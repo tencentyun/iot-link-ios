@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCloudSecret/NSString+QCloudSHA.h

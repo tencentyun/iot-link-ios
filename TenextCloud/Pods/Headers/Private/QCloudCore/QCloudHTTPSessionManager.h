@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/SessionSupport/QCloudHTTPSessionManager.h

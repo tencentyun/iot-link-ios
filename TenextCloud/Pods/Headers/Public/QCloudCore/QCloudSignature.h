@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCloudClientBase/Authentation/QCloudSignature.h

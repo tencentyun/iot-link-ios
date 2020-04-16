@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCloudBundle/UIImage+QCloudBundle.h

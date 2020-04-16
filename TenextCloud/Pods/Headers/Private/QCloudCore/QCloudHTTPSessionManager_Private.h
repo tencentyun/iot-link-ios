@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/Operations/QCloudHTTPSessionManager_Private.h

@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/ObjectFack/QCloudWeakProxy.h

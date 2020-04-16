@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/SessionSupport/NSObject+HTTPHeadersContainer.h

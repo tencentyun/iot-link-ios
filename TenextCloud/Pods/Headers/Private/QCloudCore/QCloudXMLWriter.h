@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/CoreRequest/Serializer/XML/XMLDictionary/Writer/QCloudXMLWriter.h
