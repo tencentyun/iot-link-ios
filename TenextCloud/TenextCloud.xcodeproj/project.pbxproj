@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		546D66FD6C39419F9C35F07A /* libPods-TenextCloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */; };
+		A43FCE63247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m */; };
+		A43FCE66247E464900A7CEF3 /* WCCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE65247E464900A7CEF3 /* WCCategoryTableViewCell.m */; };
+		A43FCE69247E63E900A7CEF3 /* WCProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE68247E63E900A7CEF3 /* WCProductCell.m */; };
+		A43FCE6C247E7DA800A7CEF3 /* WCDiscoverProductView.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE6B247E7DA800A7CEF3 /* WCDiscoverProductView.m */; };
 		D2038B8C2331D5F10036F6B9 /* WCMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B8B2331D5F10036F6B9 /* WCMessageViewController.m */; };
 		D2038B922331DBC30036F6B9 /* WCHelpCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B912331DBC30036F6B9 /* WCHelpCenterViewController.m */; };
 		D2038B952331DBCD0036F6B9 /* WCFeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B942331DBCD0036F6B9 /* WCFeedBackViewController.m */; };
@@ -223,6 +227,7 @@
 		EDF126FE23BDBE8D00FB1638 /* WCWaterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF126FD23BDBE8D00FB1638 /* WCWaterFlowLayout.m */; };
 		EDF1270223BDC51A00FB1638 /* WCPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* WCPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* WCRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* WCRequestObject.m */; };
+		FF67F587247EB7480075C5C1 /* WCProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF67F586247EB7480075C5C1 /* WCProductTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -258,6 +263,14 @@
 /* Begin PBXFileReference section */
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TenextCloud.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A43FCE61247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCNewAddEquipmentViewController.h; sourceTree = "<group>"; };
+		A43FCE62247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCNewAddEquipmentViewController.m; sourceTree = "<group>"; };
+		A43FCE64247E464900A7CEF3 /* WCCategoryTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCCategoryTableViewCell.h; sourceTree = "<group>"; };
+		A43FCE65247E464900A7CEF3 /* WCCategoryTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCCategoryTableViewCell.m; sourceTree = "<group>"; };
+		A43FCE67247E63E900A7CEF3 /* WCProductCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCProductCell.h; sourceTree = "<group>"; };
+		A43FCE68247E63E900A7CEF3 /* WCProductCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCProductCell.m; sourceTree = "<group>"; };
+		A43FCE6A247E7DA800A7CEF3 /* WCDiscoverProductView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDiscoverProductView.h; sourceTree = "<group>"; };
+		A43FCE6B247E7DA800A7CEF3 /* WCDiscoverProductView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCDiscoverProductView.m; sourceTree = "<group>"; };
 		ADFDE60EA26FD8690CFB93FF /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
 		C58BD7948DBCA9A9650F6CA7 /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
 		CEFA75EB664302F51AF9F173 /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
@@ -660,6 +673,8 @@
 		EDF93D9723B367A000D477C7 /* WCRequestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCRequestObject.h; sourceTree = "<group>"; };
 		EDF93D9823B367A000D477C7 /* WCRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCRequestObject.m; sourceTree = "<group>"; };
 		F53FD779B409389D1A4DEBFF /* libPods-TenextCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TenextCloud.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF67F585247EB7480075C5C1 /* WCProductTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCProductTableViewCell.h; sourceTree = "<group>"; };
+		FF67F586247EB7480075C5C1 /* WCProductTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCProductTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -924,6 +939,14 @@
 				D20621B123559DD100142DAC /* WCDistributionNetCollectionViewCell.m */,
 				D20621BE2355B1B300142DAC /* SYPaneView.h */,
 				D20621BD2355B1B300142DAC /* SYPaneView.m */,
+				A43FCE64247E464900A7CEF3 /* WCCategoryTableViewCell.h */,
+				A43FCE65247E464900A7CEF3 /* WCCategoryTableViewCell.m */,
+				A43FCE67247E63E900A7CEF3 /* WCProductCell.h */,
+				A43FCE68247E63E900A7CEF3 /* WCProductCell.m */,
+				A43FCE6A247E7DA800A7CEF3 /* WCDiscoverProductView.h */,
+				A43FCE6B247E7DA800A7CEF3 /* WCDiscoverProductView.m */,
+				FF67F585247EB7480075C5C1 /* WCProductTableViewCell.h */,
+				FF67F586247EB7480075C5C1 /* WCProductTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -945,6 +968,8 @@
 				D2E11EAE2331B98400C388A5 /* WCSoftapConnectViewController.m */,
 				ED3A93D02378FE2E00379AA7 /* WCSoftapWaitVC.h */,
 				ED3A93D12378FE2E00379AA7 /* WCSoftapWaitVC.m */,
+				A43FCE61247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.h */,
+				A43FCE62247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1805,6 +1830,7 @@
 				ED6BA5A323C57DD100BE9EC9 /* WCFamilyInfoCell.m in Sources */,
 				ED549E9B23C710EE00325958 /* WCTimerCell.m in Sources */,
 				D2614E31234F272100D7D7E7 /* WCBindPhoneViewController.m in Sources */,
+				FF67F587247EB7480075C5C1 /* WCProductTableViewCell.m in Sources */,
 				ED9C49C523B1F487005D537F /* XGPushManage.m in Sources */,
 				D231050F233075D50003069D /* WxManager.m in Sources */,
 				D23104F323306A0E0003069D /* UIBarButtonItem+CustomUI.m in Sources */,
@@ -1852,6 +1878,7 @@
 				D2A2CD25234C66790039EB51 /* UIViewController+GetController.m in Sources */,
 				D297C35C2366753100918921 /* WCStringView.m in Sources */,
 				ED6BA5B523C5B9D000BE9EC9 /* WCAddRoomVC.m in Sources */,
+				A43FCE63247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m in Sources */,
 				ED153C6D237182A8007E9C4F /* WCRequestObj.m in Sources */,
 				D2A2CD33234EBBE50039EB51 /* WCModifyNikeNameViewController.m in Sources */,
 				D2C7D80B2330CA6500C97A04 /* SGQRCodeScanView.m in Sources */,
@@ -1905,9 +1932,11 @@
 				D2614E5D23501AAC00D7D7E7 /* ESPTouchResult.m in Sources */,
 				D23104D52330678F0003069D /* NSObject+SwizzlingMethod.m in Sources */,
 				ED6BA5C323C5DF8500BE9EC9 /* WCAlertView.m in Sources */,
+				A43FCE69247E63E900A7CEF3 /* WCProductCell.m in Sources */,
 				D210C7C9234044DC00A53B08 /* NSString+Extension.m in Sources */,
 				D210C7DA2341D7EB00A53B08 /* XWCountryCodeController.m in Sources */,
 				D210C7D22340A25800A53B08 /* UIImageView+WCWebImageView.m in Sources */,
+				A43FCE66247E464900A7CEF3 /* WCCategoryTableViewCell.m in Sources */,
 				D2C7D7F42330B76500C97A04 /* WCEquipmentTableViewCell.m in Sources */,
 				ED6DA52723C9CC5F00FDDC97 /* WRNavigationBar.m in Sources */,
 				D23104FC23306DE60003069D /* KeyboardManage.m in Sources */,
@@ -1930,6 +1959,7 @@
 				ED800C92240CA25C0045A268 /* WCMessageDeviceVC.m in Sources */,
 				D2038BC323322F350036F6B9 /* WCChoseDayTableViewCell.m in Sources */,
 				ED67E5A423C3177B00BE7628 /* UIView+CMCommon.m in Sources */,
+				A43FCE6C247E7DA800A7CEF3 /* WCDiscoverProductView.m in Sources */,
 				D2614E4123501A7000D7D7E7 /* ESPDatumCode.m in Sources */,
 				ED782298241B5F4A00919FF6 /* WCMessageInviteCell.m in Sources */,
 				D292525823580F26005BE0A8 /* TCSocket.m in Sources */,
@@ -2117,7 +2147,7 @@
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6.3;
-				DEVELOPMENT_TEAM = VVSC89559T;
+				DEVELOPMENT_TEAM = 6VSD54M7AH;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
@@ -2150,7 +2180,7 @@
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6.3;
-				DEVELOPMENT_TEAM = VVSC89559T;
+				DEVELOPMENT_TEAM = 6VSD54M7AH;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",

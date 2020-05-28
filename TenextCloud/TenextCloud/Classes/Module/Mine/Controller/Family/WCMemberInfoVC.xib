@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -167,25 +167,23 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="B35-Ip-NHL" firstAttribute="top" secondItem="Nsb-ox-qRP" secondAttribute="top" constant="40" id="3Dy-t5-26N"/>
-                        <constraint firstItem="Nsb-ox-qRP" firstAttribute="trailing" secondItem="ank-ka-PhA" secondAttribute="trailing" id="6CL-Jf-Bse"/>
-                        <constraint firstItem="ank-ka-PhA" firstAttribute="leading" secondItem="Nsb-ox-qRP" secondAttribute="leading" id="DAe-pf-Dc4"/>
-                        <constraint firstItem="qnL-X6-qmE" firstAttribute="leading" secondItem="l1g-XL-xpI" secondAttribute="leading" constant="20" id="HGb-AF-fN9"/>
+                        <constraint firstItem="B35-Ip-NHL" firstAttribute="top" secondItem="2gw-sD-ugf" secondAttribute="top" constant="40" id="3Dy-t5-26N"/>
+                        <constraint firstAttribute="trailing" secondItem="ank-ka-PhA" secondAttribute="trailing" id="6CL-Jf-Bse"/>
+                        <constraint firstItem="ank-ka-PhA" firstAttribute="leading" secondItem="2gw-sD-ugf" secondAttribute="leading" id="DAe-pf-Dc4"/>
+                        <constraint firstItem="qnL-X6-qmE" firstAttribute="leading" secondItem="2gw-sD-ugf" secondAttribute="leading" constant="20" id="HGb-AF-fN9"/>
                         <constraint firstItem="ank-ka-PhA" firstAttribute="width" secondItem="2gw-sD-ugf" secondAttribute="width" id="W88-0e-pzz"/>
-                        <constraint firstItem="l1g-XL-xpI" firstAttribute="trailing" secondItem="qnL-X6-qmE" secondAttribute="trailing" constant="20" id="Xgr-iT-VAA"/>
-                        <constraint firstItem="l1g-XL-xpI" firstAttribute="trailing" secondItem="OYZ-Yg-qQX" secondAttribute="trailing" id="Ztx-zs-dQi"/>
+                        <constraint firstAttribute="trailing" secondItem="qnL-X6-qmE" secondAttribute="trailing" constant="20" id="Xgr-iT-VAA"/>
+                        <constraint firstAttribute="trailing" secondItem="OYZ-Yg-qQX" secondAttribute="trailing" id="Ztx-zs-dQi"/>
                         <constraint firstItem="qnL-X6-qmE" firstAttribute="top" secondItem="2Cc-q0-oeH" secondAttribute="bottom" constant="60" id="a7e-FD-mfq"/>
                         <constraint firstItem="OYZ-Yg-qQX" firstAttribute="top" secondItem="ank-ka-PhA" secondAttribute="bottom" id="aRs-37-0Jw"/>
                         <constraint firstItem="2Cc-q0-oeH" firstAttribute="leading" secondItem="2gw-sD-ugf" secondAttribute="leading" id="mNT-55-FaE"/>
-                        <constraint firstItem="l1g-XL-xpI" firstAttribute="trailing" secondItem="2Cc-q0-oeH" secondAttribute="trailing" id="new-8b-OTm"/>
+                        <constraint firstAttribute="trailing" secondItem="2Cc-q0-oeH" secondAttribute="trailing" id="new-8b-OTm"/>
                         <constraint firstItem="2Cc-q0-oeH" firstAttribute="top" secondItem="OYZ-Yg-qQX" secondAttribute="bottom" id="p42-f2-e1h"/>
                         <constraint firstItem="ank-ka-PhA" firstAttribute="top" secondItem="B35-Ip-NHL" secondAttribute="bottom" constant="40" id="r2G-Ms-XaG"/>
                         <constraint firstItem="OYZ-Yg-qQX" firstAttribute="leading" secondItem="2gw-sD-ugf" secondAttribute="leading" id="r2I-Av-pOs"/>
-                        <constraint firstItem="qnL-X6-qmE" firstAttribute="bottom" secondItem="Nsb-ox-qRP" secondAttribute="bottom" id="w92-PH-TbW"/>
+                        <constraint firstItem="qnL-X6-qmE" firstAttribute="bottom" secondItem="2gw-sD-ugf" secondAttribute="bottom" id="w92-PH-TbW"/>
                         <constraint firstItem="B35-Ip-NHL" firstAttribute="centerX" secondItem="2gw-sD-ugf" secondAttribute="centerX" id="zaF-a2-X7G"/>
                     </constraints>
-                    <viewLayoutGuide key="contentLayoutGuide" id="Nsb-ox-qRP"/>
-                    <viewLayoutGuide key="frameLayoutGuide" id="l1g-XL-xpI"/>
                 </scrollView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
