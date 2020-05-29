@@ -82,7 +82,6 @@ NSString *const AppReportDeviceData = @"AppReportDeviceData";
 
 NSString *const AppModifyFamilyDeviceRoom = @"AppModifyFamilyDeviceRoom";
 
-
 NSString *const AppGetParentCategoryList = @"AppGetParentCategoryList";//获取产品推荐父类别列表
 NSString *const AppGetRecommList = @"AppGetRecommList";//获取某个父类别下的推荐产品列表及子类别列表
 

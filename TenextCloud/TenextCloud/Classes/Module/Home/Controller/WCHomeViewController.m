@@ -434,7 +434,9 @@ static CGFloat weatherHeight = 60;
 
 //添加设备
 - (void)addEquipmentViewController{
-    WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
+//    WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
+    
+    WCAddEquipmentViewController *vc = [[WCAddEquipmentViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

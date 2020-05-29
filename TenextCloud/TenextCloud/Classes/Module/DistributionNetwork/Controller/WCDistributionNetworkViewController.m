@@ -174,7 +174,7 @@
 
 - (void)getDistributionNetworkToken {
     if ([self.title isEqualToString:@"智能配网"]) {
-        
+        [self getSoftApToken];
     }else {
         [self getSoftApToken];
     }

@@ -129,11 +129,12 @@
                 [self checkTokenStateWithCirculationWithDeviceData:dictionary];
             }else {
                 //deviceReplay 为 Cuttent_Error
-                WCLog(@"配网过程中失败，需要重新配网");
+                WCLog(@"soft配网过程中失败，需要重新配网");
+                [self connectFaild];
             }
             
         }else {
-            WCLog(@"dictionary==%@----socket链路设备success",dictionary);
+            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
             [self checkTokenStateWithCirculationWithDeviceData:dictionary];
         }
         
@@ -188,7 +189,6 @@
 
 //获取签名，绑定设备
 - (void)bindDevice:(NSDictionary *)deviceData{
-    
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
 
         [[WCRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[WCUserManage shared].familyId} success:^(id responseObject) {
