@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCWIFINetViewController : UIViewController
 
 @property (nonatomic, assign) EquipmentType equipmentType;
-
+@property (nonatomic, copy) NSString *currentDistributionToken;
 @end
 
 NS_ASSUME_NONNULL_END

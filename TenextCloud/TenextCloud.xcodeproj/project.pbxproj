@@ -2147,7 +2147,7 @@
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6.3;
-				DEVELOPMENT_TEAM = 6VSD54M7AH;
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
@@ -2165,7 +2165,7 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tenext.TenextCloud;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.AppIotExplorer;
 				PRODUCT_NAME = "腾讯连连";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
@@ -2180,7 +2180,7 @@
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6.3;
-				DEVELOPMENT_TEAM = 6VSD54M7AH;
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
@@ -2198,7 +2198,7 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tenext.TenextCloud;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.AppIotExplorer;
 				PRODUCT_NAME = "腾讯连连";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";

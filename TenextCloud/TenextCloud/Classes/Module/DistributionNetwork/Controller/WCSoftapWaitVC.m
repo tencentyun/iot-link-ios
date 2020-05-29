@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UILabel *tipLab;
 
 @property (nonatomic,strong) NSDictionary *signInfo;//签名信息
-
+@property (nonatomic, assign) BOOL isTokenbindedStatus;
 @end
 
 @implementation WCSoftapWaitVC
@@ -83,12 +83,13 @@
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
     WCLog(@"连接成功");
     
+    //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
     dispatch_source_set_event_handler(self.timer, ^{
         
-        if (self.sendCount >= 3) {
+        if (self.sendCount >= 5) {
             dispatch_source_cancel(self.timer);
             dispatch_async(dispatch_get_main_queue(), ^{
                [self connectFaild];
@@ -98,7 +99,8 @@
         
         NSString *Ssid = self.wifiInfo[@"name"];
         NSString *Pwd = self.wifiInfo[@"pwd"];
-        [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+        NSString *Token = self.wifiInfo[@"token"];
+        [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd,@"token":Token} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
         self.sendCount ++;
     });
     dispatch_resume(self.timer);
@@ -120,112 +122,101 @@
     WCLog(@"嘟嘟嘟 %@",dictionary);
     
     if ([dictionary[@"cmdType"] integerValue] == 2) {
-        //模组已经收到WiFi路由器的SSID/PSW，正在进行连接。这个时候app/小程序需要等待3秒钟，然后发送时间戳信息给模组
-        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]]) {
-            if ([dictionary[@"deviceReply"] isEqualToString:@"dataRecived"]) {
-                
-                dispatch_source_cancel(self.timer);
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    
-                    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-                    self.timer2 = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-                    dispatch_source_set_timer(self.timer2, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-                    dispatch_source_set_event_handler(self.timer2, ^{
-                        
-                        if (self.sendCount2 >= 3) {
-                            dispatch_source_cancel(self.timer2);
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self connectFaild];
-                            });
-                            return ;
-                        }
-                        
-                        [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"timestamp":@((long)[[NSDate date] timeIntervalSince1970])} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-                        
-                        self.sendCount2 ++;
-                    });
-                    dispatch_resume(self.timer2);
-                    
-                });
+        //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
+        //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
+        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
+            if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
+                [self checkTokenStateWithCirculationWithDeviceData:dictionary];
+            }else {
+                //deviceReplay 为 Cuttent_Error
+                WCLog(@"配网过程中失败，需要重新配网");
             }
             
-            return;
-        }
-        
-        
-        if (![NSObject isNullOrNilWithObject:dictionary[@"signature"]] && [@"connected" isEqualToString:dictionary[@"wifiState"]]) {
-            dispatch_source_cancel(self.timer2);
-            
-            
-            if (@available(iOS 11.0, *)) {
-                NEHotspotConfiguration *config = [[NEHotspotConfiguration alloc] initWithSSID:self.wifiInfo[@"name"] passphrase:self.wifiInfo[@"pwd"] isWEP:NO];
-                [[NEHotspotConfigurationManager sharedManager] applyConfiguration:config completionHandler:^(NSError * _Nullable error) {
-                    [self bindDevice:dictionary];
-                }];
-            } else {
-                //ios 10切换WiFi
-                
-                UIButton *tryAgainBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [tryAgainBtn setTitle:[NSString stringWithFormat:@"已将WiFi切换为'%@'",self.wifiInfo[@"name"]] forState:UIControlStateNormal];
-                [tryAgainBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                tryAgainBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-                [tryAgainBtn addTarget:self action:@selector(toBind) forControlEvents:UIControlEventTouchUpInside];
-                tryAgainBtn.backgroundColor = kMainColor;
-                tryAgainBtn.layer.cornerRadius = 3;
-                [self.view addSubview:tryAgainBtn];
-                [tryAgainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(self.view).offset(30);
-                    make.top.equalTo(self.progressLab.mas_bottom).offset(149 * kScreenAllHeightScale);
-                    make.width.mas_equalTo(kScreenWidth - 60);
-                    make.height.mas_equalTo(48);
-                    make.bottom.equalTo(self.contentView).offset(-30);
-                }];
-                
-                // Fallback on earlier versions
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"请将手机WiFi切换为'%@'",self.wifiInfo[@"name"]] message:@"" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [self connectFaild];
-                }];
-                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
-                    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                    if ([[UIApplication sharedApplication] canOpenURL:url]){
-                        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-                    }
-                }];
-                [alert addAction:action];
-                [alert addAction:action2];
-                [self presentViewController:alert animated:NO completion:^{
-                    
-                }];
-            }
-            
-        }
-        else
-        {
-            [self connectFaild];
+        }else {
+            WCLog(@"dictionary==%@----socket链路设备success",dictionary);
+            [self checkTokenStateWithCirculationWithDeviceData:dictionary];
         }
         
     }
+        
+}
+
+//token 2秒轮询查看设备状态
+- (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
+    dispatch_source_cancel(self.timer);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        self.timer2 = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+        dispatch_source_set_timer(self.timer2, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+        dispatch_source_set_event_handler(self.timer2, ^{
+
+            if (self.sendCount2 >= 100) {
+                dispatch_source_cancel(self.timer2);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self connectFaild];
+                });
+                return ;
+            }
+            if (self.isTokenbindedStatus == NO) {
+                [self getDevideBindTokenStateWithData:data];
+            }
+            
+            self.sendCount2 ++;
+        });
+        dispatch_resume(self.timer2);
+
+    });
+}
+
+//获取设备绑定token状态
+- (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
+    [[WCRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
+        //State:Uint Token 状态，1：初始生产，2：可使用状态
+        WCLog(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
+        if ([responseObject[@"State"] isEqual:@(1)]) {
+            self.isTokenbindedStatus = NO;
+        }else if ([responseObject[@"State"] isEqual:@(2)]) {
+            self.isTokenbindedStatus = YES;
+            [self bindingDevidesWithData:deviceData];
+        }
+    } failure:^(NSString *reason, NSError *error) {
+        WCLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
+        
+    }];
 }
 
 //获取签名，绑定设备
 - (void)bindDevice:(NSDictionary *)deviceData{
     
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
-        
+
         [[WCRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[WCUserManage shared].familyId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {
             [self connectFaild];
         }];
-        
     }
     else
     {
         [self connectFaild];
     }
+}
+
+//判断token返回后（设备状态为2），绑定设备
+- (void)bindingDevidesWithData:(NSDictionary *)deviceData {
+    if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
+        [[WCRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[WCUserManage shared].familyId,@"RoomId":@"0"} success:^(id responseObject) {
+            [self connectSucess:deviceData];
+            [HXYNotice addUpdateDeviceListPost];
+        } failure:^(NSString *reason, NSError *error) {
+            [self connectFaild];
+        }];
+    }else {
+        [self connectFaild];
+    }
+
 }
 
 #pragma mark - UI

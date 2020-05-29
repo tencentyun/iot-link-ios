@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) NSArray *dataArr;
 
+@property (nonatomic, strong) NSString *networkToken;
 @end
 
 @implementation WCDistributionNetworkViewController
@@ -29,7 +30,13 @@
     // Do any additional setup after loading the view.
     
     [self setupUI];
+    [self getDistributionNetworkToken];
 }
+
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+//    [self getDistributionNetworkToken];
+//}
 
 - (void)setupUI{
     self.view.backgroundColor = kBgColor;
@@ -165,10 +172,34 @@
     }];
 }
 
+- (void)getDistributionNetworkToken {
+    if ([self.title isEqualToString:@"智能配网"]) {
+        
+    }else {
+        [self getSoftApToken];
+    }
+}
+
+- (void)getSoftApToken {
+    [[WCRequestObject shared] post:AppCreateDeviceBindToken Param:@{} success:^(id responseObject) {
+
+        WCLog(@"AppCreateDeviceBindToken----responseObject==%@",responseObject);
+        
+        if (![NSObject isNullOrNilWithObject:responseObject[@"Token"]]) {
+            self.networkToken = responseObject[@"Token"];
+        }
+        
+    } failure:^(NSString *reason, NSError *error) {
+
+        WCLog(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
+    }];
+}
+
 #pragma mark eventResponse
 - (void)nextClick:(id)sender{
     WCWIFINetViewController *vc = [[WCWIFINetViewController alloc] init];
     vc.equipmentType = self.equipmentType;
+    vc.currentDistributionToken = self.networkToken;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -227,4 +258,10 @@
     return _dataArr;
 }
 
+- (NSString *)networkToken {
+    if (_networkToken == nil) {
+        _networkToken = @"";
+    }
+    return _networkToken;
+}
 @end

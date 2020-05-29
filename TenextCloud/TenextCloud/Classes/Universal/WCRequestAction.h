@@ -88,8 +88,14 @@ FOUNDATION_EXPORT NSString *const AppReportDeviceData;//虚拟设备上报
 
 FOUNDATION_EXPORT NSString *const AppModifyFamilyDeviceRoom;//更换设备所属房间
 
+
 FOUNDATION_EXPORT NSString *const AppGetParentCategoryList;//获取产品推荐父类别列表
 FOUNDATION_EXPORT NSString *const AppGetRecommList;//获取某个父类别下的推荐产品列表及子类别列表
+
+FOUNDATION_EXPORT NSString *const AppCreateDeviceBindToken;//用户获取当次配网token
+FOUNDATION_EXPORT NSString *const AppGetDeviceBindTokenState;// 查询token，生成之后经hub回调后token状态标识为可用状态
+FOUNDATION_EXPORT NSString *const AppTokenBindDeviceFamily;//使用token进行设备绑定
+
 
 
 //MARK: 设备定时

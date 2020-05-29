@@ -251,6 +251,7 @@
 - (void)sureClick:(id)sender{
     [self.wifiInfo setObject:self.wifiNameTF.text forKey:@"name"];
     [self.wifiInfo setObject:self.wifiPwdTF.text forKey:@"pwd"];
+    [self.wifiInfo setObject:self.currentDistributionToken forKey:@"token"];
     switch (self.equipmentType) {
         case SmartConfig:{
             WCConnectViewController *vc = [[WCConnectViewController alloc] init];
