@@ -29,7 +29,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.imgView = [[UIImageView alloc] init];
-    self.imgView.backgroundColor = [UIColor redColor];
+    self.imgView.image = [UIImage imageNamed:@"new_add_product_placeholder"];
     [self addSubview:_imgView];
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(65 * kScreenAllWidthScale);
@@ -46,6 +46,18 @@
         make.top.equalTo(self.imgView.mas_bottom).offset(6.5);
         make.centerX.equalTo(self.contentView);
     }];
+}
+
+- (void)setDic:(NSDictionary *)dic{
+    _dic = dic;
+    
+    if ([dic objectForKey:@"CategoryName"]){
+        self.titleLab.text = dic[@"CategoryName"]?:@"";
+    }
+    if ([dic objectForKey:@"ProductName"]){
+        self.titleLab.text = dic[@"ProductName"]?:@"";
+    }
+    [self.imgView setImageWithURLStr:dic[@"IconUrl"] placeHolder:@"new_add_product_placeholder"];
 }
 
 @end

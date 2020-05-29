@@ -70,6 +70,9 @@
 #pragma mark - event
 - (void)connect {
     WCLog(@"连接");
+    if (self.connectEvent) {
+        self.connectEvent();
+    }
 }
 
 - (void)setDic:(NSDictionary *)dic{

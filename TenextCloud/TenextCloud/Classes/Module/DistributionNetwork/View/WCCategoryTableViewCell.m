@@ -57,7 +57,7 @@
 - (void)setDic:(NSDictionary *)dic{
     _dic = dic;
     
-    self.titleLab.text = dic[@"title"]?:@"";
+    self.titleLab.text = dic[@"CategoryName"]?:@"";
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -21,9 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-//        [self setupDiscoveringUI];
-        [self setupDiscoveredProductUI];
-//        [self setupNotFoundProductUI];
+        self.status = DiscoverDeviceStatusDiscovering;
     }
     return self;
 }
@@ -43,7 +41,22 @@
     }];
     
     UIImageView *loadView = [[UIImageView alloc] init];
-    loadView.backgroundColor = [UIColor grayColor];
+    loadView.image = [UIImage imageNamed:@"new_add_loading"];
+    // 旋转动画
+    CABasicAnimation *animation = [CABasicAnimation
+                                   animationWithKeyPath: @"transform" ];
+    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    
+    animation.toValue = [NSValue valueWithCATransform3D:
+                         CATransform3DMakeRotation(M_PI + 0.01, 0.0, 0.0, -1.0) ];
+    animation.duration = 0.5;
+    
+    animation.cumulative = YES;
+    animation.repeatCount = HUGE_VALF;
+    animation.removedOnCompletion = NO;
+    
+    // 添加动画
+    [loadView.layer addAnimation:animation forKey:nil];
     [self addSubview:loadView];
     [loadView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(tipLab);
@@ -52,7 +65,7 @@
     }];
     
     UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"mineHelp"] forState:UIControlStateNormal];
+    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
     [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:helpBtn];
     [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -62,7 +75,7 @@
     }];
     
     UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"sweepIcon"] forState:UIControlStateNormal];
+    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
     [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:scanBtn];
     [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -96,7 +109,7 @@
     }];
     
     UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"mineHelp"] forState:UIControlStateNormal];
+    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
     [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:helpBtn];
     [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -106,7 +119,7 @@
     }];
     
     UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"sweepIcon"] forState:UIControlStateNormal];
+    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
     [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:scanBtn];
     [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -130,7 +143,7 @@
     }];
     
     UIImageView *loadView = [[UIImageView alloc] init];
-    loadView.backgroundColor = [UIColor blueColor];
+    loadView.image = [UIImage imageNamed:@"new_add_warn"];
     [self addSubview:loadView];
     [loadView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(tipLab);
@@ -139,7 +152,7 @@
     }];
 
     UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"mineHelp"] forState:UIControlStateNormal];
+    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
     [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:helpBtn];
     [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -149,7 +162,7 @@
     }];
 
     UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"sweepIcon"] forState:UIControlStateNormal];
+    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
     [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:scanBtn];
     [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -174,14 +187,23 @@
 #pragma mark - event
 - (void)help{
     WCLog(@"帮助");
+    if (self.helpAction) {
+        self.helpAction();
+    }
 }
 
 - (void)scan{
     WCLog(@"扫码");
+    if (self.scanAction) {
+        self.scanAction();
+    }
 }
 
 - (void)retry{
     WCLog(@"重试");
+    if (self.retryAction) {
+        self.retryAction();
+    }
 }
 
 #pragma mark TableViewDelegate && TableViewDataSource
@@ -195,6 +217,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WCProductTableViewCell *cell = [WCProductTableViewCell cellWithTableView:tableView];
+    cell.connectEvent = ^{
+        
+    };
 //    cell.dic = self.productArr[indexPath.row];
     return cell;
 }
@@ -212,6 +237,17 @@
     }
     
     return _tableView;
+}
+
+- (void)setStatus:(DiscoverDeviceStatus)status {
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    if (status == DiscoverDeviceStatusDiscovering) {
+        [self setupDiscoveringUI];
+    } else if (status == DiscoverDeviceStatusDiscovered) {
+        [self setupDiscoveredProductUI];
+    } else {
+        [self setupNotFoundProductUI];
+    }
 }
 
 @end
