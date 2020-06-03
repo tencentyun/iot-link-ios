@@ -38,6 +38,10 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 
 #pragma mark lifeCircle
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -49,6 +53,9 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
     [self setupUI];
     [self getCategoryList];
     [self.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
+    
+    [HXYNotice changeAddDeviceTypeListener:self reaction:@selector(receiveChangeAddDeviceType:)];
+    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
 }
 
 #pragma mark - other
@@ -120,6 +127,19 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
     WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:vc];
     nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)receiveChangeAddDeviceType:(NSNotification *)noti{
+    NSInteger deviceType = [noti.object integerValue];
+    if (deviceType == 0) {
+        [self jumpConfigVC:@"智能配网"];
+    } else if (deviceType == 1) {
+        [self jumpConfigVC:@"自助配网"];
+    }
+}
+
+- (void)popHomeVC {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

@@ -8,7 +8,6 @@
 
 #import "WCHomeViewController.h"
 #import "WCEquipmentTableViewCell.h"
-#import "WCAddEquipmentViewController.h"
 #import "WCNewAddEquipmentViewController.h"
 #import "WCMessageViewController.h"
 #import "WCPanelVC.h"
@@ -434,9 +433,7 @@ static CGFloat weatherHeight = 60;
 
 //添加设备
 - (void)addEquipmentViewController{
-//    WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
-    
-    WCAddEquipmentViewController *vc = [[WCAddEquipmentViewController alloc] init];
+    WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

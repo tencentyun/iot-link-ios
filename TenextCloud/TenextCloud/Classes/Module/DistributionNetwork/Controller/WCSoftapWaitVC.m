@@ -418,15 +418,12 @@
 
 - (void)changeTypeClick:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+    [HXYNotice postChangeAddDeviceType:0];
 }
 
 - (void)tryAgainClick:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
-//    for (UIViewController * controller in self.navigationController.viewControllers) {
-//        if ([controller isKindOfClass:[WCDistributionNetworkViewController class]]) {
-//            [self.navigationController popToViewController:controller animated:YES];
-//        }
-//    }
+    [HXYNotice postChangeAddDeviceType:1];
 }
 
 - (void)moreErrorResult:(id)sender{

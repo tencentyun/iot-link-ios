@@ -99,7 +99,6 @@
 		D2C7AA17232F6AA6005E8006 /* TenextCloudUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7AA16232F6AA6005E8006 /* TenextCloudUITests.m */; };
 		D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7EF2330B43200C97A04 /* UIView+StatusCoast.m */; };
 		D2C7D7F42330B76500C97A04 /* WCEquipmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7F32330B76500C97A04 /* WCEquipmentTableViewCell.m */; };
-		D2C7D7F72330BECC00C97A04 /* WCAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7F62330BECC00C97A04 /* WCAddEquipmentViewController.m */; };
 		D2C7D8082330CA6500C97A04 /* SGQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D2C7D8012330CA6500C97A04 /* SGQRCode.bundle */; };
 		D2C7D8092330CA6500C97A04 /* SGQRCodeObtainConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D8022330CA6500C97A04 /* SGQRCodeObtainConfigure.m */; };
 		D2C7D80A2330CA6500C97A04 /* SGQRCodeObtain.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D8062330CA6500C97A04 /* SGQRCodeObtain.m */; };
@@ -452,8 +451,6 @@
 		D2C7D7F02330B43200C97A04 /* UIView+StatusCoast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+StatusCoast.h"; sourceTree = "<group>"; };
 		D2C7D7F22330B76500C97A04 /* WCEquipmentTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCEquipmentTableViewCell.h; sourceTree = "<group>"; };
 		D2C7D7F32330B76500C97A04 /* WCEquipmentTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCEquipmentTableViewCell.m; sourceTree = "<group>"; };
-		D2C7D7F52330BECC00C97A04 /* WCAddEquipmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCAddEquipmentViewController.h; sourceTree = "<group>"; };
-		D2C7D7F62330BECC00C97A04 /* WCAddEquipmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCAddEquipmentViewController.m; sourceTree = "<group>"; };
 		D2C7D8002330CA6500C97A04 /* SGQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCode.h; sourceTree = "<group>"; };
 		D2C7D8012330CA6500C97A04 /* SGQRCode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SGQRCode.bundle; sourceTree = "<group>"; };
 		D2C7D8022330CA6500C97A04 /* SGQRCodeObtainConfigure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeObtainConfigure.m; sourceTree = "<group>"; };
@@ -954,8 +951,6 @@
 		D231049F232F88D40003069D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D2C7D7F52330BECC00C97A04 /* WCAddEquipmentViewController.h */,
-				D2C7D7F62330BECC00C97A04 /* WCAddEquipmentViewController.m */,
 				D2C7D80C2330CA7D00C97A04 /* WCScanlViewController.h */,
 				D2C7D80D2330CA7D00C97A04 /* WCScanlViewController.m */,
 				D20621AD235597DC00142DAC /* WCDistributionNetworkViewController.h */,
@@ -1846,7 +1841,6 @@
 				D2C7AA02232F6AA5005E8006 /* main.m in Sources */,
 				EDF1270223BDC51A00FB1638 /* WCPanelVC.m in Sources */,
 				ED3FDA7F2418890300EE60D5 /* WCModifyRoomVC.m in Sources */,
-				D2C7D7F72330BECC00C97A04 /* WCAddEquipmentViewController.m in Sources */,
 				ED932E4023BB1AD800F73F35 /* WCEnumView.m in Sources */,
 				ED3A93DD237948DE00379AA7 /* GCDAsyncUdpSocket.m in Sources */,
 				D2614E4F23501A8600D7D7E7 /* ESP_CRC8.m in Sources */,
@@ -2165,7 +2159,7 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.AppIotExplorer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer;
 				PRODUCT_NAME = "腾讯连连";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
@@ -2198,7 +2192,7 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.AppIotExplorer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer;
 				PRODUCT_NAME = "腾讯连连";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";

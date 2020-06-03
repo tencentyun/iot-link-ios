@@ -72,4 +72,8 @@
 //成员更新
 + (void)addUpdateMemberListListener:(id)listener reaction:(SEL)selector;
 + (void)postUpdateMemberList;
+
+//切换配网方式
++ (void)changeAddDeviceTypeListener:(id)listener reaction:(SEL)selector;
++ (void)postChangeAddDeviceType:(NSInteger)deviceType;
 @end

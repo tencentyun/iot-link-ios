@@ -21,6 +21,7 @@ static NSString * const updateFamilyList     = @"updateFamilyList";
 static NSString * const updateRoomList       = @"updateRoomList";
 static NSString * const updateTimerList      = @"updateTimerList";
 static NSString * const updateMemberList     = @"updateMemberList";
+static NSString * const changeAddDeviceType  = @"changeAddDeviceType";
 
 @implementation HXYNotice
 
@@ -162,5 +163,17 @@ static NSString * const updateMemberList     = @"updateMemberList";
 + (void)postUpdateMemberList
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:updateMemberList object:nil];
+}
+
+
+//切换配网方式
++ (void)changeAddDeviceTypeListener:(id)listener reaction:(SEL)selector
+{
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:changeAddDeviceType object:nil];
+}
+
++ (void)postChangeAddDeviceType:(NSInteger)deviceType
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:changeAddDeviceType object:@(deviceType)];
 }
 @end
