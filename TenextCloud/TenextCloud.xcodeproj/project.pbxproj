@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		546D66FD6C39419F9C35F07A /* libPods-TenextCloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */; };
+		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		A43FCE63247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m */; };
 		A43FCE66247E464900A7CEF3 /* WCCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE65247E464900A7CEF3 /* WCCategoryTableViewCell.m */; };
 		A43FCE69247E63E900A7CEF3 /* WCProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE68247E63E900A7CEF3 /* WCProductCell.m */; };
@@ -260,6 +261,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TenextCloud.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A43FCE61247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCNewAddEquipmentViewController.h; sourceTree = "<group>"; };
@@ -1160,6 +1163,8 @@
 				D23104CA2330678E0003069D /* UIView+XDPExtension.m */,
 				D23104D12330678F0003069D /* UIView+XDPGesture.h */,
 				D23104C82330678E0003069D /* UIView+XDPGesture.m */,
+				6DEC06312487AC0E00902C9F /* UIView+Extension.h */,
+				6DEC06322487AC0E00902C9F /* UIView+Extension.m */,
 				D210C7C7234044DC00A53B08 /* NSString+Extension.h */,
 				D210C7C8234044DC00A53B08 /* NSString+Extension.m */,
 				D2A2CD1A234C302C0039EB51 /* NSObject+additions.h */,
@@ -1885,6 +1890,7 @@
 				D20621BC23559E5600142DAC /* TYCyclePagerTransformLayout.m in Sources */,
 				D2C7D80E2330CA7D00C97A04 /* WCScanlViewController.m in Sources */,
 				D27ACA1123614DA50074C2B3 /* WCDeviceDetailTableViewCell.m in Sources */,
+				6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */,
 				D23104F823306C150003069D /* UIFont+WCFont.m in Sources */,
 				D2038BA2233200930036F6B9 /* WCSendPhoneCodeViewController.m in Sources */,
 				D2C7A9F4232F6AA4005E8006 /* AppDelegate.m in Sources */,

@@ -38,7 +38,6 @@
 
     self.delegate = self;
     
-
 }
 
 #pragma mark - UITabBarControllerDelegate

@@ -95,6 +95,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     [[XGPushManage sharedXGPushManage] reportXGNotificationInfo:userInfo];
+    WCLog(@"userInfo-静默消息---%@",[NSString jsonToObject:userInfo[@"custom"]]);
     completionHandler(UIBackgroundFetchResultNewData);
 }
 

@@ -88,8 +88,9 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 // iOS 10 新增 API 无论APP当前在前台还是后台点击通知都会走该 API
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     
-    
+    WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@",response.notification.request.content.userInfo,response.notification.request.content.userInfo[@"custom"]);
     [[XGPush defaultManager] reportXGNotificationResponse:response];
+    [self performSelector:@selector(postCutomNotification:) withObject:response.notification.request.content.userInfo[@"custom"] afterDelay:0.5];
     completionHandler();
 }
 
@@ -101,7 +102,7 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
- /// 统一收到通知消息的回调
+ /// 统一收到通知消息的回调（静默消息也调用此方法）
 //- (void)xgPushDidReceiveRemoteNotification:(id)notification withCompletionHandler:(void (^)(NSUInteger))completionHandler {
 //
 //    if (@available(iOS 10.0, *)) {
@@ -115,5 +116,9 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 //    }
 //}
 
+#pragma mark - post发送通知跳转指定页面
+- (void)postCutomNotification:(NSNotification *)notificaion {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"userInfoNotificationFeedbackDetail" object:notificaion];
+}
 
 @end
