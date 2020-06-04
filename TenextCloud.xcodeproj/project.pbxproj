@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		546D66FD6C39419F9C35F07A /* libPods-TenextCloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */; };
+		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		A43FCE63247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* WCNewAddEquipmentViewController.m */; };
 		A43FCE66247E464900A7CEF3 /* WCCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE65247E464900A7CEF3 /* WCCategoryTableViewCell.m */; };
@@ -261,6 +262,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1408,6 +1410,7 @@
 				D2C7A9F2232F6AA4005E8006 /* AppDelegate.h */,
 				D2C7A9F3232F6AA4005E8006 /* AppDelegate.m */,
 				D2C7AA00232F6AA5005E8006 /* Info.plist */,
+				6DD4E82E248927830056A162 /* GoogleService-Info.plist */,
 				D2C7AA01232F6AA5005E8006 /* main.m */,
 				D2C7AA25232F6EBC005E8006 /* TenextCloud.pch */,
 				D23104AE232F929D0003069D /* Localizable.strings */,
@@ -1590,6 +1593,7 @@
 				D2C7A9ED232F6AA4005E8006 /* Resources */,
 				444BF7CD783F3A364674D4C1 /* [CP] Copy Pods Resources */,
 				D2E976AB233C4EDB00182443 /* Embed App Extensions */,
+				6DD4E8302489DAAE0056A162 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1699,6 +1703,7 @@
 				D210C7D82341D7EB00A53B08 /* sortedNameEN.plist in Resources */,
 				EDB2F91723B59A3100CDD4A6 /* WCFamiliesVC.xib in Resources */,
 				ED8D76C7237CEE5B00E358C9 /* img_1.png in Resources */,
+				6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */,
 				D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */,
 				ED6D120723C8598400A7A333 /* WCTimerListCell.xib in Resources */,
 				ED9C49B323B1BB46005D537F /* 腾讯连连用户服务协议V1.0(1).docx in Resources */,
@@ -1787,6 +1792,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TenextCloud/Pods-TenextCloud-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		6DD4E8302489DAAE0056A162 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

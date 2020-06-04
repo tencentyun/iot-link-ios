@@ -15,6 +15,7 @@
 #import "WCLoginVC.h"
 #import "WxManager.h"
 #import "WRNavigationBar.h"
+#import "Firebase.h"
 
 @interface AppDelegate ()
 
@@ -39,6 +40,8 @@
     //注册微信
     [[WxManager sharedWxManager] registerApp];
     
+    //firebase注册
+    [FIRApp configure];
     
     // 1.创建窗口
     self.window = [[UIWindow alloc] init];
@@ -96,6 +99,15 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     [[XGPushManage sharedXGPushManage] reportXGNotificationInfo:userInfo];
     WCLog(@"userInfo-静默消息---%@",[NSString jsonToObject:userInfo[@"custom"]]);
+    if( [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
+    {
+      //NSLog(@"didReceiveRemoteNotification:APP在前台运行时，不做处理");
+        //APP在前台，先暂不处理，后面跟产品商定
+    }//当APP在后台运行时，当有通知栏消息时，点击它，就会执行下面的方法跳转到相应的页面
+    else if([UIApplication sharedApplication].applicationState == UIApplicationStateInactive){
+      // 取得 APNs 标准信息内容
+      //NSLog(@"didReceiveRemoteNotification:APP在后台运行时，当有通知栏消息时，点击它，就会执行下面的方法跳转到相应的页面");
+    }
     completionHandler(UIBackgroundFetchResultNewData);
 }
 

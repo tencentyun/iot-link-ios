@@ -3,7 +3,7 @@
 //  XGPushStatMTA-SDK
 //
 //  Originally Created by uweiyuan on 2019/7/4.
-//  
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -19,20 +19,20 @@
  接口统计的枚举值
  */
 typedef enum {
-	/**
-	 接口调用成功
-	 */
-	XGPushStatMTA_SUCCESS = 0,
+    /**
+     接口调用成功
+     */
+    XGPushStatMTA_SUCCESS = 0,
 
-	/**
-	 接口调用失败
-	 */
-	XGPushStatMTA_FAILURE = 1,
+    /**
+     接口调用失败
+     */
+    XGPushStatMTA_FAILURE = 1,
 
-	/**
-	 接口调用出现逻辑错误
-	 */
-	XGPushStatMTA_LOGIC_FAILURE = 2
+    /**
+     接口调用出现逻辑错误
+     */
+    XGPushStatMTA_LOGIC_FAILURE = 2
 } XGPushStatMTAAppMonitorErrorType;
 
 /**
@@ -44,12 +44,11 @@ typedef enum {
  - XGPushStatEC_INPUT_LENGTH_LIMIT: 参数过长，详细情况请查看自定义事件API的注释
  */
 typedef NS_ENUM(NSInteger, XGPushStatMTAErrorCode) {
-	XGPushStatEC_OK = 0,
-	XGPushStatEC_SERVICE_DISABLE = -1,
-	XGPushStatEC_ARGUMENT_INVALID = 1000,
-	XGPushStatEC_INPUT_LENGTH_LIMIT = 1001,
+    XGPushStatEC_OK = 0,
+    XGPushStatEC_SERVICE_DISABLE = -1,
+    XGPushStatEC_ARGUMENT_INVALID = 1000,
+    XGPushStatEC_INPUT_LENGTH_LIMIT = 1001,
 };
-
 
 #pragma mark - XGPushStatMTA统计功能相关接口
 @interface XGPushStatMTA : NSObject
@@ -73,10 +72,9 @@ typedef NS_ENUM(NSInteger, XGPushStatMTAErrorCode) {
  */
 + (BOOL)startWithAppkey:(NSString *)appkey checkedSdkVersion:(NSString *)ver;
 
-
 #pragma mark - XG
 + (XGPushStatMTAErrorCode)reportMessageInfo:(NSDictionary *)info;
 
-+ (XGPushStatMTAErrorCode)reportCrashInfo:(NSDictionary *)info;
++ (XGPushStatMTAErrorCode)reportErrInfo:(NSDictionary *)info;
 
 @end

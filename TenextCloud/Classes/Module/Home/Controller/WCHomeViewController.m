@@ -97,19 +97,7 @@ static CGFloat weatherHeight = 60;
     [HXYNotice addSocketConnectSucessListener:self reaction:@selector(socketConnected)];
     [HXYNotice addUpdateDeviceListListener:self reaction:@selector(updateDevice:)];
     [HXYNotice addUpdateFamilyListListener:self reaction:@selector(getFamilyList)];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoNotification:) name:@"userInfoNotificationFeedbackDetail" object:nil];
 
-}
-
-/** 响应通知方法 */
-- (void)userInfoNotification:(NSNotification *)notification {
-    NSDictionary *dictionary = notification.userInfo;
-    //Dictionary 包含 msgtype 和 url 需要传入feedbackVC 中
-    WCFeedBackViewController *vc = [[WCFeedBackViewController alloc]init];
-//    vc.hidesBottomBarWhenPushed = YES;
-    [[self currentViewController].navigationController pushViewController:vc animated:YES];
-    
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图

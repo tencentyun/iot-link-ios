@@ -42,7 +42,6 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
         [XGPush.defaultManager setXgApplicationBadgeNumber:0];
     }
     
-    [XGPush.defaultManager reportXGNotificationInfo:self.launchOptions];
 }
 
 - (void)stopPushService{
@@ -56,7 +55,6 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 }
 
 - (void)reportXGNotificationInfo:(nonnull NSDictionary *)info{
-    [XGPush.defaultManager reportXGNotificationInfo:info];
 }
 
 - (void)bindPushToken
@@ -73,12 +71,6 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 
 #pragma mark - XGPushDelegate
 
-- (void)xgPushDidFinishStart:(BOOL)isSuccess error:(nullable NSError *)error{
-    if (error) {
-        WCLog(@"信鸽推送启动失败：%@",error);
-    }
-}
-
 - (void)xgPushDidRegisteredDeviceToken:(nullable NSString *)deviceToken error:(nullable NSError *)error{
     //绑定信鸽
     self.deviceToken = deviceToken;
@@ -89,15 +81,11 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     
     WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@",response.notification.request.content.userInfo,response.notification.request.content.userInfo[@"custom"]);
-    [[XGPush defaultManager] reportXGNotificationResponse:response];
-    [self performSelector:@selector(postCutomNotification:) withObject:response.notification.request.content.userInfo[@"custom"] afterDelay:0.5];
     completionHandler();
 }
 
 // App 在前台弹通知需要调用这个接口
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-
-    [XGPush.defaultManager reportXGNotificationInfo:notification.request.content.userInfo];
     
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
@@ -116,9 +104,20 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 //    }
 //}
 
-#pragma mark - post发送通知跳转指定页面
-- (void)postCutomNotification:(NSNotification *)notificaion {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"userInfoNotificationFeedbackDetail" object:notificaion];
+/// 统一收到通知消息的回调
+/// @param notification 消息对象
+/// @param completionHandler 完成回调
+/// 区分消息类型说明：xg字段里的msgtype为1则代表通知消息msgtype为2则代表静默消息
+/// notification消息对象说明：有2种类型NSDictionary和UNNotification具体解析参考示例代码
+- (void)xgPushDidReceiveRemoteNotification:(nonnull id)notification withCompletionHandler:(nullable void (^)(NSUInteger))completionHandler {
+    //    NSLog(@"recieve message:%@", notification);
+    if ([notification isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"notification ==%@",notification);
+        completionHandler(UIBackgroundFetchResultNewData);
+    } else if ([notification isKindOfClass:[UNNotification class]]) {
+                NSLog(@"xg info :%@", ((UNNotification *)notification).request.content.userInfo);
+        completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
+    }
 }
 
 @end
