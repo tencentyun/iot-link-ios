@@ -8,7 +8,7 @@ on:
   
 jobs:
   build-and-deploy:
-    runs-on: macOS-10.15.4
+    runs-on: macOS-latest
     
     steps:
     - name: Checkout
