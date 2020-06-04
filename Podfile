@@ -22,6 +22,10 @@ pod 'YYModel'
 pod 'SDWebImage'
 pod 'QCloudCOSXML/Transfer'
 pod 'TZImagePickerController'
-pod 'TPNS-iOS'
+pod 'TPNS-iOS','~>1.2.6.1'
 
+pod 'Firebase/Analytics'
+pod 'Fabric', '~> 1.10.2'
+pod 'Crashlytics', '~> 3.14.0'
+pod 'Firebase/Performance'
 end
