@@ -1,1 +1,0 @@
-../../../TPNS-iOS/XGVIPPush/XGPushPrivate.h

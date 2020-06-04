@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) EquipmentType equipmentType;
 @property (nonatomic, copy) NSString *currentDistributionToken;
+@property (nonatomic, copy) NSString *roomId;
 @end
 
 NS_ASSUME_NONNULL_END

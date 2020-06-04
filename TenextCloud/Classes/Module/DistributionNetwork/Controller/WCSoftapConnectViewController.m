@@ -156,6 +156,7 @@
     WCSoftapWaitVC *vc = [[WCSoftapWaitVC alloc] init];
     vc.title = @"soft ap配网";
     vc.wifiInfo = self.wifiInfo.copy;
+    vc.roomId = self.roomId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

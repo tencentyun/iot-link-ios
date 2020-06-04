@@ -10,6 +10,7 @@
 #import "GCDAsyncUdpSocket.h"
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 #import "CHDWaveView.h"
+#import "WCHelpCenterViewController.h"
 
 #define APIP @"192.168.4.1"
 #define APPort 8266
@@ -207,7 +208,8 @@
 //判断token返回后（设备状态为2），绑定设备
 - (void)bindingDevidesWithData:(NSDictionary *)deviceData {
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
-        [[WCRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[WCUserManage shared].familyId,@"RoomId":@"0"} success:^(id responseObject) {
+        NSString *roomId = self.roomId ?: @"0";
+        [[WCRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[WCUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {
@@ -427,7 +429,8 @@
 }
 
 - (void)moreErrorResult:(id)sender{
-    
+    WCHelpCenterViewController *vc = [[WCHelpCenterViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)backHome:(id)sender{

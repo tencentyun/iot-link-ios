@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/QCLOUDFileUtils/QCloudSHAPart.h

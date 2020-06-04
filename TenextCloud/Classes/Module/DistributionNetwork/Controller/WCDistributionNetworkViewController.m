@@ -200,6 +200,7 @@
     WCWIFINetViewController *vc = [[WCWIFINetViewController alloc] init];
     vc.equipmentType = self.equipmentType;
     vc.currentDistributionToken = self.networkToken;
+    vc.roomId = self.roomId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

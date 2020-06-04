@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/TimeOutAdapter/QCloudIntelligenceTimeOutAdapter.h

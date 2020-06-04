@@ -78,6 +78,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
     };
     self.discoverView.scanAction = ^{
         WCScanlViewController *vc = [[WCScanlViewController alloc] init];
+        vc.roomId = selfWeak.roomId;
         [selfWeak.navigationController pushViewController:vc animated:YES];
     };
     self.discoverView.retryAction = ^{
@@ -122,6 +123,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 
 - (void)jumpConfigVC:(NSString *)title{
     WCDistributionNetworkViewController *vc = [[WCDistributionNetworkViewController alloc] init];
+    vc.roomId = self.roomId;
     vc.title = title;
 
     WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:vc];

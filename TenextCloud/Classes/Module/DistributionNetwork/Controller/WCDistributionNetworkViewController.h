@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WCDistributionNetworkViewController : UIViewController
 
 @property (nonatomic, assign) EquipmentType equipmentType;
+@property (nonatomic, copy) NSString *roomId;
 
 @end
 

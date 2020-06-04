@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/Logger/QCloudLogger.h

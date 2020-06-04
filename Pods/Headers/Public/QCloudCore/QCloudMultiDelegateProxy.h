@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/ObjectFack/QCloudMultiDelegateProxy.h

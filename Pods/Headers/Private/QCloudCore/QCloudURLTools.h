@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/QCLOUDRestNet/URLTools/QCloudURLTools.h

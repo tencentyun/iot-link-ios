@@ -64,7 +64,8 @@
     
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
     
-    NSDictionary *param = @{@"FamilyId":[WCUserManage shared].familyId,@"DeviceSignature":signature};
+    NSString *roomId = self.roomId ?: @"";
+    NSDictionary *param = @{@"FamilyId":[WCUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
     
     [[WCRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
         
@@ -78,6 +79,60 @@
     }];
 }
 
+- (void)processQRCodeResult:(NSString *)result {
+    if (result) {
+        [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"正在处理..."];
+        [obtain stopRunning];
+        [obtain playSoundName:@"SGQRCode.bundle/sound.caf"];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD dismissInView:self.view];
+            
+            NSString *signature = @"";//result;
+            NSDictionary *param = [NSString jsonToObject:result];
+            
+            if (param) {
+                signature = param[@"Signature"];
+                [self bindDevice:signature];
+            }
+            else if ([result hasPrefix:@"http"]) {
+                
+                NSURL *url = [NSURL URLWithString:result];
+                NSString *page = @"";
+                
+                if (url.query) {
+                    NSArray *params = [url.query componentsSeparatedByString:@"&"];
+                    
+                    for (NSString *param in params) {
+                        if ([param containsString:@"signature"]) {
+                            signature = [[param componentsSeparatedByString:@"="] lastObject];
+                        }
+                        if ([param containsString:@"page"]) {
+                            page = [[param componentsSeparatedByString:@"="] lastObject];
+                        }
+                    }
+                    
+                }
+                if (signature.length) {
+                    [self bindDevice:signature];
+                } else {
+                    if ([page isEqualToString:@"softap"]) {
+                        [self.navigationController popViewControllerAnimated:YES];
+                        [HXYNotice postChangeAddDeviceType:1];
+                    } else if ([page isEqualToString:@"smartconfig"]) {
+                        [self.navigationController popViewControllerAnimated:YES];
+                        [HXYNotice postChangeAddDeviceType:0];
+                    } else { //未知page
+                        [self bindDevice:signature];
+                    }
+                }
+                
+            }
+            
+        });
+    }
+}
+
 - (void)setupQRCodeScan {
     WeakObj(self)
     SGQRCodeObtainConfigure *configure = [SGQRCodeObtainConfigure QRCodeObtainConfigure];
@@ -85,41 +140,7 @@
     [obtain establishQRCodeObtainScanWithController:self configure:configure];
     [obtain setBlockWithQRCodeObtainScanResult:^(SGQRCodeObtain *obtain, NSString *result) {
         StrongObj(self)
-        if (result) {
-            [MBProgressHUD showLodingNoneEnabledInView:selfstrong.view withMessage:@"正在处理..."];
-            [obtain stopRunning];
-            [obtain playSoundName:@"SGQRCode.bundle/sound.caf"];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [MBProgressHUD dismissInView:selfstrong.view];
-                
-                NSString *signature = result;
-                NSDictionary *param = [NSString jsonToObject:result];
-                
-                if (param) {
-                    signature = param[@"Signature"];
-                }
-                else if ([result hasPrefix:@"http"]) {
-                    
-                    NSURL *url = [NSURL URLWithString:result];
-                    
-                    if (url.query) {
-                        NSArray *params = [url.query componentsSeparatedByString:@"&"];
-                        
-                        for (NSString *param in params) {
-                            if ([param containsString:@"signature"]) {
-                                signature = [[param componentsSeparatedByString:@"="] lastObject];
-                                break;
-                            }
-                        }
-                        
-                    }
-                    
-                }
-                
-                [selfstrong bindDevice:signature];
-            });
-        }
+        [selfstrong processQRCodeResult:result];
     }];
     [obtain setBlockWithQRCodeObtainScanBrightness:^(SGQRCodeObtain *obtain, CGFloat brightness) {
         StrongObj(self)
@@ -151,39 +172,7 @@
     }];
     [obtain setBlockWithQRCodeObtainAlbumResult:^(SGQRCodeObtain *obtain, NSString *result) {
         StrongObj(self)
-        [MBProgressHUD showLodingNoneEnabledInView:selfstrong.view withMessage:@"正在处理..."];
-        if (result == nil) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [MBProgressHUD dismissInView:selfstrong.view];
-                [MBProgressHUD showError:@"未发现二维码/条形码"];
-            });
-        } else {
-
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [MBProgressHUD dismissInView:selfstrong.view];
-                
-                NSString *signature = result;
-                
-                if ([result hasPrefix:@"http"]) {
-                    
-                    NSURL *url = [NSURL URLWithString:result];
-                    
-                    if (url.query) {
-                        NSArray *params = [url.query componentsSeparatedByString:@"&"];
-                        
-                        for (NSString *param in params) {
-                            if ([param containsString:@"signature"]) {
-                                signature = [[param componentsSeparatedByString:@"="] lastObject];
-                                break;
-                            }
-                        }
-                        
-                    }
-                    
-                }
-                [selfstrong bindDevice:signature];
-            });
-        }
+        [selfstrong processQRCodeResult:result];
     }];
 }
 

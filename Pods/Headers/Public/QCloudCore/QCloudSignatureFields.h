@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/QCloudClientBase/Authentation/QCloudSignatureFields.h

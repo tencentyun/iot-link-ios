@@ -257,12 +257,14 @@
             WCConnectViewController *vc = [[WCConnectViewController alloc] init];
             vc.title = @"配网进度";
             vc.wifiInfo = self.wifiInfo.copy;
+            vc.roomId = self.roomId;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case Softap:{
             WCSoftapConnectViewController *vc = [[WCSoftapConnectViewController alloc] init];
             vc.wifiInfo = self.wifiInfo.copy;
+            vc.roomId = self.roomId;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;

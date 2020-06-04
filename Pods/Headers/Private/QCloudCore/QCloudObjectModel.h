@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/QCLOUDObjectModel/QCloudObjectModel.h

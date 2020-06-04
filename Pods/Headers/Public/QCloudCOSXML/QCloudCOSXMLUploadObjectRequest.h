@@ -1,1 +1,0 @@
-../../../QCloudCOSXML/QCloudCOSXML/Classes/Transfer/request/QCloudCOSXMLUploadObjectRequest.h

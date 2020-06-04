@@ -160,18 +160,20 @@ static CGFloat weatherHeight = 60;
         [self.tableView.mj_header endRefreshing];
         if (self.offset >= total) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        } else {
+            [self.tableView.mj_footer endRefreshing];
         }
     }
 }
 
-- (void)refreshUI:(NSDictionary *)data{
+- (void)refreshUI{
     
-    if ([data[@"Total"] integerValue] == 0) {
+    if (self.dataArr.count == 0) {//[data[@"Total"] integerValue] == 0) {
         
         [MBProgressHUD dismissInView:self.view];
         WeakObj(self)
         if (!self.currentRoomId || self.currentRoomId.length == 0) {
-            [self.tableView showEmpty2:@"添加设备" desc:@"当前暂无设备，请点击添加按钮进行添加" image:[UIImage imageNamed:@"noDevice"] block:^{
+            [self.tableView showEmpty2:@"" desc:@"还没有设备，点击添加" image:[UIImage imageNamed:@"home_no_device"] block:^{
                 [selfWeak addEquipmentViewController];
             }];
             
@@ -182,6 +184,10 @@ static CGFloat weatherHeight = 60;
             //房间列表隐藏
             self.tableHeaderView.alpha = 0;
             self.tableHeaderView2.alpha = 0;
+        } else {
+            [self.tableView showEmpty2:@"" desc:@"还没有设备，点击添加" image:[UIImage imageNamed:@"home_no_device"] block:^{
+                [selfWeak addEquipmentViewController];
+            }];
         }
         
         [self.tableView reloadData];
@@ -359,7 +365,9 @@ static CGFloat weatherHeight = 60;
         [self endRefresh:NO total:[responseObject[@"Total"] integerValue]];
         [self.dataArr removeAllObjects];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
-        [self refreshUI:responseObject];
+        if (self.dataArr.count == 0) {
+            [self refreshUI];
+        }
         
         [self updateDeviceStatus];
         
@@ -374,7 +382,9 @@ static CGFloat weatherHeight = 60;
     [[WCRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
         [self endRefresh:YES total:[responseObject[@"Total"] integerValue]];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
-        [self refreshUI:responseObject];
+        if (self.dataArr.count == 0) {
+            [self refreshUI];
+        }
         
         [self updateDeviceStatus];
         
@@ -416,7 +426,7 @@ static CGFloat weatherHeight = 60;
             
             [self.dataArr removeAllObjects];
             [self.dataArr addObjectsFromArray:tmpArr];
-            [self.tableView reloadData];
+            [self refreshUI];
         } failure:^(NSString *reason, NSError *error) {
             
         }];
@@ -465,6 +475,7 @@ static CGFloat weatherHeight = 60;
 //添加设备
 - (void)addEquipmentViewController{
     WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
+    vc.roomId = self.currentRoomId ?: @"";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -518,7 +529,7 @@ static CGFloat weatherHeight = 60;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
-    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+//    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
         [HXYNotice postHeartBeat:devIds];
         [HXYNotice addActivePushPost:devIds];
         
@@ -530,11 +541,11 @@ static CGFloat weatherHeight = 60;
         vc.isOwner = [self.currentFamilyRole integerValue] == 1;
         [self.navigationController pushViewController:vc animated:YES];
         
-    }
-    else
-    {
-        [MBProgressHUD showError:@"请检查网络"];
-    }
+//    }
+//    else
+//    {
+//        [MBProgressHUD showError:@"请检查网络"];
+//    }
     
 }
 
