@@ -140,22 +140,10 @@ DEPENDENCIES:
   - YYModel
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs:
-    - FDFullscreenPopGesture
-    - IQKeyboardManager
-    - Masonry
-    - MBProgressHUD
-    - MJRefresh
-    - QCloudCore
-    - QCloudCOSXML
-    - SDWebImage
-    - SocketRocket
-    - TZImagePickerController
-    - WechatOpenSDK
-    - YYModel
   trunk:
     - Crashlytics
     - Fabric
+    - FDFullscreenPopGesture
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -172,10 +160,21 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
+    - IQKeyboardManager
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
     - nanopb
     - PromisesObjC
     - Protobuf
+    - QCloudCore
+    - QCloudCOSXML
+    - SDWebImage
+    - SocketRocket
     - TPNS-iOS
+    - TZImagePickerController
+    - WechatOpenSDK
+    - YYModel
 
 SPEC CHECKSUMS:
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
@@ -213,6 +212,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 98cd76a19431abacfcfd563d2d2f04f319f92a97
+PODFILE CHECKSUM: 8bb0ea39bcbb4e6ee0a8ab6ce2db8eaa45db328f
 
 COCOAPODS: 1.9.1
