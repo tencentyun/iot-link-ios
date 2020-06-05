@@ -9,9 +9,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: macOS-latest
-    
     steps:
-      uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+    - uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
     - name: Install Dependencies
       env:
         THEOS: theos
