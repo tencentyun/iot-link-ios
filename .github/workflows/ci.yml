@@ -11,13 +11,20 @@ jobs:
     runs-on: macOS-latest
     
     steps:
-    - name: Checkout
       uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-      with:
-        persist-credentials: false
-    - name: Install and Build
+    - name: Install Dependencies
+      env:
+        THEOS: theos
       run: |
-        sh archive.sh
+        brew install ldid fakeroot
+        git clone --depth=1 --recursive https://github.com/theos/theos.git $THEOS
+        git submodule update --init --recursive
+
+    - name: Build Package
+      env:
+        THEOS: theos
+      run: make package
+
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
