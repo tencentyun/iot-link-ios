@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+jobs:
+  Build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install GPG
+      run: brew install gnupg
+    - name: List available Xcode versions
+      run: ls /Applications | grep Xcode
+    - name: Decrypt large secret
+      run: ./provisioning/import_provisioning.sh
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.provisioning_password }}
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_11.4.app && /usr/bin/xcodebuild -version
+    - name: Build archive
+      run: |
+        sh archive.sh
+    - name: Dump file hierarchy
+      run: ls -R
