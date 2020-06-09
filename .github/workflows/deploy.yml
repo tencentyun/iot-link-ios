@@ -28,3 +28,5 @@ jobs:
         sh archive.sh
     - name: Dump file hierarchy
       run: ls -R
+    - name: Deploy App to PGY
+      run: curl -F 'file=@./TenextCloud.ipa' -F '_api_key=bbd778a91c68d37898ff367903efc4a5' https://www.pgyer.com/apiv2/app/upload
