@@ -122,22 +122,22 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - Crashlytics (~> 3.14.0)
-  - Fabric (~> 1.10.2)
-  - FDFullscreenPopGesture
-  - Firebase/Analytics
-  - Firebase/Performance
-  - IQKeyboardManager
-  - Masonry
-  - MBProgressHUD
-  - MJRefresh
-  - QCloudCOSXML/Transfer
-  - SDWebImage
-  - SocketRocket
-  - TPNS-iOS (~> 1.2.6.1)
-  - TZImagePickerController
-  - WechatOpenSDK
-  - YYModel
+  - Crashlytics (= 3.14.0)
+  - Fabric (= 1.10.2)
+  - FDFullscreenPopGesture (= 1.1)
+  - Firebase/Analytics (= 6.26.0)
+  - Firebase/Performance (= 6.26.0)
+  - IQKeyboardManager (= 6.1.1)
+  - Masonry (= 1.1.0)
+  - MBProgressHUD (= 1.1.0)
+  - MJRefresh (= 3.2.0)
+  - QCloudCOSXML/Transfer (= 5.5.2)
+  - SDWebImage (= 4.4.2)
+  - SocketRocket (= 0.5.1)
+  - TPNS-iOS (= 1.2.6.1)
+  - TZImagePickerController (= 3.2.1)
+  - WechatOpenSDK (= 1.8.2)
+  - YYModel (= 1.0.4)
 
 SPEC REPOS:
   trunk:
@@ -212,6 +212,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 8bb0ea39bcbb4e6ee0a8ab6ce2db8eaa45db328f
+PODFILE CHECKSUM: 3b432faae224623d873eeca18c54a91c061f1e80
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
