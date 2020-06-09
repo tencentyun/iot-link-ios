@@ -8,8 +8,8 @@
 	<string>development</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.tencent.iot.explorer</key>
-		<string>iot_development</string>
+		<key>com.tencent.iot.test</key>
+		<string>iot_dev_test</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Development: Chao Ren (45U44KXTL9)</string>
