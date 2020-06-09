@@ -3,7 +3,7 @@
 //  TA-SDK
 //
 //  Originally Created by uweiyuan on 2019/7/4.
-//  
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -12,45 +12,45 @@
  上报策略枚举值
  */
 typedef enum {
-	/**
-	 实时上报
-	 */
-	XGPushStatMTA_STRATEGY_INSTANT = 1,
+    /**
+     实时上报
+     */
+    XGPushStatMTA_STRATEGY_INSTANT = 1,
 
-	/**
-	 批量上报，达到缓存临界值时触发发送
-	 */
-	XGPushStatMTA_STRATEGY_BATCH = 2,
+    /**
+     批量上报，达到缓存临界值时触发发送
+     */
+    XGPushStatMTA_STRATEGY_BATCH = 2,
 
-	/**
-	 应用启动时发送
-	 */
-	XGPushStatMTA_STRATEGY_APP_LAUNCH = 3,
+    /**
+     应用启动时发送
+     */
+    XGPushStatMTA_STRATEGY_APP_LAUNCH = 3,
 
-	/**
-	 仅在WIFI网络下发送
-	 */
-	XGPushStatMTA_STRATEGY_ONLY_WIFI = 4,
+    /**
+     仅在WIFI网络下发送
+     */
+    XGPushStatMTA_STRATEGY_ONLY_WIFI = 4,
 
-	/**
-	 每间隔一定最小时间发送，默认24小时
-	 */
-	XGPushStatMTA_STRATEGY_PERIOD = 5,
+    /**
+     每间隔一定最小时间发送，默认24小时
+     */
+    XGPushStatMTA_STRATEGY_PERIOD = 5,
 
-	/**
-	 开发者在代码中主动调用发送行为
-	 */
-	XGPushStatMTA_STRATEGY_DEVELOPER = 6,
+    /**
+     开发者在代码中主动调用发送行为
+     */
+    XGPushStatMTA_STRATEGY_DEVELOPER = 6,
 
-	/**
-	 仅在WIFI网络下发送, 发送失败以及非WIFI网络情况下不缓存数据
-	 */
-	XGPushStatMTA_STRATEGY_ONLY_WIFI_NO_CACHE = 7,
+    /**
+     仅在WIFI网络下发送, 发送失败以及非WIFI网络情况下不缓存数据
+     */
+    XGPushStatMTA_STRATEGY_ONLY_WIFI_NO_CACHE = 7,
 
-	/*
+    /*
      不缓存数据，批量上报+间隔上报组合。适用于上报特别频繁的场景。
      */
-	XGPushStatMTA_STRATEGY_NO_CACHE_BATCH_PERIOD = 8
+    XGPushStatMTA_STRATEGY_NO_CACHE_BATCH_PERIOD = 8
 
 } XGPushStatMTAStatReportStrategy;
 
@@ -82,7 +82,6 @@ typedef enum {
  */
 @property (nonatomic) XGPushStatMTAStatReportStrategy reportStrategy;
 
-
 /**
  是否自动统计整个APP的使用时长，默认打开
  */
@@ -110,7 +109,6 @@ typedef enum {
  渠道名，默认为"appstore"
  */
 @property (nonatomic, copy) NSString *channel;
-
 
 /**
  最大缓存的未发送的统计消息，默认1024条
@@ -199,7 +197,6 @@ typedef enum {
  guid，预留字段，无特定含义
  */
 @property (nonatomic, assign) NSUInteger guid;
-
 
 /**
  获取在XGPushStatMTA前端控制台配置的参数

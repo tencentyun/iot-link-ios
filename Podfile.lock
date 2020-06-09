@@ -11,7 +11,7 @@ PODS:
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
   - SocketRocket (0.5.1)
-  - TPNS-iOS (1.2.4.8)
+  - TPNS-iOS (1.2.6.1)
   - TZImagePickerController (3.2.1)
   - WechatOpenSDK (1.8.2)
   - YYModel (1.0.4)
@@ -31,7 +31,7 @@ DEPENDENCIES:
   - YYModel
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - FDFullscreenPopGesture
     - IQKeyboardManager
     - Masonry
@@ -41,11 +41,10 @@ SPEC REPOS:
     - QCloudCOSXML
     - SDWebImage
     - SocketRocket
+    - TPNS-iOS
     - TZImagePickerController
     - WechatOpenSDK
     - YYModel
-  trunk:
-    - TPNS-iOS
 
 SPEC CHECKSUMS:
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
@@ -57,11 +56,11 @@ SPEC CHECKSUMS:
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
-  TPNS-iOS: 438717158f83d5effa304acd4d3450245ab04a24
+  TPNS-iOS: 19d500bf272a4f8f3f08472cb49baeaff9a8af70
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 67b6456d9ab3772f0613b74ba49d46024b7ce2f3
+PODFILE CHECKSUM: d33fb203ba0bf6ccfe0c1e7abc346570494020e0
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3
