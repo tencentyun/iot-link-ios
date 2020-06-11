@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCDistributionNetCollectionViewCell.h"
+#import "TIoTDistributionNetCollectionViewCell.h"
 
-@interface WCDistributionNetCollectionViewCell()
+@interface TIoTDistributionNetCollectionViewCell()
 @property (nonatomic,strong) UIImageView *imgView;
 @end
-@implementation WCDistributionNetCollectionViewCell
+@implementation TIoTDistributionNetCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];

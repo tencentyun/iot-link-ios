@@ -10,18 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCAddActionView : UIView
+@interface TIoTAddActionView : UIView
 
 @end
 
 
 
-@interface WCActionTypeView : UIView
+@interface TIoTActionTypeView : UIView
 
 @end
 
 
-@interface WCActionStatusView : UIView
+@interface TIoTActionStatusView : UIView
 
 @end
 

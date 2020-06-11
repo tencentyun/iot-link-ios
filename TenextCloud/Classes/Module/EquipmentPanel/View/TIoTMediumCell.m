@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMediumCell.h"
+#import "TIoTMediumCell.h"
 
-@interface WCMediumCell()
+@interface TIoTMediumCell()
 @property (weak, nonatomic) IBOutlet UIImageView *imgV;
 @property (weak, nonatomic) IBOutlet UILabel *nameLab;
 @property (weak, nonatomic) IBOutlet UILabel *contentLab;
@@ -18,7 +18,7 @@
 
 
 @end
-@implementation WCMediumCell
+@implementation TIoTMediumCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

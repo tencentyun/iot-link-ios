@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCWebSocketManage.h"
-#import "WCAppEnvironment.h"
+#import "TIoTWebSocketManage.h"
+#import "TIoTAppEnvironment.h"
 #import "UIViewController+GetController.h"
-#import "WCNavigationController.h"
-#import "WCLoginVC.h"
-#import "WCRequestObj.h"
+#import "TIoTNavigationController.h"
+#import "TIoTLoginVC.h"
+#import "TIoTRequestObj.h"
 #import "ReachabilityManager.h"
 
 
@@ -27,7 +27,7 @@ dispatch_async(dispatch_get_main_queue(), block);\
 static NSString *registDeviceReqID = @"5001";
 static NSString *heartBeatReqID = @"5002";
 
-@interface WCWebSocketManage ()<SRWebSocketDelegate>
+@interface TIoTWebSocketManage ()<SRWebSocketDelegate>
 
 @property (nonatomic, strong) SRWebSocket *socket;
 @property (nonatomic, strong) NSTimer *heartBeat;
@@ -38,10 +38,10 @@ static NSString *heartBeatReqID = @"5002";
 
 @end
 
-@implementation WCWebSocketManage
+@implementation TIoTWebSocketManage
 
 +(instancetype)shared{
-    static WCWebSocketManage *_instance = nil;
+    static TIoTWebSocketManage *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];
@@ -93,7 +93,7 @@ static NSString *heartBeatReqID = @"5002";
     
     NSArray *deviceIds = noti.object;
     
-    [[WCWebSocketManage shared] sendActiveData:deviceIds withRequestURL:@"ActivePush" complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
+    [[TIoTWebSocketManage shared] sendActiveData:deviceIds withRequestURL:@"ActivePush" complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
         if (sucess) {
 
         }
@@ -186,7 +186,7 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     NSString *reqID = [NSString stringWithFormat:@"%@",data[@"reqId"]];
-    WCRequestObj *reqObj = self.reqArray[reqID];
+    TIoTRequestObj *reqObj = self.reqArray[reqID];
     
     if (reqObj.sucess) {
         reqObj.sucess(sucess, data[@"data"]);
@@ -243,7 +243,7 @@ static NSString *heartBeatReqID = @"5002";
     
     
     NSString *reqIDStr = [NSString stringWithFormat:@"%@",reqId];
-    WCRequestObj *reqObj = self.reqArray[reqIDStr];
+    TIoTRequestObj *reqObj = self.reqArray[reqIDStr];
     if(reqObj.sucess){
         if (sucess) {
             if ([NSObject isNullOrNilWithObject:dic[@"data"][@"Response"][@"Data"]]) {
@@ -329,11 +329,11 @@ static NSString *heartBeatReqID = @"5002";
 //心跳数据
 - (NSDictionary *)heartData:(NSArray *)deviceIds {
     return @{
-        @"action":[WCAppEnvironment shareEnvironment].action,
+        @"action":[TIoTAppEnvironment shareEnvironment].action,
         @"reqId":[[NSUUID UUID] UUIDString],
         @"params":@{
             @"Action": @"AppDeviceTraceHeartBeat",
-            @"AccessToken":[WCUserManage shared].accessToken,
+            @"AccessToken":[TIoTUserManage shared].accessToken,
             @"RequestId":@"weichuan-client",
             @"ActionParams": @{
                 @"DeviceIds": deviceIds
@@ -344,14 +344,14 @@ static NSString *heartBeatReqID = @"5002";
 
 //判断是否重新登录
 - (BOOL)needLogin{
-    if ([[WCUserManage shared].expireAt integerValue] <= [[NSString getNowTimeString] integerValue] && [WCUserManage shared].accessToken.length > 0) {
+    if ([[TIoTUserManage shared].expireAt integerValue] <= [[NSString getNowTimeString] integerValue] && [TIoTUserManage shared].accessToken.length > 0) {
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"登录已过期" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"重新登录" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
-            [[WCAppEnvironment shareEnvironment] loginOut];
+            [[TIoTAppEnvironment shareEnvironment] loginOut];
             
-            WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:[[WCLoginVC alloc] init]];
+            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
             [UIViewController getCurrentViewController].view.window.rootViewController = nav;
         }];
         [alert addAction:alertA];
@@ -374,11 +374,11 @@ static NSString *heartBeatReqID = @"5002";
                                 @"reqId":registDeviceReqID,
                                 @"params":@{
                                                 @"DeviceIds" :deviceIds,
-                                                @"AccessToken" :[WCUserManage shared].accessToken,
+                                                @"AccessToken" :[TIoTUserManage shared].accessToken,
                                             },
                                     };
     
-    WCRequestObj *obj = [WCRequestObj new];
+    TIoTRequestObj *obj = [TIoTRequestObj new];
     obj.sucess = sucess;
     [self.reqArray setObject:obj forKey:registDeviceReqID];
     
@@ -393,10 +393,10 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     NSMutableDictionary *actionParams = [NSMutableDictionary dictionaryWithDictionary:paramDic];
-    [actionParams setObject:[WCAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+    [actionParams setObject:[TIoTAppEnvironment shareEnvironment].platform forKey:@"Platform"];
     [actionParams setObject:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    if ([WCUserManage shared].accessToken.length > 0) {
-        [actionParams setObject:[WCUserManage shared].accessToken forKey:@"AccessToken"];
+    if ([TIoTUserManage shared].accessToken.length > 0) {
+        [actionParams setObject:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
     }
     
     NSInteger reqID = 100;
@@ -408,16 +408,16 @@ static NSString *heartBeatReqID = @"5002";
             NSInteger lastReqId = [arr.lastObject integerValue];
             reqID = lastReqId + 10;
         }
-        WCRequestObj *obj = [WCRequestObj new];
+        TIoTRequestObj *obj = [TIoTRequestObj new];
         obj.sucess = sucess;
         [self.reqArray setObject:obj forKey:[NSString stringWithFormat:@"%zi",reqID]];
     }
     
     NSDictionary *dataDic = @{
-                                @"action":[WCAppEnvironment shareEnvironment].action,
+                                @"action":[TIoTAppEnvironment shareEnvironment].action,
                                 @"reqId":@(reqID),
                                 @"params":@{
-                                                @"AppKey" :[WCAppEnvironment shareEnvironment].appKey,
+                                                @"AppKey" :[TIoTAppEnvironment shareEnvironment].appKey,
                                                 @"Action" :requestURL,
                                                 @"ActionParams":actionParams
                                     },
@@ -491,7 +491,7 @@ static NSString *heartBeatReqID = @"5002";
 {
     if (!_socket) {
         _socket = [[SRWebSocket alloc] initWithURLRequest:
-        [NSURLRequest requestWithURL:[NSURL URLWithString:[WCAppEnvironment shareEnvironment].wsUrl]]];
+        [NSURLRequest requestWithURL:[NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].wsUrl]]];
         _socket.delegate = self;
     }
     return _socket;

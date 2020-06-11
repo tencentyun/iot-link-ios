@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageInviteCell.h"
+#import "TIoTMessageInviteCell.h"
 
-@interface WCMessageInviteCell()
+@interface TIoTMessageInviteCell()
 @property (weak, nonatomic) IBOutlet UIImageView *picView;
 @property (weak, nonatomic) IBOutlet UILabel *titleL;
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation WCMessageInviteCell
+@implementation TIoTMessageInviteCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -49,7 +49,7 @@
     
     NSInteger msgType = [self.msgData[@"MsgType"] integerValue];
     if (msgType == 204) {
-        [[WCRequestObject shared] post:AppJoinFamily Param:@{@"ShareToken":self.msgData[@"Attachments"][@"ShareToken"]} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppJoinFamily Param:@{@"ShareToken":self.msgData[@"Attachments"][@"ShareToken"]} success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"加入成功"];
         } failure:^(NSString *reason, NSError *error) {
             [MBProgressHUD showError:reason];
@@ -58,7 +58,7 @@
     else if (msgType == 301)
     {
         NSDictionary *param = @{@"ShareDeviceToken":self.msgData[@"Attachments"][@"ShareToken"],@"ProductId":self.msgData[@"ProductId"],@"DeviceName":self.msgData[@"DeviceName"]};
-        [[WCRequestObject shared] post:AppBindUserShareDevice Param:param success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppBindUserShareDevice Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"绑定成功"];
         } failure:^(NSString *reason, NSError *error) {
             

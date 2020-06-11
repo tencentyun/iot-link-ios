@@ -6,17 +6,17 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCMessageViewController.h"
+#import "TIoTMessageViewController.h"
 #import "CMPageTitleView.h"
 
-@interface WCMessageViewController ()
+@interface TIoTMessageViewController ()
 
 
 @property (nonatomic,strong) CMPageTitleView *pageView;
 @property (nonatomic,strong) NSArray *childControllers;
 @end
 
-@implementation WCMessageViewController
+@implementation TIoTMessageViewController
 
 
 - (void)viewDidLoad {
@@ -36,8 +36,8 @@
     [self.view addSubview:self.pageView];
     [self.pageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
-        make.top.mas_equalTo([WCUIProxy shareUIProxy].navigationBarHeight);
-        make.height.mas_equalTo(kScreenHeight - [WCUIProxy shareUIProxy].navigationBarHeight);
+        make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight);
+        make.height.mas_equalTo(kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight);
         
     }];
     

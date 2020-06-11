@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCDeviceDetailTableViewCell.h"
+#import "TIoTDeviceDetailTableViewCell.h"
 
-@interface WCDeviceDetailTableViewCell ()
+@interface TIoTDeviceDetailTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UILabel *valueLab;
@@ -17,13 +17,13 @@
 
 @end
 
-@implementation WCDeviceDetailTableViewCell
+@implementation TIoTDeviceDetailTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCDeviceDetailTableViewCell";
-    WCDeviceDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTDeviceDetailTableViewCell";
+    TIoTDeviceDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCDeviceDetailTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTDeviceDetailTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

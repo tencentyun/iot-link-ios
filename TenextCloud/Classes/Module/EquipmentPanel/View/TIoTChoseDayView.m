@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCChoseDayView.h"
-#import "WCChoseDayTableViewCell.h"
+#import "TIoTChoseDayView.h"
+#import "TIoTChoseDayTableViewCell.h"
 
-@interface WCChoseDayView ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTChoseDayView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *backBtn;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation WCChoseDayView
+@implementation TIoTChoseDayView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -81,7 +81,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCChoseDayTableViewCell *cell = [WCChoseDayTableViewCell cellWithTableView:tableView];
+    TIoTChoseDayTableViewCell *cell = [TIoTChoseDayTableViewCell cellWithTableView:tableView];
     cell.dic = self.dataArr[indexPath.row];
     return cell;
 }

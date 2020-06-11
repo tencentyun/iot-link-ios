@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCLongCell.h"
+#import "TIoTLongCell.h"
 
-@interface WCLongCell()
+@interface TIoTLongCell()
 @property (weak, nonatomic) IBOutlet UIImageView *imgV;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *content;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation WCLongCell
+@implementation TIoTLongCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

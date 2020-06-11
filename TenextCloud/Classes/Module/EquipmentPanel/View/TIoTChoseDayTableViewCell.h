@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCChoseDayTableViewCell : UITableViewCell
+@interface TIoTChoseDayTableViewCell : UITableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, copy) NSDictionary *dic;

@@ -6,11 +6,11 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddTimeView.h"
-#import "WCChoseDayView.h"
-#import "WCAddActionView.h"
+#import "TIoTAddTimeView.h"
+#import "TIoTChoseDayView.h"
+#import "TIoTAddActionView.h"
 
-@interface WCAddTimeView ()<UIGestureRecognizerDelegate>
+@interface TIoTAddTimeView ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) UIButton *saveBtn;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation WCAddTimeView
+@implementation TIoTAddTimeView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -122,7 +122,7 @@
 
 - (void)actionClick:(id)sender{
     
-    WCAddActionView *dayView = [[WCAddActionView alloc] init];
+    TIoTAddActionView *dayView = [[TIoTAddActionView alloc] init];
     [self.whiteView addSubview:dayView];
     [dayView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.whiteView);
@@ -143,7 +143,7 @@
 }
 
 - (void)repeatClick:(id)sender{
-    WCChoseDayView *dayView = [[WCChoseDayView alloc] init];
+    TIoTChoseDayView *dayView = [[TIoTChoseDayView alloc] init];
     [self.whiteView addSubview:dayView];
     [dayView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.whiteView);

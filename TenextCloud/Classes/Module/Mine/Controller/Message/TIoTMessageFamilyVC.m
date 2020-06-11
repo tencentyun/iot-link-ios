@@ -6,13 +6,13 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageFamilyVC.h"
+#import "TIoTMessageFamilyVC.h"
 
-@interface WCMessageFamilyVC ()
+@interface TIoTMessageFamilyVC ()
 
 @end
 
-@implementation WCMessageFamilyVC
+@implementation TIoTMessageFamilyVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

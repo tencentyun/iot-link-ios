@@ -6,14 +6,14 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCRoomCell.h"
+#import "TIoTRoomCell.h"
 
-@interface WCRoomCell()
+@interface TIoTRoomCell()
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
 
 @end
-@implementation WCRoomCell
+@implementation TIoTRoomCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

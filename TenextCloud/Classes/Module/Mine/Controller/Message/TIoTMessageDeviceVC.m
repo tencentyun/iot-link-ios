@@ -6,13 +6,13 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageDeviceVC.h"
+#import "TIoTMessageDeviceVC.h"
 
-@interface WCMessageDeviceVC ()
+@interface TIoTMessageDeviceVC ()
 
 @end
 
-@implementation WCMessageDeviceVC
+@implementation TIoTMessageDeviceVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

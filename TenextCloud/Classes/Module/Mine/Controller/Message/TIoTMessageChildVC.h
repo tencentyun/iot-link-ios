@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WCRefreshHeader.h"
+#import "TIoTRefreshHeader.h"
 
 
-@interface WCMessageChildVC : UIViewController
+@interface TIoTMessageChildVC : UIViewController
 
 @property (nonatomic, strong) UITableView *tableView;
 - (void)beginRefreshWithCategory:(NSUInteger)category;

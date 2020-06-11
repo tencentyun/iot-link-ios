@@ -6,25 +6,25 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCPanelVC.h"
-#import "WCWaterFlowLayout.h"
-#import "WCDeviceData.h"
-#import "WCBoolView.h"
-#import "WCEnumView.h"
-#import "WCNumberView.h"
-#import "WCLongCell.h"
-#import "WCMediumCell.h"
-#import "WCPanelMoreViewController.h"
-#import "WCBaseBigBtnView.h"
+#import "TIoTPanelVC.h"
+#import "TIoTWaterFlowLayout.h"
+#import "TIoTDeviceData.h"
+#import "TIoTBoolView.h"
+#import "TIoTEnumView.h"
+#import "TIoTNumberView.h"
+#import "TIoTLongCell.h"
+#import "TIoTMediumCell.h"
+#import "TIoTPanelMoreViewController.h"
+#import "TIoTBaseBigBtnView.h"
 
-#import "WCSlideView.h"
-#import "WCChoseValueView.h"
-#import "WCTimeView.h"
-#import "WCStringView.h"
+#import "TIoTSlideView.h"
+#import "TIoTChoseValueView.h"
+#import "TIoTTimeView.h"
+#import "TIoTStringView.h"
 
-#import "WCTipView.h"
+#import "TIoTTipView.h"
 
-#import "WCTimerListVC.h"
+#import "TIoTTimerListVC.h"
 #import "WRNavigationBar.h"
 
 #import "UIImage+Ex.h"
@@ -37,7 +37,7 @@ static NSString *itemId2 = @"i_ooo223";
 static NSString *itemId3 = @"i_ooo454";
 
 
-@implementation WCCollectionView
+@implementation TIoTCollectionView
 
 //- (BOOL)touchesShouldCancelInContentView:(UIView *)view
 //{
@@ -47,17 +47,17 @@ static NSString *itemId3 = @"i_ooo454";
 @end
 
 
-@interface WCPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate>
+@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate>
 @property (nonatomic,strong) UIImageView *bgView;//背景
-@property (nonatomic,strong) WCCollectionView *coll;
+@property (nonatomic,strong) TIoTCollectionView *coll;
 @property (nonatomic,strong) UIView *bottomBar;//底部导航栏
 @property (nonatomic,strong) CAGradientLayer *bottomLayer;
 @property (nonatomic,strong) UIStackView *stackView;
-@property (nonatomic,strong) WCBaseBigBtnView *bigBtnView;
+@property (nonatomic,strong) TIoTBaseBigBtnView *bigBtnView;
 
 
 
-@property (nonatomic,strong) WCDeviceData *deviceInfo;
+@property (nonatomic,strong) TIoTDeviceData *deviceInfo;
 
 @property (nonatomic) WCThemeStyle themeStyle;
 @property (nonatomic,strong) MASConstraint *bottomBarHeight;
@@ -66,7 +66,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 @end
 
-@implementation WCPanelVC
+@implementation TIoTPanelVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -98,7 +98,7 @@ static NSString *itemId3 = @"i_ooo454";
 - (void)showOfflineTip
 {
     if (![self.deviceDic[@"Online"] boolValue]) {
-        WCTipView *vc = [[WCTipView alloc] init];
+        TIoTTipView *vc = [[TIoTTipView alloc] init];
         vc.feedback = ^{
             UIViewController *vc = [NSClassFromString(@"WCFeedBackViewController") new];
             [self.navigationController pushViewController:vc animated:YES];
@@ -129,8 +129,8 @@ static NSString *itemId3 = @"i_ooo454";
     }];
     
     
-    [self.coll registerNib:[UINib nibWithNibName:@"WCLongCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
-    [self.coll registerNib:[UINib nibWithNibName:@"WCMediumCell" bundle:nil] forCellWithReuseIdentifier:itemId3];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTLongCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTMediumCell" bundle:nil] forCellWithReuseIdentifier:itemId3];
     
     [self.view addSubview:self.bottomBar];
     [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -149,7 +149,7 @@ static NSString *itemId3 = @"i_ooo454";
     if (self.deviceInfo.navBar) {
         BOOL isBottomBarShow = [self.deviceInfo.navBar[@"visible"] boolValue];
         if (isBottomBarShow) {
-            [self.bottomBarHeight setOffset:76 + [WCUIProxy shareUIProxy].tabbarAddHeight];
+            [self.bottomBarHeight setOffset:76 + [TIoTUIProxy shareUIProxy].tabbarAddHeight];
             
             NSString *templateId = self.deviceInfo.navBar[@"templateId"];
             BOOL timingProject = [self.deviceInfo.navBar[@"timingProject"] boolValue];
@@ -168,7 +168,7 @@ static NSString *itemId3 = @"i_ooo454";
                 [vv addSubview:barLab];
                 [barLab mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.centerX.equalTo(vv.mas_centerX);
-                    make.bottom.mas_equalTo(-[WCUIProxy shareUIProxy].tabbarAddHeight - 4);
+                    make.bottom.mas_equalTo(-[TIoTUIProxy shareUIProxy].tabbarAddHeight - 4);
                 }];
                 
                 UIImageView *imgV = [[UIImageView alloc] init];
@@ -236,7 +236,7 @@ static NSString *itemId3 = @"i_ooo454";
                 
                 [barLab mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.centerX.equalTo(vv.mas_centerX);
-                    make.bottom.mas_equalTo(-[WCUIProxy shareUIProxy].tabbarAddHeight - 4);
+                    make.bottom.mas_equalTo(-[TIoTUIProxy shareUIProxy].tabbarAddHeight - 4);
                 }];
                 
                 UIImageView *imgV = [[UIImageView alloc] init];
@@ -275,19 +275,19 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([type isEqualToString:@"enum"])
         {
-            _coll.contentInset = UIEdgeInsetsMake(357 + [WCUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
+            _coll.contentInset = UIEdgeInsetsMake(357 + [TIoTUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
         }
         else if ([type isEqualToString:@"int"])
         {
-            _coll.contentInset = UIEdgeInsetsMake(350 + [WCUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
+            _coll.contentInset = UIEdgeInsetsMake(350 + [TIoTUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
         }
         else if ([type isEqualToString:@"float"])
         {
-            _coll.contentInset = UIEdgeInsetsMake(350 + [WCUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
+            _coll.contentInset = UIEdgeInsetsMake(350 + [TIoTUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
         }
         
         if ([type isEqualToString:@"bool"]) {
-            WCBoolView *ev = [[WCBoolView alloc] init];
+            TIoTBoolView *ev = [[TIoTBoolView alloc] init];
             CGSize size = [ev systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
             ev.frame = CGRectMake(0, -size.height, kScreenWidth, size.height);
             [ev setStyle:self.themeStyle];
@@ -306,7 +306,7 @@ static NSString *itemId3 = @"i_ooo454";
             for (int i = 0; i < map.count; i ++) {
                 [source addObject:map[[NSString stringWithFormat:@"%i",i]]];
             }
-            WCEnumView *ev = [[WCEnumView alloc] init];
+            TIoTEnumView *ev = [[TIoTEnumView alloc] init];
             ev.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             [ev setStyle:self.themeStyle];
             ev.info = self.deviceInfo.bigProp;
@@ -321,7 +321,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([type isEqualToString:@"int"])
         {
-            WCNumberView *nv = [[WCNumberView alloc] initWithFrame:CGRectMake(0, -350, kScreenWidth, 350)];
+            TIoTNumberView *nv = [[TIoTNumberView alloc] initWithFrame:CGRectMake(0, -350, kScreenWidth, 350)];
             nv.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             [nv setStyle:self.themeStyle];
             nv.info = self.deviceInfo.bigProp;
@@ -334,7 +334,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([type isEqualToString:@"float"])
         {
-            WCNumberView *nv = [[WCNumberView alloc] initWithFrame:CGRectMake(0, -350, kScreenWidth, 350)];
+            TIoTNumberView *nv = [[TIoTNumberView alloc] initWithFrame:CGRectMake(0, -350, kScreenWidth, 350)];
             nv.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             nv.info = self.deviceInfo.bigProp;
             nv.update = ^(NSDictionary * _Nonnull uploadInfo) {
@@ -378,7 +378,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)getProductsConfig
 {
-    [[WCRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
             NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
@@ -392,7 +392,7 @@ static NSString *itemId3 = @"i_ooo454";
 - (void)loadData:(NSDictionary *)dic {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[WCRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
@@ -408,7 +408,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)getDeviceData:(NSDictionary *)uiInfo andBaseInfo:(NSDictionary *)baseInfo {
 
-    [[WCRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
         NSString *tmpStr = (NSString *)responseObject[@"Data"];
         NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
         
@@ -440,7 +440,7 @@ static NSString *itemId3 = @"i_ooo454";
                                 @"Data":[NSString objectToJson:deviceReport],
                             };
     
-    [[WCRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         
     } failure:^(NSString *reason, NSError *error) {
         
@@ -461,7 +461,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)moreClick:(UIButton *)sender{
     
-    WCPanelMoreViewController *vc = [[WCPanelMoreViewController alloc] init];
+    TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
     vc.title = @"设备详情";
     vc.deviceDic = self.deviceDic;
     [self.navigationController pushViewController:vc animated:YES];
@@ -495,7 +495,7 @@ static NSString *itemId3 = @"i_ooo454";
 //定时
 - (void)bottomBarRightTap
 {
-    WCTimerListVC *vc = [WCTimerListVC new];
+    TIoTTimerListVC *vc = [TIoTTimerListVC new];
     vc.productId = self.productId;
     vc.deviceName = self.deviceName;
     vc.actions = self.deviceInfo.allProperties;
@@ -505,7 +505,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 #pragma mark - WCWaterFlowLayoutDelegate
 
-- (CGSize)waterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (CGSize)waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < self.deviceInfo.properties.count) {
         NSDictionary *pro = self.deviceInfo.properties[indexPath.row];
@@ -529,7 +529,7 @@ static NSString *itemId3 = @"i_ooo454";
     return CGSizeMake([UIScreen mainScreen].bounds.size.width - kSectionInset.left - kSectionInset.right, 60);
 }
 
-- (CGSize)waterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout sizeForHeaderViewInSection:(NSInteger)section
+- (CGSize)waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForHeaderViewInSection:(NSInteger)section
 {
 //    if (self.deviceInfo.bigProp) {
 //        NSString *type = self.deviceInfo.bigProp[@"define"][@"type"];
@@ -553,17 +553,17 @@ static NSString *itemId3 = @"i_ooo454";
     return CGSizeMake(0, 0);
 }
 
-- (CGFloat)minSpaceForLines:(WCWaterFlowLayout *)waterFlowLayout
+- (CGFloat)minSpaceForLines:(TIoTWaterFlowLayout *)waterFlowLayout
 {
     return lineSpace;
 }
 
-- (CGFloat)minSpaceForCells:(WCWaterFlowLayout *)waterFlowLayout
+- (CGFloat)minSpaceForCells:(TIoTWaterFlowLayout *)waterFlowLayout
 {
     return itemSpace;
 }
 
-- (UIEdgeInsets)edgeInsetInWaterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout
+- (UIEdgeInsets)edgeInsetInWaterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout
 {
     return kSectionInset;
 }
@@ -583,7 +583,7 @@ static NSString *itemId3 = @"i_ooo454";
         NSDictionary *pro = self.deviceInfo.properties[indexPath.row];
         NSString *type = pro[@"ui"][@"type"];
         if ([type isEqualToString:@"btn-col-3"] || [type isEqualToString:@"btn-col-2"]) {
-            WCMediumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId3 forIndexPath:indexPath];
+            TIoTMediumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId3 forIndexPath:indexPath];
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             [cell setInfo:pro];
             [cell setThemeStyle:self.themeStyle];
@@ -594,7 +594,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([type isEqualToString:@"btn-col-1"])
         {
-            WCLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
+            TIoTLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
             [cell setInfo:pro];
             [cell setThemeStyle:self.themeStyle];
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
@@ -606,7 +606,7 @@ static NSString *itemId3 = @"i_ooo454";
     }
     else
     {
-        WCLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
+        TIoTLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
         [cell setShowInfo:@{@"name":@"云端定时",@"content":@""}];
         [cell setThemeStyle:self.themeStyle];
         cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
@@ -628,7 +628,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"enum"]){
             
-            WCChoseValueView *choseView = [[WCChoseValueView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTChoseValueView *choseView = [[TIoTChoseValueView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             choseView.dic = dic;
             choseView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
@@ -638,7 +638,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"int"]){
             
-            WCSlideView *slideView = [[WCSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTSlideView *slideView = [[TIoTSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             slideView.dic = dic;
             slideView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
@@ -650,7 +650,7 @@ static NSString *itemId3 = @"i_ooo454";
         else if ([dic[@"define"][@"type"] isEqualToString:@"string"]){
             
             
-            WCStringView *stringView = [[WCStringView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTStringView *stringView = [[TIoTStringView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             stringView.dic = dic;
             stringView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
@@ -660,7 +660,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"float"]){
             
-            WCSlideView *slideView = [[WCSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTSlideView *slideView = [[TIoTSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             slideView.dic = dic;
             slideView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
@@ -670,7 +670,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"timestamp"]){
             
-            WCTimeView *timeView = [[WCTimeView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTTimeView *timeView = [[TIoTTimeView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             timeView.dic = dic;
             timeView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
@@ -683,7 +683,7 @@ static NSString *itemId3 = @"i_ooo454";
     else
     {
         //云端定时
-        WCTimerListVC *vc = [WCTimerListVC new];
+        TIoTTimerListVC *vc = [TIoTTimerListVC new];
         vc.productId = self.productId;
         vc.deviceName = self.deviceName;
         vc.actions = self.deviceInfo.allProperties;
@@ -705,15 +705,15 @@ static NSString *itemId3 = @"i_ooo454";
 - (UICollectionView *)coll
 {
     if (!_coll) {
-        WCWaterFlowLayout *layout = [[WCWaterFlowLayout alloc] init];
+        TIoTWaterFlowLayout *layout = [[TIoTWaterFlowLayout alloc] init];
         layout.delegate = self;
         
-        _coll = [[WCCollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) collectionViewLayout:layout];
+        _coll = [[TIoTCollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) collectionViewLayout:layout];
         _coll.backgroundColor = [UIColor clearColor];
         _coll.delegate = self;
         _coll.dataSource = self;
         _coll.bounces = NO;
-        _coll.contentInset = UIEdgeInsetsMake([WCUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
+        _coll.contentInset = UIEdgeInsetsMake([TIoTUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
 //        _coll.delaysContentTouches = NO;
         
     }
@@ -731,7 +731,7 @@ static NSString *itemId3 = @"i_ooo454";
         _bottomBar.layer.shadowOpacity = 1;
         
         CAGradientLayer *layer = [[CAGradientLayer alloc] init];
-        layer.frame = CGRectMake(0, 0, kScreenWidth, 76 + [WCUIProxy shareUIProxy].tabbarAddHeight);
+        layer.frame = CGRectMake(0, 0, kScreenWidth, 76 + [TIoTUIProxy shareUIProxy].tabbarAddHeight);
         layer.colors = @[(id)[UIColor whiteColor].CGColor,(id)[UIColor whiteColor].CGColor];
         layer.startPoint = CGPointMake(0, 0);
         layer.endPoint = CGPointMake(0, 1);
@@ -756,10 +756,10 @@ static NSString *itemId3 = @"i_ooo454";
     return _stackView;
 }
 
-- (WCDeviceData *)deviceInfo
+- (TIoTDeviceData *)deviceInfo
 {
     if (!_deviceInfo) {
-        _deviceInfo = [[WCDeviceData alloc] init];
+        _deviceInfo = [[TIoTDeviceData alloc] init];
     }
     return _deviceInfo;
 }

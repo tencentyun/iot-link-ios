@@ -6,8 +6,8 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCRefreshHeader.h"
-@interface WCRefreshHeader ()
+#import "TIoTRefreshHeader.h"
+@interface TIoTRefreshHeader ()
 
 @property (nonatomic , weak) UIImageView *arrowView;
 
@@ -23,7 +23,7 @@
 @end
 
 
-@implementation WCRefreshHeader
+@implementation TIoTRefreshHeader
 
 #pragma mark - 重写父类的方法
 - (void)prepare

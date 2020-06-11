@@ -6,15 +6,15 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddFamilyVC.h"
+#import "TIoTAddFamilyVC.h"
 
-@interface WCAddFamilyVC ()
+@interface TIoTAddFamilyVC ()
 @property (weak, nonatomic) IBOutlet UITextField *nameL;
 @property (weak, nonatomic) IBOutlet UITextField *addressL;
 
 @end
 
-@implementation WCAddFamilyVC
+@implementation TIoTAddFamilyVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,7 +71,7 @@
     
     if (self.nameL.hasText && self.addressL.hasText) {
         NSDictionary *param = @{@"Name":self.nameL.text,@"Address":self.addressL.text};
-        [[WCRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
             [HXYNotice addUpdateFamilyListPost];
             [self cancel];
         } failure:^(NSString *reason, NSError *error) {

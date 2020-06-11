@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCScanlViewController : UIViewController
+@interface TIoTScanlViewController : UIViewController
 
 @property (nonatomic, copy) NSString *roomId;
 

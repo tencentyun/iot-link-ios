@@ -6,13 +6,13 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCTimerListVC.h"
-#import "WCAddTimerVC.h"
-#import "WCTimerListCell.h"
+#import "TIoTTimerListVC.h"
+#import "TIoTAddTimerVC.h"
+#import "TIoTTimerListCell.h"
 
 
 static NSString *cellId = @"ub67989";
-@interface WCTimerListVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTTimerListVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -22,7 +22,7 @@ static NSString *cellId = @"ub67989";
 
 @end
 
-@implementation WCTimerListVC
+@implementation TIoTTimerListVC
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -66,7 +66,7 @@ static NSString *cellId = @"ub67989";
 
 - (void)toAddTimer{
     
-    WCAddTimerVC *vc = [[WCAddTimerVC alloc] init];
+    TIoTAddTimerVC *vc = [[TIoTAddTimerVC alloc] init];
     vc.productId = self.productId;
     vc.deviceName = self.deviceName;
     vc.actions = self.actions;
@@ -101,7 +101,7 @@ static NSString *cellId = @"ub67989";
     [dic setValue:@(self.offset) forKey:@"Offset"];
     [dic setValue:@(50) forKey:@"Limit"];
     
-    [[WCRequestObject shared] post:AppGetTimerList Param:dic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetTimerList Param:dic success:^(id responseObject) {
         
         [self.timers removeAllObjects];
         [self.timers addObjectsFromArray:responseObject[@"TimerList"]];
@@ -118,7 +118,7 @@ static NSString *cellId = @"ub67989";
     [dic setValue:self.deviceName forKey:@"DeviceName"];
     [dic setValue:timerId forKey:@"TimerId"];
     
-    [[WCRequestObject shared] post:AppDeleteTimer Param:dic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteTimer Param:dic success:^(id responseObject) {
         [self.timers removeObjectAtIndex:row];
         [self refreshUI:self.timers.count];
         
@@ -142,13 +142,13 @@ static NSString *cellId = @"ub67989";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    WCTimerListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTTimerListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     [cell setInfo:self.timers[indexPath.row]];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCAddTimerVC *vc = [[WCAddTimerVC alloc] init];
+    TIoTAddTimerVC *vc = [[TIoTAddTimerVC alloc] init];
     vc.productId = self.productId;
     vc.deviceName = self.deviceName;
     vc.actions = self.actions;
@@ -190,7 +190,7 @@ static NSString *cellId = @"ub67989";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
-        [_tableView registerNib:[UINib nibWithNibName:@"WCTimerListCell" bundle:nil] forCellReuseIdentifier:cellId];
+        [_tableView registerNib:[UINib nibWithNibName:@"TIoTTimerListCell" bundle:nil] forCellReuseIdentifier:cellId];
     }
     
     return _tableView;

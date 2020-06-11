@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCDeviceShareVC : UIViewController
+@interface TIoTDeviceShareVC : UIViewController
 
 @property (nonatomic, copy) NSDictionary *deviceDic;
 

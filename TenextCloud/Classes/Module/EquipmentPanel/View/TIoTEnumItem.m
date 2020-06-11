@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCEnumItem.h"
+#import "TIoTEnumItem.h"
 
-@interface WCEnumItem()
+@interface TIoTEnumItem()
 @property (weak, nonatomic) IBOutlet UIView *bgview;
 @property (weak, nonatomic) IBOutlet UILabel *titleLab;
 @property (weak, nonatomic) IBOutlet UIImageView *imgV;
@@ -18,7 +18,7 @@
 @property (nonatomic,strong) CAGradientLayer *gl;
 @end
 
-@implementation WCEnumItem
+@implementation TIoTEnumItem
 
 - (void)awakeFromNib {
     [super awakeFromNib];

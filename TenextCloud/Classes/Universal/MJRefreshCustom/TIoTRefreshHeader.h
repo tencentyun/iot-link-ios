@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRefreshHeader : MJRefreshHeader
+@interface TIoTRefreshHeader : MJRefreshHeader
 
 @end
 

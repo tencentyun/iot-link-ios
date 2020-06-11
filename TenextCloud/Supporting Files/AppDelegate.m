@@ -7,12 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import "WCTabBarViewController.h"
-#import "WCNavigationController.h"
+#import "TIoTTabBarViewController.h"
+#import "TIoTNavigationController.h"
 #import "KeyboardManage.h"
-#import "WCAppEnvironment.h"
+#import "TIoTAppEnvironment.h"
 #import "XGPushManage.h"
-#import "WCLoginVC.h"
+#import "TIoTLoginVC.h"
 #import "WxManager.h"
 #import "WRNavigationBar.h"
 #import "Firebase.h"
@@ -27,8 +27,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [[WCAppEnvironment shareEnvironment] selectEnvironmentType:WCAppEnvironmentTypeRelease];
-    [[WCWebSocketManage shared] SRWebSocketOpen];
+    [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType:WCAppEnvironmentTypeRelease];
+    [[TIoTWebSocketManage shared] SRWebSocketOpen];
     
     //注册键盘全局事件
     [KeyboardManage registerIQKeyboard];
@@ -51,12 +51,12 @@
         self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
     }
     
-    if ([WCUserManage shared].isValidToken) {
-        self.window.rootViewController = [[WCTabBarViewController alloc] init];
+    if ([TIoTUserManage shared].isValidToken) {
+        self.window.rootViewController = [[TIoTTabBarViewController alloc] init];
     }
     else{
         
-        WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:[[WCLoginVC alloc] init]];
+        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         self.window.rootViewController = nav;
     }
     

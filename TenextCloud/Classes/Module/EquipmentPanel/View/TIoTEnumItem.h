@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCEnumItem : UICollectionViewCell
+@interface TIoTEnumItem : UICollectionViewCell
 
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic,copy) NSString *name;

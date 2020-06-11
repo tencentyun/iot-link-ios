@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCMediumCell : UICollectionViewCell
+@interface TIoTMediumCell : UICollectionViewCell
 @property (nonatomic,strong) NSDictionary *info;
 @property (nonatomic, copy) void (^boolUpdate)(NSDictionary *uploadInfo);
 

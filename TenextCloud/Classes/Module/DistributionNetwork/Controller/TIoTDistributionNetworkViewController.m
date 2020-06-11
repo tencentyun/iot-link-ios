@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCDistributionNetworkViewController.h"
+#import "TIoTDistributionNetworkViewController.h"
 #import "TYCyclePagerView.h"
-#import "WCDistributionNetCollectionViewCell.h"
-#import "WCWIFINetViewController.h"
+#import "TIoTDistributionNetCollectionViewCell.h"
+#import "TIoTWIFINetViewController.h"
 
-@interface WCDistributionNetworkViewController ()<TYCyclePagerViewDataSource, TYCyclePagerViewDelegate>
+@interface TIoTDistributionNetworkViewController ()<TYCyclePagerViewDataSource, TYCyclePagerViewDelegate>
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) TYCyclePagerView *pagerView;
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSString *networkToken;
 @end
 
-@implementation WCDistributionNetworkViewController
+@implementation TIoTDistributionNetworkViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -64,7 +64,7 @@
     [scroll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.mas_equalTo(0);
         make.top.mas_equalTo(0);
-        make.bottom.mas_equalTo(-[WCUIProxy shareUIProxy].tabbarAddHeight);
+        make.bottom.mas_equalTo(-[TIoTUIProxy shareUIProxy].tabbarAddHeight);
     }];
     
     self.titleLab = [[UILabel alloc] init];
@@ -181,7 +181,7 @@
 }
 
 - (void)getSoftApToken {
-    [[WCRequestObject shared] post:AppCreateDeviceBindToken Param:@{} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppCreateDeviceBindToken Param:@{} success:^(id responseObject) {
 
         WCLog(@"AppCreateDeviceBindToken----responseObject==%@",responseObject);
         
@@ -197,7 +197,7 @@
 
 #pragma mark eventResponse
 - (void)nextClick:(id)sender{
-    WCWIFINetViewController *vc = [[WCWIFINetViewController alloc] init];
+    TIoTWIFINetViewController *vc = [[TIoTWIFINetViewController alloc] init];
     vc.equipmentType = self.equipmentType;
     vc.currentDistributionToken = self.networkToken;
     vc.roomId = self.roomId;
@@ -214,7 +214,7 @@
 }
 
 - (UICollectionViewCell *)pagerView:(TYCyclePagerView *)pagerView cellForItemAtIndex:(NSInteger)index {
-    WCDistributionNetCollectionViewCell *cell = [pagerView dequeueReusableCellWithReuseIdentifier:@"WCDistributionNetCollectionViewCell" forIndex:index];
+    TIoTDistributionNetCollectionViewCell *cell = [pagerView dequeueReusableCellWithReuseIdentifier:@"TIoTDistributionNetCollectionViewCell" forIndex:index];
     cell.imgName = self.dataArr[index][@"img"];
     return cell;
 }
@@ -240,7 +240,7 @@
         _pagerView.dataSource = self;
         _pagerView.delegate = self;
         _pagerView.isInfiniteLoop = NO;
-        [_pagerView registerClass:[WCDistributionNetCollectionViewCell class] forCellWithReuseIdentifier:@"WCDistributionNetCollectionViewCell"];
+        [_pagerView registerClass:[TIoTDistributionNetCollectionViewCell class] forCellWithReuseIdentifier:@"TIoTDistributionNetCollectionViewCell"];
     }
     return _pagerView;
 }

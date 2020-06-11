@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCEquipmentTableViewCell.h"
+#import "TIoTEquipmentTableViewCell.h"
 
-@interface WCEquipmentTableViewCell ()
+@interface TIoTEquipmentTableViewCell ()
 
 @property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -18,13 +18,13 @@
 
 @end
 
-@implementation WCEquipmentTableViewCell
+@implementation TIoTEquipmentTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCEquipmentTableViewCell";
-    WCEquipmentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTEquipmentTableViewCell";
+    TIoTEquipmentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCEquipmentTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTEquipmentTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

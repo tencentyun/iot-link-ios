@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCPanelTableViewCell.h"
+#import "TIoTPanelTableViewCell.h"
 
-@interface WCPanelTableViewCell ()
+@interface TIoTPanelTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UILabel *valueLab;
@@ -18,13 +18,13 @@
 
 @end
 
-@implementation WCPanelTableViewCell
+@implementation TIoTPanelTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCPanelTableViewCell";
-    WCPanelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTPanelTableViewCell";
+    TIoTPanelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCPanelTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTPanelTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

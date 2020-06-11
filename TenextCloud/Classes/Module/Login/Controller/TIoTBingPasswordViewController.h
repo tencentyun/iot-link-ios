@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, RegisterType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCBingPasswordViewController : UIViewController
+@interface TIoTBingPasswordViewController : UIViewController
 
 @property (nonatomic, assign) RegisterType registerType;
 @property (nonatomic, copy) NSDictionary *sendDataDic;

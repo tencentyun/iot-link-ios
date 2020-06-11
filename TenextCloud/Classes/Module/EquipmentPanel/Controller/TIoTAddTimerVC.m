@@ -6,14 +6,14 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddTimerVC.h"
-#import "WCRepeatVC.h"
-#import "WCTimerCell.h"
-#import "WCChoseValueView.h"
-#import "WCSlideView.h"
+#import "TIoTAddTimerVC.h"
+#import "TIoTRepeatVC.h"
+#import "TIoTTimerCell.h"
+#import "TIoTChoseValueView.h"
+#import "TIoTSlideView.h"
 
 static NSString *cellId = @"rv23244";
-@interface WCAddTimerVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTAddTimerVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) UIDatePicker *picker;
 
@@ -26,14 +26,14 @@ static NSString *cellId = @"rv23244";
 
 @end
 
-@implementation WCAddTimerVC
+@implementation TIoTAddTimerVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.title = @"添加定时";
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"WCTimerCell" bundle:nil] forCellReuseIdentifier:cellId];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTTimerCell" bundle:nil] forCellReuseIdentifier:cellId];
     
     [self configData];
     [self addTableHeaderView];
@@ -187,7 +187,7 @@ static NSString *cellId = @"rv23244";
     }
     [param setValue:[NSString objectToJson:self.publishData] forKey:@"Data"];
     
-    [[WCRequestObject shared] post:AppCreateTimer Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppCreateTimer Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateTimerListPost];
         [self.navigationController popViewControllerAnimated:YES];
@@ -233,7 +233,7 @@ static NSString *cellId = @"rv23244";
     }
     [param setValue:[NSString objectToJson:self.publishData] forKey:@"Data"];
     
-    [[WCRequestObject shared] post:AppModifyTimer Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppModifyTimer Param:param success:^(id responseObject) {
         [HXYNotice addUpdateTimerListPost];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error) {
@@ -256,7 +256,7 @@ static NSString *cellId = @"rv23244";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCTimerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTTimerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     [cell setActionInfo:self.dataArr[indexPath.section][indexPath.row]];
     return cell;
 }
@@ -296,7 +296,7 @@ static NSString *cellId = @"rv23244";
             {
                 NSMutableDictionary *dic = self.dataArr[0][0];
                 
-                WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+                TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
                 [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
                 av.maxLength = 10;
                 av.defaultText = dic[@"content"];
@@ -312,7 +312,7 @@ static NSString *cellId = @"rv23244";
                 break;
             case 1:
             {
-                WCRepeatVC *vc = [WCRepeatVC new];
+                TIoTRepeatVC *vc = [TIoTRepeatVC new];
                 vc.days = self.repeatData;
                 vc.repeatResult = ^(NSArray *repeats) {
                     
@@ -336,7 +336,7 @@ static NSString *cellId = @"rv23244";
     {
         NSMutableDictionary *pro = self.dataArr[indexPath.section][indexPath.row];
         if ([@"bool" isEqualToString:pro[@"define"][@"type"]] || [@"enum" isEqualToString:pro[@"define"][@"type"]]) {
-            WCChoseValueView *choseView = [[WCChoseValueView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTChoseValueView *choseView = [[TIoTChoseValueView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             choseView.isAction = YES;
             choseView.deleteTap = ^{
                 [self.publishData removeObjectForKey:pro[@"id"]];
@@ -360,7 +360,7 @@ static NSString *cellId = @"rv23244";
         }
         else if ([@"int" isEqualToString:pro[@"define"][@"type"]] || [@"float" isEqualToString:pro[@"define"][@"type"]])
         {
-            WCSlideView *slideView = [[WCSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            TIoTSlideView *slideView = [[TIoTSlideView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             slideView.isAction = YES;
             slideView.deleteTap = ^{
                 [self.publishData removeObjectForKey:pro[@"id"]];

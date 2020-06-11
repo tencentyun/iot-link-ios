@@ -6,16 +6,16 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCUserCell.h"
+#import "TIoTUserCell.h"
 
-@interface WCUserCell()
+@interface TIoTUserCell()
 @property (weak, nonatomic) IBOutlet UIImageView *header;
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
 @property (weak, nonatomic) IBOutlet UILabel *timeL;
 
 
 @end
-@implementation WCUserCell
+@implementation TIoTUserCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

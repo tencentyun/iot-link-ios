@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WCDeviceData : NSObject
+@interface TIoTDeviceData : NSObject
 
 +(instancetype)shared;
 

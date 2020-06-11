@@ -6,11 +6,11 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddActionView.h"
-#import "WCAddActionTableViewCell.h"
-#import "WCActionTypeTableViewCell.h"
+#import "TIoTAddActionView.h"
+#import "TIoTAddActionTableViewCell.h"
+#import "TIoTActionTypeTableViewCell.h"
 
-@interface WCAddActionView ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTAddActionView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *actionTableView;
 @property (nonatomic, strong) UIButton *backBtn;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation WCAddActionView
+@implementation TIoTAddActionView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -97,7 +97,7 @@
 }
 
 - (void)addAction:(id)sender{
-    WCActionTypeView *typeView = [[WCActionTypeView alloc] init];
+    TIoTActionTypeView *typeView = [[TIoTActionTypeView alloc] init];
     [self addSubview:typeView];
     [typeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self);
@@ -131,12 +131,12 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCAddActionTableViewCell *cell = [WCAddActionTableViewCell cellWithTableView:tableView];
+    TIoTAddActionTableViewCell *cell = [TIoTAddActionTableViewCell cellWithTableView:tableView];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCActionStatusView *statusView = [[WCActionStatusView alloc] init];
+    TIoTActionStatusView *statusView = [[TIoTActionStatusView alloc] init];
     [self addSubview:statusView];
     [statusView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self);
@@ -176,13 +176,13 @@
 
 
 
-@interface WCActionTypeView ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTActionTypeView ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, copy) NSArray *dataArr;
 @end
 
-@implementation WCActionTypeView
+@implementation TIoTActionTypeView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -229,13 +229,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCActionTypeTableViewCell *cell = [WCActionTypeTableViewCell cellWithTableView:tableView];
+    TIoTActionTypeTableViewCell *cell = [TIoTActionTypeTableViewCell cellWithTableView:tableView];
     cell.nameStr = self.dataArr[indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCActionStatusView *statusView = [[WCActionStatusView alloc] init];
+    TIoTActionStatusView *statusView = [[TIoTActionStatusView alloc] init];
     [self addSubview:statusView];
     [statusView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self);
@@ -280,13 +280,13 @@
 
 
 
-@interface WCActionStatusView ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTActionStatusView ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, copy) NSArray *dataArr;
 @end
 
-@implementation WCActionStatusView
+@implementation TIoTActionStatusView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -333,7 +333,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCActionTypeTableViewCell *cell = [WCActionTypeTableViewCell cellWithTableView:tableView];
+    TIoTActionTypeTableViewCell *cell = [TIoTActionTypeTableViewCell cellWithTableView:tableView];
     cell.nameStr = self.dataArr[indexPath.row];
     return cell;
 }

@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMemberInfoVC.h"
+#import "TIoTMemberInfoVC.h"
 
-@interface WCMemberInfoVC ()
+@interface TIoTMemberInfoVC ()
 @property (weak, nonatomic) IBOutlet UIImageView *headImg;
 @property (weak, nonatomic) IBOutlet UILabel *memberNick;
 @property (weak, nonatomic) IBOutlet UILabel *account;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation WCMemberInfoVC
+@implementation TIoTMemberInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,14 +32,14 @@
     self.memberNick.text = self.memberInfo[@"NickName"];
     self.roleL.text = [self.memberInfo[@"Role"] integerValue] == 1 ? @"所有者" : @"成员";
     
-    if (self.isOwner && ![[WCUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
+    if (self.isOwner && ![[TIoTUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
         self.removeBtn.hidden = NO;
     }
 }
 
 - (IBAction)done:(UIButton *)sender {
     NSDictionary *param = @{@"MemberID":self.memberInfo[@"UserID"],@"FamilyId":self.familyId};
-    [[WCRequestObject shared] post:AppDeleteFamilyMember Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteFamilyMember Param:param success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"移除成功"];
         [HXYNotice postUpdateMemberList];
         [self.navigationController popViewControllerAnimated:YES];

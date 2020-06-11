@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^didReceiveMessage) (BOOL sucess, NSDictionary *data);
 
-@interface WCWebSocketManage : NSObject
+@interface TIoTWebSocketManage : NSObject
 
 /** 连接状态 */
 @property (nonatomic,assign) SRReadyState socketReadyState;

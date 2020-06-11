@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCMineViewController : UIViewController
+@interface TIoTMineViewController : UIViewController
 
 @end
 

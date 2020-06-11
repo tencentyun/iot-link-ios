@@ -6,13 +6,13 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageNoticeVC.h"
+#import "TIoTMessageNoticeVC.h"
 
-@interface WCMessageNoticeVC ()
+@interface TIoTMessageNoticeVC ()
 
 @end
 
-@implementation WCMessageNoticeVC
+@implementation TIoTMessageNoticeVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

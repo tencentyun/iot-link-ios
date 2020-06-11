@@ -6,16 +6,16 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCBoolView.h"
+#import "TIoTBoolView.h"
 
-@interface WCBoolView()
+@interface TIoTBoolView()
 
 @property (nonatomic,strong) UIButton *ibtn;
 @property (nonatomic,strong) UILabel *iLab;
 
 @end
 
-@implementation WCBoolView
+@implementation TIoTBoolView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

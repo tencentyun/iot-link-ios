@@ -6,14 +6,14 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCAddRoomVC.h"
+#import "TIoTAddRoomVC.h"
 
-@interface WCAddRoomVC ()
+@interface TIoTAddRoomVC ()
 @property (weak, nonatomic) IBOutlet UITextField *roomTF;
 
 @end
 
-@implementation WCAddRoomVC
+@implementation TIoTAddRoomVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,7 +43,7 @@
         return;
     }
     NSDictionary *param = @{@"FamilyId":self.familyId,@"Name":self.roomTF.text};
-    [[WCRequestObject shared] post:AppCreateRoom Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppCreateRoom Param:param success:^(id responseObject) {
         [HXYNotice addUpdateRoomListPost];
         [self cancel];
     } failure:^(NSString *reason, NSError *error) {

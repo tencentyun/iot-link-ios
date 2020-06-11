@@ -6,19 +6,19 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCQCloudCOSXMLManage.h"
+#import "TIoTQCloudCOSXMLManage.h"
 
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <QCloudCore/QCloudCore.h>
-#import "WCUploadObj.h"
+#import "TIoTUploadObj.h"
 
-@interface WCQCloudCOSXMLManage ()<QCloudSignatureProvider>
+@interface TIoTQCloudCOSXMLManage ()<QCloudSignatureProvider>
 
 @property (nonatomic, copy) NSDictionary *signatureDic;
 
 @end
 
-@implementation WCQCloudCOSXMLManage
+@implementation TIoTQCloudCOSXMLManage
 
 - (void)registerQCloudCOSXML:(NSString *)regionName appID:(NSString *)bucket{
     NSArray *array = [bucket componentsSeparatedByString:@"-"];
@@ -77,12 +77,12 @@
     
     NSMutableArray *reqArr = [NSMutableArray array];
     
-    [[WCRequestObject shared] getSigForUpload:AppCosAuth Param:@{@"path":@"iotexplorer-app-logs/user_{uin}/"} success:^(id responseObject) {
+    [[TIoTRequestObject shared] getSigForUpload:AppCosAuth Param:@{@"path":@"iotexplorer-app-logs/user_{uin}/"} success:^(id responseObject) {
         self.signatureDic = responseObject;
         [self registerQCloudCOSXML:self.signatureDic[@"cosConfig"][@"region"] appID:self.signatureDic[@"cosConfig"][@"bucket"]];
         
         for (UIImage *image in images) {
-            WCUploadObj *obj = [WCUploadObj new];
+            TIoTUploadObj *obj = [TIoTUploadObj new];
             obj.image = image;
             obj.req = [self uploadImage:image];
             [reqArr addObject: obj];

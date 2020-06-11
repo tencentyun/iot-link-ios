@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCBingPasswordViewController.h"
+#import "TIoTBingPasswordViewController.h"
 
-@interface WCBingPasswordViewController ()
+@interface TIoTBingPasswordViewController ()
 
 @property (nonatomic, strong) UITextField *passWordTF;
 @property (nonatomic, strong) UITextField *passWordTF2;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation WCBingPasswordViewController
+@implementation TIoTBingPasswordViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -53,7 +53,7 @@
     [self.view addSubview:self.passWordTF];
     [self.passWordTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view).offset(24);
-        make.top.mas_equalTo([WCUIProxy shareUIProxy].navigationBarHeight + 52 * kScreenAllHeightScale);
+        make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + 52 * kScreenAllHeightScale);
         make.trailing.equalTo(self.view).offset(-24);
         make.height.mas_equalTo(48);
     }];
@@ -161,7 +161,7 @@
         NSDictionary *tmpDic = @{@"CountryCode":self.sendDataDic[@"CountryCode"],@"PhoneNumber":self.sendDataDic[@"PhoneNumber"],@"VerificationCode":self.sendDataDic[@"VerificationCode"],@"Password":self.passWordTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppCreateCellphoneUser Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppCreateCellphoneUser Param:tmpDic success:^(id responseObject) {
             [self.navigationController popToRootViewControllerAnimated:YES];
             
         } failure:^(NSString *reason, NSError *error) {
@@ -173,7 +173,7 @@
         NSDictionary *tmpDic = @{@"CountryCode":self.sendDataDic[@"CountryCode"],@"PhoneNumber":self.sendDataDic[@"PhoneNumber"],@"VerificationCode":self.sendDataDic[@"VerificationCode"],@"Password":self.passWordTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppResetPasswordByCellphone Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppResetPasswordByCellphone Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error) {
@@ -185,7 +185,7 @@
         NSDictionary *tmpDic = @{@"Email":self.sendDataDic[@"Email"],@"VerificationCode":self.sendDataDic[@"VerificationCode"],@"Password":self.passWordTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppCreateEmailUser Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppCreateEmailUser Param:tmpDic success:^(id responseObject) {
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error) {
             
@@ -195,7 +195,7 @@
         NSDictionary *tmpDic = @{@"Email":self.sendDataDic[@"Email"],@"VerificationCode":self.sendDataDic[@"VerificationCode"],@"Password":self.passWordTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppResetPasswordByEmail Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppResetPasswordByEmail Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error) {

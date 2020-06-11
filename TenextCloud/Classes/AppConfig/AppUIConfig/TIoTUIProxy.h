@@ -10,13 +10,13 @@
 #import <UIKit/UIKit.h>
 
 // 全面屏
-#define kXDPiPhoneBottomSafeAreaHeight [WCUIProxy shareUIProxy].tabbarAddHeight
+#define kXDPiPhoneBottomSafeAreaHeight [TIoTUIProxy shareUIProxy].tabbarAddHeight
 
 // screen
-#define kScreenWidth [WCUIProxy shareUIProxy].screenWidth
-#define kScreenHeight [WCUIProxy shareUIProxy].screenHeight
-#define kScreenAllWidthScale [WCUIProxy shareUIProxy].screenAllWidthScale
-#define kScreenAllHeightScale [WCUIProxy shareUIProxy].screenAllHeightScale
+#define kScreenWidth [TIoTUIProxy shareUIProxy].screenWidth
+#define kScreenHeight [TIoTUIProxy shareUIProxy].screenHeight
+#define kScreenAllWidthScale [TIoTUIProxy shareUIProxy].screenAllWidthScale
+#define kScreenAllHeightScale [TIoTUIProxy shareUIProxy].screenAllHeightScale
 
 //rgb
 #define kRGBAColor(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
@@ -28,20 +28,20 @@
 #define kXDPNavigationBarTitleFont 18
 #define kXDPNavigationBackgroundColor [UIColor whiteColor]
 #define kXDPNavigationLineColor kRGBColor(230,230,230)
-#define kXDPNavigationBarHeight [WCUIProxy shareUIProxy].navigationBarHeight
+#define kXDPNavigationBarHeight [TIoTUIProxy shareUIProxy].navigationBarHeight
 
 //tabbar
 #define kXDPTabbarTintColor kRGBColor(51,51,51)
 #define kXDPTabbarNomalColor kRGBColor(51,51,51)
 #define kXDPTabbarBackgroundColor [UIColor whiteColor]
 #define kXDPTabbarTitleFont 8
-#define kXDPTabbarHeight [WCUIProxy shareUIProxy].tabbarHeight
+#define kXDPTabbarHeight [TIoTUIProxy shareUIProxy].tabbarHeight
 //tabbar 线颜色
 #define kXDPTabbarLineColor kRGBAColor(0,0,0,0.1)
 
 //edge
 #define kHorEdge 16
-#define kXDPContentRealWidth [WCUIProxy shareUIProxy].contentWidth
+#define kXDPContentRealWidth [TIoTUIProxy shareUIProxy].contentWidth
 
 //主题色
 #define kMainColor kRGBColor(0, 82, 217)
@@ -69,9 +69,9 @@ typedef NS_ENUM(NSInteger,WCThemeStyle) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCUIProxy : NSObject
+@interface TIoTUIProxy : NSObject
 
-+ (WCUIProxy *)shareUIProxy;
++ (TIoTUIProxy *)shareUIProxy;
 
 
 /**

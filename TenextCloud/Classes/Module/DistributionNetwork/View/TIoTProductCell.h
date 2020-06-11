@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCProductCell : UICollectionViewCell
+@interface TIoTProductCell : UICollectionViewCell
 
 @property (nonatomic, copy) NSDictionary *dic;
 

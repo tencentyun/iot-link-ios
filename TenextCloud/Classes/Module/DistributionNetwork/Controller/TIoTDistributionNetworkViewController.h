@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WCWIFINetViewController.h"
+#import "TIoTWIFINetViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCDistributionNetworkViewController : UIViewController
+@interface TIoTDistributionNetworkViewController : UIViewController
 
 @property (nonatomic, assign) EquipmentType equipmentType;
 @property (nonatomic, copy) NSString *roomId;

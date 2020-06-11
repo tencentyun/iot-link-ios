@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTabBarViewController : UITabBarController
+@interface TIoTTabBarViewController : UITabBarController
 
 
 @end

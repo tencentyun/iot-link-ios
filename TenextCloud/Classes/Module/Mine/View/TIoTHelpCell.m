@@ -6,21 +6,21 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCHelpCell.h"
+#import "TIoTHelpCell.h"
 
-@interface WCHelpCell()
+@interface TIoTHelpCell()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIView *lineView;
 
 @end
-@implementation WCHelpCell
+@implementation TIoTHelpCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCHelpCell";
-    WCHelpCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTHelpCell";
+    TIoTHelpCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCHelpCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTHelpCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

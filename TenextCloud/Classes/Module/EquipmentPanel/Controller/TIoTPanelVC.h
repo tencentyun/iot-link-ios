@@ -10,13 +10,13 @@
 
 
 
-@interface WCCollectionView : UICollectionView
+@interface TIoTCollectionView : UICollectionView
 
 @end
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCPanelVC : UIViewController
+@interface TIoTPanelVC : UIViewController
 
 @property (nonatomic, copy) NSString *productId;
 @property (nonatomic, copy) NSString *deviceName;

@@ -6,15 +6,15 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCWIFINetViewController.h"
-#import "WCConnectViewController.h"
-#import "WCSoftapConnectViewController.h"
+#import "TIoTWIFINetViewController.h"
+#import "TIoTConnectViewController.h"
+#import "TIoTSoftapConnectViewController.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import "ReachabilityManager.h"
 
-@interface WCWIFINetViewController ()<CLLocationManagerDelegate,UITextFieldDelegate>
+@interface TIoTWIFINetViewController ()<CLLocationManagerDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *wifiNameTF;
 @property (nonatomic, strong) UITextField *wifiPwdTF;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation WCWIFINetViewController
+@implementation TIoTWIFINetViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -85,7 +85,7 @@
     [self.wifiNameTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(20);
         make.right.equalTo(self.view).offset(-20);
-        make.top.mas_equalTo(50 + [WCUIProxy shareUIProxy].navigationBarHeight);
+        make.top.mas_equalTo(50 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
     }];
     
     UIView *nameLineView = [[UIView alloc] init];
@@ -254,7 +254,7 @@
     [self.wifiInfo setObject:self.currentDistributionToken forKey:@"token"];
     switch (self.equipmentType) {
         case SmartConfig:{
-            WCConnectViewController *vc = [[WCConnectViewController alloc] init];
+            TIoTConnectViewController *vc = [[TIoTConnectViewController alloc] init];
             vc.title = @"配网进度";
             vc.wifiInfo = self.wifiInfo.copy;
             vc.roomId = self.roomId;
@@ -262,7 +262,7 @@
         }
             break;
         case Softap:{
-            WCSoftapConnectViewController *vc = [[WCSoftapConnectViewController alloc] init];
+            TIoTSoftapConnectViewController *vc = [[TIoTSoftapConnectViewController alloc] init];
             vc.wifiInfo = self.wifiInfo.copy;
             vc.roomId = self.roomId;
             [self.navigationController pushViewController:vc animated:YES];

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCActionTypeTableViewCell : UITableViewCell
+@interface TIoTActionTypeTableViewCell : UITableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, copy) NSString *nameStr;

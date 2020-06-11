@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTimeView : UIView
+@interface TIoTTimeView : UIView
 
 @property (nonatomic, copy) void (^updateData)(NSDictionary *dataDic);
 @property (nonatomic, copy) NSDictionary *dic;

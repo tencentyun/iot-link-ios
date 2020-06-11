@@ -6,15 +6,15 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCMineViewController.h"
-#import "WCMineTableViewCell.h"
-#import "WCUserInfomationViewController.h"
+#import "TIoTMineViewController.h"
+#import "TIoTMineTableViewCell.h"
+#import "TIoTUserInfomationViewController.h"
 
-#import "WCAlertView.h"
+#import "TIoTAlertView.h"
 
 #import "NSString+Extension.h"
 
-@interface WCMineViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTMineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation WCMineViewController
+@implementation TIoTMineViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -71,7 +71,7 @@
 }
 
 - (void)addTableHeaderView{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 140 * kScreenAllHeightScale + [WCUIProxy shareUIProxy].statusHeight + 10)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 140 * kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].statusHeight + 10)];
     headerView.backgroundColor = [UIColor whiteColor];
     [headerView xdp_addTarget:self action:@selector(userClick:)];
     
@@ -82,7 +82,7 @@
     [headerView addSubview:bgBorder];
     [bgBorder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(headerView).offset(28);
-        make.centerY.equalTo(headerView).offset([WCUIProxy shareUIProxy].statusHeight * 0.5);
+        make.centerY.equalTo(headerView).offset([TIoTUIProxy shareUIProxy].statusHeight * 0.5);
         make.width.height.mas_equalTo(92 * kScreenAllWidthScale);
     }];
     
@@ -95,7 +95,7 @@
     [headerView addSubview:self.iconImageView];
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(headerView).offset(34);
-        make.centerY.equalTo(headerView).offset([WCUIProxy shareUIProxy].statusHeight * 0.5);
+        make.centerY.equalTo(headerView).offset([TIoTUIProxy shareUIProxy].statusHeight * 0.5);
         make.width.height.mas_equalTo(80 * kScreenAllWidthScale);
     }];
     
@@ -136,13 +136,13 @@
 - (void)getUserInfo{
     
     
-    [[WCRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         self.nameLab.text = data[@"NickName"];
         [self.iconImageView setImageWithURLStr:data[@"Avatar"] placeHolder:@"userDefalut"];
         self.telLab.text = data[@"PhoneNumber"];
         
-        [[WCUserManage shared] saveUserInfo:data];
+        [[TIoTUserManage shared] saveUserInfo:data];
     } failure:^(NSString *reason, NSError *error) {
         
     }];
@@ -150,14 +150,14 @@
 
 #pragma mark eventResponse
 - (void)userClick:(id)sender{
-    WCUserInfomationViewController *vc = [[WCUserInfomationViewController alloc] init];
+    TIoTUserInfomationViewController *vc = [[TIoTUserInfomationViewController alloc] init];
     vc.title = @"个人信息";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)modifyUserInfo:(id)sender{
-    self.nameLab.text = [WCUserManage shared].nickName;
-    [self.iconImageView setImageWithURLStr:[WCUserManage shared].avatar placeHolder:@"userDefalut"];
+    self.nameLab.text = [TIoTUserManage shared].nickName;
+    [self.iconImageView setImageWithURLStr:[TIoTUserManage shared].avatar placeHolder:@"userDefalut"];
 }
 
 #pragma mark TableViewDelegate && TableViewDataSource
@@ -170,7 +170,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCMineTableViewCell *cell = [WCMineTableViewCell cellWithTableView:tableView];
+    TIoTMineTableViewCell *cell = [TIoTMineTableViewCell cellWithTableView:tableView];
     cell.dic = self.dataArr[indexPath.row];
     return cell;
 }

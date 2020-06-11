@@ -14,23 +14,23 @@
 
 #ifdef __OBJC__
 
-#import "WCUIProxy.h"
-#import "UIFont+WCFont.h"
+#import "TIoTUIProxy.h"
+#import "UIFont+TIoTFont.h"
 #import "Masonry.h"
 #import "UIView+XDPGesture.h"
 #import "MBProgressHUD+XDP.h"
 #import "UIView+StatusCoast.h"
-#import "WCWebSocketManage.h"
+#import "TIoTWebSocketManage.h"
 #import "NSString+Extension.h"
 #import "HXYNotice.h"
-#import "UIImageView+WCWebImageView.h"
+#import "UIImageView+TIoTWebImageView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import "NSObject+additions.h"
-#import "WCUserManage.h"
-#import "WCRequestObject.h"
-#import "WCRequestAction.h"
-#import "WCButton.h"
-#import "WCAlertView.h"
+#import "TIoTUserManage.h"
+#import "TIoTRequestObject.h"
+#import "TIoTRequestAction.h"
+#import "TIoTButton.h"
+#import "TIoTAlertView.h"
 
 #endif
 

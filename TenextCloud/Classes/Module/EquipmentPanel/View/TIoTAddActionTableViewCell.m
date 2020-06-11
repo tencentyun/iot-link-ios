@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddActionTableViewCell.h"
+#import "TIoTAddActionTableViewCell.h"
 
-@interface WCAddActionTableViewCell ()
+@interface TIoTAddActionTableViewCell ()
 
 @property (nonatomic, strong) UILabel *nameLab;
 @property (nonatomic, strong) UILabel *statusLab;
@@ -16,13 +16,13 @@
 
 @end
 
-@implementation WCAddActionTableViewCell
+@implementation TIoTAddActionTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCAddActionTableViewCell";
-    WCAddActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTAddActionTableViewCell";
+    TIoTAddActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCAddActionTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTAddActionTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

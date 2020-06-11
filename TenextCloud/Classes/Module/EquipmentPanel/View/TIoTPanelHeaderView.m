@@ -6,8 +6,8 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCPanelHeaderView.h"
+#import "TIoTPanelHeaderView.h"
 
-@implementation WCPanelHeaderView
+@implementation TIoTPanelHeaderView
 
 @end

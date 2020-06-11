@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, DiscoverDeviceStatus) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCDiscoverProductView : UIView
+@interface TIoTDiscoverProductView : UIView
 
 @property (nonatomic, copy) void (^helpAction)(void);
 @property (nonatomic, copy) void (^scanAction)(void);

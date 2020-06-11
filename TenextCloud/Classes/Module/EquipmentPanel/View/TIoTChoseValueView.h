@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCChoseValueView : UIView
+@interface TIoTChoseValueView : UIView
 
 @property (nonatomic) BOOL isAction;//控制删除动作按钮
 @property (nonatomic, copy) void (^deleteTap)(void);

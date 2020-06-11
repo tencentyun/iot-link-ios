@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTimerListCell : UITableViewCell
+@interface TIoTTimerListCell : UITableViewCell
 @property (nonatomic,copy) NSDictionary *info;
 @end
 

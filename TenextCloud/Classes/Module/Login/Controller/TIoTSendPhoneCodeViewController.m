@@ -6,11 +6,11 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCSendPhoneCodeViewController.h"
+#import "TIoTSendPhoneCodeViewController.h"
 #import "JHVerificationCodeView.h"
-#import "WCUserManage.h"
+#import "TIoTUserManage.h"
 
-@interface WCSendPhoneCodeViewController ()
+@interface TIoTSendPhoneCodeViewController ()
 
 @property (nonatomic, strong) UIButton *registerBtn;
 @property (nonatomic, strong) JHVerificationCodeView *codeView;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation WCSendPhoneCodeViewController
+@implementation TIoTSendPhoneCodeViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -67,7 +67,7 @@
     
     [self.view addSubview:({
         WeakObj(self)
-        self.codeView = [[JHVerificationCodeView alloc] initWithFrame:CGRectMake(kHorEdge, [WCUIProxy shareUIProxy].navigationBarHeight + 70* kScreenAllHeightScale, 246, 40) config:config];
+        self.codeView = [[JHVerificationCodeView alloc] initWithFrame:CGRectMake(kHorEdge, [TIoTUIProxy shareUIProxy].navigationBarHeight + 70* kScreenAllHeightScale, 246, 40) config:config];
         CGPoint center = self.codeView.center;
         center.x = self.view.center.x;
         self.codeView.center = center;
@@ -190,8 +190,8 @@
         NSDictionary *tmpDic = @{@"Type":self.sendCodeDic[@"Type"],@"CountryCode":self.sendCodeDic[@"CountryCode"],@"PhoneNumber":self.sendCodeDic[@"PhoneNumber"],@"VerificationCode":self.code};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppCheckVerificationCode Param:tmpDic success:^(id responseObject) {
-            WCBingPasswordViewController *vc = [[WCBingPasswordViewController alloc] init];
+        [[TIoTRequestObject shared] postWithoutToken:AppCheckVerificationCode Param:tmpDic success:^(id responseObject) {
+            TIoTBingPasswordViewController *vc = [[TIoTBingPasswordViewController alloc] init];
             vc.sendDataDic = tmpDic;
             vc.registerType = self.registerType;
             [self.navigationController pushViewController:vc animated:YES];
@@ -204,8 +204,8 @@
         NSDictionary *tmpDic = @{@"Type":self.sendCodeDic[@"Type"],@"Email":self.sendCodeDic[@"Email"],@"VerificationCode":self.code};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppCheckEmailVerificationCode Param:tmpDic success:^(id responseObject) {
-            WCBingPasswordViewController *vc = [[WCBingPasswordViewController alloc] init];
+        [[TIoTRequestObject shared] postWithoutToken:AppCheckEmailVerificationCode Param:tmpDic success:^(id responseObject) {
+            TIoTBingPasswordViewController *vc = [[TIoTBingPasswordViewController alloc] init];
             vc.sendDataDic = tmpDic;
             vc.registerType = self.registerType;
             [self.navigationController pushViewController:vc animated:YES];
@@ -219,13 +219,13 @@
         NSDictionary *tmpDic = @{@"Type":self.sendCodeDic[@"Type"],@"CountryCode":self.sendCodeDic[@"CountryCode"],@"PhoneNumber":self.sendCodeDic[@"PhoneNumber"],@"VerificationCode":self.code};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppCheckVerificationCode Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppCheckVerificationCode Param:tmpDic success:^(id responseObject) {
             
-            [[WCRequestObject shared] post:AppUpdateUser Param:@{@"phoneNumber":self.sendCodeDic[@"PhoneNumber"],@"VerificationCode":self.code,@"CountryCode":self.sendCodeDic[@"CountryCode"]} success:^(id responseObject) {
+            [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"phoneNumber":self.sendCodeDic[@"PhoneNumber"],@"VerificationCode":self.code,@"CountryCode":self.sendCodeDic[@"CountryCode"]} success:^(id responseObject) {
                 UIViewController *userInfoVC = self.navigationController.viewControllers[1];
                 [self.navigationController popToViewController:userInfoVC animated:YES];
                 [MBProgressHUD showSuccess:@"修改成功"];
-                [WCUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
+                [TIoTUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
                 [HXYNotice addModifyUserInfoPost];
             } failure:^(NSString *reason, NSError *error) {
                 
@@ -243,7 +243,7 @@
         NSDictionary *tmpDic = @{@"Type":self.sendCodeDic[@"Type"],@"CountryCode":self.sendCodeDic[@"CountryCode"],@"PhoneNumber":self.sendCodeDic[@"PhoneNumber"]};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送成功"];
             [self openCountdown];
         } failure:^(NSString *reason, NSError *error) {
@@ -257,7 +257,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
         
-        [[WCRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
             [MBProgressHUD showSuccess:@"发送成功"];
             [self openCountdown];

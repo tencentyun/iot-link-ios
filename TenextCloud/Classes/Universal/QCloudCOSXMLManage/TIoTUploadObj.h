@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCUploadObj : NSObject
+@interface TIoTUploadObj : NSObject
 
 @property (nonatomic,strong) UIImage *image;
 @property (nonatomic,strong) QCloudCOSXMLUploadObjectRequest *req;

@@ -6,24 +6,24 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCAppEnvironment.h"
+#import "TIoTAppEnvironment.h"
 #import "ESP_NetUtil.h"
 #import "XGPushManage.h"
 
-@interface WCAppEnvironment ()
+@interface TIoTAppEnvironment ()
 
 @property (nonatomic , assign) WCAppEnvironmentType type;
 
 @end
 
-@implementation WCAppEnvironment
+@implementation TIoTAppEnvironment
 
 + (instancetype)shareEnvironment{
     
-    static WCAppEnvironment *_environment ;
+    static TIoTAppEnvironment *_environment ;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _environment = [WCAppEnvironment new];
+        _environment = [TIoTAppEnvironment new];
     });
     return _environment;
 }
@@ -63,7 +63,7 @@
 - (void)loginOut {
 //    [[XGPushManage sharedXGPushManage] stopPushService];
     [HXYNotice addLoginOutPost];
-    [[WCUserManage shared] clear];
+    [[TIoTUserManage shared] clear];
     
 }
 

@@ -6,21 +6,21 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCFamiliesVC.h"
-#import "WCHelpCell.h"
-#import "WCNavigationController.h"
-#import "WCFamilyInfoVC.h"
+#import "TIoTFamiliesVC.h"
+#import "TIoTHelpCell.h"
+#import "TIoTNavigationController.h"
+#import "TIoTFamilyInfoVC.h"
 
 static NSString *cellId = @"rbrb";
 
-@interface WCFamiliesVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTFamiliesVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSMutableArray *families;
 
 @end
 
-@implementation WCFamiliesVC
+@implementation TIoTFamiliesVC
 
 
 - (void)viewDidLoad {
@@ -37,7 +37,7 @@ static NSString *cellId = @"rbrb";
 {
     self.title = @"家庭管理";
     
-    [self.tableView registerClass:[WCHelpCell class] forCellReuseIdentifier:cellId];
+    [self.tableView registerClass:[TIoTHelpCell class] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     self.tableView.rowHeight = 60;
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
@@ -75,14 +75,14 @@ static NSString *cellId = @"rbrb";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCHelpCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTHelpCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     cell.name = self.families[indexPath.row][@"FamilyName"];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCFamilyInfoVC *vc = [[WCFamilyInfoVC alloc] init];
+    TIoTFamilyInfoVC *vc = [[TIoTFamilyInfoVC alloc] init];
     vc.familyInfo = self.families[indexPath.row];
     vc.familyCount = self.families.count;
     [self.navigationController pushViewController:vc animated:YES];
@@ -92,7 +92,7 @@ static NSString *cellId = @"rbrb";
 
 - (void)getFamilyList
 {
-    [[WCRequestObject shared] post:AppGetFamilyList Param:@{} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetFamilyList Param:@{} success:^(id responseObject) {
         if ([responseObject[@"FamilyList"] isKindOfClass:[NSArray class]]) {
             [self.families removeAllObjects];
             [self.families addObjectsFromArray:responseObject[@"FamilyList"]];

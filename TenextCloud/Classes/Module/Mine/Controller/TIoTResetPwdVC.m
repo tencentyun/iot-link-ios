@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCResetPwdVC.h"
-#import "WCNavigationController.h"
-#import "WCLoginVC.h"
-#import "WCAppEnvironment.h"
+#import "TIoTResetPwdVC.h"
+#import "TIoTNavigationController.h"
+#import "TIoTLoginVC.h"
+#import "TIoTAppEnvironment.h"
 
-@interface WCResetPwdVC ()
+@interface TIoTResetPwdVC ()
 @property (nonatomic, strong) UITextField *oldPwdTF;
 @property (nonatomic, strong) UITextField *passWordTF;
 @property (nonatomic, strong) UITextField *passWordTF2;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation WCResetPwdVC
+@implementation TIoTResetPwdVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -63,10 +63,10 @@
     NSDictionary *tmpDic = @{@"Password":self.oldPwdTF.text,@"NewPassword":self.passWordTF.text};
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[WCRequestObject shared] post:AppUserResetPassword Param:tmpDic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppUserResetPassword Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"修改成功，请重新登录"];
-        [[WCAppEnvironment shareEnvironment] loginOut];
-        WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:[[WCLoginVC alloc] init]];
+        [[TIoTAppEnvironment shareEnvironment] loginOut];
+        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error) {
         
@@ -89,7 +89,7 @@
     [self.view addSubview:self.oldPwdTF];
     [self.oldPwdTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view).offset(24);
-        make.top.mas_equalTo(52 * kScreenAllHeightScale + [WCUIProxy shareUIProxy].navigationBarHeight);
+        make.top.mas_equalTo(52 * kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.trailing.equalTo(self.view).offset(-24);
         make.height.mas_equalTo(48);
     }];

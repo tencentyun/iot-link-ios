@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCMineTableViewCell.h"
+#import "TIoTMineTableViewCell.h"
 //#import "UIImage+Ex.h"
 
-@interface WCMineTableViewCell ()
+@interface TIoTMineTableViewCell ()
 
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UILabel *titleLab;
@@ -17,13 +17,13 @@
 
 @end
 
-@implementation WCMineTableViewCell
+@implementation TIoTMineTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCMineTableViewCell";
-    WCMineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTMineTableViewCell";
+    TIoTMineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCMineTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTMineTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

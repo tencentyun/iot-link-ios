@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCScanlViewController.h"
+#import "TIoTScanlViewController.h"
 #import "SGQRCode.h"
 
-@interface WCScanlViewController (){
+@interface TIoTScanlViewController (){
     SGQRCodeObtain *obtain;
 }
 @property (nonatomic, strong) SGQRCodeScanView *scanView;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation WCScanlViewController
+@implementation TIoTScanlViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -65,9 +65,9 @@
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
     
     NSString *roomId = self.roomId ?: @"";
-    NSDictionary *param = @{@"FamilyId":[WCUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
+    NSDictionary *param = @{@"FamilyId":[TIoTUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
     
-    [[WCRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
         
         [MBProgressHUD showSuccess:@"添加成功"];
         [self.navigationController popToRootViewControllerAnimated:YES];

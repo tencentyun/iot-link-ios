@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCPhoneResetPwdViewController : UIViewController
+@interface TIoTPhoneResetPwdViewController : UIViewController
 
 @end
 

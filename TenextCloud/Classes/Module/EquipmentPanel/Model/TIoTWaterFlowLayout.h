@@ -8,29 +8,29 @@
 
 #import <UIKit/UIKit.h>
 
-@class WCWaterFlowLayout;
+@class TIoTWaterFlowLayout;
 
 @protocol WCWaterFlowLayoutDelegate <NSObject>
 
-- (CGSize)waterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (CGSize)waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @optional
 
 /** 头视图Size */
--(CGSize )waterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout sizeForHeaderViewInSection:(NSInteger)section;
+-(CGSize )waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForHeaderViewInSection:(NSInteger)section;
 /** 脚视图Size */
--(CGSize )waterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout sizeForFooterViewInSection:(NSInteger)section;
+-(CGSize )waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForFooterViewInSection:(NSInteger)section;
 
 /** 列间距*/
--(CGFloat)minSpaceForLines:(WCWaterFlowLayout *)waterFlowLayout;
+-(CGFloat)minSpaceForLines:(TIoTWaterFlowLayout *)waterFlowLayout;
 /** 行间距*/
--(CGFloat)minSpaceForCells:(WCWaterFlowLayout *)waterFlowLayout;
+-(CGFloat)minSpaceForCells:(TIoTWaterFlowLayout *)waterFlowLayout;
 /** 边缘之间的间距*/
--(UIEdgeInsets)edgeInsetInWaterFlowLayout:(WCWaterFlowLayout *)waterFlowLayout;
+-(UIEdgeInsets)edgeInsetInWaterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout;
 
 @end
 
-@interface WCWaterFlowLayout : UICollectionViewLayout
+@interface TIoTWaterFlowLayout : UICollectionViewLayout
 
 @property (nonatomic, weak) id<WCWaterFlowLayoutDelegate> delegate;
 

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface WCAddTimeView : UIView
+@interface TIoTAddTimeView : UIView
 
 @property (nonatomic, weak) id<WCAddTimeDelegate>delegate;
 

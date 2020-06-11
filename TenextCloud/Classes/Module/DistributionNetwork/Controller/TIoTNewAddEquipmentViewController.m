@@ -6,22 +6,22 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCNewAddEquipmentViewController.h"
-#import "WCCategoryTableViewCell.h"
-#import "WCProductCell.h"
-#import "WCDiscoverProductView.h"
+#import "TIoTNewAddEquipmentViewController.h"
+#import "TIoTCategoryTableViewCell.h"
+#import "TIoTProductCell.h"
+#import "TIoTDiscoverProductView.h"
 
-#import "WCHelpCenterViewController.h"
-#import "WCScanlViewController.h"
-#import "WCDistributionNetworkViewController.h"
-#import "WCNavigationController.h"
+#import "TIoTHelpCenterViewController.h"
+#import "TIoTScanlViewController.h"
+#import "TIoTDistributionNetworkViewController.h"
+#import "TIoTNavigationController.h"
 
-@interface WCNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic) CGFloat itemWidth;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) WCDiscoverProductView *discoverView;
+@property (nonatomic, strong) TIoTDiscoverProductView *discoverView;
 @property (nonatomic, strong) UITableView *categoryTableView;
 @property (nonatomic, strong) UICollectionView *productCollectionView;
 @property (nonatomic, strong) NSMutableArray *categoryArr;
@@ -30,9 +30,9 @@
 
 @end
 
-@implementation WCNewAddEquipmentViewController
+@implementation TIoTNewAddEquipmentViewController
 
-static NSString *cellId = @"WCProductCell";
+static NSString *cellId = @"TIoTProductCellTIoTProductCell";
 static NSString *headerId1 = @"WCProductSectionHeader1";
 static NSString *headerId2 = @"WCProductSectionHeader2";
 
@@ -70,14 +70,14 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
         make.edges.equalTo(self.view);
     }];
     
-    self.discoverView = [[WCDiscoverProductView alloc] init];
+    self.discoverView = [[TIoTDiscoverProductView alloc] init];
     WeakObj(self)
     self.discoverView.helpAction = ^{
-        WCHelpCenterViewController *vc = [[WCHelpCenterViewController alloc] init];
+        TIoTHelpCenterViewController *vc = [[TIoTHelpCenterViewController alloc] init];
         [selfWeak.navigationController pushViewController:vc animated:YES];
     };
     self.discoverView.scanAction = ^{
-        WCScanlViewController *vc = [[WCScanlViewController alloc] init];
+        TIoTScanlViewController *vc = [[TIoTScanlViewController alloc] init];
         vc.roomId = selfWeak.roomId;
         [selfWeak.navigationController pushViewController:vc animated:YES];
     };
@@ -117,16 +117,16 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
         productCollectionViewHeight = ((self.productArr.count / 3 + (self.productArr.count % 3 == 0 ? 0 : 1)) * 104.5) + 20.5 + (self.productArr.count / 3 * 15);
     }
     CGFloat listHeight = productCollectionViewHeight > categoryTableViewHeight ? productCollectionViewHeight : categoryTableViewHeight;
-    listHeight = 119.5 + 20 + listHeight > kScreenHeight - [WCUIProxy shareUIProxy].navigationBarHeight - 30 ? 119.5 + 20 + listHeight : kScreenHeight - [WCUIProxy shareUIProxy].navigationBarHeight - 30;
+    listHeight = 119.5 + 20 + listHeight > kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight - 30 ? 119.5 + 20 + listHeight : kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight - 30;
     self.scrollView.contentSize = CGSizeMake(kScreenWidth, listHeight);
 }
 
 - (void)jumpConfigVC:(NSString *)title{
-    WCDistributionNetworkViewController *vc = [[WCDistributionNetworkViewController alloc] init];
+    TIoTDistributionNetworkViewController *vc = [[TIoTDistributionNetworkViewController alloc] init];
     vc.roomId = self.roomId;
     vc.title = title;
 
-    WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:vc];
+    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:vc];
     nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -148,7 +148,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 #pragma mark - request
 - (void)getCategoryList{
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
-    [[WCRequestObject shared] post:AppGetParentCategoryList Param:@{} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetParentCategoryList Param:@{} success:^(id responseObject) {
         
         [self.categoryArr removeAllObjects];
         [self.categoryArr addObjectsFromArray:responseObject[@"List"]];
@@ -170,7 +170,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 
 - (void)getProductList:(NSString *)categoryKey {
     
-    [[WCRequestObject shared] post:AppGetRecommList Param:@{@"CategoryKey":categoryKey} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetRecommList Param:@{@"CategoryKey":categoryKey} success:^(id responseObject) {
         [self.productArr removeAllObjects];
         [self.recommendArr removeAllObjects];
         [self.productArr addObjectsFromArray:responseObject[@"CategoryList"]];
@@ -186,7 +186,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 }
 
 - (void)getProductsConfig:(NSString *)productId{
-    [[WCRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
         
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
@@ -219,7 +219,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCCategoryTableViewCell *cell = [WCCategoryTableViewCell cellWithTableView:tableView];
+    TIoTCategoryTableViewCell *cell = [TIoTCategoryTableViewCell cellWithTableView:tableView];
     cell.dic = self.categoryArr[indexPath.row];
     return cell;
 }
@@ -252,7 +252,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    WCProductCell *cell = nil;
+    TIoTProductCell *cell = nil;
     if (self.recommendArr.count) {
         if (indexPath.section == 0) {
             cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
@@ -359,7 +359,7 @@ static NSString *headerId2 = @"WCProductSectionHeader2";
         _productCollectionView.delegate = self;
         _productCollectionView.dataSource = self;
         _productCollectionView.scrollEnabled = NO;
-        [_productCollectionView registerClass:[WCProductCell class] forCellWithReuseIdentifier:cellId];
+        [_productCollectionView registerClass:[TIoTProductCell class] forCellWithReuseIdentifier:cellId];
         [_productCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId1];
         [_productCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId2];
         

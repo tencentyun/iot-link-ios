@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCButton.h"
+#import "TIoTButton.h"
 
-@implementation WCButton
+@implementation TIoTButton
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

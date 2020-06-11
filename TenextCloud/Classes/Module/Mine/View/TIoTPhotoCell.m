@@ -6,13 +6,13 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCPhotoCell.h"
+#import "TIoTPhotoCell.h"
 
-@interface WCPhotoCell()
+@interface TIoTPhotoCell()
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 
 @end
-@implementation WCPhotoCell
+@implementation TIoTPhotoCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

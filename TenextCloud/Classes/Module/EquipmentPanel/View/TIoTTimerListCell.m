@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCTimerListCell.h"
+#import "TIoTTimerListCell.h"
 
-@interface WCTimerListCell()
+@interface TIoTTimerListCell()
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *detailL;
 @property (weak, nonatomic) IBOutlet UISwitch *turn;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation WCTimerListCell
+@implementation TIoTTimerListCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -31,7 +31,7 @@
 {
     if (_info) {
         NSDictionary *param = @{@"ProductId":_info[@"ProductId"],@"DeviceName":_info[@"DeviceName"],@"TimerId":_info[@"TimerId"],@"Status":@(status)};
-        [[WCRequestObject shared] post:AppModifyTimerStatus Param:param success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppModifyTimerStatus Param:param success:^(id responseObject) {
             
         } failure:^(NSString *reason, NSError *error) {
             

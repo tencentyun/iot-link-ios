@@ -6,16 +6,16 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCHelpCenterViewController.h"
-#import "WCHelpCell.h"
-#import "WCTextVC.h"
+#import "TIoTHelpCenterViewController.h"
+#import "TIoTHelpCell.h"
+#import "TIoTTextVC.h"
 
-@interface WCHelpCenterViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTHelpCenterViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *dataArr;
 @end
 
-@implementation WCHelpCenterViewController
+@implementation TIoTHelpCenterViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -46,13 +46,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCHelpCell *cell = [WCHelpCell cellWithTableView:tableView];
+    TIoTHelpCell *cell = [TIoTHelpCell cellWithTableView:tableView];
     cell.dic = self.dataArr[indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCTextVC *vc = [WCTextVC new];
+    TIoTTextVC *vc = [TIoTTextVC new];
     vc.content = self.dataArr[indexPath.row][@"answer"];
     [self.navigationController pushViewController:vc animated:YES];
 }

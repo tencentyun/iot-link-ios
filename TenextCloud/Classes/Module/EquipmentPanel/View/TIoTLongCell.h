@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCLongCell : UICollectionViewCell
+@interface TIoTLongCell : UICollectionViewCell
 
 
 @property (nonatomic,strong) NSDictionary *showInfo;

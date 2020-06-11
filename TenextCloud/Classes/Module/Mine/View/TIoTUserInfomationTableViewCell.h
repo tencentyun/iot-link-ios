@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCUserInfomationTableViewCell : UITableViewCell
+@interface TIoTUserInfomationTableViewCell : UITableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, copy) NSDictionary *dic;

@@ -6,18 +6,18 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRepeatVC.h"
-#import "WCChoseValueTableViewCell.h"
+#import "TIoTRepeatVC.h"
+#import "TIoTChoseValueTableViewCell.h"
 
 
-@interface WCRepeatVC ()
+@interface TIoTRepeatVC ()
 
 @property (nonatomic,strong) NSArray *week;
 @property (nonatomic,strong) NSMutableArray *weekSelect;
 
 @end
 
-@implementation WCRepeatVC
+@implementation TIoTRepeatVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -75,7 +75,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    WCChoseValueTableViewCell *cell = [WCChoseValueTableViewCell cellWithTableView:tableView];
+    TIoTChoseValueTableViewCell *cell = [TIoTChoseValueTableViewCell cellWithTableView:tableView];
     [cell setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 0)];
     BOOL select = [self.weekSelect[indexPath.row] integerValue] == 1;
     [cell setTitle:self.week[indexPath.row] andSelect:select];

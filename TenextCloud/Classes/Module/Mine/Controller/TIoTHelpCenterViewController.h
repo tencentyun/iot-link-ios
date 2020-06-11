@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCHelpCenterViewController : UIViewController
+@interface TIoTHelpCenterViewController : UIViewController
 
 @end
 

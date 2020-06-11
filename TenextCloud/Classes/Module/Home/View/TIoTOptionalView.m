@@ -6,11 +6,11 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCOptionalView.h"
-#import "WCChoseValueTableViewCell.h"
+#import "TIoTOptionalView.h"
+#import "TIoTChoseValueTableViewCell.h"
 #import "FamilyModel.h"
 
-@interface WCOptionalView()<UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface TIoTOptionalView()<UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *whiteView;
@@ -19,7 +19,7 @@
 
 @property (nonatomic,assign) CGFloat currentHeight;
 @end
-@implementation WCOptionalView
+@implementation TIoTOptionalView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -38,7 +38,7 @@
     [self addGestureRecognizer:singleFingerOne];
     
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, -[WCUIProxy shareUIProxy].statusHeight - 200, kScreenWidth, [WCUIProxy shareUIProxy].statusHeight + 200)];
+    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, -[TIoTUIProxy shareUIProxy].statusHeight - 200, kScreenWidth, [TIoTUIProxy shareUIProxy].statusHeight + 200)];
     self.whiteView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.whiteView];
 //    [self.whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -120,7 +120,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCChoseValueTableViewCell *cell = [WCChoseValueTableViewCell cellWithTableView:tableView];
+    TIoTChoseValueTableViewCell *cell = [TIoTChoseValueTableViewCell cellWithTableView:tableView];
     
     FamilyModel *model = self.dataArr[indexPath.row];
     BOOL iS = [model.FamilyId isEqualToString:self.currentValue];
@@ -174,7 +174,7 @@
     _titles = titles;
     
     CGFloat maxHeight = kScreenHeight - 200;
-    CGFloat height = [WCUIProxy shareUIProxy].statusHeight + titles.count * 60 + 60;
+    CGFloat height = [TIoTUIProxy shareUIProxy].statusHeight + titles.count * 60 + 60;
     if (height > maxHeight) {
         height = maxHeight;
     }

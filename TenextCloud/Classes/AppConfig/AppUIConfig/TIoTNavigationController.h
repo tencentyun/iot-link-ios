@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCNavigationController : UINavigationController
+@interface TIoTNavigationController : UINavigationController
 
 @end
 

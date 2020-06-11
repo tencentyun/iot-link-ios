@@ -6,22 +6,22 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCCategoryTableViewCell.h"
+#import "TIoTCategoryTableViewCell.h"
 
-@interface WCCategoryTableViewCell ()
+@interface TIoTCategoryTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIView *lineView;
 
 @end
 
-@implementation WCCategoryTableViewCell
+@implementation TIoTCategoryTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCCategoryTableViewCell";
-    WCCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTCategoryTableViewCell";
+    TIoTCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCCategoryTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTCategoryTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

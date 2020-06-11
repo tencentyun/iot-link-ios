@@ -6,25 +6,25 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCFamilyInfoVC.h"
-#import "WCFamilyInfoCell.h"
-#import "WCFamilyMemberCell.h"
-#import "WCRoomsVC.h"
-#import "WCMemberInfoVC.h"
+#import "TIoTFamilyInfoVC.h"
+#import "TIoTFamilyInfoCell.h"
+#import "TIoTFamilyMemberCell.h"
+#import "TIoTRoomsVC.h"
+#import "TIoTMemberInfoVC.h"
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
 static NSString *itemId = @"pfrrr";
 static NSString *itemId2 = @"pfDDD";
 
-@interface WCFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface TIoTFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *coll;
 
 @property (nonatomic,strong) NSMutableArray *dataArr;
 
 @end
 
-@implementation WCFamilyInfoVC
+@implementation TIoTFamilyInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,8 +42,8 @@ static NSString *itemId2 = @"pfDDD";
     
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerId];
-    [self.coll registerNib:[UINib nibWithNibName:@"WCFamilyInfoCell" bundle:nil] forCellWithReuseIdentifier:itemId];
-    [self.coll registerNib:[UINib nibWithNibName:@"WCFamilyMemberCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTFamilyInfoCell" bundle:nil] forCellWithReuseIdentifier:itemId];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTFamilyMemberCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
 }
 
 #pragma mark - request
@@ -51,7 +51,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)getMemberList
 {
     NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"]};
-    [[WCRequestObject shared] post:AppGetFamilyMemberList Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetFamilyMemberList Param:param success:^(id responseObject) {
         
         if (self.dataArr.count == 2) {
             [self.dataArr removeLastObject];
@@ -67,7 +67,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)deleteFamily
 {
     NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":self.familyInfo[@"FamilyName"]};
-    [[WCRequestObject shared] post:AppDeleteFamily Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteFamily Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateFamilyListPost];
         [self.navigationController popViewControllerAnimated:YES];
@@ -79,7 +79,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)leaveFamily
 {
     NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"]};
-    [[WCRequestObject shared] post:AppExitFamily Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppExitFamily Param:param success:^(id responseObject) {
         [HXYNotice addUpdateFamilyListPost];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error) {
@@ -90,7 +90,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)modifyFamily:(NSString *)name
 {
     NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name};
-    [[WCRequestObject shared] post:AppModifyFamily Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppModifyFamily Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateFamilyListPost];
         
@@ -108,7 +108,7 @@ static NSString *itemId2 = @"pfDDD";
 {
     if ([self.familyInfo[@"Role"] integerValue] == 1) {//删除
         
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
         [av alertWithTitle:@"您确定要删除该家庭吗？" message:@"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除" cancleTitlt:@"取消" doneTitle:@"删除"];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
@@ -118,7 +118,7 @@ static NSString *itemId2 = @"pfDDD";
     }
     else//退出
     {
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
         [av alertWithTitle:@"您确定要离开该家庭吗？" message:@"离开家庭后，系统将清除您与该家庭数据" cancleTitlt:@"取消" doneTitle:@"离开"];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self leaveFamily];
@@ -145,11 +145,11 @@ static NSString *itemId2 = @"pfDDD";
 {
     NSDictionary *info = self.dataArr[indexPath.section][indexPath.row];
     if (indexPath.section == 0) {
-        WCFamilyInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
+        TIoTFamilyInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
         [cell setInfo:info];
         return cell;
     }
-    WCFamilyMemberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
+    TIoTFamilyMemberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
     [cell setInfo:info];
     return cell;
 }
@@ -187,7 +187,7 @@ static NSString *itemId2 = @"pfDDD";
         else
         {
             
-            WCButton *deleteBtn = [WCButton buttonWithType:UIButtonTypeCustom];
+            TIoTButton *deleteBtn = [TIoTButton buttonWithType:UIButtonTypeCustom];
             deleteBtn.frame = CGRectMake(20, 21, kScreenWidth - 40, 48);
             deleteBtn.backgroundColor = kWarnColor;
             [deleteBtn addTarget:self action:@selector(deleteOrLeaveFamily) forControlEvents:UIControlEventTouchUpInside];
@@ -218,7 +218,7 @@ static NSString *itemId2 = @"pfDDD";
         switch (indexPath.item) {
             case 0:
             {
-                WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+                TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
                 [av alertWithTitle:@"家庭名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
                 av.maxLength = 20;
                 av.doneAction = ^(NSString * _Nonnull text) {
@@ -231,7 +231,7 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             case 1:
             {
-                WCRoomsVC *vc = [WCRoomsVC new];
+                TIoTRoomsVC *vc = [TIoTRoomsVC new];
                 vc.familyId = self.familyInfo[@"FamilyId"];
                 vc.isOwner = [self.familyInfo[@"Role"] integerValue] == 1;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -265,8 +265,8 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             }
         }
-        WCMemberInfoVC *vc = [[WCMemberInfoVC alloc] init];
-        if ([[WCUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
+        TIoTMemberInfoVC *vc = [[TIoTMemberInfoVC alloc] init];
+        if ([[TIoTUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
             vc.isOwner = YES;
         }
         vc.memberInfo = self.dataArr[indexPath.section][indexPath.row];

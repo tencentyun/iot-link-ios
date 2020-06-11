@@ -6,14 +6,14 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCFamilyInfoCell.h"
+#import "TIoTFamilyInfoCell.h"
 
-@interface WCFamilyInfoCell()
+@interface TIoTFamilyInfoCell()
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
 
 @end
-@implementation WCFamilyInfoCell
+@implementation TIoTFamilyInfoCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

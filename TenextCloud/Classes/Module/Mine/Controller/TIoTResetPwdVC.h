@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCResetPwdVC : UIViewController
+@interface TIoTResetPwdVC : UIViewController
 
 @end
 

@@ -7,7 +7,7 @@
 //
 
 #import "UIBarButtonItem+CustomUI.h"
-#import "WCUIProxy.h"
+#import "TIoTUIProxy.h"
 
 @implementation UIBarButtonItem (CustomUI)
 

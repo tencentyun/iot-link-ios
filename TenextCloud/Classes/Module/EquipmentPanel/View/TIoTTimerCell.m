@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCTimerCell.h"
+#import "TIoTTimerCell.h"
 
-@interface WCTimerCell()
+@interface TIoTTimerCell()
 
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
 @property (weak, nonatomic) IBOutlet UIImageView *addIcon;
@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *detailL;
 
 @end
-@implementation WCTimerCell
+@implementation TIoTTimerCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

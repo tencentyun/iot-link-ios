@@ -6,16 +6,16 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCSoftapWaitVC.h"
+#import "TIoTSoftapWaitVC.h"
 #import "GCDAsyncUdpSocket.h"
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 #import "CHDWaveView.h"
-#import "WCHelpCenterViewController.h"
+#import "TIoTHelpCenterViewController.h"
 
 #define APIP @"192.168.4.1"
 #define APPort 8266
 
-@interface WCSoftapWaitVC ()<GCDAsyncUdpSocketDelegate>
+@interface TIoTSoftapWaitVC ()<GCDAsyncUdpSocketDelegate>
 @property (strong, nonatomic) GCDAsyncUdpSocket *socket;
 @property (strong, nonatomic) dispatch_queue_t delegateQueue;
 
@@ -35,7 +35,7 @@
 @property (nonatomic, assign) BOOL isTokenbindedStatus;
 @end
 
-@implementation WCSoftapWaitVC
+@implementation TIoTSoftapWaitVC
 
 - (void)dealloc
 {
@@ -173,7 +173,7 @@
 
 //获取设备绑定token状态
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
-    [[WCRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
         WCLog(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
@@ -192,7 +192,7 @@
 - (void)bindDevice:(NSDictionary *)deviceData{
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
 
-        [[WCRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[WCUserManage shared].familyId} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[TIoTUserManage shared].familyId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {
@@ -209,7 +209,7 @@
 - (void)bindingDevidesWithData:(NSDictionary *)deviceData {
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
         NSString *roomId = self.roomId ?: @"0";
-        [[WCRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[WCUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[TIoTUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {
@@ -409,7 +409,7 @@
 #pragma mark - event
 
 - (void)cancleClick:(id)sender{
-    WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
     [av alertWithTitle:@"退出添加设备" message:@"当前正在添加设备，是否确认退出" cancleTitlt:@"取消" doneTitle:@"确定"];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self releaseAlloc];
@@ -429,7 +429,7 @@
 }
 
 - (void)moreErrorResult:(id)sender{
-    WCHelpCenterViewController *vc = [[WCHelpCenterViewController alloc] init];
+    TIoTHelpCenterViewController *vc = [[TIoTHelpCenterViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

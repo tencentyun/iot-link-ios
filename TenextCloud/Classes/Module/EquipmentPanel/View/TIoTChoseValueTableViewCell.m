@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCChoseValueTableViewCell.h"
+#import "TIoTChoseValueTableViewCell.h"
 
-@interface WCChoseValueTableViewCell ()
+@interface TIoTChoseValueTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIImageView *choseImageView;
@@ -19,13 +19,13 @@
 
 @end
 
-@implementation WCChoseValueTableViewCell
+@implementation TIoTChoseValueTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCChoseValueTableViewCell";
-    WCChoseValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTChoseValueTableViewCell";
+    TIoTChoseValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCChoseValueTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID
+        cell = [[TIoTChoseValueTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID
                 ];
     }
     return cell;

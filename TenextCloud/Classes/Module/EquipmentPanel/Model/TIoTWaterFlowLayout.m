@@ -6,7 +6,7 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCWaterFlowLayout.h"
+#import "TIoTWaterFlowLayout.h"
 
 /** 每一列之间的间距*/
 static const NSInteger WSLDefaultColumeMargin = 10;
@@ -21,7 +21,7 @@ static const UIEdgeInsets WSLDefaultEdgeInset = {10, 10, 10, 10};
 //static const CGSize WSLDefaultFooterSize = CGSizeMake(0, 66);
 
 
-@interface WCWaterFlowLayout ()
+@interface TIoTWaterFlowLayout ()
 
 /** 存放所有cell的布局属性*/
 @property (strong, nonatomic) NSMutableArray *attrsArray;
@@ -38,7 +38,7 @@ static const UIEdgeInsets WSLDefaultEdgeInset = {10, 10, 10, 10};
 
 @end
 
-@implementation WCWaterFlowLayout
+@implementation TIoTWaterFlowLayout
 
 #pragma mark - 重写系统方法
 

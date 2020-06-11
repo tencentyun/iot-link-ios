@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCPopoverVC.h"
+#import "TIoTPopoverVC.h"
 #import "FamilyModel.h"
 
 static NSString *cellId = @"ry4555";
-@interface WCPopoverVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTPopoverVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
-@implementation WCPopoverVC
+@implementation TIoTPopoverVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

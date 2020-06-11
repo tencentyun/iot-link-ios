@@ -12,8 +12,8 @@
 typedef void (^FailureResponseBlock)(NSString *reason,NSError *error);
 typedef void (^SuccessResponseBlock)(id responseObject);
 
-@interface WCRequestObject : NSObject
-+ (WCRequestObject *)shared;
+@interface TIoTRequestObject : NSObject
++ (TIoTRequestObject *)shared;
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure;
 - (void)postWithoutToken:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success failure:(FailureResponseBlock)failure;

@@ -8,7 +8,7 @@
 
 #import "WxManager.h"
 #import "WXApi.h"
-#import "WCAppEnvironment.h"
+#import "TIoTAppEnvironment.h"
 
 #define WxAppID     @"wxfb36c49df3a370c7"
 #define WxAppSecret @"e2002b0bb99f7484ca7c416b63507662"
@@ -200,7 +200,7 @@
         object.userName = userName;
     }
 
-    object.miniProgramType = [WCAppEnvironment shareEnvironment].wxShareType;;
+    object.miniProgramType = [TIoTAppEnvironment shareEnvironment].wxShareType;;
     
     if (image == nil) {
 

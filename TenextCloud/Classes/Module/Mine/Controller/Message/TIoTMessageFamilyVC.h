@@ -6,11 +6,11 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageChildVC.h"
+#import "TIoTMessageChildVC.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCMessageFamilyVC : WCMessageChildVC
+@interface TIoTMessageFamilyVC : TIoTMessageChildVC
 
 @end
 

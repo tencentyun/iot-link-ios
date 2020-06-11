@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCInvitationVC : UIViewController
+@interface TIoTInvitationVC : UIViewController
 
 @property (nonatomic,strong) NSString *familyId;
 

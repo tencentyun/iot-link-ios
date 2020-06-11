@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WCBaseBigBtnView.h"
+#import "TIoTBaseBigBtnView.h"
 
 
-@interface WCEnumView : WCBaseBigBtnView
+@interface TIoTEnumView : TIoTBaseBigBtnView
 
 - (void)setStyle:(WCThemeStyle)style;
 

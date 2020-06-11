@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTipView : UIView
+@interface TIoTTipView : UIView
 
 @property (nonatomic,strong) void(^feedback)(void);
 @property (nonatomic,strong) void(^navback)(void);

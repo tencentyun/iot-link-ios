@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCDeviceData.h"
+#import "TIoTDeviceData.h"
 
-@implementation WCDeviceData
+@implementation TIoTDeviceData
 
 +(instancetype)shared{
-    static WCDeviceData *_instance = nil;
+    static TIoTDeviceData *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];

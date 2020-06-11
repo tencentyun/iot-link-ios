@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, EquipmentType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCWIFINetViewController : UIViewController
+@interface TIoTWIFINetViewController : UIViewController
 
 @property (nonatomic, assign) EquipmentType equipmentType;
 @property (nonatomic, copy) NSString *currentDistributionToken;

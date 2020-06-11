@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCWebVC : UIViewController
+@interface TIoTWebVC : UIViewController
 
 @property (nonatomic,copy) NSString *filePath;
 @property (nonatomic,copy) NSString *urlPath;

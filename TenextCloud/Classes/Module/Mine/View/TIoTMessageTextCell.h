@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCMessageTextCell : UITableViewCell
+@interface TIoTMessageTextCell : UITableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 

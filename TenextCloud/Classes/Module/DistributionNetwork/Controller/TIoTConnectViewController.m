@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCConnectViewController.h"
-#import "WCDistributionNetworkViewController.h"
-#import "WCHelpCenterViewController.h"
+#import "TIoTConnectViewController.h"
+#import "TIoTDistributionNetworkViewController.h"
+#import "TIoTHelpCenterViewController.h"
 #import "CHDWaveView.h"
 
 #import "ESP_NetUtil.h"
@@ -23,7 +23,7 @@
 
 #define SmartConfigPort 8266
 
-@interface WCConnectViewController ()<TCSocketDelegate,GCDAsyncUdpSocketDelegate>
+@interface TIoTConnectViewController ()<TCSocketDelegate,GCDAsyncUdpSocketDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *contentView;
@@ -59,7 +59,7 @@
 
 @end
 
-@implementation WCConnectViewController
+@implementation TIoTConnectViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -370,7 +370,7 @@
     
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
         
-        [[WCRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[WCUserManage shared].familyId} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[TIoTUserManage shared].familyId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {
@@ -387,7 +387,7 @@
 #pragma mark eventResponse
 - (void)cancleClick:(id)sender{
     
-    WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
     [av alertWithTitle:@"退出添加设备" message:@"当前正在添加设备，是否确认退出" cancleTitlt:@"取消" doneTitle:@"确定"];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self releaseAlloc];
@@ -407,7 +407,7 @@
 }
 
 - (void)moreErrorResult:(id)sender{
-    WCHelpCenterViewController *vc = [[WCHelpCenterViewController alloc] init];
+    TIoTHelpCenterViewController *vc = [[TIoTHelpCenterViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -577,7 +577,7 @@
 
 //获取设备绑定token状态
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
-    [[WCRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
         WCLog(@"AppGetDeviceBindTokenState--smaartConfig-responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
@@ -596,7 +596,7 @@
 - (void)bindingDevidesWithData:(NSDictionary *)deviceData {
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
         NSString *roomId = self.roomId ?: @"0";
-        [[WCRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[WCUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[TIoTUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
         } failure:^(NSString *reason, NSError *error) {

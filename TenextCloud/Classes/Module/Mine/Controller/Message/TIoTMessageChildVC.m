@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageChildVC.h"
-#import "WCMessageInviteCell.h"
-#import "WCMessageTextCell.h"
-#import "WCMessageText2Cell.h"
+#import "TIoTMessageChildVC.h"
+#import "TIoTMessageInviteCell.h"
+#import "TIoTMessageTextCell.h"
+#import "TIoTMessageText2Cell.h"
 #import <MJRefresh/MJRefresh.h>
 
 static NSString *cell1 = @"qdg";
 static NSString *cell2 = @"asg";
 static NSString *cell3 = @"gddf";
 static NSUInteger limit = 20;
-@interface WCMessageChildVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTMessageChildVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *datas;
 
@@ -27,7 +27,7 @@ static NSUInteger limit = 20;
 
 @end
 
-@implementation WCMessageChildVC
+@implementation TIoTMessageChildVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,7 +53,7 @@ static NSUInteger limit = 20;
 {
     // 下拉刷新
     WeakObj(self)
-    self.tableView.mj_header = [WCRefreshHeader headerWithRefreshingBlock:^{
+    self.tableView.mj_header = [TIoTRefreshHeader headerWithRefreshingBlock:^{
         [selfWeak loadNewData];
     }];
     
@@ -118,7 +118,7 @@ static NSUInteger limit = 20;
     NSDictionary *dic = @{@"MsgID":@"",@"MsgTimestamp":@(0),@"Limit":@(limit),@"Category":@(self.category)};
     
     
-    [[WCRequestObject shared] post:AppGetMessages Param:dic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetMessages Param:dic success:^(id responseObject) {
         
         NSDictionary *data = responseObject[@"Data"];
         [self.datas removeAllObjects];
@@ -134,7 +134,7 @@ static NSUInteger limit = 20;
 - (void)loadMoreData{
     NSDictionary *dic = @{@"MsgID":self.msgID?:@"",@"MsgTimestamp":@(self.msgTimestamp),@"Limit":@(limit),@"Category":@(self.category)};
     
-    [[WCRequestObject shared] post:AppGetMessages Param:dic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetMessages Param:dic success:^(id responseObject) {
         
         NSDictionary *data = responseObject[@"Data"];
         [self endRefresh:YES total:[data[@"Msgs"] count]];
@@ -152,7 +152,7 @@ static NSUInteger limit = 20;
     NSNumber *deleteMsgId = self.datas[index][@"MsgID"];
     NSDictionary *dic = @{@"MsgID":deleteMsgId};
     
-    [[WCRequestObject shared] post:AppDeleteMessage Param:dic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteMessage Param:dic success:^(id responseObject) {
         [self.datas removeObjectAtIndex:index];
         [self refreshUI:self.datas.count];
         
@@ -177,14 +177,14 @@ static NSUInteger limit = 20;
     NSDictionary *msgDic = self.datas[indexPath.row];
     NSInteger msgType = [msgDic[@"MsgType"] integerValue];
     if (msgType >= 100 && msgType < 200) {
-        WCMessageText2Cell *cell = [tableView dequeueReusableCellWithIdentifier:cell3 forIndexPath:indexPath];
+        TIoTMessageText2Cell *cell = [tableView dequeueReusableCellWithIdentifier:cell3 forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setMsgData:msgDic];
         return cell;
     }
     else if (msgType == 301 || msgType == 204)
     {
-        WCMessageInviteCell *cell = [tableView dequeueReusableCellWithIdentifier:cell2 forIndexPath:indexPath];
+        TIoTMessageInviteCell *cell = [tableView dequeueReusableCellWithIdentifier:cell2 forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setMsgData:msgDic];
         cell.rejectEvent = ^{
@@ -194,13 +194,13 @@ static NSUInteger limit = 20;
     }
     else if (msgType >= 300)
     {
-        WCMessageTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cell1 forIndexPath:indexPath];
+        TIoTMessageTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cell1 forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setMsgData:msgDic];
         return cell;
     }
     
-    WCMessageText2Cell *cell = [tableView dequeueReusableCellWithIdentifier:cell3 forIndexPath:indexPath];
+    TIoTMessageText2Cell *cell = [tableView dequeueReusableCellWithIdentifier:cell3 forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setMsgData:msgDic];
     return cell;
@@ -263,9 +263,9 @@ static NSUInteger limit = 20;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
         
-        [_tableView registerClass:[WCMessageTextCell class] forCellReuseIdentifier:cell1];
-        [_tableView registerNib:[UINib nibWithNibName:@"WCMessageInviteCell" bundle:nil] forCellReuseIdentifier:cell2];
-        [_tableView registerNib:[UINib nibWithNibName:@"WCMessageText2Cell" bundle:nil] forCellReuseIdentifier:cell3];
+        [_tableView registerClass:[TIoTMessageTextCell class] forCellReuseIdentifier:cell1];
+        [_tableView registerNib:[UINib nibWithNibName:@"TIoTMessageInviteCell" bundle:nil] forCellReuseIdentifier:cell2];
+        [_tableView registerNib:[UINib nibWithNibName:@"TIoTMessageText2Cell" bundle:nil] forCellReuseIdentifier:cell3];
     }
     
     return _tableView;

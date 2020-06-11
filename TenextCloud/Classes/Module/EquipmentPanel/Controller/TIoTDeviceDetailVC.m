@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCDeviceDetailVC.h"
-#import "WCDeviceDetailTableViewCell.h"
+#import "TIoTDeviceDetailVC.h"
+#import "TIoTDeviceDetailTableViewCell.h"
 
-@interface WCDeviceDetailVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTDeviceDetailVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
 
 @end
 
-@implementation WCDeviceDetailVC
+@implementation TIoTDeviceDetailVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,7 +42,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCDeviceDetailTableViewCell *cell = [WCDeviceDetailTableViewCell cellWithTableView:tableView];
+    TIoTDeviceDetailTableViewCell *cell = [TIoTDeviceDetailTableViewCell cellWithTableView:tableView];
     cell.dic = [self dataArr][indexPath.row];
     return cell;
 }

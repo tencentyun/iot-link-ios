@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCDistributionNetCollectionViewCell : UICollectionViewCell
+@interface TIoTDistributionNetCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, copy) NSString *imgName;
 

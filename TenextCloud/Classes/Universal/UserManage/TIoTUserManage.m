@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCUserManage.h"
+#import "TIoTUserManage.h"
 
 
-@implementation WCUserManage
+@implementation TIoTUserManage
 @synthesize accessToken = _accessToken;
 @synthesize expireAt = _expireAt;
 @synthesize userId = _userId;
@@ -18,7 +18,7 @@
 @synthesize phoneNumber = _phoneNumber;
 
 +(instancetype)shared{
-    static WCUserManage *_instance = nil;
+    static TIoTUserManage *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];

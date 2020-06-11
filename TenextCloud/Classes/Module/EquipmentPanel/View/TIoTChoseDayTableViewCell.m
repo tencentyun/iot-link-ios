@@ -6,22 +6,22 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCChoseDayTableViewCell.h"
+#import "TIoTChoseDayTableViewCell.h"
 
-@interface WCChoseDayTableViewCell ()
+@interface TIoTChoseDayTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIView *lineView;
 
 @end
 
-@implementation WCChoseDayTableViewCell
+@implementation TIoTChoseDayTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCChoseDayTableViewCell";
-    WCChoseDayTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTChoseDayTableViewCell";
+    TIoTChoseDayTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCChoseDayTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTChoseDayTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

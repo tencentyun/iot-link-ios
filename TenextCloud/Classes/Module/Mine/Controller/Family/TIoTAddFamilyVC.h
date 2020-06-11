@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCAddFamilyVC : UIViewController
+@interface TIoTAddFamilyVC : UIViewController
 
 @end
 

@@ -6,20 +6,20 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRoomsVC.h"
-#import "WCRoomCell.h"
-#import "WCAddRoomVC.h"
-#import "WCNavigationController.h"
-#import "WCRoomInfoVC.h"
+#import "TIoTRoomsVC.h"
+#import "TIoTRoomCell.h"
+#import "TIoTAddRoomVC.h"
+#import "TIoTNavigationController.h"
+#import "TIoTRoomInfoVC.h"
 
 static NSString *cellId = @"wd9765";
-@interface WCRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *rooms;
 
 @end
 
-@implementation WCRoomsVC
+@implementation TIoTRoomsVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,7 +34,7 @@ static NSString *cellId = @"wd9765";
 {
     self.title = @"房间管理";
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"WCRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     self.tableView.rowHeight = 60;
     
@@ -57,7 +57,7 @@ static NSString *cellId = @"wd9765";
 - (void)getRoomList
 {
     NSDictionary *param = @{@"FamilyId":self.familyId,@"Offset":@(0),@"Limit":@(40)};
-    [[WCRequestObject shared] post:AppGetRoomList Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetRoomList Param:param success:^(id responseObject) {
         [self.rooms removeAllObjects];
         [self.rooms addObjectsFromArray:responseObject[@"RoomList"]];
         [self refreshUI:responseObject];
@@ -87,7 +87,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)toAddRoom
 {
-    WCAddRoomVC *vc = [WCAddRoomVC new];
+    TIoTAddRoomVC *vc = [TIoTAddRoomVC new];
     vc.familyId = self.familyId;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -101,7 +101,7 @@ static NSString *cellId = @"wd9765";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     [cell setInfo:self.rooms[indexPath.row]];
     return cell;
 }
@@ -109,7 +109,7 @@ static NSString *cellId = @"wd9765";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_isOwner) {
-        WCRoomInfoVC *vc = [WCRoomInfoVC new];
+        TIoTRoomInfoVC *vc = [TIoTRoomInfoVC new];
         vc.familyId = self.familyId;
         vc.roomDic = self.rooms[indexPath.row];
         [self.navigationController pushViewController:vc animated:YES];

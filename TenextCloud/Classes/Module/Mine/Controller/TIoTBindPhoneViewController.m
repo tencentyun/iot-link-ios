@@ -6,11 +6,11 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCBindPhoneViewController.h"
+#import "TIoTBindPhoneViewController.h"
 #import "XWCountryCodeController.h"
-#import "WCSendPhoneCodeViewController.h"
+#import "TIoTSendPhoneCodeViewController.h"
 
-@interface WCBindPhoneViewController ()
+@interface TIoTBindPhoneViewController ()
 
 @property (nonatomic, strong) UIButton *areaCodeBtn;
 @property (nonatomic, strong) UITextField *phoneTF;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation WCBindPhoneViewController
+@implementation TIoTBindPhoneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,7 +44,7 @@
     [self.view addSubview:self.areaCodeBtn];
     [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(20);
-        make.top.mas_equalTo(40*kScreenAllHeightScale + [WCUIProxy shareUIProxy].navigationBarHeight);
+        make.top.mas_equalTo(40*kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.height.mas_equalTo(30);
     }];
     
@@ -145,8 +145,8 @@
     NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneTF.text};
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[WCRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
-        WCSendPhoneCodeViewController *vc = [[WCSendPhoneCodeViewController alloc] init];
+    [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
+        TIoTSendPhoneCodeViewController *vc = [[TIoTSendPhoneCodeViewController alloc] init];
         vc.registerType = LoginedResetPwd;
         vc.sendCodeDic = tmpDic;
         [self.navigationController pushViewController:vc animated:YES];

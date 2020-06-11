@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^ggBlock)(NSArray *);
 
-@interface WCQCloudCOSXMLManage : NSObject
+@interface TIoTQCloudCOSXMLManage : NSObject
 
 - (void)getSignature:(NSArray<UIImage *> *)images com:(ggBlock)block;
 

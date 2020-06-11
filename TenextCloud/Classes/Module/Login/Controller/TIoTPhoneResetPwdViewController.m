@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCPhoneResetPwdViewController.h"
+#import "TIoTPhoneResetPwdViewController.h"
 #import "XWCountryCodeController.h"
-#import "WCSendPhoneCodeViewController.h"
-#import "WCWebVC.h"
+#import "TIoTSendPhoneCodeViewController.h"
+#import "TIoTWebVC.h"
 
-@interface WCPhoneResetPwdViewController ()<UITextViewDelegate>
+@interface TIoTPhoneResetPwdViewController ()<UITextViewDelegate>
 {
     BOOL _emailStyle;//false:手机，true:邮箱
 }
@@ -29,7 +29,7 @@
 
 @end
 
-@implementation WCPhoneResetPwdViewController
+@implementation TIoTPhoneResetPwdViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -219,8 +219,8 @@
         NSDictionary *tmpDic = @{@"Type":@"resetpass",@"Email":self.emailTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
-            WCSendPhoneCodeViewController *vc = [[WCSendPhoneCodeViewController alloc] init];
+        [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
+            TIoTSendPhoneCodeViewController *vc = [[TIoTSendPhoneCodeViewController alloc] init];
             vc.registerType = EmailResetPwd;
             vc.sendCodeDic = tmpDic;
             [self.navigationController pushViewController:vc animated:YES];
@@ -234,9 +234,9 @@
         NSDictionary *tmpDic = @{@"Type":@"resetpass",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
-        [[WCRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
-            WCSendPhoneCodeViewController *vc = [[WCSendPhoneCodeViewController alloc] init];
+            TIoTSendPhoneCodeViewController *vc = [[TIoTSendPhoneCodeViewController alloc] init];
             vc.registerType = PhoneResetPwd;
             vc.sendCodeDic = tmpDic;
             [self.navigationController pushViewController:vc animated:YES];
@@ -253,7 +253,7 @@
        
         WCLog(@"用户协议");
         NSString *path = [[NSBundle mainBundle] pathForResource:@"腾讯连连用户服务协议V1.0(1)" ofType:@"docx"];
-        WCWebVC *vc = [WCWebVC new];
+        TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"用户协议";
         vc.filePath = path;
         [self.navigationController pushViewController:vc animated:YES];
@@ -263,7 +263,7 @@
     else if ([[URL scheme] isEqualToString:@"Privacy1"]) {
         
         WCLog(@"隐私");
-        WCWebVC *vc = [WCWebVC new];
+        TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"隐私政策";
         vc.urlPath = @"https://privacy.qq.com";
         [self.navigationController pushViewController:vc animated:YES];

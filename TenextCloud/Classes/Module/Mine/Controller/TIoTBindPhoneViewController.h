@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCBindPhoneViewController : UIViewController
+@interface TIoTBindPhoneViewController : UIViewController
 
 @end
 

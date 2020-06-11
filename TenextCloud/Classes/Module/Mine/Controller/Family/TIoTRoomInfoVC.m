@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCRoomInfoVC.h"
-#import "WCRoomCell.h"
+#import "TIoTRoomInfoVC.h"
+#import "TIoTRoomCell.h"
 
 static NSString *cellId = @"rc62368";
-@interface WCRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
+@interface TIoTRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSArray *roomInfo;
 @end
 
-@implementation WCRoomInfoVC
+@implementation TIoTRoomInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,7 +29,7 @@ static NSString *cellId = @"rc62368";
 {
     self.title = @"房间设置";
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"WCRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     self.tableView.rowHeight = 60;
     
@@ -52,7 +52,7 @@ static NSString *cellId = @"rc62368";
 - (void)toDeleteRoom
 {
     NSDictionary *param = @{@"FamilyId":self.familyId,@"RoomId":self.roomDic[@"RoomId"]};
-    [[WCRequestObject shared] post:AppDeleteRoom Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteRoom Param:param success:^(id responseObject) {
         [HXYNotice addUpdateRoomListPost];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error) {
@@ -63,7 +63,7 @@ static NSString *cellId = @"rc62368";
 - (void)modifyRoom:(NSString *)name
 {
     NSDictionary *param = @{@"FamilyId":self.familyId,@"RoomId":self.roomDic[@"RoomId"],@"Name":name};
-    [[WCRequestObject shared] post:AppModifyRoom Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppModifyRoom Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateRoomListPost];
         
@@ -83,7 +83,7 @@ static NSString *cellId = @"rc62368";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     [cell setInfo2:self.roomInfo[indexPath.row]];
     return cell;
 }
@@ -91,7 +91,7 @@ static NSString *cellId = @"rc62368";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
         [av alertWithTitle:@"房间名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {

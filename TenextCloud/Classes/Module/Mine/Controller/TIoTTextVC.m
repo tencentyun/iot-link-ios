@@ -6,14 +6,14 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCTextVC.h"
+#import "TIoTTextVC.h"
 #import <WebKit/WKWebView.h>
 
-@interface WCTextVC ()
+@interface TIoTTextVC ()
 
 @end
 
-@implementation WCTextVC
+@implementation TIoTTextVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,7 +43,7 @@
             if (@available(iOS 11.0, *)) {
                 make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(20);
             } else {
-                make.top.mas_equalTo([WCUIProxy shareUIProxy].navigationBarHeight).offset(20);
+                make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight).offset(20);
             }
         }];
     }

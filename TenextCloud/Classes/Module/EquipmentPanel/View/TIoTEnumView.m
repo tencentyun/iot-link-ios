@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCEnumView.h"
-#import "WCEnumItem.h"
+#import "TIoTEnumView.h"
+#import "TIoTEnumItem.h"
 
 static NSString *itemId = @"gggddd";
 
-@interface WCEnumView()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface TIoTEnumView()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (nonatomic,strong) UIImageView *bgView;
 @property (nonatomic,strong) UILabel *nameLab;
@@ -23,7 +23,7 @@ static NSString *itemId = @"gggddd";
 @property (nonatomic,weak) NSIndexPath *currentIndexPath;
 @end
 
-@implementation WCEnumView
+@implementation TIoTEnumView
 
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -82,7 +82,7 @@ static NSString *itemId = @"gggddd";
         make.bottom.mas_equalTo(-40);
     }];
     
-    [col registerNib:[UINib nibWithNibName:@"WCEnumItem" bundle:nil] forCellWithReuseIdentifier:itemId];
+    [col registerNib:[UINib nibWithNibName:@"TIoTEnumItem" bundle:nil] forCellWithReuseIdentifier:itemId];
 }
 
 
@@ -98,7 +98,7 @@ static NSString *itemId = @"gggddd";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCEnumItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
+    TIoTEnumItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
     
     if ([self.currentValue isEqualToString:self.dataArray[indexPath.row][@"value"]]) {
         self.currentIndexPath = indexPath;

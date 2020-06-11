@@ -6,9 +6,9 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCHudLoadingView.h"
+#import "TIoTHudLoadingView.h"
 
-@interface WCHudLoadingView ()
+@interface TIoTHudLoadingView ()
 
 @property (nonatomic, strong) CAShapeLayer *shapeLayer;
 //@property (nonatomic, strong) UIImageView *loadingImageView;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation WCHudLoadingView
+@implementation TIoTHudLoadingView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 40, 40)];

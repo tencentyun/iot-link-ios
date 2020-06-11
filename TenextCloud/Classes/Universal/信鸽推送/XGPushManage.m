@@ -47,7 +47,7 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 - (void)stopPushService{
     [XGPush.defaultManager stopXGNotification];
     
-    [[WCRequestObject shared] post:@"AppUnBindXgToken" Param:@{@"Token":self.deviceToken?:@"",@"Platform":@"ios"} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:@"AppUnBindXgToken" Param:@{@"Token":self.deviceToken?:@"",@"Platform":@"ios"} success:^(id responseObject) {
         
     } failure:^(NSString *reason, NSError *error) {
         
@@ -61,7 +61,7 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 {
     if (self.deviceToken) {
         
-        [[WCRequestObject shared] post:@"AppBindXgToken" Param:@{@"Token":self.deviceToken,@"Platform":@"ios"} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:@"AppBindXgToken" Param:@{@"Token":self.deviceToken,@"Platform":@"ios"} success:^(id responseObject) {
             
         } failure:^(NSString *reason, NSError *error) {
             

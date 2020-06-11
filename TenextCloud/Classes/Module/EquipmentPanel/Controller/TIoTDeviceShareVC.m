@@ -6,19 +6,19 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCDeviceShareVC.h"
-#import "WCUserCell.h"
-#import "WCInvitationVC.h"
+#import "TIoTDeviceShareVC.h"
+#import "TIoTUserCell.h"
+#import "TIoTInvitationVC.h"
 
 static NSString *cellId = @"sd0679";
-@interface WCDeviceShareVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTDeviceShareVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSMutableArray *userList;
 
 @end
 
-@implementation WCDeviceShareVC
+@implementation TIoTDeviceShareVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,7 +31,7 @@ static NSString *cellId = @"sd0679";
 - (void)setupUI
 {
     self.title = @"设备分享";
-    [self.tableView registerNib:[UINib nibWithNibName:@"WCUserCell" bundle:nil] forCellReuseIdentifier:cellId];
+    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTUserCell" bundle:nil] forCellReuseIdentifier:cellId];
     
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 60)];
@@ -68,7 +68,7 @@ static NSString *cellId = @"sd0679";
 
 - (void)toShare
 {
-    WCInvitationVC *vc = [WCInvitationVC new];
+    TIoTInvitationVC *vc = [TIoTInvitationVC new];
     vc.title = @"分享用户";
     vc.familyId = self.deviceDic[@"FamilyId"];
     vc.productId = self.deviceDic[@"ProductId"];
@@ -85,7 +85,7 @@ static NSString *cellId = @"sd0679";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCUserCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    TIoTUserCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
     [cell setInfo:self.userList[indexPath.row]];
     return cell;
 }
@@ -128,7 +128,7 @@ static NSString *cellId = @"sd0679";
     [param setValue:self.deviceDic[@"DeviceName"] forKey:@"DeviceName"];
 //    [param setValue:@"" forKey:@"Offset"];
 //    [param setValue:@"" forKey:@"Limit"];
-    [[WCRequestObject shared] post:AppListShareDeviceUsers Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppListShareDeviceUsers Param:param success:^(id responseObject) {
         [self.userList removeAllObjects];
         [self.userList addObjectsFromArray:responseObject[@"Users"]];
         [self refreshUI:responseObject];
@@ -147,7 +147,7 @@ static NSString *cellId = @"sd0679";
     [param setValue:userId forKey:@"RemoveUserID"];
     [param setValue:self.deviceDic[@"ProductId"] forKey:@"ProductId"];
     [param setValue:self.deviceDic[@"DeviceName"] forKey:@"DeviceName"];
-    [[WCRequestObject shared] post:AppRemoveShareDeviceUser Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppRemoveShareDeviceUser Param:param success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"删除成功"];
         [self.userList removeObjectAtIndex:index];
         [self.tableView reloadData];

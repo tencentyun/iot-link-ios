@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
     WCAppEnvironmentTypeTest
 };
 
-@interface WCAppEnvironment : NSObject
+@interface TIoTAppEnvironment : NSObject
 
 + (instancetype)shareEnvironment;
 

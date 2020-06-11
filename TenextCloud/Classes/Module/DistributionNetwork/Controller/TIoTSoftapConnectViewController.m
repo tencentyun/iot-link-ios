@@ -6,19 +6,19 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCSoftapConnectViewController.h"
-#import "WCSoftapWaitVC.h"
+#import "TIoTSoftapConnectViewController.h"
+#import "TIoTSoftapWaitVC.h"
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 #import "UIImage+Ex.h"
 
-@interface WCSoftapConnectViewController ()
+@interface TIoTSoftapConnectViewController ()
 
 @property (nonatomic,strong) UIButton *connectB;//连接按钮
 @property (nonatomic,strong) UIButton *nextB;//下一步按钮
 
 @end
 
-@implementation WCSoftapConnectViewController
+@implementation TIoTSoftapConnectViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -153,7 +153,7 @@
 }
 
 - (void)nextClick:(id)sender{
-    WCSoftapWaitVC *vc = [[WCSoftapWaitVC alloc] init];
+    TIoTSoftapWaitVC *vc = [[TIoTSoftapWaitVC alloc] init];
     vc.title = @"soft ap配网";
     vc.wifiInfo = self.wifiInfo.copy;
     vc.roomId = self.roomId;

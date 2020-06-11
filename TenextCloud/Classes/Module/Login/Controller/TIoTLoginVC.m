@@ -6,12 +6,12 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCLoginVC.h"
-#import "WCSendPhoneCodeViewController.h"
+#import "TIoTLoginVC.h"
+#import "TIoTSendPhoneCodeViewController.h"
 #import "XWCountryCodeController.h"
-#import "WCPhoneResetPwdViewController.h"
-#import "WCRegisterViewController.h"
-#import "WCTabBarViewController.h"
+#import "TIoTPhoneResetPwdViewController.h"
+#import "TIoTRegisterViewController.h"
+#import "TIoTTabBarViewController.h"
 #import "XGPushManage.h"
 #import "WxManager.h"
 #import "UIButton+LQRelayout.h"
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     WCLoginStyleWechat
 };
 
-@interface WCLoginVC ()
+@interface TIoTLoginVC ()
 
 @property (nonatomic, strong) UIButton *areaCodeBtn;
 @property (nonatomic, strong) UITextField *phoneTF;
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 
 @end
 
-@implementation WCLoginVC
+@implementation TIoTLoginVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -449,12 +449,12 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 
 
 - (void)toRegist:(id)sender{
-    WCRegisterViewController *vc = [[WCRegisterViewController alloc] init];
+    TIoTRegisterViewController *vc = [[TIoTRegisterViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)forgetPwdClick:(id)sender{
-    WCPhoneResetPwdViewController *vc = [[WCPhoneResetPwdViewController alloc] init];
+    TIoTPhoneResetPwdViewController *vc = [[TIoTPhoneResetPwdViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -483,10 +483,10 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  //@"Email":@"",
                                  };
         
-        [[WCRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:nil];
-            [[WCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-            self.view.window.rootViewController = [[WCTabBarViewController alloc] init];
+            [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+            self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
 
             //信鸽推送注册
             [[XGPushManage sharedXGPushManage] bindPushToken];
@@ -502,10 +502,10 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  @"Password":self.emailPwdTF.text,
                                  @"Email":self.emailTF.text,
                                  };
-        [[WCRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
+        [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             
-            [[WCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-            self.view.window.rootViewController = [[WCTabBarViewController alloc] init];
+            [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+            self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
             
             //信鸽推送绑定
             [[XGPushManage sharedXGPushManage] bindPushToken];
@@ -529,11 +529,11 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 {
     NSDictionary *tmpDic = @{@"code":code,@"busi":@"studio"};
     
-    [[WCRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
+    [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
-        [[WCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+        [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         
-        self.view.window.rootViewController = [[WCTabBarViewController alloc] init];
+        self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
         
         //信鸽推送注册
         [[XGPushManage sharedXGPushManage] bindPushToken];
@@ -607,7 +607,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         if (keyboardBeginFrame.origin.y + keyboardBeginFrame.size.height != keyboardEndFrame.origin.y + keyboardEndFrame.size.height) {
             [self.topLayout uninstall];
             [self.loginView mas_updateConstraints:^(MASConstraintMaker *make) {
-                self.topLayout = make.top.equalTo(self.view).offset([WCUIProxy shareUIProxy].navigationBarHeight + 10);
+                self.topLayout = make.top.equalTo(self.view).offset([TIoTUIProxy shareUIProxy].navigationBarHeight + 10);
             }];
             [self.registView mas_updateConstraints:^(MASConstraintMaker *make) {
                 self.bottomLayout = make.bottom.equalTo(self.loginView.mas_bottom).offset(200);

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCPanelMoreViewController : UIViewController
+@interface TIoTPanelMoreViewController : UIViewController
 
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCUploadObj.h"
+#import "TIoTUploadObj.h"
 
-@implementation WCUploadObj
+@implementation TIoTUploadObj
 
 @end

@@ -6,16 +6,16 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCProductCell.h"
+#import "TIoTProductCell.h"
 
-@interface WCProductCell ()
+@interface TIoTProductCell ()
 
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong) UILabel *titleLab;
 
 @end
 
-@implementation WCProductCell
+@implementation TIoTProductCell
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];

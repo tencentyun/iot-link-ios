@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface WCMessageText2Cell : UITableViewCell
+@interface TIoTMessageText2Cell : UITableViewCell
 @property (nonatomic,strong) NSDictionary *msgData;
 @end
 

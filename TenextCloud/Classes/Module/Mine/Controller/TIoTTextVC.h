@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTextVC : UIViewController
+@interface TIoTTextVC : UIViewController
 @property (nonatomic,copy) NSString *content;
 @end
 

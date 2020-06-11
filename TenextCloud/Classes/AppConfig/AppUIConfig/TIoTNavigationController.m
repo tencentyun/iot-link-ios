@@ -6,14 +6,14 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCNavigationController.h"
+#import "TIoTNavigationController.h"
 #import "UIImage+Ex.h"
 
-@interface WCNavigationController ()
+@interface TIoTNavigationController ()
 
 @end
 
-@implementation WCNavigationController
+@implementation TIoTNavigationController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

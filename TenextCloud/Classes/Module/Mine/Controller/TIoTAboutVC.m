@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCAboutVC.h"
-#import "WCWebVC.h"
+#import "TIoTAboutVC.h"
+#import "TIoTWebVC.h"
 #import <QuickLook/QLPreviewController.h>
 
-@interface WCAboutVC ()
+@interface TIoTAboutVC ()
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLab;
 
 @end
 
-@implementation WCAboutVC
+@implementation TIoTAboutVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,7 +30,7 @@
 
 
 - (IBAction)privacyPolicy:(UITapGestureRecognizer *)sender {
-    WCWebVC *vc = [WCWebVC new];
+    TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"隐私政策";
     vc.urlPath = @"https://privacy.qq.com";
     [self.navigationController pushViewController:vc animated:YES];
@@ -38,7 +38,7 @@
 
 - (IBAction)protocol:(UITapGestureRecognizer *)sender {
     
-    WCWebVC *vc = [WCWebVC new];
+    TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"用户协议";
     vc.urlPath = @"https://docs.qq.com/doc/DY3ducUxmYkRUd2x2?pub=1&dver=2.1.0";
     [self.navigationController pushViewController:vc animated:YES];

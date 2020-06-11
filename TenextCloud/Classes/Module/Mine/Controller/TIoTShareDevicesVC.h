@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCShareDevicesVC : UIViewController
+@interface TIoTShareDevicesVC : UIViewController
 
 @end
 

@@ -10,7 +10,7 @@
 #define kXDPRefreshFooterFailure @"加载失败，点击重新加载"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRefreshFooter : MJRefreshAutoFooter
+@interface TIoTRefreshFooter : MJRefreshAutoFooter
 
 - (void)showFailStatus;
 

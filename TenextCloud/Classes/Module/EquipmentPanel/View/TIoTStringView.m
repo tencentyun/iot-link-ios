@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCStringView.h"
+#import "TIoTStringView.h"
 
-@interface WCStringView ()<UIGestureRecognizerDelegate,UITextViewDelegate>
+@interface TIoTStringView ()<UIGestureRecognizerDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) UILabel *titleLab;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation WCStringView
+@implementation TIoTStringView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];

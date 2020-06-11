@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCSoftapWaitVC : UIViewController
+@interface TIoTSoftapWaitVC : UIViewController
 @property (nonatomic, copy) NSDictionary *wifiInfo;
 @property (nonatomic, copy) NSString *roomId;
 @end

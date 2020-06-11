@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCFamilyMemberCell : UICollectionViewCell
+@interface TIoTFamilyMemberCell : UICollectionViewCell
 
 @property (nonatomic,copy) NSDictionary *info;
 @end

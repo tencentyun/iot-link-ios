@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCOptionalView : UIView
+@interface TIoTOptionalView : UIView
 
 @property (nonatomic, copy) void (^selected)(NSInteger index);
 @property (nonatomic, copy) void (^doneAction)(void);

@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCUserInfomationTableViewCell.h"
+#import "TIoTUserInfomationTableViewCell.h"
 
-@interface WCUserInfomationTableViewCell ()
+@interface TIoTUserInfomationTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UILabel *valueLab;
@@ -19,13 +19,13 @@
 
 @end
 
-@implementation WCUserInfomationTableViewCell
+@implementation TIoTUserInfomationTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCUserInfomationTableViewCell";
-    WCUserInfomationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTUserInfomationTableViewCell";
+    TIoTUserInfomationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCUserInfomationTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTUserInfomationTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

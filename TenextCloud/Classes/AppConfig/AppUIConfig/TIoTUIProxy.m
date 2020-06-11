@@ -6,16 +6,16 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCUIProxy.h"
+#import "TIoTUIProxy.h"
 
 
-@implementation WCUIProxy
+@implementation TIoTUIProxy
 
-+ (WCUIProxy *)shareUIProxy{
++ (TIoTUIProxy *)shareUIProxy{
     static id _proxy = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _proxy = [WCUIProxy new];
+        _proxy = [TIoTUIProxy new];
     });
     return _proxy;
 }

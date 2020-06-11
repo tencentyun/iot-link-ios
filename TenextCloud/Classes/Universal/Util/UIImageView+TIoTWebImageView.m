@@ -6,7 +6,7 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "UIImageView+WCWebImageView.h"
+#import "UIImageView+TIoTWebImageView.h"
 #import "UIImageView+WebCache.h"
 
 @implementation UIImageView (WCWebImageView)

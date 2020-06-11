@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCPhotoCell : UICollectionViewCell
+@interface TIoTPhotoCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *imgView;
 @property (nonatomic) void (^deleteTap)(void);
 - (void)setHiddenDeleteBtn:(BOOL)hiddenDeleteBtn;

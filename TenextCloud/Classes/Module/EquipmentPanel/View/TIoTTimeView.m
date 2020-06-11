@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCTimeView.h"
+#import "TIoTTimeView.h"
 
-@interface WCTimeView ()<UIGestureRecognizerDelegate>
+@interface TIoTTimeView ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) UILabel *titleLab;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation WCTimeView
+@implementation TIoTTimeView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];

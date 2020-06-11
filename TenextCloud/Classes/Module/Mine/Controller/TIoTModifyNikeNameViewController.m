@@ -6,16 +6,16 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCModifyNikeNameViewController.h"
+#import "TIoTModifyNikeNameViewController.h"
 #import "KeyboardManage.h"
 
-@interface WCModifyNikeNameViewController ()
+@interface TIoTModifyNikeNameViewController ()
 
 @property (nonatomic, strong) UITextField *textField;
 
 @end
 
-@implementation WCModifyNikeNameViewController
+@implementation TIoTModifyNikeNameViewController
 
 #pragma mark lifeCircle
 
@@ -60,7 +60,7 @@
     bgview.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgview];
     [bgview mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10 + [WCUIProxy shareUIProxy].navigationBarHeight);
+        make.top.mas_equalTo(10 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.leading.trailing.mas_equalTo(0);
         make.height.mas_equalTo(48);
     }];
@@ -81,12 +81,12 @@
         return;
     }
     
-    if (![self.textField.text isEqualToString:[WCUserManage shared].nickName]) {
+    if (![self.textField.text isEqualToString:[TIoTUserManage shared].nickName]) {
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] post:AppUpdateUser Param:@{@"NickName":self.textField.text,@"Avatar":[WCUserManage shared].avatar} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":self.textField.text,@"Avatar":[TIoTUserManage shared].avatar} success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"修改成功"];
-            [[WCUserManage shared] saveUserInfo:@{@"UserID":[WCUserManage shared].userId,@"Avatar":[WCUserManage shared].avatar,@"NickName":self.textField.text,@"PhoneNumber":[WCUserManage shared].phoneNumber}];
+            [[TIoTUserManage shared] saveUserInfo:@{@"UserID":[TIoTUserManage shared].userId,@"Avatar":[TIoTUserManage shared].avatar,@"NickName":self.textField.text,@"PhoneNumber":[TIoTUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error) {
             
@@ -105,7 +105,7 @@
     if (!_textField) {
         _textField = [[UITextField alloc] init];
         _textField.placeholder = @"请输入昵称";
-        _textField.text = [WCUserManage shared].nickName;
+        _textField.text = [TIoTUserManage shared].nickName;
         _textField.textColor = kRGBColor(51, 51, 51);
         _textField.font = [UIFont wcPfRegularFontOfSize:16];
         _textField.textContentType = UITextContentTypeNickname;

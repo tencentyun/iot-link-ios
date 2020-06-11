@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCUserManage : NSObject
+@interface TIoTUserManage : NSObject
 
 +(instancetype)shared;
 

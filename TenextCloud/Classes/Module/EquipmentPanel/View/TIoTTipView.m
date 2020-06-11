@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCTipView.h"
+#import "TIoTTipView.h"
 
-@implementation WCTipView
+@implementation TIoTTipView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

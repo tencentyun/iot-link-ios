@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRoomCell : UITableViewCell
+@interface TIoTRoomCell : UITableViewCell
 
 @property (nonatomic,copy) NSDictionary *info;
 @property (nonatomic,strong) NSDictionary *info2;

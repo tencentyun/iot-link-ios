@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WCBingPasswordViewController.h"
+#import "TIoTBingPasswordViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCSendPhoneCodeViewController : UIViewController
+@interface TIoTSendPhoneCodeViewController : UIViewController
 
 @property (nonatomic, assign) RegisterType registerType;
 @property (nonatomic, copy) NSDictionary *sendCodeDic;

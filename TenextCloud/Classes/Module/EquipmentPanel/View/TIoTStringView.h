@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCStringView : UIView
+@interface TIoTStringView : UIView
 
 @property (nonatomic, copy) void (^updateData)(NSDictionary *dataDic);
 @property (nonatomic, copy) NSDictionary *dic;

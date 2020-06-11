@@ -6,22 +6,22 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCActionTypeTableViewCell.h"
+#import "TIoTActionTypeTableViewCell.h"
 
-@interface WCActionTypeTableViewCell ()
+@interface TIoTActionTypeTableViewCell ()
 
 @property (nonatomic, strong) UILabel *nameLab;
 @property (nonatomic, strong) UIView *lineView;
 
 @end
 
-@implementation WCActionTypeTableViewCell
+@implementation TIoTActionTypeTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCActionTypeTableViewCell";
-    WCActionTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTActionTypeTableViewCell";
+    TIoTActionTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCActionTypeTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTActionTypeTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

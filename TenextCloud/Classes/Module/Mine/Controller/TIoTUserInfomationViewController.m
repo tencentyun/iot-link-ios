@@ -6,31 +6,31 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCUserInfomationViewController.h"
-#import "WCUserInfomationTableViewCell.h"
-#import "WCLoginVC.h"
-#import "WCQCloudCOSXMLManage.h"
-#import "WCModifyNikeNameViewController.h"
-#import "WCBindPhoneViewController.h"
+#import "TIoTUserInfomationViewController.h"
+#import "TIoTUserInfomationTableViewCell.h"
+#import "TIoTLoginVC.h"
+#import "TIoTQCloudCOSXMLManage.h"
+#import "TIoTModifyNikeNameViewController.h"
+#import "TIoTBindPhoneViewController.h"
 #import "XGPushManage.h"
-#import "WCResetPwdVC.h"
-#import "WCNavigationController.h"
-#import "WCAppEnvironment.h"
+#import "TIoTResetPwdVC.h"
+#import "TIoTNavigationController.h"
+#import "TIoTAppEnvironment.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
-#import "WCUploadObj.h"
+#import "TIoTUploadObj.h"
 
-@interface WCUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (strong, nonatomic) UIImagePickerController *picker;
-@property (nonatomic, strong) WCQCloudCOSXMLManage *cosXml;
+@property (nonatomic, strong) TIoTQCloudCOSXMLManage *cosXml;
 @property (nonatomic, copy) NSArray *dataArr;
 @property (nonatomic, copy) NSString *picUrl;
 
 @end
 
-@implementation WCUserInfomationViewController
+@implementation TIoTUserInfomationViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -75,7 +75,7 @@
     }];
     
     self.iconImageView = [[UIImageView alloc] init];
-    [self.iconImageView setImageWithURLStr:[WCUserManage shared].avatar placeHolder:@"userDefalut"];
+    [self.iconImageView setImageWithURLStr:[TIoTUserManage shared].avatar placeHolder:@"userDefalut"];
     self.iconImageView.userInteractionEnabled = YES;
     self.iconImageView.layer.cornerRadius = 40;
     self.iconImageView.layer.masksToBounds = YES;
@@ -151,7 +151,7 @@
 
 //绑定手机号
 - (void)bindPhone{
-    WCBindPhoneViewController *vc = [[WCBindPhoneViewController alloc] init];
+    TIoTBindPhoneViewController *vc = [[TIoTBindPhoneViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -164,12 +164,12 @@
         return;
     }
     
-    if (![name isEqualToString:[WCUserManage shared].nickName]) {
+    if (![name isEqualToString:[TIoTUserManage shared].nickName]) {
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[WCRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[WCUserManage shared].avatar} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[TIoTUserManage shared].avatar} success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"修改成功"];
-            [[WCUserManage shared] saveUserInfo:@{@"UserID":[WCUserManage shared].userId,@"Avatar":[WCUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[WCUserManage shared].phoneNumber}];
+            [[TIoTUserManage shared] saveUserInfo:@{@"UserID":[TIoTUserManage shared].userId,@"Avatar":[TIoTUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error) {
             
@@ -181,9 +181,9 @@
 {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[WCRequestObject shared] post:AppUpdateUser Param:@{@"Avatar":avatar} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"Avatar":avatar} success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"修改成功"];
-        [[WCUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
+        [[TIoTUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
         [HXYNotice addModifyUserInfoPost];
     } failure:^(NSString *reason, NSError *error) {
         
@@ -194,9 +194,9 @@
 - (void)loginoutClick:(id)sender{
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[WCRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
-        [[WCAppEnvironment shareEnvironment] loginOut];
-        WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:[[WCLoginVC alloc] init]];
+    [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
+        [[TIoTAppEnvironment shareEnvironment] loginOut];
+        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error) {
         
@@ -221,7 +221,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCUserInfomationTableViewCell *cell = [WCUserInfomationTableViewCell cellWithTableView:tableView];
+    TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
     cell.dic = self.dataArr[indexPath.row];
     return cell;
 }
@@ -229,7 +229,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"昵称"]) {
         
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
         [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
         av.maxLength = 10;
         av.defaultText = self.dataArr[indexPath.row][@"value"];
@@ -248,15 +248,15 @@
 //        [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"电话号码"]){
-        if ([WCUserManage shared].phoneNumber.length == 0) {
+        if ([TIoTUserManage shared].phoneNumber.length == 0) {
             [self bindPhone];
         }
     }
     else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]){
         
-        if ([WCUserManage shared].phoneNumber.length == 0) {
+        if ([TIoTUserManage shared].phoneNumber.length == 0) {
             
-            WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
             [av alertWithTitle:@"请先绑定手机号" message:@"当前未绑定手机号，无法进行修改密码" cancleTitlt:@"取消" doneTitle:@"绑定"];
             av.doneAction = ^(NSString *text) {
                 [self bindPhone];
@@ -266,7 +266,7 @@
             return;
         }
         
-        WCResetPwdVC *vc = [WCResetPwdVC new];
+        TIoTResetPwdVC *vc = [TIoTResetPwdVC new];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -280,13 +280,13 @@
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    self.cosXml = [[WCQCloudCOSXMLManage alloc] init];
+    self.cosXml = [[TIoTQCloudCOSXMLManage alloc] init];
     
     WeakObj(self)
     [self.cosXml getSignature:@[image] com:^(NSArray * _Nonnull reqs) {
         
         for (int i = 0; i < reqs.count; i ++) {
-            WCUploadObj *obj = reqs[i];
+            TIoTUploadObj *obj = reqs[i];
             QCloudCOSXMLUploadObjectRequest *request = obj.req;
             [request setFinishBlock:^(QCloudUploadObjectResult *result, NSError *error) {
                 StrongObj(self)
@@ -350,11 +350,11 @@
     if (!_dataArr) {
         
         NSString *haveArrow = @"1";
-        if ([WCUserManage shared].phoneNumber && [WCUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
+        if ([TIoTUserManage shared].phoneNumber && [TIoTUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
         
         _dataArr = @[
-        @{@"title":@"昵称",@"value":[WCUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-        @{@"title":@"电话号码",@"value":[WCUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
+        @{@"title":@"昵称",@"value":[TIoTUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+        @{@"title":@"电话号码",@"value":[TIoTUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
         @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
         ];
     }

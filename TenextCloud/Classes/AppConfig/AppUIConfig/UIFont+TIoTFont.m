@@ -6,7 +6,7 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "UIFont+WCFont.h"
+#import "UIFont+TIoTFont.h"
 
 @implementation UIFont (WCFont)
 

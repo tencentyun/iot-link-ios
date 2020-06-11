@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCConnectViewController : UIViewController
+@interface TIoTConnectViewController : UIViewController
 
 @property (nonatomic, copy) NSDictionary *wifiInfo;
 @property (nonatomic, copy) NSString *roomId;

@@ -6,10 +6,10 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCInvitationVC.h"
+#import "TIoTInvitationVC.h"
 #import "XWCountryCodeController.h"
 
-@interface WCInvitationVC ()
+@interface TIoTInvitationVC ()
 {
     BOOL _emailStyle;//false:手机，true:邮箱
 }
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation WCInvitationVC
+@implementation TIoTInvitationVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -150,7 +150,7 @@
     if (_emailStyle) param = @{@"Type":@"email",@"Email":self.emailTF.text};
     else param = @{@"Type":@"phone",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneTF.text};
     
-    [[WCRequestObject shared] post:AppFindUser Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppFindUser Param:param success:^(id responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         NSString *userId = data[@"UserID"];
         
@@ -183,7 +183,7 @@
 {
     if ([self.title isEqualToString:@"分享用户"]) {
         NSDictionary *param = @{@"FamilyId":self.familyId,@"ProductId":self.productId,@"DeviceName":self.deviceName,@"ToUserID":userId};
-        [[WCRequestObject shared] post:AppSendShareDeviceInvite Param:param success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppSendShareDeviceInvite Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送邀请成功"];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error) {
@@ -193,7 +193,7 @@
     else if ([self.title isEqualToString:@"邀请成员"])
     {
         NSDictionary *param = @{@"FamilyId":self.familyId,@"ToUserID":userId};
-        [[WCRequestObject shared] post:AppSendShareFamilyInvite Param:param success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppSendShareFamilyInvite Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送邀请成功"];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error) {

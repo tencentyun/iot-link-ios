@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WCPopoverVC : UIViewController
+@interface TIoTPopoverVC : UIViewController
 
 @property (nonatomic,copy) NSArray *families;
 

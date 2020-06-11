@@ -6,15 +6,15 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCModifyRoomVC.h"
-#import "WCChoseValueTableViewCell.h"
+#import "TIoTModifyRoomVC.h"
+#import "TIoTChoseValueTableViewCell.h"
 
-@interface WCModifyRoomVC ()
+@interface TIoTModifyRoomVC ()
 @property (nonatomic,strong) NSArray *rooms;
 @property (nonatomic,copy) NSString *currentRoomId;
 @end
 
-@implementation WCModifyRoomVC
+@implementation TIoTModifyRoomVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,7 +45,7 @@
 
 - (void)getRoomList
 {
-    [[WCRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":self.deviceInfo[@"FamilyId"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":self.deviceInfo[@"FamilyId"]} success:^(id responseObject) {
         self.rooms = responseObject[@"RoomList"];
         [self refreshUI:self.rooms.count];
     } failure:^(NSString *reason, NSError *error) {
@@ -74,7 +74,7 @@
 - (void)save
 {
     
-    [[WCRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":self.deviceInfo[@"ProductId"],@"DeviceName":self.deviceInfo[@"DeviceName"],@"FamilyId": self.deviceInfo[@"FamilyId"],@"RoomId":self.currentRoomId} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":self.deviceInfo[@"ProductId"],@"DeviceName":self.deviceInfo[@"DeviceName"],@"FamilyId": self.deviceInfo[@"FamilyId"],@"RoomId":self.currentRoomId} success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"保存成功"];
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
@@ -93,7 +93,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    WCChoseValueTableViewCell *cell = [WCChoseValueTableViewCell cellWithTableView:tableView];
+    TIoTChoseValueTableViewCell *cell = [TIoTChoseValueTableViewCell cellWithTableView:tableView];
     [cell setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 0)];
     BOOL select = [self.currentRoomId isEqualToString:self.rooms[indexPath.row][@"RoomId"]];
     [cell setTitle:self.rooms[indexPath.row][@"RoomName"] andSelect:select];

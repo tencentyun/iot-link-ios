@@ -6,17 +6,17 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCFeedBackViewController.h"
+#import "TIoTFeedBackViewController.h"
 #import "TZImagePickerController.h"
-#import "WCQCloudCOSXMLManage.h"
+#import "TIoTQCloudCOSXMLManage.h"
 #import <IQKeyboardManager/IQTextView.h>
-#import "WCPhotoCell.h"
+#import "TIoTPhotoCell.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
-#import "WCUploadObj.h"
+#import "TIoTUploadObj.h"
 
 static NSInteger maxNumber = 100;
 
-@interface WCFeedBackViewController ()<UITextViewDelegate,TZImagePickerControllerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface TIoTFeedBackViewController ()<UITextViewDelegate,TZImagePickerControllerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic) CGFloat itemWidth;
 
@@ -26,7 +26,7 @@ static NSInteger maxNumber = 100;
 @property (nonatomic, strong) UIButton *submitBtn;
 @property (nonatomic, strong) UILabel *countLab;
 
-@property (nonatomic, strong) WCQCloudCOSXMLManage *cosXml;
+@property (nonatomic, strong) TIoTQCloudCOSXMLManage *cosXml;
 @property (nonatomic, strong) UIImageView *picView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -34,7 +34,7 @@ static NSInteger maxNumber = 100;
 
 @end
 
-@implementation WCFeedBackViewController
+@implementation TIoTFeedBackViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -132,7 +132,7 @@ static NSInteger maxNumber = 100;
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     [photoView addSubview:_collectionView];
-    [_collectionView registerNib:[UINib nibWithNibName:@"WCPhotoCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoCell"];
+    [_collectionView registerNib:[UINib nibWithNibName:@"TIoTPhotoCellTIoTPhotoCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoCell"];
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(20);
         make.trailing.mas_equalTo(-20);
@@ -230,7 +230,7 @@ static NSInteger maxNumber = 100;
     }
     
     
-    [[WCRequestObject shared] post:AppUserFeedBack Param:@{@"Type":@"advise",@"Desc":self.contextTV.text,@"Contact":self.contactTF.hasText ? self.contactTF.text : @"",@"LogUrl":[urlArr componentsJoinedByString:@","]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppUserFeedBack Param:@{@"Type":@"advise",@"Desc":self.contextTV.text,@"Contact":self.contactTF.hasText ? self.contactTF.text : @"",@"LogUrl":[urlArr componentsJoinedByString:@","]} success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"反馈成功"];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error) {
@@ -275,10 +275,10 @@ static NSInteger maxNumber = 100;
         
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         WeakObj(self)
-        self.cosXml = [[WCQCloudCOSXMLManage alloc] init];
+        self.cosXml = [[TIoTQCloudCOSXMLManage alloc] init];
         [self.cosXml getSignature:photos com:^(NSArray * _Nonnull reqs) {
             for (int i = 0; i < reqs.count; i ++) {
-                WCUploadObj *obj = reqs[i];
+                TIoTUploadObj *obj = reqs[i];
                 QCloudCOSXMLUploadObjectRequest *request = obj.req;
                 [request setFinishBlock:^(QCloudUploadObjectResult *result, NSError *error) {
                     StrongObj(self)
@@ -400,7 +400,7 @@ static NSInteger maxNumber = 100;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
+    TIoTPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     if (indexPath.item == self.images.count) {
         [cell setHiddenDeleteBtn:YES];
         [cell.imgView setImage:[UIImage imageNamed:@"img_add"]];

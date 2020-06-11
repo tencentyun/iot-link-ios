@@ -6,9 +6,9 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCRefreshFooter.h"
+#import "TIoTRefreshFooter.h"
 
-@interface WCRefreshFooter ()
+@interface TIoTRefreshFooter ()
 
 @property (nonatomic , weak) UIImageView *failureView;
 
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation WCRefreshFooter
+@implementation TIoTRefreshFooter
 
 #pragma mark pubilc method
 - (void)showFailStatus{

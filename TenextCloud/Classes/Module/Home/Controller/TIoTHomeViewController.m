@@ -6,30 +6,30 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCHomeViewController.h"
-#import "WCEquipmentTableViewCell.h"
-#import "WCNewAddEquipmentViewController.h"
-#import "WCMessageViewController.h"
-#import "WCPanelVC.h"
-#import "WCRefreshHeader.h"
-#import "WCAppEnvironment.h"
+#import "TIoTHomeViewController.h"
+#import "TIoTEquipmentTableViewCell.h"
+#import "TIoTNewAddEquipmentViewController.h"
+#import "TIoTMessageViewController.h"
+#import "TIoTPanelVC.h"
+#import "TIoTRefreshHeader.h"
+#import "TIoTAppEnvironment.h"
 
 #import "CMPageTitleContentView.h"
 #import <YYModel.h>
 #import "FamilyModel.h"
 #import "RoomModel.h"
 
-#import "WCPopoverVC.h"
-#import "WCOptionalView.h"
+#import "TIoTPopoverVC.h"
+#import "TIoTOptionalView.h"
 
 #import <MJRefresh.h>
 
 #import "UIView+Extension.h"
-#import "WCFeedBackViewController.h"
+#import "TIoTFeedBackViewController.h"
 
 static CGFloat weatherHeight = 60;
 
-@interface WCHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
+@interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
 
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -66,7 +66,7 @@ static CGFloat weatherHeight = 60;
 
 @end
 
-@implementation WCHomeViewController
+@implementation TIoTHomeViewController
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleDefault;
 }
@@ -132,7 +132,7 @@ static CGFloat weatherHeight = 60;
 {
     // 下拉刷新
     WeakObj(self)
-    self.tableView.mj_header = [WCRefreshHeader headerWithRefreshingBlock:^{
+    self.tableView.mj_header = [TIoTRefreshHeader headerWithRefreshingBlock:^{
         [selfWeak getFamilyList];
     }];
     
@@ -274,7 +274,7 @@ static CGFloat weatherHeight = 60;
     config2.cm_selectedColor = kRGBColor(0, 82, 217);
     
     self.tableHeaderView2 = [[CMPageTitleContentView alloc] initWithConfig:config2];
-    _tableHeaderView2.frame = CGRectMake(0, [WCUIProxy shareUIProxy].statusHeight, kScreenWidth, 44);
+    _tableHeaderView2.frame = CGRectMake(0, [TIoTUIProxy shareUIProxy].statusHeight, kScreenWidth, 44);
     _tableHeaderView2.cm_selectedIndex = index;
     _tableHeaderView2.cm_delegate = self;
     [_navView3 addSubview:_tableHeaderView2];
@@ -313,7 +313,7 @@ static CGFloat weatherHeight = 60;
 
 - (void)getFamilyList
 {
-    [[WCRequestObject shared] post:AppGetFamilyList Param:@{} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetFamilyList Param:@{} success:^(id responseObject) {
         self.families = [NSArray yy_modelArrayWithClass:[FamilyModel class] json:responseObject[@"FamilyList"]];
         
         if (self.families.count > 0) {
@@ -349,7 +349,7 @@ static CGFloat weatherHeight = 60;
 
 - (void)getRoomList:(NSString *)familyId
 {
-    [[WCRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":familyId} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":familyId} success:^(id responseObject) {
         self.rooms = [NSArray yy_modelArrayWithClass:[RoomModel class] json:responseObject[@"RoomList"]];
         
         [self loadNewData];
@@ -361,7 +361,7 @@ static CGFloat weatherHeight = 60;
 - (void)loadNewData{
     self.offset = 0;
     NSString *roomId = self.currentRoomId ?: @"";
-    [[WCRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
         [self endRefresh:NO total:[responseObject[@"Total"] integerValue]];
         [self.dataArr removeAllObjects];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
@@ -379,7 +379,7 @@ static CGFloat weatherHeight = 60;
 - (void)loadMoreData{
     
     NSString *roomId = self.currentRoomId ?: @"";
-    [[WCRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
         [self endRefresh:YES total:[responseObject[@"Total"] integerValue]];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
         if (self.dataArr.count == 0) {
@@ -403,7 +403,7 @@ static CGFloat weatherHeight = 60;
     if (arr.count > 0) {
         NSDictionary *dic = @{@"ProductId":self.dataArr[0][@"ProductId"],@"DeviceIds":arr};
         
-        [[WCRequestObject shared] post:AppGetDeviceStatuses Param:dic success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppGetDeviceStatuses Param:dic success:^(id responseObject) {
             NSArray *statusArr = responseObject[@"DeviceStatuses"];
             
             NSMutableArray *tmpArr = [NSMutableArray array];
@@ -436,7 +436,7 @@ static CGFloat weatherHeight = 60;
 - (void)createFamily
 {
     NSDictionary *param = @{@"Name":@"我的家",@"Address":@""};
-    [[WCRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
         [self getFamilyList];
     } failure:^(NSString *reason, NSError *error) {
         
@@ -450,7 +450,7 @@ static CGFloat weatherHeight = 60;
 {
     
     FamilyModel *model = self.families[index];
-    [WCUserManage shared].familyId = model.FamilyId;
+    [TIoTUserManage shared].familyId = model.FamilyId;
     self.nick.text = model.FamilyName;
     self.nick2.text = model.FamilyName;
     self.currentFamilyId = model.FamilyId;
@@ -460,7 +460,7 @@ static CGFloat weatherHeight = 60;
 }
 
 - (void)messageClick:(id)sender{
-    WCMessageViewController *vc = [[WCMessageViewController alloc] init];
+    TIoTMessageViewController *vc = [[TIoTMessageViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -474,7 +474,7 @@ static CGFloat weatherHeight = 60;
 
 //添加设备
 - (void)addEquipmentViewController{
-    WCNewAddEquipmentViewController *vc = [[WCNewAddEquipmentViewController alloc] init];
+    TIoTNewAddEquipmentViewController *vc = [[TIoTNewAddEquipmentViewController alloc] init];
     vc.roomId = self.currentRoomId ?: @"";
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -482,7 +482,7 @@ static CGFloat weatherHeight = 60;
 - (void)selectFamily:(UIButton *)sender
 {
     if (self.families) {
-        WCOptionalView *vv = [[WCOptionalView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        TIoTOptionalView *vv = [[TIoTOptionalView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         vv.selected = ^(NSInteger index) {
             [self chooseFamilyByIndex:index];
         };
@@ -521,7 +521,7 @@ static CGFloat weatherHeight = 60;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCEquipmentTableViewCell *cell = [WCEquipmentTableViewCell cellWithTableView:tableView];
+    TIoTEquipmentTableViewCell *cell = [TIoTEquipmentTableViewCell cellWithTableView:tableView];
     cell.dataDic = self.dataArr[indexPath.row];
     return cell;
 }
@@ -533,7 +533,7 @@ static CGFloat weatherHeight = 60;
         [HXYNotice postHeartBeat:devIds];
         [HXYNotice addActivePushPost:devIds];
         
-        WCPanelVC *vc = [[WCPanelVC alloc] init];
+        TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
         vc.title = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"AliasName"]];
         vc.productId = self.dataArr[indexPath.row][@"ProductId"];
         vc.deviceName = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"DeviceName"]];
@@ -554,15 +554,15 @@ static CGFloat weatherHeight = 60;
     CGFloat offSetY = scrollView.contentOffset.y;
     NSLog(@"天地的==%f",offSetY);
     CGFloat limit = 44 + weatherHeight;
-    if (offSetY <= -(limit + [WCUIProxy shareUIProxy].statusHeight)) {
+    if (offSetY <= -(limit + [TIoTUIProxy shareUIProxy].statusHeight)) {
         self.navView2.hidden = YES;
         self.navView.hidden = NO;
     }
-    else if (offSetY > -(limit + [WCUIProxy shareUIProxy].statusHeight))
+    else if (offSetY > -(limit + [TIoTUIProxy shareUIProxy].statusHeight))
     {
         self.navView2.hidden = NO;
         self.navView.hidden = YES;
-        if (offSetY > -[WCUIProxy shareUIProxy].statusHeight) {
+        if (offSetY > -[TIoTUIProxy shareUIProxy].statusHeight) {
             self.tableHeaderView.hidden = YES;
             self.navView3.hidden = NO;
         }
@@ -616,7 +616,7 @@ static CGFloat weatherHeight = 60;
 - (UIView *)navView
 {
     if (!_navView) {
-        _navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [WCUIProxy shareUIProxy].navigationBarHeight + weatherHeight)];
+        _navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight)];
 //        _navView.backgroundColor = [UIColor whiteColor];
         
         UILabel *titleLab = [[UILabel alloc] init];
@@ -628,7 +628,7 @@ static CGFloat weatherHeight = 60;
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.mas_equalTo(16);
             make.height.mas_equalTo(44);
-            make.top.mas_equalTo([WCUIProxy shareUIProxy].statusHeight);
+            make.top.mas_equalTo([TIoTUIProxy shareUIProxy].statusHeight);
         }];
         
         UIImageView *imgv = [[UIImageView alloc] init];
@@ -745,7 +745,7 @@ static CGFloat weatherHeight = 60;
 - (UIView *)navView3
 {
     if (!_navView3) {
-        _navView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [WCUIProxy shareUIProxy].navigationBarHeight)];
+        _navView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight)];
         _navView3.backgroundColor = [UIColor whiteColor];
         _navView3.hidden = YES;
         

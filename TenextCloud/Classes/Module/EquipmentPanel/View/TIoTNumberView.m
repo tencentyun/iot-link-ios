@@ -6,11 +6,11 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCNumberView.h"
+#import "TIoTNumberView.h"
 #import "SliderView.h"
 #import "UIImage+Ex.h"
 
-@interface WCNumberView()
+@interface TIoTNumberView()
 
 @property (nonatomic,strong) UIImageView *bgView;
 
@@ -24,7 +24,7 @@
 @property (nonatomic,copy) NSString *unit;//单位
 @end
 
-@implementation WCNumberView
+@implementation TIoTNumberView
 
 
 - (instancetype)initWithFrame:(CGRect)frame

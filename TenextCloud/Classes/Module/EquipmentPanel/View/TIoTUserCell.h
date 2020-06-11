@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface WCUserCell : UITableViewCell
+@interface TIoTUserCell : UITableViewCell
 @property (nonatomic,copy) NSDictionary *info;
 @end
 

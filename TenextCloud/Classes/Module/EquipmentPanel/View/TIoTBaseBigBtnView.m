@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCBaseBigBtnView.h"
+#import "TIoTBaseBigBtnView.h"
 
-@implementation WCBaseBigBtnView
+@implementation TIoTBaseBigBtnView
 
 - (void)setInfo:(NSDictionary *)info
 {

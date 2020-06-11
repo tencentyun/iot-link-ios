@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCSlider : UISlider
+@interface TIoTSlider : UISlider
 
 @end
 
-@interface WCSlideView : UIView
+@interface TIoTSlideView : UIView
 
 @property (nonatomic) BOOL isAction;//控制删除动作按钮
 @property (nonatomic, copy) void (^deleteTap)(void);

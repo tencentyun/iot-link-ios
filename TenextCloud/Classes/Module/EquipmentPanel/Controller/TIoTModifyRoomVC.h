@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCModifyRoomVC : UITableViewController
+@interface TIoTModifyRoomVC : UITableViewController
 
 @property (nonatomic, strong) NSDictionary *deviceInfo;
 

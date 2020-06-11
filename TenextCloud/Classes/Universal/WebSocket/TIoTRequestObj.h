@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRequestObj : NSObject
+@interface TIoTRequestObj : NSObject
 @property (nonatomic, unsafe_unretained) NSUInteger reqId;
 @property (nonatomic) didReceiveMessage sucess;
 @end

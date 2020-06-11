@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCDiscoverProductView.h"
-#import "WCProductTableViewCell.h"
+#import "TIoTDiscoverProductView.h"
+#import "TIoTProductTableViewCell.h"
 
-@interface WCDiscoverProductView () <UITableViewDataSource, UITableViewDelegate>
+@interface TIoTDiscoverProductView () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *productArr;
 
 @end
 
-@implementation WCDiscoverProductView
+@implementation TIoTDiscoverProductView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -216,7 +216,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCProductTableViewCell *cell = [WCProductTableViewCell cellWithTableView:tableView];
+    TIoTProductTableViewCell *cell = [TIoTProductTableViewCell cellWithTableView:tableView];
     cell.connectEvent = ^{
         
     };

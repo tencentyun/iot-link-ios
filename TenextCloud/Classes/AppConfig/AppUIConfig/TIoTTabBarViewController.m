@@ -6,18 +6,18 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCTabBarViewController.h"
-#import "WCHomeViewController.h"
-#import "WCMineViewController.h"
-#import "WCNavigationController.h"
+#import "TIoTTabBarViewController.h"
+#import "TIoTHomeViewController.h"
+#import "TIoTMineViewController.h"
+#import "TIoTNavigationController.h"
 #import "UIImage+Ex.h"
 
-@interface WCTabBarViewController ()<UITabBarControllerDelegate>
+@interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
 
 @end
 
-@implementation WCTabBarViewController
+@implementation TIoTTabBarViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,11 +29,11 @@
     // 1.初始化子控制器
     
     //首页
-    WCHomeViewController *homeVC = [[WCHomeViewController alloc] init];
+    TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
     [self addChildVc:homeVC title:@"首页" image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
 
     //个人中心
-    WCMineViewController *mineVC = [[WCMineViewController alloc] init];
+    TIoTMineViewController *mineVC = [[TIoTMineViewController alloc] init];
     [self addChildVc:mineVC title:@"我的" image:@"mineDefaultTabbar" selectedImage:@"mineSelectTabbar"];
 
     self.delegate = self;
@@ -74,7 +74,7 @@
     [childVc.tabBarItem setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
     [childVc.tabBarItem setTitleTextAttributes:selectTextAttrs forState:UIControlStateSelected];
     // 先给外面传进来的小控制器 包装 一个导航控制器
-    WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:childVc];
+    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:childVc];
     // 添加为子控制器
     [self addChildViewController:nav];
 }

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCAddTimerVC : UIViewController
+@interface TIoTAddTimerVC : UIViewController
 
 @property (nonatomic, copy) NSString *productId;
 @property (nonatomic, copy) NSString *deviceName;

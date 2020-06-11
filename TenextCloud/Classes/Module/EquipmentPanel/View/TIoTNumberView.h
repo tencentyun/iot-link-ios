@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WCBaseBigBtnView.h"
+#import "TIoTBaseBigBtnView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCNumberView : WCBaseBigBtnView
+@interface TIoTNumberView : TIoTBaseBigBtnView
 
 
 - (void)setStyle:(WCThemeStyle)style;

@@ -6,21 +6,21 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCProductTableViewCell.h"
+#import "TIoTProductTableViewCell.h"
 
-@interface WCProductTableViewCell ()
+@interface TIoTProductTableViewCell ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 
 @end
 
-@implementation WCProductTableViewCell
+@implementation TIoTProductTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCProductTableViewCell";
-    WCProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTProductTableViewCell";
+    TIoTProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCProductTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTProductTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

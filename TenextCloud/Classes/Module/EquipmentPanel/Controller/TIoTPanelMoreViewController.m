@@ -6,13 +6,13 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCPanelMoreViewController.h"
-#import "WCDeviceData.h"
-#import "WCDeviceDetailTableViewCell.h"
-#import "WCDeviceShareVC.h"
-#import "WCModifyRoomVC.h"
+#import "TIoTPanelMoreViewController.h"
+#import "TIoTDeviceData.h"
+#import "TIoTDeviceDetailTableViewCell.h"
+#import "TIoTDeviceShareVC.h"
+#import "TIoTModifyRoomVC.h"
 
-@interface WCPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UILabel *nameLab;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation WCPanelMoreViewController
+@implementation TIoTPanelMoreViewController
 
 #pragma mark lifeCircle
 - (void)viewDidLoad {
@@ -97,7 +97,7 @@
 
 - (void)modifyName:(NSString *)name
 {
-    [[WCRequestObject shared] post:AppUpdateDeviceInFamily Param:@{@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"],@"AliasName":name} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppUpdateDeviceInFamily Param:@{@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"],@"AliasName":name} success:^(id responseObject) {
         [HXYNotice addUpdateDeviceListPost];
         
         [self.deviceDic setValue:name forKey:@"AliasName"];
@@ -112,7 +112,7 @@
 
 - (void)deleteDevice
 {
-    [[WCRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
         
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
@@ -127,7 +127,7 @@
 
 - (void)deleteEquipment:(id)sender{
     
-    WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
     [av alertWithTitle:@"确定要删除设备吗？" message:@"删除后数据无法直接恢复" cancleTitlt:@"取消" doneTitle:@"删除"];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self deleteDevice];
@@ -147,7 +147,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCDeviceDetailTableViewCell *cell = [WCDeviceDetailTableViewCell cellWithTableView:tableView];
+    TIoTDeviceDetailTableViewCell *cell = [TIoTDeviceDetailTableViewCell cellWithTableView:tableView];
     cell.dic = [self dataArr][indexPath.row];
     return cell;
 }
@@ -155,7 +155,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备名称"]) {
         
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
         [av alertWithTitle:@"设备名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {
@@ -169,13 +169,13 @@
     }
     else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备分享"])
     {
-        WCDeviceShareVC *vc = [[WCDeviceShareVC alloc] init];
+        TIoTDeviceShareVC *vc = [[TIoTDeviceShareVC alloc] init];
         vc.deviceDic = self.deviceDic;
         [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"房间设置"])
     {
-        WCModifyRoomVC *vc = [[WCModifyRoomVC alloc] init];
+        TIoTModifyRoomVC *vc = [[TIoTModifyRoomVC alloc] init];
         vc.deviceInfo = self.deviceDic;
         [self.navigationController pushViewController:vc animated:YES];
     }

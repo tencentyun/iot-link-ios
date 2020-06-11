@@ -6,20 +6,20 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCMessageTextCell.h"
+#import "TIoTMessageTextCell.h"
 
-@interface WCMessageTextCell()
+@interface TIoTMessageTextCell()
 @property (nonatomic,strong) UILabel *titleLab;
 @property (nonatomic,strong) UILabel *timeLab;
 @end
 
-@implementation WCMessageTextCell
+@implementation TIoTMessageTextCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"WCMessageTextCell";
-    WCMessageTextCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"TIoTMessageTextCell";
+    TIoTMessageTextCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[WCMessageTextCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
+        cell = [[TIoTMessageTextCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
                 ];
     }
     return cell;

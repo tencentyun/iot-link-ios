@@ -6,22 +6,22 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRequestObject.h"
-#import "WCAppEnvironment.h"
+#import "TIoTRequestObject.h"
+#import "TIoTAppEnvironment.h"
 
 
 #define kCode @"code"
 #define kMsg @"msg"
 #define kData @"data"
 
-@implementation WCRequestObject
+@implementation TIoTRequestObject
 
-+ (WCRequestObject *)shared {
++ (TIoTRequestObject *)shared {
     
-    static WCRequestObject *_xonet = nil;
+    static TIoTRequestObject *_xonet = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _xonet = [[WCRequestObject alloc] init];
+        _xonet = [[TIoTRequestObject alloc] init];
     });
     return _xonet;
 }
@@ -33,11 +33,11 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[WCUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
     
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
-    NSURL *url = [NSURL URLWithString:[WCAppEnvironment shareEnvironment].baseUrlForLogined];
+    NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
     
     WCLog(@"连接==%@",url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
@@ -96,16 +96,16 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[WCAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
+    [accessParam setValue:[TIoTAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
     [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
     [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
-    [accessParam setValue:[WCAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+    [accessParam setValue:[TIoTAppEnvironment shareEnvironment].platform forKey:@"Platform"];
     
 //    [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
     
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[WCAppEnvironment shareEnvironment].baseUrl,urlStr]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
     
     WCLog(@"连接==%@",url);
     
@@ -180,7 +180,7 @@ failure:(FailureResponseBlock)failure
         }
     }
     
-    return [NSString HmacSha1:[WCAppEnvironment shareEnvironment].appSecret data:keyValue];
+    return [NSString HmacSha1:[TIoTAppEnvironment shareEnvironment].appSecret data:keyValue];
 }
 
 
@@ -194,7 +194,7 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[WCUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
     
     NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];

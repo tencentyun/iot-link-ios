@@ -6,22 +6,22 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCShareDevicesVC.h"
-#import "WCEquipmentTableViewCell.h"
-#import "WCPanelVC.h"
+#import "TIoTShareDevicesVC.h"
+#import "TIoTEquipmentTableViewCell.h"
+#import "TIoTPanelVC.h"
 
-@interface WCShareDevicesVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTShareDevicesVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
 @end
 
-@implementation WCShareDevicesVC
+@implementation TIoTShareDevicesVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [[WCRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
         [self.dataArr addObjectsFromArray:responseObject[@"ShareDevices"]];
         
         [self updateDeviceStatus];
@@ -38,7 +38,7 @@
     if (arr.count > 0) {
         NSDictionary *dic = @{@"ProductId":self.dataArr[0][@"ProductId"],@"DeviceIds":arr};
         
-        [[WCRequestObject shared] post:AppGetDeviceStatuses Param:dic success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppGetDeviceStatuses Param:dic success:^(id responseObject) {
             NSArray *statusArr = responseObject[@"DeviceStatuses"];
             
             NSMutableArray *tmpArr = [NSMutableArray array];
@@ -73,7 +73,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCEquipmentTableViewCell *cell = [WCEquipmentTableViewCell cellWithTableView:tableView];
+    TIoTEquipmentTableViewCell *cell = [TIoTEquipmentTableViewCell cellWithTableView:tableView];
     cell.dataDic = self.dataArr[indexPath.row];
     return cell;
 }
@@ -81,11 +81,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
-    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+    if ([TIoTWebSocketManage shared].socketReadyState == SR_OPEN) {
         [HXYNotice addActivePushPost:devIds];
     }
 
-    WCPanelVC *vc = [[WCPanelVC alloc] init];
+    TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
     vc.title = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"AliasName"]];
     vc.productId = self.dataArr[indexPath.row][@"ProductId"];
     vc.deviceName = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"DeviceName"]];

@@ -6,16 +6,16 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMessageText2Cell.h"
+#import "TIoTMessageText2Cell.h"
 
-@interface WCMessageText2Cell()
+@interface TIoTMessageText2Cell()
 @property (weak, nonatomic) IBOutlet UIImageView *picView;
 @property (weak, nonatomic) IBOutlet UILabel *titleL;
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
 @property (weak, nonatomic) IBOutlet UILabel *timeL;
 
 @end
-@implementation WCMessageText2Cell
+@implementation TIoTMessageText2Cell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

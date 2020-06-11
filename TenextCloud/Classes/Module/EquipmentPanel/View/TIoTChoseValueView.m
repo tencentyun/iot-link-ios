@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCChoseValueView.h"
-#import "WCChoseValueTableViewCell.h"
+#import "TIoTChoseValueView.h"
+#import "TIoTChoseValueTableViewCell.h"
 
-@interface WCChoseValueView ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
+@interface TIoTChoseValueView ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UILabel *titleLab;
@@ -20,7 +20,7 @@
 @property (nonatomic, copy) NSString *currentValue;//当前选中
 @end
 
-@implementation WCChoseValueView
+@implementation TIoTChoseValueView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -39,7 +39,7 @@
     [self addGestureRecognizer:singleFingerOne];
     
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 300 + [WCUIProxy shareUIProxy].tabbarAddHeight)];
+    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 300 + [TIoTUIProxy shareUIProxy].tabbarAddHeight)];
     self.whiteView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.whiteView];
 //    [self.whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -106,7 +106,7 @@
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(line.mas_bottom);
         make.leading.trailing.mas_equalTo(0);
-        make.bottom.mas_equalTo(-[WCUIProxy shareUIProxy].tabbarAddHeight);
+        make.bottom.mas_equalTo(-[TIoTUIProxy shareUIProxy].tabbarAddHeight);
         make.height.mas_equalTo(60);
     }];
     
@@ -123,7 +123,7 @@
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     
     [UIView animateWithDuration:0.2 animations:^{
-        self.whiteView.frame = CGRectMake(0, kScreenHeight - 300 - [WCUIProxy shareUIProxy].tabbarAddHeight, kScreenWidth, 300 + [WCUIProxy shareUIProxy].tabbarAddHeight);
+        self.whiteView.frame = CGRectMake(0, kScreenHeight - 300 - [TIoTUIProxy shareUIProxy].tabbarAddHeight, kScreenWidth, 300 + [TIoTUIProxy shareUIProxy].tabbarAddHeight);
     }];
 }
 
@@ -165,7 +165,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WCChoseValueTableViewCell *cell = [WCChoseValueTableViewCell cellWithTableView:tableView];
+    TIoTChoseValueTableViewCell *cell = [TIoTChoseValueTableViewCell cellWithTableView:tableView];
     BOOL iS = [self.dataArr[indexPath.row][@"id"] integerValue] == [self.currentValue integerValue];
     [cell setTitle:self.dataArr[indexPath.row][@"name"] andSelect:iS];
     return cell;
