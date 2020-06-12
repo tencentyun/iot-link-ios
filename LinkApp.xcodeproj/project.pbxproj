@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		546D66FD6C39419F9C35F07A /* libPods-TenextCloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m */; };
 		A43FCE66247E464900A7CEF3 /* TIoTCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE65247E464900A7CEF3 /* TIoTCategoryTableViewCell.m */; };
 		A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE68247E63E900A7CEF3 /* TIoTProductCell.m */; };
 		A43FCE6C247E7DA800A7CEF3 /* TIoTDiscoverProductView.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE6B247E7DA800A7CEF3 /* TIoTDiscoverProductView.m */; };
+		C06DEE64CF807EF97425007A /* libPods-LinkApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5BE7303D813D5C27B1CE1DF /* libPods-LinkApp.a */; };
 		D2038B8C2331D5F10036F6B9 /* TIoTMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B8B2331D5F10036F6B9 /* TIoTMessageViewController.m */; };
 		D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B912331DBC30036F6B9 /* TIoTHelpCenterViewController.m */; };
 		D2038B952331DBCD0036F6B9 /* TIoTFeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B942331DBCD0036F6B9 /* TIoTFeedBackViewController.m */; };
@@ -266,7 +266,7 @@
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
-		8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TenextCloud.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkApp/Pods-LinkApp.release.xcconfig"; sourceTree = "<group>"; };
 		A43FCE61247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNewAddEquipmentViewController.h; sourceTree = "<group>"; };
 		A43FCE62247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNewAddEquipmentViewController.m; sourceTree = "<group>"; };
 		A43FCE64247E464900A7CEF3 /* TIoTCategoryTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCategoryTableViewCell.h; sourceTree = "<group>"; };
@@ -277,6 +277,8 @@
 		A43FCE6B247E7DA800A7CEF3 /* TIoTDiscoverProductView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDiscoverProductView.m; sourceTree = "<group>"; };
 		ADFDE60EA26FD8690CFB93FF /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
 		C58BD7948DBCA9A9650F6CA7 /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
+		C5BE7303D813D5C27B1CE1DF /* libPods-LinkApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6770FC7B2DE12C08C524BF2 /* Pods-LinkApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkApp/Pods-LinkApp.debug.xcconfig"; sourceTree = "<group>"; };
 		CEFA75EB664302F51AF9F173 /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		D2038B8A2331D5F10036F6B9 /* TIoTMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMessageViewController.h; sourceTree = "<group>"; };
 		D2038B8B2331D5F10036F6B9 /* TIoTMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMessageViewController.m; sourceTree = "<group>"; };
@@ -445,13 +447,13 @@
 		D2C7A9FE232F6AA5005E8006 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2C7AA00232F6AA5005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2C7AA01232F6AA5005E8006 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D2C7AA07232F6AA6005E8006 /* TenextCloudTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TenextCloudTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2C7AA07232F6AA6005E8006 /* LinkAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LinkAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C7AA0B232F6AA6005E8006 /* TenextCloudTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TenextCloudTests.m; sourceTree = "<group>"; };
 		D2C7AA0D232F6AA6005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D2C7AA12232F6AA6005E8006 /* TenextCloudUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TenextCloudUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2C7AA12232F6AA6005E8006 /* LinkAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LinkAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C7AA16232F6AA6005E8006 /* TenextCloudUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TenextCloudUITests.m; sourceTree = "<group>"; };
 		D2C7AA18232F6AA6005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D2C7AA25232F6EBC005E8006 /* TenextCloud.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TenextCloud.pch; sourceTree = "<group>"; };
+		D2C7AA25232F6EBC005E8006 /* LinkApp.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkApp.pch; sourceTree = "<group>"; };
 		D2C7D7EF2330B43200C97A04 /* UIView+StatusCoast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+StatusCoast.m"; sourceTree = "<group>"; };
 		D2C7D7F02330B43200C97A04 /* UIView+StatusCoast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+StatusCoast.h"; sourceTree = "<group>"; };
 		D2C7D7F22330B76500C97A04 /* TIoTEquipmentTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTEquipmentTableViewCell.h; sourceTree = "<group>"; };
@@ -693,7 +695,7 @@
 				D2E97691233C499700182443 /* UserNotifications.framework in Frameworks */,
 				D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */,
 				ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */,
-				546D66FD6C39419F9C35F07A /* libPods-TenextCloud.a in Frameworks */,
+				C06DEE64CF807EF97425007A /* libPods-LinkApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,6 +723,8 @@
 				ADFDE60EA26FD8690CFB93FF /* Pods-TenextCloud.release.xcconfig */,
 				CEFA75EB664302F51AF9F173 /* Pods-TenextCloud.debug.xcconfig */,
 				C58BD7948DBCA9A9650F6CA7 /* Pods-TenextCloud.release.xcconfig */,
+				C6770FC7B2DE12C08C524BF2 /* Pods-LinkApp.debug.xcconfig */,
+				A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -737,8 +741,7 @@
 				D2E97694233C49AD00182443 /* SystemConfiguration.framework */,
 				D2E97692233C49A300182443 /* CoreTelephony.framework */,
 				D2E97690233C499700182443 /* UserNotifications.framework */,
-				8337F48F8441D8FB7E553685 /* libPods-TenextCloud.a */,
-				F53FD779B409389D1A4DEBFF /* libPods-TenextCloud.a */,
+				C5BE7303D813D5C27B1CE1DF /* libPods-LinkApp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1354,9 +1357,9 @@
 		D2C7A9E6232F6AA4005E8006 = {
 			isa = PBXGroup;
 			children = (
-				D2C7A9F1232F6AA4005E8006 /* TenextCloud */,
-				D2C7AA0A232F6AA6005E8006 /* TenextCloudTests */,
-				D2C7AA15232F6AA6005E8006 /* TenextCloudUITests */,
+				D2C7A9F1232F6AA4005E8006 /* LinkApp */,
+				D2C7AA0A232F6AA6005E8006 /* LinkAppTests */,
+				D2C7AA15232F6AA6005E8006 /* LinkAppUITests */,
 				D2C7A9F0232F6AA4005E8006 /* Products */,
 				2801633B04573676584788D5 /* Pods */,
 				9172D49D607895D45538B791 /* Frameworks */,
@@ -1367,13 +1370,13 @@
 			isa = PBXGroup;
 			children = (
 				D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */,
-				D2C7AA07232F6AA6005E8006 /* TenextCloudTests.xctest */,
-				D2C7AA12232F6AA6005E8006 /* TenextCloudUITests.xctest */,
+				D2C7AA07232F6AA6005E8006 /* LinkAppTests.xctest */,
+				D2C7AA12232F6AA6005E8006 /* LinkAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D2C7A9F1232F6AA4005E8006 /* TenextCloud */ = {
+		D2C7A9F1232F6AA4005E8006 /* LinkApp */ = {
 			isa = PBXGroup;
 			children = (
 				D2859C32233B73BC00BB247C /* TenextCloud.entitlements */,
@@ -1382,25 +1385,25 @@
 				D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */,
 				D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */,
 			);
-			path = TenextCloud;
+			path = LinkApp;
 			sourceTree = "<group>";
 		};
-		D2C7AA0A232F6AA6005E8006 /* TenextCloudTests */ = {
+		D2C7AA0A232F6AA6005E8006 /* LinkAppTests */ = {
 			isa = PBXGroup;
 			children = (
 				D2C7AA0B232F6AA6005E8006 /* TenextCloudTests.m */,
 				D2C7AA0D232F6AA6005E8006 /* Info.plist */,
 			);
-			path = TenextCloudTests;
+			path = LinkAppTests;
 			sourceTree = "<group>";
 		};
-		D2C7AA15232F6AA6005E8006 /* TenextCloudUITests */ = {
+		D2C7AA15232F6AA6005E8006 /* LinkAppUITests */ = {
 			isa = PBXGroup;
 			children = (
 				D2C7AA16232F6AA6005E8006 /* TenextCloudUITests.m */,
 				D2C7AA18232F6AA6005E8006 /* Info.plist */,
 			);
-			path = TenextCloudUITests;
+			path = LinkAppUITests;
 			sourceTree = "<group>";
 		};
 		D2C7AA24232F6D83005E8006 /* Supporting Files */ = {
@@ -1412,7 +1415,7 @@
 				D2C7AA00232F6AA5005E8006 /* Info.plist */,
 				6DD4E82E248927830056A162 /* GoogleService-Info.plist */,
 				D2C7AA01232F6AA5005E8006 /* main.m */,
-				D2C7AA25232F6EBC005E8006 /* TenextCloud.pch */,
+				D2C7AA25232F6EBC005E8006 /* LinkApp.pch */,
 				D23104AE232F929D0003069D /* Localizable.strings */,
 			);
 			path = "Supporting Files";
@@ -1583,9 +1586,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D2C7A9EE232F6AA4005E8006 /* TenextCloud */ = {
+		D2C7A9EE232F6AA4005E8006 /* LinkApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloud" */;
+			buildConfigurationList = D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkApp" */;
 			buildPhases = (
 				1805E9362A06B178133EC800 /* [CP] Check Pods Manifest.lock */,
 				D2C7A9EB232F6AA4005E8006 /* Sources */,
@@ -1599,14 +1602,14 @@
 			);
 			dependencies = (
 			);
-			name = TenextCloud;
+			name = LinkApp;
 			productName = TenextCloud;
 			productReference = D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D2C7AA06232F6AA6005E8006 /* TenextCloudTests */ = {
+		D2C7AA06232F6AA6005E8006 /* LinkAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D2C7AA1E232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloudTests" */;
+			buildConfigurationList = D2C7AA1E232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkAppTests" */;
 			buildPhases = (
 				D2C7AA03232F6AA6005E8006 /* Sources */,
 				D2C7AA04232F6AA6005E8006 /* Frameworks */,
@@ -1617,14 +1620,14 @@
 			dependencies = (
 				D2C7AA09232F6AA6005E8006 /* PBXTargetDependency */,
 			);
-			name = TenextCloudTests;
+			name = LinkAppTests;
 			productName = TenextCloudTests;
-			productReference = D2C7AA07232F6AA6005E8006 /* TenextCloudTests.xctest */;
+			productReference = D2C7AA07232F6AA6005E8006 /* LinkAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D2C7AA11232F6AA6005E8006 /* TenextCloudUITests */ = {
+		D2C7AA11232F6AA6005E8006 /* LinkAppUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D2C7AA21232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloudUITests" */;
+			buildConfigurationList = D2C7AA21232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkAppUITests" */;
 			buildPhases = (
 				D2C7AA0E232F6AA6005E8006 /* Sources */,
 				D2C7AA0F232F6AA6005E8006 /* Frameworks */,
@@ -1635,9 +1638,9 @@
 			dependencies = (
 				D2C7AA14232F6AA6005E8006 /* PBXTargetDependency */,
 			);
-			name = TenextCloudUITests;
+			name = LinkAppUITests;
 			productName = TenextCloudUITests;
-			productReference = D2C7AA12232F6AA6005E8006 /* TenextCloudUITests.xctest */;
+			productReference = D2C7AA12232F6AA6005E8006 /* LinkAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -1671,7 +1674,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D2C7A9EA232F6AA4005E8006 /* Build configuration list for PBXProject "TenextCloud" */;
+			buildConfigurationList = D2C7A9EA232F6AA4005E8006 /* Build configuration list for PBXProject "LinkApp" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1685,9 +1688,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2C7A9EE232F6AA4005E8006 /* TenextCloud */,
-				D2C7AA06232F6AA6005E8006 /* TenextCloudTests */,
-				D2C7AA11232F6AA6005E8006 /* TenextCloudUITests */,
+				D2C7A9EE232F6AA4005E8006 /* LinkApp */,
+				D2C7AA06232F6AA6005E8006 /* LinkAppTests */,
+				D2C7AA11232F6AA6005E8006 /* LinkAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1769,7 +1772,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TenextCloud-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-LinkApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1782,15 +1785,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TenextCloud/Pods-TenextCloud-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TenextCloud/Pods-TenextCloud-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TenextCloud/Pods-TenextCloud-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6DD4E8302489DAAE0056A162 /* ShellScript */ = {
@@ -2014,12 +2017,12 @@
 /* Begin PBXTargetDependency section */
 		D2C7AA09232F6AA6005E8006 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D2C7A9EE232F6AA4005E8006 /* TenextCloud */;
+			target = D2C7A9EE232F6AA4005E8006 /* LinkApp */;
 			targetProxy = D2C7AA08232F6AA6005E8006 /* PBXContainerItemProxy */;
 		};
 		D2C7AA14232F6AA6005E8006 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D2C7A9EE232F6AA4005E8006 /* TenextCloud */;
+			target = D2C7A9EE232F6AA4005E8006 /* LinkApp */;
 			targetProxy = D2C7AA13232F6AA6005E8006 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2163,7 +2166,7 @@
 		};
 		D2C7AA1C232F6AA6005E8006 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CEFA75EB664302F51AF9F173 /* Pods-TenextCloud.debug.xcconfig */;
+			baseConfigurationReference = C6770FC7B2DE12C08C524BF2 /* Pods-LinkApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
@@ -2175,8 +2178,8 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TenextCloud/Supporting Files/TenextCloud.pch";
-				INFOPLIST_FILE = "$(SRCROOT)/TenextCloud/Supporting Files/Info.plist";
+				GCC_PREFIX_HEADER = "LinkApp/Supporting Files/LinkApp.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/LinkApp/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2197,7 +2200,7 @@
 		};
 		D2C7AA1D232F6AA6005E8006 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C58BD7948DBCA9A9650F6CA7 /* Pods-TenextCloud.release.xcconfig */;
+			baseConfigurationReference = A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TenextCloud/TenextCloud.entitlements;
@@ -2209,8 +2212,8 @@
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TenextCloud/Supporting Files/TenextCloud.pch";
-				INFOPLIST_FILE = "$(SRCROOT)/TenextCloud/Supporting Files/Info.plist";
+				GCC_PREFIX_HEADER = "LinkApp/Supporting Files/LinkApp.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/LinkApp/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2243,7 +2246,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Winext.TenextCloudTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TenextCloud.app/TenextCloud";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinkApp.app/LinkApp";
 			};
 			name = Debug;
 		};
@@ -2261,7 +2264,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Winext.TenextCloudTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TenextCloud.app/TenextCloud";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinkApp.app/LinkApp";
 			};
 			name = Release;
 		};
@@ -2302,7 +2305,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D2C7A9EA232F6AA4005E8006 /* Build configuration list for PBXProject "TenextCloud" */ = {
+		D2C7A9EA232F6AA4005E8006 /* Build configuration list for PBXProject "LinkApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2C7AA19232F6AA6005E8006 /* Debug */,
@@ -2311,7 +2314,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloud" */ = {
+		D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2C7AA1C232F6AA6005E8006 /* Debug */,
@@ -2320,7 +2323,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D2C7AA1E232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloudTests" */ = {
+		D2C7AA1E232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2C7AA1F232F6AA6005E8006 /* Debug */,
@@ -2329,7 +2332,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D2C7AA21232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TenextCloudUITests" */ = {
+		D2C7AA21232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2C7AA22232F6AA6005E8006 /* Debug */,

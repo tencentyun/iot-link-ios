@@ -9,7 +9,7 @@ platform :ios, '10.0'
 #    end
 #end
 
-target 'TenextCloud' do
+target 'LinkApp' do
     
 pod 'Masonry', '1.1.0'
 pod 'MJRefresh', '3.2.0'
