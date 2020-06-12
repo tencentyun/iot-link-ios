@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
                BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
-               BlueprintName = "TenextCloud"
-               ReferencedContainer = "container:TenextCloud.xcodeproj">
+               BlueprintName = "LinkApp"
+               ReferencedContainer = "container:LinkApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D2C7AA06232F6AA6005E8006"
-               BuildableName = "TenextCloudTests.xctest"
-               BlueprintName = "TenextCloudTests"
-               ReferencedContainer = "container:TenextCloud.xcodeproj">
+               BuildableName = "LinkAppTests.xctest"
+               BlueprintName = "LinkAppTests"
+               ReferencedContainer = "container:LinkApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D2C7AA11232F6AA6005E8006"
-               BuildableName = "TenextCloudUITests.xctest"
-               BlueprintName = "TenextCloudUITests"
-               ReferencedContainer = "container:TenextCloud.xcodeproj">
+               BuildableName = "LinkAppUITests.xctest"
+               BlueprintName = "LinkAppUITests"
+               ReferencedContainer = "container:LinkApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -68,8 +68,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
             BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
-            BlueprintName = "TenextCloud"
-            ReferencedContainer = "container:TenextCloud.xcodeproj">
+            BlueprintName = "LinkApp"
+            ReferencedContainer = "container:LinkApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -85,8 +85,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
             BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
-            BlueprintName = "TenextCloud"
-            ReferencedContainer = "container:TenextCloud.xcodeproj">
+            BlueprintName = "LinkApp"
+            ReferencedContainer = "container:LinkApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
