@@ -2,8 +2,10 @@
 
 # Decrypt the files
 # --batch to prevent interactive command --yes to assume "yes" for questions
-gpg --quiet --batch --yes --decrypt --passphrase="$PROVISIONING_PASSWORD" --output .github/script/apple_dev.p12 .github/script/apple_dev.p12.gpg
-gpg --quiet --batch --yes --decrypt --passphrase="$PROVISIONING_PASSWORD" --output .github/script/dev.mobileprovision .github/script/dev.mobileprovision.gpg
+#gpg --quiet --batch --yes --decrypt --passphrase="$PROVISIONING_PASSWORD" --output .github/script/apple_dev.p12 .github/script/opensource_keystore.p12.asc
+#gpg --quiet --batch --yes --decrypt --passphrase="$PROVISIONING_PASSWORD" --output .github/script/dev.mobileprovision .github/script/opensource_keystore.mobileprovision.asc
+gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
+gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
 
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
