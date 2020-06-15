@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="WCFamilyMemberCell">
+            <rect key="frame" x="0.0" y="0.0" width="150" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="150" height="120"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jgb-P0-PnB">
+                        <rect key="frame" x="50" y="15" width="50" height="50"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="Cgd-GK-LpX"/>
+                            <constraint firstAttribute="width" constant="50" id="vwX-7l-SSc"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="25"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hmn-pC-aij">
+                        <rect key="frame" x="5" y="75" width="140" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3y-0u-Pc3">
+                        <rect key="frame" x="62" y="96" width="26.5" height="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Hmn-pC-aij" firstAttribute="centerX" secondItem="SEy-5g-ep8" secondAttribute="centerX" id="73a-0U-TDr"/>
+                <constraint firstItem="jgb-P0-PnB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="LM1-on-3Tn"/>
+                <constraint firstItem="l3y-0u-Pc3" firstAttribute="top" secondItem="Hmn-pC-aij" secondAttribute="bottom" constant="4" id="Tl7-W9-ZZ7"/>
+                <constraint firstItem="jgb-P0-PnB" firstAttribute="centerX" secondItem="SEy-5g-ep8" secondAttribute="centerX" id="c9r-8r-uBU"/>
+                <constraint firstItem="Hmn-pC-aij" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="g3G-NO-98N"/>
+                <constraint firstItem="Hmn-pC-aij" firstAttribute="top" secondItem="jgb-P0-PnB" secondAttribute="bottom" constant="10" id="npt-P7-4KG"/>
+                <constraint firstItem="l3y-0u-Pc3" firstAttribute="centerX" secondItem="SEy-5g-ep8" secondAttribute="centerX" id="q0S-oD-E9k"/>
+                <constraint firstAttribute="trailing" secondItem="Hmn-pC-aij" secondAttribute="trailing" constant="5" id="ud1-xo-pbJ"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <connections>
+                <outlet property="authorL" destination="l3y-0u-Pc3" id="PMl-6L-fgW"/>
+                <outlet property="headerImg" destination="jgb-P0-PnB" id="dtc-VP-YSS"/>
+                <outlet property="nameL" destination="Hmn-pC-aij" id="l5v-eP-lbM"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="85"/>
+        </collectionViewCell>
+    </objects>
+</document>

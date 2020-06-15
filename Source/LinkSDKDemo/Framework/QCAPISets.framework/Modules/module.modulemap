@@ -1,0 +1,6 @@
+framework module QCAPISets {
+  umbrella header "QCAPISets.h"
+
+  export *
+  module * { export * }
+}
