@@ -18,7 +18,7 @@ jobs:
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
     - name: Decrypt large secret
-      run: ./provisioning/import_provisioning.sh
+      run: ./.github/script/import_provisioning.sh
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.P12_EXPORT_CCHARLESREN_PASSWORD }}
