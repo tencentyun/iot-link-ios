@@ -21,8 +21,8 @@ machine github.com
   password $GITHUB_TOKEN
   
 machine trunk.cocoapods.org
-  login tonychanchen@gmail.com
-  password a85347ed36518bffb15c2cd11ad1dc95
+  login $COCOAPODS_TRUNK_ACTOR
+  password $COCOAPODS_TRUNK_TOKEN
 EOF
 
 pod spec lint TIoTLinkKit.podspec --allow-warnings --verbose

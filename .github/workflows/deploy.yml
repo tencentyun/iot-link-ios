@@ -20,13 +20,12 @@ jobs:
     - name: Decrypt large secret
       run: ./provisioning/import_provisioning.sh
       env:
-        PROVISIONING_PASSWORD: ${{ secrets.provisioning_password }}
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
+        P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.P12_EXPORT_CCHARLESREN_PASSWORD }}
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_11.4.app && /usr/bin/xcodebuild -version
     - name: Build archive
       run: |
-        sh archive.sh
-    - name: Dump file hierarchy
-      run: ls -R
+        sh .github/script/archive.sh
     - name: Deploy App to PGY
-      run: curl -F 'file=@./TenextCloud.ipa' -F '_api_key=bbd778a91c68d37898ff367903efc4a5' https://www.pgyer.com/apiv2/app/upload
+      run: curl -F 'file=@./TenextCloud.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload

@@ -8,7 +8,7 @@
 	<string>development</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.tencent.iot.test</key>
+		<key>com.tencent.iot.explorer.link.opensource</key>
 		<string>iot_dev_test</string>
 	</dict>
 	<key>signingCertificate</key>

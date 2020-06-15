@@ -4,10 +4,10 @@
 rm -rf Podfile.lock
 /usr/local/bin/pod install --verbose --no-repo-update
  
-xcodebuild clean -workspace TenextCloud.xcworkspace -scheme TenextCloud -configuration Debug
+xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Debug
  
-xcodebuild archive -workspace TenextCloud.xcworkspace -scheme TenextCloud -configuration Debug -archivePath TenextCloud.xcarchive -UseModernBuildSystem=NO
+xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Debug -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
  
  
-xcodebuild -exportArchive -archivePath TenextCloud.xcarchive -exportOptionsPlist './ExportOptionsDevelop.plist'  -exportPath ./
+xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./
  
