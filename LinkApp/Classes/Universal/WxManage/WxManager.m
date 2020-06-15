@@ -36,6 +36,11 @@
     return _sharedObject;
 }
 
++ (BOOL)isWXAppInstalled
+{
+    return [WXApi isWXAppInstalled];
+}
+
 - (void)registerApp
 {
     [WXApi registerApp:WxAppID];

@@ -139,6 +139,9 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         make.height.mas_equalTo(80);
     }];
     [wxLoginBtn relayoutButton:XDPButtonLayoutStyleTop];
+    
+    // 对未安装的用户隐藏微信登录按钮，只提供其他登录方式（比如手机号注册登录、游客登录等）。
+    wxLoginBtn.hidden = ![WxManager isWXAppInstalled];
 }
 
 

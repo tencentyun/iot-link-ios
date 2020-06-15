@@ -15,6 +15,7 @@ typedef void(^WxBlock) (id obj,NSError * error);
 @property (nonatomic,copy) NSString *appID;
 
 + (id)sharedWxManager;
++ (BOOL)isWXAppInstalled;
 - (void)registerApp;
 - (BOOL)handleOpenURL:(NSURL *) url;
 - (void)authFromWxComplete:(WxBlock)blk;
