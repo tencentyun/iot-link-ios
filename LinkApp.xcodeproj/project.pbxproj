@@ -228,6 +228,8 @@
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4019B2924971718009DEA99 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4019B2724971718009DEA99 /* NSString+Extension.m */; };
+		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
+		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
 		F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D52C24935BD3005D3396 /* AppDelegate.m */; };
 		F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53424935BD3005D3396 /* Main.storyboard */; };
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
@@ -841,6 +843,11 @@
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
 		F4019B2724971718009DEA99 /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		F4019B2824971718009DEA99 /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
+		F4DA47DB24977EC20031A048 /* XGMTACloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XGMTACloud.framework; sourceTree = "<group>"; };
+		F4DA47DD24977ECE0031A048 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
+		F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGForFreeVersion.h; sourceTree = "<group>"; };
+		F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK-Cloud.a"; sourceTree = "<group>"; };
+		F4DA47E024977ECE0031A048 /* XGPushPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPushPrivate.h; sourceTree = "<group>"; };
 		F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D52B24935BD3005D3396 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4F3D52C24935BD3005D3396 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -1054,12 +1061,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED9C15E023B9E66300CAC848 /* CoreLocation.framework in Frameworks */,
+				F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */,
 				ED9C15DE23B9E65000CAC848 /* QuartzCore.framework in Frameworks */,
 				ED9C15DC23B9E63600CAC848 /* libsqlite3.tbd in Frameworks */,
 				D2E97697233C49B900182443 /* libz.tbd in Frameworks */,
 				D2E97695233C49AD00182443 /* SystemConfiguration.framework in Frameworks */,
 				D2E97693233C49A300182443 /* CoreTelephony.framework in Frameworks */,
 				D2E97691233C499700182443 /* UserNotifications.framework in Frameworks */,
+				F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */,
 				D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */,
 				ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */,
 				C06DEE64CF807EF97425007A /* libPods-LinkApp.a in Frameworks */,
@@ -1490,6 +1499,7 @@
 			children = (
 				ED5767172410AED70070D218 /* ReachabilityManager.h */,
 				ED5767162410AED70070D218 /* ReachabilityManager.m */,
+				F4DA47DA24977E880031A048 /* TPNS-SDK */,
 				ED800CAD240D0FC00045A268 /* RouteAddress */,
 				ED9C49C223B1F487005D537F /* 信鸽推送 */,
 				ED3A93D8237948DE00379AA7 /* GCDAsyncUdpSocket */,
@@ -1952,6 +1962,18 @@
 				ED9C49C423B1F487005D537F /* XGPushManage.m */,
 			);
 			path = "信鸽推送";
+			sourceTree = "<group>";
+		};
+		F4DA47DA24977E880031A048 /* TPNS-SDK */ = {
+			isa = PBXGroup;
+			children = (
+				F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */,
+				F4DA47DD24977ECE0031A048 /* XGPush.h */,
+				F4DA47E024977ECE0031A048 /* XGPushPrivate.h */,
+				F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */,
+				F4DA47DB24977EC20031A048 /* XGMTACloud.framework */,
+			);
+			path = "TPNS-SDK";
 			sourceTree = "<group>";
 		};
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
@@ -3259,12 +3281,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LinkApp/Supporting Files/LinkApp.pch";
@@ -3312,9 +3336,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_NAME = "腾讯连连";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3328,12 +3353,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LinkApp/Supporting Files/LinkApp.pch";
@@ -3381,9 +3408,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_NAME = "腾讯连连";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				TARGETED_DEVICE_FAMILY = 1;
