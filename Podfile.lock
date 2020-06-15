@@ -128,12 +128,17 @@ DEPENDENCIES:
   - Firebase/Analytics (= 6.26.0)
   - Firebase/Performance (= 6.26.0)
   - IQKeyboardManager (= 6.1.1)
+  - Masonry
   - Masonry (= 1.1.0)
+  - MBProgressHUD
   - MBProgressHUD (= 1.1.0)
   - MJRefresh (= 3.2.0)
+  - QCloudCOSXML/Transfer
   - QCloudCOSXML/Transfer (= 5.5.2)
+  - SDWebImage
   - SDWebImage (= 4.4.2)
   - SocketRocket (= 0.5.1)
+  - TPNS-iOS
   - TPNS-iOS (= 1.2.6.1)
   - TZImagePickerController (= 3.2.1)
   - WechatOpenSDK (= 1.8.2)
@@ -212,6 +217,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 268ea90c95ce4c2ab9bb54e0d3599947347ff6fb
+PODFILE CHECKSUM: 701104c9c36c6ac5dbc1cc64319ca28b6f59447e
 
 COCOAPODS: 1.9.3

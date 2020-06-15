@@ -29,3 +29,14 @@ pod 'Fabric', '1.10.2'
 pod 'Crashlytics', '3.14.0'
 pod 'Firebase/Performance', '6.26.0'
 end
+
+
+
+target 'LinkSDKDemo' do
+    
+pod 'Masonry'
+pod 'MBProgressHUD'
+pod 'SDWebImage'
+pod 'QCloudCOSXML/Transfer'
+pod 'TPNS-iOS'
+end

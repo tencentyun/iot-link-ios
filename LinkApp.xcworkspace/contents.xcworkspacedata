@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/eagleychen/Desktop/tencent/iot-ios-ll/LinkApp.xcodeproj">
+      location = "group:LinkApp.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
