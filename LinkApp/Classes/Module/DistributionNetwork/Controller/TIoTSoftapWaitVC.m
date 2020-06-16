@@ -47,7 +47,7 @@
     // Do any additional setup after loading the view.
     [self setupUI];
     
-//    [self createudpConnect:[NSString getGateway]];
+    [self createudpConnect:[NSString getGateway]];
     
 }
 
