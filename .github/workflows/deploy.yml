@@ -28,4 +28,4 @@ jobs:
       run: |
         sh .github/script/archive.sh
     - name: Deploy App to PGY
-      run: curl -F 'file=@./TenextCloud.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload
+      run: curl -F 'file=@./LinkApp.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload
