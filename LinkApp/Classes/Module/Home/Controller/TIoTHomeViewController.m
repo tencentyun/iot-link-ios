@@ -26,6 +26,7 @@
 
 #import "UIView+Extension.h"
 #import "TIoTFeedBackViewController.h"
+#import "MGJRouter.h"
 
 static CGFloat weatherHeight = 60;
 
@@ -87,6 +88,8 @@ static CGFloat weatherHeight = 60;
     
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
     [self getFamilyList];
+    
+    [self registFeedBackRouterController];
 }
 
 
@@ -308,6 +311,17 @@ static CGFloat weatherHeight = 60;
 //    dispatch_semaphore_signal(self.sem);
 }
 
+
+/// 通过MGJRouter 注册帮助反馈控制器，以便点击通知后跳转
+- (void)registFeedBackRouterController {
+        
+    [MGJRouter registerURLPattern:@"TIoT://TPNSPushManage/feedback" toHandler:^(NSDictionary *routerParameters) {
+        TIoTFeedBackViewController *feedBackVC = [[TIoTFeedBackViewController alloc]init];
+        //传入推送的全部信息，在控制器内部取出URL，进行展示
+//        feedBackVC.pushNotiContent = routerParameters[MGJRouterParameterUserInfo][@"customMessageContent"];
+        [self.navigationController pushViewController:feedBackVC animated:YES];
+    }];
+}
 
 #pragma mark - request
 

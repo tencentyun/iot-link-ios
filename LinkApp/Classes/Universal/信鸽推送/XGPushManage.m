@@ -9,6 +9,8 @@
 #import "XGPushManage.h"
 #import <UserNotifications/UserNotifications.h>
 #import "XGPush.h"
+#import "MGJRouter.h"
+#import "TIoTFeedBackViewController.h"
 
 @interface XGPushManage ()<XGPushDelegate,UNUserNotificationCenterDelegate>
 
@@ -81,6 +83,9 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     
     WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@",response.notification.request.content.userInfo,response.notification.request.content.userInfo[@"custom"]);
+    
+    [MGJRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":response.notification.request.content.userInfo[@"custom"]} completion:nil];
+    
     completionHandler();
 }
 

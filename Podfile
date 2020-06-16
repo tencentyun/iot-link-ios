@@ -27,6 +27,7 @@ pod 'Firebase/Analytics', '6.26.0'
 pod 'Fabric', '1.10.2'
 pod 'Crashlytics', '3.14.0'
 pod 'Firebase/Performance', '6.26.0'
+pod 'MGJRouter', '0.10.0'
 end
 
 
