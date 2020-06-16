@@ -65,6 +65,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// HmacSha1->base64
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
+
+/// 获取网关
++ (NSString *)getGateway;
 @end
 
 NS_ASSUME_NONNULL_END
