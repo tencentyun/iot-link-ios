@@ -227,6 +227,7 @@
 		EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
+		F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
 		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
 		F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D52C24935BD3005D3396 /* AppDelegate.m */; };
@@ -2908,6 +2909,7 @@
 				EDF126FE23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m in Sources */,
 				D2614E5D23501AAC00D7D7E7 /* ESPTouchResult.m in Sources */,
 				D23104D52330678F0003069D /* NSObject+SwizzlingMethod.m in Sources */,
+				F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */,
 				ED6BA5C323C5DF8500BE9EC9 /* TIoTAlertView.m in Sources */,
 				A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */,
 				D210C7DA2341D7EB00A53B08 /* XWCountryCodeController.m in Sources */,
