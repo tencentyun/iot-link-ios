@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TIoTLinkKit'
-  s.version          = '0.1.5'
+  s.version          = '0.1.0'
   s.summary          = 'A short description of TIoTLinkKit.'
 
 # This description is used to generate tags and improve search results.
@@ -21,17 +21,17 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/tencentyun/iot-ios-sdk'
+  s.homepage         = 'https://github.com/tencentyun/iot-link-ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'iot-ios-sdk' => 'tonychanchen@gmail.com' }
-  s.source           = { :git => 'https://github.com/tencentyun/iot-ios-sdk.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  # s.source_files  = 'QCAccount/**/*.{h,m,c}'  源码暂未编译通过
-  s.vendored_frameworks = 'QCFrameworkDemo/QCFrameworkDemo/Framework/QCAPISets.framework', 'QCFrameworkDemo/QCFrameworkDemo/Framework/QCDeviceCenter.framework', 'QCFrameworkDemo/QCFrameworkDemo/Framework/QCFoundation.framework'
+  # s.source_files  = 'QCAccount/**/*.{h,m,c}'  源码需调整
+  s.vendored_frameworks = 'Source/LinkSDKDemo/Framework/QCAPISets.framework', 'Source/LinkSDKDemo/Framework/QCDeviceCenter.framework', 'Source/LinkSDKDemo/Framework/QCFoundation.framework'
   
   # s.resource_bundles = {
   #   'QIotLinkKit' => ['QIotLinkKit/Assets/*.png']

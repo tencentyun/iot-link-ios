@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>369055548986-s3tq38np0aa298i61mapktka8ui7sn9v.apps.googleusercontent.com</string>
+	<string>369055548986-p0rfg5sp5p3u5l8gjdhprp4ecesa6hnr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.369055548986-s3tq38np0aa298i61mapktka8ui7sn9v</string>
+	<string>com.googleusercontent.apps.369055548986-p0rfg5sp5p3u5l8gjdhprp4ecesa6hnr</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>369055548986-sl5q6con41t8f7g02vjdjhrtsntsuq7b.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBZpdNPwKfxyE9XB1Ks30TCvEZmgxSYbk0</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tencent.iot.explorer</string>
+	<string>com.tencent.iot.explorer.link.opensource</string>
 	<key>PROJECT_ID</key>
 	<string>tencent-iot</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:369055548986:ios:1801c51addfb8abe441703</string>
+	<string>1:369055548986:ios:d4a074faa5884ef5441703</string>
 	<key>DATABASE_URL</key>
 	<string>https://tencent-iot.firebaseio.com</string>
 </dict>
