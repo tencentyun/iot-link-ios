@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCFamilyInfoVC : UIViewController
+@interface TIoTCoreFamilyInfoVC : UIViewController
 
 @property (nonatomic,copy) NSDictionary *familyInfo;
 @property (nonatomic)  NSInteger familyCount;//家庭数量，最后一个家庭不可删除

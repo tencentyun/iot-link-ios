@@ -235,33 +235,33 @@
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
 		F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */; };
 		F4F3D53E24935BD3005D3396 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D53D24935BD3005D3396 /* main.m */; };
-		F4F3D6A9249361DA005D3396 /* QCAPISets.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55624935F3D005D3396 /* QCAPISets.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D6AA249361DA005D3396 /* WCRequestAction.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55A24935F3D005D3396 /* WCRequestAction.h */; };
-		F4F3D6AB249361DA005D3396 /* WCRequestObj.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55B24935F3D005D3396 /* WCRequestObj.h */; };
-		F4F3D6AC249361DA005D3396 /* QCSocketCover.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55C24935F3D005D3396 /* QCSocketCover.h */; };
+		F4F3D6A9249361DA005D3396 /* TIoTCoreAPISets.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55624935F3D005D3396 /* TIoTCoreAPISets.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6AA249361DA005D3396 /* TIoTCoreRequestAction.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55A24935F3D005D3396 /* TIoTCoreRequestAction.h */; };
+		F4F3D6AB249361DA005D3396 /* TIoTCoreRequestObj.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55B24935F3D005D3396 /* TIoTCoreRequestObj.h */; };
+		F4F3D6AC249361DA005D3396 /* TIoTCoreSocketCover.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55C24935F3D005D3396 /* TIoTCoreSocketCover.h */; };
 		F4F3D6AD249361DA005D3396 /* NSObject+additions.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D55D24935F3D005D3396 /* NSObject+additions.h */; };
-		F4F3D6AE249361DA005D3396 /* QCMessageSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56124935F3D005D3396 /* QCMessageSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D6AF249361DA005D3396 /* QCDeviceSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56324935F3D005D3396 /* QCDeviceSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D6B0249361DA005D3396 /* QCParts.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56424935F3D005D3396 /* QCParts.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D6B1249361DA005D3396 /* QCAccountSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56524935F3D005D3396 /* QCAccountSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D6B2249361DA005D3396 /* QCFamilySet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56724935F3D005D3396 /* QCFamilySet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6AE249361DA005D3396 /* TIoTCoreMessageSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56124935F3D005D3396 /* TIoTCoreMessageSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6AF249361DA005D3396 /* TIoTCoreDeviceSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56324935F3D005D3396 /* TIoTCoreDeviceSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6B0249361DA005D3396 /* TIoTCoreParts.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56424935F3D005D3396 /* TIoTCoreParts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6B1249361DA005D3396 /* TIoTCoreAccountSet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56524935F3D005D3396 /* TIoTCoreAccountSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6B2249361DA005D3396 /* TIoTCoreFamilySet.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56724935F3D005D3396 /* TIoTCoreFamilySet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F3D6B324936228005D3396 /* NSObject+additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55824935F3D005D3396 /* NSObject+additions.m */; };
-		F4F3D6B424936228005D3396 /* QCSocketCover.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55924935F3D005D3396 /* QCSocketCover.m */; };
-		F4F3D6B524936228005D3396 /* WCRequestAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55E24935F3D005D3396 /* WCRequestAction.m */; };
-		F4F3D6B624936228005D3396 /* WCRequestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55F24935F3D005D3396 /* WCRequestObj.m */; };
-		F4F3D6B724936228005D3396 /* QCFamilySet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56224935F3D005D3396 /* QCFamilySet.m */; };
-		F4F3D6B824936228005D3396 /* QCMessageSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56624935F3D005D3396 /* QCMessageSet.m */; };
-		F4F3D6B924936228005D3396 /* QCAccountSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56824935F3D005D3396 /* QCAccountSet.m */; };
-		F4F3D6BA24936228005D3396 /* QCDeviceSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56924935F3D005D3396 /* QCDeviceSet.m */; };
-		F4F3D6CC24936DBC005D3396 /* QCObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56C24935F3E005D3396 /* QCObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6B424936228005D3396 /* TIoTCoreSocketCover.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55924935F3D005D3396 /* TIoTCoreSocketCover.m */; };
+		F4F3D6B524936228005D3396 /* TIoTCoreRequestAction.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55E24935F3D005D3396 /* TIoTCoreRequestAction.m */; };
+		F4F3D6B624936228005D3396 /* TIoTCoreRequestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D55F24935F3D005D3396 /* TIoTCoreRequestObj.m */; };
+		F4F3D6B724936228005D3396 /* TIoTCoreFamilySet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56224935F3D005D3396 /* TIoTCoreFamilySet.m */; };
+		F4F3D6B824936228005D3396 /* TIoTCoreMessageSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56624935F3D005D3396 /* TIoTCoreMessageSet.m */; };
+		F4F3D6B924936228005D3396 /* TIoTCoreAccountSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56824935F3D005D3396 /* TIoTCoreAccountSet.m */; };
+		F4F3D6BA24936228005D3396 /* TIoTCoreDeviceSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56924935F3D005D3396 /* TIoTCoreDeviceSet.m */; };
+		F4F3D6CC24936DBC005D3396 /* TIoTCoreObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D56C24935F3E005D3396 /* TIoTCoreObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F3D6CD24936DBC005D3396 /* route.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57024935F3E005D3396 /* route.h */; };
 		F4F3D6CE24936DBC005D3396 /* getgateway.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57124935F3E005D3396 /* getgateway.h */; };
-		F4F3D6CF24936DBC005D3396 /* WCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57324935F3E005D3396 /* WCMacros.h */; };
+		F4F3D6CF24936DBC005D3396 /* TIoTCoreWMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57324935F3E005D3396 /* TIoTCoreWMacros.h */; };
 		F4F3D6D024936DBC005D3396 /* NSObject+so.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57424935F3E005D3396 /* NSObject+so.h */; };
-		F4F3D6D124936DBC005D3396 /* QCDeviceCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57524935F3E005D3396 /* QCDeviceCenter.h */; };
+		F4F3D6D124936DBC005D3396 /* TIoTCoreDeviceCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57524935F3E005D3396 /* TIoTCoreDeviceCenter.h */; };
 		F4F3D6D224936DBC005D3396 /* GCDAsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57924935F3E005D3396 /* GCDAsyncUdpSocket.h */; };
 		F4F3D6D324936DBC005D3396 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57A24935F3E005D3396 /* GCDAsyncSocket.h */; };
-		F4F3D6D424936DBC005D3396 /* QCAddDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57B24935F3E005D3396 /* QCAddDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D6D424936DBC005D3396 /* TIoTCoreAddDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D57B24935F3E005D3396 /* TIoTCoreAddDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F3D6D524936DBC005D3396 /* ESPTouchTaskParameter.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D58024935F3E005D3396 /* ESPTouchTaskParameter.h */; };
 		F4F3D6D624936DBC005D3396 /* ESPUDPSocketClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D58124935F3E005D3396 /* ESPUDPSocketClient.h */; };
 		F4F3D6D724936DBC005D3396 /* ESPVersionMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D58724935F3E005D3396 /* ESPVersionMacro.h */; };
@@ -279,11 +279,11 @@
 		F4F3D6E324936DBD005D3396 /* ESP_CRC8.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D59824935F3E005D3396 /* ESP_CRC8.h */; };
 		F4F3D6E424936DBD005D3396 /* ESPTouchGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D59924935F3E005D3396 /* ESPTouchGenerator.h */; };
 		F4F3D6E524936DBD005D3396 /* ESP_WifiUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D59A24935F3E005D3396 /* ESP_WifiUtil.h */; };
-		F4F3D6E624936E1D005D3396 /* QCAddDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56B24935F3E005D3396 /* QCAddDevice.m */; };
+		F4F3D6E624936E1D005D3396 /* TIoTCoreAddDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56B24935F3E005D3396 /* TIoTCoreAddDevice.m */; };
 		F4F3D6E724936E1D005D3396 /* NSObject+so.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D56E24935F3E005D3396 /* NSObject+so.m */; };
 		F4F3D6E824936E1D005D3396 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57724935F3E005D3396 /* GCDAsyncUdpSocket.m */; };
 		F4F3D6E924936E1D005D3396 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57824935F3E005D3396 /* GCDAsyncSocket.m */; };
-		F4F3D6EA24936E1D005D3396 /* QCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57C24935F3E005D3396 /* QCObject.m */; };
+		F4F3D6EA24936E1D005D3396 /* TIoTCoreObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57C24935F3E005D3396 /* TIoTCoreObject.m */; };
 		F4F3D6EB24936E1D005D3396 /* ESPGuideCode.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57E24935F3E005D3396 /* ESPGuideCode.m */; };
 		F4F3D6EC24936E1D005D3396 /* ESPTouchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57F24935F3E005D3396 /* ESPTouchResult.m */; };
 		F4F3D6ED24936E1D005D3396 /* ESP_NetUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D58224935F3E005D3396 /* ESP_NetUtil.m */; };
@@ -300,26 +300,26 @@
 		F4F3D6F824936E1E005D3396 /* ESPTouchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D59C24935F3E005D3396 /* ESPTouchTask.m */; };
 		F4F3D6F924936E1E005D3396 /* ESPDatumCode.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D59D24935F3E005D3396 /* ESPDatumCode.m */; };
 		F4F3D6FA24936E2D005D3396 /* getgateway.c in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D57224935F3E005D3396 /* getgateway.c */; };
-		F4F3D70C24936E9B005D3396 /* QCServices.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A224935F3E005D3396 /* QCServices.m */; };
-		F4F3D70D24936E9B005D3396 /* QCSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A324935F3E005D3396 /* QCSocketManager.m */; };
-		F4F3D70F24936E9B005D3396 /* QCUserManage.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A924935F3E005D3396 /* QCUserManage.m */; };
-		F4F3D71024936E9B005D3396 /* WCAppEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AA24935F3E005D3396 /* WCAppEnvironment.m */; };
-		F4F3D71124936E9B005D3396 /* WCRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AB24935F3E005D3396 /* WCRequestObject.m */; };
-		F4F3D71224936E9B005D3396 /* QCRequestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AC24935F3E005D3396 /* QCRequestClient.m */; };
-		F4F3D71324936E9B005D3396 /* QCWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AD24935F3E005D3396 /* QCWebSocket.m */; };
-		F4F3D71424936E9B005D3396 /* QCRequestBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5B024935F3E005D3396 /* QCRequestBuilder.m */; };
-		F4F3D71524936EB4005D3396 /* QCWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D59F24935F3E005D3396 /* QCWebSocket.h */; };
-		F4F3D71624936EB4005D3396 /* QCRequestClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A024935F3E005D3396 /* QCRequestClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71724936EB4005D3396 /* QCRequestBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A124935F3E005D3396 /* QCRequestBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D70C24936E9B005D3396 /* TIoTCoreServices.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A224935F3E005D3396 /* TIoTCoreServices.m */; };
+		F4F3D70D24936E9B005D3396 /* TIoTCoreSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A324935F3E005D3396 /* TIoTCoreSocketManager.m */; };
+		F4F3D70F24936E9B005D3396 /* TIoTCoreUserManage.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A924935F3E005D3396 /* TIoTCoreUserManage.m */; };
+		F4F3D71024936E9B005D3396 /* TIoTCoreAppEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AA24935F3E005D3396 /* TIoTCoreAppEnvironment.m */; };
+		F4F3D71124936E9B005D3396 /* TIoTCoreRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AB24935F3E005D3396 /* TIoTCoreRequestObject.m */; };
+		F4F3D71224936E9B005D3396 /* TIoTCoreRequestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AC24935F3E005D3396 /* TIoTCoreRequestClient.m */; };
+		F4F3D71324936E9B005D3396 /* TIoTCoreWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5AD24935F3E005D3396 /* TIoTCoreWebSocket.m */; };
+		F4F3D71424936E9B005D3396 /* TIoTCoreRequestBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5B024935F3E005D3396 /* TIoTCoreRequestBuilder.m */; };
+		F4F3D71524936EB4005D3396 /* TIoTCoreWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D59F24935F3E005D3396 /* TIoTCoreWebSocket.h */; };
+		F4F3D71624936EB4005D3396 /* TIoTCoreRequestClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A024935F3E005D3396 /* TIoTCoreRequestClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D71724936EB4005D3396 /* TIoTCoreRequestBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A124935F3E005D3396 /* TIoTCoreRequestBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F3D71824936EB4005D3396 /* NSString+Extension.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A524935F3E005D3396 /* NSString+Extension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71924936EB4005D3396 /* QCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A624935F3E005D3396 /* QCMacros.h */; };
-		F4F3D71A24936EB4005D3396 /* QCUserManage.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A724935F3E005D3396 /* QCUserManage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71B24936EB4005D3396 /* QCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5AE24935F3E005D3396 /* QCFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71C24936EB4005D3396 /* QCServices.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5AF24935F3E005D3396 /* QCServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71D24936EB4005D3396 /* WCAppEnvironment.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B124935F3E005D3396 /* WCAppEnvironment.h */; };
-		F4F3D71E24936EB4005D3396 /* QCSocketManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B224935F3E005D3396 /* QCSocketManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F4F3D71F24936EB4005D3396 /* WCRequestObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B324935F3E005D3396 /* WCRequestObject.h */; };
-		F4F3D79A24938EBE005D3396 /* WCHudLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72224938EBD005D3396 /* WCHudLoadingView.m */; };
+		F4F3D71924936EB4005D3396 /* TIoTCoreQMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A624935F3E005D3396 /* TIoTCoreQMacros.h */; };
+		F4F3D71A24936EB4005D3396 /* TIoTCoreUserManage.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5A724935F3E005D3396 /* TIoTCoreUserManage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D71B24936EB4005D3396 /* TIoTCoreFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5AE24935F3E005D3396 /* TIoTCoreFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D71C24936EB4005D3396 /* TIoTCoreServices.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5AF24935F3E005D3396 /* TIoTCoreServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D71D24936EB4005D3396 /* TIoTCoreAppEnvironment.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B124935F3E005D3396 /* TIoTCoreAppEnvironment.h */; };
+		F4F3D71E24936EB4005D3396 /* TIoTCoreSocketManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B224935F3E005D3396 /* TIoTCoreSocketManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4F3D71F24936EB4005D3396 /* TIoTCoreRequestObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B324935F3E005D3396 /* TIoTCoreRequestObject.h */; };
+		F4F3D79A24938EBE005D3396 /* TIoTCoreHudLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */; };
 		F4F3D79B24938EBE005D3396 /* getgateway.c in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72624938EBD005D3396 /* getgateway.c */; };
 		F4F3D79C24938EBE005D3396 /* UIView+CMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */; };
 		F4F3D79D24938EBE005D3396 /* CMPageTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */; };
@@ -328,50 +328,50 @@
 		F4F3D7A024938EBE005D3396 /* MBProgressHUD+XDP.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */; };
 		F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73724938EBD005D3396 /* ControlInfo.m */; };
 		F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73A24938EBD005D3396 /* SelectView.m */; };
-		F4F3D7A424938EBE005D3396 /* WCTimerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D73F24938EBD005D3396 /* WCTimerListCell.xib */; };
-		F4F3D7A524938EBE005D3396 /* WCFamilyMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74024938EBD005D3396 /* WCFamilyMemberCell.m */; };
-		F4F3D7A624938EBE005D3396 /* WCFamilyMemberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74224938EBD005D3396 /* WCFamilyMemberCell.xib */; };
-		F4F3D7A724938EBE005D3396 /* WCTimerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74324938EBD005D3396 /* WCTimerCell.xib */; };
-		F4F3D7A824938EBE005D3396 /* WCSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74524938EBD005D3396 /* WCSlideView.m */; };
-		F4F3D7A924938EBE005D3396 /* WCTimerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74724938EBD005D3396 /* WCTimerCell.m */; };
-		F4F3D7AA24938EBE005D3396 /* WCTimerListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74824938EBD005D3396 /* WCTimerListCell.m */; };
-		F4F3D7AB24938EBE005D3396 /* WCFamilyInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74924938EBD005D3396 /* WCFamilyInfoCell.m */; };
-		F4F3D7AC24938EBE005D3396 /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74A24938EBD005D3396 /* WCAlertView.m */; };
-		F4F3D7AD24938EBE005D3396 /* WCFamilyInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74B24938EBD005D3396 /* WCFamilyInfoCell.xib */; };
-		F4F3D7AE24938EBE005D3396 /* WCEquipmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74C24938EBD005D3396 /* WCEquipmentTableViewCell.m */; };
+		F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */; };
+		F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74024938EBD005D3396 /* TIoTCoreFamilyMemberCell.m */; };
+		F4F3D7A624938EBE005D3396 /* TIoTCoreFamilyMemberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74224938EBD005D3396 /* TIoTCoreFamilyMemberCell.xib */; };
+		F4F3D7A724938EBE005D3396 /* TIoTCoreTimerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74324938EBD005D3396 /* TIoTCoreTimerCell.xib */; };
+		F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74524938EBD005D3396 /* TIoTCoreSlideView.m */; };
+		F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74724938EBD005D3396 /* TIoTCoreTimerCell.m */; };
+		F4F3D7AA24938EBE005D3396 /* TIoTCoreTimerListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74824938EBD005D3396 /* TIoTCoreTimerListCell.m */; };
+		F4F3D7AB24938EBE005D3396 /* TIoTCoreFamilyInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74924938EBD005D3396 /* TIoTCoreFamilyInfoCell.m */; };
+		F4F3D7AC24938EBE005D3396 /* TIoTCoreAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74A24938EBD005D3396 /* TIoTCoreAlertView.m */; };
+		F4F3D7AD24938EBE005D3396 /* TIoTCoreFamilyInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D74B24938EBD005D3396 /* TIoTCoreFamilyInfoCell.xib */; };
+		F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D74C24938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.m */; };
 		F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75024938EBD005D3396 /* FeedbackVC.xib */; };
-		F4F3D7B024938EBE005D3396 /* WCAddFamilyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75324938EBD005D3396 /* WCAddFamilyVC.m */; };
-		F4F3D7B124938EBE005D3396 /* WCFamiliesVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75424938EBD005D3396 /* WCFamiliesVC.xib */; };
-		F4F3D7B224938EBE005D3396 /* WCAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75724938EBD005D3396 /* WCAddFamilyVC.xib */; };
+		F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75324938EBD005D3396 /* TIoTCoreAddFamilyVC.m */; };
+		F4F3D7B124938EBE005D3396 /* TIoTCoreFamiliesVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75424938EBD005D3396 /* TIoTCoreFamiliesVC.xib */; };
+		F4F3D7B224938EBE005D3396 /* TIoTCoreAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */; };
 		F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75B24938EBD005D3396 /* InviteVC.m */; };
-		F4F3D7B424938EBE005D3396 /* WCAddRoomVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75D24938EBD005D3396 /* WCAddRoomVC.m */; };
-		F4F3D7B524938EBE005D3396 /* WCFamilyInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75F24938EBD005D3396 /* WCFamilyInfoVC.xib */; };
+		F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75D24938EBD005D3396 /* TIoTCoreAddRoomVC.m */; };
+		F4F3D7B524938EBE005D3396 /* TIoTCoreFamilyInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75F24938EBD005D3396 /* TIoTCoreFamilyInfoVC.xib */; };
 		F4F3D7B624938EBE005D3396 /* InviteVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76024938EBD005D3396 /* InviteVC.xib */; };
-		F4F3D7B724938EBE005D3396 /* WCFamiliesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76124938EBD005D3396 /* WCFamiliesVC.m */; };
-		F4F3D7B824938EBE005D3396 /* WCMemberInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76224938EBD005D3396 /* WCMemberInfoVC.xib */; };
-		F4F3D7B924938EBE005D3396 /* WCRoomInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76324938EBD005D3396 /* WCRoomInfoVC.m */; };
-		F4F3D7BA24938EBE005D3396 /* WCAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76424938EBD005D3396 /* WCAddRoomVC.xib */; };
-		F4F3D7BB24938EBE005D3396 /* WCMemberInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76524938EBD005D3396 /* WCMemberInfoVC.m */; };
-		F4F3D7BC24938EBE005D3396 /* WCRoomInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76624938EBD005D3396 /* WCRoomInfoVC.xib */; };
-		F4F3D7BD24938EBE005D3396 /* WCRoomsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76724938EBD005D3396 /* WCRoomsVC.xib */; };
-		F4F3D7BE24938EBE005D3396 /* WCRoomsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76824938EBD005D3396 /* WCRoomsVC.m */; };
-		F4F3D7BF24938EBE005D3396 /* WCFamilyInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76A24938EBD005D3396 /* WCFamilyInfoVC.m */; };
+		F4F3D7B724938EBE005D3396 /* TIoTCoreFamiliesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76124938EBD005D3396 /* TIoTCoreFamiliesVC.m */; };
+		F4F3D7B824938EBE005D3396 /* TIoTCoreMemberInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */; };
+		F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76324938EBD005D3396 /* TIoTCoreRoomInfoVC.m */; };
+		F4F3D7BA24938EBE005D3396 /* TIoTCoreAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */; };
+		F4F3D7BB24938EBE005D3396 /* TIoTCoreMemberInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */; };
+		F4F3D7BC24938EBE005D3396 /* TIoTCoreRoomInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76624938EBD005D3396 /* TIoTCoreRoomInfoVC.xib */; };
+		F4F3D7BD24938EBE005D3396 /* TIoTCoreRoomsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76724938EBD005D3396 /* TIoTCoreRoomsVC.xib */; };
+		F4F3D7BE24938EBE005D3396 /* TIoTCoreRoomsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76824938EBD005D3396 /* TIoTCoreRoomsVC.m */; };
+		F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.m */; };
 		F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76B24938EBD005D3396 /* UserVC.m */; };
 		F4F3D7C124938EBE005D3396 /* MessageVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76E24938EBD005D3396 /* MessageVC.xib */; };
 		F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76F24938EBD005D3396 /* MessageVC.m */; };
 		F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77124938EBD005D3396 /* UserInfoVC.m */; };
 		F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D77224938EBD005D3396 /* UserInfoVC.xib */; };
 		F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77324938EBD005D3396 /* FeedbackVC.m */; };
-		F4F3D7C624938EBE005D3396 /* WCAddTimerVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D77624938EBD005D3396 /* WCAddTimerVC.xib */; };
+		F4F3D7C624938EBE005D3396 /* TIoTCoreAddTimerVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D77624938EBD005D3396 /* TIoTCoreAddTimerVC.xib */; };
 		F4F3D7C724938EBE005D3396 /* ControlDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77824938EBD005D3396 /* ControlDeviceVC.m */; };
-		F4F3D7C824938EBE005D3396 /* WCRepeatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77924938EBD005D3396 /* WCRepeatVC.m */; };
+		F4F3D7C824938EBE005D3396 /* TIoTCoreRepeatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77924938EBD005D3396 /* TIoTCoreRepeatVC.m */; };
 		F4F3D7C924938EBE005D3396 /* UsersOfDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77A24938EBD005D3396 /* UsersOfDeviceVC.m */; };
 		F4F3D7CA24938EBE005D3396 /* WifiInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77B24938EBD005D3396 /* WifiInfoVC.m */; };
 		F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77C24938EBD005D3396 /* HomeVC.m */; };
-		F4F3D7CC24938EBE005D3396 /* WCAddTimerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77E24938EBD005D3396 /* WCAddTimerVC.m */; };
+		F4F3D7CC24938EBE005D3396 /* TIoTCoreAddTimerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77E24938EBD005D3396 /* TIoTCoreAddTimerVC.m */; };
 		F4F3D7CD24938EBE005D3396 /* ChangeWifiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D77F24938EBD005D3396 /* ChangeWifiVC.m */; };
 		F4F3D7CE24938EBE005D3396 /* ControlDeviceVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D78024938EBD005D3396 /* ControlDeviceVC.xib */; };
-		F4F3D7CF24938EBE005D3396 /* WCTimerListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D78424938EBD005D3396 /* WCTimerListVC.m */; };
+		F4F3D7CF24938EBE005D3396 /* TIoTCoreTimerListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D78424938EBD005D3396 /* TIoTCoreTimerListVC.m */; };
 		F4F3D7D024938EBE005D3396 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D78924938EBD005D3396 /* LoginVC.m */; };
 		F4F3D7D124938EBE005D3396 /* RegistVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D78A24938EBD005D3396 /* RegistVC.xib */; };
 		F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D78B24938EBD005D3396 /* RegistVC.m */; };
@@ -832,39 +832,39 @@
 		F4F3D53D24935BD3005D3396 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F4F3D54824935D75005D3396 /* QCAPISets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCAPISets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D54B24935D75005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F4F3D55624935F3D005D3396 /* QCAPISets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCAPISets.h; sourceTree = "<group>"; };
+		F4F3D55624935F3D005D3396 /* TIoTCoreAPISets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAPISets.h; sourceTree = "<group>"; };
 		F4F3D55824935F3D005D3396 /* NSObject+additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+additions.m"; sourceTree = "<group>"; };
-		F4F3D55924935F3D005D3396 /* QCSocketCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCSocketCover.m; sourceTree = "<group>"; };
-		F4F3D55A24935F3D005D3396 /* WCRequestAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRequestAction.h; sourceTree = "<group>"; };
-		F4F3D55B24935F3D005D3396 /* WCRequestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRequestObj.h; sourceTree = "<group>"; };
-		F4F3D55C24935F3D005D3396 /* QCSocketCover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCSocketCover.h; sourceTree = "<group>"; };
+		F4F3D55924935F3D005D3396 /* TIoTCoreSocketCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreSocketCover.m; sourceTree = "<group>"; };
+		F4F3D55A24935F3D005D3396 /* TIoTCoreRequestAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRequestAction.h; sourceTree = "<group>"; };
+		F4F3D55B24935F3D005D3396 /* TIoTCoreRequestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRequestObj.h; sourceTree = "<group>"; };
+		F4F3D55C24935F3D005D3396 /* TIoTCoreSocketCover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreSocketCover.h; sourceTree = "<group>"; };
 		F4F3D55D24935F3D005D3396 /* NSObject+additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+additions.h"; sourceTree = "<group>"; };
-		F4F3D55E24935F3D005D3396 /* WCRequestAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRequestAction.m; sourceTree = "<group>"; };
-		F4F3D55F24935F3D005D3396 /* WCRequestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRequestObj.m; sourceTree = "<group>"; };
-		F4F3D56124935F3D005D3396 /* QCMessageSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCMessageSet.h; sourceTree = "<group>"; };
-		F4F3D56224935F3D005D3396 /* QCFamilySet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCFamilySet.m; sourceTree = "<group>"; };
-		F4F3D56324935F3D005D3396 /* QCDeviceSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCDeviceSet.h; sourceTree = "<group>"; };
-		F4F3D56424935F3D005D3396 /* QCParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCParts.h; sourceTree = "<group>"; };
-		F4F3D56524935F3D005D3396 /* QCAccountSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCAccountSet.h; sourceTree = "<group>"; };
-		F4F3D56624935F3D005D3396 /* QCMessageSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCMessageSet.m; sourceTree = "<group>"; };
-		F4F3D56724935F3D005D3396 /* QCFamilySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCFamilySet.h; sourceTree = "<group>"; };
-		F4F3D56824935F3D005D3396 /* QCAccountSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCAccountSet.m; sourceTree = "<group>"; };
-		F4F3D56924935F3D005D3396 /* QCDeviceSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCDeviceSet.m; sourceTree = "<group>"; };
-		F4F3D56B24935F3E005D3396 /* QCAddDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCAddDevice.m; sourceTree = "<group>"; };
-		F4F3D56C24935F3E005D3396 /* QCObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCObject.h; sourceTree = "<group>"; };
+		F4F3D55E24935F3D005D3396 /* TIoTCoreRequestAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRequestAction.m; sourceTree = "<group>"; };
+		F4F3D55F24935F3D005D3396 /* TIoTCoreRequestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRequestObj.m; sourceTree = "<group>"; };
+		F4F3D56124935F3D005D3396 /* TIoTCoreMessageSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreMessageSet.h; sourceTree = "<group>"; };
+		F4F3D56224935F3D005D3396 /* TIoTCoreFamilySet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamilySet.m; sourceTree = "<group>"; };
+		F4F3D56324935F3D005D3396 /* TIoTCoreDeviceSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreDeviceSet.h; sourceTree = "<group>"; };
+		F4F3D56424935F3D005D3396 /* TIoTCoreParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreParts.h; sourceTree = "<group>"; };
+		F4F3D56524935F3D005D3396 /* TIoTCoreAccountSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAccountSet.h; sourceTree = "<group>"; };
+		F4F3D56624935F3D005D3396 /* TIoTCoreMessageSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreMessageSet.m; sourceTree = "<group>"; };
+		F4F3D56724935F3D005D3396 /* TIoTCoreFamilySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamilySet.h; sourceTree = "<group>"; };
+		F4F3D56824935F3D005D3396 /* TIoTCoreAccountSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAccountSet.m; sourceTree = "<group>"; };
+		F4F3D56924935F3D005D3396 /* TIoTCoreDeviceSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreDeviceSet.m; sourceTree = "<group>"; };
+		F4F3D56B24935F3E005D3396 /* TIoTCoreAddDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAddDevice.m; sourceTree = "<group>"; };
+		F4F3D56C24935F3E005D3396 /* TIoTCoreObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreObject.h; sourceTree = "<group>"; };
 		F4F3D56E24935F3E005D3396 /* NSObject+so.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+so.m"; sourceTree = "<group>"; };
 		F4F3D57024935F3E005D3396 /* route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = route.h; sourceTree = "<group>"; };
 		F4F3D57124935F3E005D3396 /* getgateway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getgateway.h; sourceTree = "<group>"; };
 		F4F3D57224935F3E005D3396 /* getgateway.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getgateway.c; sourceTree = "<group>"; };
-		F4F3D57324935F3E005D3396 /* WCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCMacros.h; sourceTree = "<group>"; };
+		F4F3D57324935F3E005D3396 /* TIoTCoreWMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreWMacros.h; sourceTree = "<group>"; };
 		F4F3D57424935F3E005D3396 /* NSObject+so.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+so.h"; sourceTree = "<group>"; };
-		F4F3D57524935F3E005D3396 /* QCDeviceCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCDeviceCenter.h; sourceTree = "<group>"; };
+		F4F3D57524935F3E005D3396 /* TIoTCoreDeviceCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreDeviceCenter.h; sourceTree = "<group>"; };
 		F4F3D57724935F3E005D3396 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		F4F3D57824935F3E005D3396 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		F4F3D57924935F3E005D3396 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		F4F3D57A24935F3E005D3396 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		F4F3D57B24935F3E005D3396 /* QCAddDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCAddDevice.h; sourceTree = "<group>"; };
-		F4F3D57C24935F3E005D3396 /* QCObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCObject.m; sourceTree = "<group>"; };
+		F4F3D57B24935F3E005D3396 /* TIoTCoreAddDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAddDevice.h; sourceTree = "<group>"; };
+		F4F3D57C24935F3E005D3396 /* TIoTCoreObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreObject.m; sourceTree = "<group>"; };
 		F4F3D57E24935F3E005D3396 /* ESPGuideCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPGuideCode.m; sourceTree = "<group>"; };
 		F4F3D57F24935F3E005D3396 /* ESPTouchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchResult.m; sourceTree = "<group>"; };
 		F4F3D58024935F3E005D3396 /* ESPTouchTaskParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchTaskParameter.h; sourceTree = "<group>"; };
@@ -897,31 +897,31 @@
 		F4F3D59B24935F3E005D3396 /* ESPAES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPAES.m; sourceTree = "<group>"; };
 		F4F3D59C24935F3E005D3396 /* ESPTouchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchTask.m; sourceTree = "<group>"; };
 		F4F3D59D24935F3E005D3396 /* ESPDatumCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPDatumCode.m; sourceTree = "<group>"; };
-		F4F3D59F24935F3E005D3396 /* QCWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCWebSocket.h; sourceTree = "<group>"; };
-		F4F3D5A024935F3E005D3396 /* QCRequestClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCRequestClient.h; sourceTree = "<group>"; };
-		F4F3D5A124935F3E005D3396 /* QCRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCRequestBuilder.h; sourceTree = "<group>"; };
-		F4F3D5A224935F3E005D3396 /* QCServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCServices.m; sourceTree = "<group>"; };
-		F4F3D5A324935F3E005D3396 /* QCSocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCSocketManager.m; sourceTree = "<group>"; };
+		F4F3D59F24935F3E005D3396 /* TIoTCoreWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreWebSocket.h; sourceTree = "<group>"; };
+		F4F3D5A024935F3E005D3396 /* TIoTCoreRequestClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRequestClient.h; sourceTree = "<group>"; };
+		F4F3D5A124935F3E005D3396 /* TIoTCoreRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRequestBuilder.h; sourceTree = "<group>"; };
+		F4F3D5A224935F3E005D3396 /* TIoTCoreServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreServices.m; sourceTree = "<group>"; };
+		F4F3D5A324935F3E005D3396 /* TIoTCoreSocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreSocketManager.m; sourceTree = "<group>"; };
 		F4F3D5A524935F3E005D3396 /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
-		F4F3D5A624935F3E005D3396 /* QCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCMacros.h; sourceTree = "<group>"; };
-		F4F3D5A724935F3E005D3396 /* QCUserManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCUserManage.h; sourceTree = "<group>"; };
+		F4F3D5A624935F3E005D3396 /* TIoTCoreQMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreQMacros.h; sourceTree = "<group>"; };
+		F4F3D5A724935F3E005D3396 /* TIoTCoreUserManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreUserManage.h; sourceTree = "<group>"; };
 		F4F3D5A824935F3E005D3396 /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
-		F4F3D5A924935F3E005D3396 /* QCUserManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCUserManage.m; sourceTree = "<group>"; };
-		F4F3D5AA24935F3E005D3396 /* WCAppEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAppEnvironment.m; sourceTree = "<group>"; };
-		F4F3D5AB24935F3E005D3396 /* WCRequestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRequestObject.m; sourceTree = "<group>"; };
-		F4F3D5AC24935F3E005D3396 /* QCRequestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCRequestClient.m; sourceTree = "<group>"; };
-		F4F3D5AD24935F3E005D3396 /* QCWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCWebSocket.m; sourceTree = "<group>"; };
-		F4F3D5AE24935F3E005D3396 /* QCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCFoundation.h; sourceTree = "<group>"; };
-		F4F3D5AF24935F3E005D3396 /* QCServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCServices.h; sourceTree = "<group>"; };
-		F4F3D5B024935F3E005D3396 /* QCRequestBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCRequestBuilder.m; sourceTree = "<group>"; };
-		F4F3D5B124935F3E005D3396 /* WCAppEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAppEnvironment.h; sourceTree = "<group>"; };
-		F4F3D5B224935F3E005D3396 /* QCSocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCSocketManager.h; sourceTree = "<group>"; };
-		F4F3D5B324935F3E005D3396 /* WCRequestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRequestObject.h; sourceTree = "<group>"; };
+		F4F3D5A924935F3E005D3396 /* TIoTCoreUserManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreUserManage.m; sourceTree = "<group>"; };
+		F4F3D5AA24935F3E005D3396 /* TIoTCoreAppEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAppEnvironment.m; sourceTree = "<group>"; };
+		F4F3D5AB24935F3E005D3396 /* TIoTCoreRequestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRequestObject.m; sourceTree = "<group>"; };
+		F4F3D5AC24935F3E005D3396 /* TIoTCoreRequestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRequestClient.m; sourceTree = "<group>"; };
+		F4F3D5AD24935F3E005D3396 /* TIoTCoreWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreWebSocket.m; sourceTree = "<group>"; };
+		F4F3D5AE24935F3E005D3396 /* TIoTCoreFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFoundation.h; sourceTree = "<group>"; };
+		F4F3D5AF24935F3E005D3396 /* TIoTCoreServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreServices.h; sourceTree = "<group>"; };
+		F4F3D5B024935F3E005D3396 /* TIoTCoreRequestBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRequestBuilder.m; sourceTree = "<group>"; };
+		F4F3D5B124935F3E005D3396 /* TIoTCoreAppEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAppEnvironment.h; sourceTree = "<group>"; };
+		F4F3D5B224935F3E005D3396 /* TIoTCoreSocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreSocketManager.h; sourceTree = "<group>"; };
+		F4F3D5B324935F3E005D3396 /* TIoTCoreRequestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRequestObject.h; sourceTree = "<group>"; };
 		F4F3D6C024936280005D3396 /* QCDeviceCenter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCDeviceCenter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D6C324936280005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F3D70024936E58005D3396 /* QCFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D70324936E58005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F4F3D72224938EBD005D3396 /* WCHudLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCHudLoadingView.m; sourceTree = "<group>"; };
+		F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreHudLoadingView.m; sourceTree = "<group>"; };
 		F4F3D72424938EBD005D3396 /* route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = route.h; sourceTree = "<group>"; };
 		F4F3D72524938EBD005D3396 /* getgateway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getgateway.h; sourceTree = "<group>"; };
 		F4F3D72624938EBD005D3396 /* getgateway.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getgateway.c; sourceTree = "<group>"; };
@@ -934,57 +934,57 @@
 		F4F3D72E24938EBD005D3396 /* CMPageTitleConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleConfig.h; sourceTree = "<group>"; };
 		F4F3D72F24938EBD005D3396 /* NSObject+ro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ro.m"; sourceTree = "<group>"; };
 		F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+XDP.m"; sourceTree = "<group>"; };
-		F4F3D73124938EBD005D3396 /* WCHudLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCHudLoadingView.h; sourceTree = "<group>"; };
+		F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreHudLoadingView.h; sourceTree = "<group>"; };
 		F4F3D73224938EBD005D3396 /* NSObject+ro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ro.h"; sourceTree = "<group>"; };
 		F4F3D73324938EBD005D3396 /* MBProgressHUD+XDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+XDP.h"; sourceTree = "<group>"; };
 		F4F3D73724938EBD005D3396 /* ControlInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlInfo.m; sourceTree = "<group>"; };
 		F4F3D73824938EBD005D3396 /* ControlInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlInfo.h; sourceTree = "<group>"; };
 		F4F3D73A24938EBD005D3396 /* SelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectView.m; sourceTree = "<group>"; };
-		F4F3D73B24938EBD005D3396 /* WCSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCSlideView.h; sourceTree = "<group>"; };
-		F4F3D73C24938EBD005D3396 /* WCTimerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTimerCell.h; sourceTree = "<group>"; };
-		F4F3D73D24938EBD005D3396 /* WCFamilyInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFamilyInfoCell.h; sourceTree = "<group>"; };
-		F4F3D73E24938EBD005D3396 /* WCTimerListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTimerListCell.h; sourceTree = "<group>"; };
-		F4F3D73F24938EBD005D3396 /* WCTimerListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCTimerListCell.xib; sourceTree = "<group>"; };
-		F4F3D74024938EBD005D3396 /* WCFamilyMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFamilyMemberCell.m; sourceTree = "<group>"; };
-		F4F3D74124938EBD005D3396 /* WCEquipmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCEquipmentTableViewCell.h; sourceTree = "<group>"; };
-		F4F3D74224938EBD005D3396 /* WCFamilyMemberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCFamilyMemberCell.xib; sourceTree = "<group>"; };
-		F4F3D74324938EBD005D3396 /* WCTimerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCTimerCell.xib; sourceTree = "<group>"; };
-		F4F3D74424938EBD005D3396 /* WCAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAlertView.h; sourceTree = "<group>"; };
-		F4F3D74524938EBD005D3396 /* WCSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSlideView.m; sourceTree = "<group>"; };
+		F4F3D73B24938EBD005D3396 /* TIoTCoreSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreSlideView.h; sourceTree = "<group>"; };
+		F4F3D73C24938EBD005D3396 /* TIoTCoreTimerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreTimerCell.h; sourceTree = "<group>"; };
+		F4F3D73D24938EBD005D3396 /* TIoTCoreFamilyInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamilyInfoCell.h; sourceTree = "<group>"; };
+		F4F3D73E24938EBD005D3396 /* TIoTCoreTimerListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreTimerListCell.h; sourceTree = "<group>"; };
+		F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreTimerListCell.xib; sourceTree = "<group>"; };
+		F4F3D74024938EBD005D3396 /* TIoTCoreFamilyMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamilyMemberCell.m; sourceTree = "<group>"; };
+		F4F3D74124938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreEquipmentTableViewCell.h; sourceTree = "<group>"; };
+		F4F3D74224938EBD005D3396 /* TIoTCoreFamilyMemberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreFamilyMemberCell.xib; sourceTree = "<group>"; };
+		F4F3D74324938EBD005D3396 /* TIoTCoreTimerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreTimerCell.xib; sourceTree = "<group>"; };
+		F4F3D74424938EBD005D3396 /* TIoTCoreAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAlertView.h; sourceTree = "<group>"; };
+		F4F3D74524938EBD005D3396 /* TIoTCoreSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreSlideView.m; sourceTree = "<group>"; };
 		F4F3D74624938EBD005D3396 /* SelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectView.h; sourceTree = "<group>"; };
-		F4F3D74724938EBD005D3396 /* WCTimerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTimerCell.m; sourceTree = "<group>"; };
-		F4F3D74824938EBD005D3396 /* WCTimerListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTimerListCell.m; sourceTree = "<group>"; };
-		F4F3D74924938EBD005D3396 /* WCFamilyInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFamilyInfoCell.m; sourceTree = "<group>"; };
-		F4F3D74A24938EBD005D3396 /* WCAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAlertView.m; sourceTree = "<group>"; };
-		F4F3D74B24938EBD005D3396 /* WCFamilyInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCFamilyInfoCell.xib; sourceTree = "<group>"; };
-		F4F3D74C24938EBD005D3396 /* WCEquipmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCEquipmentTableViewCell.m; sourceTree = "<group>"; };
-		F4F3D74D24938EBD005D3396 /* WCFamilyMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFamilyMemberCell.h; sourceTree = "<group>"; };
+		F4F3D74724938EBD005D3396 /* TIoTCoreTimerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreTimerCell.m; sourceTree = "<group>"; };
+		F4F3D74824938EBD005D3396 /* TIoTCoreTimerListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreTimerListCell.m; sourceTree = "<group>"; };
+		F4F3D74924938EBD005D3396 /* TIoTCoreFamilyInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamilyInfoCell.m; sourceTree = "<group>"; };
+		F4F3D74A24938EBD005D3396 /* TIoTCoreAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAlertView.m; sourceTree = "<group>"; };
+		F4F3D74B24938EBD005D3396 /* TIoTCoreFamilyInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreFamilyInfoCell.xib; sourceTree = "<group>"; };
+		F4F3D74C24938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreEquipmentTableViewCell.m; sourceTree = "<group>"; };
+		F4F3D74D24938EBD005D3396 /* TIoTCoreFamilyMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamilyMemberCell.h; sourceTree = "<group>"; };
 		F4F3D75024938EBD005D3396 /* FeedbackVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackVC.xib; sourceTree = "<group>"; };
 		F4F3D75124938EBD005D3396 /* UserInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoVC.h; sourceTree = "<group>"; };
-		F4F3D75324938EBD005D3396 /* WCAddFamilyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAddFamilyVC.m; sourceTree = "<group>"; };
-		F4F3D75424938EBD005D3396 /* WCFamiliesVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCFamiliesVC.xib; sourceTree = "<group>"; };
-		F4F3D75524938EBD005D3396 /* WCAddRoomVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAddRoomVC.h; sourceTree = "<group>"; };
-		F4F3D75624938EBD005D3396 /* WCFamiliesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFamiliesVC.h; sourceTree = "<group>"; };
-		F4F3D75724938EBD005D3396 /* WCAddFamilyVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCAddFamilyVC.xib; sourceTree = "<group>"; };
-		F4F3D75824938EBD005D3396 /* WCMemberInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCMemberInfoVC.h; sourceTree = "<group>"; };
-		F4F3D75924938EBD005D3396 /* WCRoomInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoomInfoVC.h; sourceTree = "<group>"; };
-		F4F3D75A24938EBD005D3396 /* WCFamilyInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCFamilyInfoVC.h; sourceTree = "<group>"; };
+		F4F3D75324938EBD005D3396 /* TIoTCoreAddFamilyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAddFamilyVC.m; sourceTree = "<group>"; };
+		F4F3D75424938EBD005D3396 /* TIoTCoreFamiliesVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreFamiliesVC.xib; sourceTree = "<group>"; };
+		F4F3D75524938EBD005D3396 /* TIoTCoreAddRoomVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAddRoomVC.h; sourceTree = "<group>"; };
+		F4F3D75624938EBD005D3396 /* TIoTCoreFamiliesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamiliesVC.h; sourceTree = "<group>"; };
+		F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreAddFamilyVC.xib; sourceTree = "<group>"; };
+		F4F3D75824938EBD005D3396 /* TIoTCoreMemberInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreMemberInfoVC.h; sourceTree = "<group>"; };
+		F4F3D75924938EBD005D3396 /* TIoTCoreRoomInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRoomInfoVC.h; sourceTree = "<group>"; };
+		F4F3D75A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamilyInfoVC.h; sourceTree = "<group>"; };
 		F4F3D75B24938EBD005D3396 /* InviteVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteVC.m; sourceTree = "<group>"; };
-		F4F3D75C24938EBD005D3396 /* WCRoomsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRoomsVC.h; sourceTree = "<group>"; };
-		F4F3D75D24938EBD005D3396 /* WCAddRoomVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAddRoomVC.m; sourceTree = "<group>"; };
-		F4F3D75E24938EBD005D3396 /* WCAddFamilyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAddFamilyVC.h; sourceTree = "<group>"; };
-		F4F3D75F24938EBD005D3396 /* WCFamilyInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCFamilyInfoVC.xib; sourceTree = "<group>"; };
+		F4F3D75C24938EBD005D3396 /* TIoTCoreRoomsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRoomsVC.h; sourceTree = "<group>"; };
+		F4F3D75D24938EBD005D3396 /* TIoTCoreAddRoomVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAddRoomVC.m; sourceTree = "<group>"; };
+		F4F3D75E24938EBD005D3396 /* TIoTCoreAddFamilyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAddFamilyVC.h; sourceTree = "<group>"; };
+		F4F3D75F24938EBD005D3396 /* TIoTCoreFamilyInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreFamilyInfoVC.xib; sourceTree = "<group>"; };
 		F4F3D76024938EBD005D3396 /* InviteVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InviteVC.xib; sourceTree = "<group>"; };
-		F4F3D76124938EBD005D3396 /* WCFamiliesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFamiliesVC.m; sourceTree = "<group>"; };
-		F4F3D76224938EBD005D3396 /* WCMemberInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCMemberInfoVC.xib; sourceTree = "<group>"; };
-		F4F3D76324938EBD005D3396 /* WCRoomInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoomInfoVC.m; sourceTree = "<group>"; };
-		F4F3D76424938EBD005D3396 /* WCAddRoomVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCAddRoomVC.xib; sourceTree = "<group>"; };
-		F4F3D76524938EBD005D3396 /* WCMemberInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCMemberInfoVC.m; sourceTree = "<group>"; };
-		F4F3D76624938EBD005D3396 /* WCRoomInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCRoomInfoVC.xib; sourceTree = "<group>"; };
-		F4F3D76724938EBD005D3396 /* WCRoomsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCRoomsVC.xib; sourceTree = "<group>"; };
-		F4F3D76824938EBD005D3396 /* WCRoomsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRoomsVC.m; sourceTree = "<group>"; };
+		F4F3D76124938EBD005D3396 /* TIoTCoreFamiliesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamiliesVC.m; sourceTree = "<group>"; };
+		F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreMemberInfoVC.xib; sourceTree = "<group>"; };
+		F4F3D76324938EBD005D3396 /* TIoTCoreRoomInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRoomInfoVC.m; sourceTree = "<group>"; };
+		F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreAddRoomVC.xib; sourceTree = "<group>"; };
+		F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreMemberInfoVC.m; sourceTree = "<group>"; };
+		F4F3D76624938EBD005D3396 /* TIoTCoreRoomInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreRoomInfoVC.xib; sourceTree = "<group>"; };
+		F4F3D76724938EBD005D3396 /* TIoTCoreRoomsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreRoomsVC.xib; sourceTree = "<group>"; };
+		F4F3D76824938EBD005D3396 /* TIoTCoreRoomsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRoomsVC.m; sourceTree = "<group>"; };
 		F4F3D76924938EBD005D3396 /* InviteVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteVC.h; sourceTree = "<group>"; };
-		F4F3D76A24938EBD005D3396 /* WCFamilyInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCFamilyInfoVC.m; sourceTree = "<group>"; };
+		F4F3D76A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamilyInfoVC.m; sourceTree = "<group>"; };
 		F4F3D76B24938EBD005D3396 /* UserVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVC.m; sourceTree = "<group>"; };
 		F4F3D76D24938EBD005D3396 /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
 		F4F3D76E24938EBD005D3396 /* MessageVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageVC.xib; sourceTree = "<group>"; };
@@ -994,21 +994,21 @@
 		F4F3D77224938EBD005D3396 /* UserInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInfoVC.xib; sourceTree = "<group>"; };
 		F4F3D77324938EBD005D3396 /* FeedbackVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackVC.m; sourceTree = "<group>"; };
 		F4F3D77424938EBD005D3396 /* UserVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVC.h; sourceTree = "<group>"; };
-		F4F3D77624938EBD005D3396 /* WCAddTimerVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCAddTimerVC.xib; sourceTree = "<group>"; };
+		F4F3D77624938EBD005D3396 /* TIoTCoreAddTimerVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreAddTimerVC.xib; sourceTree = "<group>"; };
 		F4F3D77724938EBD005D3396 /* ChangeWifiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeWifiVC.h; sourceTree = "<group>"; };
 		F4F3D77824938EBD005D3396 /* ControlDeviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlDeviceVC.m; sourceTree = "<group>"; };
-		F4F3D77924938EBD005D3396 /* WCRepeatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCRepeatVC.m; sourceTree = "<group>"; };
+		F4F3D77924938EBD005D3396 /* TIoTCoreRepeatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRepeatVC.m; sourceTree = "<group>"; };
 		F4F3D77A24938EBD005D3396 /* UsersOfDeviceVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersOfDeviceVC.m; sourceTree = "<group>"; };
 		F4F3D77B24938EBD005D3396 /* WifiInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiInfoVC.m; sourceTree = "<group>"; };
 		F4F3D77C24938EBD005D3396 /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
-		F4F3D77D24938EBD005D3396 /* WCTimerListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTimerListVC.h; sourceTree = "<group>"; };
-		F4F3D77E24938EBD005D3396 /* WCAddTimerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAddTimerVC.m; sourceTree = "<group>"; };
+		F4F3D77D24938EBD005D3396 /* TIoTCoreTimerListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreTimerListVC.h; sourceTree = "<group>"; };
+		F4F3D77E24938EBD005D3396 /* TIoTCoreAddTimerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreAddTimerVC.m; sourceTree = "<group>"; };
 		F4F3D77F24938EBD005D3396 /* ChangeWifiVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeWifiVC.m; sourceTree = "<group>"; };
 		F4F3D78024938EBD005D3396 /* ControlDeviceVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControlDeviceVC.xib; sourceTree = "<group>"; };
-		F4F3D78124938EBD005D3396 /* WCRepeatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCRepeatVC.h; sourceTree = "<group>"; };
+		F4F3D78124938EBD005D3396 /* TIoTCoreRepeatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRepeatVC.h; sourceTree = "<group>"; };
 		F4F3D78224938EBD005D3396 /* ControlDeviceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlDeviceVC.h; sourceTree = "<group>"; };
-		F4F3D78324938EBD005D3396 /* WCAddTimerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAddTimerVC.h; sourceTree = "<group>"; };
-		F4F3D78424938EBD005D3396 /* WCTimerListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCTimerListVC.m; sourceTree = "<group>"; };
+		F4F3D78324938EBD005D3396 /* TIoTCoreAddTimerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAddTimerVC.h; sourceTree = "<group>"; };
+		F4F3D78424938EBD005D3396 /* TIoTCoreTimerListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreTimerListVC.m; sourceTree = "<group>"; };
 		F4F3D78524938EBD005D3396 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		F4F3D78624938EBD005D3396 /* WifiInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiInfoVC.h; sourceTree = "<group>"; };
 		F4F3D78724938EBD005D3396 /* UsersOfDeviceVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersOfDeviceVC.h; sourceTree = "<group>"; };
@@ -1991,7 +1991,7 @@
 			isa = PBXGroup;
 			children = (
 				F4F3D54B24935D75005D3396 /* Info.plist */,
-				F4F3D55624935F3D005D3396 /* QCAPISets.h */,
+				F4F3D55624935F3D005D3396 /* TIoTCoreAPISets.h */,
 				F4F3D55724935F3D005D3396 /* Other */,
 				F4F3D56024935F3D005D3396 /* Public */,
 			);
@@ -2002,13 +2002,13 @@
 			isa = PBXGroup;
 			children = (
 				F4F3D55824935F3D005D3396 /* NSObject+additions.m */,
-				F4F3D55924935F3D005D3396 /* QCSocketCover.m */,
-				F4F3D55A24935F3D005D3396 /* WCRequestAction.h */,
-				F4F3D55B24935F3D005D3396 /* WCRequestObj.h */,
-				F4F3D55C24935F3D005D3396 /* QCSocketCover.h */,
+				F4F3D55924935F3D005D3396 /* TIoTCoreSocketCover.m */,
+				F4F3D55A24935F3D005D3396 /* TIoTCoreRequestAction.h */,
+				F4F3D55B24935F3D005D3396 /* TIoTCoreRequestObj.h */,
+				F4F3D55C24935F3D005D3396 /* TIoTCoreSocketCover.h */,
 				F4F3D55D24935F3D005D3396 /* NSObject+additions.h */,
-				F4F3D55E24935F3D005D3396 /* WCRequestAction.m */,
-				F4F3D55F24935F3D005D3396 /* WCRequestObj.m */,
+				F4F3D55E24935F3D005D3396 /* TIoTCoreRequestAction.m */,
+				F4F3D55F24935F3D005D3396 /* TIoTCoreRequestObj.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -2016,15 +2016,15 @@
 		F4F3D56024935F3D005D3396 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D56124935F3D005D3396 /* QCMessageSet.h */,
-				F4F3D56224935F3D005D3396 /* QCFamilySet.m */,
-				F4F3D56324935F3D005D3396 /* QCDeviceSet.h */,
-				F4F3D56424935F3D005D3396 /* QCParts.h */,
-				F4F3D56524935F3D005D3396 /* QCAccountSet.h */,
-				F4F3D56624935F3D005D3396 /* QCMessageSet.m */,
-				F4F3D56724935F3D005D3396 /* QCFamilySet.h */,
-				F4F3D56824935F3D005D3396 /* QCAccountSet.m */,
-				F4F3D56924935F3D005D3396 /* QCDeviceSet.m */,
+				F4F3D56124935F3D005D3396 /* TIoTCoreMessageSet.h */,
+				F4F3D56224935F3D005D3396 /* TIoTCoreFamilySet.m */,
+				F4F3D56324935F3D005D3396 /* TIoTCoreDeviceSet.h */,
+				F4F3D56424935F3D005D3396 /* TIoTCoreParts.h */,
+				F4F3D56524935F3D005D3396 /* TIoTCoreAccountSet.h */,
+				F4F3D56624935F3D005D3396 /* TIoTCoreMessageSet.m */,
+				F4F3D56724935F3D005D3396 /* TIoTCoreFamilySet.h */,
+				F4F3D56824935F3D005D3396 /* TIoTCoreAccountSet.m */,
+				F4F3D56924935F3D005D3396 /* TIoTCoreDeviceSet.m */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -2033,11 +2033,11 @@
 			isa = PBXGroup;
 			children = (
 				F4F3D6C324936280005D3396 /* Info.plist */,
-				F4F3D57524935F3E005D3396 /* QCDeviceCenter.h */,
-				F4F3D57B24935F3E005D3396 /* QCAddDevice.h */,
-				F4F3D56B24935F3E005D3396 /* QCAddDevice.m */,
-				F4F3D56C24935F3E005D3396 /* QCObject.h */,
-				F4F3D57C24935F3E005D3396 /* QCObject.m */,
+				F4F3D57524935F3E005D3396 /* TIoTCoreDeviceCenter.h */,
+				F4F3D57B24935F3E005D3396 /* TIoTCoreAddDevice.h */,
+				F4F3D56B24935F3E005D3396 /* TIoTCoreAddDevice.m */,
+				F4F3D56C24935F3E005D3396 /* TIoTCoreObject.h */,
+				F4F3D57C24935F3E005D3396 /* TIoTCoreObject.m */,
 				F4F3D57D24935F3E005D3396 /* EspTouch */,
 				F4F3D57624935F3E005D3396 /* GCDAsyncUdpSocket */,
 				F4F3D56D24935F3E005D3396 /* Other */,
@@ -2048,7 +2048,7 @@
 		F4F3D56D24935F3E005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D57324935F3E005D3396 /* WCMacros.h */,
+				F4F3D57324935F3E005D3396 /* TIoTCoreWMacros.h */,
 				F4F3D57424935F3E005D3396 /* NSObject+so.h */,
 				F4F3D56E24935F3E005D3396 /* NSObject+so.m */,
 				F4F3D56F24935F3E005D3396 /* RouteAddress */,
@@ -2120,21 +2120,21 @@
 			isa = PBXGroup;
 			children = (
 				F4F3D70324936E58005D3396 /* Info.plist */,
-				F4F3D5AE24935F3E005D3396 /* QCFoundation.h */,
-				F4F3D5A124935F3E005D3396 /* QCRequestBuilder.h */,
-				F4F3D5B024935F3E005D3396 /* QCRequestBuilder.m */,
-				F4F3D5AF24935F3E005D3396 /* QCServices.h */,
-				F4F3D5A224935F3E005D3396 /* QCServices.m */,
-				F4F3D5B124935F3E005D3396 /* WCAppEnvironment.h */,
-				F4F3D5AA24935F3E005D3396 /* WCAppEnvironment.m */,
-				F4F3D5B324935F3E005D3396 /* WCRequestObject.h */,
-				F4F3D5AB24935F3E005D3396 /* WCRequestObject.m */,
-				F4F3D5A024935F3E005D3396 /* QCRequestClient.h */,
-				F4F3D5AC24935F3E005D3396 /* QCRequestClient.m */,
-				F4F3D59F24935F3E005D3396 /* QCWebSocket.h */,
-				F4F3D5AD24935F3E005D3396 /* QCWebSocket.m */,
-				F4F3D5B224935F3E005D3396 /* QCSocketManager.h */,
-				F4F3D5A324935F3E005D3396 /* QCSocketManager.m */,
+				F4F3D5AE24935F3E005D3396 /* TIoTCoreFoundation.h */,
+				F4F3D5A124935F3E005D3396 /* TIoTCoreRequestBuilder.h */,
+				F4F3D5B024935F3E005D3396 /* TIoTCoreRequestBuilder.m */,
+				F4F3D5AF24935F3E005D3396 /* TIoTCoreServices.h */,
+				F4F3D5A224935F3E005D3396 /* TIoTCoreServices.m */,
+				F4F3D5B124935F3E005D3396 /* TIoTCoreAppEnvironment.h */,
+				F4F3D5AA24935F3E005D3396 /* TIoTCoreAppEnvironment.m */,
+				F4F3D5B324935F3E005D3396 /* TIoTCoreRequestObject.h */,
+				F4F3D5AB24935F3E005D3396 /* TIoTCoreRequestObject.m */,
+				F4F3D5A024935F3E005D3396 /* TIoTCoreRequestClient.h */,
+				F4F3D5AC24935F3E005D3396 /* TIoTCoreRequestClient.m */,
+				F4F3D59F24935F3E005D3396 /* TIoTCoreWebSocket.h */,
+				F4F3D5AD24935F3E005D3396 /* TIoTCoreWebSocket.m */,
+				F4F3D5B224935F3E005D3396 /* TIoTCoreSocketManager.h */,
+				F4F3D5A324935F3E005D3396 /* TIoTCoreSocketManager.m */,
 				F4F3D5A424935F3E005D3396 /* Other */,
 			);
 			path = QCFoundation;
@@ -2143,9 +2143,9 @@
 		F4F3D5A424935F3E005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D5A624935F3E005D3396 /* QCMacros.h */,
-				F4F3D5A724935F3E005D3396 /* QCUserManage.h */,
-				F4F3D5A924935F3E005D3396 /* QCUserManage.m */,
+				F4F3D5A624935F3E005D3396 /* TIoTCoreQMacros.h */,
+				F4F3D5A724935F3E005D3396 /* TIoTCoreUserManage.h */,
+				F4F3D5A924935F3E005D3396 /* TIoTCoreUserManage.m */,
 				F4F3D5A524935F3E005D3396 /* NSString+Extension.h */,
 				F4F3D5A824935F3E005D3396 /* NSString+Extension.m */,
 			);
@@ -2155,12 +2155,12 @@
 		F4F3D72124938EBD005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D72224938EBD005D3396 /* WCHudLoadingView.m */,
+				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
 				F4F3D72324938EBD005D3396 /* RouteAddress */,
 				F4F3D72724938EBD005D3396 /* pageTitle */,
 				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
 				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
-				F4F3D73124938EBD005D3396 /* WCHudLoadingView.h */,
+				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
 				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
 				F4F3D73324938EBD005D3396 /* MBProgressHUD+XDP.h */,
 			);
@@ -2214,25 +2214,25 @@
 			isa = PBXGroup;
 			children = (
 				F4F3D73A24938EBD005D3396 /* SelectView.m */,
-				F4F3D73B24938EBD005D3396 /* WCSlideView.h */,
-				F4F3D73C24938EBD005D3396 /* WCTimerCell.h */,
-				F4F3D73D24938EBD005D3396 /* WCFamilyInfoCell.h */,
-				F4F3D73E24938EBD005D3396 /* WCTimerListCell.h */,
-				F4F3D73F24938EBD005D3396 /* WCTimerListCell.xib */,
-				F4F3D74024938EBD005D3396 /* WCFamilyMemberCell.m */,
-				F4F3D74124938EBD005D3396 /* WCEquipmentTableViewCell.h */,
-				F4F3D74224938EBD005D3396 /* WCFamilyMemberCell.xib */,
-				F4F3D74324938EBD005D3396 /* WCTimerCell.xib */,
-				F4F3D74424938EBD005D3396 /* WCAlertView.h */,
-				F4F3D74524938EBD005D3396 /* WCSlideView.m */,
+				F4F3D73B24938EBD005D3396 /* TIoTCoreSlideView.h */,
+				F4F3D73C24938EBD005D3396 /* TIoTCoreTimerCell.h */,
+				F4F3D73D24938EBD005D3396 /* TIoTCoreFamilyInfoCell.h */,
+				F4F3D73E24938EBD005D3396 /* TIoTCoreTimerListCell.h */,
+				F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */,
+				F4F3D74024938EBD005D3396 /* TIoTCoreFamilyMemberCell.m */,
+				F4F3D74124938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.h */,
+				F4F3D74224938EBD005D3396 /* TIoTCoreFamilyMemberCell.xib */,
+				F4F3D74324938EBD005D3396 /* TIoTCoreTimerCell.xib */,
+				F4F3D74424938EBD005D3396 /* TIoTCoreAlertView.h */,
+				F4F3D74524938EBD005D3396 /* TIoTCoreSlideView.m */,
 				F4F3D74624938EBD005D3396 /* SelectView.h */,
-				F4F3D74724938EBD005D3396 /* WCTimerCell.m */,
-				F4F3D74824938EBD005D3396 /* WCTimerListCell.m */,
-				F4F3D74924938EBD005D3396 /* WCFamilyInfoCell.m */,
-				F4F3D74A24938EBD005D3396 /* WCAlertView.m */,
-				F4F3D74B24938EBD005D3396 /* WCFamilyInfoCell.xib */,
-				F4F3D74C24938EBD005D3396 /* WCEquipmentTableViewCell.m */,
-				F4F3D74D24938EBD005D3396 /* WCFamilyMemberCell.h */,
+				F4F3D74724938EBD005D3396 /* TIoTCoreTimerCell.m */,
+				F4F3D74824938EBD005D3396 /* TIoTCoreTimerListCell.m */,
+				F4F3D74924938EBD005D3396 /* TIoTCoreFamilyInfoCell.m */,
+				F4F3D74A24938EBD005D3396 /* TIoTCoreAlertView.m */,
+				F4F3D74B24938EBD005D3396 /* TIoTCoreFamilyInfoCell.xib */,
+				F4F3D74C24938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.m */,
+				F4F3D74D24938EBD005D3396 /* TIoTCoreFamilyMemberCell.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2267,30 +2267,30 @@
 		F4F3D75224938EBD005D3396 /* Family */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D75624938EBD005D3396 /* WCFamiliesVC.h */,
-				F4F3D76124938EBD005D3396 /* WCFamiliesVC.m */,
-				F4F3D75424938EBD005D3396 /* WCFamiliesVC.xib */,
-				F4F3D75924938EBD005D3396 /* WCRoomInfoVC.h */,
-				F4F3D76324938EBD005D3396 /* WCRoomInfoVC.m */,
-				F4F3D76624938EBD005D3396 /* WCRoomInfoVC.xib */,
-				F4F3D75A24938EBD005D3396 /* WCFamilyInfoVC.h */,
-				F4F3D76A24938EBD005D3396 /* WCFamilyInfoVC.m */,
-				F4F3D75F24938EBD005D3396 /* WCFamilyInfoVC.xib */,
+				F4F3D75624938EBD005D3396 /* TIoTCoreFamiliesVC.h */,
+				F4F3D76124938EBD005D3396 /* TIoTCoreFamiliesVC.m */,
+				F4F3D75424938EBD005D3396 /* TIoTCoreFamiliesVC.xib */,
+				F4F3D75924938EBD005D3396 /* TIoTCoreRoomInfoVC.h */,
+				F4F3D76324938EBD005D3396 /* TIoTCoreRoomInfoVC.m */,
+				F4F3D76624938EBD005D3396 /* TIoTCoreRoomInfoVC.xib */,
+				F4F3D75A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.h */,
+				F4F3D76A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.m */,
+				F4F3D75F24938EBD005D3396 /* TIoTCoreFamilyInfoVC.xib */,
 				F4F3D76924938EBD005D3396 /* InviteVC.h */,
 				F4F3D75B24938EBD005D3396 /* InviteVC.m */,
 				F4F3D76024938EBD005D3396 /* InviteVC.xib */,
-				F4F3D75524938EBD005D3396 /* WCAddRoomVC.h */,
-				F4F3D75D24938EBD005D3396 /* WCAddRoomVC.m */,
-				F4F3D76424938EBD005D3396 /* WCAddRoomVC.xib */,
-				F4F3D75E24938EBD005D3396 /* WCAddFamilyVC.h */,
-				F4F3D75324938EBD005D3396 /* WCAddFamilyVC.m */,
-				F4F3D75724938EBD005D3396 /* WCAddFamilyVC.xib */,
-				F4F3D75824938EBD005D3396 /* WCMemberInfoVC.h */,
-				F4F3D76524938EBD005D3396 /* WCMemberInfoVC.m */,
-				F4F3D76224938EBD005D3396 /* WCMemberInfoVC.xib */,
-				F4F3D75C24938EBD005D3396 /* WCRoomsVC.h */,
-				F4F3D76824938EBD005D3396 /* WCRoomsVC.m */,
-				F4F3D76724938EBD005D3396 /* WCRoomsVC.xib */,
+				F4F3D75524938EBD005D3396 /* TIoTCoreAddRoomVC.h */,
+				F4F3D75D24938EBD005D3396 /* TIoTCoreAddRoomVC.m */,
+				F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */,
+				F4F3D75E24938EBD005D3396 /* TIoTCoreAddFamilyVC.h */,
+				F4F3D75324938EBD005D3396 /* TIoTCoreAddFamilyVC.m */,
+				F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */,
+				F4F3D75824938EBD005D3396 /* TIoTCoreMemberInfoVC.h */,
+				F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */,
+				F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */,
+				F4F3D75C24938EBD005D3396 /* TIoTCoreRoomsVC.h */,
+				F4F3D76824938EBD005D3396 /* TIoTCoreRoomsVC.m */,
+				F4F3D76724938EBD005D3396 /* TIoTCoreRoomsVC.xib */,
 			);
 			path = Family;
 			sourceTree = "<group>";
@@ -2310,17 +2310,17 @@
 			children = (
 				F4F3D78724938EBD005D3396 /* UsersOfDeviceVC.h */,
 				F4F3D77A24938EBD005D3396 /* UsersOfDeviceVC.m */,
-				F4F3D78124938EBD005D3396 /* WCRepeatVC.h */,
-				F4F3D77924938EBD005D3396 /* WCRepeatVC.m */,
+				F4F3D78124938EBD005D3396 /* TIoTCoreRepeatVC.h */,
+				F4F3D77924938EBD005D3396 /* TIoTCoreRepeatVC.m */,
 				F4F3D78624938EBD005D3396 /* WifiInfoVC.h */,
 				F4F3D77B24938EBD005D3396 /* WifiInfoVC.m */,
 				F4F3D78524938EBD005D3396 /* HomeVC.h */,
 				F4F3D77C24938EBD005D3396 /* HomeVC.m */,
-				F4F3D77D24938EBD005D3396 /* WCTimerListVC.h */,
-				F4F3D78424938EBD005D3396 /* WCTimerListVC.m */,
-				F4F3D78324938EBD005D3396 /* WCAddTimerVC.h */,
-				F4F3D77E24938EBD005D3396 /* WCAddTimerVC.m */,
-				F4F3D77624938EBD005D3396 /* WCAddTimerVC.xib */,
+				F4F3D77D24938EBD005D3396 /* TIoTCoreTimerListVC.h */,
+				F4F3D78424938EBD005D3396 /* TIoTCoreTimerListVC.m */,
+				F4F3D78324938EBD005D3396 /* TIoTCoreAddTimerVC.h */,
+				F4F3D77E24938EBD005D3396 /* TIoTCoreAddTimerVC.m */,
+				F4F3D77624938EBD005D3396 /* TIoTCoreAddTimerVC.xib */,
 				F4F3D77724938EBD005D3396 /* ChangeWifiVC.h */,
 				F4F3D77F24938EBD005D3396 /* ChangeWifiVC.m */,
 				F4F3D78224938EBD005D3396 /* ControlDeviceVC.h */,
@@ -2369,15 +2369,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F3D6B2249361DA005D3396 /* QCFamilySet.h in Headers */,
-				F4F3D6B0249361DA005D3396 /* QCParts.h in Headers */,
-				F4F3D6B1249361DA005D3396 /* QCAccountSet.h in Headers */,
-				F4F3D6AE249361DA005D3396 /* QCMessageSet.h in Headers */,
-				F4F3D6AF249361DA005D3396 /* QCDeviceSet.h in Headers */,
-				F4F3D6A9249361DA005D3396 /* QCAPISets.h in Headers */,
-				F4F3D6AA249361DA005D3396 /* WCRequestAction.h in Headers */,
-				F4F3D6AB249361DA005D3396 /* WCRequestObj.h in Headers */,
-				F4F3D6AC249361DA005D3396 /* QCSocketCover.h in Headers */,
+				F4F3D6B2249361DA005D3396 /* TIoTCoreFamilySet.h in Headers */,
+				F4F3D6B0249361DA005D3396 /* TIoTCoreParts.h in Headers */,
+				F4F3D6B1249361DA005D3396 /* TIoTCoreAccountSet.h in Headers */,
+				F4F3D6AE249361DA005D3396 /* TIoTCoreMessageSet.h in Headers */,
+				F4F3D6AF249361DA005D3396 /* TIoTCoreDeviceSet.h in Headers */,
+				F4F3D6A9249361DA005D3396 /* TIoTCoreAPISets.h in Headers */,
+				F4F3D6AA249361DA005D3396 /* TIoTCoreRequestAction.h in Headers */,
+				F4F3D6AB249361DA005D3396 /* TIoTCoreRequestObj.h in Headers */,
+				F4F3D6AC249361DA005D3396 /* TIoTCoreSocketCover.h in Headers */,
 				F4F3D6AD249361DA005D3396 /* NSObject+additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2386,13 +2386,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F3D6D424936DBC005D3396 /* QCAddDevice.h in Headers */,
-				F4F3D6CC24936DBC005D3396 /* QCObject.h in Headers */,
+				F4F3D6D424936DBC005D3396 /* TIoTCoreAddDevice.h in Headers */,
+				F4F3D6CC24936DBC005D3396 /* TIoTCoreObject.h in Headers */,
 				F4F3D6CD24936DBC005D3396 /* route.h in Headers */,
 				F4F3D6CE24936DBC005D3396 /* getgateway.h in Headers */,
-				F4F3D6CF24936DBC005D3396 /* WCMacros.h in Headers */,
+				F4F3D6CF24936DBC005D3396 /* TIoTCoreWMacros.h in Headers */,
 				F4F3D6D024936DBC005D3396 /* NSObject+so.h in Headers */,
-				F4F3D6D124936DBC005D3396 /* QCDeviceCenter.h in Headers */,
+				F4F3D6D124936DBC005D3396 /* TIoTCoreDeviceCenter.h in Headers */,
 				F4F3D6D224936DBC005D3396 /* GCDAsyncUdpSocket.h in Headers */,
 				F4F3D6D324936DBC005D3396 /* GCDAsyncSocket.h in Headers */,
 				F4F3D6D524936DBC005D3396 /* ESPTouchTaskParameter.h in Headers */,
@@ -2420,16 +2420,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F3D71824936EB4005D3396 /* NSString+Extension.h in Headers */,
-				F4F3D71724936EB4005D3396 /* QCRequestBuilder.h in Headers */,
-				F4F3D71A24936EB4005D3396 /* QCUserManage.h in Headers */,
-				F4F3D71624936EB4005D3396 /* QCRequestClient.h in Headers */,
-				F4F3D71E24936EB4005D3396 /* QCSocketManager.h in Headers */,
-				F4F3D71C24936EB4005D3396 /* QCServices.h in Headers */,
-				F4F3D71B24936EB4005D3396 /* QCFoundation.h in Headers */,
-				F4F3D71524936EB4005D3396 /* QCWebSocket.h in Headers */,
-				F4F3D71924936EB4005D3396 /* QCMacros.h in Headers */,
-				F4F3D71D24936EB4005D3396 /* WCAppEnvironment.h in Headers */,
-				F4F3D71F24936EB4005D3396 /* WCRequestObject.h in Headers */,
+				F4F3D71724936EB4005D3396 /* TIoTCoreRequestBuilder.h in Headers */,
+				F4F3D71A24936EB4005D3396 /* TIoTCoreUserManage.h in Headers */,
+				F4F3D71624936EB4005D3396 /* TIoTCoreRequestClient.h in Headers */,
+				F4F3D71E24936EB4005D3396 /* TIoTCoreSocketManager.h in Headers */,
+				F4F3D71C24936EB4005D3396 /* TIoTCoreServices.h in Headers */,
+				F4F3D71B24936EB4005D3396 /* TIoTCoreFoundation.h in Headers */,
+				F4F3D71524936EB4005D3396 /* TIoTCoreWebSocket.h in Headers */,
+				F4F3D71924936EB4005D3396 /* TIoTCoreQMacros.h in Headers */,
+				F4F3D71D24936EB4005D3396 /* TIoTCoreAppEnvironment.h in Headers */,
+				F4F3D71F24936EB4005D3396 /* TIoTCoreRequestObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2640,12 +2640,12 @@
 				F4F3D7D124938EBE005D3396 /* RegistVC.xib in Resources */,
 				F4F3D7D824938EBE005D3396 /* Main.storyboard in Resources */,
 				F4F3D7D324938EBE005D3396 /* LoginVC.xib in Resources */,
-				F4F3D7B824938EBE005D3396 /* WCMemberInfoVC.xib in Resources */,
-				F4F3D7BA24938EBE005D3396 /* WCAddRoomVC.xib in Resources */,
-				F4F3D7BD24938EBE005D3396 /* WCRoomsVC.xib in Resources */,
-				F4F3D7B524938EBE005D3396 /* WCFamilyInfoVC.xib in Resources */,
-				F4F3D7B124938EBE005D3396 /* WCFamiliesVC.xib in Resources */,
-				F4F3D7A724938EBE005D3396 /* WCTimerCell.xib in Resources */,
+				F4F3D7B824938EBE005D3396 /* TIoTCoreMemberInfoVC.xib in Resources */,
+				F4F3D7BA24938EBE005D3396 /* TIoTCoreAddRoomVC.xib in Resources */,
+				F4F3D7BD24938EBE005D3396 /* TIoTCoreRoomsVC.xib in Resources */,
+				F4F3D7B524938EBE005D3396 /* TIoTCoreFamilyInfoVC.xib in Resources */,
+				F4F3D7B124938EBE005D3396 /* TIoTCoreFamiliesVC.xib in Resources */,
+				F4F3D7A724938EBE005D3396 /* TIoTCoreTimerCell.xib in Resources */,
 				F4F3D7C124938EBE005D3396 /* MessageVC.xib in Resources */,
 				F4F3D7D724938EBE005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4F3D7CE24938EBE005D3396 /* ControlDeviceVC.xib in Resources */,
@@ -2653,13 +2653,13 @@
 				F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */,
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */,
-				F4F3D7A424938EBE005D3396 /* WCTimerListCell.xib in Resources */,
-				F4F3D7B224938EBE005D3396 /* WCAddFamilyVC.xib in Resources */,
+				F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */,
+				F4F3D7B224938EBE005D3396 /* TIoTCoreAddFamilyVC.xib in Resources */,
 				F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */,
-				F4F3D7C624938EBE005D3396 /* WCAddTimerVC.xib in Resources */,
-				F4F3D7A624938EBE005D3396 /* WCFamilyMemberCell.xib in Resources */,
-				F4F3D7AD24938EBE005D3396 /* WCFamilyInfoCell.xib in Resources */,
-				F4F3D7BC24938EBE005D3396 /* WCRoomInfoVC.xib in Resources */,
+				F4F3D7C624938EBE005D3396 /* TIoTCoreAddTimerVC.xib in Resources */,
+				F4F3D7A624938EBE005D3396 /* TIoTCoreFamilyMemberCell.xib in Resources */,
+				F4F3D7AD24938EBE005D3396 /* TIoTCoreFamilyInfoCell.xib in Resources */,
+				F4F3D7BC24938EBE005D3396 /* TIoTCoreRoomInfoVC.xib in Resources */,
 				F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2954,45 +2954,45 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F3D79F24938EBE005D3396 /* NSObject+ro.m in Sources */,
-				F4F3D7AE24938EBE005D3396 /* WCEquipmentTableViewCell.m in Sources */,
+				F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
-				F4F3D7A824938EBE005D3396 /* WCSlideView.m in Sources */,
+				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
 				F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */,
-				F4F3D7BF24938EBE005D3396 /* WCFamilyInfoVC.m in Sources */,
-				F4F3D7A924938EBE005D3396 /* WCTimerCell.m in Sources */,
+				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
+				F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
-				F4F3D7B924938EBE005D3396 /* WCRoomInfoVC.m in Sources */,
+				F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */,
 				F4F3D7CD24938EBE005D3396 /* ChangeWifiVC.m in Sources */,
 				F4F3D7CA24938EBE005D3396 /* WifiInfoVC.m in Sources */,
 				F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */,
 				F4F3D79B24938EBE005D3396 /* getgateway.c in Sources */,
 				F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */,
-				F4F3D7BE24938EBE005D3396 /* WCRoomsVC.m in Sources */,
+				F4F3D7BE24938EBE005D3396 /* TIoTCoreRoomsVC.m in Sources */,
 				F4F3D79D24938EBE005D3396 /* CMPageTitleContentView.m in Sources */,
-				F4F3D79A24938EBE005D3396 /* WCHudLoadingView.m in Sources */,
+				F4F3D79A24938EBE005D3396 /* TIoTCoreHudLoadingView.m in Sources */,
 				F4F3D7A024938EBE005D3396 /* MBProgressHUD+XDP.m in Sources */,
-				F4F3D7AA24938EBE005D3396 /* WCTimerListCell.m in Sources */,
-				F4F3D7B724938EBE005D3396 /* WCFamiliesVC.m in Sources */,
+				F4F3D7AA24938EBE005D3396 /* TIoTCoreTimerListCell.m in Sources */,
+				F4F3D7B724938EBE005D3396 /* TIoTCoreFamiliesVC.m in Sources */,
 				F4F3D7C924938EBE005D3396 /* UsersOfDeviceVC.m in Sources */,
 				F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */,
 				F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */,
 				F4F3D79E24938EBE005D3396 /* CMPageTitleConfig.m in Sources */,
-				F4F3D7B424938EBE005D3396 /* WCAddRoomVC.m in Sources */,
+				F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */,
 				F4F3D7C724938EBE005D3396 /* ControlDeviceVC.m in Sources */,
-				F4F3D7CF24938EBE005D3396 /* WCTimerListVC.m in Sources */,
-				F4F3D7BB24938EBE005D3396 /* WCMemberInfoVC.m in Sources */,
-				F4F3D7AC24938EBE005D3396 /* WCAlertView.m in Sources */,
+				F4F3D7CF24938EBE005D3396 /* TIoTCoreTimerListVC.m in Sources */,
+				F4F3D7BB24938EBE005D3396 /* TIoTCoreMemberInfoVC.m in Sources */,
+				F4F3D7AC24938EBE005D3396 /* TIoTCoreAlertView.m in Sources */,
 				F4F3D53E24935BD3005D3396 /* main.m in Sources */,
 				F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */,
 				F4F3D79C24938EBE005D3396 /* UIView+CMCommon.m in Sources */,
 				F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */,
-				F4F3D7B024938EBE005D3396 /* WCAddFamilyVC.m in Sources */,
+				F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */,
 				F4F3D7D024938EBE005D3396 /* LoginVC.m in Sources */,
-				F4F3D7AB24938EBE005D3396 /* WCFamilyInfoCell.m in Sources */,
-				F4F3D7CC24938EBE005D3396 /* WCAddTimerVC.m in Sources */,
+				F4F3D7AB24938EBE005D3396 /* TIoTCoreFamilyInfoCell.m in Sources */,
+				F4F3D7CC24938EBE005D3396 /* TIoTCoreAddTimerVC.m in Sources */,
 				F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */,
-				F4F3D7C824938EBE005D3396 /* WCRepeatVC.m in Sources */,
-				F4F3D7A524938EBE005D3396 /* WCFamilyMemberCell.m in Sources */,
+				F4F3D7C824938EBE005D3396 /* TIoTCoreRepeatVC.m in Sources */,
+				F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3001,13 +3001,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F3D6B324936228005D3396 /* NSObject+additions.m in Sources */,
-				F4F3D6B424936228005D3396 /* QCSocketCover.m in Sources */,
-				F4F3D6B524936228005D3396 /* WCRequestAction.m in Sources */,
-				F4F3D6B624936228005D3396 /* WCRequestObj.m in Sources */,
-				F4F3D6B724936228005D3396 /* QCFamilySet.m in Sources */,
-				F4F3D6B824936228005D3396 /* QCMessageSet.m in Sources */,
-				F4F3D6B924936228005D3396 /* QCAccountSet.m in Sources */,
-				F4F3D6BA24936228005D3396 /* QCDeviceSet.m in Sources */,
+				F4F3D6B424936228005D3396 /* TIoTCoreSocketCover.m in Sources */,
+				F4F3D6B524936228005D3396 /* TIoTCoreRequestAction.m in Sources */,
+				F4F3D6B624936228005D3396 /* TIoTCoreRequestObj.m in Sources */,
+				F4F3D6B724936228005D3396 /* TIoTCoreFamilySet.m in Sources */,
+				F4F3D6B824936228005D3396 /* TIoTCoreMessageSet.m in Sources */,
+				F4F3D6B924936228005D3396 /* TIoTCoreAccountSet.m in Sources */,
+				F4F3D6BA24936228005D3396 /* TIoTCoreDeviceSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3016,11 +3016,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F3D6FA24936E2D005D3396 /* getgateway.c in Sources */,
-				F4F3D6E624936E1D005D3396 /* QCAddDevice.m in Sources */,
+				F4F3D6E624936E1D005D3396 /* TIoTCoreAddDevice.m in Sources */,
 				F4F3D6E724936E1D005D3396 /* NSObject+so.m in Sources */,
 				F4F3D6E824936E1D005D3396 /* GCDAsyncUdpSocket.m in Sources */,
 				F4F3D6E924936E1D005D3396 /* GCDAsyncSocket.m in Sources */,
-				F4F3D6EA24936E1D005D3396 /* QCObject.m in Sources */,
+				F4F3D6EA24936E1D005D3396 /* TIoTCoreObject.m in Sources */,
 				F4F3D6EB24936E1D005D3396 /* ESPGuideCode.m in Sources */,
 				F4F3D6EC24936E1D005D3396 /* ESPTouchResult.m in Sources */,
 				F4F3D6ED24936E1D005D3396 /* ESP_NetUtil.m in Sources */,
@@ -3043,15 +3043,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F3D70C24936E9B005D3396 /* QCServices.m in Sources */,
-				F4F3D70D24936E9B005D3396 /* QCSocketManager.m in Sources */,
-				F4F3D70F24936E9B005D3396 /* QCUserManage.m in Sources */,
-				F4F3D71024936E9B005D3396 /* WCAppEnvironment.m in Sources */,
-				F4F3D71124936E9B005D3396 /* WCRequestObject.m in Sources */,
-				F4F3D71224936E9B005D3396 /* QCRequestClient.m in Sources */,
-				F4F3D71324936E9B005D3396 /* QCWebSocket.m in Sources */,
+				F4F3D70C24936E9B005D3396 /* TIoTCoreServices.m in Sources */,
+				F4F3D70D24936E9B005D3396 /* TIoTCoreSocketManager.m in Sources */,
+				F4F3D70F24936E9B005D3396 /* TIoTCoreUserManage.m in Sources */,
+				F4F3D71024936E9B005D3396 /* TIoTCoreAppEnvironment.m in Sources */,
+				F4F3D71124936E9B005D3396 /* TIoTCoreRequestObject.m in Sources */,
+				F4F3D71224936E9B005D3396 /* TIoTCoreRequestClient.m in Sources */,
+				F4F3D71324936E9B005D3396 /* TIoTCoreWebSocket.m in Sources */,
 				F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */,
-				F4F3D71424936E9B005D3396 /* QCRequestBuilder.m in Sources */,
+				F4F3D71424936E9B005D3396 /* TIoTCoreRequestBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

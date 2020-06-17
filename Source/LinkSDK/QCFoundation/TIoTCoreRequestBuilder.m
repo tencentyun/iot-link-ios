@@ -6,10 +6,10 @@
 //  Copyright © 2020 Reo. All rights reserved.
 //
 
-#import "QCRequestBuilder.h"
-#import "WCAppEnvironment.h"
+#import "TIoTCoreRequestBuilder.h"
+#import "TIoTCoreAppEnvironment.h"
 
-@implementation QCRequestBuilder
+@implementation TIoTCoreRequestBuilder
 
 - (instancetype)initWtihAction:(NSString *)action params:(NSDictionary *)params useToken:(BOOL)useToken
 {

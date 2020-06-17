@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QCParts.h"
+#import "TIoTCoreParts.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QCAccountSet : NSObject
+@interface TIoTCoreAccountSet : NSObject
 
 + (instancetype)shared;
 

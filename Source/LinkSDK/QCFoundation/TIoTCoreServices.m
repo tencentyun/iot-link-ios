@@ -6,14 +6,14 @@
 //  Copyright © 2020 Reo. All rights reserved.
 //
 
-#import "QCServices.h"
-#import "WCAppEnvironment.h"
-#import "QCSocketManager.h"
+#import "TIoTCoreServices.h"
+#import "TIoTCoreAppEnvironment.h"
+#import "TIoTCoreSocketManager.h"
 
-@implementation QCServices
+@implementation TIoTCoreServices
 
 + (instancetype)shared{
-    static QCServices *_instance = nil;
+    static TIoTCoreServices *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];
@@ -25,12 +25,12 @@
 
 - (void)setAppKey:(NSString *)appkey
 {
-    [WCAppEnvironment shareEnvironment].environment = WCAppEnvironmentTypeRelease;
+    [TIoTCoreAppEnvironment shareEnvironment].environment = WCAppEnvironmentTypeRelease;
     
-    [WCAppEnvironment shareEnvironment].appKey = appkey;
+    [TIoTCoreAppEnvironment shareEnvironment].appKey = appkey;
     _appKey = appkey;
     
-    [[QCSocketManager shared] socketOpen];
+    [[TIoTCoreSocketManager shared] socketOpen];
 }
 
 - (void)setLogEnable:(BOOL)logEnable

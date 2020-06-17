@@ -7,11 +7,11 @@
 //
 
 #import "ControlDeviceVC.h"
-#import <QCFoundation/QCFoundation.h>
+#import <QCFoundation/TIoTCoreFoundation.h>
 
-#import "WCAlertView.h"
+#import "TIoTCoreAlertView.h"
 
-#import "WCTimerListVC.h"
+#import "TIoTCoreTimerListVC.h"
 
 @interface ControlDeviceVC ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -32,14 +32,14 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    [QCDeviceSet shared].deviceChange = ^(NSDictionary *changeInfo) {
+    [TIoTCoreDeviceSet shared].deviceChange = ^(NSDictionary *changeInfo) {
         if ([self.deviceInfo[@"DeviceId"] isEqualToString:changeInfo[@"DeviceId"]]) {
             [self receiveData:changeInfo];
         }
     };
     
     
-    [[QCDeviceSet shared] getDeviceDetailWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreDeviceSet shared] getDeviceDetailWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
         
         self.ci = responseObject;
         
@@ -144,11 +144,11 @@
 #pragma mark -
 
 - (IBAction)delete:(id)sender {
-    WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
     [av alertWithTitle:@"确定要删除设备吗？" message:@"删除后数据无法直接恢复" cancleTitlt:@"取消" doneTitle:@"删除"];
     av.doneAction = ^(NSString * _Nonnull text) {
         
-        [[QCDeviceSet shared] deleteDeviceWithFamilyId:self.deviceInfo[@"FamilyId"] productId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreDeviceSet shared] deleteDeviceWithFamilyId:self.deviceInfo[@"FamilyId"] productId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
             [MBProgressHUD showSuccess:@"删除成功"];
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             [MBProgressHUD showError:reason];
@@ -159,7 +159,7 @@
 }
 
 - (IBAction)toTimer:(id)sender {
-    WCTimerListVC *vc = [WCTimerListVC new];
+    TIoTCoreTimerListVC *vc = [TIoTCoreTimerListVC new];
     vc.productId = self.deviceInfo[@"ProductId"];
     vc.deviceName = self.deviceInfo[@"DeviceName"];
     vc.actions = self.ci.zipData;
@@ -167,12 +167,12 @@
 }
 
 - (IBAction)modifyAlias:(id)sender {
-    WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+    TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
     [av alertWithTitle:@"设备名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
     av.maxLength = 20;
     av.doneAction = ^(NSString * _Nonnull text) {
         if (text.length > 0) {
-            [[QCDeviceSet shared] modifyAliasName:text ByProductId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
+            [[TIoTCoreDeviceSet shared] modifyAliasName:text ByProductId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"修改成功"];
                 self.title = text;
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
@@ -224,7 +224,7 @@
 
 - (void)sendControlData:(NSDictionary *)data {
     
-    [[QCDeviceSet shared] controlDeviceDataWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] data:data success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreDeviceSet shared] controlDeviceDataWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] data:data success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"发送成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         

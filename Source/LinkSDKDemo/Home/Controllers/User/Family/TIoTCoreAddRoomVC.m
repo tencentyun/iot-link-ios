@@ -6,14 +6,14 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCAddRoomVC.h"
+#import "TIoTCoreAddRoomVC.h"
 
-@interface WCAddRoomVC ()
+@interface TIoTCoreAddRoomVC ()
 @property (weak, nonatomic) IBOutlet UITextField *roomTF;
 
 @end
 
-@implementation WCAddRoomVC
+@implementation TIoTCoreAddRoomVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,7 +43,7 @@
         return;
     }
     
-    [[QCFamilySet shared] createRoomWithFamilyId:self.familyId name:self.roomTF.text success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] createRoomWithFamilyId:self.familyId name:self.roomTF.text success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"添加成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         

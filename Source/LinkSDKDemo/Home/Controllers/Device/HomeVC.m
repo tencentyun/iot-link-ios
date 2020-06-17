@@ -7,12 +7,12 @@
 //
 
 #import "HomeVC.h"
-#import "WCEquipmentTableViewCell.h"
+#import "TIoTCoreEquipmentTableViewCell.h"
 #import "NSObject+ro.h"
 #import "CMPageTitleContentView.h"
 #import "ControlDeviceVC.h"
 
-#import <QCFoundation/QCFoundation.h>
+#import <QCFoundation/TIoTCoreFoundation.h>
 
 
 static NSString *cellID = @"DODO";
@@ -42,7 +42,7 @@ static NSString *cellID = @"DODO";
     
     
     self.title = @"首页";
-    [self.tab registerClass:[WCEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
+    [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
     
     [self getFamilyList];
     
@@ -84,7 +84,7 @@ static NSString *cellID = @"DODO";
 
 - (void)getFamilyList
 {
-    [[QCFamilySet shared] getFamilyListWithOffset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] getFamilyListWithOffset:0 limit:0 success:^(id  _Nonnull responseObject) {
         
         self.familyList = responseObject[@"FamilyList"];
         
@@ -112,7 +112,7 @@ static NSString *cellID = @"DODO";
 
 - (void)createFamily
 {
-    [[QCFamilySet shared] createFamilyWithName:@"我的家" address:@"兰陵" success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] createFamilyWithName:@"我的家" address:@"兰陵" success:^(id  _Nonnull responseObject) {
         [self getFamilyList];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         
@@ -121,7 +121,7 @@ static NSString *cellID = @"DODO";
 
 - (void)getRoomList
 {
-    [[QCFamilySet shared] getRoomListWithFamilyId:self.currentFamilyId offset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] getRoomListWithFamilyId:self.currentFamilyId offset:0 limit:0 success:^(id  _Nonnull responseObject) {
         
         self.roomList = responseObject[@"RoomList"];
         NSMutableArray *names = [NSMutableArray arrayWithObject:@"全部"];
@@ -135,12 +135,12 @@ static NSString *cellID = @"DODO";
 
 - (void)getDeviceList
 {
-    [[QCDeviceSet shared] getDeviceListWithFamilyId:self.currentFamilyId roomId:self.currentRoomId ?: @"" offset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreDeviceSet shared] getDeviceListWithFamilyId:self.currentFamilyId roomId:self.currentRoomId ?: @"" offset:0 limit:0 success:^(id  _Nonnull responseObject) {
         self.deviceList = responseObject;
         
         self.deviceIds = [self.deviceList valueForKey:@"DeviceId"];
         if (self.deviceIds && self.deviceIds.count > 0) {
-            [[QCDeviceSet shared] activePushWithDeviceIds:self.deviceIds complete:^(BOOL success, id data) {
+            [[TIoTCoreDeviceSet shared] activePushWithDeviceIds:self.deviceIds complete:^(BOOL success, id data) {
                 
             }];
         }
@@ -164,7 +164,7 @@ static NSString *cellID = @"DODO";
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    WCEquipmentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID forIndexPath:indexPath];
+    TIoTCoreEquipmentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID forIndexPath:indexPath];
     cell.dataDic = self.deviceList[indexPath.row];
     return cell;
 }

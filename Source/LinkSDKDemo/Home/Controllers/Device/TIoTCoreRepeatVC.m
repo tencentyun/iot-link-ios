@@ -6,17 +6,17 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRepeatVC.h"
+#import "TIoTCoreRepeatVC.h"
 
 static NSString *cellId = @"ededf";
-@interface WCRepeatVC ()
+@interface TIoTCoreRepeatVC ()
 
 @property (nonatomic,strong) NSArray *week;
 @property (nonatomic,strong) NSMutableArray *weekSelect;
 
 @end
 
-@implementation WCRepeatVC
+@implementation TIoTCoreRepeatVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

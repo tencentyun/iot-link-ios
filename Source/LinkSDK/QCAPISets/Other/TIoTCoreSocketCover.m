@@ -6,18 +6,18 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "QCSocketCover.h"
-#import "WCRequestObj.h"
+#import "TIoTCoreSocketCover.h"
+#import "TIoTCoreRequestObj.h"
 #import "NSObject+additions.h"
 
-#import <QCFoundation/QCFoundation.h>
+#import <QCFoundation/TIoTCoreFoundation.h>
 
 
 #define QQCLog(fmt, ...) if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {NSLog((@"\n--------------\n" fmt @"\n================================="), ##__VA_ARGS__);}
 
 static NSString *registDeviceReqID = @"5001";
 
-@interface QCSocketCover ()<QCSocketManagerDelegate>
+@interface TIoTCoreSocketCover ()<QCSocketManagerDelegate>
 
 @property (nonatomic, assign) NSTimeInterval reConnectTime;
 
@@ -26,10 +26,10 @@ static NSString *registDeviceReqID = @"5001";
 
 @end
 
-@implementation QCSocketCover
+@implementation TIoTCoreSocketCover
 
 + (instancetype)shared{
-    static QCSocketCover *_instance = nil;
+    static TIoTCoreSocketCover *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];
@@ -40,7 +40,7 @@ static NSString *registDeviceReqID = @"5001";
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [QCSocketManager shared].delegate = self;
+        [TIoTCoreSocketManager shared].delegate = self;
     }
     return self;
 }
@@ -53,7 +53,7 @@ static NSString *registDeviceReqID = @"5001";
 - (void)registerDeviceActive:(NSArray *)deviceIds complete:(didReceiveMessage)success
 {
     //每次请求需要判断登录是否失效
-    if (![QCUserManage shared].isValidToken) {
+    if (![TIoTCoreUserManage shared].isValidToken) {
         return;
     }
     
@@ -61,30 +61,30 @@ static NSString *registDeviceReqID = @"5001";
                                 @"action":@"ActivePush",
                                 @"reqId":registDeviceReqID,
                                 @"params":@{
-                                                @"AccessToken" :[QCUserManage shared].accessToken ?: @"",
+                                                @"AccessToken" :[TIoTCoreUserManage shared].accessToken ?: @"",
                                                 @"DeviceIds" :deviceIds
                                             },
                                     };
     
-    WCRequestObj *obj = [WCRequestObj new];
+    TIoTCoreRequestObj *obj = [TIoTCoreRequestObj new];
     obj.sucess = success;
     [self.reqArray setObject:obj forKey:registDeviceReqID];
     
     QQCLog(@"send======%@",dataDic);
-    [[QCSocketManager shared] sendData:dataDic];
+    [[TIoTCoreSocketManager shared] sendData:dataDic];
 }
 
 - (void)sendData:(NSDictionary *)paramDic withRequestURL:(NSString*)requestURL complete:(didReceiveMessage)sucess{
     //每次请求需要判断登录是否失效
-    if (![QCUserManage shared].isValidToken) {
+    if (![TIoTCoreUserManage shared].isValidToken) {
         return;
     }
     
     NSMutableDictionary *actionParams = [NSMutableDictionary dictionaryWithDictionary:paramDic];
     [actionParams setObject:@"iOS" forKey:@"Platform"];
     [actionParams setObject:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    if ([QCUserManage shared].accessToken.length > 0) {
-        [actionParams setObject:[QCUserManage shared].accessToken forKey:@"AccessToken"];
+    if ([TIoTCoreUserManage shared].accessToken.length > 0) {
+        [actionParams setObject:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     }
     
     NSInteger reqID = 100;
@@ -96,7 +96,7 @@ static NSString *registDeviceReqID = @"5001";
             NSInteger lastReqId = [arr.lastObject integerValue];
             reqID = lastReqId + 10;
         }
-        WCRequestObj *obj = [WCRequestObj new];
+        TIoTCoreRequestObj *obj = [TIoTCoreRequestObj new];
         obj.sucess = sucess;
         [self.reqArray setObject:obj forKey:[NSString stringWithFormat:@"%zi",reqID]];
     }
@@ -105,7 +105,7 @@ static NSString *registDeviceReqID = @"5001";
                                 @"action":@"YunApi",
                                 @"reqId":@(reqID),
                                 @"params":@{
-                                                @"AppKey" :[QCServices shared].appKey,
+                                                @"AppKey" :[TIoTCoreServices shared].appKey,
                                                 @"Action" :requestURL,
                                                 @"ActionParams":actionParams
                                     },
@@ -114,29 +114,29 @@ static NSString *registDeviceReqID = @"5001";
     
     
     QQCLog(@"send======%@",dataDic);
-    [[QCSocketManager shared] sendData:dataDic];
+    [[TIoTCoreSocketManager shared] sendData:dataDic];
     
 }
 
 
 #pragma mark - socket delegate
 
-- (void)socket:(QCSocketManager *)manager didReceiveMessage:(id)message
+- (void)socket:(TIoTCoreSocketManager *)manager didReceiveMessage:(id)message
 {
     if(!message){
         return;
     }
     [self handleReceivedMessage:message];
 }
-- (void)socketDidOpen:(QCSocketManager *)manager
+- (void)socketDidOpen:(TIoTCoreSocketManager *)manager
 {
     
 }
-- (void)socket:(QCSocketManager *)manager didFailWithError:(NSError *)error
+- (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error
 {
     
 }
-- (void)socket:(QCSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
+- (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     
 }
@@ -152,7 +152,7 @@ static NSString *registDeviceReqID = @"5001";
     }
     
     NSString *reqID = [NSString stringWithFormat:@"%@",data[@"reqId"]];
-    WCRequestObj *reqObj = self.reqArray[reqID];
+    TIoTCoreRequestObj *reqObj = self.reqArray[reqID];
     
     if (reqObj.sucess) {
         reqObj.sucess(sucess, data[@"data"]);
@@ -207,7 +207,7 @@ static NSString *registDeviceReqID = @"5001";
     
     
     NSString *reqIDStr = [NSString stringWithFormat:@"%@",reqId];
-    WCRequestObj *reqObj = self.reqArray[reqIDStr];
+    TIoTCoreRequestObj *reqObj = self.reqArray[reqIDStr];
     if(reqObj.sucess){
         if (sucess) {
             if ([NSObject isNullOrNilWithObject:dic[@"data"][@"Response"][@"Data"]]) {

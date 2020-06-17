@@ -6,12 +6,12 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "QCSocketManager.h"
-#import "QCWebSocket.h"
+#import "TIoTCoreSocketManager.h"
+#import "TIoTCoreWebSocket.h"
 #import "NSString+Extension.h"
-#import "WCAppEnvironment.h"
+#import "TIoTCoreAppEnvironment.h"
 
-#import "QCMacros.h"
+#import "TIoTCoreQMacros.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -26,19 +26,19 @@ dispatch_async(dispatch_get_main_queue(), block);\
 
 static NSString *heartBeatReqID = @"5002";
 
-@interface QCSocketManager ()<QCWebSocketDelegate>
+@interface TIoTCoreSocketManager ()<QCWebSocketDelegate>
 
-@property (nonatomic, strong) QCWebSocket *socket;
+@property (nonatomic, strong) TIoTCoreWebSocket *socket;
 @property (nonatomic, strong) NSTimer *heartBeat;
 @property (nonatomic, assign) NSTimeInterval reConnectTime;
 
 
 @end
 
-@implementation QCSocketManager
+@implementation TIoTCoreSocketManager
 
 +(instancetype)shared{
-    static QCSocketManager *_instance = nil;
+    static TIoTCoreSocketManager *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];
@@ -102,8 +102,8 @@ static NSString *heartBeatReqID = @"5002";
 - (void)heartBeatAction:(NSTimer *)timer {
     NSDictionary *params = timer.userInfo;
     
-    if ([QCSocketManager shared].socketReadyState == WC_OPEN) {
-        [[QCSocketManager shared] sendData:params];
+    if ([TIoTCoreSocketManager shared].socketReadyState == WC_OPEN) {
+        [[TIoTCoreSocketManager shared] sendData:params];
     }
 }
 
@@ -111,7 +111,7 @@ static NSString *heartBeatReqID = @"5002";
 
 #pragma mark - socket delegate
 
-- (void)webSocketDidOpen:(QCWebSocket *)webSocket {
+- (void)webSocketDidOpen:(TIoTCoreWebSocket *)webSocket {
     
     //每次正常连接的时候清零重连时间
     self.reConnectTime = 0;
@@ -128,7 +128,7 @@ static NSString *heartBeatReqID = @"5002";
     }
 }
 
-- (void)webSocket:(QCWebSocket *)webSocket didFailWithError:(NSError *)error {
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didFailWithError:(NSError *)error {
 
     if (webSocket == self.socket) {
         QCLog(@"************************** socket 连接失败************************** ");
@@ -141,7 +141,7 @@ static NSString *heartBeatReqID = @"5002";
     }
 }
 
-- (void)webSocket:(QCWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     
     if (webSocket == self.socket) {
         QCLog(@"************************** socket连接断开************************** ");
@@ -154,13 +154,13 @@ static NSString *heartBeatReqID = @"5002";
 
 }
 
--(void)webSocket:(QCWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
+-(void)webSocket:(TIoTCoreWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
 //    NSString *reply = [[NSString alloc] initWithData:pongPayload encoding:NSUTF8StringEncoding];
 //    QCLog(@"reply===%@",reply);
 }
 
 #pragma mark - 收到的回调
-- (void)webSocket:(QCWebSocket *)webSocket didReceiveMessage:(id)message  {
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didReceiveMessage:(id)message  {
     
     if (webSocket == self.socket) {
         if(!message){
@@ -260,11 +260,11 @@ static NSString *heartBeatReqID = @"5002";
 #pragma mark - getter
 
 
-- (QCWebSocket *)socket
+- (TIoTCoreWebSocket *)socket
 {
     if (!_socket) {
-        _socket = [[QCWebSocket alloc] initWithURLRequest:
-        [NSURLRequest requestWithURL:[NSURL URLWithString:[WCAppEnvironment shareEnvironment].wsUrl]]];
+        _socket = [[TIoTCoreWebSocket alloc] initWithURLRequest:
+        [NSURLRequest requestWithURL:[NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].wsUrl]]];
         _socket.delegate = self;
     }
     return _socket;

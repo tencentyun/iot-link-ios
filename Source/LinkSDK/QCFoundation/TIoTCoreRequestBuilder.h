@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QCRequestBuilder : NSObject
+@interface TIoTCoreRequestBuilder : NSObject
 
 - (instancetype)initWtihAction:(NSString *)action params:(NSDictionary *)params useToken:(BOOL)useToken;
 

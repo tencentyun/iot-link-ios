@@ -6,19 +6,19 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCFamiliesVC.h"
-#import "WCFamilyInfoVC.h"
+#import "TIoTCoreFamiliesVC.h"
+#import "TIoTCoreFamilyInfoVC.h"
 
 static NSString *cellId = @"rbrb";
 
-@interface WCFamiliesVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTCoreFamiliesVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSMutableArray *families;
 
 @end
 
-@implementation WCFamiliesVC
+@implementation TIoTCoreFamiliesVC
 
 
 - (void)viewDidLoad {
@@ -52,7 +52,7 @@ static NSString *cellId = @"rbrb";
 
 - (void)toAddFamily
 {
-    UIViewController *vc = [NSClassFromString(@"WCAddFamilyVC") new];
+    UIViewController *vc = [NSClassFromString(@"TIoTCoreAddFamilyVC") new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -72,7 +72,7 @@ static NSString *cellId = @"rbrb";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCFamilyInfoVC *vc = [[WCFamilyInfoVC alloc] init];
+    TIoTCoreFamilyInfoVC *vc = [[TIoTCoreFamilyInfoVC alloc] init];
     vc.familyInfo = self.families[indexPath.row];
     vc.familyCount = self.families.count;
     [self.navigationController pushViewController:vc animated:YES];
@@ -82,7 +82,7 @@ static NSString *cellId = @"rbrb";
 
 - (void)getFamilyList
 {
-    [[QCFamilySet shared] getFamilyListWithOffset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] getFamilyListWithOffset:0 limit:0 success:^(id  _Nonnull responseObject) {
         [self.families removeAllObjects];
         [self.families addObjectsFromArray:responseObject[@"FamilyList"]];
         [self.tableView reloadData];

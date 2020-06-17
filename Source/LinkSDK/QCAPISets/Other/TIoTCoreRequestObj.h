@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QCSocketCover.h"
+#import "TIoTCoreSocketCover.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRequestObj : NSObject
+@interface TIoTCoreRequestObj : NSObject
 @property (nonatomic, unsafe_unretained) NSUInteger reqId;
 @property (nonatomic) didReceiveMessage sucess;
 @end

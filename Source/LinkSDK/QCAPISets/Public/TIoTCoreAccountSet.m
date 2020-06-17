@@ -6,21 +6,21 @@
 //  Copyright © 2019 Reo. All rights reserved.
 //
 
-#import "QCAccountSet.h"
-#import "WCRequestAction.h"
-#import <QCFoundation/QCFoundation.h>
+#import "TIoTCoreAccountSet.h"
+#import "TIoTCoreRequestAction.h"
+#import <QCFoundation/TIoTCoreFoundation.h>
 
 
 
-@interface QCAccountSet()
+@interface TIoTCoreAccountSet()
 
 @end
 
-@implementation QCAccountSet
+@implementation TIoTCoreAccountSet
 
 + (instancetype)shared
 {
-    static QCAccountSet *_instance = nil;
+    static TIoTCoreAccountSet *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];
@@ -39,8 +39,8 @@
     }
     NSDictionary *tmpDic = @{@"Type":@"register",@"Email":email};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -61,8 +61,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"register",@"Email":email,@"VerificationCode":code};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -88,8 +88,8 @@
     
     NSDictionary *tmpDic = @{@"Email":email,@"VerificationCode":code,@"Password":password};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCreateEmailUser params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateEmailUser params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -111,8 +111,8 @@
     
     
     NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber};
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -137,8 +137,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber,@"VerificationCode":verificationCode};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -169,8 +169,8 @@
     
     NSDictionary *tmpDic = @{@"CountryCode":countryCode,@"PhoneNumber":phoneNumber,@"VerificationCode":verificationCode,@"Password":password};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCreateCellphoneUser params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateCellphoneUser params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -204,9 +204,9 @@
                              @"Password":password
                              };
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetToken params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        [[QCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetToken params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -220,9 +220,9 @@
                                      @"Password":password,
                                      @"Email":email,
                                      };
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetToken params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        [[QCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetToken params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -238,9 +238,9 @@
     
     NSDictionary *tmpDic = @{@"code":[NSString stringWithFormat:@"%@",code],@"busi":@"studio"};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetTokenByWeiXin params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        [[QCUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetTokenByWeiXin params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -250,9 +250,9 @@
 
 - (void)signOutOnSuccess:(SRHandler)success failure:(FRHandler)failure
 {
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppLogoutUser params:@{} useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        [[QCUserManage shared] clear];
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppLogoutUser params:@{} useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreUserManage shared] clear];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -272,8 +272,8 @@
     }
     NSDictionary *tmpDic = @{@"Type":@"resetpass",@"Email":email};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -294,8 +294,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"resetpass",@"Email":email,@"VerificationCode":code};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -307,8 +307,8 @@
 {
     NSDictionary *tmpDic = @{@"Email":email,@"VerificationCode":code,@"Password":password};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppResetPasswordByEmail params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppResetPasswordByEmail params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -334,8 +334,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"resetpass",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -363,8 +363,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"resetpass",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber,@"VerificationCode":verificationCode};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -397,8 +397,8 @@
     
     NSDictionary *tmpDic = @{@"CountryCode":countryCode,@"PhoneNumber":phoneNumber,@"VerificationCode":verificationCode,@"Password":password};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppResetPasswordByCellphone params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppResetPasswordByCellphone params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -428,8 +428,8 @@
     
     NSDictionary *tmpDic = @{@"Password":currentPassword,@"NewPassword":newPassword};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUserResetPassword params:tmpDic useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUserResetPassword params:tmpDic useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -455,8 +455,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -483,12 +483,12 @@
     
     NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":countryCode,@"PhoneNumber":phoneNumber,@"VerificationCode":verificationCode};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         
-        QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUpdateUser params:@{@"phoneNumber":phoneNumber,@"VerificationCode":verificationCode,@"CountryCode":countryCode} useToken:YES];
-        [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-            [QCUserManage shared].phoneNumber = phoneNumber;
+        TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUpdateUser params:@{@"phoneNumber":phoneNumber,@"VerificationCode":verificationCode,@"CountryCode":countryCode} useToken:YES];
+        [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+            [TIoTCoreUserManage shared].phoneNumber = phoneNumber;
             success(responseObject);
         } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
             failure(reason,error);
@@ -505,10 +505,10 @@
 
 - (void)getUserInfoOnSuccess:(SRHandler)success failure:(FRHandler)failure
 {
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetUser params:@{} useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetUser params:@{} useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
-        [[QCUserManage shared] saveUserInfo:data];
+        [[TIoTCoreUserManage shared] saveUserInfo:data];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -517,8 +517,8 @@
 
 - (void)getUploadInfoOnSuccess:(SRHandler)success failure:(FRHandler)failure
 {
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCosAuth params:@{@"path":@"iotexplorer-app-logs/user_{uin}/"} useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCosAuth params:@{@"path":@"iotexplorer-app-logs/user_{uin}/"} useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -530,15 +530,15 @@
     NSString *name = nickName;
     NSString *pt = avatar;
     if (nickName == nil || [nickName isEqualToString:@""]) {
-        name = [QCUserManage shared].nickName;
+        name = [TIoTCoreUserManage shared].nickName;
     }
     if (avatar == nil || [avatar isEqualToString:@""]) {
-        pt = [QCUserManage shared].avatar;
+        pt = [TIoTCoreUserManage shared].avatar;
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUpdateUser params:@{@"NickName":name,@"Avatar":pt} useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        [[QCUserManage shared] saveUserInfo:@{@"UserID":[QCUserManage shared].userId,@"Avatar":avatar,@"NickName":nickName,@"PhoneNumber":[QCUserManage shared].phoneNumber}];
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUpdateUser params:@{@"NickName":name,@"Avatar":pt} useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":avatar,@"NickName":nickName,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -567,8 +567,8 @@
     
     NSDictionary *tmpDic = @{@"Type":@"advise",@"Desc":text,@"Contact":contact,@"LogUrl":[urls componentsJoinedByString:@","]};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUserFeedBack params:tmpDic useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUserFeedBack params:tmpDic useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);

@@ -15,7 +15,7 @@
 //
 
 
-#import "QCWebSocket.h"
+#import "TIoTCoreWebSocket.h"
 
 #if TARGET_OS_IPHONE
 #define HAS_ICU
@@ -142,7 +142,7 @@ NSString *const QCHTTPResponseErrorKey = @"HTTPResponseStatusCode";
 // Sends bytes to callback handler;
 typedef size_t (^stream_scanner)(NSData *collected_data);
 
-typedef void (^data_callback)(QCWebSocket *webSocket,  NSData *data);
+typedef void (^data_callback)(TIoTCoreWebSocket *webSocket,  NSData *data);
 
 @interface QCIOConsumer : NSObject {
     stream_scanner _scanner;
@@ -169,7 +169,7 @@ typedef void (^data_callback)(QCWebSocket *webSocket,  NSData *data);
 
 @end
 
-@interface QCWebSocket ()  <NSStreamDelegate>
+@interface TIoTCoreWebSocket ()  <NSStreamDelegate>
 
 @property (nonatomic) QCReadyState readyState;
 
@@ -185,7 +185,7 @@ typedef void (^data_callback)(QCWebSocket *webSocket,  NSData *data);
 @end
 
 
-@implementation QCWebSocket {
+@implementation TIoTCoreWebSocket {
     NSInteger _webSocketVersion;
     
     NSOperationQueue *_delegateOperationQueue;
@@ -237,7 +237,7 @@ typedef void (^data_callback)(QCWebSocket *webSocket,  NSData *data);
     NSMutableSet *_scheduledRunloops;
     
     // We use this to retain ourselves.
-    __strong QCWebSocket *_selfRetain;
+    __strong TIoTCoreWebSocket *_selfRetain;
     
     NSArray *_requestedProtocols;
     QCIOConsumerPool *_consumerPool;
@@ -478,7 +478,7 @@ static __strong NSData *CRLFCRLF;
         _receivedHTTPHeaders = CFHTTPMessageCreateEmpty(NULL, NO);
     }
                         
-    [self _readUntilHeaderCompleteWithCallback:^(QCWebSocket *self,  NSData *data) {
+    [self _readUntilHeaderCompleteWithCallback:^(TIoTCoreWebSocket *self,  NSData *data) {
         CFHTTPMessageAppendBytes(self->_receivedHTTPHeaders, (const UInt8 *)data.bytes, data.length);
         
         if (CFHTTPMessageIsHeaderComplete(self->_receivedHTTPHeaders)) {
@@ -992,7 +992,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
         }
     } else {
         assert(frame_header.payload_length <= SIZE_T_MAX);
-        [self _addConsumerWithDataLength:(size_t)frame_header.payload_length callback:^(QCWebSocket *self, NSData *newData) {
+        [self _addConsumerWithDataLength:(size_t)frame_header.payload_length callback:^(TIoTCoreWebSocket *self, NSData *newData) {
             if (isControlFrame) {
                 [self _handleFrameWithData:newData opCode:frame_header.opcode];
             } else {
@@ -1041,7 +1041,7 @@ static const uint8_t QCPayloadLenMask   = 0x7F;
 {
     assert((_currentFrameCount == 0 && _currentFrameOpcode == 0) || (_currentFrameCount > 0 && _currentFrameOpcode > 0));
 
-    [self _addConsumerWithDataLength:2 callback:^(QCWebSocket *self, NSData *data) {
+    [self _addConsumerWithDataLength:2 callback:^(TIoTCoreWebSocket *self, NSData *data) {
         __block frame_header header = {0};
         
         const uint8_t *headerBuffer = data.bytes;
@@ -1091,7 +1091,7 @@ static const uint8_t QCPayloadLenMask   = 0x7F;
         if (extra_bytes_needed == 0) {
             [self _handleFrameHeader:header curData:self->_currentFrameData];
         } else {
-            [self _addConsumerWithDataLength:extra_bytes_needed callback:^(QCWebSocket *self, NSData *data) {
+            [self _addConsumerWithDataLength:extra_bytes_needed callback:^(TIoTCoreWebSocket *self, NSData *data) {
                 size_t mapped_size = data.length;
                 #pragma unused (mapped_size)
                 const void *mapped_buffer = data.bytes;

@@ -6,16 +6,16 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCFamilyMemberCell.h"
+#import "TIoTCoreFamilyMemberCell.h"
 #import <UIImageView+WebCache.h>
 
-@interface WCFamilyMemberCell()
+@interface TIoTCoreFamilyMemberCell()
 @property (weak, nonatomic) IBOutlet UIImageView *headerImg;
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
 @property (weak, nonatomic) IBOutlet UILabel *authorL;
 
 @end
-@implementation WCFamilyMemberCell
+@implementation TIoTCoreFamilyMemberCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

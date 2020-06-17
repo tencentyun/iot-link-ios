@@ -6,10 +6,10 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCAlertView.h"
+#import "TIoTCoreAlertView.h"
 
 
-@interface WCAlertView()<UITextFieldDelegate>
+@interface TIoTCoreAlertView()<UITextFieldDelegate>
 
 @property (nonatomic) WCAlertViewStyle style;
 
@@ -23,7 +23,7 @@
 @property (nonatomic) CGRect oriFrame;
 
 @end
-@implementation WCAlertView
+@implementation TIoTCoreAlertView
 
 - (instancetype)initWithFrame:(CGRect)frame andStyle:(WCAlertViewStyle)style
 {

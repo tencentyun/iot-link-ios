@@ -6,18 +6,18 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRoomsVC.h"
-#import "WCAddRoomVC.h"
-#import "WCRoomInfoVC.h"
+#import "TIoTCoreRoomsVC.h"
+#import "TIoTCoreAddRoomVC.h"
+#import "TIoTCoreRoomInfoVC.h"
 
 static NSString *cellId = @"wd9765";
-@interface WCRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTCoreRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *rooms;
 
 @end
 
-@implementation WCRoomsVC
+@implementation TIoTCoreRoomsVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,7 +50,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)getRoomList
 {
-    [[QCFamilySet shared] getRoomListWithFamilyId:self.familyId offset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] getRoomListWithFamilyId:self.familyId offset:0 limit:0 success:^(id  _Nonnull responseObject) {
         [self.rooms removeAllObjects];
         [self.rooms addObjectsFromArray:responseObject[@"RoomList"]];
         [self.tableView reloadData];
@@ -62,7 +62,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)toAddRoom
 {
-    WCAddRoomVC *vc = [WCAddRoomVC new];
+    TIoTCoreAddRoomVC *vc = [TIoTCoreAddRoomVC new];
     vc.familyId = self.familyId;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -89,7 +89,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WCRoomInfoVC *vc = [WCRoomInfoVC new];
+    TIoTCoreRoomInfoVC *vc = [TIoTCoreRoomInfoVC new];
     vc.familyId = self.familyId;
     vc.roomDic = self.rooms[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];

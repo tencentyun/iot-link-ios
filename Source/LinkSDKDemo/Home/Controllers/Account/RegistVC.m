@@ -37,7 +37,7 @@
         case 0://手机号
         {
             if ([self.title isEqualToString:@"注册"]) {
-                [[QCAccountSet shared] sendVerificationCodeWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] sendVerificationCodeWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
                     
@@ -45,7 +45,7 @@
             }
             else
             {
-                [[QCAccountSet shared] sendCodeForResetWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] sendCodeForResetWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
                     
@@ -56,7 +56,7 @@
         case 1://邮箱
         {
             if ([self.title isEqualToString:@"注册"]) {
-                [[QCAccountSet shared] sendVerificationCodeWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] sendVerificationCodeWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
                     
@@ -64,7 +64,7 @@
             }
             else
             {
-                [[QCAccountSet shared] sendCodeForResetWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] sendCodeForResetWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
                     
@@ -89,7 +89,7 @@
         case 0://手机号
         {
             if ([self.title isEqualToString:@"注册"]){
-                [[QCAccountSet shared] createPhoneUserWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] createPhoneUserWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     [MBProgressHUD showSuccess:@"注册成功"];
                     [self.navigationController popViewControllerAnimated:YES];
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
@@ -98,7 +98,7 @@
             }
             else
             {
-                [[QCAccountSet shared] ResetPasswordWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] ResetPasswordWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     
                     [MBProgressHUD showSuccess:@"重置密码成功"];
                     [self.navigationController popViewControllerAnimated:YES];
@@ -111,7 +111,7 @@
         case 1:
         {
             if ([self.title isEqualToString:@"注册"]){
-                [[QCAccountSet shared] createEmailUserWithEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] createEmailUserWithEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     [MBProgressHUD showSuccess:@"注册成功"];
                     [self.navigationController popViewControllerAnimated:YES];
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
@@ -120,7 +120,7 @@
             }
             else
             {
-                [[QCAccountSet shared] resetPasswordByEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
+                [[TIoTCoreAccountSet shared] resetPasswordByEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     
                     [MBProgressHUD showSuccess:@"重置密码成功"];
                     [self.navigationController popViewControllerAnimated:YES];

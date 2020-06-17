@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^FailureResponseHandler)(NSString *reason,NSError *error);
 typedef void (^SuccessResponseHandler)(id responseObject);
 
-@interface QCRequestClient : NSObject
+@interface TIoTCoreRequestClient : NSObject
 
 + (void)sendRequestWithBuild:(NSDictionary *)build success:(SuccessResponseHandler)success
 failure:(FailureResponseHandler)failure;

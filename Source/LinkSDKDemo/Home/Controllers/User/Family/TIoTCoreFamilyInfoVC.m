@@ -6,14 +6,14 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCFamilyInfoVC.h"
-#import "WCFamilyInfoCell.h"
-#import "WCFamilyMemberCell.h"
-#import "WCRoomsVC.h"
-#import "WCMemberInfoVC.h"
-#import "WCAlertView.h"
+#import "TIoTCoreFamilyInfoVC.h"
+#import "TIoTCoreFamilyInfoCell.h"
+#import "TIoTCoreFamilyMemberCell.h"
+#import "TIoTCoreRoomsVC.h"
+#import "TIoTCoreMemberInfoVC.h"
+#import "TIoTCoreAlertView.h"
 
-#import <QCFoundation/QCUserManage.h>
+#import <QCFoundation/TIoTCoreUserManage.h>
 
 
 static NSString *headerId = @"pf99";
@@ -21,14 +21,14 @@ static NSString *footerId = @"pfwer";
 static NSString *itemId = @"pfrrr";
 static NSString *itemId2 = @"pfDDD";
 
-@interface WCFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface TIoTCoreFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *coll;
 
 @property (nonatomic,strong) NSMutableArray *dataArr;
 
 @end
 
-@implementation WCFamilyInfoVC
+@implementation TIoTCoreFamilyInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,15 +44,15 @@ static NSString *itemId2 = @"pfDDD";
     
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerId];
-    [self.coll registerNib:[UINib nibWithNibName:@"WCFamilyInfoCell" bundle:nil] forCellWithReuseIdentifier:itemId];
-    [self.coll registerNib:[UINib nibWithNibName:@"WCFamilyMemberCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTCoreFamilyInfoCell" bundle:nil] forCellWithReuseIdentifier:itemId];
+    [self.coll registerNib:[UINib nibWithNibName:@"TIoTCoreFamilyMemberCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
 }
 
 #pragma mark - request
 
 - (void)getMemberList
 {
-    [[QCFamilySet shared] getMemberListWithFamilyId:self.familyInfo[@"FamilyId"] offset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] getMemberListWithFamilyId:self.familyInfo[@"FamilyId"] offset:0 limit:0 success:^(id  _Nonnull responseObject) {
         [self.dataArr addObject:responseObject[@"MemberList"]];
         [self.coll reloadData];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
@@ -62,7 +62,7 @@ static NSString *itemId2 = @"pfDDD";
 
 - (void)deleteFamily
 {
-    [[QCFamilySet shared] deleteFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:self.familyInfo[@"FamilyName"] success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] deleteFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:self.familyInfo[@"FamilyName"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"删除成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         
@@ -71,7 +71,7 @@ static NSString *itemId2 = @"pfDDD";
 
 - (void)leaveFamily
 {
-    [[QCFamilySet shared] leaveFamilyWithFamilyId:self.familyInfo[@"FamilyId"] success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] leaveFamilyWithFamilyId:self.familyInfo[@"FamilyId"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"退出成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         
@@ -80,7 +80,7 @@ static NSString *itemId2 = @"pfDDD";
 
 - (void)modifyFamily:(NSString *)name
 {
-    [[QCFamilySet shared] modifyFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:name success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] modifyFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:name success:^(id  _Nonnull responseObject) {
         NSMutableDictionary *dic = self.dataArr[0][0];
         [dic setValue:name forKey:@"name"];
         [self.coll reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
@@ -95,7 +95,7 @@ static NSString *itemId2 = @"pfDDD";
 {
     if ([self.familyInfo[@"Role"] integerValue] == 1) {//删除
         
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
         [av alertWithTitle:@"您确定要删除该家庭吗？" message:@"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除" cancleTitlt:@"取消" doneTitle:@"删除"];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
@@ -126,11 +126,11 @@ static NSString *itemId2 = @"pfDDD";
 {
     NSDictionary *info = self.dataArr[indexPath.section][indexPath.row];
     if (indexPath.section == 0) {
-        WCFamilyInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
+        TIoTCoreFamilyInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId forIndexPath:indexPath];
         [cell setInfo:info];
         return cell;
     }
-    WCFamilyMemberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
+    TIoTCoreFamilyMemberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
     [cell setInfo:info];
     return cell;
 }
@@ -198,7 +198,7 @@ static NSString *itemId2 = @"pfDDD";
         switch (indexPath.item) {
             case 0:
             {
-                WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+                TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
                 [av alertWithTitle:@"家庭名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
                 av.maxLength = 20;
                 av.doneAction = ^(NSString * _Nonnull text) {
@@ -211,7 +211,7 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             case 1:
             {
-                WCRoomsVC *vc = [WCRoomsVC new];
+                TIoTCoreRoomsVC *vc = [TIoTCoreRoomsVC new];
                 vc.familyId = self.familyInfo[@"FamilyId"];
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -239,8 +239,8 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             }
         }
-        WCMemberInfoVC *vc = [[WCMemberInfoVC alloc] init];
-        if ([[QCUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
+        TIoTCoreMemberInfoVC *vc = [[TIoTCoreMemberInfoVC alloc] init];
+        if ([[TIoTCoreUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
             vc.isOwner = YES;
         }
         vc.memberInfo = self.dataArr[indexPath.section][indexPath.row];

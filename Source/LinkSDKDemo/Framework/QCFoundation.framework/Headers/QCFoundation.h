@@ -19,6 +19,6 @@ FOUNDATION_EXPORT const unsigned char QCFoundationVersionString[];
 #import <QCFoundation/QCServices.h>
 #import <QCFoundation/QCRequestBuilder.h>
 #import <QCFoundation/QCRequestClient.h>
-#import <QCFoundation/QCSocketManager.h>
+#import <QCFoundation/TIoTCoreSocketManager.h>
 #import <QCFoundation/QCUserManage.h>
 #import <QCFoundation/NSString+Extension.h>

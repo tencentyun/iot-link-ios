@@ -6,9 +6,9 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCTimerListCell.h"
+#import "TIoTCoreTimerListCell.h"
 
-@interface WCTimerListCell()
+@interface TIoTCoreTimerListCell()
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *detailL;
 @property (weak, nonatomic) IBOutlet UISwitch *turn;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation WCTimerListCell
+@implementation TIoTCoreTimerListCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -31,7 +31,7 @@
 {
     if (_info) {
         
-        [[QCDeviceSet shared] modifyTimerStatusWithTimerId:_info[@"TimerId"] productId:_info[@"ProductId"] deviceName:_info[@"DeviceName"] status:status success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreDeviceSet shared] modifyTimerStatusWithTimerId:_info[@"TimerId"] productId:_info[@"ProductId"] deviceName:_info[@"DeviceName"] status:status success:^(id  _Nonnull responseObject) {
             
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCHudLoadingView : UIView
+@interface TIoTCoreHudLoadingView : UIView
 
 - (void)stopAnimation;
 

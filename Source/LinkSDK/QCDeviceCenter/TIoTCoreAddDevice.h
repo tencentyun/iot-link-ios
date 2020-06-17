@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QCObject.h"
+#import "TIoTCoreObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-@protocol QCAddDeviceProtocol
+@protocol TIoTCoreAddDeviceProtocol
 
 @property (nonatomic,readonly) BOOL isConnecting;//是否正在配网中
 
@@ -24,20 +24,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol QCAddDeviceDelegate <NSObject>
+@protocol TIoTCoreAddDeviceDelegate <NSObject>
 
-- (void)onResult:(QCResult *)result;
+- (void)onResult:(TIoTCoreResult *)result;
 
 @end
 
 
-@interface QCSmartConfig : NSObject<QCAddDeviceProtocol>
+@interface TIoTCoreSmartConfig : NSObject<TIoTCoreAddDeviceProtocol>
 
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
 @property (nonatomic,copy,readonly) NSString *bssid;
 
-@property (nonatomic,weak) id<QCAddDeviceDelegate> delegate;
+@property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 
 /// WiFi信息
 /// @param ssid 必填
@@ -49,12 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface QCSoftAP : NSObject<QCAddDeviceProtocol>
+@interface TIoTCoreSoftAP : NSObject<TIoTCoreAddDeviceProtocol>
 
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
 
-@property (nonatomic,weak) id<QCAddDeviceDelegate> delegate;
+@property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 
 /// WiFi信息
 /// @param ssid 必填

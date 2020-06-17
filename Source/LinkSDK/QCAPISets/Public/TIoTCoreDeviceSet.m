@@ -6,11 +6,11 @@
 //  Copyright © 2019 Reo. All rights reserved.
 //
 
-#import "QCDeviceSet.h"
+#import "TIoTCoreDeviceSet.h"
 #import "NSObject+additions.h"
-#import <QCFoundation/QCFoundation.h>
-#import "QCSocketCover.h"
-#import "WCRequestAction.h"
+#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreSocketCover.h"
+#import "TIoTCoreRequestAction.h"
 
 
 @implementation DeviceInfo
@@ -27,17 +27,17 @@
 
 
 
-@interface QCDeviceSet()
+@interface TIoTCoreDeviceSet()
 
 @property (nonatomic,strong) NSArray *deviceList;
 
 @end
 
-@implementation QCDeviceSet
+@implementation TIoTCoreDeviceSet
 
 + (instancetype)shared
 {
-    static QCDeviceSet *_instance = nil;
+    static TIoTCoreDeviceSet *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];
@@ -57,7 +57,7 @@
 - (void)setDeviceChange:(void (^)(NSDictionary *))deviceChange
 {
     _deviceChange = deviceChange;
-    [QCSocketCover shared].deviceChange = deviceChange;
+    [TIoTCoreSocketCover shared].deviceChange = deviceChange;
 }
 
 
@@ -68,7 +68,7 @@
         @"reqId":[[NSUUID UUID] UUIDString],
         @"params":@{
             @"Action": @"AppDeviceTraceHeartBeat",
-            @"AccessToken":[QCUserManage shared].accessToken,
+            @"AccessToken":[TIoTCoreUserManage shared].accessToken,
             @"RequestId":@"req_heartbeat",
             @"ActionParams": @{
                 @"DeviceIds": deviceIds
@@ -78,7 +78,7 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"heartBeatStart" object:params];
     
-    [[QCSocketCover shared] registerDeviceActive:deviceIds complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
+    [[TIoTCoreSocketCover shared] registerDeviceActive:deviceIds complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
         result(sucess,data);
     }];
 }
@@ -103,16 +103,16 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetFamilyDeviceList params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetFamilyDeviceList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         
         NSArray *devices = responseObject[@"DeviceList"];
         NSArray *deviceIds = [devices valueForKey:@"DeviceId"];
         if (deviceIds.count > 0) {
             NSDictionary *dic = @{@"ProductId":devices[0][@"ProductId"],@"DeviceIds":deviceIds};
             
-            QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetDeviceStatuses params:dic useToken:YES];
-            [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+            TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetDeviceStatuses params:dic useToken:YES];
+            [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
                 
                 NSArray *statusArr = responseObject[@"DeviceStatuses"];
                 
@@ -165,8 +165,8 @@
     
     NSDictionary *param = @{@"ProductIds":productIds};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetProductsConfig params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetProductsConfig params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -182,8 +182,8 @@
     
     NSDictionary *param = @{@"ProductIds":productIds};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetProducts params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetProducts params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -204,8 +204,8 @@
     
     NSDictionary *param = @{@"ProductId":productId,@"DeviceName":deviceName};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetDeviceData params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetDeviceData params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -324,8 +324,8 @@
         @"Data":[NSString objectToJson:data],
     };
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppControlDeviceData params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppControlDeviceData params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -351,8 +351,8 @@
     
     NSDictionary *param = @{@"ProductID":productId,@"DeviceName":deviceName,@"AliasName":aliasName};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUpdateDeviceInFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUpdateDeviceInFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -379,8 +379,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"ProductID":productId,@"DeviceName":deviceName};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteDeviceInFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteDeviceInFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -406,8 +406,8 @@
         [param setValue:roomId forKey:@"RoomId"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSigBindDeviceInFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSigBindDeviceInFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -431,8 +431,8 @@
         [param setValue:roomId forKey:@"RoomId"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSecureAddDeviceInFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSecureAddDeviceInFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -465,8 +465,8 @@
     
     NSDictionary *param = @{@"ProductId":productId,@"DeviceName":deviceName,@"FamilyId": familyId,@"RoomId":roomId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppModifyFamilyDeviceRoom params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyFamilyDeviceRoom params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -499,8 +499,8 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetTimerList params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetTimerList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -551,8 +551,8 @@
     [param setValue:@(repeat) forKey:@"Repeat"];
     [param setValue:[NSString objectToJson:data] forKey:@"Data"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCreateTimer params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateTimer params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -608,8 +608,8 @@
     [param setValue:@(repeat) forKey:@"Repeat"];
     [param setValue:[NSString objectToJson:data] forKey:@"Data"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppModifyTimer params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyTimer params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -639,8 +639,8 @@
     [dic setValue:timerId forKey:@"TimerId"];
     [dic setValue:@(status) forKey:@"Status"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppModifyTimerStatus params:dic useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyTimerStatus params:dic useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -670,8 +670,8 @@
     [dic setValue:deviceName forKey:@"DeviceName"];
     [dic setValue:timerId forKey:@"TimerId"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteTimer params:dic useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteTimer params:dic useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -701,8 +701,8 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppListShareDeviceUsers params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppListShareDeviceUsers params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -718,8 +718,8 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppListUserShareDevices params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppListUserShareDevices params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -748,8 +748,8 @@
     [param setValue:productId forKey:@"ProductId"];
     [param setValue:deviceName forKey:@"DeviceName"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppRemoveShareDeviceUser params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppRemoveShareDeviceUser params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -778,8 +778,8 @@
     [param setValue:productId forKey:@"ProductId"];
     [param setValue:deviceName forKey:@"DeviceName"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppRemoveUserShareDevice params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppRemoveUserShareDevice params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -808,8 +808,8 @@
     [param setValue:productId forKey:@"ProductId"];
     [param setValue:deviceName forKey:@"DeviceName"];
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppBindUserShareDevice params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppBindUserShareDevice params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -844,14 +844,14 @@
     }
     NSDictionary *param = @{@"Type":@"phone",@"CountryCode":countryCode,@"PhoneNumber":phoneNum};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         NSString *userId = data[@"UserID"];
         
         NSDictionary *param = @{@"FamilyId":familyId,@"ProductId":productId,@"DeviceName":deviceName,@"ToUserID":userId};
-        QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
-        [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
+        [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
         } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
             failure(reason,error);
@@ -886,14 +886,14 @@
     }
     NSDictionary *param = @{@"Type":@"email",@"Email":email};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         NSString *userId = data[@"UserID"];
         
         NSDictionary *param = @{@"FamilyId":familyId,@"ProductId":productId,@"DeviceName":deviceName,@"ToUserID":userId};
-        QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
-        [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
+        [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
         } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
             failure(reason,error);

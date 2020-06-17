@@ -6,15 +6,15 @@
 //  Copyright © 2020 Reo. All rights reserved.
 //
 
-#import "QCMessageSet.h"
-#import "WCRequestAction.h"
-#import <QCFoundation/QCFoundation.h>
+#import "TIoTCoreMessageSet.h"
+#import "TIoTCoreRequestAction.h"
+#import <QCFoundation/TIoTCoreFoundation.h>
 
-@implementation QCMessageSet
+@implementation TIoTCoreMessageSet
 
 + (instancetype)shared
 {
-    static QCMessageSet *_instance = nil;
+    static TIoTCoreMessageSet *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];
@@ -33,8 +33,8 @@
     
     NSDictionary *param = @{@"MsgID":msgId,@"MsgTimestamp":@(msgTimestamp),@"Limit":@(limit),@"Category":@(category)};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetMessages params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetMessages params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -51,8 +51,8 @@
     
     NSDictionary *param = @{@"MsgID":msgId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteMessage params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteMessage params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -68,8 +68,8 @@
     
     NSDictionary *param = @{@"Token":token,@"Platform":@"ios"};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppBindXgToken params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppBindXgToken params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -85,8 +85,8 @@
     
     NSDictionary *param = @{@"Token":token,@"Platform":@"ios"};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppUnBindXgToken params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUnBindXgToken params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);

@@ -6,9 +6,9 @@
 //  Copyright © 2019 Reo. All rights reserved.
 //
 
-#import "QCAddDevice.h"
+#import "TIoTCoreAddDevice.h"
 
-#import "WCMacros.h"
+#import "TIoTCoreWMacros.h"
 #import "NSObject+so.h"
 
 //smartconfig
@@ -27,7 +27,7 @@
 
 #define SmartConfigPort 8266
 
-@interface QCSmartConfig()<TCSocketDelegate>
+@interface TIoTCoreSmartConfig()<TCSocketDelegate>
 @property (atomic, strong) ESPTouchTask *esptouchTask;
 @property (nonatomic, strong) NSCondition *condition;
 @property (nonatomic, strong) TCSocket *socket;
@@ -36,7 +36,7 @@
 
 @end
 
-@implementation QCSmartConfig
+@implementation TIoTCoreSmartConfig
 
 - (BOOL)isConnecting
 {
@@ -129,7 +129,7 @@
                     //没发现设备
                     if ([self.delegate respondsToSelector:@selector(onResult:)]) {
                         self.connecting = NO;
-                        QCResult *result = [QCResult new];
+                        TIoTCoreResult *result = [TIoTCoreResult new];
                         result.code = 5000;
                         result.errMsg = @"未发现设备";
                         [self.delegate onResult:result];
@@ -185,7 +185,7 @@
             //失败
             if ([self.delegate respondsToSelector:@selector(onResult:)]) {
                 self.connecting = NO;
-                QCResult *result = [QCResult new];
+                TIoTCoreResult *result = [TIoTCoreResult new];
                 result.code = 5001;
                 result.errMsg = @"解析失败";
                 [self.delegate onResult:result];
@@ -194,7 +194,7 @@
             //成功
             if ([self.delegate respondsToSelector:@selector(onResult:)]) {
                 self.connecting = NO;
-                QCResult *result = [QCResult new];
+                TIoTCoreResult *result = [TIoTCoreResult new];
                 result.code = 0;
                 result.signatureInfo = [NSObject base64Encode:dictionary];
                 [self.delegate onResult:result];
@@ -218,7 +218,7 @@
 
 /*=======================================================================*/
 
-@interface QCSoftAP()<GCDAsyncUdpSocketDelegate>
+@interface TIoTCoreSoftAP()<GCDAsyncUdpSocketDelegate>
 
 @property (strong, nonatomic) GCDAsyncUdpSocket *socket;
 @property (strong, nonatomic) dispatch_queue_t delegateQueue;
@@ -233,7 +233,7 @@
 
 @end
 
-@implementation QCSoftAP
+@implementation TIoTCoreSoftAP
 
 - (BOOL)isConnecting
 {
@@ -287,7 +287,7 @@
         //连接失败
         self.connecting = NO;
         if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-            QCResult *result = [QCResult new];
+            TIoTCoreResult *result = [TIoTCoreResult new];
             result.code = 6003;
             result.errMsg = @"udp连接失败";
             [self.delegate onResult:result];
@@ -299,7 +299,7 @@
         //连接失败
         self.connecting = NO;
         if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-            QCResult *result = [QCResult new];
+            TIoTCoreResult *result = [TIoTCoreResult new];
             result.code = 6003;
             result.errMsg = @"udp连接失败";
             [self.delegate onResult:result];
@@ -313,7 +313,7 @@
         //连接失败
         self.connecting = NO;
         if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-            QCResult *result = [QCResult new];
+            TIoTCoreResult *result = [TIoTCoreResult new];
             result.code = 6003;
             result.errMsg = @"udp连接失败";
             [self.delegate onResult:result];
@@ -383,7 +383,7 @@
                //连接失败,模组有问题
                 self.connecting = NO;
                 if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                    QCResult *result = [QCResult new];
+                    TIoTCoreResult *result = [TIoTCoreResult new];
                     result.code = 6000;
                     result.errMsg = @"模组有问题";
                     [self.delegate onResult:result];
@@ -431,7 +431,7 @@
                                 //连接失败,发送时间戳失败
                                 self.connecting = NO;
                                 if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                                    QCResult *result = [QCResult new];
+                                    TIoTCoreResult *result = [TIoTCoreResult new];
                                     result.code = 6001;
                                     result.errMsg = @"模组有问题";
                                     [self.delegate onResult:result];
@@ -458,7 +458,7 @@
             
             self.connecting = NO;
             if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                QCResult *result = [QCResult new];
+                TIoTCoreResult *result = [TIoTCoreResult new];
                 result.code = 0;
                 result.signatureInfo = [NSObject base64Encode:dictionary];
                 [self.delegate onResult:result];
@@ -469,7 +469,7 @@
             //连接失败,模组回复信息缺失或wifiState不为connected
             self.connecting = NO;
             if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                QCResult *result = [QCResult new];
+                TIoTCoreResult *result = [TIoTCoreResult new];
                 result.code = 6002;
                 result.errMsg = @"模组有问题";
                 [self.delegate onResult:result];
