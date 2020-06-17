@@ -29,3 +29,5 @@ jobs:
         sh .github/script/archive.sh
     - name: Deploy App to PGY
       run: curl -F 'file=@./LinkApp.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload
+    - name: upload dSYM
+      run: ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/腾讯连连.app.dSYM
