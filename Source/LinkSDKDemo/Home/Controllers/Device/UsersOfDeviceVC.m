@@ -30,7 +30,7 @@
     
     
     
-    [[QCDeviceSet shared] getUserListForDeviceWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] offset:0 limit:0 success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreDeviceSet shared] getUserListForDeviceWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] offset:0 limit:0 success:^(id  _Nonnull responseObject) {
 
         self.datas = responseObject[@"Users"];
         [self.table reloadData];

@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCEquipmentTableViewCell.h"
+#import "TIoTCoreEquipmentTableViewCell.h"
 
 
-@interface WCEquipmentTableViewCell ()
+@interface TIoTCoreEquipmentTableViewCell ()
 
 @property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation WCEquipmentTableViewCell
+@implementation TIoTCoreEquipmentTableViewCell
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

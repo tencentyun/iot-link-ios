@@ -6,10 +6,10 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "QCUserManage.h"
+#import "TIoTCoreUserManage.h"
 #import "NSString+Extension.h"
 
-@implementation QCUserManage
+@implementation TIoTCoreUserManage
 @synthesize accessToken = _accessToken;
 @synthesize expireAt = _expireAt;
 @synthesize userId = _userId;
@@ -18,7 +18,7 @@
 @synthesize phoneNumber = _phoneNumber;
 
 +(instancetype)shared{
-    static QCUserManage *_instance = nil;
+    static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc]init];

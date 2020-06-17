@@ -10,10 +10,10 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import <QCDeviceCenter/QCAddDevice.h>
+#import <QCDeviceCenter/TIoTCoreAddDevice.h>
 
 
-@interface WifiInfoVC ()<CLLocationManagerDelegate,QCAddDeviceDelegate>
+@interface WifiInfoVC ()<CLLocationManagerDelegate,TIoTCoreAddDeviceDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *SSID;
 @property (weak, nonatomic) IBOutlet UITextField *password;
 @property (weak, nonatomic) IBOutlet UILabel *bssid;
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSMutableDictionary *wifiInfo;
 
 @property (weak, nonatomic) IBOutlet UIButton *startBtn;
-@property (nonatomic,strong) QCSmartConfig *sc;
+@property (nonatomic,strong) TIoTCoreSmartConfig *sc;
 @end
 
 @implementation WifiInfoVC
@@ -117,14 +117,14 @@
 
 #pragma mark - QCAddDeviceDelegate
 
-- (void)onResult:(QCResult *)result
+- (void)onResult:(TIoTCoreResult *)result
 {
     self.startBtn.enabled = YES;
     if (result.code == 0) {
         
         self.res.text = @"开始绑定";
         NSString *familyId = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstFamilyId"];
-        [[QCDeviceSet shared] bindDeviceWithSignatureInfo:result.signatureInfo inFamilyId:familyId roomId:nil success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreDeviceSet shared] bindDeviceWithSignatureInfo:result.signatureInfo inFamilyId:familyId roomId:nil success:^(id  _Nonnull responseObject) {
             self.res.text = @"成功";
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             self.res.text = reason;
@@ -145,7 +145,7 @@
         
         sender.enabled = NO;
         
-        self.sc = [[QCSmartConfig alloc] initWithSSID:self.wifiInfo[@"name"] PWD:self.password.text BSSID:self.wifiInfo[@"bssid"]];
+        self.sc = [[TIoTCoreSmartConfig alloc] initWithSSID:self.wifiInfo[@"name"] PWD:self.password.text BSSID:self.wifiInfo[@"bssid"]];
         _sc.delegate = self;
         [_sc startAddDevice];
         

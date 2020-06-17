@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRequestAction.h"
+#import "TIoTCoreRequestAction.h"
 
-@implementation WCRequestAction
+@implementation TIoTCoreRequestAction
 
 //===============用户管理
 

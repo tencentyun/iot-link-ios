@@ -25,7 +25,7 @@
 - (IBAction)signIn:(id)sender {
     
     if (0 == self.segment.selectedSegmentIndex) {
-        [[QCAccountSet shared] signInWithCountryCode:@"86" phoneNumber:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreAccountSet shared] signInWithCountryCode:@"86" phoneNumber:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
             NSLog(@"登录==%@",responseObject);
             
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -38,7 +38,7 @@
     }
     else if (1 == self.segment.selectedSegmentIndex)
     {
-        [[QCAccountSet shared] signInWithEmail:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreAccountSet shared] signInWithEmail:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
             [UIApplication sharedApplication].keyWindow.rootViewController = vc;

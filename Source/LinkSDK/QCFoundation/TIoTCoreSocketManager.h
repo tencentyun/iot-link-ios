@@ -22,20 +22,20 @@ typedef NS_ENUM(NSInteger, WCReadyState) {
 };
 
 
-@class QCSocketManager;
+@class TIoTCoreSocketManager;
 @protocol QCSocketManagerDelegate <NSObject>
 @optional
-- (void)socket:(QCSocketManager *)manager didReceiveMessage:(id)message;
-- (void)socketDidOpen:(QCSocketManager *)manager;
-- (void)socket:(QCSocketManager *)manager didFailWithError:(NSError *)error;
-- (void)socket:(QCSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)socket:(TIoTCoreSocketManager *)manager didReceiveMessage:(id)message;
+- (void)socketDidOpen:(TIoTCoreSocketManager *)manager;
+- (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error;
+- (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 
 @end
 
 
 
 
-@interface QCSocketManager : NSObject
+@interface TIoTCoreSocketManager : NSObject
 
 @property (nonatomic,weak) id<QCSocketManagerDelegate> delegate;
 /** 连接状态 */

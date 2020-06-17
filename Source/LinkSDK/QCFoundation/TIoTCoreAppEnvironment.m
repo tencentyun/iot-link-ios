@@ -6,19 +6,19 @@
 //  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
-#import "WCAppEnvironment.h"
+#import "TIoTCoreAppEnvironment.h"
 
-@interface WCAppEnvironment ()
+@interface TIoTCoreAppEnvironment ()
 
 @property (nonatomic , assign) WCAppEnvironmentType type;
 
 @end
 
-@implementation WCAppEnvironment
+@implementation TIoTCoreAppEnvironment
 
 + (instancetype)shareEnvironment{
     
-    static WCAppEnvironment *_inst ;
+    static TIoTCoreAppEnvironment *_inst ;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _inst = [[self alloc] init];

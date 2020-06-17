@@ -6,24 +6,24 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRequestObject.h"
-#import "WCAppEnvironment.h"
-#import "QCUserManage.h"
+#import "TIoTCoreRequestObject.h"
+#import "TIoTCoreAppEnvironment.h"
+#import "TIoTCoreUserManage.h"
 #import "NSString+Extension.h"
-#import "QCMacros.h"
+#import "TIoTCoreQMacros.h"
 
 #define kCode @"code"
 #define kMsg @"msg"
 #define kData @"data"
 
-@implementation WCRequestObject
+@implementation TIoTCoreRequestObject
 
-+ (WCRequestObject *)shared {
++ (TIoTCoreRequestObject *)shared {
     
-    static WCRequestObject *_xonet = nil;
+    static TIoTCoreRequestObject *_xonet = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _xonet = [[WCRequestObject alloc] init];
+        _xonet = [[TIoTCoreRequestObject alloc] init];
     });
     return _xonet;
 }
@@ -35,11 +35,11 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[QCUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     
     QCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
-    NSURL *url = [NSURL URLWithString:[WCAppEnvironment shareEnvironment].baseUrlForLogined];
+    NSURL *url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -82,16 +82,16 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[WCAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
+    [accessParam setValue:[TIoTCoreAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
     [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
     [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
-    [accessParam setValue:[WCAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+    [accessParam setValue:[TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
     
 //    [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
     
     QCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[WCAppEnvironment shareEnvironment].baseUrl,urlStr]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
@@ -150,7 +150,7 @@ failure:(FailureResponseBlock)failure
         }
     }
     
-    return [NSString HmacSha1:[WCAppEnvironment shareEnvironment].appSecret data:keyValue];
+    return [NSString HmacSha1:[TIoTCoreAppEnvironment shareEnvironment].appSecret data:keyValue];
 }
 
 
@@ -164,7 +164,7 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[QCUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     
     NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];

@@ -31,7 +31,7 @@
 
 - (void)getMessagesWithCategory:(NSUInteger)category
 {
-    [[QCMessageSet shared] getMessagesWithMsgId:@"" msgTimestamp:0 limit:20 category:category success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreMessageSet shared] getMessagesWithMsgId:@"" msgTimestamp:0 limit:20 category:category success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         self.messages = data[@"Msgs"];
         [self.tableView reloadData];
@@ -89,7 +89,7 @@
     NSInteger msgType = [message[@"MsgType"] integerValue];
     if (msgType == 204)
     {
-        [[QCFamilySet shared] joinFamilyWithShareToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreFamilySet shared] joinFamilyWithShareToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
             
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             
@@ -97,7 +97,7 @@
     }
     else if (msgType == 301)
     {
-        [[QCDeviceSet shared] bindUserShareDeviceWithProductId:message[@"ProductId"] deviceName:message[@"DeviceName"] shareDeviceToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreDeviceSet shared] bindUserShareDeviceWithProductId:message[@"ProductId"] deviceName:message[@"DeviceName"] shareDeviceToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
             
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             

@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 };
 
 
-@interface WCAlertView : UIView
+@interface TIoTCoreAlertView : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame andStyle:(WCAlertViewStyle)style;
 

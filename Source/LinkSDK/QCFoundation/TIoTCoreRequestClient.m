@@ -6,10 +6,10 @@
 //  Copyright © 2020 Reo. All rights reserved.
 //
 
-#import "QCRequestClient.h"
-#import "WCRequestObject.h"
+#import "TIoTCoreRequestClient.h"
+#import "TIoTCoreRequestObject.h"
 
-@implementation QCRequestClient
+@implementation TIoTCoreRequestClient
 
 + (void)sendRequestWithBuild:(NSDictionary *)build success:(SuccessResponseHandler)success
 failure:(FailureResponseHandler)failure
@@ -20,7 +20,7 @@ failure:(FailureResponseHandler)failure
     
     if ([action isEqualToString:@"AppCosAuth"]) {
         
-        [[WCRequestObject shared] getSigForUpload:action Param:params success:^(id responseObject) {
+        [[TIoTCoreRequestObject shared] getSigForUpload:action Param:params success:^(id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(responseObject);
             });
@@ -34,7 +34,7 @@ failure:(FailureResponseHandler)failure
     }
     
     if (useToken) {
-        [[WCRequestObject shared] post:action Param:params success:^(id responseObject) {
+        [[TIoTCoreRequestObject shared] post:action Param:params success:^(id responseObject) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(responseObject);
@@ -48,7 +48,7 @@ failure:(FailureResponseHandler)failure
     }
     else
     {
-        [[WCRequestObject shared] postWithoutToken:action Param:params success:^(id responseObject) {
+        [[TIoTCoreRequestObject shared] postWithoutToken:action Param:params success:^(id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(responseObject);
             });

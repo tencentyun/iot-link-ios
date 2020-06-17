@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCMemberInfoVC : UIViewController
+@interface TIoTCoreMemberInfoVC : UIViewController
 
 @property (nonatomic) BOOL isOwner;
 @property (nonatomic,copy) NSDictionary *memberInfo;

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRequestAction : NSObject
+@interface TIoTCoreRequestAction : NSObject
 
 
 //MARK: 用户管理

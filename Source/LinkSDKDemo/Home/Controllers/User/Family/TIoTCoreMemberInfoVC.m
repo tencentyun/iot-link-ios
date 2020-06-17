@@ -6,11 +6,11 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCMemberInfoVC.h"
+#import "TIoTCoreMemberInfoVC.h"
 #import <UIImageView+WebCache.h>
-#import <QCFoundation/QCUserManage.h>
+#import <QCFoundation/TIoTCoreUserManage.h>
 
-@interface WCMemberInfoVC ()
+@interface TIoTCoreMemberInfoVC ()
 @property (weak, nonatomic) IBOutlet UIImageView *headImg;
 @property (weak, nonatomic) IBOutlet UILabel *memberNick;
 @property (weak, nonatomic) IBOutlet UILabel *account;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation WCMemberInfoVC
+@implementation TIoTCoreMemberInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,14 +34,14 @@
     self.memberNick.text = self.memberInfo[@"NickName"];
     self.roleL.text = [self.memberInfo[@"Role"] integerValue] == 1 ? @"所有者" : @"成员";
     
-    if (self.isOwner && ![[QCUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
+    if (self.isOwner && ![[TIoTCoreUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
         self.removeBtn.hidden = NO;
     }
 }
 
 - (IBAction)done:(UIButton *)sender {
     
-    [[QCFamilySet shared] deleteFamilyMemberWithFamilyId:self.familyId memberId:self.memberInfo[@"UserID"] success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] deleteFamilyMemberWithFamilyId:self.familyId memberId:self.memberInfo[@"UserID"] success:^(id  _Nonnull responseObject) {
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         

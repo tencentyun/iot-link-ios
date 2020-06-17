@@ -16,9 +16,9 @@ FOUNDATION_EXPORT const unsigned char QCFoundationVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <QCFoundation/PublicHeader.h>
 
-#import <QCFoundation/QCServices.h>
-#import <QCFoundation/QCRequestBuilder.h>
-#import <QCFoundation/QCRequestClient.h>
-#import <QCFoundation/QCSocketManager.h>
-#import <QCFoundation/QCUserManage.h>
+#import <QCFoundation/TIoTCoreServices.h>
+#import <QCFoundation/TIoTCoreRequestBuilder.h>
+#import <QCFoundation/TIoTCoreRequestClient.h>
+#import <QCFoundation/TIoTCoreSocketManager.h>
+#import <QCFoundation/TIoTCoreUserManage.h>
 #import <QCFoundation/NSString+Extension.h>

@@ -14,7 +14,7 @@
 #import <Masonry.h>
 #import "MBProgressHUD+XDP.h"
 
-#import <QCAPISets/QCAPISets.h>
+#import <QCAPISets/TIoTCoreAPISets.h>
 #import "NSObject+ro.h"
 #endif
 

@@ -48,7 +48,7 @@ typedef enum QCStatusCode : NSInteger {
     // 4000–4999: Available for use by applications.
 } QCStatusCode;
 
-@class QCWebSocket;
+@class TIoTCoreWebSocket;
 
 extern NSString *const QCWebSocketErrorDomain;
 extern NSString *const QCHTTPResponseErrorKey;
@@ -59,7 +59,7 @@ extern NSString *const QCHTTPResponseErrorKey;
 
 #pragma mark - QCWebSocket
 
-@interface QCWebSocket : NSObject <NSStreamDelegate>
+@interface TIoTCoreWebSocket : NSObject <NSStreamDelegate>
 
 @property (nonatomic, weak) id <QCWebSocketDelegate> delegate;
 
@@ -115,17 +115,17 @@ extern NSString *const QCHTTPResponseErrorKey;
 
 // message will either be an NSString if the server is using text
 // or NSData if the server is using binary.
-- (void)webSocket:(QCWebSocket *)webSocket didReceiveMessage:(id)message;
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @optional
 
-- (void)webSocketDidOpen:(QCWebSocket *)webSocket;
-- (void)webSocket:(QCWebSocket *)webSocket didFailWithError:(NSError *)error;
-- (void)webSocket:(QCWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
-- (void)webSocket:(QCWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
+- (void)webSocketDidOpen:(TIoTCoreWebSocket *)webSocket;
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didFailWithError:(NSError *)error;
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)webSocket:(TIoTCoreWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
 
 // Return YES to convert messages sent as Text to an NSString. Return NO to skip NSData -> NSString conversion for Text messages. Defaults to YES.
-- (BOOL)webSocketShouldConvertTextFrameToString:(QCWebSocket *)webSocket;
+- (BOOL)webSocketShouldConvertTextFrameToString:(TIoTCoreWebSocket *)webSocket;
 
 @end
 

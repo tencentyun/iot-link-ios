@@ -6,8 +6,8 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCRequestObj.h"
+#import "TIoTCoreRequestObj.h"
 
-@implementation WCRequestObj
+@implementation TIoTCoreRequestObj
 
 @end

@@ -7,13 +7,13 @@
 //
 
 #import "ChangeWifiVC.h"
-#import <QCDeviceCenter/QCAddDevice.h>
+#import <QCDeviceCenter/TIoTCoreAddDevice.h>
 
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 
-@interface ChangeWifiVC ()<QCAddDeviceDelegate>
+@interface ChangeWifiVC ()<TIoTCoreAddDeviceDelegate>
 
-@property (nonatomic,strong) QCSoftAP *sa;
+@property (nonatomic,strong) TIoTCoreSoftAP *sa;
 @property (weak, nonatomic) IBOutlet UILabel *status;
 @property (weak, nonatomic) IBOutlet UIButton *btn;
 
@@ -44,7 +44,7 @@
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@"配网中"];
     
-    _sa = [[QCSoftAP alloc] initWithSSID:self.wName PWD:self.wPassword];
+    _sa = [[TIoTCoreSoftAP alloc] initWithSSID:self.wName PWD:self.wPassword];
     _sa.delegate = self;
     [_sa startAddDevice];
 }
@@ -54,14 +54,14 @@
     NSString *familyId = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstFamilyId"];
     NSAssert(familyId, @"家庭id");
     
-    [[QCDeviceSet shared] bindDeviceWithSignatureInfo:self.sig inFamilyId:familyId roomId:@"" success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreDeviceSet shared] bindDeviceWithSignatureInfo:self.sig inFamilyId:familyId roomId:@"" success:^(id  _Nonnull responseObject) {
         self.status.text = @"绑定设备成功";
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         self.status.text = reason;
     }];
 }
 
-- (void)onResult:(QCResult *)result
+- (void)onResult:(TIoTCoreResult *)result
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [MBProgressHUD dismissInView:nil];

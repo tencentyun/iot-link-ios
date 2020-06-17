@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QCParts.h"
+#import "TIoTCoreParts.h"
 
 
 @interface DeviceInfo : NSObject
@@ -21,7 +21,7 @@
 @end
 
 
-@interface QCDeviceSet : NSObject
+@interface TIoTCoreDeviceSet : NSObject
 
 
 + (instancetype)shared;

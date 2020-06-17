@@ -6,15 +6,15 @@
 //  Copyright © 2020 Reo. All rights reserved.
 //
 
-#import "QCFamilySet.h"
-#import "WCRequestAction.h"
-#import <QCFoundation/QCFoundation.h>
+#import "TIoTCoreFamilySet.h"
+#import "TIoTCoreRequestAction.h"
+#import <QCFoundation/TIoTCoreFoundation.h>
 
-@implementation QCFamilySet
+@implementation TIoTCoreFamilySet
 
 + (instancetype)shared
 {
-    static QCFamilySet *_instance = nil;
+    static TIoTCoreFamilySet *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];
@@ -30,8 +30,8 @@
         param = @{@"Offset":@(offset),@"Limit":@(limit)};
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetFamilyList params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetFamilyList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -52,8 +52,8 @@
     
     NSDictionary *param = @{@"Name":name,@"Address":address};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCreateFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -72,8 +72,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDescribeFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDescribeFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -94,8 +94,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"Name":name};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppModifyFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -116,8 +116,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"Name":name};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -134,8 +134,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppExitFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppExitFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -156,8 +156,8 @@
     
     NSDictionary *param = @{@"MemberID":memberId,@"FamilyId":familyId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteFamilyMember params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteFamilyMember params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -178,8 +178,8 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetFamilyMemberList params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetFamilyMemberList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -201,8 +201,8 @@
         [param setObject:@(limit) forKey:@"Limit"];
     }
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppGetRoomList params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetRoomList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -224,8 +224,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"Name":name};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppCreateRoom params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateRoom params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -247,8 +247,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"RoomId":roomId};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppDeleteRoom params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteRoom params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -275,8 +275,8 @@
     
     NSDictionary *param = @{@"FamilyId":familyId,@"RoomId":roomId,@"Name":name};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppModifyRoom params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyRoom params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);
@@ -303,14 +303,14 @@
     
     NSDictionary *param = @{@"Type":@"phone",@"CountryCode":countryCode,@"PhoneNumber":phoneNum};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         NSString *userId = data[@"UserID"];
         
         NSDictionary *param = @{@"FamilyId":familyId,@"ToUserID":userId};
-        QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
-        [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
+        [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
         } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
             failure(reason,error);
@@ -336,14 +336,14 @@
     
     NSDictionary *param = @{@"Type":@"email",@"Email":email};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppFindUser params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         NSDictionary *data = responseObject[@"Data"];
         NSString *userId = data[@"UserID"];
         
         NSDictionary *param = @{@"FamilyId":familyId,@"ToUserID":userId};
-        QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
-        [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
+        [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
         } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
             failure(reason,error);
@@ -364,8 +364,8 @@
     
     NSDictionary *param = @{@"ShareToken":shareToken};
     
-    QCRequestBuilder *b = [[QCRequestBuilder alloc] initWtihAction:AppJoinFamily params:param useToken:YES];
-    [QCRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppJoinFamily params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
         failure(reason,error);

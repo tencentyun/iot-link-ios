@@ -6,8 +6,8 @@
 //  Copyright © 2019 Reo. All rights reserved.
 //
 
-#import "QCObject.h"
+#import "TIoTCoreObject.h"
 
-@implementation QCResult
+@implementation TIoTCoreResult
 
 @end

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCEquipmentTableViewCell : UITableViewCell
+@interface TIoTCoreEquipmentTableViewCell : UITableViewCell
 
 @property (nonatomic, copy) NSDictionary *dataDic;
 

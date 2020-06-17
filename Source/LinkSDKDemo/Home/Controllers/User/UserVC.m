@@ -153,7 +153,7 @@
 {
     if (!_titles) {
         _titles = @[@{@"name":@"个人信息",@"vc":@"UserInfoVC"},
-                    @{@"name":@"家庭管理",@"vc":@"WCFamiliesVC"},
+                    @{@"name":@"家庭管理",@"vc":@"TIoTCoreFamiliesVC"},
                     @{@"name":@"消息通知",@"vc":@"MessageVC"},
                     @{@"name":@"意见反馈",@"vc":@"FeedbackVC"}];
     }

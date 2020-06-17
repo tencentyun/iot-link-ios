@@ -6,16 +6,16 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCAddFamilyVC.h"
+#import "TIoTCoreAddFamilyVC.h"
 
 
-@interface WCAddFamilyVC ()
+@interface TIoTCoreAddFamilyVC ()
 @property (weak, nonatomic) IBOutlet UITextField *nameL;
 @property (weak, nonatomic) IBOutlet UITextField *addressL;
 
 @end
 
-@implementation WCAddFamilyVC
+@implementation TIoTCoreAddFamilyVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -73,7 +73,7 @@
     
     if (self.nameL.hasText && self.addressL.hasText) {
         
-        [[QCFamilySet shared] createFamilyWithName:self.nameL.text address:self.addressL.text success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreFamilySet shared] createFamilyWithName:self.nameL.text address:self.addressL.text success:^(id  _Nonnull responseObject) {
             [MBProgressHUD showSuccess:@"添加成功"];
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             

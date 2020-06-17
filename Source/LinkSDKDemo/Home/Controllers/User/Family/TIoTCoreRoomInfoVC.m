@@ -6,17 +6,17 @@
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "WCRoomInfoVC.h"
-#import "WCAlertView.h"
+#import "TIoTCoreRoomInfoVC.h"
+#import "TIoTCoreAlertView.h"
 
 static NSString *cellId = @"rc62368";
-@interface WCRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
+@interface TIoTCoreRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSArray *roomInfo;
 @end
 
-@implementation WCRoomInfoVC
+@implementation TIoTCoreRoomInfoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,7 +49,7 @@ static NSString *cellId = @"rc62368";
 
 - (void)toDeleteRoom
 {
-    [[QCFamilySet shared] deleteRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] deleteRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"删除成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         
@@ -58,7 +58,7 @@ static NSString *cellId = @"rc62368";
 
 - (void)modifyRoom:(NSString *)name
 {
-    [[QCFamilySet shared] modifyRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] name:name success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] modifyRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] name:name success:^(id  _Nonnull responseObject) {
         self.roomInfo = @[@{@"title":@"房间名称",@"name":name}];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
@@ -89,7 +89,7 @@ static NSString *cellId = @"rc62368";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        WCAlertView *av = [[WCAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+        TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
         [av alertWithTitle:@"房间名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {

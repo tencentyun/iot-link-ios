@@ -6,9 +6,9 @@
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "WCSlideView.h"
+#import "TIoTCoreSlideView.h"
 
-@implementation WCSlider
+@implementation TIoTCoreSlider
 
 - (CGRect)trackRectForBounds:(CGRect)bounds
 {
@@ -23,7 +23,7 @@
 }
 @end
 
-@interface WCSlideView ()
+@interface TIoTCoreSlideView ()
 @property (nonatomic,copy) NSString *type;//数据类型，整形还是浮点
 
 @property (nonatomic, strong) UIView *whiteView;
@@ -35,7 +35,7 @@
 
 @end
 
-@implementation WCSlideView
+@implementation TIoTCoreSlideView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -89,7 +89,7 @@
     self.valueLab.font = [UIFont boldSystemFontOfSize:24];
     [_whiteView addSubview:self.valueLab];
     
-    self.slider = [[WCSlider alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.valueLab.frame), kScreenWidth - 40, 40)];
+    self.slider = [[TIoTCoreSlider alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.valueLab.frame), kScreenWidth - 40, 40)];
     self.slider.minimumValue = 0;// 设置最小值
     self.slider.maximumValue = 100;// 设置最大值
     self.slider.value = 0;// 设置初始值

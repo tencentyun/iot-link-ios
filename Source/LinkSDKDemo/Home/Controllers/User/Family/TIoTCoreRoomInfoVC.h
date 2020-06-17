@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCRoomInfoVC : UIViewController
+@interface TIoTCoreRoomInfoVC : UIViewController
 
 @property (nonatomic,copy) NSString *familyId;
 @property (nonatomic,strong) NSDictionary *roomDic;

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QCUserManage : NSObject
+@interface TIoTCoreUserManage : NSObject
 
 +(instancetype)shared;
 

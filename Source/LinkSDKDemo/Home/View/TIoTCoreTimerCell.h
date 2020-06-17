@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WCTimerCell : UITableViewCell
+@interface TIoTCoreTimerCell : UITableViewCell
 
 @property (nonatomic,strong) NSDictionary *actionInfo;
 

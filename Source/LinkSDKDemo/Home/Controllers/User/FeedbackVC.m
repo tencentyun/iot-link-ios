@@ -28,7 +28,7 @@
 - (IBAction)submit:(id)sender {
     
     if (self.content.hasText && self.url.hasText) {
-        [[QCAccountSet shared] setFeedbackWithText:self.content.text contact:self.contact.text ?: @"" imageURLs:@[self.url.text] success:^(id  _Nonnull responseObject) {
+        [[TIoTCoreAccountSet shared] setFeedbackWithText:self.content.text contact:self.contact.text ?: @"" imageURLs:@[self.url.text] success:^(id  _Nonnull responseObject) {
             [MBProgressHUD showSuccess:@"反馈成功"];
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
             [MBProgressHUD showError:reason];

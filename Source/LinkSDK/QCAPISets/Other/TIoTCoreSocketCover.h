@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^didReceiveMessage) (BOOL sucess, NSDictionary *data);
 
 
-@interface QCSocketCover : NSObject
+@interface TIoTCoreSocketCover : NSObject
 
 + (instancetype)shared;
 

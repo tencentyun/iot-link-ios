@@ -7,7 +7,7 @@
 //
 
 #import "UserInfoVC.h"
-#import <QCFoundation/QCUserManage.h>
+#import <QCFoundation/TIoTCoreUserManage.h>
 #import <UIImageView+WebCache.h>
 
 
@@ -33,12 +33,12 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    [[QCAccountSet shared] getUserInfoOnSuccess:^(id  _Nonnull responseObject) {
+    [[TIoTCoreAccountSet shared] getUserInfoOnSuccess:^(id  _Nonnull responseObject) {
         
-        self.nick.text = [QCUserManage shared].nickName;
-        self.phoneNum.text = [QCUserManage shared].phoneNumber;
-        [self.header sd_setImageWithURL:[NSURL URLWithString:[QCUserManage shared].avatar]];
-        NSLog(@"头像==%@",[QCUserManage shared].avatar);
+        self.nick.text = [TIoTCoreUserManage shared].nickName;
+        self.phoneNum.text = [TIoTCoreUserManage shared].phoneNumber;
+        [self.header sd_setImageWithURL:[NSURL URLWithString:[TIoTCoreUserManage shared].avatar]];
+        NSLog(@"头像==%@",[TIoTCoreUserManage shared].avatar);
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         
     }];
@@ -55,7 +55,7 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     
-    [[QCAccountSet shared] getUploadInfoOnSuccess:^(id  _Nonnull responseObject) {
+    [[TIoTCoreAccountSet shared] getUploadInfoOnSuccess:^(id  _Nonnull responseObject) {
         
         self.signatureInfo = responseObject;
         
@@ -77,7 +77,7 @@
                     [MBProgressHUD dismissInView:self.view];
                     self.header.image = image;
                     
-                    [[QCAccountSet shared] updateUserWithNickName:@"" avatar:result.location success:^(id  _Nonnull responseObject) {
+                    [[TIoTCoreAccountSet shared] updateUserWithNickName:@"" avatar:result.location success:^(id  _Nonnull responseObject) {
                         [MBProgressHUD showSuccess:@"修改成功"];
                     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
                         
@@ -212,7 +212,7 @@
 #pragma mark - 退出登录
 
 - (IBAction)signOut:(id)sender {
-    [[QCAccountSet shared] signOutOnSuccess:^(id  _Nonnull responseObject) {
+    [[TIoTCoreAccountSet shared] signOutOnSuccess:^(id  _Nonnull responseObject) {
         [UIApplication sharedApplication].keyWindow.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
         

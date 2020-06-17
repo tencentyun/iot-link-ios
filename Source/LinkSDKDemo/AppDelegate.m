@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <QCFoundation/QCFoundation.h>
+#import <QCFoundation/TIoTCoreFoundation.h>
 
 @interface AppDelegate ()
 
@@ -19,10 +19,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [[QCServices shared] setAppKey:@"您的Key"];
-    [QCServices shared].logEnable = YES;
+    [[TIoTCoreServices shared] setAppKey:@"您的Key"];
+    [TIoTCoreServices shared].logEnable = YES;
     
-    if (![QCUserManage shared].isValidToken) {
+    if (![TIoTCoreUserManage shared].isValidToken) {
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
     }
     
