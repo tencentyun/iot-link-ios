@@ -4,3 +4,8 @@
 /Pods/
 .DS_Store
 .idea/
+DistributionSummary.plist
+ExportOptions.plist
+LinkApp.ipa
+LinkApp.xcarchive/
+Packaging.log
