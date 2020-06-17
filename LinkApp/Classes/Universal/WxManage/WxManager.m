@@ -11,7 +11,6 @@
 #import "TIoTAppEnvironment.h"
 
 #define WxAppID     @"wxfb36c49df3a370c7"
-#define WxAppSecret @"e2002b0bb99f7484ca7c416b63507662"
 #define WxManagerError @"WxManagerError"
 
 //////bundleId com.tencent.cloudiot   com.Tenext.TenextCloud
