@@ -76,4 +76,8 @@
 //切换配网方式
 + (void)changeAddDeviceTypeListener:(id)listener reaction:(SEL)selector;
 + (void)postChangeAddDeviceType:(NSInteger)deviceType;
+
+//重新登录获取ticketToken
++ (void)addLoginInTicketTokenListener:(id)listener reaction:(SEL)selector;
++ (void)postLoginInTicketToken:(NSString *)ticketToken;
 @end

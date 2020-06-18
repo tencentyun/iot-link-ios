@@ -22,6 +22,7 @@ static NSString * const updateRoomList       = @"updateRoomList";
 static NSString * const updateTimerList      = @"updateTimerList";
 static NSString * const updateMemberList     = @"updateMemberList";
 static NSString * const changeAddDeviceType  = @"changeAddDeviceType";
+static NSString * const loginInTicketToken   = @"loginInTicketToken";
 
 @implementation HXYNotice
 
@@ -175,5 +176,16 @@ static NSString * const changeAddDeviceType  = @"changeAddDeviceType";
 + (void)postChangeAddDeviceType:(NSInteger)deviceType
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:changeAddDeviceType object:@(deviceType)];
+}
+
+//重新登录获取ticketToken
++ (void)addLoginInTicketTokenListener:(id)listener reaction:(SEL)selector
+{
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:loginInTicketToken object:nil];
+}
+
++ (void)postLoginInTicketToken:(NSString *)ticketToken
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:loginInTicketToken object:ticketToken];
 }
 @end

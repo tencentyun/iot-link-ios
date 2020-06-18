@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString *filePath;
 @property (nonatomic,copy) NSString *urlPath;
+@property (nonatomic,assign) BOOL needJudgeJump;//需要判断跳转
 
 @end
 

@@ -40,6 +40,11 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 @property (nonatomic , copy) NSString *wsUrl;
 
 /**
+h5
+*/
+@property (nonatomic , copy) NSString *h5Url;
+
+/**
  微信分享要的type
  */
 @property (nonatomic , assign) NSInteger wxShareType;

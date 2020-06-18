@@ -91,7 +91,11 @@ static char const *const panGesKey = "panGesKey";
 
 - (void)back
 {
-    [self popViewControllerAnimated:YES];
+    if ([self.topViewController respondsToSelector:@selector(nav_customBack)]) {
+        [self.topViewController performSelector:@selector(nav_customBack)];
+    } else {
+        [self popViewControllerAnimated:YES];
+    }
 }
 
 

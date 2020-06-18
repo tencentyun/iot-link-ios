@@ -37,6 +37,8 @@ NSString *const AppUserResetPassword = @"AppUserResetPassword";
 NSString *const AppUserFeedBack = @"AppUserFeedBack";
 NSString *const AppCosAuth = @"AppCosAuth";
 
+NSString *const AppGetTokenTicket = @"AppGetTokenTicket";
+
 //===============消息
 NSString *const AppGetMessages = @"AppGetMessages";
 NSString *const AppDeleteMessage = @"AppDeleteMessage";
@@ -108,5 +110,9 @@ NSString *const AppListUserShareDevices = @"AppListUserShareDevices";//查询用
 NSString *const AppListShareDeviceUsers = @"AppListShareDeviceUsers";//查询设备的用户列表
 NSString *const AppRemoveShareDeviceUser = @"AppRemoveShareDeviceUser";//删除设备的用户
 NSString *const AppRemoveUserShareDevice = @"AppRemoveUserShareDevice";//删除用户的设备
+
+
+//===============h5
+NSString *const H5HelpCenter = @"help-center";//帮助中心
 
 @end

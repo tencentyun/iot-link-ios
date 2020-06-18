@@ -38,6 +38,7 @@
             self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
             self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
             self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
+            self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
             self.wxShareType = 0;
             self.action = @"YunApi";
             self.appKey = model.TencentIotLinkAppkey;
@@ -49,6 +50,7 @@
             self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
             self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
             self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
+            self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
             self.wxShareType = 1;
             self.action = @"YunApi";
             self.appKey = model.TencentIotLinkAppkey;

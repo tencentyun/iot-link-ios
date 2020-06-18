@@ -9,6 +9,8 @@
 #import "TIoTMineViewController.h"
 #import "TIoTMineTableViewCell.h"
 #import "TIoTUserInfomationViewController.h"
+#import "TIoTWebVC.h"
+#import "TIoTAppEnvironment.h"
 
 #import "TIoTAlertView.h"
 
@@ -176,9 +178,28 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    UIViewController *vc = [[NSClassFromString(self.dataArr[indexPath.row][@"vc"]) alloc] init];
-    [vc setValue:self.dataArr[indexPath.row][@"title"] forKey:@"title"];
-    [self.navigationController pushViewController:vc animated:YES];
+    NSString *vcName = self.dataArr[indexPath.row][@"vc"];
+    if ([vcName isEqualToString:@"TIoTWebVC"]) {
+        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+            
+            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+            TIoTWebVC *vc = [TIoTWebVC new];
+            vc.title = self.dataArr[indexPath.row][@"title"];
+            vc.urlPath = [NSString stringWithFormat:@"%@/%@/?uin=help_center_h5&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+            vc.needJudgeJump = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            [MBProgressHUD dismissInView:self.view];
+            
+        } failure:^(NSString *reason, NSError *error) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
+    } else {
+        UIViewController *vc = [[NSClassFromString(self.dataArr[indexPath.row][@"vc"]) alloc] init];
+        [vc setValue:self.dataArr[indexPath.row][@"title"] forKey:@"title"];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark setter or getter
@@ -202,8 +223,7 @@
             @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
             @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
             @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
-            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTHelpCenterViewController"},
-            @{@"title":@"意见反馈",@"image":@"mineFeed",@"vc":@"TIoTFeedBackViewController"},
+            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
             @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
         ];
     }
