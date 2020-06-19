@@ -227,6 +227,7 @@
 		EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
+		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
 		F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
 		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
@@ -817,6 +818,7 @@
 		EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPanelVC.m; sourceTree = "<group>"; };
 		EDF93D9723B367A000D477C7 /* TIoTRequestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRequestObject.h; sourceTree = "<group>"; };
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
+		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F4DA47DB24977EC20031A048 /* XGMTACloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XGMTACloud.framework; sourceTree = "<group>"; };
 		F4DA47DD24977ECE0031A048 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGForFreeVersion.h; sourceTree = "<group>"; };
@@ -1034,6 +1036,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4103F90249B971100CB678F /* CoreData.framework in Frameworks */,
 				ED9C15E023B9E66300CAC848 /* CoreLocation.framework in Frameworks */,
 				F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */,
 				ED9C15DE23B9E65000CAC848 /* QuartzCore.framework in Frameworks */,
@@ -1102,6 +1105,7 @@
 		9172D49D607895D45538B791 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F4103F8F249B971100CB678F /* CoreData.framework */,
 				ED9C15DF23B9E66300CAC848 /* CoreLocation.framework */,
 				ED9C15DD23B9E65000CAC848 /* QuartzCore.framework */,
 				ED3A93D62379304600379AA7 /* NetworkExtension.framework */,
@@ -3240,7 +3244,6 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3288,7 +3291,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/信鸽推送",
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				MARKETING_VERSION = 1.0.20;
@@ -3314,7 +3317,6 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TenextCloud/Classes/Vendor/QMap",
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3362,7 +3364,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TenextCloud/Classes/Universal/信鸽推送",
+					"$(PROJECT_DIR)/LinkApp/Classes/Universal/信鸽推送",
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/TPNS-SDK",
 				);
 				MARKETING_VERSION = 1.0.20;

@@ -38,7 +38,7 @@
     [[XGPushManage sharedXGPushManage] startPushService];
     
     //注册微信
-    [[WxManager sharedWxManager] registerApp];
+    [[WxManager sharedWxManager] registerApp]; 
     
     //firebase注册
     [FIRApp configure];
