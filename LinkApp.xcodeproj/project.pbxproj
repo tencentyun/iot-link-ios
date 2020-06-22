@@ -826,6 +826,7 @@
 		F4C5DE0D24A0B7C40098F18B /* app-open-config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "app-open-config.json"; sourceTree = "<group>"; };
 		F4C5DE0F24A0B7FE0098F18B /* TIoTAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppConfig.h; sourceTree = "<group>"; };
 		F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTAppConfig.m; sourceTree = "<group>"; };
+		F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkApp.xcconfig; sourceTree = "<group>"; };
 		F4DA47DB24977EC20031A048 /* XGMTACloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XGMTACloud.framework; sourceTree = "<group>"; };
 		F4DA47DD24977ECE0031A048 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGForFreeVersion.h; sourceTree = "<group>"; };
@@ -1785,6 +1786,7 @@
 				D2C7AA01232F6AA5005E8006 /* main.m */,
 				D2C7AA25232F6EBC005E8006 /* LinkApp.pch */,
 				D23104AE232F929D0003069D /* Localizable.strings */,
+				F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -3140,6 +3142,7 @@
 /* Begin XCBuildConfiguration section */
 		D2C7AA19232F6AA6005E8006 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -3200,6 +3203,7 @@
 		};
 		D2C7AA1A232F6AA6005E8006 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
