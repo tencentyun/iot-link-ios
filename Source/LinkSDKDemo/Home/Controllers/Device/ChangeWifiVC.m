@@ -34,7 +34,7 @@
 }
 
 - (IBAction)toSetting:(UIButton *)sender {
-    NSURL *url = [NSURL URLWithString:@"App-prefs:root=WIFI"];
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
         
     }];

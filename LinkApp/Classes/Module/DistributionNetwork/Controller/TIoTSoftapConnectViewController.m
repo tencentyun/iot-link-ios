@@ -146,7 +146,6 @@
 - (void)connectClick:(id)sender{
     
     NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-//    NSURL *url = [NSURL URLWithString:@"App-prefs:root=WIFI"];
     if ([[UIApplication sharedApplication] canOpenURL:url]){
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
     }
