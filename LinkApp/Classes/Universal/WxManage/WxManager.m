@@ -101,30 +101,6 @@
 }
 
 
-- (void)payFromWx:(NSDictionary *)payInfo complete:(WxBlock)blk
-{
-    if (blk) {
-        self.payBlk = blk;
-    }
-    
-    if (payInfo.count != 0) {
-        if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
-            PayReq *req = [[PayReq alloc] init];
-            req.partnerId = payInfo[@"partnerId"];
-            req.prepayId  = payInfo[@"prePayId"];
-            req.package   = @"Sign=WXPay";
-            req.nonceStr  = payInfo[@"nonceStr"];
-            req.timeStamp = [payInfo[@"timeStamp"] intValue];
-            req.sign      = payInfo[@"paySign"];
-            [WXApi sendReq:req];
-        }
-        else {
-            [MBProgressHUD showError:@"未安装微信或版本过低"];
-        }
-    }
-}
-
-
 - (void)shareWebPageToWXSceneTimelineWithTitle:(NSString *)title
                                    description:(NSString *)description
                                     thumbImage:(UIImage*)image
