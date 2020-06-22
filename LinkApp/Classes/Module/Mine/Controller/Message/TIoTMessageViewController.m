@@ -70,9 +70,9 @@
 - (NSArray *)childControllers {
     
     if (!_childControllers) {
-        UIViewController *vc0 = [NSClassFromString(@"WCMessageDeviceVC") new];
-        UIViewController *vc1 = [NSClassFromString(@"WCMessageFamilyVC") new];
-        UIViewController *vc2 = [NSClassFromString(@"WCMessageNoticeVC") new];
+        UIViewController *vc0 = [NSClassFromString(@"TIoTMessageDeviceVC") new];
+        UIViewController *vc1 = [NSClassFromString(@"TIoTMessageFamilyVC") new];
+        UIViewController *vc2 = [NSClassFromString(@"TIoTMessageNoticeVC") new];
         
         vc0.title = @"设备";
         vc1.title = @"家庭";

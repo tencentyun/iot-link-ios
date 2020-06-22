@@ -33,8 +33,8 @@
 @implementation TIoTNewAddEquipmentViewController
 
 static NSString *cellId = @"TIoTProductCellTIoTProductCell";
-static NSString *headerId1 = @"WCProductSectionHeader1";
-static NSString *headerId2 = @"WCProductSectionHeader2";
+static NSString *headerId1 = @"TIoTProductSectionHeader1";
+static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
 #pragma mark lifeCircle
 

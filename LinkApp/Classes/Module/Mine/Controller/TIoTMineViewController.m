@@ -199,12 +199,12 @@
 - (NSArray *)dataArr{
     if (_dataArr == nil) {
         _dataArr = @[
-            @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"WCFamiliesVC"},
-            @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"WCShareDevicesVC"},
-            @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"WCMessageViewController"},
-            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"WCHelpCenterViewController"},
-            @{@"title":@"意见反馈",@"image":@"mineFeed",@"vc":@"WCFeedBackViewController"},
-            @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"WCAboutVC"}
+            @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
+            @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
+            @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
+            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTHelpCenterViewController"},
+            @{@"title":@"意见反馈",@"image":@"mineFeed",@"vc":@"TIoTFeedBackViewController"},
+            @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
         ];
     }
     return _dataArr;

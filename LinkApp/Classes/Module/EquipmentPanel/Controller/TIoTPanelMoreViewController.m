@@ -181,7 +181,7 @@
     }
     else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备信息"])
     {
-        UIViewController *vc = [NSClassFromString(@"WCDeviceDetailVC") new];
+        UIViewController *vc = [NSClassFromString(@"TIoTDeviceDetailVC") new];
         [self.navigationController pushViewController:vc animated:YES];
     }
     

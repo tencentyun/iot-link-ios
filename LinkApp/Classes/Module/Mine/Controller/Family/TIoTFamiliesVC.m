@@ -58,7 +58,7 @@ static NSString *cellId = @"rbrb";
 
 - (void)toAddFamily
 {
-    UIViewController *vc = [NSClassFromString(@"WCAddFamilyVC") new];
+    UIViewController *vc = [NSClassFromString(@"TIoTAddFamilyVC") new];
 //    WCNavigationController *nav = [[WCNavigationController alloc] initWithRootViewController:vc];
     [self.navigationController pushViewController:vc animated:YES];
 //    [self presentViewController:nav animated:YES completion:^{

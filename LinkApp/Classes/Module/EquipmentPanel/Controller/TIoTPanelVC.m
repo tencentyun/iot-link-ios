@@ -100,7 +100,7 @@ static NSString *itemId3 = @"i_ooo454";
     if (![self.deviceDic[@"Online"] boolValue]) {
         TIoTTipView *vc = [[TIoTTipView alloc] init];
         vc.feedback = ^{
-            UIViewController *vc = [NSClassFromString(@"WCFeedBackViewController") new];
+            UIViewController *vc = [NSClassFromString(@"TIoTFeedBackViewController") new];
             [self.navigationController pushViewController:vc animated:YES];
         };
         vc.navback = ^{

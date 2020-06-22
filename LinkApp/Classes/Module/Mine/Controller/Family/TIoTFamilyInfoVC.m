@@ -240,7 +240,7 @@ static NSString *itemId2 = @"pfDDD";
             case 2:
             {
                 
-                UIViewController *vc = [NSClassFromString(@"WCInvitationVC") new];
+                UIViewController *vc = [NSClassFromString(@"TIoTInvitationVC") new];
                 if (vc) {
                     vc.title = @"邀请成员";
                     [vc setValue:self.familyInfo[@"FamilyId"] forKey:@"familyId"];

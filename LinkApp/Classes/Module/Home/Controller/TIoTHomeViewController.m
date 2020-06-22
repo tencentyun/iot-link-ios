@@ -501,7 +501,7 @@ static CGFloat weatherHeight = 60;
             [self chooseFamilyByIndex:index];
         };
         vv.doneAction = ^{
-            UIViewController *vc = [[NSClassFromString(@"WCFamiliesVC") alloc] init];
+            UIViewController *vc = [[NSClassFromString(@"TIoTFamiliesVC") alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         };
         vv.currentValue = self.currentFamilyId;
