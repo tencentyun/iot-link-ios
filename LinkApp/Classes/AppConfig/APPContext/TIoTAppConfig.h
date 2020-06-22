@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSString *WXAccessAppId;
 
 @property NSString *TencentIotLinkAppkey;
-@property NSString *TencentIotLinkAppSecrecy;
+@property NSString *TencentIotLinkAppSecrect;
 
 @property NSString *XgAccessId;
 @property NSString *XgAccessKey;

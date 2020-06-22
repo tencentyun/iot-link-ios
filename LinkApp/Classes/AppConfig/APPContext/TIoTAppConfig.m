@@ -22,7 +22,7 @@
 
 + (TIoTAppConfigModel *)loadLocalConfigList {
     
-    NSString *localPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"app-open-config.json"];
+    NSString *localPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"app-config.json"];
     
     NSData *data = [NSData dataWithContentsOfFile:localPath];
 

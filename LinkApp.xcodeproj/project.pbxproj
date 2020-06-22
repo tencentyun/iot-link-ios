@@ -230,7 +230,7 @@
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
 		F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4C5DE0B24A07E3E0098F18B /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */; };
-		F4C5DE0E24A0B7C50098F18B /* app-open-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-open-config.json */; };
+		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
 		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
 		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
@@ -823,7 +823,7 @@
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLaunch.png; sourceTree = "<group>"; };
-		F4C5DE0D24A0B7C40098F18B /* app-open-config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "app-open-config.json"; sourceTree = "<group>"; };
+		F4C5DE0D24A0B7C40098F18B /* app-config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "app-config.json"; sourceTree = "<group>"; };
 		F4C5DE0F24A0B7FE0098F18B /* TIoTAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppConfig.h; sourceTree = "<group>"; };
 		F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTAppConfig.m; sourceTree = "<group>"; };
 		F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkApp.xcconfig; sourceTree = "<group>"; };
@@ -1956,7 +1956,7 @@
 		F4C5DE0C24A0B7C40098F18B /* AppConfig */ = {
 			isa = PBXGroup;
 			children = (
-				F4C5DE0D24A0B7C40098F18B /* app-open-config.json */,
+				F4C5DE0D24A0B7C40098F18B /* app-config.json */,
 			);
 			path = AppConfig;
 			sourceTree = "<group>";
@@ -2627,7 +2627,7 @@
 				6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */,
 				D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */,
 				ED6D120723C8598400A7A333 /* TIoTTimerListCell.xib in Resources */,
-				F4C5DE0E24A0B7C50098F18B /* app-open-config.json in Resources */,
+				F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */,
 				ED9C49B323B1BB46005D537F /* 腾讯连连用户服务协议V1.0(1).docx in Resources */,
 				ED6BA5A923C57DED00BE9EC9 /* TIoTFamilyMemberCell.xib in Resources */,
 				D23104AC232F929D0003069D /* Localizable.strings in Resources */,

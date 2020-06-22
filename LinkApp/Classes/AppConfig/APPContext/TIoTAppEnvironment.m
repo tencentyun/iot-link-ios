@@ -41,7 +41,7 @@
             self.wxShareType = 0;
             self.action = @"YunApi";
             self.appKey = model.TencentIotLinkAppkey;
-            self.appSecret = model.TencentIotLinkAppSecrecy;
+            self.appSecret = model.TencentIotLinkAppSecrect;
             self.platform = @"iOS";
         }
             break;
@@ -52,7 +52,7 @@
             self.wxShareType = 1;
             self.action = @"YunApi";
             self.appKey = model.TencentIotLinkAppkey;
-            self.appSecret = model.TencentIotLinkAppSecrecy;
+            self.appSecret = model.TencentIotLinkAppSecrect;
             self.platform = @"iOS";
         }
             break;
