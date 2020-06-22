@@ -1,0 +1,14 @@
+//
+//  LinkApp.xcconfig
+//  LinkApp
+//
+//  Created by eagleychen on 2020/6/22.
+//  Copyright © 2020 Winext. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+LinkAPP_NAME = 连连开源体验
+LinkAPP_VERSION = 1.0.0
+LinkAPP_BUILD_VERSION = 1
