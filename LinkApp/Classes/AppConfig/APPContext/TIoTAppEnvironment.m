@@ -9,6 +9,7 @@
 #import "TIoTAppEnvironment.h"
 #import "ESP_NetUtil.h"
 #import "XGPushManage.h"
+#import "TIoTAppConfig.h"
 
 @interface TIoTAppEnvironment ()
 
@@ -30,6 +31,7 @@
 
 - (void)selectEnvironmentType:(WCAppEnvironmentType)type{
     self.type = type;
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     
     switch (type) {
         case WCAppEnvironmentTypeRelease:{
@@ -38,8 +40,8 @@
             self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
             self.wxShareType = 0;
             self.action = @"YunApi";
-            self.appKey = @"iftGgQcbDMGlzZTMU";
-            self.appSecret = @"QMOGnPaBACBKFDLGbTby";
+            self.appKey = model.TencentIotLinkAppkey;
+            self.appSecret = model.TencentIotLinkAppSecrecy;
             self.platform = @"iOS";
         }
             break;
@@ -49,8 +51,8 @@
             self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
             self.wxShareType = 1;
             self.action = @"YunApi";
-            self.appKey = @"iftGgQcbDMGlzZTMU";
-            self.appSecret = @"QMOGnPaBACBKFDLGbTby";
+            self.appKey = model.TencentIotLinkAppkey;
+            self.appSecret = model.TencentIotLinkAppSecrecy;
             self.platform = @"iOS";
         }
             break;

@@ -11,6 +11,7 @@
 #import "XGPush.h"
 #import "MGJRouter.h"
 #import "TIoTFeedBackViewController.h"
+#import "TIoTAppConfig.h"
 
 @interface XGPushManage ()<XGPushDelegate,UNUserNotificationCenterDelegate>
 
@@ -19,10 +20,6 @@
 @end
 
 @implementation XGPushManage
-
-static uint32_t const kXGAccessID = 1600003264;
-
-static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 
 + (id)sharedXGPushManage{
     static XGPushManage *_instance = nil;
@@ -38,7 +35,8 @@ static NSString *const kXGAccessKey = @"IN51HLDWINA3";
 #ifdef DEBUG
     [XGPush.defaultManager setEnableDebug:YES];
 #endif
-    [XGPush.defaultManager startXGWithAppID:kXGAccessID appKey:kXGAccessKey delegate:self];
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    [XGPush.defaultManager startXGWithAppID:model.XgAccessId.intValue appKey:model.XgAccessKey delegate:self];
     
     if (XGPush.defaultManager.xgApplicationBadgeNumber > 0) {
         [XGPush.defaultManager setXgApplicationBadgeNumber:0];

@@ -9,8 +9,8 @@
 #import "WxManager.h"
 #import "WXApi.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
-#define WxAppID     @"wxfb36c49df3a370c7"
 #define WxManagerError @"WxManagerError"
 
 //////bundleId com.tencent.cloudiot   com.Tenext.TenextCloud
@@ -42,7 +42,8 @@
 
 - (void)registerApp
 {
-    [WXApi registerApp:WxAppID];
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    [WXApi registerApp:model.WXAccessAppId];
 }
 
 
