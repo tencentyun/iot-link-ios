@@ -181,7 +181,7 @@
         object.userName = userName;
     }
 
-    object.miniProgramType = [TIoTAppEnvironment shareEnvironment].wxShareType;;
+//    object.miniProgramType = [TIoTAppEnvironment shareEnvironment].wxShareType;;
     
     if (image == nil) {
 
@@ -244,28 +244,7 @@
     {
         [self requestWxInfoWitAuthResp:resp];
     }
-    // 支付
-    if ([resp isKindOfClass:[PayResp class]]) {
-        PayResp*response=(PayResp*)resp;
-        if (response.errCode == WXSuccess) {
-            if (self.payBlk) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.payBlk(nil,nil); // 支付成功
-                });
-            }
-        }else {
-            if (self.payBlk) {
-                NSError  * error   = nil;
-                int errCode = response.errCode;
-                NSString * errStr = [self errorReason:errCode];
-                [MBProgressHUD showError:errStr];
-                error = [NSError errorWithDomain:WxManagerError code:errCode userInfo:@{NSLocalizedDescriptionKey : errStr}];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        self.payBlk(nil,error); // 失败
-                    });
-            }
-        }
-    }
+    
     // 分享
     if ([resp isKindOfClass:[SendMessageToWXResp class]]) {  // 分享
         SendMessageToWXResp*response=(SendMessageToWXResp*)resp;
