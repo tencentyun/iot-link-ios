@@ -8,7 +8,7 @@
 
 #import "TIoTRequestObject.h"
 #import "TIoTAppEnvironment.h"
-
+#import "TIoTAppConfig.h"
 
 #define kCode @"code"
 #define kMsg @"msg"
@@ -43,6 +43,9 @@ failure:(FailureResponseBlock)failure
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
@@ -92,7 +95,7 @@ failure:(FailureResponseBlock)failure
 - (void)postWithoutToken:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
@@ -100,18 +103,31 @@ failure:(FailureResponseBlock)failure
     [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
     [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
     [accessParam setValue:[TIoTAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+   
+    NSURL *url = nil;
     
-//    [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
+    if ([TIoTAppConfig appTypeWithModel:model] == 0){
+        //公版
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr,[TIoTUserManage shared].userId]];
+        [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
+    }else {
+        //开源
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=testID",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+        if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
+            [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
+        }
+    }
     
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
-    
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
     
     WCLog(@"连接==%@",url);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
@@ -157,6 +173,9 @@ failure:(FailureResponseBlock)failure
     [task resume];
 }
 
+
+//MARK: 重要
+#pragma mark -  ***签字函数请务必在服务端实现，此处仅为演示，如有泄露概不负责***
 
 - (NSString *)getSignatureWithParam:(NSDictionary *)param
 {

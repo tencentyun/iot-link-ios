@@ -494,11 +494,10 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  @"Password":self.pwdTF.text,
                                  //@"Email":@"",
                                  };
-        
         [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:nil];
             [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-            [self loginSuccess];
+            self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
 
             //信鸽推送注册
             [[XGPushManage sharedXGPushManage] bindPushToken];
@@ -521,7 +520,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             
             //信鸽推送绑定
             [[XGPushManage sharedXGPushManage] bindPushToken];
-//            [HXYNotice addLoginInPost];
+            //            [HXYNotice addLoginInPost];
         } failure:^(NSString *reason, NSError *error) {
             
         }];
@@ -542,11 +541,12 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     NSString *busivalue = @"studioappOpensource";
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    if ([TIoTAppConfig appTypeWithModel:model] == 0){
-        //公版
+
+    if ([TIoTAppConfig weixinLoginWithModel:model]){
+        
         busivalue = @"studioapp";
     }else {
-        //开源
+        
         busivalue = @"studioappOpensource";
     }
     NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue};

@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (TIoTAppConfigModel *)loadLocalConfigList;
 + (NSInteger)appTypeWithModel:(TIoTAppConfigModel *)model ;
+
++ (BOOL)isOriginAppkeyAndSecret:(TIoTAppConfigModel *)model;
++ (BOOL)weixinLoginWithModel:(TIoTAppConfigModel *)model;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -30,6 +30,11 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 @property (nonatomic , copy) NSString *baseUrlForLogined;
 
 /**
+ 登录前需要签名baseurl
+ */
+@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined;
+
+/**
  未登录baseurl
  */
 @property (nonatomic , copy) NSString *baseUrl;
