@@ -117,7 +117,7 @@ PODS:
   - SDWebImage/Core (4.4.2)
   - SocketRocket (0.5.1)
   - TZImagePickerController (3.2.1)
-  - WechatOpenSDK (1.8.2)
+  - WechatOpenSDK_NoPay (1.8.0)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -139,7 +139,7 @@ DEPENDENCIES:
   - SDWebImage (= 4.4.2)
   - SocketRocket (= 0.5.1)
   - TZImagePickerController (= 3.2.1)
-  - WechatOpenSDK (= 1.8.2)
+  - WechatOpenSDK_NoPay (= 1.8.0)
   - YYModel (= 1.0.4)
 
 SPEC REPOS:
@@ -176,7 +176,7 @@ SPEC REPOS:
     - SDWebImage
     - SocketRocket
     - TZImagePickerController
-    - WechatOpenSDK
+    - WechatOpenSDK_NoPay
     - YYModel
 
 SPEC CHECKSUMS:
@@ -212,9 +212,9 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
-  WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
+  WechatOpenSDK_NoPay: 27366a152202a6a7c8a15fad4d07261e87fb2389
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: ab912590e1cad097a6aa4749639b450b36a2990c
+PODFILE CHECKSUM: 4d77b206dceee5806026465e3b49d153c06e6cde
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
