@@ -132,7 +132,7 @@ static NSInteger maxNumber = 100;
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     [photoView addSubview:_collectionView];
-    [_collectionView registerNib:[UINib nibWithNibName:@"TIoTPhotoCellTIoTPhotoCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoCell"];
+    [_collectionView registerNib:[UINib nibWithNibName:@"TIoTPhotoCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoCell"];
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(20);
         make.trailing.mas_equalTo(-20);
