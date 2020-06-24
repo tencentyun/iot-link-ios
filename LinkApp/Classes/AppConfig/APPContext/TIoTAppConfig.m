@@ -33,4 +33,19 @@
     TIoTAppConfigModel *model = [TIoTAppConfigModel yy_modelWithJSON:data];
     return model;
 }
+
+// 0为公版； 1为开源
++ (NSInteger)appTypeWithModel:(TIoTAppConfigModel *)model {
+
+    if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecrect == nil) {
+     //
+        return 0;
+    }else if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecrect isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, 正式发布前务必填写"]) {
+    //拉取源码走公版
+        return 0;
+    }else {
+    //开源
+        return 1;
+    }
+}
 @end

@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTAppConfig : NSObject
 
 + (TIoTAppConfigModel *)loadLocalConfigList;
++ (NSInteger)appTypeWithModel:(TIoTAppConfigModel *)model ;
 @end
 
 NS_ASSUME_NONNULL_END

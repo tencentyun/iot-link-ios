@@ -12,3 +12,4 @@
 LinkAPP_NAME = 连连开源体验
 LinkAPP_VERSION = 1.0.0
 LinkAPP_BUILD_VERSION = 1
+LinkAPP_WEIXIN_APPID = wx3c5a586d7fbcbace

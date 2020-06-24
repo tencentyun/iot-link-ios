@@ -25,7 +25,7 @@
 			<string>wx</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wxfb36c49df3a370c7</string>
+				<string>$(LinkAPP_WEIXIN_APPID)</string>
 			</array>
 		</dict>
 	</array>

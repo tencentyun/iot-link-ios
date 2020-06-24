@@ -15,6 +15,7 @@
 #import "XGPushManage.h"
 #import "WxManager.h"
 #import "UIButton+LQRelayout.h"
+#import "TIoTAppConfig.h"
 
 #define kMargin 16
 
@@ -537,7 +538,17 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 
 - (void)getTokenByOpenId:(NSString *)code
 {
-    NSDictionary *tmpDic = @{@"code":code,@"busi":@"studio"};
+    NSString *busivalue = @"studioappOpensource";
+    
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    if ([TIoTAppConfig appTypeWithModel:model] == 0){
+        //公版
+        busivalue = @"studioapp";
+    }else {
+        //开源
+        busivalue = @"studioappOpensource";
+    }
+    NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue};
     
     [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
