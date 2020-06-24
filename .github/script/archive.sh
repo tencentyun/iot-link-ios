@@ -4,7 +4,7 @@
 
 rc=$(git rev-parse --short HEAD)
 #echo $rc
-sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkApp.xcconfig
+sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 
 rm -rf Podfile.lock
 /usr/local/bin/pod install --verbose --no-repo-update
