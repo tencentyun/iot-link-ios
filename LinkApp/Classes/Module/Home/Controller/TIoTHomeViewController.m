@@ -25,7 +25,7 @@
 #import <MJRefresh.h>
 
 #import "UIView+Extension.h"
-#import "TIoTFeedBackViewController.h"
+#import "TIoTWebVC.h"
 #import "MGJRouter.h"
 
 static CGFloat weatherHeight = 60;
@@ -316,10 +316,15 @@ static CGFloat weatherHeight = 60;
 - (void)registFeedBackRouterController {
         
     [MGJRouter registerURLPattern:@"TIoT://TPNSPushManage/feedback" toHandler:^(NSDictionary *routerParameters) {
-        TIoTFeedBackViewController *feedBackVC = [[TIoTFeedBackViewController alloc]init];
         //传入推送的全部信息，在控制器内部取出URL，进行展示
-//        feedBackVC.pushNotiContent = routerParameters[MGJRouterParameterUserInfo][@"customMessageContent"];
-        [self.navigationController pushViewController:feedBackVC animated:YES];
+        NSString *url = routerParameters[MGJRouterParameterUserInfo][@"customMessageContent"][@"url"]?:@"";
+        if (url.length) {
+            TIoTWebVC *vc = [[TIoTWebVC alloc] init];
+            vc.title = @"反馈详情";
+            vc.urlPath = url;
+            vc.needJudgeJump = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }];
 }
 

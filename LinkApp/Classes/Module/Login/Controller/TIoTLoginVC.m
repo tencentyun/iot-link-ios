@@ -120,6 +120,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         make.height.mas_equalTo(100);
     }];
     
+    self.registView.hidden = self.isExpireAt;
     
     UILabel *proctolLab = [[UILabel alloc] init];
     proctolLab.text = @"Copyright @ 2013-2020 Tencent Cloud.All Right Reserved.\n腾讯云 版权所有";

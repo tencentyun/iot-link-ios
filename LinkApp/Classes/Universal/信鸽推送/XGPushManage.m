@@ -80,9 +80,9 @@
 // iOS 10 新增 API 无论APP当前在前台还是后台点击通知都会走该 API
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     
-    WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@",response.notification.request.content.userInfo,response.notification.request.content.userInfo[@"custom"]);
+    WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@", response.notification.request.content.userInfo, response.notification.request.content.userInfo[@"custom"]);
     
-    [MGJRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":response.notification.request.content.userInfo[@"custom"]} completion:nil];
+    [MGJRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":[NSString jsonToObject:response.notification.request.content.userInfo[@"custom"]]} completion:nil];
     
     completionHandler();
 }

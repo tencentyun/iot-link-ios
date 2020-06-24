@@ -223,7 +223,7 @@
             @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
             @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
             @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
-            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
+            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTHelpCenterViewController"},
             @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
         ];
     }
