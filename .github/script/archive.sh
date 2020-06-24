@@ -1,6 +1,11 @@
 #!/bin/sh
 
 #bin/bsah - l
+
+rc=$(git rev-parse --short HEAD)
+#echo $rc
+sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkApp.xcconfig
+
 rm -rf Podfile.lock
 /usr/local/bin/pod install --verbose --no-repo-update
  
