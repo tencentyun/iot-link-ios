@@ -37,10 +37,10 @@
 // 0为公版； 1为开源
 + (NSInteger)appTypeWithModel:(TIoTAppConfigModel *)model {
 
-    if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecrect == nil) {
+    if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecret == nil) {
      //
         return 0;
-    }else if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecrect isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责"]) {
+    }else if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecret isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责"]) {
     //拉取源码走公版
         return 0;
     }else {
@@ -50,7 +50,7 @@
 }
 
 + (BOOL)isOriginAppkeyAndSecret:(TIoTAppConfigModel *)model {
-    if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecrect isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责"]) {
+    if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecret isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责"]) {
         return YES;
     }else {
         return NO;
@@ -59,7 +59,7 @@
 
 // yes 上架 NO 开源
 + (BOOL)weixinLoginWithModel:(TIoTAppConfigModel *)model {
-    if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecrect == nil) {
+    if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecret == nil) {
         return YES;
     }else {
         return NO;
