@@ -6,21 +6,21 @@
 *  腾讯推送创建应用，获取 AccessID 和 AccessKey。   
     1、注册腾讯云用户，请在[腾讯云物联网开发平台](https://cloud.tencent.com)完成注册操作   
     2、进入腾讯移动推送：   
-    <img src="IMG/Picture2_Push_Entry.png" alt="Picture2_Push_Entry.png" style="zoom: 50%;" />   
+    <img src="https://main.qcloudimg.com/raw/ecae801626f5c74906b49cfa02383a9b/Picture2_Push_Entry.png" alt="Picture2_Push_Entry.png" style="zoom: 50%;" />   
     3、创建产品并填写信息：   
-    <img src="IMG/Picture3_Push_CreateProduct.png" alt="Picture3_Push_CreateProduct.png" style="zoom: 50%;" />   
-    <img src="IMG/Picture4_Push_ProductInfo.png" alt="Picture4_Push_ProductInfo.png" style="zoom:67%;" />   
+    <img src="https://main.qcloudimg.com/raw/6f19587374faeb6af60f5dd394643fff/Picture3_Push_CreateProduct.png" alt="Picture3_Push_CreateProduct.png" style="zoom: 50%;" />   
+    <img src="https://main.qcloudimg.com/raw/3eab3f178a9002eda53feb87debfa7ef/Picture4_Push_ProductInfo.png" alt="Picture4_Push_ProductInfo.png" style="zoom:67%;" />   
     4、在 iOS 和 Android 平台上，填写对应的 BundleID 和包名：   
-    <img src="IMG/Picture5_Push_managerConfiguration.png" alt="Picture5_Push_managerConfiguration.png" style="zoom: 50%;" />   
+    <img src="https://main.qcloudimg.com/raw/53368dab7af05a9db602bc665ba009ac/Picture5_Push_managerConfiguration.png" alt="Picture5_Push_managerConfiguration.png" style="zoom: 50%;" />   
 
-    <img src="IMG/Picture6_Push_iOSBundleID.png" alt="Picture6_Push_iOSBundleID.png" style="zoom: 80%;" />   
+    <img src="https://main.qcloudimg.com/raw/dc68d2fd4fbbfc762833e536fc000cef/Picture6_Push_iOSBundleID.png" alt="Picture6_Push_iOSBundleID.png" style="zoom: 80%;" />   
        
     5、 <font color=red>填写完 BundleID 后，一定要保存好 iOS 或 Android 平台的 AccessID 和 AccessKey，在 SDK 接入工程配置时会用到，并上传 iOS 平台对应的证书。</font>   
    
-    <img src="IMG/Picture8_Push_Config_ios.png" alt="Picture8_Push_Config_ios.png" style="zoom: 50%;" />   
+    <img src="https://main.qcloudimg.com/raw/b8893f61c4777ea6c3e06e89aef0d566/Picture8_Push_Config_ios.png" alt="Picture8_Push_Config_ios.png" style="zoom: 50%;" />   
 
      6、如要接入使用需要购买或申请测试使用。   
-     <img src="IMG/Picture10_Push_Purch.png" alt="Picture10_Push_Purch.png" style="zoom:50%;" />   
+     <img src="https://main.qcloudimg.com/raw/5630b4ec4d9e9f06d32cf0d483dda7f5/Picture10_Push_Purch.png" alt="Picture10_Push_Purch.png" style="zoom:50%;" />   
     
 *   微信登录 AppID   
     1、登录[微信开放平台](https://open.weixin.qq.com/)   
@@ -44,5 +44,5 @@ iOS 版本 APP 可通过[腾讯连连-iOS](https://github.com/tencentyun/iot-lin
 
 APP 内已经包含 SDK Demo 和 SDK，不需要额外再引入，目录如下：
 
-<img src="IMG/Picture1_APP_SDK_SDKDemo.png" alt="Picture1_APP_SDK_SDKDemo.png" style="zoom: 80%;" />
+<img src="https://main.qcloudimg.com/raw/1db56b17fe7f333b5d78ed6a717c0cf3/Picture1_APP_SDK_SDKDemo.png" alt="Picture1_APP_SDK_SDKDemo.png" style="zoom: 80%;" />
 
