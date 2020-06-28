@@ -108,7 +108,11 @@ failure:(FailureResponseBlock)failure
     
     if ([TIoTAppConfig appTypeWithModel:model] == 0){
         //公版
+#ifdef DEBUG
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+#else
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+#endif
         [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
     }else {
         //开源
