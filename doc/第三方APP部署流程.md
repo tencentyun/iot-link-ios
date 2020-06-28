@@ -22,7 +22,7 @@
 
 * 打开 **linkApp** 工程，在 **AppConfig** 文件目录下的 **app-open-config.json** 文件内，填写需要配置的信息，配置内容如下
   	
-   <img src="https://main.qcloudimg.com/raw/4ac87c6497296b903695351df7a923c0.png" alt="image-20200619200309488" style="zoom:67%;" />
+   <img src="https://main.qcloudimg.com/raw/a4ac3c516d4382d19727e49a789c0adb/image-20200619200309488.png" alt="image-20200619200309488" style="zoom:67%;" />
 
 ### APP 绑定真实设备      
 
