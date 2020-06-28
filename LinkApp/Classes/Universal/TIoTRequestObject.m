@@ -198,7 +198,9 @@ failure:(FailureResponseBlock)failure
             [keyValue appendFormat:@"&%@=%@",key,param[key]];
         }
     }
-    
+    if ([NSString matchSinogram:[TIoTAppEnvironment shareEnvironment].appSecret]) {
+        return @"";
+    }
     return [NSString HmacSha1:[TIoTAppEnvironment shareEnvironment].appSecret data:keyValue];
 }
 

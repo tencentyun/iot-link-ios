@@ -193,4 +193,18 @@
     return ip;
 }
 
++ (BOOL)matchSinogram:(NSString *)checkString {
+    if (checkString == nil || [checkString isEqualToString:@""]) {
+        return NO;
+    }
+    
+    NSString *pattern = @"[\u4e00-\u9fa5]";
+    NSRegularExpression *regular = [[NSRegularExpression alloc] initWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *results = [regular matchesInString:checkString options:0 range:NSMakeRange(0, checkString.length)];
+    if (results.count > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

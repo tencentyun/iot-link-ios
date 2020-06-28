@@ -68,6 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 获取网关
 + (NSString *)getGateway;
+
+/// 检测中文
++ (BOOL)matchSinogram:(NSString *)checkString;
 @end
 
 NS_ASSUME_NONNULL_END
