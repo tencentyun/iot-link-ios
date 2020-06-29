@@ -13,6 +13,7 @@
 #import "TIoTPanelVC.h"
 #import "TIoTRefreshHeader.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 #import "CMPageTitleContentView.h"
 #import <YYModel.h>
@@ -92,6 +93,7 @@ static CGFloat weatherHeight = 60;
     [self getFamilyList];
     
     [self registFeedBackRouterController];
+    
 }
 
 
@@ -323,11 +325,27 @@ static CGFloat weatherHeight = 60;
         if (url.length) {
             TIoTWebVC *vc = [[TIoTWebVC alloc] init];
             vc.title = @"反馈详情";
-            vc.urlPath = url;
+            vc.urlPath = [self judgeToAppendAppTypeWithUrl:url];
             vc.needJudgeJump = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
     }];
+}
+
+- (NSString *)judgeToAppendAppTypeWithUrl:(NSString *)url {
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    if ([TIoTAppConfig appTypeWithModel:model] == 1){ //公版
+        return url;
+    } else {  //开源
+        NSRange range = [url rangeOfString:@"?#"];
+        NSMutableString *mString = [NSMutableString stringWithString:url];
+        if (range.location != NSNotFound) {
+            [mString insertString:@"ver=opensource" atIndex:range.location+1];
+            return [NSString stringWithString:mString];
+        } else {
+            return url;
+        }
+    }
 }
 
 #pragma mark - request
