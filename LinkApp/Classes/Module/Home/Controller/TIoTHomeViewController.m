@@ -28,6 +28,8 @@
 #import "TIoTWebVC.h"
 #import "MGJRouter.h"
 
+#import "Firebase.h"
+
 static CGFloat weatherHeight = 60;
 
 @interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
@@ -360,6 +362,16 @@ static CGFloat weatherHeight = 60;
         {
             [self createFamily];
         }
+        
+        [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
+            NSDictionary *data = responseObject[@"Data"];
+            [[TIoTUserManage shared] saveUserInfo:data];
+            //上报用户userid
+            [FIRAnalytics setUserID:[TIoTUserManage shared].userId];
+            
+        } failure:^(NSString *reason, NSError *error) {
+            
+        }];
         
     } failure:^(NSString *reason, NSError *error) {
         

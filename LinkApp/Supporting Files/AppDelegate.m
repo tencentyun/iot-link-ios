@@ -43,6 +43,11 @@
     //firebase注册
     [FIRApp configure];
     
+    if ([TIoTUserManage shared].userId != nil) {
+        //上报用户userid
+        [FIRAnalytics setUserID:[TIoTUserManage shared].userId];
+    }
+    
     // 1.创建窗口
     self.window = [[UIWindow alloc] init];
     self.window.frame = [UIScreen mainScreen].bounds;
