@@ -11,6 +11,7 @@
 #import "TIoTUserInfomationViewController.h"
 #import "TIoTWebVC.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 #import "TIoTAlertView.h"
 
@@ -187,7 +188,20 @@
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             TIoTWebVC *vc = [TIoTWebVC new];
             vc.title = self.dataArr[indexPath.row][@"title"];
-            vc.urlPath = [NSString stringWithFormat:@"%@/%@/?uin=help_center_h5&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+            TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+            NSString *url = nil;
+#ifdef DEBUG
+                url = [NSString stringWithFormat:@"%@/%@/?uin=help_center_h5&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+#else
+                url = [NSString stringWithFormat:@"%@/%@/?ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+#endif
+            
+            if ([TIoTAppConfig appTypeWithModel:model] == 0){ //公版
+                
+            } else {  //开源
+                url = [NSString stringWithFormat:@"%@&ver=opensource", url];
+            }
+            vc.urlPath = url;
             vc.needJudgeJump = YES;
             [self.navigationController pushViewController:vc animated:YES];
             [MBProgressHUD dismissInView:self.view];
@@ -223,7 +237,7 @@
             @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
             @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
             @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
-            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTHelpCenterViewController"},
+            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
             @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
         ];
     }

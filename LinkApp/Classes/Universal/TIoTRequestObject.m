@@ -48,8 +48,10 @@ failure:(FailureResponseBlock)failure
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 
-//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
-
+#ifdef DEBUG
+    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+#endif
+    
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
@@ -121,7 +123,7 @@ failure:(FailureResponseBlock)failure
 #else
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
 #endif
-        [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
+        
     }else {
         //开源
 #ifdef DEBUG
@@ -134,6 +136,8 @@ failure:(FailureResponseBlock)failure
             [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
         }
     }
+
+    [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
     
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
@@ -143,7 +147,9 @@ failure:(FailureResponseBlock)failure
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 
-//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+#ifdef DEBUG
+    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+#endif
 
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];

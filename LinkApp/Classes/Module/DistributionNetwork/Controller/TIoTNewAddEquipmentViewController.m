@@ -17,6 +17,7 @@
 #import "TIoTDistributionNetworkViewController.h"
 #import "TIoTNavigationController.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -75,23 +76,34 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     self.discoverView = [[TIoTDiscoverProductView alloc] init];
     WeakObj(self)
     self.discoverView.helpAction = ^{
-        TIoTHelpCenterViewController *vc = [[TIoTHelpCenterViewController alloc] init];
-        [selfWeak.navigationController pushViewController:vc animated:YES];
-//        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
-//        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
-//
-//            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
-//            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
-//            TIoTWebVC *vc = [TIoTWebVC new];
-//            vc.title = @"帮助中心";
-//            vc.urlPath = [NSString stringWithFormat:@"%@/%@/?uin=help_center_h5&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
-//            vc.needJudgeJump = YES;
-//            [selfWeak.navigationController pushViewController:vc animated:YES];
-//            [MBProgressHUD dismissInView:selfWeak.view];
-//
-//        } failure:^(NSString *reason, NSError *error) {
-//            [MBProgressHUD dismissInView:selfWeak.view];
-//        }];
+        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+
+            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+            TIoTWebVC *vc = [TIoTWebVC new];
+            vc.title = @"帮助中心";
+            TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+            NSString *url = nil;
+#ifdef DEBUG
+                url = [NSString stringWithFormat:@"%@/%@/?uin=help_center_h5&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+#else
+                url = [NSString stringWithFormat:@"%@/%@/?ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, ticket];
+#endif
+            
+            if ([TIoTAppConfig appTypeWithModel:model] == 0){ //公版
+                
+            } else {  //开源
+                url = [NSString stringWithFormat:@"%@&ver=opensource", url];
+            }
+            vc.urlPath = url;
+            vc.needJudgeJump = YES;
+            [selfWeak.navigationController pushViewController:vc animated:YES];
+            [MBProgressHUD dismissInView:selfWeak.view];
+
+        } failure:^(NSString *reason, NSError *error) {
+            [MBProgressHUD dismissInView:selfWeak.view];
+        }];
     };
     self.discoverView.scanAction = ^{
         TIoTScanlViewController *vc = [[TIoTScanlViewController alloc] init];
