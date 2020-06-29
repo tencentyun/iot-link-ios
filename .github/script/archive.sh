@@ -9,10 +9,18 @@ sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkAppCommo
 rm -rf Podfile.lock
 /usr/local/bin/pod install --verbose --no-repo-update
  
-xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Debug
+BUILD_TYPE=$1
+
  
-xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Debug -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
+xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration $BUILD_TYPE
  
+xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration $BUILD_TYPE -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
  
-xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./
+if [ $1 == 'Debug' ]; then
+    xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./
+else
+    xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsRelease.plist  -exportPath ./
+fi
+
+
  
