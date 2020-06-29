@@ -271,6 +271,37 @@
     }
 }
 
+/// 决定具体cell是否显示提示
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 1) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
+
+///菜单上显示名称
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        if (([TIoTUserManage shared].userId == nil) || ([[TIoTUserManage shared].userId isEqual: @""])) {
+            return NO;
+        }else {
+            return YES;
+        }
+    }else {
+        return NO;
+    }
+}
+
+/// 点击菜单中选项会调用
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+        NSString *userID = [TIoTUserManage shared].userId;
+        pastboard.string = (userID != nil ? userID : @"");
+    }
+}
+
 #pragma mark - UIImagePickerControllerDelegate && UINavigationControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
@@ -354,6 +385,7 @@
         
         _dataArr = @[
         @{@"title":@"昵称",@"value":[TIoTUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+        @{@"title":@"用户ID",@"value":[TIoTUserManage shared].userId!=nil?[TIoTUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
         @{@"title":@"电话号码",@"value":[TIoTUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
         @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
         ];
