@@ -17,6 +17,8 @@
 #define kMsg @"msg"
 #define kData @"data"
 
+NSString  * const kInvalidParameterValueInvalidAccessToken = @"InvalidParameterValue.InvalidAccessToken";
+
 @implementation TIoTRequestObject
 
 + (TIoTRequestObject *)shared {
@@ -37,7 +39,6 @@ failure:(FailureResponseBlock)failure
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
     [accessParam setValue:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
-    
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
     NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
@@ -70,7 +71,8 @@ failure:(FailureResponseBlock)failure
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
                         failure(dic[kMsg],nil);
-                        [self judgeUserSignoutWithReturnToken:dic[kMsg]];
+                        [self judgeUserSignoutWithReturnToken:dic];
+                        
                     });
                     
                 }
@@ -89,7 +91,6 @@ failure:(FailureResponseBlock)failure
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD showError:error.localizedDescription toView:[UIApplication sharedApplication].keyWindow];
                 failure(nil,error);
-                [self judgeUserSignoutWithReturnToken:error.localizedDescription];
             });
         }
     }];
@@ -256,6 +257,7 @@ failure:(FailureResponseBlock)failure
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
                         failure(dic[kMsg],nil);
+                         [self judgeUserSignoutWithReturnToken:dic];
                     });
                     
                 }
@@ -282,23 +284,28 @@ failure:(FailureResponseBlock)failure
 
 
 /// 根据token code 判断是否退出登录
-- (void)judgeUserSignoutWithReturnToken:(NSString *)errorMsg {
-    if ([errorMsg isEqualToString:@"InvalidParameterValue.TokenIsExpire"]) {
-        [self logout];
+- (void)judgeUserSignoutWithReturnToken:(NSDictionary *)descriptionDic {
+                                
+    if ([descriptionDic[kCode] isEqual:@(-1000)]) {
+        if (descriptionDic[kData] != nil) {
+            if (descriptionDic[kData][@"Error"] != nil) {
+                NSString *errorMsg = descriptionDic[kData][@"Error"][@"Code"];
+                if ([errorMsg isEqualToString:kInvalidParameterValueInvalidAccessToken]) {
+                    [self logout];
+                }
+            }
+        }
     }
+    
 }
 
 /// token过期，强制用户退出到登录页面
 - (void)logout {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
-    [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
-        [[TIoTAppEnvironment shareEnvironment] loginOut];
-        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
-        [UIViewController getCurrentViewController].view.window.rootViewController = nav;
-    } failure:^(NSString *reason, NSError *error) {
-        
-    }];
+    [[TIoTAppEnvironment shareEnvironment] loginOut];
+    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+    [UIViewController getCurrentViewController].view.window.rootViewController = nav;
 }
 
 @end
