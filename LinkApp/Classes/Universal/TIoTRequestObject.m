@@ -121,7 +121,7 @@ failure:(FailureResponseBlock)failure
 #else
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
 #endif
-        [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
+        
     }else {
         //开源
 #ifdef DEBUG
@@ -134,6 +134,8 @@ failure:(FailureResponseBlock)failure
             [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
         }
     }
+
+    [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
     
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     

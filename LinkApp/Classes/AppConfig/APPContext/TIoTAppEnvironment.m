@@ -13,8 +13,6 @@
 
 @interface TIoTAppEnvironment ()
 
-@property (nonatomic , assign) WCAppEnvironmentType type;
-
 @end
 
 @implementation TIoTAppEnvironment

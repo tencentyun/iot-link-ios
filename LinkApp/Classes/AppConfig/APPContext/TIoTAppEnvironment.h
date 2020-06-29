@@ -18,6 +18,8 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 
 @interface TIoTAppEnvironment : NSObject
 
+@property (nonatomic , assign) WCAppEnvironmentType type;
+
 + (instancetype)shareEnvironment;
 
 - (void)selectEnvironmentType:(WCAppEnvironmentType)type;
