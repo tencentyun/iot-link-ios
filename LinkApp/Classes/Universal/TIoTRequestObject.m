@@ -9,6 +9,9 @@
 #import "TIoTRequestObject.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
+#import "TIoTNavigationController.h"
+#import "TIoTLoginVC.h"
+#import "UIViewController+GetController.h"
 
 #define kCode @"code"
 #define kMsg @"msg"
@@ -67,6 +70,7 @@ failure:(FailureResponseBlock)failure
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
                         failure(dic[kMsg],nil);
+                        [self judgeUserSignoutWithReturnToken:dic[kMsg]];
                     });
                     
                 }
@@ -85,6 +89,7 @@ failure:(FailureResponseBlock)failure
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD showError:error.localizedDescription toView:[UIApplication sharedApplication].keyWindow];
                 failure(nil,error);
+                [self judgeUserSignoutWithReturnToken:error.localizedDescription];
             });
         }
     }];
@@ -268,6 +273,27 @@ failure:(FailureResponseBlock)failure
         }
     }];
     [task resume];
+}
+
+
+/// 根据token code 判断是否退出登录
+- (void)judgeUserSignoutWithReturnToken:(NSString *)errorMsg {
+    if ([errorMsg isEqualToString:@"InvalidParameterValue.TokenIsExpire"]) {
+        [self logout];
+    }
+}
+
+/// token过期，强制用户退出到登录页面
+- (void)logout {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    
+    [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
+        [[TIoTAppEnvironment shareEnvironment] loginOut];
+        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+        [UIViewController getCurrentViewController].view.window.rootViewController = nav;
+    } failure:^(NSString *reason, NSError *error) {
+        
+    }];
 }
 
 @end
