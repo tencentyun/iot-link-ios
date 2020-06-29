@@ -16,7 +16,18 @@
 在平台上创建虚拟产品后，可从数据模板到批量生产流程，实现配置产、测试、再实现量产的流水线，如图：
 <img src="https://main.qcloudimg.com/raw/2757c418f38e9d8b941a6b7b62b843b7/Picture6_Iot_Product_Flow.png" alt="Picture6_Iot_Product_Flow.png" style="zoom: 33%;" />
 
-### 创建应用       
+### 创建应用   
+* 进入项目后，选中左侧的【应用开发】，在对应位置创建应用，如图所示：    
+  
+ <img src="https://main.qcloudimg.com/raw/9f2b66a5135b98d2aaa88fab7e6cbc64/image-20200628235251.png" alt="image-20200628235251" style="zoom:67%;" />    
+ 
+* 填写新建应用相关信息：   
+
+  <img src="https://main.qcloudimg.com/raw/37d177276cbb1b53ad1a08a85aa94252/image-20200629000705.png" alt="image-20200629000705" style="zoom:67%;" />   
+ 
+*  创建完应用后，点击已创建应用的名称，即可看到页面中显示与之对应，不同平台的 APP Key 和 APP Secret，如图：   
+      
+  <img src="https://main.qcloudimg.com/raw/ee276a1abf86dac8f76dd90e540fcb0c/image-20200629001051.png" alt="image-20200629001051" style="zoom:67%;" />     
   
 ### APP Demo 参数写入配置文件   
 
