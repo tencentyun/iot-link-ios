@@ -497,7 +497,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:nil];
             [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-            self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+            [self loginSuccess];
 
             //信鸽推送注册
             [[XGPushManage sharedXGPushManage] bindPushToken];

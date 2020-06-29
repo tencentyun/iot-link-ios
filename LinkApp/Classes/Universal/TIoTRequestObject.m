@@ -47,9 +47,14 @@ failure:(FailureResponseBlock)failure
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-
-//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
-
+    
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    if ([TIoTAppConfig appTypeWithModel:model] == 0){
+#ifdef DEBUG
+        [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+#endif
+    }
+    
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
@@ -142,8 +147,13 @@ failure:(FailureResponseBlock)failure
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-
-//    [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+    
+    
+    if ([TIoTAppConfig appTypeWithModel:model] == 0){
+#ifdef DEBUG
+        [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+#endif
+    }
 
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
