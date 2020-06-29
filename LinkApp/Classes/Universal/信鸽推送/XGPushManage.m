@@ -71,10 +71,10 @@
 
 #pragma mark - XGPushDelegate
 
-- (void)xgPushDidRegisteredDeviceToken:(nullable NSString *)deviceToken error:(nullable NSError *)error{
+- (void)xgPushDidRegisteredDeviceToken:(nullable NSString *)deviceToken xgToken:(nullable NSString *)xgToken error:(nullable NSError *)error{
     //绑定信鸽
-    self.deviceToken = deviceToken;
-    WCLog(@"信鸽推送：%@",deviceToken);
+    self.deviceToken = xgToken;
+    WCLog(@"信鸽推送deviceToken：%@------xgToken：%@",deviceToken, xgToken);
 }
 
 // iOS 10 新增 API 无论APP当前在前台还是后台点击通知都会走该 API
