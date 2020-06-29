@@ -121,7 +121,12 @@ failure:(FailureResponseBlock)failure
         [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
     }else {
         //开源
+#ifdef DEBUG
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=testID",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+#else
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+#endif
+        
         if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
             [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
         }
