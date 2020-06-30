@@ -1,0 +1,28 @@
+name: iOS Release CI
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  Build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install GPG
+      run: brew install gnupg
+    - name: List available Xcode versions
+      run: ls /Applications | grep Xcode
+    - name: Decrypt large secret
+      run: sh .github/script/import_provisioning.sh Release
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
+        P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_11.4.app && /usr/bin/xcodebuild -version
+    - name: Build archive
+      run: |
+        sh .github/script/archive.sh Release
+    - name: upload dSYM
+      run: ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/腾讯连连.app.dSYM
