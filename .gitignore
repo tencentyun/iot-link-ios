@@ -9,3 +9,4 @@ ExportOptions.plist
 LinkApp.ipa
 LinkApp.xcarchive/
 Packaging.log
+Podfile.lock
