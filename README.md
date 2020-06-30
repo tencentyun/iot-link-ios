@@ -55,13 +55,13 @@
   
 &emsp;&emsp;腾讯连连开源体验版集成了微信授权登录。    
 
-* 若确认使用自定义的微信授权登录，需要在[微信开放平台](https://open.weixin.qq.com/)注册开发者帐号，创建移动应用，审核通过后，即可获得相应的 AppID 和 AppSecret，[申请步骤](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Development_Guide.html)。
+* 若确认使用自定义的微信授权登录，需要在[微信开放平台](https://open.weixin.qq.com/)注册开发者帐号，创建移动应用，审核通过后，即可获得相应的 AppID 和 AppSecret，[申请步骤](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Development_Guide.html)；同时需要自行搭建微信授权登录的**接入服务器**，可参考接入服务器的[接口](https://cloud.tencent.com/document/product/1081/40781)。
 
    使用微信授权登录还需：
-    - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；<font color=red>同时请**遵从官方建议**自建微信接入服务器，保证 AppSecret 不被泄露</font>。
+    - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***。
   <img src="https://main.qcloudimg.com/raw/015e14483c561991f8b23993ccd30ee2/image-20200622184257.png" alt="image-20200619141407513" style="zoom: 50%;" />
 
-    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；<font color=red>同时请**遵从官方建议**自建微信接入服务器，保证 AppSecret 不被泄露</font>。
+    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***。
 
   <img src="https://main.qcloudimg.com/raw/e67eec45b7861b46f471789e569017e0/image20200628150316.png" alt="image-20200619162858817" style="zoom: 50%;" />
 
