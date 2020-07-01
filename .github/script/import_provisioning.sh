@@ -7,15 +7,15 @@
 
 if [ $1 == 'Debug' ]; then
     echo "Debug"
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
 else
     echo "Release"
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.p12.asc > .github/script/apple_dev.p12
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.mobileprovision.asc > .github/script/dev.mobileprovision
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > LinkApp/Supporting\ Files/app-config.json
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkApp.xcconfig.asc > LinkApp/Supporting\ Files/LinkApp.xcconfig
-    gpg -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > LinkApp/Supporting\ Files/GoogleService-Info.plist
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.p12.asc > .github/script/apple_dev.p12
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.mobileprovision.asc > .github/script/dev.mobileprovision
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > LinkApp/Supporting\ Files/app-config.json
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkApp.xcconfig.asc > LinkApp/Supporting\ Files/LinkApp.xcconfig
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > LinkApp/Supporting\ Files/GoogleService-Info.plist
 fi
 
 
