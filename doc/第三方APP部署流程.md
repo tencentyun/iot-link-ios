@@ -33,7 +33,7 @@
 
 * 打开 **linkApp** 工程，在 **AppConfig** 文件目录下的 **app-open-config.json** 文件内，填写需要配置的信息，配置内容如下
   	
-   <img src="https://main.qcloudimg.com/raw/a4ac3c516d4382d19727e49a789c0adb/image-20200619200309488.png" alt="image-20200619200309488" style="zoom:67%;" />
+   <img src="https://main.qcloudimg.com/raw/4540ef44403829bfd24c9167ff9c3910/image-20200619200309488.png" alt="image-20200619200309488" style="zoom:67%;" />
 
 ### APP 绑定真实设备      
 
@@ -42,7 +42,7 @@
 	2. APP 自动识别设备配网为 SoftAP 配网方式，如图：   
 	<img src="https://main.qcloudimg.com/raw/99036b00c6d9e0338eb37b5dedd18473/Picture8_softAp1.png" alt="Picture8_softAp1.PNG" style="zoom: 50%;" />   
 	3. 点击底部按钮后，连接 WiFi，输入 WiFi 名称和密码，如图：   
-	<img src="https://main.qcloudimg.com/raw/b0a0c626f7ea4e17f614096a8d2e8613/Picture9_softAp2.png" alt="Picture9_softAp2.PNG" style="zoom:50%;" />   
+	<img src="https://main.qcloudimg.com/raw/2d83c93198a4a11070c41dba0264244b/Picture14_SmartCon2.png" alt="Picture9_softAp2.PNG" style="zoom:50%;" />   
 	4. 输入完后点击确认，再连接设备热点，如图：   
 	<img src="https://main.qcloudimg.com/raw/1a235edeac570d487d55d7eb36a2e0a8/Picture10_softAp3.png" alt="Picture10_softAp3.PNG" style="zoom:50%;" />   
 	5. 此时跳转到“设置”中选择设备提供的热点，进行连接。
@@ -59,7 +59,7 @@
     2. APP 自动识别设备配网为 SmartConfig 配网方式，如图：   
     <img src="https://main.qcloudimg.com/raw/dc01c17f5224e0d0aa811f4465977bd3/Picture13_SmartCon1.png" alt="Picture13_SmartCon1.PNG" style="zoom:50%;" />
     3. 点击底部按钮后，连接 WiFi，输入 WiFi 名称和密码，如图：   
-    <img src="https://main.qcloudimg.com/raw/ef714b0d048012ee4ab42088f6b9bdca/Picture14_SmartCon2.png" alt="Picture14_SmartCon2.PNG" style="zoom:50%;" />   
+    <img src="https://main.qcloudimg.com/raw/2d83c93198a4a11070c41dba0264244b/Picture14_SmartCon2.png" alt="Picture14_SmartCon2.PNG" style="zoom:50%;" />   
     4. 点击连接成功后，如图：   
     <img src="https://main.qcloudimg.com/raw/7f3a2e32cec7edc72966e08ce9f45083/Picture15_SmartCon3.png" alt="Picture15_SmartCon3.PNG" style="zoom:50%;" />   
     
