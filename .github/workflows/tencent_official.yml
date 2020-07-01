@@ -25,8 +25,10 @@ jobs:
       run: |
         sh .github/script/archive.sh Release
         zip -q -r -m -o "LinkApp.dSYM.zip" LinkApp.xcarchive/dSYMs/腾讯连连.app.dSYM
-        gpg --batch --passphrase ${{ secrets.GPG_DECRYPT_PASSPHRASE }} -c LinkApp.dSYM.zip
-        gpg --batch --passphrase ${{ secrets.GPG_DECRYPT_PASSPHRASE }} -c LinkApp.ipa
+        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.dSYM.zip
+        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.ipa
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
     - name: Upload ipa to github
       uses: actions/upload-artifact@v2
       with:
