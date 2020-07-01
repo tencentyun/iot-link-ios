@@ -4,17 +4,17 @@
 
 * 用户需要使用从物联网平台自建应用所获得的 **TencentIotLinkAppkey** 和 **TencentIotLinkAppSecrecy**，来替换 APP Demo 中相对应的字符串，如下图所示：
      
-	<img src="https://main.qcloudimg.com/raw/76f28e72ec12fc564d0c6211e040e8ba/image-20200622182228.png" alt="image-20200622182228" style="zoom:67%;" />    
+	<img src="https://main.qcloudimg.com/raw/81f747d7d3ad0e6285a9ebda0bb0c034/image-20200622182228.png" alt="image-20200622182228" style="zoom:67%;" />    
 	
 
 * 用户需要使用从腾讯推送平台自建应用所获得的 **XgAccessId** 和 **XgAccessKey**，来替换 APP Demo 中相对应的字符串     
 	
-	<img src="https://main.qcloudimg.com/raw/5fb69539e1a55ba6ac2e6183c9a39e2e/image-20200622182507.png" alt="image-20200622182507" style="zoom:67%;" />      
+	<img src="https://main.qcloudimg.com/raw/ae293ea8790abac2c956f77c1d62d18c/image-20200622182507.png" alt="image-20200622182507" style="zoom:67%;" />      
 	   
 
 * 用户需要使用从微信开发平台自建应用所获得的 **WXAccessAppId**，来替换 APP Demo 中相对应的字符串，如图：   
 	
-	<img src="https://main.qcloudimg.com/raw/015e14483c561991f8b23993ccd30ee2/image-20200622184257.png" alt="image-20200622184257" style="zoom:67%;" />
+	<img src="https://main.qcloudimg.com/raw/72f8b8a7b4ccfd117abee395cd722c69/image-20200622184257.png" alt="image-20200622184257" style="zoom:67%;" />
 
     详情可见：   
 	
