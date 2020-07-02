@@ -32,9 +32,8 @@
 	   相关链接：[https://firebase.google.com/docs?authuser=0](https://firebase.google.com/docs?authuser=0)    
 	   iOS 平台：   
 	   相关链接  [https://firebase.google.com/docs/ios/setup?authuser=0](https://firebase.google.com/docs/ios/setup?authuser=0)   
-  
-	   3、接入 Crashlytics 功能。   
-	   iOS 平台：   
+   3、接入 Crashlytics 功能。   
+	   iOS 平台：     
 	   接入相关链接  [https://firebase.google.com/docs/crashlytics/get-started?authuser=0&platform=iOS](https://firebase.google.com/docs/crashlytics/get-started?authuser=0&platform=iOS)   
 
 ### APP 源码获取
