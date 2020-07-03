@@ -114,6 +114,14 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
+#pragma mark - Public Methods
+// 加载url
+- (void)loadUrl:(NSString *)urlString {
+
+    NSURL *url = [NSURL URLWithString:urlString];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
+}
+
 #pragma mark - KVO
 // 计算wkWebView进度条
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

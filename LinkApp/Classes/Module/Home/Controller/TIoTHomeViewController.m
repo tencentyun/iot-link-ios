@@ -327,9 +327,34 @@ static CGFloat weatherHeight = 60;
             vc.title = @"反馈详情";
             vc.urlPath = [self judgeToAppendAppTypeWithUrl:url];
             vc.needJudgeJump = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+            UIViewController *topVc = [self topViewController];
+            if ([topVc isMemberOfClass:[TIoTWebVC class]]) {
+                [topVc performSelector:@selector(loadUrl:) withObject:[self judgeToAppendAppTypeWithUrl:url]];
+            } else {
+                [topVc.navigationController pushViewController:vc animated:YES];
+            }
         }
     }];
+}
+
+- (UIViewController *)topViewController {
+    UIViewController *resultVC;
+    resultVC = [self _topViewController:[[UIApplication sharedApplication].keyWindow rootViewController]];
+    while (resultVC.presentedViewController) {
+        resultVC = [self _topViewController:resultVC.presentedViewController];
+    }
+    return resultVC;
+}
+
+- (UIViewController *)_topViewController:(UIViewController *)vc {
+    if ([vc isKindOfClass:[UINavigationController class]]) {
+        return [self _topViewController:[(UINavigationController *)vc topViewController]];
+    } else if ([vc isKindOfClass:[UITabBarController class]]) {
+        return [self _topViewController:[(UITabBarController *)vc selectedViewController]];
+    } else {
+        return vc;
+    }
+    return nil;
 }
 
 - (NSString *)judgeToAppendAppTypeWithUrl:(NSString *)url {
