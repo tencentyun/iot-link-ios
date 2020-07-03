@@ -28,6 +28,16 @@
 @implementation TIoTWIFINetViewController
 
 #pragma mark lifeCircle
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -205,6 +215,17 @@
         [alertC addAction:alertA];
         [self presentViewController:alertC animated:YES completion:nil];
         
+    }
+}
+
+- (void)applicationwillenterforegound
+{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+        [self.wifiInfo removeAllObjects];
+        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        self.wifiNameTF.text = self.wifiInfo[@"name"];
+    } else {
+        [self.locationManager requestWhenInUseAuthorization];
     }
 }
 
