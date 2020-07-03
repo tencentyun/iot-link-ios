@@ -28,12 +28,23 @@
 @implementation TIoTWIFINetViewController
 
 #pragma mark lifeCircle
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self getWifiInfos];
     [self setupUI];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
+
     NetworkReachabilityManager *reachability = [NetworkReachabilityManager sharedManager];
     [reachability setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
@@ -206,6 +217,20 @@
         [self presentViewController:alertC animated:YES completion:nil];
         
     }
+}
+
+- (void)applicationwillenterforegound
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+            [self.wifiInfo removeAllObjects];
+            [self.wifiInfo setDictionary:[self getWifiSsid]];
+            self.wifiNameTF.text = self.wifiInfo[@"name"];
+        } else {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+    });
 }
 
 - (void)getWifiInfos
