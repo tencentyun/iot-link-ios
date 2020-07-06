@@ -1,6 +1,6 @@
 ## 第三方定制 APP 接入指南
 
-具体详情请查看 ：  [APP接入指南]()
+具体详情请查看 ：  [APP接入指南](https://github.com/tencentyun/iot-link-ios/blob/master/doc/%E5%B9%B3%E5%8F%B0%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97.md)
 
 ### APP 源码获取
 请通过[腾讯连连-iOS](https://github.com/tencentyun/iot-link-ios)下载源码 。
