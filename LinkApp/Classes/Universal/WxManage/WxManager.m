@@ -43,7 +43,7 @@
 - (void)registerApp
 {
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    [WXApi registerApp:model.WXAccessAppId];
+    [WXApi registerApp:model.WXAccessAppId universalLink:@"https://cloud.tencent.com/"];
 }
 
 
@@ -52,6 +52,10 @@
     return [WXApi handleOpenURL:url delegate:self];
 }
 
+
+- (BOOL)handleOpenUniversalLink:(NSUserActivity *)userActivity {
+    return [WXApi handleOpenUniversalLink:userActivity delegate:self];
+}
 
 - (void)authFromWxComplete:(WxBlock)blk
 {
@@ -63,7 +67,9 @@
         SendAuthReq *req = [[SendAuthReq alloc] init];
         req.scope = @"snsapi_userinfo";
         req.state = @"app";
-        [WXApi sendReq:req];
+        [WXApi sendReq:req completion:^(BOOL success) {
+            
+        }];
     }
     else {
         [MBProgressHUD showError:@"未安装微信或版本过低"];
@@ -121,7 +127,9 @@
     req.bText = NO;
     req.message = message;
     req.scene = WXSceneTimeline;
-    [WXApi sendReq:req];
+    [WXApi sendReq:req completion:^(BOOL success) {
+        
+    }];
 }
 
 
@@ -144,7 +152,9 @@
     req.bText = NO;
     req.message = message;
     req.scene = WXSceneSession;
-    [WXApi sendReq:req];
+    [WXApi sendReq:req completion:^(BOOL success) {
+        
+    }];
 }
 
 - (void)shareMiniProgramToWXSceneSessionWithTitle:(NSString *)title
@@ -205,7 +215,9 @@
     req.bText = NO;
     req.message = message;
     req.scene = WXSceneSession;  //目前只支持会话
-    [WXApi sendReq:req];
+    [WXApi sendReq:req completion:^(BOOL success) {
+        
+    }];
 }
 
 - (NSData *)compressQualityWithLengthLimit:(NSInteger)maxLength image:(UIImage *)image{

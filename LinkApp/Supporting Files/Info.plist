@@ -46,6 +46,8 @@
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>打开蓝牙用于扫描硬件</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>打开蓝牙用于扫描硬件</string>
 	<key>NSCameraUsageDescription</key>
 	<string>获取相机权限用于扫描设备二维码</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

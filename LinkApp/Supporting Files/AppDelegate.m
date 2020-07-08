@@ -121,6 +121,9 @@
     return [[WxManager sharedWxManager] handleOpenURL:url];
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+    return [[WxManager sharedWxManager] handleOpenUniversalLink:userActivity];
+}
 
 #pragma mark - navBar
 

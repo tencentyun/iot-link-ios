@@ -18,6 +18,7 @@ typedef void(^WxBlock) (id obj,NSError * error);
 + (BOOL)isWXAppInstalled;
 - (void)registerApp;
 - (BOOL)handleOpenURL:(NSURL *) url;
+- (BOOL)handleOpenUniversalLink:(NSUserActivity *)userActivity;
 - (void)authFromWxComplete:(WxBlock)blk;
 - (void)shareWebPageToWXSceneTimelineWithTitle:(NSString *)title
                                    description:(NSString *)description
