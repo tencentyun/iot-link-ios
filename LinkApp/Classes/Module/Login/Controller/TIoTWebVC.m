@@ -106,7 +106,7 @@
 }
 
 - (void)login {
-    [[TIoTUserManage shared] clear];
+    [[TIoTCoreUserManage shared] clear];
     UIViewController *loginVc = [NSClassFromString(@"TIoTLoginVC") new];
     [loginVc setValue:@(YES) forKeyPath:@"isExpireAt"];
     TIoTNavigationController *vc = [[TIoTNavigationController alloc] initWithRootViewController:loginVc];

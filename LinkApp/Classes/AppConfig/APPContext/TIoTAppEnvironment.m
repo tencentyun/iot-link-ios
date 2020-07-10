@@ -69,7 +69,7 @@
 - (void)loginOut {
 //    [[XGPushManage sharedXGPushManage] stopPushService];
     [HXYNotice addLoginOutPost];
-    [[TIoTUserManage shared] clear];
+    [[TIoTCoreUserManage shared] clear];
     
 }
 

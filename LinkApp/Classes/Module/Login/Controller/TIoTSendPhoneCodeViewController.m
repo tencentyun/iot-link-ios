@@ -8,7 +8,6 @@
 
 #import "TIoTSendPhoneCodeViewController.h"
 #import "JHVerificationCodeView.h"
-#import "TIoTUserManage.h"
 
 @interface TIoTSendPhoneCodeViewController ()
 
@@ -225,7 +224,7 @@
                 UIViewController *userInfoVC = self.navigationController.viewControllers[1];
                 [self.navigationController popToViewController:userInfoVC animated:YES];
                 [MBProgressHUD showSuccess:@"修改成功"];
-                [TIoTUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
+                [TIoTCoreUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
                 [HXYNotice addModifyUserInfoPost];
             } failure:^(NSString *reason, NSError *error) {
                 

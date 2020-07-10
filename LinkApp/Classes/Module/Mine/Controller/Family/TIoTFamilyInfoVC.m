@@ -266,7 +266,7 @@ static NSString *itemId2 = @"pfDDD";
             }
         }
         TIoTMemberInfoVC *vc = [[TIoTMemberInfoVC alloc] init];
-        if ([[TIoTUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
+        if ([[TIoTCoreUserManage shared].userId isEqualToString:ownerInfo[@"UserID"]]) {
             vc.isOwner = YES;
         }
         vc.memberInfo = self.dataArr[indexPath.section][indexPath.row];

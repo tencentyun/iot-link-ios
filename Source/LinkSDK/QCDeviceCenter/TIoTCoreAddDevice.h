@@ -24,12 +24,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@class TCSocket;
+@class GCDAsyncUdpSocket;
+
 @protocol TIoTCoreAddDeviceDelegate <NSObject>
+@optional
+- (void)smartConfigOnHandleSocketOpen:(TCSocket *)socket;
+
+- (void)smartConfigOnHandleSocketClosed:(TCSocket *)socket;
+
+- (void)smartConfigOnHandleDataReceived:(TCSocket *)socket data:(NSData *)data;
+
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
+
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag;
+
+- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
+
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
 - (void)onResult:(TIoTCoreResult *)result;
 
 @end
 
+typedef void(^createUpdBlock)(NSString *ipaAddrData);
+typedef void(^connectFaildBlock)(void);
 
 @interface TIoTCoreSmartConfig : NSObject<TIoTCoreAddDeviceProtocol>
 
@@ -39,15 +58,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 
+/*
+ 必须实现
+*/
+
+/// 创建udp链接block  必须实现
+@property (nonatomic, copy) createUpdBlock updConnectBlock;
+
+/// 链接失败后block   必须实现
+@property (nonatomic, copy) connectFaildBlock connectFaildBlock;
+
 /// WiFi信息
 /// @param ssid 必填
 /// @param password 必填
 /// @param bssid 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid;
 
+
 @end
 
 
+typedef void(^connectUdpFaildBlock)(void);
+//typedef NSString *_Nullable(^gatewayIPBlock)(void);
 
 @interface TIoTCoreSoftAP : NSObject<TIoTCoreAddDeviceProtocol>
 
@@ -56,10 +88,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 
+/*
+ 必须实现
+*/
+
+
+/// 获取 gateway 的ip   必填
+@property (nonatomic, copy) NSString *gatewayIpString;
+
+/// dup连接失败 block   必须实现
+@property (nonatomic ,copy) connectUdpFaildBlock udpFaildBlock;
+
+
 /// WiFi信息
 /// @param ssid 必填
 /// @param password 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password;
+
 
 @end
 

@@ -26,7 +26,7 @@
 #import "UIImageView+TIoTWebImageView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import "NSObject+additions.h"
-#import "TIoTUserManage.h"
+#import "TIoTCoreUserManage.h"
 #import "TIoTRequestObject.h"
 #import "TIoTCoreRequestAction.h"
 #import "TIoTButton.h"

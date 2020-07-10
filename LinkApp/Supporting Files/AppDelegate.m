@@ -43,9 +43,9 @@
     //firebase注册
     [FIRApp configure];
     
-    if ([TIoTUserManage shared].userId != nil) {
+    if ([TIoTCoreUserManage shared].userId != nil) {
         //上报用户userid
-        [FIRAnalytics setUserID:[TIoTUserManage shared].userId];
+        [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
     }
     
     // 1.创建窗口
@@ -56,7 +56,7 @@
         self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
     }
     
-    if ([TIoTUserManage shared].isValidToken) {
+    if ([TIoTCoreUserManage shared].isValidToken) {
         self.window.rootViewController = [[TIoTTabBarViewController alloc] init];
     }
     else{

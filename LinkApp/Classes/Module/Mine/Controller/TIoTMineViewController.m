@@ -145,7 +145,7 @@
         [self.iconImageView setImageWithURLStr:data[@"Avatar"] placeHolder:@"userDefalut"];
         self.telLab.text = data[@"PhoneNumber"];
         
-        [[TIoTUserManage shared] saveUserInfo:data];
+        [[TIoTCoreUserManage shared] saveUserInfo:data];
     } failure:^(NSString *reason, NSError *error) {
         
     }];
@@ -159,8 +159,8 @@
 }
 
 - (void)modifyUserInfo:(id)sender{
-    self.nameLab.text = [TIoTUserManage shared].nickName;
-    [self.iconImageView setImageWithURLStr:[TIoTUserManage shared].avatar placeHolder:@"userDefalut"];
+    self.nameLab.text = [TIoTCoreUserManage shared].nickName;
+    [self.iconImageView setImageWithURLStr:[TIoTCoreUserManage shared].avatar placeHolder:@"userDefalut"];
 }
 
 #pragma mark TableViewDelegate && TableViewDataSource

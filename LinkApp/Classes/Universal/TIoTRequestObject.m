@@ -38,7 +38,7 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
     
     NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
@@ -242,7 +242,7 @@ failure:(FailureResponseBlock)failure
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
     [accessParam setValue:urlStr forKey:@"Action"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTUserManage shared].accessToken forKey:@"AccessToken"];
+    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     
     NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];

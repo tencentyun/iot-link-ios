@@ -32,7 +32,7 @@
     self.memberNick.text = self.memberInfo[@"NickName"];
     self.roleL.text = [self.memberInfo[@"Role"] integerValue] == 1 ? @"所有者" : @"成员";
     
-    if (self.isOwner && ![[TIoTUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
+    if (self.isOwner && ![[TIoTCoreUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
         self.removeBtn.hidden = NO;
     }
 }

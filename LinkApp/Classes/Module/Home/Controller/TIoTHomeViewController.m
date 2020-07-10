@@ -404,9 +404,9 @@ static CGFloat weatherHeight = 60;
         
         [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
             NSDictionary *data = responseObject[@"Data"];
-            [[TIoTUserManage shared] saveUserInfo:data];
+            [[TIoTCoreUserManage shared] saveUserInfo:data];
             //上报用户userid
-            [FIRAnalytics setUserID:[TIoTUserManage shared].userId];
+            [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
             
         } failure:^(NSString *reason, NSError *error) {
             
@@ -520,7 +520,7 @@ static CGFloat weatherHeight = 60;
 {
     
     FamilyModel *model = self.families[index];
-    [TIoTUserManage shared].familyId = model.FamilyId;
+    [TIoTCoreUserManage shared].familyId = model.FamilyId;
     self.nick.text = model.FamilyName;
     self.nick2.text = model.FamilyName;
     self.currentFamilyId = model.FamilyId;

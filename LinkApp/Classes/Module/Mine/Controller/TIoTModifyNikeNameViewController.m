@@ -81,12 +81,12 @@
         return;
     }
     
-    if (![self.textField.text isEqualToString:[TIoTUserManage shared].nickName]) {
+    if (![self.textField.text isEqualToString:[TIoTCoreUserManage shared].nickName]) {
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":self.textField.text,@"Avatar":[TIoTUserManage shared].avatar} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":self.textField.text,@"Avatar":[TIoTCoreUserManage shared].avatar} success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"修改成功"];
-            [[TIoTUserManage shared] saveUserInfo:@{@"UserID":[TIoTUserManage shared].userId,@"Avatar":[TIoTUserManage shared].avatar,@"NickName":self.textField.text,@"PhoneNumber":[TIoTUserManage shared].phoneNumber}];
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":self.textField.text,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error) {
             
@@ -105,7 +105,7 @@
     if (!_textField) {
         _textField = [[UITextField alloc] init];
         _textField.placeholder = @"请输入昵称";
-        _textField.text = [TIoTUserManage shared].nickName;
+        _textField.text = [TIoTCoreUserManage shared].nickName;
         _textField.textColor = kRGBColor(51, 51, 51);
         _textField.font = [UIFont wcPfRegularFontOfSize:16];
         _textField.textContentType = UITextContentTypeNickname;

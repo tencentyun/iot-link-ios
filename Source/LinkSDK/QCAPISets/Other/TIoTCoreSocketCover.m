@@ -57,8 +57,34 @@ static NSString *registDeviceReqID = @"5001";
         return;
     }
     
+    NSDictionary *dataDic = [self registerDeviceParamterActive:deviceIds withAction:@"ActivePush" complete:success];
+    [self sendSocketDataWithDictionary:dataDic];
+}
+
+- (void)sendData:(NSDictionary *)paramDic withRequestURL:(NSString*)requestURL complete:(didReceiveMessage)sucess{
+    //每次请求需要判断登录是否失效
+    if (![TIoTCoreUserManage shared].isValidToken) {
+        return;
+    }
+    
+    NSDictionary *dic = @{@"Platform":@"iOS",
+                          @"RequestId":[[NSUUID UUID] UUIDString],
+                          @"action":@"YunApi",
+                          @"AppKey":[TIoTCoreServices shared].appKey,
+    };
+    
+    NSDictionary *dataDic =  [self sendDataDictionaryWithParamDic:paramDic withArgumentDic:dic withRequestURL:requestURL complete:sucess];
+    [self sendSocketDataWithDictionary:dataDic];
+    
+}
+
+#pragma mark - function method
+
+/// 注册监听设备时，构建发送数据参数
+- (NSDictionary *)registerDeviceParamterActive:(NSArray *)deviceIds withAction:(NSString *)actionName complete:(didReceiveMessage)success{
+    
     NSDictionary *dataDic = @{
-                                @"action":@"ActivePush",
+                                @"action":actionName,
                                 @"reqId":registDeviceReqID,
                                 @"params":@{
                                                 @"AccessToken" :[TIoTCoreUserManage shared].accessToken ?: @"",
@@ -69,24 +95,27 @@ static NSString *registDeviceReqID = @"5001";
     TIoTCoreRequestObj *obj = [TIoTCoreRequestObj new];
     obj.sucess = success;
     [self.reqArray setObject:obj forKey:registDeviceReqID];
+     QQCLog(@"send======%@",dataDic);
+    return dataDic;
     
-    QQCLog(@"send======%@",dataDic);
+}
+
+// 注册设备时，向socket 发送数据
+- (void)sendSocketDataWithDictionary:(NSDictionary *)dataDic {
+    
     [[TIoTCoreSocketManager shared] sendData:dataDic];
 }
 
-- (void)sendData:(NSDictionary *)paramDic withRequestURL:(NSString*)requestURL complete:(didReceiveMessage)sucess{
-    //每次请求需要判断登录是否失效
-    if (![TIoTCoreUserManage shared].isValidToken) {
-        return;
-    }
+//监听设备状态的所需参数
+- (NSDictionary *)sendDataDictionaryWithParamDic:(NSDictionary *)paramDic withArgumentDic:(NSDictionary *)dic withRequestURL:(NSString*)requestURL complete:(didReceiveMessage)sucess {
     
     NSMutableDictionary *actionParams = [NSMutableDictionary dictionaryWithDictionary:paramDic];
-    [actionParams setObject:@"iOS" forKey:@"Platform"];
-    [actionParams setObject:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
+    [actionParams setObject:dic[@"iOS"] forKey:@"Platform"];
+    [actionParams setObject:dic[@"RequestId"] forKey:@"RequestId"];
     if ([TIoTCoreUserManage shared].accessToken.length > 0) {
         [actionParams setObject:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     }
-    
+
     NSInteger reqID = 100;
     @synchronized (self.reqArray) {
         if (self.reqArray.count > 0) {
@@ -100,24 +129,22 @@ static NSString *registDeviceReqID = @"5001";
         obj.sucess = sucess;
         [self.reqArray setObject:obj forKey:[NSString stringWithFormat:@"%zi",reqID]];
     }
-    
+
     NSDictionary *dataDic = @{
-                                @"action":@"YunApi",
+                                @"action":dic[@"action"],
                                 @"reqId":@(reqID),
                                 @"params":@{
-                                                @"AppKey" :[TIoTCoreServices shared].appKey,
+                                                @"AppKey" :dic[@"AppKey"],
                                                 @"Action" :requestURL,
                                                 @"ActionParams":actionParams
                                     },
-                                
-                                };
-    
-    
-    QQCLog(@"send======%@",dataDic);
-    [[TIoTCoreSocketManager shared] sendData:dataDic];
-    
-}
 
+                                };
+
+
+    QQCLog(@"send======%@",dataDic);
+    return dataDic;
+}
 
 #pragma mark - socket delegate
 

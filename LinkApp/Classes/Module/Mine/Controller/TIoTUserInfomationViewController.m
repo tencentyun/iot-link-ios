@@ -75,7 +75,7 @@
     }];
     
     self.iconImageView = [[UIImageView alloc] init];
-    [self.iconImageView setImageWithURLStr:[TIoTUserManage shared].avatar placeHolder:@"userDefalut"];
+    [self.iconImageView setImageWithURLStr:[TIoTCoreUserManage shared].avatar placeHolder:@"userDefalut"];
     self.iconImageView.userInteractionEnabled = YES;
     self.iconImageView.layer.cornerRadius = 40;
     self.iconImageView.layer.masksToBounds = YES;
@@ -164,12 +164,12 @@
         return;
     }
     
-    if (![name isEqualToString:[TIoTUserManage shared].nickName]) {
+    if (![name isEqualToString:[TIoTCoreUserManage shared].nickName]) {
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
-        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[TIoTUserManage shared].avatar} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[TIoTCoreUserManage shared].avatar} success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"修改成功"];
-            [[TIoTUserManage shared] saveUserInfo:@{@"UserID":[TIoTUserManage shared].userId,@"Avatar":[TIoTUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTUserManage shared].phoneNumber}];
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error) {
             
@@ -183,7 +183,7 @@
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"Avatar":avatar} success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"修改成功"];
-        [[TIoTUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
+        [[TIoTCoreUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
         [HXYNotice addModifyUserInfoPost];
     } failure:^(NSString *reason, NSError *error) {
         
@@ -248,13 +248,13 @@
 //        [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"电话号码"]){
-        if ([TIoTUserManage shared].phoneNumber.length == 0) {
+        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
             [self bindPhone];
         }
     }
     else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]){
         
-        if ([TIoTUserManage shared].phoneNumber.length == 0) {
+        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
             
             TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
             [av alertWithTitle:@"请先绑定手机号" message:@"当前未绑定手机号，无法进行修改密码" cancleTitlt:@"取消" doneTitle:@"绑定"];
@@ -283,7 +283,7 @@
 ///菜单上显示名称
 - (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     if (action == @selector(copy:)) {
-        if (([TIoTUserManage shared].userId == nil) || ([[TIoTUserManage shared].userId isEqual: @""])) {
+        if (([TIoTCoreUserManage shared].userId == nil) || ([[TIoTCoreUserManage shared].userId isEqual: @""])) {
             return NO;
         }else {
             return YES;
@@ -297,7 +297,7 @@
 - (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     if (action == @selector(copy:)) {
         UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
-        NSString *userID = [TIoTUserManage shared].userId;
+        NSString *userID = [TIoTCoreUserManage shared].userId;
         pastboard.string = (userID != nil ? userID : @"");
     }
 }
@@ -381,12 +381,12 @@
     if (!_dataArr) {
         
         NSString *haveArrow = @"1";
-        if ([TIoTUserManage shared].phoneNumber && [TIoTUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
+        if ([TIoTCoreUserManage shared].phoneNumber && [TIoTCoreUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
         
         _dataArr = @[
-        @{@"title":@"昵称",@"value":[TIoTUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-        @{@"title":@"用户ID",@"value":[TIoTUserManage shared].userId!=nil?[TIoTUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
-        @{@"title":@"电话号码",@"value":[TIoTUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
+        @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+        @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
         @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
         ];
     }

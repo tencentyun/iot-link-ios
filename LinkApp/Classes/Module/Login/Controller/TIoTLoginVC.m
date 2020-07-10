@@ -496,7 +496,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  };
         [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:nil];
-            [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+            [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
             [self loginSuccess];
 
             //信鸽推送注册
@@ -515,7 +515,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  };
         [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             
-            [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+            [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
             [self loginSuccess];
             
             //信鸽推送绑定
@@ -553,7 +553,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     
     [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
-        [[TIoTUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         
         [self loginSuccess];
         

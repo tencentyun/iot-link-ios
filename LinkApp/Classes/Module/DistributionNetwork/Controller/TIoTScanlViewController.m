@@ -65,7 +65,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
     
     NSString *roomId = self.roomId ?: @"";
-    NSDictionary *param = @{@"FamilyId":[TIoTUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
+    NSDictionary *param = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
     
     [[TIoTRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
         
