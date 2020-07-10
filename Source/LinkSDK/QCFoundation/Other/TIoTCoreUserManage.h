@@ -24,7 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *nickName;
 @property (nonatomic, copy, nullable) NSString *phoneNumber;
 
-
+@property (nonatomic,copy) NSString *familyId;//
+@property (nonatomic,copy) NSString *currentRoomId;
 
 //保存accessToken 和 有效期
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt;

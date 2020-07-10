@@ -44,8 +44,13 @@ static NSString *cellID = @"DODO";
     self.title = @"首页";
     [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
     
-    [self getFamilyList];
+//    [self getFamilyList];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self getFamilyList];
 }
 
 - (void)addViewWithType:(NSUInteger)type names:(NSArray<NSString *> *)names
@@ -93,6 +98,7 @@ static NSString *cellID = @"DODO";
             [self addViewWithType:1 names:names];
             
             self.currentFamilyId = self.familyList[0][@"FamilyId"];
+            [TIoTCoreUserManage shared].familyId = self.currentFamilyId;
             [self getRoomList];
             [self getDeviceList];
             
@@ -214,9 +220,5 @@ static NSString *cellID = @"DODO";
 {
     _currentFamilyId = currentFamilyId;
 }
-
-
-
-
 
 @end

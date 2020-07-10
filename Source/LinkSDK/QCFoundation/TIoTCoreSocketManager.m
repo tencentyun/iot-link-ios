@@ -217,7 +217,8 @@ static NSString *heartBeatReqID = @"5002";
     
     NSError *error;
     NSString *data;
-    
+    //(NSJSONWritingOptions) (paramDic ? NSJSONWritingPrettyPrinted : 0)
+    //采用这个格式的json数据会比较好看，但是不是服务器需要的
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:obj
                                                        options:0
                                                          error:&error];
@@ -249,7 +250,7 @@ static NSString *heartBeatReqID = @"5002";
                 [weakself reConnect];
             }
         } else {
-            
+            // 这里要看你的具体业务需求；不过一般情况下，调用发送数据还是希望能把数据发送出去，所以可以再次打开链接；不用担心这里会有多个socketopen；因为如果当前有socket存在，会停止创建哒
             [weakself socketOpen];
         }
     });

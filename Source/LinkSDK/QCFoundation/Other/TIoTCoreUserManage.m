@@ -57,7 +57,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setValue:accessToken forKey:@"acsToken"];
     }
-    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString *)expireAt
