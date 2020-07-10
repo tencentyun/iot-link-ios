@@ -63,23 +63,8 @@
 		D231050F233075D50003069D /* WxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D231050D233075D50003069D /* WxManager.m */; };
 		D2310513233077D40003069D /* TIoTAppEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D2310511233077D40003069D /* TIoTAppEnvironment.m */; };
 		D2614E31234F272100D7D7E7 /* TIoTBindPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E30234F272100D7D7E7 /* TIoTBindPhoneViewController.m */; };
-		D2614E3E23501A7000D7D7E7 /* ESPTouchGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E3623501A6F00D7D7E7 /* ESPTouchGenerator.m */; };
-		D2614E3F23501A7000D7D7E7 /* ESPDataCode.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E3823501A6F00D7D7E7 /* ESPDataCode.m */; };
-		D2614E4023501A7000D7D7E7 /* ESPGuideCode.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E3A23501A6F00D7D7E7 /* ESPGuideCode.m */; };
-		D2614E4123501A7000D7D7E7 /* ESPDatumCode.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E3C23501A7000D7D7E7 /* ESPDatumCode.m */; };
-		D2614E4D23501A8600D7D7E7 /* ESP_NetUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E4223501A8400D7D7E7 /* ESP_NetUtil.m */; };
-		D2614E4E23501A8600D7D7E7 /* ESP_WifiUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E4423501A8500D7D7E7 /* ESP_WifiUtil.m */; };
-		D2614E4F23501A8600D7D7E7 /* ESP_CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E4823501A8500D7D7E7 /* ESP_CRC8.m */; };
-		D2614E5023501A8600D7D7E7 /* ESPAES.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E4A23501A8600D7D7E7 /* ESPAES.m */; };
-		D2614E5123501A8600D7D7E7 /* ESP_ByteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E4B23501A8600D7D7E7 /* ESP_ByteUtil.m */; };
-		D2614E5623501A9500D7D7E7 /* ESPUDPSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E5323501A9500D7D7E7 /* ESPUDPSocketClient.m */; };
-		D2614E5723501A9500D7D7E7 /* ESPUDPSocketServer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E5423501A9500D7D7E7 /* ESPUDPSocketServer.m */; };
-		D2614E5C23501AAC00D7D7E7 /* ESPTouchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E5823501AAB00D7D7E7 /* ESPTouchTask.m */; };
-		D2614E5D23501AAC00D7D7E7 /* ESPTouchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E5923501AAB00D7D7E7 /* ESPTouchResult.m */; };
-		D2614E5E23501AAC00D7D7E7 /* ESPTouchTaskParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = D2614E5A23501AAC00D7D7E7 /* ESPTouchTaskParameter.m */; };
 		D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2614E622350872900D7D7E7 /* ExternalAccessory.framework */; };
 		D27ACA1123614DA50074C2B3 /* TIoTDeviceDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D27ACA1023614DA50074C2B3 /* TIoTDeviceDetailTableViewCell.m */; };
-		D292525823580F26005BE0A8 /* TCSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D292525723580F26005BE0A8 /* TCSocket.m */; };
 		D297C35C2366753100918921 /* TIoTStringView.m in Sources */ = {isa = PBXBuildFile; fileRef = D297C35B2366753100918921 /* TIoTStringView.m */; };
 		D2A2CD1C234C302C0039EB51 /* NSObject+additions.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A2CD1B234C302C0039EB51 /* NSObject+additions.m */; };
 		D2A2CD1F234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A2CD1E234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m */; };
@@ -122,8 +107,6 @@
 		ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED16D93E236FB87400D26D0A /* TIoTNavigationController.m */; };
 		ED3A93D22378FE2E00379AA7 /* TIoTSoftapWaitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3A93D12378FE2E00379AA7 /* TIoTSoftapWaitVC.m */; };
 		ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
-		ED3A93DD237948DE00379AA7 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3A93D9237948DE00379AA7 /* GCDAsyncUdpSocket.m */; };
-		ED3A93DE237948DE00379AA7 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3A93DA237948DE00379AA7 /* GCDAsyncSocket.m */; };
 		ED3FDA7F2418890300EE60D5 /* TIoTModifyRoomVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3FDA7E2418890300EE60D5 /* TIoTModifyRoomVC.m */; };
 		ED549E9B23C710EE00325958 /* TIoTTimerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED549E9923C710EE00325958 /* TIoTTimerCell.m */; };
 		ED549E9C23C710EE00325958 /* TIoTTimerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED549E9A23C710EE00325958 /* TIoTTimerCell.xib */; };
@@ -217,7 +200,6 @@
 		EDAF9848241F7F1F0049859F /* TIoTShareDevicesVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDAF9846241F7F1F0049859F /* TIoTShareDevicesVC.xib */; };
 		EDB2F91623B59A3100CDD4A6 /* TIoTFamiliesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB2F91423B59A3100CDD4A6 /* TIoTFamiliesVC.m */; };
 		EDB2F91723B59A3100CDD4A6 /* TIoTFamiliesVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB2F91523B59A3100CDD4A6 /* TIoTFamiliesVC.xib */; };
-		EDB2F91B23B59FA800CDD4A6 /* TIoTRequestAction.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB2F91A23B59FA800CDD4A6 /* TIoTRequestAction.m */; };
 		EDB2F91E23B5DC7C00CDD4A6 /* FamilyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB2F91D23B5DC7C00CDD4A6 /* FamilyModel.m */; };
 		EDB2F92123B5E3DE00CDD4A6 /* RoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB2F92023B5E3DE00CDD4A6 /* RoomModel.m */; };
 		EDC630A623D03B190079B64E /* TIoTOptionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = EDC630A523D03B190079B64E /* TIoTOptionalView.m */; };
@@ -228,7 +210,6 @@
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
-		F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D5A824935F3E005D3396 /* NSString+Extension.m */; };
 		F4C5DE0B24A07E3E0098F18B /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */; };
 		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
@@ -531,42 +512,10 @@
 		D2310512233077D40003069D /* TIoTAppEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppEnvironment.h; sourceTree = "<group>"; };
 		D2614E2F234F272100D7D7E7 /* TIoTBindPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTBindPhoneViewController.h; sourceTree = "<group>"; };
 		D2614E30234F272100D7D7E7 /* TIoTBindPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTBindPhoneViewController.m; sourceTree = "<group>"; };
-		D2614E3323501A5D00D7D7E7 /* ESPTouchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchResult.h; sourceTree = "<group>"; };
-		D2614E3423501A5D00D7D7E7 /* ESPTouchDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchDelegate.h; sourceTree = "<group>"; };
-		D2614E3523501A5D00D7D7E7 /* ESPTouchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchTask.h; sourceTree = "<group>"; };
-		D2614E3623501A6F00D7D7E7 /* ESPTouchGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchGenerator.m; sourceTree = "<group>"; };
-		D2614E3723501A6F00D7D7E7 /* ESPDataCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPDataCode.h; sourceTree = "<group>"; };
-		D2614E3823501A6F00D7D7E7 /* ESPDataCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPDataCode.m; sourceTree = "<group>"; };
-		D2614E3923501A6F00D7D7E7 /* ESPGuideCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPGuideCode.h; sourceTree = "<group>"; };
-		D2614E3A23501A6F00D7D7E7 /* ESPGuideCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPGuideCode.m; sourceTree = "<group>"; };
-		D2614E3B23501A7000D7D7E7 /* ESPDatumCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPDatumCode.h; sourceTree = "<group>"; };
-		D2614E3C23501A7000D7D7E7 /* ESPDatumCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPDatumCode.m; sourceTree = "<group>"; };
-		D2614E3D23501A7000D7D7E7 /* ESPTouchGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchGenerator.h; sourceTree = "<group>"; };
-		D2614E4223501A8400D7D7E7 /* ESP_NetUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESP_NetUtil.m; sourceTree = "<group>"; };
-		D2614E4323501A8500D7D7E7 /* ESPAES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPAES.h; sourceTree = "<group>"; };
-		D2614E4423501A8500D7D7E7 /* ESP_WifiUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESP_WifiUtil.m; sourceTree = "<group>"; };
-		D2614E4523501A8500D7D7E7 /* ESP_WifiUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESP_WifiUtil.h; sourceTree = "<group>"; };
-		D2614E4623501A8500D7D7E7 /* ESPVersionMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPVersionMacro.h; sourceTree = "<group>"; };
-		D2614E4723501A8500D7D7E7 /* ESP_ByteUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESP_ByteUtil.h; sourceTree = "<group>"; };
-		D2614E4823501A8500D7D7E7 /* ESP_CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESP_CRC8.m; sourceTree = "<group>"; };
-		D2614E4923501A8600D7D7E7 /* ESP_NetUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESP_NetUtil.h; sourceTree = "<group>"; };
-		D2614E4A23501A8600D7D7E7 /* ESPAES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPAES.m; sourceTree = "<group>"; };
-		D2614E4B23501A8600D7D7E7 /* ESP_ByteUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESP_ByteUtil.m; sourceTree = "<group>"; };
-		D2614E4C23501A8600D7D7E7 /* ESP_CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESP_CRC8.h; sourceTree = "<group>"; };
-		D2614E5223501A9500D7D7E7 /* ESPUDPSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPUDPSocketClient.h; sourceTree = "<group>"; };
-		D2614E5323501A9500D7D7E7 /* ESPUDPSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPUDPSocketClient.m; sourceTree = "<group>"; };
-		D2614E5423501A9500D7D7E7 /* ESPUDPSocketServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPUDPSocketServer.m; sourceTree = "<group>"; };
-		D2614E5523501A9500D7D7E7 /* ESPUDPSocketServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPUDPSocketServer.h; sourceTree = "<group>"; };
-		D2614E5823501AAB00D7D7E7 /* ESPTouchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchTask.m; sourceTree = "<group>"; };
-		D2614E5923501AAB00D7D7E7 /* ESPTouchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchResult.m; sourceTree = "<group>"; };
-		D2614E5A23501AAC00D7D7E7 /* ESPTouchTaskParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTouchTaskParameter.m; sourceTree = "<group>"; };
-		D2614E5B23501AAC00D7D7E7 /* ESPTouchTaskParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTouchTaskParameter.h; sourceTree = "<group>"; };
 		D2614E622350872900D7D7E7 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		D27ACA0F23614DA50074C2B3 /* TIoTDeviceDetailTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDeviceDetailTableViewCell.h; sourceTree = "<group>"; };
 		D27ACA1023614DA50074C2B3 /* TIoTDeviceDetailTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceDetailTableViewCell.m; sourceTree = "<group>"; };
 		D2859C32233B73BC00BB247C /* TenextCloud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TenextCloud.entitlements; sourceTree = "<group>"; };
-		D292525623580F26005BE0A8 /* TCSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCSocket.h; sourceTree = "<group>"; };
-		D292525723580F26005BE0A8 /* TCSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCSocket.m; sourceTree = "<group>"; };
 		D297C35A2366753100918921 /* TIoTStringView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTStringView.h; sourceTree = "<group>"; };
 		D297C35B2366753100918921 /* TIoTStringView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTStringView.m; sourceTree = "<group>"; };
 		D2A2CD1A234C302C0039EB51 /* NSObject+additions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+additions.h"; sourceTree = "<group>"; };
@@ -645,10 +594,6 @@
 		ED3A93D02378FE2E00379AA7 /* TIoTSoftapWaitVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSoftapWaitVC.h; sourceTree = "<group>"; };
 		ED3A93D12378FE2E00379AA7 /* TIoTSoftapWaitVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSoftapWaitVC.m; sourceTree = "<group>"; };
 		ED3A93D62379304600379AA7 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		ED3A93D9237948DE00379AA7 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
-		ED3A93DA237948DE00379AA7 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
-		ED3A93DB237948DE00379AA7 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
-		ED3A93DC237948DE00379AA7 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		ED3FDA7D2418890300EE60D5 /* TIoTModifyRoomVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyRoomVC.h; sourceTree = "<group>"; };
 		ED3FDA7E2418890300EE60D5 /* TIoTModifyRoomVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyRoomVC.m; sourceTree = "<group>"; };
 		ED549E9823C710EE00325958 /* TIoTTimerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTimerCell.h; sourceTree = "<group>"; };
@@ -803,8 +748,6 @@
 		EDB2F91323B59A3100CDD4A6 /* TIoTFamiliesVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTFamiliesVC.h; sourceTree = "<group>"; };
 		EDB2F91423B59A3100CDD4A6 /* TIoTFamiliesVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTFamiliesVC.m; sourceTree = "<group>"; };
 		EDB2F91523B59A3100CDD4A6 /* TIoTFamiliesVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTFamiliesVC.xib; sourceTree = "<group>"; };
-		EDB2F91923B59FA800CDD4A6 /* TIoTRequestAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRequestAction.h; sourceTree = "<group>"; };
-		EDB2F91A23B59FA800CDD4A6 /* TIoTRequestAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestAction.m; sourceTree = "<group>"; };
 		EDB2F91C23B5DC7C00CDD4A6 /* FamilyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FamilyModel.h; sourceTree = "<group>"; };
 		EDB2F91D23B5DC7C00CDD4A6 /* FamilyModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FamilyModel.m; sourceTree = "<group>"; };
 		EDB2F91F23B5E3DE00CDD4A6 /* RoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomModel.h; sourceTree = "<group>"; };
@@ -1496,8 +1439,6 @@
 				F4DA47DA24977E880031A048 /* TPNS-SDK */,
 				ED800CAD240D0FC00045A268 /* RouteAddress */,
 				ED9C49C223B1F487005D537F /* 信鸽推送 */,
-				ED3A93D8237948DE00379AA7 /* GCDAsyncUdpSocket */,
-				D2614E3223501A3200D7D7E7 /* EspTouch */,
 				D2A2CD34234ECC4E0039EB51 /* MJRefreshCustom */,
 				D2A2CD26234DBD9A0039EB51 /* QCloudCOSXMLManage */,
 				D210C7C323403F4B00A53B08 /* UserManage */,
@@ -1510,8 +1451,6 @@
 				D23104B5233066810003069D /* Util */,
 				EDF93D9723B367A000D477C7 /* TIoTRequestObject.h */,
 				EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */,
-				EDB2F91923B59FA800CDD4A6 /* TIoTRequestAction.h */,
-				EDB2F91A23B59FA800CDD4A6 /* TIoTRequestAction.m */,
 			);
 			path = Universal;
 			sourceTree = "<group>";
@@ -1685,45 +1624,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		D2614E3223501A3200D7D7E7 /* EspTouch */ = {
-			isa = PBXGroup;
-			children = (
-				D292525623580F26005BE0A8 /* TCSocket.h */,
-				D292525723580F26005BE0A8 /* TCSocket.m */,
-				D2614E4723501A8500D7D7E7 /* ESP_ByteUtil.h */,
-				D2614E4B23501A8600D7D7E7 /* ESP_ByteUtil.m */,
-				D2614E4C23501A8600D7D7E7 /* ESP_CRC8.h */,
-				D2614E4823501A8500D7D7E7 /* ESP_CRC8.m */,
-				D2614E4923501A8600D7D7E7 /* ESP_NetUtil.h */,
-				D2614E4223501A8400D7D7E7 /* ESP_NetUtil.m */,
-				D2614E4523501A8500D7D7E7 /* ESP_WifiUtil.h */,
-				D2614E4423501A8500D7D7E7 /* ESP_WifiUtil.m */,
-				D2614E4323501A8500D7D7E7 /* ESPAES.h */,
-				D2614E4A23501A8600D7D7E7 /* ESPAES.m */,
-				D2614E3723501A6F00D7D7E7 /* ESPDataCode.h */,
-				D2614E3823501A6F00D7D7E7 /* ESPDataCode.m */,
-				D2614E3B23501A7000D7D7E7 /* ESPDatumCode.h */,
-				D2614E3C23501A7000D7D7E7 /* ESPDatumCode.m */,
-				D2614E3923501A6F00D7D7E7 /* ESPGuideCode.h */,
-				D2614E3A23501A6F00D7D7E7 /* ESPGuideCode.m */,
-				D2614E3423501A5D00D7D7E7 /* ESPTouchDelegate.h */,
-				D2614E3D23501A7000D7D7E7 /* ESPTouchGenerator.h */,
-				D2614E3623501A6F00D7D7E7 /* ESPTouchGenerator.m */,
-				D2614E3323501A5D00D7D7E7 /* ESPTouchResult.h */,
-				D2614E5923501AAB00D7D7E7 /* ESPTouchResult.m */,
-				D2614E3523501A5D00D7D7E7 /* ESPTouchTask.h */,
-				D2614E5823501AAB00D7D7E7 /* ESPTouchTask.m */,
-				D2614E5B23501AAC00D7D7E7 /* ESPTouchTaskParameter.h */,
-				D2614E5A23501AAC00D7D7E7 /* ESPTouchTaskParameter.m */,
-				D2614E5223501A9500D7D7E7 /* ESPUDPSocketClient.h */,
-				D2614E5323501A9500D7D7E7 /* ESPUDPSocketClient.m */,
-				D2614E5523501A9500D7D7E7 /* ESPUDPSocketServer.h */,
-				D2614E5423501A9500D7D7E7 /* ESPUDPSocketServer.m */,
-				D2614E4623501A8500D7D7E7 /* ESPVersionMacro.h */,
-			);
-			path = EspTouch;
-			sourceTree = "<group>";
-		};
 		D2A2CD26234DBD9A0039EB51 /* QCloudCOSXMLManage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1833,17 +1733,6 @@
 				ED153C6C237182A8007E9C4F /* TIoTRequestObj.m */,
 			);
 			path = WebSocket;
-			sourceTree = "<group>";
-		};
-		ED3A93D8237948DE00379AA7 /* GCDAsyncUdpSocket */ = {
-			isa = PBXGroup;
-			children = (
-				ED3A93D9237948DE00379AA7 /* GCDAsyncUdpSocket.m */,
-				ED3A93DA237948DE00379AA7 /* GCDAsyncSocket.m */,
-				ED3A93DB237948DE00379AA7 /* GCDAsyncUdpSocket.h */,
-				ED3A93DC237948DE00379AA7 /* GCDAsyncSocket.h */,
-			);
-			path = GCDAsyncUdpSocket;
 			sourceTree = "<group>";
 		};
 		ED67E59823C3177B00BE7628 /* pageTitle */ = {
@@ -2829,10 +2718,8 @@
 				ED800C98240CA2A50045A268 /* TIoTMessageNoticeVC.m in Sources */,
 				D2310507233075AE0003069D /* MBProgressHUD+XDP.m in Sources */,
 				ED78229D241B70FA00919FF6 /* TIoTMessageText2Cell.m in Sources */,
-				ED3A93DE237948DE00379AA7 /* GCDAsyncSocket.m in Sources */,
 				ED3A93D22378FE2E00379AA7 /* TIoTSoftapWaitVC.m in Sources */,
 				ED67E58C23C30B1E00BE7628 /* TIoTLongCell.m in Sources */,
-				D2614E5023501A8600D7D7E7 /* ESPAES.m in Sources */,
 				ED9C49C123B1DCE8005D537F /* UITextView+DisableCopy.m in Sources */,
 				ED72905E238E2AEC00175739 /* TIoTPhotoCell.m in Sources */,
 				EDE067B22373E9B50011F931 /* UIButton+LQRelayout.m in Sources */,
@@ -2842,8 +2729,6 @@
 				D2E11EAF2331B98400C388A5 /* TIoTSoftapConnectViewController.m in Sources */,
 				D2038BAB2332082F0036F6B9 /* TIoTPanelMoreViewController.m in Sources */,
 				ED932E4423BB286000F73F35 /* TIoTEnumItem.m in Sources */,
-				D2614E3E23501A7000D7D7E7 /* ESPTouchGenerator.m in Sources */,
-				EDB2F91B23B59FA800CDD4A6 /* TIoTRequestAction.m in Sources */,
 				ED6BA5A323C57DD100BE9EC9 /* TIoTFamilyInfoCell.m in Sources */,
 				ED549E9B23C710EE00325958 /* TIoTTimerCell.m in Sources */,
 				D2614E31234F272100D7D7E7 /* TIoTBindPhoneViewController.m in Sources */,
@@ -2864,10 +2749,7 @@
 				EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */,
 				ED3FDA7F2418890300EE60D5 /* TIoTModifyRoomVC.m in Sources */,
 				ED932E4023BB1AD800F73F35 /* TIoTEnumView.m in Sources */,
-				ED3A93DD237948DE00379AA7 /* GCDAsyncUdpSocket.m in Sources */,
-				D2614E4F23501A8600D7D7E7 /* ESP_CRC8.m in Sources */,
 				ED6BA5A823C57DED00BE9EC9 /* TIoTFamilyMemberCell.m in Sources */,
-				D2614E4E23501A8600D7D7E7 /* ESP_WifiUtil.m in Sources */,
 				ED67E5A823C3177B00BE7628 /* CMPageContentView.m in Sources */,
 				ED85BE9B23C470A000DF7790 /* TIoTBaseBigBtnView.m in Sources */,
 				ED9C15B923B9AB3800CAC848 /* TIoTDeviceShareVC.m in Sources */,
@@ -2875,9 +2757,7 @@
 				ED67E59123C3138600BE7628 /* TIoTMediumCell.m in Sources */,
 				ED7A568A2444406A005B4E5E /* TIoTDeviceDetailVC.m in Sources */,
 				D23104BD233066810003069D /* UUIDUntil.m in Sources */,
-				D2614E4D23501A8600D7D7E7 /* ESP_NetUtil.m in Sources */,
 				D20621AF235597DC00142DAC /* TIoTDistributionNetworkViewController.m in Sources */,
-				D2614E5C23501AAC00D7D7E7 /* ESPTouchTask.m in Sources */,
 				D2310492232F872F0003069D /* TIoTMineViewController.m in Sources */,
 				D2E11EB52331CE1000C388A5 /* TIoTUserInfomationViewController.m in Sources */,
 				D2C7D8172330DA7A00C97A04 /* TIoTConnectViewController.m in Sources */,
@@ -2890,7 +2770,6 @@
 				D23104BE233066810003069D /* KeyChainUntil.m in Sources */,
 				ED6DA51E23C99BBE00FDDC97 /* TIoTPopoverVC.m in Sources */,
 				D23104F223306A0E0003069D /* TIoTTabBarViewController.m in Sources */,
-				D2614E4023501A7000D7D7E7 /* ESPGuideCode.m in Sources */,
 				D2A2CD25234C66790039EB51 /* UIViewController+GetController.m in Sources */,
 				D297C35C2366753100918921 /* TIoTStringView.m in Sources */,
 				ED6BA5B523C5B9D000BE9EC9 /* TIoTAddRoomVC.m in Sources */,
@@ -2917,13 +2796,11 @@
 				ED729062238E669600175739 /* TIoTUploadObj.m in Sources */,
 				D2038BBA23321EA80036F6B9 /* TIoTAddTimeView.m in Sources */,
 				EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */,
-				D2614E5123501A8600D7D7E7 /* ESP_ByteUtil.m in Sources */,
 				ED93D98D23CBFDD000E3FD7D /* TIoTLoginVC.m in Sources */,
 				EDE6D0AE23AB6F4D00087388 /* TIoTWebVC.m in Sources */,
 				ED9C15D623B9DE6000CAC848 /* TIoTRoomsVC.m in Sources */,
 				D20621BA23559E5600142DAC /* TYPageControl.m in Sources */,
 				ED782291241B2E7E00919FF6 /* TIoTInvitationVC.m in Sources */,
-				D2614E5623501A9500D7D7E7 /* ESPUDPSocketClient.m in Sources */,
 				ED800C9B240CACF20045A268 /* TIoTMessageChildVC.m in Sources */,
 				ED67E5A523C3177B00BE7628 /* CMPageTitleContentView.m in Sources */,
 				ED69BE8B237ABAC90023F5FC /* TIoTTextVC.m in Sources */,
@@ -2941,14 +2818,11 @@
 				D2038BB1233211BA0036F6B9 /* TIoTTimerListVC.m in Sources */,
 				ED9C15C223B9C9E900CAC848 /* TIoTRepeatVC.m in Sources */,
 				D23104D42330678F0003069D /* NSTimer+BlockSupport.m in Sources */,
-				D2614E5E23501AAC00D7D7E7 /* ESPTouchTaskParameter.m in Sources */,
 				D2038BC023322E0A0036F6B9 /* TIoTAddActionView.m in Sources */,
 				ED6FD93A23CADBAB002DEC32 /* UINavigationController+CustomUI.m in Sources */,
 				ED9C15CB23B9D71F00CAC848 /* TIoTAddFamilyVC.m in Sources */,
 				EDF126FE23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m in Sources */,
-				D2614E5D23501AAC00D7D7E7 /* ESPTouchResult.m in Sources */,
 				D23104D52330678F0003069D /* NSObject+SwizzlingMethod.m in Sources */,
-				F47425932498D44B00B415E7 /* NSString+Extension.m in Sources */,
 				ED6BA5C323C5DF8500BE9EC9 /* TIoTAlertView.m in Sources */,
 				A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */,
 				D210C7DA2341D7EB00A53B08 /* XWCountryCodeController.m in Sources */,
@@ -2958,13 +2832,11 @@
 				ED6DA52723C9CC5F00FDDC97 /* WRNavigationBar.m in Sources */,
 				D23104FC23306DE60003069D /* KeyboardManage.m in Sources */,
 				EDC630A623D03B190079B64E /* TIoTOptionalView.m in Sources */,
-				D2614E5723501A9500D7D7E7 /* ESPUDPSocketServer.m in Sources */,
 				F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */,
 				EDA7677B23699A250036C8B7 /* TIoTHelpCell.m in Sources */,
 				D210C8452341F46200A53B08 /* JHVerificationCodeView.m in Sources */,
 				D2D5DA262362E68600BB0FBE /* TIoTTimeView.m in Sources */,
 				D231049A232F88040003069D /* TIoTHomeViewController.m in Sources */,
-				D2614E3F23501A7000D7D7E7 /* ESPDataCode.m in Sources */,
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
 				D23104D82330678F0003069D /* UIView+XDPExtension.m in Sources */,
 				D2310506233075AE0003069D /* TIoTHudLoadingView.m in Sources */,
@@ -2978,9 +2850,7 @@
 				D2038BC323322F350036F6B9 /* TIoTChoseDayTableViewCell.m in Sources */,
 				ED67E5A423C3177B00BE7628 /* UIView+CMCommon.m in Sources */,
 				A43FCE6C247E7DA800A7CEF3 /* TIoTDiscoverProductView.m in Sources */,
-				D2614E4123501A7000D7D7E7 /* ESPDatumCode.m in Sources */,
 				ED782298241B5F4A00919FF6 /* TIoTMessageInviteCell.m in Sources */,
-				D292525823580F26005BE0A8 /* TCSocket.m in Sources */,
 				D2C7D8142330D75300C97A04 /* TIoTWIFINetViewController.m in Sources */,
 				ED9C15B423B998DB00CAC848 /* TIoTAddTimerVC.m in Sources */,
 				D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */,

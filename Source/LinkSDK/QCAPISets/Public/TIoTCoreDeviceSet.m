@@ -8,7 +8,8 @@
 
 #import "TIoTCoreDeviceSet.h"
 #import "NSObject+additions.h"
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
+//#import <QCFoundation/TIoTCoreFoundation.h>
 #import "TIoTCoreSocketCover.h"
 #import "TIoTCoreRequestAction.h"
 

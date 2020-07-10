@@ -1370,7 +1370,7 @@ enum GCDAsyncUdpSocketConfig
 
 /**
  * Finds the address(es) of an interface description.
- * An inteface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).
+ * An inteface description may be an interface name (en0, en1, lo0) or corresponding IP
 **/
 - (void)convertIntefaceDescription:(NSString *)interfaceDescription
                               port:(uint16_t)port
@@ -1519,7 +1519,7 @@ enum GCDAsyncUdpSocketConfig
 
 /**
  * Converts a numeric hostname into its corresponding address.
- * The hostname is expected to be an IPv4 or IPv6 address represented as a human-readable string. (e.g. 192.168.4.34)
+ * The hostname is expected to be an IPv4 or IPv6 address represented as a human-readable string. 
 **/
 - (void)convertNumericHost:(NSString *)numericHost
                       port:(uint16_t)port
