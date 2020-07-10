@@ -31,4 +31,17 @@
     return NO;
 }
 
++ (id)base64Decode:(NSString *)base64String{
+    
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
+    NSError *error = nil;
+    id payload = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+    
+    if (error == nil) {
+        return payload;
+    }
+    
+    return @{};
+}
+
 @end
