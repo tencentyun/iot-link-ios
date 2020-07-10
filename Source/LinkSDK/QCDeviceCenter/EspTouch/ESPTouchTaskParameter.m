@@ -141,7 +141,6 @@ static int _datagramCount = 0;
     }
 }
 
-// target hostname is : 234.1.1.1, 234.2.2.2, 234.3.3.3 to 234.100.100.100 for IPv4
 // target hostname is : ff02::1 for IPv6
 - (NSString *) getTargetHostname
 {

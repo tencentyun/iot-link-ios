@@ -8,7 +8,8 @@
 
 #import "TIoTCoreMessageSet.h"
 #import "TIoTCoreRequestAction.h"
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
+//#import <QCFoundation/TIoTCoreFoundation.h>
 
 @implementation TIoTCoreMessageSet
 
