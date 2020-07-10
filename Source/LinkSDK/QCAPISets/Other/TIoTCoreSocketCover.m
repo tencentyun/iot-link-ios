@@ -9,8 +9,8 @@
 #import "TIoTCoreSocketCover.h"
 #import "TIoTCoreRequestObj.h"
 #import "NSObject+additions.h"
-
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
+//#import <QCFoundation/TIoTCoreFoundation.h>
 
 
 #define QQCLog(fmt, ...) if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {NSLog((@"\n--------------\n" fmt @"\n================================="), ##__VA_ARGS__);}

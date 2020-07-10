@@ -159,7 +159,7 @@ typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
  * For example, you could specify that the socket should only accept connections over ethernet,
  * and not other interfaces such as wifi.
  * 
- * The interface may be specified by name (e.g. "en1" or "lo0") or by IP address (e.g. "192.168.4.34").
+ * The interface may be specified by name (e.g. "en1" or "lo0") or by IP address
  * You may also use the special strings "localhost" or "loopback" to specify that
  * the socket only accept connections from the local machine.
  * 
@@ -202,11 +202,11 @@ typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
 /**
  * Connects to the given host & port, via the optional interface, with an optional timeout.
  * 
- * The host may be a domain name (e.g. "deusty.com") or an IP address string (e.g. "192.168.0.2").
+ * The host may be a domain name (e.g. "deusty.com") or an IP address string
  * The host may also be the special strings "localhost" or "loopback" to specify connecting
  * to a service on the local machine.
  * 
- * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address (e.g. "192.168.4.35").
+ * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address
  * The interface may also be used to specify the local port (see below).
  * 
  * To not time out use a negative time interval.
@@ -223,7 +223,7 @@ typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
  * 
  * The interface may optionally contain a port number at the end of the string, separated by a colon.
  * This allows you to specify the local port that should be used for the outgoing connection. (read paragraph to end)
- * To specify both interface and local port: "en1:8082" or "192.168.4.35:2424".
+ * To specify both interface and local port: "en1:8082"
  * To specify only local port: ":8082".
  * Please note this is an advanced feature, and is somewhat hidden on purpose.
  * You should understand that 99.999% of the time you should NOT specify the local port for an outgoing connection.
@@ -265,7 +265,7 @@ typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
  * struct sockaddr sa  -> NSData *dsa = [NSData dataWithBytes:&remoteAddr length:remoteAddr.sa_len];
  * struct sockaddr *sa -> NSData *dsa = [NSData dataWithBytes:remoteAddr length:remoteAddr->sa_len];
  * 
- * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address (e.g. "192.168.4.35").
+ * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address
  * The interface may also be used to specify the local port (see below).
  * 
  * The timeout is optional. To not time out use a negative time interval.
@@ -282,7 +282,7 @@ typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
  * 
  * The interface may optionally contain a port number at the end of the string, separated by a colon.
  * This allows you to specify the local port that should be used for the outgoing connection. (read paragraph to end)
- * To specify both interface and local port: "en1:8082" or "192.168.4.35:2424".
+ * To specify both interface and local port: "en1:8082" .
  * To specify only local port: ":8082".
  * Please note this is an advanced feature, and is somewhat hidden on purpose.
  * You should understand that 99.999% of the time you should NOT specify the local port for an outgoing connection.

@@ -360,7 +360,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * You may optionally pass a port number of zero to immediately bind the socket,
  * yet still allow the OS to automatically assign an available port.
  * 
- * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address (e.g. "192.168.4.35").
+ * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address
  * You may also use the special strings "localhost" or "loopback" to specify that
  * the socket only accept packets from the local machine.
  * 
@@ -410,7 +410,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * You cannot bind a socket after it has been connected.
  * You can only connect a socket once.
  * 
- * The host may be a domain name (e.g. "deusty.com") or an IP address string (e.g. "192.168.0.2").
+ * The host may be a domain name (e.g. "deusty.com") or an IP address string
  * 
  * This method is asynchronous as it requires a DNS lookup to resolve the given host name.
  * If an obvious error is detected, this method immediately returns NO and sets errPtr.
@@ -465,7 +465,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
 /**
  * Join multicast group.
  * Group should be an IP address (eg @"225.228.0.1").
- * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address (e.g. "192.168.4.35").
+ * The interface may be a name (e.g. "en1" or "lo0") or the corresponding IP address
  * 
  * On success, returns YES.
  * Otherwise returns NO, and sets errPtr. If you don't care about the error, you can pass nil for errPtr.
@@ -558,7 +558,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * 
  * @param host
  *     The destination to send the udp packet to.
- *     May be specified as a domain name (e.g. "deusty.com") or an IP address string (e.g. "192.168.0.2").
+ *     May be specified as a domain name (e.g. "deusty.com") or an IP address string
  *     You may also use the convenience strings of "loopback" or "localhost".
  * 
  * @param port

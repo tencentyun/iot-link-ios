@@ -40,6 +40,7 @@ FOUNDATION_EXPORT NSString *const AppUserResetPassword;//登录下修改密码
 FOUNDATION_EXPORT NSString *const AppUserFeedBack;//用户意见反馈
 FOUNDATION_EXPORT NSString *const AppCosAuth;//上传图片获取信息
 
+FOUNDATION_EXPORT NSString *const AppGetTokenTicket;//得到一次性的TokenTicket
 
 
 //MARK: 消息
@@ -89,6 +90,19 @@ FOUNDATION_EXPORT NSString *const AppReportDeviceData;//虚拟设备上报
 
 FOUNDATION_EXPORT NSString *const AppModifyFamilyDeviceRoom;//更换设备所属房间
 
+FOUNDATION_EXPORT NSString *const AppCreateDeviceBindToken;//用户获取当次配网token
+FOUNDATION_EXPORT NSString *const AppGetDeviceBindTokenState;// 查询token，生成之后经hub回调后token状态标识为可用状态
+FOUNDATION_EXPORT NSString *const AppTokenBindDeviceFamily;//使用token进行设备绑定
+
+
+FOUNDATION_EXPORT NSString *const AppGetParentCategoryList;//获取产品推荐父类别列表
+FOUNDATION_EXPORT NSString *const AppGetRecommList;//获取某个父类别下的推荐产品列表及子类别列表
+
+FOUNDATION_EXPORT NSString *const AppCreateDeviceBindToken;//用户获取当次配网token
+FOUNDATION_EXPORT NSString *const AppGetDeviceBindTokenState;// 查询token，生成之后经hub回调后token状态标识为可用状态
+FOUNDATION_EXPORT NSString *const AppTokenBindDeviceFamily;//使用token进行设备绑定
+
+
 
 //MARK: 设备定时
 
@@ -106,6 +120,10 @@ FOUNDATION_EXPORT NSString *const AppListUserShareDevices;//查询用户分享�
 FOUNDATION_EXPORT NSString *const AppListShareDeviceUsers;//查询设备的用户列表
 FOUNDATION_EXPORT NSString *const AppRemoveShareDeviceUser;//删除设备的用户
 FOUNDATION_EXPORT NSString *const AppRemoveUserShareDevice;//删除用户的设备
+
+
+//===============h5
+FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心
 
 
 @end

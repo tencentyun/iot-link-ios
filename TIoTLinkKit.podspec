@@ -30,8 +30,8 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  # s.source_files  = 'QCAccount/**/*.{h,m,c}'  源码需调整
-  s.vendored_frameworks = 'Source/LinkSDKDemo/Framework/QCAPISets.framework', 'Source/LinkSDKDemo/Framework/QCDeviceCenter.framework', 'Source/LinkSDKDemo/Framework/QCFoundation.framework'
+  s.source_files  = 'Source/LinkSDK/**/*.{h,m,c}'
+  # s.vendored_frameworks = 'Source/LinkSDKDemo/Framework/QCAPISets.framework', 'Source/LinkSDKDemo/Framework/QCDeviceCenter.framework', 'Source/LinkSDKDemo/Framework/QCFoundation.framework'
   
   # s.resource_bundles = {
   #   'QIotLinkKit' => ['QIotLinkKit/Assets/*.png']

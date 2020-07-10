@@ -28,7 +28,7 @@
 #import "NSObject+additions.h"
 #import "TIoTUserManage.h"
 #import "TIoTRequestObject.h"
-#import "TIoTRequestAction.h"
+#import "TIoTCoreRequestAction.h"
 #import "TIoTButton.h"
 #import "TIoTAlertView.h"
 
