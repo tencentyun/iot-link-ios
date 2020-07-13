@@ -30,6 +30,6 @@ jobs:
     - name: Deploy App to PGY
       run: curl -F 'file=@./LinkApp.ipa' -F "_api_key=$RELEASE_PGYER_API_KEY" https://www.pgyer.com/apiv2/app/upload
       env:
-        RELEASE_PGYER_API_KEY: ${{ secrets.RELEASE_PGYER_API_KEY }}
+        RELEASE_PGYER_API_KEY: ${{ secrets.IOT_PGYER_API_KEY }}
     - name: upload dSYM
       run: ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/腾讯连连.app.dSYM
