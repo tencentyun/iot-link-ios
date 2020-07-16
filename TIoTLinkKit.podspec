@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TIoTLinkKit'
-  s.version          = '0.1.1'
+  s.version          = ENV['LIB_VERSION'] || '0.1.3'
   s.summary          = 'A short description of TIoTLinkKit.'
 
 # This description is used to generate tags and improve search results.
