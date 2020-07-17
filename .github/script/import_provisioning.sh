@@ -9,6 +9,7 @@ if [ $1 == 'Debug' ]; then
     echo "Debug"
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/link_sdk_demo.mobileprovision.asc > .github/script/devsdkdemo.mobileprovision
 else
     echo "Release"
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.p12.asc > .github/script/apple_dev.p12
