@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <QCFoundation/TIoTCoreFoundation.h>
+#import "Firebase.h"
 
 @interface AppDelegate ()
 
@@ -21,6 +22,9 @@
     
     [[TIoTCoreServices shared] setAppKey:@"您的Key"];
     [TIoTCoreServices shared].logEnable = YES;
+    
+    //firebase注册
+    [FIRApp configure];
     
     if (![TIoTCoreUserManage shared].isValidToken) {
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];

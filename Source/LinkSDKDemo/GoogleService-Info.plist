@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>369055548986-nvnsd8qltampmt4q9c9o56ieba6mvuu9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.369055548986-nvnsd8qltampmt4q9c9o56ieba6mvuu9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>369055548986-sl5q6con41t8f7g02vjdjhrtsntsuq7b.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBZpdNPwKfxyE9XB1Ks30TCvEZmgxSYbk0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>369055548986</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tencent.iot.explorer.link.sdkdemo</string>
+	<key>PROJECT_ID</key>
+	<string>tencent-iot</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tencent-iot.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:369055548986:ios:e9c21b7d998f4031441703</string>
+	<key>DATABASE_URL</key>
+	<string>https://tencent-iot.firebaseio.com</string>
+</dict>
+</plist>
