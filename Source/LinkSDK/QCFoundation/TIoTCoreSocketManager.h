@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-static NSString *socketDidOpenNotification = @"socketDidOpenNotification";
+static NSString * _Nonnull socketDidOpenNotification = @"socketDidOpenNotification";
 
 
 NS_ASSUME_NONNULL_BEGIN

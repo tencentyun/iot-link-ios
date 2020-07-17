@@ -7,6 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <QCDeviceCenter/QCAddDevice.h>
-#import <QCDeviceCenter/QCObject.h>
+#import "TIoTCoreAddDevice.h"
+#import "TIoTCoreObject.h"
 
