@@ -132,4 +132,4 @@ APP SDK 功能划分说明
    
    
 
-若接入过程中有其他问题，请参考 [APP SDK开发常见问题](https://github.com/tencentyun/iot-link-ios/blob/master/doc/SDK开发/APP SDK开发常见问题.md ) 
+若接入过程中有其他问题，请参考 [APP SDK开发常见问题](https://github.com/tencentyun/iot-link-ios/blob/master/doc/SDK开发/APP%20SDK开发常见问题.md) 
