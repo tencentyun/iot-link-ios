@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
+		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m */; };
@@ -393,6 +394,7 @@
 /* Begin PBXFileReference section */
 		350741C903AAB840AE9A425C /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		6DADCDBC24C1417700B95D83 /* LinkSDKDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinkSDKDemo.entitlements; sourceTree = "<group>"; };
+		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
@@ -1863,6 +1865,7 @@
 				F4F3D53724935BD3005D3396 /* Assets.xcassets */,
 				F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */,
 				F4F3D53C24935BD3005D3396 /* Info.plist */,
+				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
 				F4F3D53D24935BD3005D3396 /* main.m */,
 			);
 			path = LinkSDKDemo;
@@ -2552,6 +2555,7 @@
 				F4F3D7D724938EBE005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4F3D7CE24938EBE005D3396 /* ControlDeviceVC.xib in Resources */,
 				F4F3D7B624938EBE005D3396 /* InviteVC.xib in Resources */,
+				6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */,
 				F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */,
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */,
@@ -3280,7 +3284,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3307,7 +3311,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
 				TARGETED_DEVICE_FAMILY = "1,2";
