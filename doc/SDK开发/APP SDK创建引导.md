@@ -21,7 +21,7 @@
 
 **使用说明**
 
-1. 打开 Appdelegate.m 文件，引入SDK头文件 `#import <QCFoundation/QCFoundation.h>`,并添加SDK配置。
+1. 打开 Appdelegate.m 文件，引入SDK头文件 `#import <QCFoundation/TIoTCoreFoundation.h>`,并添加SDK配置。
 
    ```objective-c
    - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -30,7 +30,7 @@
        [[TIoTCoreServices shared] setAppKey:@"您的Key"];
        [TIoTCoreServices shared].logEnable = YES;
        
-           self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[UIViewController new]];
+       self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[UIViewController new]];
        }
        
        return YES;
@@ -39,7 +39,7 @@
 
 2. APP SDK 功能划分说明
 
-   | 对             | 实现相关功能                                |
+   | 对应模块       | 实现相关功能                                |
    | -------------- | ------------------------------------------- |
    | QCDeviceCenter | 配网模块                                    |
    | QCAPISets      | 设备控制、消息相关、家庭管理、账户管理等api |
@@ -58,4 +58,4 @@
    - (void)createPhoneUserWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode password:(NSString *)password success:(SRHandler)success failure:(FRHandler)failure;
    ```
 
-4. 详细功能请参考 [APP SDK接入指南](https://github.com/tencentyun/iot-link-ios/blob/master/doc/SDK开发/APP SDK接入指南.md)
+4. 详细功能请参考 [APP SDK接入指南](https://github.com/tencentyun/iot-link-ios/blob/master/doc/SDK开发/APP%20SDK接入指南.md)
