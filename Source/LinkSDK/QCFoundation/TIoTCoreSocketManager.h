@@ -46,6 +46,10 @@ typedef NS_ENUM(NSInteger, WCReadyState) {
 - (void)socketClose;//关闭连接
 - (void)sendData:(NSDictionary *)obj;//发送数据
 
+- (void)startHeartBeatWith:(id)userInfo;
+- (void)stopHeartBeat;
+
+@property (nonatomic, strong) NSString *socketedRequestURL;
 
 @end
 
