@@ -2058,14 +2058,14 @@
 		F4F3D72124938EBD005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
-				F4F3D72324938EBD005D3396 /* RouteAddress */,
-				F4F3D72724938EBD005D3396 /* pageTitle */,
-				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
-				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
-				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
-				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
 				F4F3D73324938EBD005D3396 /* MBProgressHUD+XDP.h */,
+				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
+				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
+				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
+				F4F3D72724938EBD005D3396 /* pageTitle */,
+				F4F3D72324938EBD005D3396 /* RouteAddress */,
+				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
+				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";

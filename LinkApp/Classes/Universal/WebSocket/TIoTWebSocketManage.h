@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SocketRocket.h"
+//#import "SocketRocket.h"
+#import "TIoTCoreSocketManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,7 @@ typedef void(^didReceiveMessage) (BOOL sucess, NSDictionary *data);
 @interface TIoTWebSocketManage : NSObject
 
 /** 连接状态 */
-@property (nonatomic,assign) SRReadyState socketReadyState;
+@property (nonatomic,assign) WCReadyState socketReadyState;
 //@property (nonatomic,  copy) void (^didReceiveMessage)(BOOL sucess, NSDictionary *data);
 
 +(instancetype)shared;
