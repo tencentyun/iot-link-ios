@@ -66,6 +66,8 @@ static NSString *heartBeatReqID = @"5002";
         return;
     }
     
+    [self socketClose];
+    QCLog(@"请求的websocket地址：%@",self.socket.url.absoluteString);
     [self.socket open];
 }
 
@@ -81,21 +83,33 @@ static NSString *heartBeatReqID = @"5002";
 - (void)startHeartBeat:(NSNotification *)noti
 {
     NSDictionary *params = noti.object;
-    [self stopHeartBeat];
     
-    self.heartBeat = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(heartBeatAction:) userInfo:params repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.heartBeat forMode:NSRunLoopCommonModes];
-    [self.heartBeat fire];
+    dispatch_main_async_safe(^{
+        [self stopHeartBeat];
+        
+        [self startHeartBeatWith:params];
+    })
 }
 
 - (void)stopHeartBeat
 {
-    if (self.heartBeat) {
-        if (self.heartBeat.isValid){
-            [self.heartBeat invalidate];
-            self.heartBeat = nil;
+    dispatch_main_async_safe(^{
+        if (self.heartBeat) {
+            if ([self.heartBeat respondsToSelector:@selector(isValid)]){
+                if ([self.heartBeat isValid]){
+                    [self.heartBeat invalidate];
+                    self.heartBeat = nil;
+                }
+            }
         }
-    }
+    })
+}
+
+- (void)startHeartBeatWith:(id)userInfo {
+    
+    self.heartBeat = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(heartBeatAction:) userInfo:userInfo repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.heartBeat forMode:NSRunLoopCommonModes];
+    [self.heartBeat fire];
 }
 
 //ping
@@ -117,13 +131,14 @@ static NSString *heartBeatReqID = @"5002";
     self.reConnectTime = 0;
     
     if (webSocket == self.socket) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:socketDidOpenNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startHeartBeat:) name:@"heartBeatStart" object:nil];
         
         QCLog(@"************************** socket 连接成功************************** ");
         if ([self.delegate respondsToSelector:@selector(socketDidOpen:)]) {
             [self.delegate socketDidOpen:self];
+        }else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:socketDidOpenNotification object:nil];
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startHeartBeat:) name:@"heartBeatStart" object:nil];
         }
     }
 }
@@ -153,6 +168,12 @@ static NSString *heartBeatReqID = @"5002";
     }
 
 }
+
+/*该函数是接收服务器发送的pong消息，其中最后一个是接受pong消息的，
+在这里就要提一下心跳包，一般情况下建立长连接都会建立一个心跳包，
+用于每隔一段时间通知一次服务端，客户端还是在线，这个心跳包其实就是一个ping消息，
+我的理解就是建立一个定时器，每隔十秒或者十五秒向服务端发送一个ping消息，这个消息可是是空的
+*/
 
 -(void)webSocket:(TIoTCoreWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
 //    NSString *reply = [[NSString alloc] initWithData:pongPayload encoding:NSUTF8StringEncoding];
@@ -191,6 +212,7 @@ static NSString *heartBeatReqID = @"5002";
 - (void)reConnect
 {
     [self socketClose];
+    //超过5次后不再重连,等待重连时间分别为 0，2，4，8，16
     //超过一分钟就不再重连 所以只会重连5次
     if (self.reConnectTime > 16) {
         //您的网络状况不是很好，请检查网络后重试
@@ -264,8 +286,9 @@ static NSString *heartBeatReqID = @"5002";
 - (TIoTCoreWebSocket *)socket
 {
     if (!_socket) {
+        NSString *urlStr = self.socketedRequestURL ? self.socketedRequestURL: [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
         _socket = [[TIoTCoreWebSocket alloc] initWithURLRequest:
-        [NSURLRequest requestWithURL:[NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].wsUrl]]];
+                   [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
         _socket.delegate = self;
     }
     return _socket;

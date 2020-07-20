@@ -81,7 +81,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
-    if ([TIoTWebSocketManage shared].socketReadyState == SR_OPEN) {
+    if ([TIoTWebSocketManage shared].socketReadyState == WC_OPEN) {
         [HXYNotice addActivePushPost:devIds];
     }
 

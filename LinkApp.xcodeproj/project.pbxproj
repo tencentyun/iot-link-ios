@@ -2058,14 +2058,14 @@
 		F4F3D72124938EBD005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
-				F4F3D72324938EBD005D3396 /* RouteAddress */,
-				F4F3D72724938EBD005D3396 /* pageTitle */,
-				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
-				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
-				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
-				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
 				F4F3D73324938EBD005D3396 /* MBProgressHUD+XDP.h */,
+				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
+				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
+				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
+				F4F3D72724938EBD005D3396 /* pageTitle */,
+				F4F3D72324938EBD005D3396 /* RouteAddress */,
+				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
+				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -2083,13 +2083,13 @@
 		F4F3D72724938EBD005D3396 /* pageTitle */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */,
-				F4F3D72924938EBD005D3396 /* CMPageTitleViewMacro.h */,
-				F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */,
+				F4F3D72E24938EBD005D3396 /* CMPageTitleConfig.h */,
 				F4F3D72B24938EBD005D3396 /* CMPageTitleConfig.m */,
 				F4F3D72C24938EBD005D3396 /* CMPageTitleContentView.h */,
+				F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */,
+				F4F3D72924938EBD005D3396 /* CMPageTitleViewMacro.h */,
 				F4F3D72D24938EBD005D3396 /* UIView+CMCommon.h */,
-				F4F3D72E24938EBD005D3396 /* CMPageTitleConfig.h */,
+				F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */,
 			);
 			path = pageTitle;
 			sourceTree = "<group>";
