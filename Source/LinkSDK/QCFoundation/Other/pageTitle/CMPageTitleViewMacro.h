@@ -2,7 +2,10 @@
 //  CMPageTitleViewMacro.h
 //  CMPageTitleView
 //
-//  
+//  GitHub 下载地址：https://github.com/CrabMen/CMPageTitleView
+//
+
+//  Created by 智借iOS on 2019/5/9.
 //  Copyright © 2019 CrabMan. All rights reserved.
 //
 

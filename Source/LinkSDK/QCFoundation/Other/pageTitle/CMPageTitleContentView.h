@@ -2,7 +2,10 @@
 //  CMPageTitleContentView.h
 //  CMDisplayTitleView
 //
-//  
+//  GitHub 下载地址：https://github.com/CrabMen/CMPageTitleView
+//
+
+//  Created by CrabMan on 2018/1/15.
 //  Copyright © 2018年 CrabMan. All rights reserved.
 //
 
@@ -12,12 +15,18 @@
 @class CMPageTitleContentView;
 @protocol CMPageTitleContentViewDelegate <NSObject>
 
-@required
 /**
+ 以下代理方法二选一 必须实现
+ 
  当CMPageTitleContentView 中标题被点击会调用该代理方法
 
  @param index 当前点击的标题的index
  @param repeat 是否是重复点击
+ */
+- (void)cm_pageTitleContentViewClickWithLastIndex:(NSUInteger)LastIndex Index:(NSUInteger)index Repeat:(BOOL)repeat;
+
+/**
+ 获取点击view
  */
 - (void)cm_pageTitleContentView:(CMPageTitleContentView *)view clickWithLastIndex:(NSUInteger)LastIndex Index:(NSUInteger)index Repeat:(BOOL)repeat;
 
@@ -25,6 +34,8 @@
 
 
 @interface CMPageTitleContentView : UIScrollView
+
+@property (nonatomic, assign) BOOL isGetSelectedView;
 
 /**选中的标题*/
 @property (nonatomic,assign) NSInteger cm_selectedIndex;

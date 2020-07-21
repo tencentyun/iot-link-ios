@@ -2,7 +2,10 @@
 //  CMPageTitlem
 //  CMPageTitleView
 //
-//  
+//  GitHub 下载地址：https://github.com/CrabMen/CMPageTitleView
+//
+
+//  Created by CrabMan on 2019/3/25.
 //  Copyright © 2019 CrabMan. All rights reserved.
 //
 
