@@ -13,7 +13,7 @@
 #import "TIoTCoreMemberInfoVC.h"
 #import "TIoTCoreAlertView.h"
 
-#import <QCFoundation/TIoTCoreUserManage.h>
+#import "TIoTCoreUserManage.h"
 
 
 static NSString *headerId = @"pf99";

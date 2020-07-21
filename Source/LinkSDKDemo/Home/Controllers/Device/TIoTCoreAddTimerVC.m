@@ -12,7 +12,7 @@
 #import "TIoTCoreSlideView.h"
 #import "TIoTCoreAlertView.h"
 #import "SelectView.h"
-#import <QCFoundation/NSString+Extension.h>
+#import "NSString+Extension.h"
 
 static NSString *cellId = @"rv23244";
 @interface TIoTCoreAddTimerVC ()<UITableViewDelegate,UITableViewDataSource>

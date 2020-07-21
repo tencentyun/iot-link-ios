@@ -8,7 +8,7 @@
 
 #import "TIoTCoreMemberInfoVC.h"
 #import <UIImageView+WebCache.h>
-#import <QCFoundation/TIoTCoreUserManage.h>
+#import "TIoTCoreUserManage.h"
 
 @interface TIoTCoreMemberInfoVC ()
 @property (weak, nonatomic) IBOutlet UIImageView *headImg;

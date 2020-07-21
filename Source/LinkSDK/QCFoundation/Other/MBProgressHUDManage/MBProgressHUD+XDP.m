@@ -7,7 +7,8 @@
 //
 
 #import "MBProgressHUD+XDP.h"
-#import "TIoTHudLoadingView.h"
+#import "TIoTCoreHudLoadingView.h"
+#import "TIoTCoreQMacros.h"
 
 @implementation MBProgressHUD (WC)
 
@@ -39,7 +40,7 @@
     //遮罩层
     hud.backgroundView.color = [UIColor clearColor];
     
-    TIoTHudLoadingView *loadingView = [[TIoTHudLoadingView alloc] init];
+    TIoTCoreHudLoadingView *loadingView = [[TIoTCoreHudLoadingView alloc] init];
     hud.customView = loadingView;
 }
 
