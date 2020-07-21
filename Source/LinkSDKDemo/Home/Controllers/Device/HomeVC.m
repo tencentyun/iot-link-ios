@@ -73,6 +73,7 @@ static NSString *cellID = @"DODO";
         }
         titView.frame = CGRectMake(60, [NSObject navigationBarHeight], kScreenWidth - 60, 44);
         self.familyTitlesView = titView;
+        self.familyTitlesView.isGetSelectedView = YES;
     }
     else
     {
@@ -81,6 +82,7 @@ static NSString *cellID = @"DODO";
         }
         titView.frame = CGRectMake(60, [NSObject navigationBarHeight] + 44 + 2, kScreenWidth - 60, 44);
         self.roomTitlesView = titView;
+        self.roomTitlesView.isGetSelectedView = YES;
     }
     [self.view addSubview:titView];
 }

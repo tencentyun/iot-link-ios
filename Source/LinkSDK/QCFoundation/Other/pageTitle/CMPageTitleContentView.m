@@ -341,9 +341,13 @@
     CMDisplayTitleLabel *label = tap ? (CMDisplayTitleLabel *)tap.view : self.titleLabels[self.config.cm_selectedIndex];
     
     if (tap && self.cm_delegate) {
-        [self.cm_delegate cm_pageTitleContentViewClickWithLastIndex:self.cm_selectedIndex Index:[self.titleLabels indexOfObject:label] Repeat:label == self.selectedLabel];
+        
+        if (self.isGetSelectedView == NO) {
+            [self.cm_delegate cm_pageTitleContentViewClickWithLastIndex:self.cm_selectedIndex Index:[self.titleLabels indexOfObject:label] Repeat:label == self.selectedLabel];
+        }else {
+            [self.cm_delegate cm_pageTitleContentView:self clickWithLastIndex:self.cm_selectedIndex Index:[self.titleLabels indexOfObject:label] Repeat:label == self.selectedLabel];
+        }
     }
-    
     _cm_selectedIndex = [self.titleLabels indexOfObject:label];
     
     [self selectLabel:label];

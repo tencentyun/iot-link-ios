@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D702C1324C6E779002B9B75 /* CMPageTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C0824C6E779002B9B75 /* CMPageTitleView.h */; };
+		6D702C1424C6E779002B9B75 /* CMPageContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C0924C6E779002B9B75 /* CMPageContentView.h */; };
+		6D702C1524C6E779002B9B75 /* UIView+CMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D702C0A24C6E779002B9B75 /* UIView+CMCommon.m */; };
+		6D702C1624C6E779002B9B75 /* CMPageTitleViewMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C0B24C6E779002B9B75 /* CMPageTitleViewMacro.h */; };
+		6D702C1724C6E779002B9B75 /* CMPageTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D702C0C24C6E779002B9B75 /* CMPageTitleContentView.m */; };
+		6D702C1824C6E779002B9B75 /* CMPageTitleConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D702C0D24C6E779002B9B75 /* CMPageTitleConfig.m */; };
+		6D702C1924C6E779002B9B75 /* CMPageTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D702C0E24C6E779002B9B75 /* CMPageTitleView.m */; };
+		6D702C1A24C6E779002B9B75 /* CMPageContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D702C0F24C6E779002B9B75 /* CMPageContentView.m */; };
+		6D702C1B24C6E779002B9B75 /* CMPageTitleContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C1024C6E779002B9B75 /* CMPageTitleContentView.h */; };
+		6D702C1C24C6E779002B9B75 /* UIView+CMCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C1124C6E779002B9B75 /* UIView+CMCommon.h */; };
+		6D702C1D24C6E779002B9B75 /* CMPageTitleConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D702C1224C6E779002B9B75 /* CMPageTitleConfig.h */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
@@ -114,11 +125,6 @@
 		ED67E58D23C30B1E00BE7628 /* TIoTLongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED67E58B23C30B1E00BE7628 /* TIoTLongCell.xib */; };
 		ED67E59123C3138600BE7628 /* TIoTMediumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E58F23C3138600BE7628 /* TIoTMediumCell.m */; };
 		ED67E59223C3138600BE7628 /* TIoTMediumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED67E59023C3138600BE7628 /* TIoTMediumCell.xib */; };
-		ED67E5A423C3177B00BE7628 /* UIView+CMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E59B23C3177B00BE7628 /* UIView+CMCommon.m */; };
-		ED67E5A523C3177B00BE7628 /* CMPageTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E59D23C3177B00BE7628 /* CMPageTitleContentView.m */; };
-		ED67E5A623C3177B00BE7628 /* CMPageTitleConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E59E23C3177B00BE7628 /* CMPageTitleConfig.m */; };
-		ED67E5A723C3177B00BE7628 /* CMPageTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E59F23C3177B00BE7628 /* CMPageTitleView.m */; };
-		ED67E5A823C3177B00BE7628 /* CMPageContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED67E5A023C3177B00BE7628 /* CMPageContentView.m */; };
 		ED69BE8B237ABAC90023F5FC /* TIoTTextVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED69BE8A237ABAC90023F5FC /* TIoTTextVC.m */; };
 		ED6BA5A323C57DD100BE9EC9 /* TIoTFamilyInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5A123C57DD100BE9EC9 /* TIoTFamilyInfoCell.m */; };
 		ED6BA5A423C57DD100BE9EC9 /* TIoTFamilyInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5A223C57DD100BE9EC9 /* TIoTFamilyInfoCell.xib */; };
@@ -304,9 +310,6 @@
 		F4F3D71E24936EB4005D3396 /* TIoTCoreSocketManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B224935F3E005D3396 /* TIoTCoreSocketManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F3D71F24936EB4005D3396 /* TIoTCoreRequestObject.h in Headers */ = {isa = PBXBuildFile; fileRef = F4F3D5B324935F3E005D3396 /* TIoTCoreRequestObject.h */; };
 		F4F3D79A24938EBE005D3396 /* TIoTCoreHudLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */; };
-		F4F3D79C24938EBE005D3396 /* UIView+CMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */; };
-		F4F3D79D24938EBE005D3396 /* CMPageTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */; };
-		F4F3D79E24938EBE005D3396 /* CMPageTitleConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72B24938EBD005D3396 /* CMPageTitleConfig.m */; };
 		F4F3D79F24938EBE005D3396 /* NSObject+ro.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72F24938EBD005D3396 /* NSObject+ro.m */; };
 		F4F3D7A024938EBE005D3396 /* MBProgressHUD+XDP.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */; };
 		F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73724938EBD005D3396 /* ControlInfo.m */; };
@@ -392,6 +395,17 @@
 
 /* Begin PBXFileReference section */
 		350741C903AAB840AE9A425C /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
+		6D702C0824C6E779002B9B75 /* CMPageTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleView.h; sourceTree = "<group>"; };
+		6D702C0924C6E779002B9B75 /* CMPageContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageContentView.h; sourceTree = "<group>"; };
+		6D702C0A24C6E779002B9B75 /* UIView+CMCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CMCommon.m"; sourceTree = "<group>"; };
+		6D702C0B24C6E779002B9B75 /* CMPageTitleViewMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleViewMacro.h; sourceTree = "<group>"; };
+		6D702C0C24C6E779002B9B75 /* CMPageTitleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleContentView.m; sourceTree = "<group>"; };
+		6D702C0D24C6E779002B9B75 /* CMPageTitleConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleConfig.m; sourceTree = "<group>"; };
+		6D702C0E24C6E779002B9B75 /* CMPageTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleView.m; sourceTree = "<group>"; };
+		6D702C0F24C6E779002B9B75 /* CMPageContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageContentView.m; sourceTree = "<group>"; };
+		6D702C1024C6E779002B9B75 /* CMPageTitleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleContentView.h; sourceTree = "<group>"; };
+		6D702C1124C6E779002B9B75 /* UIView+CMCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CMCommon.h"; sourceTree = "<group>"; };
+		6D702C1224C6E779002B9B75 /* CMPageTitleConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleConfig.h; sourceTree = "<group>"; };
 		6DADCDBC24C1417700B95D83 /* LinkSDKDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinkSDKDemo.entitlements; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -600,17 +614,6 @@
 		ED67E58E23C3138600BE7628 /* TIoTMediumCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMediumCell.h; sourceTree = "<group>"; };
 		ED67E58F23C3138600BE7628 /* TIoTMediumCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMediumCell.m; sourceTree = "<group>"; };
 		ED67E59023C3138600BE7628 /* TIoTMediumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTMediumCell.xib; sourceTree = "<group>"; };
-		ED67E59923C3177B00BE7628 /* CMPageTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleView.h; sourceTree = "<group>"; };
-		ED67E59A23C3177B00BE7628 /* CMPageContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageContentView.h; sourceTree = "<group>"; };
-		ED67E59B23C3177B00BE7628 /* UIView+CMCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CMCommon.m"; sourceTree = "<group>"; };
-		ED67E59C23C3177B00BE7628 /* CMPageTitleViewMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleViewMacro.h; sourceTree = "<group>"; };
-		ED67E59D23C3177B00BE7628 /* CMPageTitleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleContentView.m; sourceTree = "<group>"; };
-		ED67E59E23C3177B00BE7628 /* CMPageTitleConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleConfig.m; sourceTree = "<group>"; };
-		ED67E59F23C3177B00BE7628 /* CMPageTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleView.m; sourceTree = "<group>"; };
-		ED67E5A023C3177B00BE7628 /* CMPageContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageContentView.m; sourceTree = "<group>"; };
-		ED67E5A123C3177B00BE7628 /* CMPageTitleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleContentView.h; sourceTree = "<group>"; };
-		ED67E5A223C3177B00BE7628 /* UIView+CMCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CMCommon.h"; sourceTree = "<group>"; };
-		ED67E5A323C3177B00BE7628 /* CMPageTitleConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleConfig.h; sourceTree = "<group>"; };
 		ED69BE89237ABAC90023F5FC /* TIoTTextVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTextVC.h; sourceTree = "<group>"; };
 		ED69BE8A237ABAC90023F5FC /* TIoTTextVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTextVC.m; sourceTree = "<group>"; };
 		ED6BA5A023C57DD100BE9EC9 /* TIoTFamilyInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTFamilyInfoCell.h; sourceTree = "<group>"; };
@@ -871,13 +874,6 @@
 		F4F3D70024936E58005D3396 /* QCFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D70324936E58005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreHudLoadingView.m; sourceTree = "<group>"; };
-		F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CMCommon.m"; sourceTree = "<group>"; };
-		F4F3D72924938EBD005D3396 /* CMPageTitleViewMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleViewMacro.h; sourceTree = "<group>"; };
-		F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleContentView.m; sourceTree = "<group>"; };
-		F4F3D72B24938EBD005D3396 /* CMPageTitleConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPageTitleConfig.m; sourceTree = "<group>"; };
-		F4F3D72C24938EBD005D3396 /* CMPageTitleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleContentView.h; sourceTree = "<group>"; };
-		F4F3D72D24938EBD005D3396 /* UIView+CMCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CMCommon.h"; sourceTree = "<group>"; };
-		F4F3D72E24938EBD005D3396 /* CMPageTitleConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPageTitleConfig.h; sourceTree = "<group>"; };
 		F4F3D72F24938EBD005D3396 /* NSObject+ro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ro.m"; sourceTree = "<group>"; };
 		F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+XDP.m"; sourceTree = "<group>"; };
 		F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreHudLoadingView.h; sourceTree = "<group>"; };
@@ -1048,6 +1044,24 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		6D702C0724C6E779002B9B75 /* pageTitle */ = {
+			isa = PBXGroup;
+			children = (
+				6D702C0924C6E779002B9B75 /* CMPageContentView.h */,
+				6D702C0F24C6E779002B9B75 /* CMPageContentView.m */,
+				6D702C1224C6E779002B9B75 /* CMPageTitleConfig.h */,
+				6D702C0D24C6E779002B9B75 /* CMPageTitleConfig.m */,
+				6D702C1024C6E779002B9B75 /* CMPageTitleContentView.h */,
+				6D702C0C24C6E779002B9B75 /* CMPageTitleContentView.m */,
+				6D702C0824C6E779002B9B75 /* CMPageTitleView.h */,
+				6D702C0E24C6E779002B9B75 /* CMPageTitleView.m */,
+				6D702C0B24C6E779002B9B75 /* CMPageTitleViewMacro.h */,
+				6D702C1124C6E779002B9B75 /* UIView+CMCommon.h */,
+				6D702C0A24C6E779002B9B75 /* UIView+CMCommon.m */,
+			);
+			path = pageTitle;
+			sourceTree = "<group>";
+		};
 		9172D49D607895D45538B791 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1215,7 +1229,6 @@
 		D2310496232F87ED0003069D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				ED67E59823C3177B00BE7628 /* pageTitle */,
 				D2C7D7F22330B76500C97A04 /* TIoTEquipmentTableViewCell.h */,
 				D2C7D7F32330B76500C97A04 /* TIoTEquipmentTableViewCell.m */,
 				EDC630A423D03B190079B64E /* TIoTOptionalView.h */,
@@ -1717,24 +1730,6 @@
 			path = WebSocket;
 			sourceTree = "<group>";
 		};
-		ED67E59823C3177B00BE7628 /* pageTitle */ = {
-			isa = PBXGroup;
-			children = (
-				ED67E59923C3177B00BE7628 /* CMPageTitleView.h */,
-				ED67E59A23C3177B00BE7628 /* CMPageContentView.h */,
-				ED67E59B23C3177B00BE7628 /* UIView+CMCommon.m */,
-				ED67E59C23C3177B00BE7628 /* CMPageTitleViewMacro.h */,
-				ED67E59D23C3177B00BE7628 /* CMPageTitleContentView.m */,
-				ED67E59E23C3177B00BE7628 /* CMPageTitleConfig.m */,
-				ED67E59F23C3177B00BE7628 /* CMPageTitleView.m */,
-				ED67E5A023C3177B00BE7628 /* CMPageContentView.m */,
-				ED67E5A123C3177B00BE7628 /* CMPageTitleContentView.h */,
-				ED67E5A223C3177B00BE7628 /* UIView+CMCommon.h */,
-				ED67E5A323C3177B00BE7628 /* CMPageTitleConfig.h */,
-			);
-			path = pageTitle;
-			sourceTree = "<group>";
-		};
 		ED7B178223BEF01800B61567 /* slider */ = {
 			isa = PBXGroup;
 			children = (
@@ -2042,6 +2037,7 @@
 		F4F3D5A424935F3E005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				6D702C0724C6E779002B9B75 /* pageTitle */,
 				F4F3D5A524935F3E005D3396 /* NSString+Extension.h */,
 				F4F3D5A824935F3E005D3396 /* NSString+Extension.m */,
 				F4F3D5A624935F3E005D3396 /* TIoTCoreQMacros.h */,
@@ -2058,25 +2054,10 @@
 				F4F3D73024938EBD005D3396 /* MBProgressHUD+XDP.m */,
 				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
 				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
-				F4F3D72724938EBD005D3396 /* pageTitle */,
 				F4F3D73124938EBD005D3396 /* TIoTCoreHudLoadingView.h */,
 				F4F3D72224938EBD005D3396 /* TIoTCoreHudLoadingView.m */,
 			);
 			path = Other;
-			sourceTree = "<group>";
-		};
-		F4F3D72724938EBD005D3396 /* pageTitle */ = {
-			isa = PBXGroup;
-			children = (
-				F4F3D72E24938EBD005D3396 /* CMPageTitleConfig.h */,
-				F4F3D72B24938EBD005D3396 /* CMPageTitleConfig.m */,
-				F4F3D72C24938EBD005D3396 /* CMPageTitleContentView.h */,
-				F4F3D72A24938EBD005D3396 /* CMPageTitleContentView.m */,
-				F4F3D72924938EBD005D3396 /* CMPageTitleViewMacro.h */,
-				F4F3D72D24938EBD005D3396 /* UIView+CMCommon.h */,
-				F4F3D72824938EBD005D3396 /* UIView+CMCommon.m */,
-			);
-			path = pageTitle;
 			sourceTree = "<group>";
 		};
 		F4F3D73524938EBD005D3396 /* Home */ = {
@@ -2307,16 +2288,22 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D702C1624C6E779002B9B75 /* CMPageTitleViewMacro.h in Headers */,
 				F4F3D71824936EB4005D3396 /* NSString+Extension.h in Headers */,
+				6D702C1324C6E779002B9B75 /* CMPageTitleView.h in Headers */,
 				F4F3D71724936EB4005D3396 /* TIoTCoreRequestBuilder.h in Headers */,
+				6D702C1C24C6E779002B9B75 /* UIView+CMCommon.h in Headers */,
 				F4F3D71A24936EB4005D3396 /* TIoTCoreUserManage.h in Headers */,
 				F4F3D71624936EB4005D3396 /* TIoTCoreRequestClient.h in Headers */,
+				6D702C1424C6E779002B9B75 /* CMPageContentView.h in Headers */,
 				F4F3D71E24936EB4005D3396 /* TIoTCoreSocketManager.h in Headers */,
+				6D702C1B24C6E779002B9B75 /* CMPageTitleContentView.h in Headers */,
 				F4F3D71C24936EB4005D3396 /* TIoTCoreServices.h in Headers */,
 				F4F3D71B24936EB4005D3396 /* TIoTCoreFoundation.h in Headers */,
 				F4F3D71524936EB4005D3396 /* TIoTCoreWebSocket.h in Headers */,
 				F4F3D71924936EB4005D3396 /* TIoTCoreQMacros.h in Headers */,
 				F4F3D71D24936EB4005D3396 /* TIoTCoreAppEnvironment.h in Headers */,
+				6D702C1D24C6E779002B9B75 /* CMPageTitleConfig.h in Headers */,
 				F4F3D71F24936EB4005D3396 /* TIoTCoreRequestObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2673,7 +2660,6 @@
 				ED7B178B23BF0A8B00B61567 /* TIoTNumberView.m in Sources */,
 				D2038BA8233204170036F6B9 /* TIoTPanelTableViewCell.m in Sources */,
 				ED7B177E23BED1C900B61567 /* TIoTBoolView.m in Sources */,
-				ED67E5A623C3177B00BE7628 /* CMPageTitleConfig.m in Sources */,
 				D20621BF2355B1B300142DAC /* SYPaneView.m in Sources */,
 				D2038BC92333145B0036F6B9 /* TIoTActionTypeTableViewCell.m in Sources */,
 				D2B29EE92360200A0086BDFA /* TIoTDeviceData.m in Sources */,
@@ -2704,7 +2690,6 @@
 				D2DAC4C623386173006DB67C /* BluetoothCentralManager.m in Sources */,
 				D2A2CD39234ECC6D0039EB51 /* TIoTRefreshFooter.m in Sources */,
 				D2E11EB82331CF4900C388A5 /* TIoTUserInfomationTableViewCell.m in Sources */,
-				ED67E5A723C3177B00BE7628 /* CMPageTitleView.m in Sources */,
 				D2E976B8233D969A00182443 /* TIoTWebSocketManage.m in Sources */,
 				ED6D120623C8598400A7A333 /* TIoTTimerListCell.m in Sources */,
 				D2C7AA02232F6AA5005E8006 /* main.m in Sources */,
@@ -2712,7 +2697,6 @@
 				ED3FDA7F2418890300EE60D5 /* TIoTModifyRoomVC.m in Sources */,
 				ED932E4023BB1AD800F73F35 /* TIoTEnumView.m in Sources */,
 				ED6BA5A823C57DED00BE9EC9 /* TIoTFamilyMemberCell.m in Sources */,
-				ED67E5A823C3177B00BE7628 /* CMPageContentView.m in Sources */,
 				ED85BE9B23C470A000DF7790 /* TIoTBaseBigBtnView.m in Sources */,
 				ED9C15B923B9AB3800CAC848 /* TIoTDeviceShareVC.m in Sources */,
 				ED7B178723BEF01800B61567 /* SliderView.m in Sources */,
@@ -2762,7 +2746,6 @@
 				D20621BA23559E5600142DAC /* TYPageControl.m in Sources */,
 				ED782291241B2E7E00919FF6 /* TIoTInvitationVC.m in Sources */,
 				ED800C9B240CACF20045A268 /* TIoTMessageChildVC.m in Sources */,
-				ED67E5A523C3177B00BE7628 /* CMPageTitleContentView.m in Sources */,
 				ED69BE8B237ABAC90023F5FC /* TIoTTextVC.m in Sources */,
 				D23104DD233069F70003069D /* TIoTUIProxy.m in Sources */,
 				ED6DA52323C9B21500FDDC97 /* TIoTUserCell.m in Sources */,
@@ -2808,7 +2791,6 @@
 				ED153C6A23712028007E9C4F /* TIoTResetPwdVC.m in Sources */,
 				ED800C92240CA25C0045A268 /* TIoTMessageDeviceVC.m in Sources */,
 				D2038BC323322F350036F6B9 /* TIoTChoseDayTableViewCell.m in Sources */,
-				ED67E5A423C3177B00BE7628 /* UIView+CMCommon.m in Sources */,
 				A43FCE6C247E7DA800A7CEF3 /* TIoTDiscoverProductView.m in Sources */,
 				ED782298241B5F4A00919FF6 /* TIoTMessageInviteCell.m in Sources */,
 				D2C7D8142330D75300C97A04 /* TIoTWIFINetViewController.m in Sources */,
@@ -2836,7 +2818,6 @@
 				F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */,
 				F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */,
 				F4F3D7BE24938EBE005D3396 /* TIoTCoreRoomsVC.m in Sources */,
-				F4F3D79D24938EBE005D3396 /* CMPageTitleContentView.m in Sources */,
 				F4F3D79A24938EBE005D3396 /* TIoTCoreHudLoadingView.m in Sources */,
 				F4F3D7A024938EBE005D3396 /* MBProgressHUD+XDP.m in Sources */,
 				F4F3D7AA24938EBE005D3396 /* TIoTCoreTimerListCell.m in Sources */,
@@ -2844,7 +2825,6 @@
 				F4F3D7C924938EBE005D3396 /* UsersOfDeviceVC.m in Sources */,
 				F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */,
 				F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */,
-				F4F3D79E24938EBE005D3396 /* CMPageTitleConfig.m in Sources */,
 				F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */,
 				F4F3D7C724938EBE005D3396 /* ControlDeviceVC.m in Sources */,
 				F4F3D7CF24938EBE005D3396 /* TIoTCoreTimerListVC.m in Sources */,
@@ -2852,7 +2832,6 @@
 				F4F3D7AC24938EBE005D3396 /* TIoTCoreAlertView.m in Sources */,
 				F4F3D53E24935BD3005D3396 /* main.m in Sources */,
 				F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */,
-				F4F3D79C24938EBE005D3396 /* UIView+CMCommon.m in Sources */,
 				F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */,
 				F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */,
 				F4F3D7D024938EBE005D3396 /* LoginVC.m in Sources */,
@@ -2912,12 +2891,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F3D70C24936E9B005D3396 /* TIoTCoreServices.m in Sources */,
+				6D702C1724C6E779002B9B75 /* CMPageTitleContentView.m in Sources */,
 				F4F3D70D24936E9B005D3396 /* TIoTCoreSocketManager.m in Sources */,
+				6D702C1824C6E779002B9B75 /* CMPageTitleConfig.m in Sources */,
 				F4F3D70F24936E9B005D3396 /* TIoTCoreUserManage.m in Sources */,
 				F4F3D71024936E9B005D3396 /* TIoTCoreAppEnvironment.m in Sources */,
 				F4F3D71124936E9B005D3396 /* TIoTCoreRequestObject.m in Sources */,
+				6D702C1924C6E779002B9B75 /* CMPageTitleView.m in Sources */,
+				6D702C1524C6E779002B9B75 /* UIView+CMCommon.m in Sources */,
 				F4F3D71224936E9B005D3396 /* TIoTCoreRequestClient.m in Sources */,
 				F4F3D71324936E9B005D3396 /* TIoTCoreWebSocket.m in Sources */,
+				6D702C1A24C6E779002B9B75 /* CMPageContentView.m in Sources */,
 				F401989D2493A3F8009DEA99 /* NSString+Extension.m in Sources */,
 				F4F3D71424936E9B005D3396 /* TIoTCoreRequestBuilder.m in Sources */,
 			);
