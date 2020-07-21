@@ -10,7 +10,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import <QCDeviceCenter/TIoTCoreAddDevice.h>
+#import "TIoTCoreAddDevice.h"
 
 #import "TIoTCoreRequestObject.h"
 #import "NSObject+additions.h"

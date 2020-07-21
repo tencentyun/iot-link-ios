@@ -7,7 +7,7 @@
 //
 
 #import "ControlDeviceVC.h"
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
 
 #import "TIoTCoreAlertView.h"
 

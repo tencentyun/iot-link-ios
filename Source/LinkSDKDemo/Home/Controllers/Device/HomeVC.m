@@ -12,7 +12,7 @@
 #import "CMPageTitleContentView.h"
 #import "ControlDeviceVC.h"
 
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
 
 
 static NSString *cellID = @"DODO";

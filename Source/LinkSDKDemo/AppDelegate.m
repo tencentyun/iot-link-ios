@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <QCFoundation/TIoTCoreFoundation.h>
+#import "TIoTCoreFoundation.h"
 #import "Firebase.h"
 
 @interface AppDelegate ()

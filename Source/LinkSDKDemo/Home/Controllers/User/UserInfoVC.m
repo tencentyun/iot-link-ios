@@ -7,7 +7,7 @@
 //
 
 #import "UserInfoVC.h"
-#import <QCFoundation/TIoTCoreUserManage.h>
+#import "TIoTCoreUserManage.h"
 #import <UIImageView+WebCache.h>
 
 

@@ -7,7 +7,7 @@
 //
 
 #import "ChangeWifiVC.h"
-#import <QCDeviceCenter/TIoTCoreAddDevice.h>
+#import "TIoTCoreAddDevice.h"
 #import "GCDAsyncUdpSocket.h"
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 

@@ -11,10 +11,11 @@
 
 #ifdef __OBJC__
 
-#import <Masonry.h>
+//#import <Masonry.h>
+#import "Masonry.h"
 #import "MBProgressHUD+XDP.h"
 
-#import <QCAPISets/TIoTCoreAPISets.h>
+#import "TIoTCoreAPISets.h"
 #import "NSObject+ro.h"
 #endif
 
