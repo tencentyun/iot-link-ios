@@ -8,6 +8,7 @@
 
 #import "MBProgressHUD+XDP.h"
 #import "TIoTCoreHudLoadingView.h"
+#import "TIoTCoreQMacros.h"
 
 @implementation MBProgressHUD (WC)
 
@@ -22,7 +23,7 @@
 
 + (void)showLodingInView:(UIView *)view enabled:(BOOL)userEnabled message:(NSString *)message{
     if (view == nil) {
-        view = [[UIApplication sharedApplication].windows lastObject];
+        view = [UIApplication sharedApplication].keyWindow;
     }
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
@@ -34,7 +35,7 @@
     hud.label.text = message;
     //设置文本颜色
     hud.contentColor = [UIColor whiteColor];
-    hud.label.font = [UIFont systemFontOfSize:13];
+    hud.label.font = [UIFont wcPfRegularFontOfSize:13];
     hud.margin = 16;
     //遮罩层
     hud.backgroundView.color = [UIColor clearColor];
@@ -45,7 +46,7 @@
 
 + (void)dismissInView:(UIView *)view{
     if (view == nil) {
-        view = [[UIApplication sharedApplication].windows lastObject];
+        view = [UIApplication sharedApplication].keyWindow;
     }
     
 //    MBProgressHUD *hud = [self HUDForView:view];
@@ -91,7 +92,7 @@
     
     NSAttributedString *attStr = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:attStr];
-    NSAttributedString *tmpStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",message] attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
+    NSAttributedString *tmpStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",message] attributes:@{NSFontAttributeName : [UIFont wcPfRegularFontOfSize:15]}];
     [str appendAttributedString:tmpStr];
     
     [self showAttributedString:str icon:@"" view:nil];
@@ -111,7 +112,7 @@
     
     NSAttributedString *attStr = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:attStr];
-    NSAttributedString *tmpStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",message] attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
+    NSAttributedString *tmpStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",message] attributes:@{NSFontAttributeName : [UIFont wcPfRegularFontOfSize:15]}];
     [str appendAttributedString:tmpStr];
     
     [self showAttributedString:str icon:@"" view:view];
@@ -124,9 +125,7 @@
  */
 + (void)showSuccess:(NSString *)success
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showSuccess:success toView:nil];
-    });
+    [self showSuccess:success toView:nil];
 }
 
 /**
@@ -146,9 +145,7 @@
  */
 + (void)showError:(NSString *)error
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showError:error toView:nil];
-    });
+    [self showError:error toView:nil];
 }
 
 /**
@@ -186,7 +183,7 @@
  */
 + (void)hideHUDForView:(UIView *)view
 {
-    if (view == nil) view = [[UIApplication sharedApplication].windows lastObject];
+    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
 //    MBProgressHUD *hud = [self HUDForView:view];
 //    if ([hud.customView isKindOfClass:[XDPHudLoadingView class]]) {
 //        XDPHudLoadingView *loadingView = (XDPHudLoadingView*)hud.customView;
@@ -207,7 +204,7 @@
 + (void)show:(NSString *)text icon:(NSString *)icon view:(UIView *)view
 {
     
-    if (view == nil) view = [[UIApplication sharedApplication].windows lastObject];
+    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
 
     [self hideHUDForView:view];
     // 快速显示一个提示信息
@@ -218,7 +215,7 @@
     hud.mode = MBProgressHUDModeCustomView;
     hud.userInteractionEnabled = NO;
     hud.label.text = text;
-    hud.label.font = [UIFont systemFontOfSize:15];
+    hud.label.font = [UIFont wcPfRegularFontOfSize:15];
     hud.label.textColor = [UIColor whiteColor];
     
     hud.bezelView.color = kRGBAColor(0, 0, 0, 0.85);
@@ -240,7 +237,7 @@
  */
 + (void)showAttributedString:(NSAttributedString *)text icon:(NSString *)icon view:(UIView *)view
 {
-    if (view == nil) view = [[UIApplication sharedApplication].windows lastObject];
+    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
     [self hideHUDForView:view];
     // 快速显示一个提示信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
@@ -250,7 +247,7 @@
     hud.mode = MBProgressHUDModeCustomView;
     hud.userInteractionEnabled = NO;
     hud.label.attributedText = text;
-    hud.label.font = [UIFont systemFontOfSize:15];
+    hud.label.font = [UIFont wcPfRegularFontOfSize:15];
     hud.label.textColor = [UIColor whiteColor];
     
     hud.bezelView.color = kRGBAColor(0, 0, 0, 0.85);
