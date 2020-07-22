@@ -106,7 +106,7 @@ static NSString *cellId = @"ub67989";
         [self.timers removeAllObjects];
         [self.timers addObjectsFromArray:responseObject[@"TimerList"]];
         [self refreshUI:[responseObject[@"Total"] integerValue]];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -122,7 +122,7 @@ static NSString *cellId = @"ub67989";
         [self.timers removeObjectAtIndex:row];
         [self refreshUI:self.timers.count];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

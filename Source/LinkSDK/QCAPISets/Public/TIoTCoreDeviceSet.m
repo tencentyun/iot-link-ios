@@ -87,12 +87,12 @@
 - (void)getDeviceListWithFamilyId:(NSString *)familyId roomId:(NSString *)roomId offset:(NSUInteger)offset limit:(NSUInteger)limit success:(SRHandler)success failure:(FRHandler)failure
 {
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (roomId == nil) {
-        failure(@"roomId参数为空",nil);
+        failure(@"roomId参数为空",nil,@{});
         return;
     }
     
@@ -144,23 +144,23 @@
                 }
                 
                 success(tmpArr);
-            } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-                failure(reason,error);
+            } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+                failure(reason,error,dic);
             }];
         }
         else
         {
             success(@[]);
         }
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)getProductsConfigWithProductIds:(NSArray *)productIds success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productIds == nil) {
-        failure(@"productIds参数为空",nil);
+        failure(@"productIds参数为空",nil,@{});
         return;
     }
     
@@ -169,15 +169,15 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetProductsConfig params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)getProductsWithProductIds:(NSArray *)productIds success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productIds == nil) {
-        failure(@"productIds参数为空",nil);
+        failure(@"productIds参数为空",nil,@{});
         return;
     }
     
@@ -186,20 +186,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetProducts params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)getDeviceDataWithProductId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
@@ -208,8 +208,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetDeviceData params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -217,12 +217,12 @@
 - (void)getDeviceDetailWithProductId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
@@ -245,18 +245,18 @@
                         DeviceInfo *set = [self zipData:config baseInfo:DataTemplateDic deviceData:tmpDic];
                         success(set);
                         
-                    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
-                        failure(reason,error);
+                    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
+                        failure(reason,error,dic);
                     }];
                     
                 }
                 
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
-                failure(reason,error);
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
+                failure(reason,error,dic);
             }];
         }
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -305,17 +305,17 @@
 - (void)controlDeviceDataWithProductId:(NSString *)productId deviceName:(NSString *)deviceName data:(NSDictionary *)data success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (data == nil) {
-        failure(@"data参数为空",nil);
+        failure(@"data参数为空",nil,@{});
         return;
     }
     
@@ -328,25 +328,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppControlDeviceData params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)modifyAliasName:(NSString *)aliasName ByProductId:(NSString *)productId andDeviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (aliasName == nil) {
-        failure(@"aliasName参数为空",nil);
+        failure(@"aliasName参数为空",nil,@{});
         return;
     }
     
@@ -355,8 +355,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUpdateDeviceInFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -364,17 +364,17 @@
 - (void)deleteDeviceWithFamilyId:(NSString *)familyId productId:(NSString *)productId andDeviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
@@ -383,8 +383,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteDeviceInFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -392,12 +392,12 @@
 - (void)bindDeviceWithSignatureInfo:(NSString *)signatureInfo inFamilyId:(NSString *)familyId roomId:(NSString *)roomId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (signatureInfo == nil) {
-        failure(@"signatureInfo参数为空",nil);
+        failure(@"signatureInfo参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -410,20 +410,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSigBindDeviceInFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)bindDeviceWithDeviceSignature:(NSString *)deviceSignature inFamilyId:(NSString *)familyId roomId:(NSString *)roomId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (deviceSignature == nil) {
-        failure(@"deviceSignature参数为空",nil);
+        failure(@"deviceSignature参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -435,8 +435,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSecureAddDeviceInFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -444,22 +444,22 @@
 {
     
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (roomId == nil) {
-        failure(@"roomId参数为空",nil);
+        failure(@"roomId参数为空",nil,@{});
         return;
     }
     
@@ -469,8 +469,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyFamilyDeviceRoom params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -483,12 +483,12 @@
 {
     
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
@@ -503,41 +503,41 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetTimerList params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)createTimerWithProductId:(NSString *)productId deviceName:(NSString *)deviceName timerName:(NSString *)timerName days:(NSString *)days timePoint:(NSDate *)timePoint repeat:(NSUInteger)repeat data:(NSDictionary *)data success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (timerName == nil) {
-        failure(@"timerName参数为空",nil);
+        failure(@"timerName参数为空",nil,@{});
         return;
     }
     if (days == nil) {
-        failure(@"days参数为空",nil);
+        failure(@"days参数为空",nil,@{});
         return;
     }
     if (timePoint == nil) {
-        failure(@"timePoint参数为空",nil);
+        failure(@"timePoint参数为空",nil,@{});
         return;
     }
     if (repeat != 0 && repeat != 1) {
-        failure(@"repeat参数取值为0或1",nil);
+        failure(@"repeat参数取值为0或1",nil,@{});
         return;
     }
     if (data == nil) {
-        failure(@"data参数为空",nil);
+        failure(@"data参数为空",nil,@{});
         return;
     }
     
@@ -555,45 +555,45 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateTimer params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)modifyTimerWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName timerName:(NSString *)timerName days:(NSString *)days timePoint:(NSDate *)timePoint repeat:(NSUInteger)repeat data:(NSDictionary *)data success:(SRHandler)success failure:(FRHandler)failure
 {
     if (timerId == nil) {
-        failure(@"timerId参数为空",nil);
+        failure(@"timerId参数为空",nil,@{});
         return;
     }
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (timerName == nil) {
-        failure(@"timerName参数为空",nil);
+        failure(@"timerName参数为空",nil,@{});
         return;
     }
     if (days == nil) {
-        failure(@"days参数为空",nil);
+        failure(@"days参数为空",nil,@{});
         return;
     }
     if (timePoint == nil) {
-        failure(@"timePoint参数为空",nil);
+        failure(@"timePoint参数为空",nil,@{});
         return;
     }
     if (repeat != 0 || repeat != 1) {
-        failure(@"repeat参数取值为0或1",nil);
+        failure(@"repeat参数取值为0或1",nil,@{});
         return;
     }
     if (data == nil) {
-        failure(@"data参数为空",nil);
+        failure(@"data参数为空",nil,@{});
         return;
     }
     
@@ -612,25 +612,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyTimer params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)modifyTimerStatusWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName status:(BOOL)status success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (timerId == nil) {
-        failure(@"timerId参数为空",nil);
+        failure(@"timerId参数为空",nil,@{});
         return;
     }
     
@@ -643,8 +643,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyTimerStatus params:dic useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -652,17 +652,17 @@
 - (void)deleteTimerWithProductId:(NSString *)productId deviceName:(NSString *)deviceName timerId:(NSString *)timerId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (timerId == nil) {
-        failure(@"timerId参数为空",nil);
+        failure(@"timerId参数为空",nil,@{});
         return;
     }
     
@@ -674,8 +674,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteTimer params:dic useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -685,12 +685,12 @@
 - (void)getUserListForDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName offset:(NSUInteger)offset limit:(NSUInteger)limit success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
@@ -705,8 +705,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppListShareDeviceUsers params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -722,25 +722,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppListUserShareDevices params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)removeShareDeviceUserWithProductId:(NSString *)productId deviceName:(NSString *)deviceName userID:(NSString *)userID success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (userID == nil) {
-        failure(@"userID参数为空",nil);
+        failure(@"userID参数为空",nil,@{});
         return;
     }
     
@@ -752,25 +752,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppRemoveShareDeviceUser params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)removeUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName shareDeviceToken:(NSString *)shareDeviceToken success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (shareDeviceToken == nil) {
-        failure(@"shareDeviceToken参数为空",nil);
+        failure(@"shareDeviceToken参数为空",nil,@{});
         return;
     }
     
@@ -782,25 +782,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppRemoveUserShareDevice params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)bindUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName shareDeviceToken:(NSString *)shareDeviceToken success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     
     if (shareDeviceToken == nil) {
-        failure(@"shareDeviceToken参数为空",nil);
+        failure(@"shareDeviceToken参数为空",nil,@{});
         return;
     }
     
@@ -812,35 +812,35 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppBindUserShareDevice params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)sendInvitationToPhoneNum:(NSString *)phoneNum withCountryCode:(NSString *)countryCode familyId:(NSString *)familyId productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (phoneNum == nil) {
-        failure(@"phoneNum参数为空",nil);
+        failure(@"phoneNum参数为空",nil,@{});
         return;
     }
     
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     NSDictionary *param = @{@"Type":@"phone",@"CountryCode":countryCode,@"PhoneNumber":phoneNum};
@@ -854,12 +854,12 @@
         TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
         [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
-        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-            failure(reason,error);
+        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+            failure(reason,error,dic);
         }];
         
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -867,22 +867,22 @@
 - (void)sendInvitationToEmail:(NSString *)email withFamilyId:(NSString *)familyId productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (productId == nil) {
-        failure(@"productId参数为空",nil);
+        failure(@"productId参数为空",nil,@{});
         return;
     }
     
     if (deviceName == nil) {
-        failure(@"deviceName参数为空",nil);
+        failure(@"deviceName参数为空",nil,@{});
         return;
     }
     NSDictionary *param = @{@"Type":@"email",@"Email":email};
@@ -896,12 +896,12 @@
         TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareDeviceInvite params:param useToken:YES];
         [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
-        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-            failure(reason,error);
+        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+            failure(reason,error,dic);
         }];
         
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }

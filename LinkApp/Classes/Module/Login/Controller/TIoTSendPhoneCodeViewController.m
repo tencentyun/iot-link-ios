@@ -194,7 +194,7 @@
             vc.sendDataDic = tmpDic;
             vc.registerType = self.registerType;
             [self.navigationController pushViewController:vc animated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
@@ -208,7 +208,7 @@
             vc.sendDataDic = tmpDic;
             vc.registerType = self.registerType;
             [self.navigationController pushViewController:vc animated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
@@ -226,11 +226,11 @@
                 [MBProgressHUD showSuccess:@"修改成功"];
                 [TIoTCoreUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
                 [HXYNotice addModifyUserInfoPost];
-            } failure:^(NSString *reason, NSError *error) {
+            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
                 
             }];
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -245,7 +245,7 @@
         [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送成功"];
             [self openCountdown];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
@@ -260,7 +260,7 @@
             [MBProgressHUD dismissInView:self.view];
             [MBProgressHUD showSuccess:@"发送成功"];
             [self openCountdown];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }

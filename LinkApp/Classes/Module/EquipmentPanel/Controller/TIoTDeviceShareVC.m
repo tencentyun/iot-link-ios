@@ -132,7 +132,7 @@ static NSString *cellId = @"sd0679";
         [self.userList removeAllObjects];
         [self.userList addObjectsFromArray:responseObject[@"Users"]];
         [self refreshUI:responseObject];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -151,7 +151,7 @@ static NSString *cellId = @"sd0679";
         [MBProgressHUD showSuccess:@"删除成功"];
         [self.userList removeObjectAtIndex:index];
         [self.tableView reloadData];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

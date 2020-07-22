@@ -26,7 +26,7 @@
         if (self.seg.selectedSegmentIndex) {
             [[TIoTCoreFamilySet shared] sendInvitationToEmail:self.tf.text withFamilyId:self.familyId success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"发送成功"];
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];
         }
@@ -34,7 +34,7 @@
         {
             [[TIoTCoreFamilySet shared] sendInvitationToPhoneNum:self.tf.text withCountryCode:@"86" familyId:self.familyId success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"发送成功"];
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 [MBProgressHUD showError:reason];
             }];
         }
@@ -44,7 +44,7 @@
         if (self.seg.selectedSegmentIndex) {
             [[TIoTCoreDeviceSet shared] sendInvitationToEmail:self.tf.text withFamilyId:self.familyId productId:self.productId deviceName:self.deviceName success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"发送成功"];
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];
         }
@@ -52,7 +52,7 @@
         {
             [[TIoTCoreDeviceSet shared] sendInvitationToPhoneNum:self.tf.text withCountryCode:@"86" familyId:self.familyId productId:self.productId deviceName:self.deviceName success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"发送成功"];
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];
         }

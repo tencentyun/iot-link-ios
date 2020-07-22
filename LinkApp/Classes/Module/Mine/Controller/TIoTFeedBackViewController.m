@@ -233,7 +233,7 @@ static NSInteger maxNumber = 100;
     [[TIoTRequestObject shared] post:AppUserFeedBack Param:@{@"Type":@"advise",@"Desc":self.contextTV.text,@"Contact":self.contactTF.hasText ? self.contactTF.text : @"",@"LogUrl":[urlArr componentsJoinedByString:@","]} success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"反馈成功"];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

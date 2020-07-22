@@ -89,7 +89,7 @@
         }
         
         block(reqArr);
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

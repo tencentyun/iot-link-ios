@@ -39,7 +39,7 @@
             if ([self.title isEqualToString:@"注册"]) {
                 [[TIoTCoreAccountSet shared] sendVerificationCodeWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -47,7 +47,7 @@
             {
                 [[TIoTCoreAccountSet shared] sendCodeForResetWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -58,7 +58,7 @@
             if ([self.title isEqualToString:@"注册"]) {
                 [[TIoTCoreAccountSet shared] sendVerificationCodeWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -66,7 +66,7 @@
             {
                 [[TIoTCoreAccountSet shared] sendCodeForResetWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -92,7 +92,7 @@
                 [[TIoTCoreAccountSet shared] createPhoneUserWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     [MBProgressHUD showSuccess:@"注册成功"];
                     [self.navigationController popViewControllerAnimated:YES];
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -102,7 +102,7 @@
                     
                     [MBProgressHUD showSuccess:@"重置密码成功"];
                     [self.navigationController popViewControllerAnimated:YES];
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -114,7 +114,7 @@
                 [[TIoTCoreAccountSet shared] createEmailUserWithEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     [MBProgressHUD showSuccess:@"注册成功"];
                     [self.navigationController popViewControllerAnimated:YES];
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }
@@ -125,7 +125,7 @@
                     [MBProgressHUD showSuccess:@"重置密码成功"];
                     [self.navigationController popViewControllerAnimated:YES];
                     
-                } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
                 }];
             }

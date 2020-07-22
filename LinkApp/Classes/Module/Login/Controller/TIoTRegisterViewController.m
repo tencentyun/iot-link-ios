@@ -244,7 +244,7 @@
             vc.registerType = EmailRegister;
             vc.sendCodeDic = tmpDic;
             [self.navigationController pushViewController:vc animated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
@@ -259,7 +259,7 @@
             vc.registerType = PhoneRegister;
             vc.sendCodeDic = tmpDic;
             [self.navigationController pushViewController:vc animated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }

@@ -24,9 +24,9 @@ failure:(FailureResponseHandler)failure
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(responseObject);
             });
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                failure(reason,error);
+                failure(reason,error,dic);
             });
         }];
         
@@ -40,9 +40,9 @@ failure:(FailureResponseHandler)failure
                 success(responseObject);
             });
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                failure(reason,error);
+                failure(reason,error,dic);
             });
         }];
     }
@@ -52,9 +52,9 @@ failure:(FailureResponseHandler)failure
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(responseObject);
             });
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                failure(reason,error);
+                failure(reason,error,dic);
             });
         }];
     }

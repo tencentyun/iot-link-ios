@@ -502,7 +502,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             //信鸽推送注册
             [[XGPushManage sharedXGPushManage] bindPushToken];
             [HXYNotice addLoginInPost];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -521,7 +521,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             //信鸽推送绑定
             [[XGPushManage sharedXGPushManage] bindPushToken];
             //            [HXYNotice addLoginInPost];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -560,7 +560,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         //信鸽推送注册
         [[XGPushManage sharedXGPushManage] bindPushToken];
         [HXYNotice addLoginInPost];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -598,7 +598,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             [HXYNotice postLoginInTicketToken:ticket];
             [self dismissViewControllerAnimated:YES completion:nil];
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD dismissInView:self.view];
         }];
     } else {

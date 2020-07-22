@@ -156,7 +156,7 @@
         
         [self sendMessageToUser:userId];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [MBProgressHUD showError:reason];
     }];
 }
@@ -186,7 +186,7 @@
         [[TIoTRequestObject shared] post:AppSendShareDeviceInvite Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送邀请成功"];
             [self.navigationController popViewControllerAnimated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
     }
@@ -196,7 +196,7 @@
         [[TIoTRequestObject shared] post:AppSendShareFamilyInvite Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:@"发送邀请成功"];
             [self.navigationController popViewControllerAnimated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
     }

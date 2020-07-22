@@ -126,7 +126,7 @@ static NSUInteger limit = 20;
         [self endRefresh:NO total:[data[@"Msgs"] count]];
         [self refreshUI:self.datas.count];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self.tableView.mj_header endRefreshing];
     }];
 }
@@ -141,7 +141,7 @@ static NSUInteger limit = 20;
         [self.datas addObjectsFromArray:data[@"Msgs"]];
         [self refreshUI:self.datas.count];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self.tableView.mj_footer endRefreshing];
     }];
     
@@ -156,7 +156,7 @@ static NSUInteger limit = 20;
         [self.datas removeObjectAtIndex:index];
         [self refreshUI:self.datas.count];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
     
