@@ -73,7 +73,7 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
         [HXYNotice addUpdateDeviceListPost];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [MBProgressHUD dismissInView:self.view];
         [self.navigationController popViewControllerAnimated:YES];
     }];

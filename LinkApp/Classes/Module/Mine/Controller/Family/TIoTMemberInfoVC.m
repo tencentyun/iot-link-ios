@@ -43,7 +43,7 @@
         [MBProgressHUD showSuccess:@"移除成功"];
         [HXYNotice postUpdateMemberList];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [MBProgressHUD showError:reason];
     }];
 }

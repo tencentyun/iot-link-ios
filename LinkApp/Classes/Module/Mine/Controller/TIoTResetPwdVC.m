@@ -68,7 +68,7 @@
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         self.view.window.rootViewController = nav;
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

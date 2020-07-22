@@ -150,7 +150,7 @@
         vc.registerType = LoginedResetPwd;
         vc.sendCodeDic = tmpDic;
         [self.navigationController pushViewController:vc animated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
     

@@ -43,7 +43,7 @@
     
     [[TIoTCoreFamilySet shared] deleteFamilyMemberWithFamilyId:self.familyId memberId:self.memberInfo[@"UserID"] success:^(id  _Nonnull responseObject) {
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

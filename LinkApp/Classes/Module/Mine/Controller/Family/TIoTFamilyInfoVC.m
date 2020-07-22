@@ -59,7 +59,7 @@ static NSString *itemId2 = @"pfDDD";
         [self.dataArr addObject:responseObject[@"MemberList"]];
         [self.coll reloadData];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -71,7 +71,7 @@ static NSString *itemId2 = @"pfDDD";
         
         [HXYNotice addUpdateFamilyListPost];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -82,7 +82,7 @@ static NSString *itemId2 = @"pfDDD";
     [[TIoTRequestObject shared] post:AppExitFamily Param:param success:^(id responseObject) {
         [HXYNotice addUpdateFamilyListPost];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -97,7 +97,7 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableDictionary *dic = self.dataArr[0][0];
         [dic setValue:name forKey:@"name"];
         [self.coll reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

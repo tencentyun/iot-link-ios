@@ -12,6 +12,8 @@ platform :ios, '10.0'
 
   pod 'TIoTLinkKit', :path => './'
 
+target 'LinkApp' do
+  
   pod 'Masonry', '1.1.0'
   pod 'SDWebImage', '4.4.2'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
@@ -19,8 +21,6 @@ platform :ios, '10.0'
   pod 'Fabric', '1.10.2'
   pod 'Crashlytics', '3.14.0'
   pod 'Firebase/Performance', '6.26.0'
-
-target 'LinkApp' do
   
   pod 'MJRefresh', '3.2.0'
   pod 'IQKeyboardManager', '6.1.1'
@@ -30,4 +30,16 @@ target 'LinkApp' do
   pod 'TZImagePickerController', '3.2.1'
   pod 'MGJRouter', '0.10.0'
 end
+
+target 'LinkSDKDemo' do
+  
+  pod 'Masonry', '1.1.0'
+  pod 'SDWebImage', '4.4.2'
+  pod 'QCloudCOSXML/Transfer', '5.5.2'
+  pod 'Firebase/Analytics', '6.26.0'
+  pod 'Fabric', '1.10.2'
+  pod 'Crashlytics', '3.14.0'
+  pod 'Firebase/Performance', '6.26.0'
+end
+
 

@@ -171,7 +171,7 @@
             [MBProgressHUD showSuccess:@"修改成功"];
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -185,7 +185,7 @@
         [MBProgressHUD showSuccess:@"修改成功"];
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
         [HXYNotice addModifyUserInfoPost];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -198,7 +198,7 @@
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         self.view.window.rootViewController = nav;
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

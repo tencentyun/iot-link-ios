@@ -26,7 +26,7 @@
         
         [self updateDeviceStatus];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -60,7 +60,7 @@
             [self.dataArr removeAllObjects];
             [self.dataArr addObjectsFromArray:tmpArr];
             [self.tableView reloadData];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }

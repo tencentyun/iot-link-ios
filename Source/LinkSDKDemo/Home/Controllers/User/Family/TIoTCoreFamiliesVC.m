@@ -86,7 +86,7 @@ static NSString *cellId = @"rbrb";
         [self.families removeAllObjects];
         [self.families addObjectsFromArray:responseObject[@"FamilyList"]];
         [self.tableView reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
     

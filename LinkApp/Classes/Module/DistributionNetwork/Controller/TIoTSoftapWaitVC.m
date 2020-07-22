@@ -171,7 +171,7 @@
             self.isTokenbindedStatus = YES;
             [self bindingDevidesWithData:deviceData];
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         WCLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
@@ -184,7 +184,7 @@
         [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":[TIoTCoreUserManage shared].familyId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaild];
         }];
     }
@@ -201,7 +201,7 @@
         [[TIoTRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
             [self connectSucess:deviceData];
             [HXYNotice addUpdateDeviceListPost];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaild];
         }];
     }else {

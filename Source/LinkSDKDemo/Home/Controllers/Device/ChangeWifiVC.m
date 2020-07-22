@@ -76,7 +76,7 @@
     [[TIoTCoreDeviceSet shared] bindDeviceWithSignatureInfo:self.sig inFamilyId:familyId roomId:@"" success:^(id  _Nonnull responseObject) {
         self.status.text = @"绑定设备成功";
         [self releaseAlloc];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         self.status.text = reason;
         [self releaseAlloc];
     }];
@@ -204,7 +204,7 @@
             self.isTokenbindedStatus = YES;
             [self bindingDevidesWithData:deviceData];
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         NSLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
@@ -217,7 +217,7 @@
         [[TIoTCoreRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wToken,@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
 
             [self compareSuccessResult];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaildResult:@"绑定设备失败"];
         }];
     }else {

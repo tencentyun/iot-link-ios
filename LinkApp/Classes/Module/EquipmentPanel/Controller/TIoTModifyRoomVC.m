@@ -48,7 +48,7 @@
     [[TIoTRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":self.deviceInfo[@"FamilyId"]} success:^(id responseObject) {
         self.rooms = responseObject[@"RoomList"];
         [self refreshUI:self.rooms.count];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -78,7 +78,7 @@
         [MBProgressHUD showSuccess:@"保存成功"];
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

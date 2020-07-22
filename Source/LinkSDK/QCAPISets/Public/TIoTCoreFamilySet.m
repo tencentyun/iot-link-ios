@@ -34,20 +34,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetFamilyList params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary * dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)createFamilyWithName:(NSString *)name address:(NSString *)address success:(SRHandler)success failure:(FRHandler)failure
 {
     if (name == nil) {
-        failure(@"name参数为空",nil);
+        failure(@"name参数为空",nil,@{});
         return;
     }
     
     if (address == nil) {
-        failure(@"address参数为空",nil);
+        failure(@"address参数为空",nil,@{});
         return;
     }
     
@@ -56,8 +56,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -67,7 +67,7 @@
 {
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -76,20 +76,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDescribeFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)modifyFamilyWithFamilyId:(NSString *)familyId name:(NSString *)name success:(SRHandler)success failure:(FRHandler)failure
 {
     if (name == nil) {
-        failure(@"name参数为空",nil);
+        failure(@"name参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -98,20 +98,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)deleteFamilyWithFamilyId:(NSString *)familyId name:(NSString *)name success:(SRHandler)success failure:(FRHandler)failure
 {
     if (name == nil) {
-        failure(@"name参数为空",nil);
+        failure(@"name参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -120,8 +120,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -129,7 +129,7 @@
 {
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -138,20 +138,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppExitFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)deleteFamilyMemberWithFamilyId:(NSString *)familyId memberId:(NSString *)memberId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (memberId == nil) {
-        failure(@"memberId参数为空",nil);
+        failure(@"memberId参数为空",nil,@{});
         return;
     }
     
@@ -160,15 +160,15 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteFamilyMember params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)getMemberListWithFamilyId:(NSString *)familyId offset:(NSUInteger)offset limit:(NSUInteger)limit success:(SRHandler)success failure:(FRHandler)failure
 {
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -182,8 +182,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetFamilyMemberList params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -191,7 +191,7 @@
 - (void)getRoomListWithFamilyId:(NSString *)familyId offset:(NSUInteger)offset limit:(NSUInteger)limit  success:(SRHandler)success failure:(FRHandler)failure
 {
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -205,8 +205,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetRoomList params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -214,12 +214,12 @@
 - (void)createRoomWithFamilyId:(NSString *)familyId name:(NSString *)name success:(SRHandler)success failure:(FRHandler)failure
 {
     if (name == nil) {
-        failure(@"name参数为空",nil);
+        failure(@"name参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -228,8 +228,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateRoom params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -237,12 +237,12 @@
 - (void)deleteRoomWithFamilyId:(NSString *)familyId roomId:(NSString *)roomId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (roomId == nil) {
-        failure(@"roomId参数为空",nil);
+        failure(@"roomId参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -251,8 +251,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteRoom params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -260,17 +260,17 @@
 - (void)modifyRoomWithFamilyId:(NSString *)familyId roomId:(NSString *)roomId name:(NSString *)name success:(SRHandler)success failure:(FRHandler)failure
 {
     if (roomId == nil) {
-        failure(@"roomId参数为空",nil);
+        failure(@"roomId参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
     if (name == nil) {
-        failure(@"name参数为空",nil);
+        failure(@"name参数为空",nil,@{});
         return;
     }
     
@@ -279,8 +279,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppModifyRoom params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -288,17 +288,17 @@
 - (void)sendInvitationToPhoneNum:(NSString *)phoneNum withCountryCode:(NSString *)countryCode familyId:(NSString *)familyId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (phoneNum == nil) {
-        failure(@"phoneNum参数为空",nil);
+        failure(@"phoneNum参数为空",nil,@{});
         return;
     }
     
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -313,12 +313,12 @@
         TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
         [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
-        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-            failure(reason,error);
+        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+            failure(reason,error,dic);
         }];
         
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary * dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -326,12 +326,12 @@
 - (void)sendInvitationToEmail:(NSString *)email withFamilyId:(NSString *)familyId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     
     if (familyId == nil) {
-        failure(@"familyId参数为空",nil);
+        failure(@"familyId参数为空",nil,@{});
         return;
     }
     
@@ -346,12 +346,12 @@
         TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendShareFamilyInvite params:param useToken:YES];
         [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             success(responseObject);
-        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-            failure(reason,error);
+        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+            failure(reason,error,dic);
         }];
         
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -359,7 +359,7 @@
 - (void)joinFamilyWithShareToken:(NSString *)shareToken success:(SRHandler)success failure:(FRHandler)failure
 {
     if (shareToken == nil) {
-        failure(@"shareToken参数为空",nil);
+        failure(@"shareToken参数为空",nil,@{});
         return;
     }
     
@@ -368,8 +368,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppJoinFamily params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 

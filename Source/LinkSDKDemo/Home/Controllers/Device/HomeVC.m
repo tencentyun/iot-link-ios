@@ -113,7 +113,7 @@ static NSString *cellID = @"DODO";
         
         
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -122,7 +122,7 @@ static NSString *cellID = @"DODO";
 {
     [[TIoTCoreFamilySet shared] createFamilyWithName:@"我的家" address:@"兰陵" success:^(id  _Nonnull responseObject) {
         [self getFamilyList];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -136,7 +136,7 @@ static NSString *cellID = @"DODO";
         [names addObjectsFromArray:[self.roomList valueForKey:@"RoomName"]];
         [self addViewWithType:2 names:names];
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -156,7 +156,7 @@ static NSString *cellID = @"DODO";
         [self.tab reloadData];
         
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

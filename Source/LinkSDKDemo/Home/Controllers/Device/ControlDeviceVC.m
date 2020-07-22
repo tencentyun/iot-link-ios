@@ -46,7 +46,7 @@
         NSLog(@"上清==%@",self.ci.zipData);
         [self refresh];
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
     
@@ -150,7 +150,7 @@
         
         [[TIoTCoreDeviceSet shared] deleteDeviceWithFamilyId:self.deviceInfo[@"FamilyId"] productId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
             [MBProgressHUD showSuccess:@"删除成功"];
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
         
@@ -175,7 +175,7 @@
             [[TIoTCoreDeviceSet shared] modifyAliasName:text ByProductId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
                 [MBProgressHUD showSuccess:@"修改成功"];
                 self.title = text;
-            } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+            } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 [MBProgressHUD showError:reason];
             }];
         }
@@ -226,7 +226,7 @@
     
     [[TIoTCoreDeviceSet shared] controlDeviceDataWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] data:data success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"发送成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
     

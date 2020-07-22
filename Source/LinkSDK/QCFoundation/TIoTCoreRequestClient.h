@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void (^FailureResponseHandler)(NSString *reason,NSError *error);
+typedef void (^FailureResponseHandler)(NSString *reason,NSError *error,NSDictionary *dic);
 typedef void (^SuccessResponseHandler)(id responseObject);
 
 @interface TIoTCoreRequestClient : NSObject

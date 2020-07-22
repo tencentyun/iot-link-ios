@@ -98,7 +98,7 @@ static NSString *cellId = @"rbrb";
             [self.families addObjectsFromArray:responseObject[@"FamilyList"]];
             [self.tableView reloadData];
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

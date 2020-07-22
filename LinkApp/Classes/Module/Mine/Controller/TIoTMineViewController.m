@@ -146,7 +146,7 @@
         self.telLab.text = data[@"PhoneNumber"];
         
         [[TIoTCoreUserManage shared] saveUserInfo:data];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -206,7 +206,7 @@
             [self.navigationController pushViewController:vc animated:YES];
             [MBProgressHUD dismissInView:self.view];
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD dismissInView:self.view];
         }];
     } else {

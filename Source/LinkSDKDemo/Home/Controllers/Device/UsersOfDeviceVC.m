@@ -35,7 +35,7 @@
         self.datas = responseObject[@"Users"];
         [self.table reloadData];
 
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
 
     }];
     

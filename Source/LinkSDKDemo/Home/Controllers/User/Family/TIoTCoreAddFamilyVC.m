@@ -75,7 +75,7 @@
         
         [[TIoTCoreFamilySet shared] createFamilyWithName:self.nameL.text address:self.addressL.text success:^(id  _Nonnull responseObject) {
             [MBProgressHUD showSuccess:@"添加成功"];
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
         
