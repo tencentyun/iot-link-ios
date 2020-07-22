@@ -42,6 +42,10 @@ failure:(FailureResponseBlock)failure
     NSURL *url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
+    if (self.configH5CookieBlock != nil) {
+        self.configH5CookieBlock(request);
+    }
+    
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
@@ -54,21 +58,47 @@ failure:(FailureResponseBlock)failure
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
             if (jsonerror == nil) {
                 if ([dic[kCode] integerValue] == 0) {
-                    success(dic[kData]);
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        if (self.tipsDismissBlock != nil) {
+                            self.tipsDismissBlock();
+                        }
+                        success(dic[kData]);
+                    });
                 }
                 else
                 {
-                    failure(dic[kMsg],nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        if (self.tipsErrorShowBlock != nil) {
+                            self.tipsErrorShowBlock(dic[kMsg]);
+                        }
+                        failure(dic[kMsg],nil);
+                    });
+                    
                 }
             }
             else
             {
-                failure(nil,jsonerror);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.tipsErrorShowBlock != nil) {
+                        self.tipsErrorShowBlock(@"json解析失败");
+                    }
+                   failure(nil,jsonerror);
+                });
+                
             }
         }
         else
         {
-            failure(nil,error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.tipsErrorShowBlock != nil) {
+                    self.tipsErrorShowBlock(error.localizedDescription);
+                }
+                failure(nil,error);
+            });
+            
         }
     }];
     [task resume];
