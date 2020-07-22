@@ -10,10 +10,7 @@
 #import "TIoTCoreRequestObj.h"
 #import "NSObject+additions.h"
 #import "TIoTCoreFoundation.h"
-//#import <QCFoundation/TIoTCoreFoundation.h>
-
-
-#define QQCLog(fmt, ...) if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {NSLog((@"\n--------------\n" fmt @"\n================================="), ##__VA_ARGS__);}
+#import "TIoTCoreWMacros.h"
 
 static NSString *registDeviceReqID = @"5001";
 
@@ -95,7 +92,7 @@ static NSString *registDeviceReqID = @"5001";
     TIoTCoreRequestObj *obj = [TIoTCoreRequestObj new];
     obj.sucess = success;
     [self.reqArray setObject:obj forKey:registDeviceReqID];
-     QQCLog(@"send======%@",dataDic);
+    QCLog(@"send======%@",dataDic);
     return dataDic;
     
 }
@@ -142,7 +139,7 @@ static NSString *registDeviceReqID = @"5001";
                                 };
 
 
-    QQCLog(@"send======%@",dataDic);
+    QCLog(@"send======%@",dataDic);
     return dataDic;
 }
 

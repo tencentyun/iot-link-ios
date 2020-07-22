@@ -10,8 +10,6 @@
 #define QCMacros_h
 
 
-#define QCLog(fmt, ...) if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {NSLog((@"\n--------------\n" fmt @"\n================================="), ##__VA_ARGS__);}
-
 #define kRGBAColor(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define kRGBColor(r,g,b) kRGBAColor(r,g,b,1.0f)
 
@@ -23,5 +21,6 @@
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 #import "UIFont+TIoTFont.h"
+#import "TIoTCoreWMacros.h"
 
 #endif /* QCMacros_h */

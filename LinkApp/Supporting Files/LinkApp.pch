@@ -31,14 +31,9 @@
 #import "TIoTCoreRequestAction.h"
 #import "TIoTButton.h"
 #import "TIoTAlertView.h"
+#import "TIoTCoreWMacros.h"
 
 #endif
 
 #endif /* TenextCloud_pch */
 
-
-#ifdef DEBUG
-#define WCLog(fmt, ...) NSLog((@"\n--------------%s\n--------------[Line %d]\n" fmt @"\n=================================\n                          ."),__PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-#else
-#define WCLog(...)
-#endif
