@@ -157,28 +157,10 @@
 
 #pragma mark - QCAddDeviceDelegate
 
+/// 可选实现
+/// @param result 返回的调用结果
 - (void)onResult:(TIoTCoreResult *)result
 {
-    
-//    self.startBtn.enabled = YES;
-//    if (result.code == 0) {
-//
-//        self.res.text = @"开始绑定";
-//        NSString *familyId = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstFamilyId"];
-//        [[TIoTCoreDeviceSet shared] bindDeviceWithSignatureInfo:result.signatureInfo inFamilyId:familyId roomId:nil success:^(id  _Nonnull responseObject) {
-//            [self releaseAlloc];
-//            self.res.text = @"成功";
-//        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
-//            [self releaseAlloc];
-//            self.res.text = reason;
-//        }];
-//    }
-//    else
-//    {
-//        self.res.text = result.errMsg;
-//    }
-    
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.startBtn.enabled = YES;
         [MBProgressHUD dismissInView:nil];
@@ -249,16 +231,6 @@
             [MBProgressHUD showMessage:@"未获取到必要参数" icon:nil];
         }
         return NO;
-    
-    
-//    if (self.wifiInfo[@"name"] && self.password.hasText) {
-//        return YES;
-//    }
-//    else
-//    {
-//        [MBProgressHUD showMessage:@"未获取到必要参数" icon:nil];
-//    }
-//    return NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -395,32 +367,7 @@
         }
         
     }
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (JSONParsingError != nil) {
-//
-//        } else {
-//            //            [self bindDevice:dictionary];
-//            if ([dictionary[@"cmdType"] integerValue] == 2) {
-//                //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-//                //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-//                if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-//                    if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
-//                        [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//                    }else {
-//                        //deviceReplay 为 Cuttent_Error
-//                        NSLog(@"smaartConfig配网过程中失败，需要重新配网");
-//                        [self connectFaildResult:@"模组有问题"];
-//                    }
-//
-//                }else {
-//                    NSLog(@"dictionary==%@----smaartConfig链路设备success",dictionary);
-//                    [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//                }
-//
-//            }
-//        }
-//    });
+
 }
 
 //token 2秒轮询查看设备状态

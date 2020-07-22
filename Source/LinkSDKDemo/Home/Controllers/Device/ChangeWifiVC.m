@@ -82,6 +82,9 @@
     }];
 }
 
+
+/// 可选实现
+/// @param result 返回的调用结果
 - (void)onResult:(TIoTCoreResult *)result
 {
     dispatch_async(dispatch_get_main_queue(), ^{

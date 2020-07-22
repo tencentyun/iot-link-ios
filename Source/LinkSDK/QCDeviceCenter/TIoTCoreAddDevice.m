@@ -81,21 +81,21 @@
 #pragma mark - private
 
 - (void)tapConfirmForResults{
-
+    
     NSString *apSsid = self.ssid;
     NSString *apPwd = self.password;
     NSString *apBssid = self.bssid;
-
-
+    
+    
     dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
-
+        
         // execute the task
         NSArray *esptouchResultArray = [self executeForResultsWithSsid:apSsid bssid:apBssid password:apPwd taskCount:1 broadcast:YES];
         // show the result to the user in UI Main Thread
         dispatch_async(dispatch_get_main_queue(), ^{
-
-
+            
+            
             ESPTouchResult *firstResult = [esptouchResultArray objectAtIndex:0];
             // check whether the task is cancelled and no results received
             if (!firstResult.isCancelled)
@@ -107,7 +107,7 @@
                 const int maxDisplayCount = 5;
                 if ([firstResult isSuc])
                 {
-
+                    
                     for (int i = 0; i < [esptouchResultArray count]; ++i)
                     {
                         ESPTouchResult *resultInArray = [esptouchResultArray objectAtIndex:i];
@@ -146,7 +146,7 @@
                     
                 }
             }
-
+            
         });
     });
 }
@@ -172,7 +172,7 @@
     [self.esptouchTask setPackageBroadcast:broadcast];
     [self.condition unlock];
     NSArray * esptouchResults = [self.esptouchTask executeForResults:taskCount];
-    NSLog(@"result is: %@",esptouchResults);
+    QCLog(@"result is: %@",esptouchResults);
     return esptouchResults;
 }
 
@@ -187,57 +187,27 @@
 #pragma mark - TCSocketDelegate
 
 - (void)onHandleSocketOpen:(TCSocket *)socket {
-//    NSLog(@"%@ did open",socket);
+    QCLog(@"%@ did open",socket);
     
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocketOpen:)]) {
         [self.delegate smartConfigOnHandleSocketOpen:socket];
-    }else {
-        [socket sendData: [NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"timestamp":@((long)[[NSDate date] timeIntervalSince1970])} options:NSJSONWritingPrettyPrinted error:nil]];
     }
 }
 
 - (void)onHandleSocketClosed:(TCSocket *)socket {
-//    NSLog(@"%@ did close",socket);
+    QCLog(@"%@ did close",socket);
+    
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocketClosed:)]) {
         [self.delegate smartConfigOnHandleSocketClosed:socket];
     }
 }
 
 - (void)onHandleDataReceived:(TCSocket *)socket data:(NSData *)data {
-//    NSLog(@"%@ did receive data %@",socket,data);
-    //TCIotDevice *result;
+    QCLog(@"%@ did receive data %@",socket,data);
+
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleDataReceived:data:)]) {
         [self.delegate smartConfigOnHandleDataReceived:socket data:data];
-    }else {
-        [self receivedSockedDataWithData:data];
     }
-}
-
-- (void)receivedSockedDataWithData:(NSData *)data {
-    NSError *JSONParsingError;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (JSONParsingError != nil) {
-            //失败
-            if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                self.connecting = NO;
-                TIoTCoreResult *result = [TIoTCoreResult new];
-                result.code = 5001;
-                result.errMsg = @"解析失败";
-                [self.delegate onResult:result];
-            }
-        } else {
-            //成功
-            if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                self.connecting = NO;
-                TIoTCoreResult *result = [TIoTCoreResult new];
-                result.code = 0;
-                result.signatureInfo = [NSObject base64Encode:dictionary];
-                [self.delegate onResult:result];
-            }
-        }
-    });
 }
 
 #pragma mark - getter
@@ -326,30 +296,7 @@
 - (void)createudpConnect:(NSString *)ip{
     
     QCLog(@"softap==start");
-    
-//    self.delegateQueue = dispatch_queue_create("qc.com", DISPATCH_QUEUE_CONCURRENT);
-//    self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
-//
-//    NSError *error = nil;
-//
-//    if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
-//        WCLog(@"bindToPort: %@", error);
-//        [self connectUdpFaild];
-//        return ;
-//    }
-//    if (![self.socket beginReceiving:&error]) {     // 开始监听
-//        WCLog(@"beginReceiving: %@", error);
-//        [self connectUdpFaild];
-//        return ;
-//    }
-//
-//    // 服务端
-//    if (![self.socket connectToHost:ip onPort:8266 error:&error]) {   // 连接服务器
-//        WCLog(@"连接失败：%@", error);
-//        [self connectUdpFaild];
-//        return ;
-//    }
-    
+
     [self creatUdpWithIp:ip connectFaildBlock:^{
        [self connectUdpFaild];
     }];
@@ -364,13 +311,11 @@
     
     if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
         QCLog(@"bindToPort: %@", error);
-//        [self connectUdpFaild];
         connectFialdBlock();
         return ;
     }
     if (![self.socket beginReceiving:&error]) {     // 开始监听
         QCLog(@"beginReceiving: %@", error);
-//        [self connectUdpFaild];
         connectFialdBlock();
         return ;
     }
@@ -378,7 +323,6 @@
     // 服务端
     if (![self.socket connectToHost:ip onPort:8266 error:&error]) {   // 连接服务器
         QCLog(@"连接失败：%@", error);
-//        [self connectUdpFaild];
         connectFialdBlock();
         return ;
     }
@@ -402,31 +346,6 @@
     
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didConnectToAddress:)]) {
         [self.delegate softApUdpSocket:sock didConnectToAddress:address];
-    }else {
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-        dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-        dispatch_source_set_event_handler(self.timer, ^{
-            
-            if (self.sendCount >= 3) {
-                dispatch_source_cancel(self.timer);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                   //连接失败,模组有问题
-                    self.connecting = NO;
-                    if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                        TIoTCoreResult *result = [TIoTCoreResult new];
-                        result.code = 6000;
-                        result.errMsg = @"模组有问题";
-                        [self.delegate onResult:result];
-                    }
-                });
-                return ;
-            }
-            
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(1),@"ssid":self.ssid,@"password":self.password} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-            self.sendCount ++;
-        });
-        dispatch_resume(self.timer);
     }
 }
 
@@ -434,7 +353,6 @@
     QCLog(@"发送成功");
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didSendDataWithTag:)]) {
         [self.delegate softApUdpSocket:sock didSendDataWithTag:tag];
-    }else {
     }
 }
 
@@ -442,7 +360,6 @@
     QCLog(@"发送失败 %@", error);
     if ([self.delegate respondsToSelector:@selector(softApuUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate softApuUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
-    }else {
     }
 }
 
@@ -450,81 +367,9 @@
     
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
         [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
-    }else {
-        NSError *JSONParsingError;
-           NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-           
-           
-           if ([dictionary[@"cmdType"] integerValue] == 2) {
-               //模组已经收到WiFi路由器的SSID/PSW，正在进行连接。这个时候app/小程序需要等待3秒钟，然后发送时间戳信息给模组
-               if (![NSObject isEmptyWithObject:dictionary[@"deviceReply"]]) {
-                   if ([dictionary[@"deviceReply"] isEqualToString:@"dataRecived"]) {
-                       
-                       dispatch_source_cancel(self.timer);
-                       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                           
-                           dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-                           self.timer2 = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-                           dispatch_source_set_timer(self.timer2, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-                           dispatch_source_set_event_handler(self.timer2, ^{
-                               
-                               if (self.sendCount2 >= 3) {
-                                   dispatch_source_cancel(self.timer2);
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       //连接失败,发送时间戳失败
-                                       self.connecting = NO;
-                                       if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                                           TIoTCoreResult *result = [TIoTCoreResult new];
-                                           result.code = 6001;
-                                           result.errMsg = @"模组有问题";
-                                           [self.delegate onResult:result];
-                                       }
-                                   });
-                                   return ;
-                               }
-                               
-                               [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"timestamp":@((long)[[NSDate date] timeIntervalSince1970])} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-                               
-                               self.sendCount2 ++;
-                           });
-                           dispatch_resume(self.timer2);
-                           
-                       });
-                   }
-                   return;
-               }
-               
-               
-               if (![NSObject isEmptyWithObject:dictionary[@"signature"]] && [@"connected" isEqualToString:dictionary[@"wifiState"]]) {
-                   
-                   dispatch_source_cancel(self.timer2);
-                   
-                   self.connecting = NO;
-                   if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                       TIoTCoreResult *result = [TIoTCoreResult new];
-                       result.code = 0;
-                       result.signatureInfo = [NSObject base64Encode:dictionary];
-                       [self.delegate onResult:result];
-                   }
-               }
-               else
-               {
-                   //连接失败,模组回复信息缺失或wifiState不为connected
-                   self.connecting = NO;
-                   if ([self.delegate respondsToSelector:@selector(onResult:)]) {
-                       TIoTCoreResult *result = [TIoTCoreResult new];
-                       result.code = 6002;
-                       result.errMsg = @"模组有问题";
-                       [self.delegate onResult:result];
-                   }
-               }
-               
-           }
     }
    
 }
-
-
 
 @end
 
