@@ -325,7 +325,7 @@
 //创建udp连接
 - (void)createudpConnect:(NSString *)ip{
     
-    WCLog(@"softap==start");
+    QCLog(@"softap==start");
     
 //    self.delegateQueue = dispatch_queue_create("qc.com", DISPATCH_QUEUE_CONCURRENT);
 //    self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
@@ -363,13 +363,13 @@
     NSError *error = nil;
     
     if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
-        WCLog(@"bindToPort: %@", error);
+        QCLog(@"bindToPort: %@", error);
 //        [self connectUdpFaild];
         connectFialdBlock();
         return ;
     }
     if (![self.socket beginReceiving:&error]) {     // 开始监听
-        WCLog(@"beginReceiving: %@", error);
+        QCLog(@"beginReceiving: %@", error);
 //        [self connectUdpFaild];
         connectFialdBlock();
         return ;
@@ -377,7 +377,7 @@
     
     // 服务端
     if (![self.socket connectToHost:ip onPort:8266 error:&error]) {   // 连接服务器
-        WCLog(@"连接失败：%@", error);
+        QCLog(@"连接失败：%@", error);
 //        [self connectUdpFaild];
         connectFialdBlock();
         return ;
@@ -398,7 +398,7 @@
 #pragma mark - GCDAsyncUdpSocketDelegate
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
+    QCLog(@"连接成功");
     
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didConnectToAddress:)]) {
         [self.delegate softApUdpSocket:sock didConnectToAddress:address];
@@ -431,7 +431,7 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
+    QCLog(@"发送成功");
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didSendDataWithTag:)]) {
         [self.delegate softApUdpSocket:sock didSendDataWithTag:tag];
     }else {
@@ -439,7 +439,7 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
+    QCLog(@"发送失败 %@", error);
     if ([self.delegate respondsToSelector:@selector(softApuUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate softApuUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
     }else {
