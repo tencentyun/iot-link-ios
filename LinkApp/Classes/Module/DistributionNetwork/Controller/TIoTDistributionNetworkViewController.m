@@ -189,7 +189,7 @@
             self.networkToken = responseObject[@"Token"];
         }
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
         WCLog(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
     }];

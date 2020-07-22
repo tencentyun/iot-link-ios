@@ -192,7 +192,7 @@ static NSString *cellId = @"rv23244";
         [HXYNotice addUpdateTimerListPost];
         [self.navigationController popViewControllerAnimated:YES];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -236,7 +236,7 @@ static NSString *cellId = @"rv23244";
     [[TIoTRequestObject shared] post:AppModifyTimer Param:param success:^(id responseObject) {
         [HXYNotice addUpdateTimerListPost];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

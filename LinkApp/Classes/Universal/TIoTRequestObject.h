@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-typedef void (^FailureResponseBlock)(NSString *reason,NSError *error);
+typedef void (^FailureResponseBlock)(NSString *reason,NSError *error,NSDictionary *dic);
 typedef void (^SuccessResponseBlock)(id responseObject);
 
 @interface TIoTRequestObject : NSObject

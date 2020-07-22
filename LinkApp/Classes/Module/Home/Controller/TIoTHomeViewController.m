@@ -408,11 +408,11 @@ static CGFloat weatherHeight = 60;
             //上报用户userid
             [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -423,7 +423,7 @@ static CGFloat weatherHeight = 60;
         self.rooms = [NSArray yy_modelArrayWithClass:[RoomModel class] json:responseObject[@"RoomList"]];
         
         [self loadNewData];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -441,7 +441,7 @@ static CGFloat weatherHeight = 60;
         
         [self updateDeviceStatus];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -458,7 +458,7 @@ static CGFloat weatherHeight = 60;
         
         [self updateDeviceStatus];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -497,7 +497,7 @@ static CGFloat weatherHeight = 60;
             [self.dataArr removeAllObjects];
             [self.dataArr addObjectsFromArray:tmpArr];
             [self refreshUI];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -508,7 +508,7 @@ static CGFloat weatherHeight = 60;
     NSDictionary *param = @{@"Name":@"我的家",@"Address":@""};
     [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
         [self getFamilyList];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

@@ -54,7 +54,7 @@ static NSString *cellId = @"wd9765";
         [self.rooms removeAllObjects];
         [self.rooms addObjectsFromArray:responseObject[@"RoomList"]];
         [self.tableView reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

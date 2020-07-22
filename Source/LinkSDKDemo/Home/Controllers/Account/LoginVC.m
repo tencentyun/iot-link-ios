@@ -32,7 +32,7 @@
             UIViewController *vc = [sb instantiateInitialViewController];
             [UIApplication sharedApplication].keyWindow.rootViewController = vc;
             
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             NSLog(@"登录错==%@",reason);
         }];
     }
@@ -42,7 +42,7 @@
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
             [UIApplication sharedApplication].keyWindow.rootViewController = vc;
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
     }

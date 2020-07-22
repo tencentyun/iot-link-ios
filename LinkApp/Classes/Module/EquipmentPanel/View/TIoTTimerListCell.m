@@ -33,7 +33,7 @@
         NSDictionary *param = @{@"ProductId":_info[@"ProductId"],@"DeviceName":_info[@"DeviceName"],@"TimerId":_info[@"TimerId"],@"Status":@(status)};
         [[TIoTRequestObject shared] post:AppModifyTimerStatus Param:param success:^(id responseObject) {
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }

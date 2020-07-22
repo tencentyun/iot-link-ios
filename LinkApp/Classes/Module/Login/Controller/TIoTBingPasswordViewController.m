@@ -164,7 +164,7 @@
         [[TIoTRequestObject shared] postWithoutToken:AppCreateCellphoneUser Param:tmpDic success:^(id responseObject) {
             [self.navigationController popToRootViewControllerAnimated:YES];
             
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         
@@ -176,7 +176,7 @@
         [[TIoTRequestObject shared] postWithoutToken:AppResetPasswordByCellphone Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
             [self.navigationController popToRootViewControllerAnimated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];;
         
@@ -187,7 +187,7 @@
         
         [[TIoTRequestObject shared] postWithoutToken:AppCreateEmailUser Param:tmpDic success:^(id responseObject) {
             [self.navigationController popToRootViewControllerAnimated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
@@ -198,7 +198,7 @@
         [[TIoTRequestObject shared] postWithoutToken:AppResetPasswordByEmail Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
             [self.navigationController popToRootViewControllerAnimated:YES];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
         

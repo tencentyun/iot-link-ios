@@ -27,7 +27,7 @@
 - (void)getMessagesWithMsgId:(NSString *)msgId msgTimestamp:(SInt64)msgTimestamp limit:(NSUInteger)limit category:(NSUInteger)category success:(SRHandler)success failure:(FRHandler)failure
 {
     if (msgId == nil) {
-        failure(@"msgId参数为空",nil);
+        failure(@"msgId参数为空",nil,@{});
         return;
     }
     
@@ -37,8 +37,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetMessages params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -46,7 +46,7 @@
 - (void)deleteMessageByMsgId:(NSString *)msgId success:(SRHandler)success failure:(FRHandler)failure
 {
     if (msgId == nil) {
-        failure(@"msgId参数为空",nil);
+        failure(@"msgId参数为空",nil,@{});
         return;
     }
     
@@ -55,15 +55,15 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppDeleteMessage params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)bindXgToken:(NSString *)token success:(SRHandler)success failure:(FRHandler)failure
 {
     if (token == nil) {
-        failure(@"token参数为空",nil);
+        failure(@"token参数为空",nil,@{});
         return;
     }
     
@@ -72,15 +72,15 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppBindXgToken params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)unbindXgToken:(NSString *)token success:(SRHandler)success failure:(FRHandler)failure
 {
     if (token == nil) {
-        failure(@"token参数为空",nil);
+        failure(@"token参数为空",nil,@{});
         return;
     }
     
@@ -89,8 +89,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUnBindXgToken params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 @end

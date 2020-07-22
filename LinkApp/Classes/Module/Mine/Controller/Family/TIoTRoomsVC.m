@@ -62,7 +62,7 @@ static NSString *cellId = @"wd9765";
         [self.rooms addObjectsFromArray:responseObject[@"RoomList"]];
         [self refreshUI:responseObject];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

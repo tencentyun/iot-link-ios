@@ -35,7 +35,7 @@
         NSDictionary *data = responseObject[@"Data"];
         self.messages = data[@"Msgs"];
         [self.tableView reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -91,7 +91,7 @@
     {
         [[TIoTCoreFamilySet shared] joinFamilyWithShareToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
             
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
     }
@@ -99,7 +99,7 @@
     {
         [[TIoTCoreDeviceSet shared] bindUserShareDeviceWithProductId:message[@"ProductId"] deviceName:message[@"DeviceName"] shareDeviceToken:message[@"Attachments"][@"ShareToken"] success:^(id  _Nonnull responseObject) {
             
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
     }

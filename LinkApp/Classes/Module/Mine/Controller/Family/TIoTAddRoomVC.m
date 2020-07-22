@@ -46,7 +46,7 @@
     [[TIoTRequestObject shared] post:AppCreateRoom Param:param success:^(id responseObject) {
         [HXYNotice addUpdateRoomListPost];
         [self cancel];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
