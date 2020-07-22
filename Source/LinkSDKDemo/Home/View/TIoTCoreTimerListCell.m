@@ -33,7 +33,7 @@
         
         [[TIoTCoreDeviceSet shared] modifyTimerStatusWithTimerId:_info[@"TimerId"] productId:_info[@"ProductId"] deviceName:_info[@"DeviceName"] status:status success:^(id  _Nonnull responseObject) {
             
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
         

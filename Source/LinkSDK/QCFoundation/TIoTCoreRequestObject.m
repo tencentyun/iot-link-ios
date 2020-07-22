@@ -31,102 +31,37 @@
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
-    
-    QCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
-    
-    NSURL *url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
-    
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        QCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonerror = nil;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-            if (jsonerror == nil) {
-                if ([dic[kCode] integerValue] == 0) {
-                    success(dic[kData]);
-                }
-                else
-                {
-                    failure(dic[kMsg],nil);
-                }
-            }
-            else
-            {
-                failure(nil,jsonerror);
-            }
-        }
-        else
-        {
-            failure(nil,error);
-        }
-    }];
-    [task resume];
+    NSURL *url  = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined];
+        
+    [self postRequestWithAction:urlStr url:url isWithoutToken:NO param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
+
 }
 
+//MARK: 重要
+#pragma mark -  ***此处仅供参考, 需自建后台服务进行替换***
 
 - (void)postWithoutToken:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
     
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTCoreAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
-    [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
-    [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
-    [accessParam setValue:[TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
-    
-//    [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
-    
-    QCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
-    
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr]];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
-    
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        QCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonerror = nil;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-            if (jsonerror == nil) {
-                if ([dic[kCode] integerValue] == 0) {
-                    success(dic[kData]);
-                }
-                else
-                {
-                    failure(dic[kMsg],nil);
-                }
-            }
-            else
-            {
-                failure(nil,jsonerror);
-            }
-        }
-        else
-        {
-            failure(nil,error);
-        }
-    }];
-    [task resume];
+    [self postRequestWithAction:urlStr url:url isWithoutToken:YES param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
 }
 
+
+//上传图片
+- (void)getSigForUpload:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
+failure:(FailureResponseBlock)failure
+{
+    NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
+    
+    [self postRequestWithAction:urlStr url:url isWithoutToken:NO param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
+    
+}
+
+//MARK: 重要
+#pragma mark -  ***签字函数请务必在服务端实现，此处仅为演示，如有泄露概不负责***
 
 - (NSString *)getSignatureWithParam:(NSDictionary *)param
 {
@@ -151,51 +86,80 @@ failure:(FailureResponseBlock)failure
     }
     
     return [NSString HmacSha1:[TIoTCoreAppEnvironment shareEnvironment].appSecret data:keyValue];
+    
 }
 
-
-
-
-//上传图片
-- (void)getSigForUpload:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
-failure:(FailureResponseBlock)failure
-{
+- (void)postRequestWithAction:(NSString *)actionStr url:(NSURL *)url  isWithoutToken:(BOOL)withoutToken param:(NSDictionary *)baseAccessParam urlAndBodySetting:(UrlAndBodyParamCustomSettingBlock )urlAndBodyCustomSettingBlock isShowHelpCenter:(ConfigModelH5CookieBlock )configH5CookieBlock success:(SuccessResponseBlock)success
+                      failure:(FailureResponseBlock)failure {
     
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+    NSMutableDictionary *accessParam = nil;
+    if (withoutToken == YES) {
+        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
+        [accessParam setValue:actionStr forKey:@"Action"];
+        [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
+        [accessParam setValue:self.customEnvrionmentAppSecretStirng ? self.customEnvrionmentAppSecretStirng : [TIoTCoreAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
+        [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
+        [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
+        [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+    }else {
+        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
+        [accessParam setValue:actionStr forKey:@"Action"];
+        [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
+        [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+    }
     
-    NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    NSURL *urlString = nil;
+    
+    if (urlAndBodyCustomSettingBlock != nil) {
+        urlString = urlAndBodyCustomSettingBlock(accessParam, nil);
+    }else {
+        urlString = url;
+    }
+    
+    QCLog(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    
+    if (configH5CookieBlock != nil) {
+        request =  configH5CookieBlock(request);
+    }
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        QCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
+        QCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
             if (jsonerror == nil) {
                 if ([dic[kCode] integerValue] == 0) {
-                    success(dic[kData]);
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(dic[kData]);
+                    });
                 }
                 else
                 {
-                    failure(dic[kMsg],nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(dic[kMsg],nil,dic);
+                    });
                 }
             }
             else
             {
-                failure(nil,jsonerror);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(nil,jsonerror,@{});
+                });
             }
         }
         else
         {
-            failure(nil,error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(nil,error,@{});
+            });
         }
     }];
     [task resume];

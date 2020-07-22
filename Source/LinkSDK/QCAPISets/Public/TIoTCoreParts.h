@@ -9,7 +9,7 @@
 #ifndef QCParts_h
 #define QCParts_h
 
-typedef void (^FRHandler)(NSString * _Nullable reason,NSError * _Nullable error);
+typedef void (^FRHandler)(NSString * _Nullable reason,NSError * _Nullable error, NSDictionary * _Nullable dic);
 typedef void (^SRHandler)(id _Nonnull responseObject);
 typedef void(^Result) (BOOL success, id _Nullable data);
 

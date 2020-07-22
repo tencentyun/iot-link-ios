@@ -55,7 +55,7 @@ static NSString *itemId2 = @"pfDDD";
     [[TIoTCoreFamilySet shared] getMemberListWithFamilyId:self.familyInfo[@"FamilyId"] offset:0 limit:0 success:^(id  _Nonnull responseObject) {
         [self.dataArr addObject:responseObject[@"MemberList"]];
         [self.coll reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -64,7 +64,7 @@ static NSString *itemId2 = @"pfDDD";
 {
     [[TIoTCoreFamilySet shared] deleteFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:self.familyInfo[@"FamilyName"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"删除成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -73,7 +73,7 @@ static NSString *itemId2 = @"pfDDD";
 {
     [[TIoTCoreFamilySet shared] leaveFamilyWithFamilyId:self.familyInfo[@"FamilyId"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"退出成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -84,7 +84,7 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableDictionary *dic = self.dataArr[0][0];
         [dic setValue:name forKey:@"name"];
         [self.coll reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
