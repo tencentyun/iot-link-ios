@@ -52,9 +52,6 @@
     // Do any additional setup after loading the view.
     [self setupUI];
     
-    //去重
-//    [self createudpConnect:[NSString getGateway]];
-    
     [self createSoftAPWith:[NSString getGateway]];
     
 }
@@ -72,37 +69,6 @@
         [weakSelf connectFaild];
     };
     [self.softAP startAddDevice];
-}
-
-//创建udp连接
-- (void)createudpConnect:(NSString *)ip{
-    
-    //去重
-    
-//    self.delegateQueue = dispatch_queue_create("socket.comDDD", DISPATCH_QUEUE_CONCURRENT);
-//    self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
-//
-//    NSError *error = nil;
-//
-//    if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
-//        WCLog(@"bindToPort: %@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-//    if (![self.socket beginReceiving:&error]) {     // 开始监听
-//        WCLog(@"beginReceiving: %@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-//
-//    // 服务端
-//    if (![self.socket connectToHost:ip onPort:8266 error:&error]) {   // 连接服务器
-//        WCLog(@"连接失败：%@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-    
-    
 }
 
 #pragma mark - TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
@@ -165,71 +131,6 @@
         
     }
 }
-
-#pragma mark - TCSocketDelegate
-//去重
-
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-//    WCLog(@"连接成功");
-//
-//    //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
-//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-//    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-//    dispatch_source_set_event_handler(self.timer, ^{
-//
-//        if (self.sendCount >= 5) {
-//            dispatch_source_cancel(self.timer);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//               [self connectFaild];
-//            });
-//            return ;
-//        }
-//
-//        NSString *Ssid = self.wifiInfo[@"name"];
-//        NSString *Pwd = self.wifiInfo[@"pwd"];
-//        NSString *Token = self.wifiInfo[@"token"];
-//        [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd,@"token":Token} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-//        self.sendCount ++;
-//    });
-//    dispatch_resume(self.timer);
-//}
-//
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-//    WCLog(@"发送成功");
-//}
-//
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-//    WCLog(@"发送失败 %@", error);
-//}
-
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
-//
-//    NSError *JSONParsingError;
-//    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-//    self.signInfo = dictionary;
-//    WCLog(@"嘟嘟嘟 %@",dictionary);
-//
-//    if ([dictionary[@"cmdType"] integerValue] == 2) {
-//        //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-//        //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-//        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-//            if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
-//                [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//            }else {
-//                //deviceReplay 为 Cuttent_Error
-//                WCLog(@"soft配网过程中失败，需要重新配网");
-//                [self connectFaild];
-//            }
-//
-//        }else {
-//            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
-//            [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//        }
-//
-//    }
-//
-//}
 
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {

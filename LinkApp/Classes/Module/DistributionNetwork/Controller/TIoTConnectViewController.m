@@ -291,39 +291,6 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [self.softAP startAddDevice];
 }
 
-//创建udp连接，进行广播
-- (void)createudpConnect:(NSString *)ip{
-    //去重
-//    self.socket = [[TCSocket alloc] init];
-//    [self.socket setDeleagte:self];
-//    [self.socket openWithIP:ip port:SmartConfigPort];
-    
-    
-//    self.delegateQueue = dispatch_queue_create("socketSmart.comDDD", DISPATCH_QUEUE_CONCURRENT);
-//    self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
-//
-//    NSError *error = nil;
-//
-//    if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
-//        WCLog(@"bindToPort: %@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-//    if (![self.socket beginReceiving:&error]) {     // 开始监听
-//        WCLog(@"beginReceiving: %@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-//
-//    // 服务端
-//    if (![self.socket connectToHost:ip onPort:SmartConfigPort error:&error]) {   // 连接服务器
-//        WCLog(@"连接失败：%@", error);
-//        [self connectFaild];
-//        return ;
-//    }
-
-}
-
 //创建smartConfig
 - (void)createSmartConfig {
     NSString *apSsid = self.wifiInfo[@"name"];
@@ -345,65 +312,6 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
         [weakSelf connectFaild];
     };
     [self.smartConfig startAddDevice];
-    
-    //去重
-//    dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    dispatch_async(queue, ^{
-//
-//        // execute the task
-//        NSArray *esptouchResultArray = [self executeForResultsWithSsid:apSsid bssid:apBssid password:apPwd taskCount:1 broadcast:YES];
-//        // show the result to the user in UI Main Thread
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//
-//            ESPTouchResult *firstResult = [esptouchResultArray objectAtIndex:0];
-//            // check whether the task is cancelled and no results received
-//            if (!firstResult.isCancelled)
-//            {
-//                NSMutableString *mutableStr = [[NSMutableString alloc]init];
-//                NSUInteger count = 0;
-//                // max results to be displayed, if it is more than maxDisplayCount,
-//                // just show the count of redundant ones
-//                const int maxDisplayCount = 5;
-//                if ([firstResult isSuc])
-//                {
-//
-//                    for (int i = 0; i < [esptouchResultArray count]; ++i)
-//                    {
-//                        ESPTouchResult *resultInArray = [esptouchResultArray objectAtIndex:i];
-//                        [mutableStr appendString:[resultInArray description]];
-//                        [mutableStr appendString:@"\n"];
-//                        count++;
-//                        NSString *ipAddrDataStr = [ESP_NetUtil descriptionInetAddr4ByData:resultInArray.ipAddrData];
-//                        if (ipAddrDataStr==nil) {
-//                            ipAddrDataStr = [ESP_NetUtil descriptionInetAddr6ByData:resultInArray.ipAddrData];
-//                        }
-//                        [self createudpConnect:ipAddrDataStr];
-//
-//                        if (count >= maxDisplayCount)
-//                        {
-//                            break;
-//                        }
-//
-//
-//                    }
-//
-//                    if (count < [esptouchResultArray count])
-//                    {
-//                        [mutableStr appendString:[NSString stringWithFormat:@"\nthere's %lu more result(s) without showing\n",(unsigned long)([esptouchResultArray count] - count)]];
-//                    }
-//
-//
-//                }
-//
-//                else
-//                {
-//                    [self connectFaild];
-//                }
-//            }
-//
-//        });
-//    });
 }
 
 //获取签名，绑定设备
@@ -480,7 +388,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
         if (JSONParsingError != nil) {
             [self connectFaild];
         } else {
-            //            [self bindDevice:dictionary];
+
             if ([dictionary[@"cmdType"] integerValue] == 2) {
                 //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
                 //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
@@ -494,7 +402,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
                     }
                     
                 }else {
-                    WCLog(@"dictionary==%@----smaartConfig链路设备success",dictionary);
+                    WCLog(@"dictionary==%@----smartConfig链路设备success",dictionary);
                     [self checkTokenStateWithCirculationWithDeviceData:dictionary];
                 }
                 
@@ -520,8 +428,6 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
                 return ;
             }
             
-    //        [socket sendData: [NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil]];
-            
             [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
             self.sendTokenCount ++;
         });
@@ -541,30 +447,12 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
     WCLog(@"嘟嘟嘟 %@",dictionary);
-    
-    //    if ([dictionary[@"cmdType"] integerValue] == 2) {
-    //        //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-    //        //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-    //        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-    //            if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
-    //                [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-    //            }else {
-    //                //deviceReplay 为 Cuttent_Error
-    //                WCLog(@"soft配网过程中失败，需要重新配网");
-    //                [self connectFaild];
-    //            }
-    //
-    //        }else {
-    //            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
-    //            [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-    //        }
-    //
-    //    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (JSONParsingError != nil) {
             [self connectFaild];
         } else {
-            //            [self bindDevice:dictionary];
+
             if ([dictionary[@"cmdType"] integerValue] == 2) {
                 //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
                 //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
@@ -586,111 +474,6 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
         }
     });
 }
-
-#pragma mark - TCSocketDelegate
-// 去重
-//- (void)onHandleSocketOpen:(TCSocket *)socket {
-//    NSLog(@"%@ did open",socket);
-////    [socket sendData: [NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"timestamp":@((long)[[NSDate date] timeIntervalSince1970])} options:NSJSONWritingPrettyPrinted error:nil]];
-//}
-//
-//- (void)onHandleSocketClosed:(TCSocket *)socket {
-//    NSLog(@"%@ did close",socket);
-//}
-//- (void)onHandleDataReceived:(TCSocket *)socket data:(NSData *)data {
-//    NSLog(@"%@ did receive data %@",socket,data);
-//    //TCIotDevice *result;
-//    [self receivedSmartConfigSockedDataWithData:data];
-//}
-
-#pragma mark - GCDAsyncUdpSocketDelegate
-
-//去重
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-//    WCLog(@"连接成功");
-//
-//    //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
-//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    self.tokenTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-//    dispatch_source_set_timer(self.tokenTimer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-//    dispatch_source_set_event_handler(self.tokenTimer, ^{
-//
-//        if (self.sendTokenCount >= 5) {
-//            dispatch_source_cancel(self.tokenTimer);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//               [self connectFaild];
-//            });
-//            return ;
-//        }
-//
-////        [socket sendData: [NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil]];
-//
-//        [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-//        self.sendTokenCount ++;
-//    });
-//    dispatch_resume(self.tokenTimer);
-//}
-
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-//    WCLog(@"发送成功");
-//}
-
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-//    WCLog(@"发送失败 %@", error);
-//}
-
-//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
-//
-//    NSError *JSONParsingError;
-//    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-//    WCLog(@"嘟嘟嘟 %@",dictionary);
-//
-////    if ([dictionary[@"cmdType"] integerValue] == 2) {
-////        //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-////        //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-////        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-////            if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
-////                [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-////            }else {
-////                //deviceReplay 为 Cuttent_Error
-////                WCLog(@"soft配网过程中失败，需要重新配网");
-////                [self connectFaild];
-////            }
-////
-////        }else {
-////            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
-////            [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-////        }
-////
-////    }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            if (JSONParsingError != nil) {
-//                [self connectFaild];
-//            } else {
-//                //            [self bindDevice:dictionary];
-//                if ([dictionary[@"cmdType"] integerValue] == 2) {
-//                    //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-//                    //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-//                    if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-//                        if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
-//                            [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//                        }else {
-//                            //deviceReplay 为 Cuttent_Error
-//                            WCLog(@"smaartConfig配网过程中失败，需要重新配网");
-//                            [self connectFaild];
-//                        }
-//
-//                    }else {
-//                        WCLog(@"dictionary==%@----smaartConfig链路设备success",dictionary);
-//                        [self checkTokenStateWithCirculationWithDeviceData:dictionary];
-//                    }
-//
-//                }
-//            }
-//        });
-//}
-
-
 
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
@@ -776,22 +559,6 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [self.socket close];
     self.socket = nil;
 }
-
-#pragma mark - the example of how to use executeForResults
-//去重
-//- (NSArray *) executeForResultsWithSsid:(NSString *)apSsid bssid:(NSString *)apBssid password:(NSString *)apPwd taskCount:(int)taskCount broadcast:(BOOL)broadcast
-//{
-//    [self.condition lock];
-//    self.esptouchTask = [[ESPTouchTask alloc]initWithApSsid:apSsid andApBssid:apBssid andApPwd:apPwd andTimeoutMillisecond:30000];
-//
-//    // set delegate
-//    //[self._esptouchTask setEsptouchDelegate:self._esptouchDelegate];
-//    [self.esptouchTask setPackageBroadcast:broadcast];
-//    [self.condition unlock];
-//    NSArray * esptouchResults = [self.esptouchTask executeForResults:taskCount];
-//    WCLog(@"ESPViewController executeForResult() result is: %@",esptouchResults);
-//    return esptouchResults;
-//}
 
 #pragma mark setter or getter
 - (UIScrollView *)scrollView{

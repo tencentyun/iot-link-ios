@@ -43,6 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
+/**
+ - (void)onResult: 代理方法可选实现，但是 TIoTCoreSmartConfig 对象和 TIoTCoreSoftAP 对象中的 updConnectBlock 、connectFaildBlock 、udpFaildBlock必须要实现
+ */
 - (void)onResult:(TIoTCoreResult *)result;
 
 @end
