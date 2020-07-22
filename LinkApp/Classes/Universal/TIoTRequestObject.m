@@ -13,6 +13,8 @@
 #import "TIoTLoginVC.h"
 #import "UIViewController+GetController.h"
 
+#import "TIoTCoreRequestObject.h"
+
 #define kCode @"code"
 #define kMsg @"msg"
 #define kData @"data"
@@ -35,71 +37,29 @@ NSString  * const kInvalidParameterValueInvalidAccessToken = @"InvalidParameterV
 failure:(FailureResponseBlock)failure
 {
     
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
-    WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
-    
-    NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
-    
-    WCLog(@"连接==%@",url);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
-    
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    if ([TIoTAppConfig appTypeWithModel:model] == 0){
-#ifdef DEBUG
-        [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
-#endif
-    }
-    
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        WCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonerror = nil;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-            if (jsonerror == nil) {
-                if ([dic[kCode] integerValue] == 0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD dismissInView:[UIApplication sharedApplication].keyWindow];
-                        success(dic[kData]);
-                    });
-                }
-                else
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
-                        failure(dic[kMsg],nil);
-                        [self judgeUserSignoutWithReturnToken:dic];
-                        
-                    });
-                    
-                }
+    [TIoTCoreRequestObject shared].urlCreateBlock = ^NSURL *{
+        NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
+        return url;
+    };
+
+    [TIoTCoreRequestObject shared].configH5CookieBlock = ^(NSMutableURLRequest *request) {
+        TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+            if ([TIoTAppConfig appTypeWithModel:model] == 0){
+        #ifdef DEBUG
+                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+        #endif
             }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD showError:@"json解析失败" toView:[UIApplication sharedApplication].keyWindow];
-                    failure(nil,jsonerror);
-                });
-                
-            }
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showError:error.localizedDescription toView:[UIApplication sharedApplication].keyWindow];
-                failure(nil,error);
-            });
-        }
+        return request;
+    };
+
+    [self invokeResponseBlock];
+
+    [[TIoTCoreRequestObject shared] post:urlStr Param:param success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSString *reason, NSError *error) {
+        failure(reason,error);
     }];
-    [task resume];
+    
 }
 
 //MARK: 重要
@@ -108,96 +68,55 @@ failure:(FailureResponseBlock)failure
 - (void)postWithoutToken:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
-    [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
-    [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
-    [accessParam setValue:[TIoTAppEnvironment shareEnvironment].platform forKey:@"Platform"];
-   
-    NSURL *url = nil;
     
-    if ([TIoTAppConfig appTypeWithModel:model] == 0){
-        //公版
-#ifdef DEBUG
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
-#else
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
-#endif
-        [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
-    }else {
-        //开源
-#ifdef DEBUG
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=testID",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
-#else
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
-#endif
-        
-        if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
-            [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
-        }
-    }
-    
-    WCLog(@"请求action==%@==%@",urlStr,[NSString objectToJson:accessParam]);
-    
-    WCLog(@"连接==%@",url);
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
-    
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    if ([TIoTAppConfig appTypeWithModel:model] == 0){
-#ifdef DEBUG
-        [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
-#endif
-    }
+    [TIoTCoreRequestObject shared].customEnvrionmentAppSecretStirng = [TIoTAppEnvironment shareEnvironment].appKey;
+    [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTAppEnvironment shareEnvironment].platform;
 
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        WCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonerror = nil;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-            if (jsonerror == nil) {
-                if ([dic[kCode] integerValue] == 0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD dismissInView:[UIApplication sharedApplication].keyWindow];
-                        success(dic[kData]);
-                    });
-                }
-                else
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
-                        failure(dic[kMsg],nil);
-                    });
-                    
+    [TIoTCoreRequestObject shared].urlAndBodyCustomSettingBlock = ^(NSMutableDictionary *accessParam, NSURL *requestUrl) {
+        TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+            NSURL *url = nil;
+
+            if ([TIoTAppConfig appTypeWithModel:model] == 0){
+                //公版
+        #ifdef DEBUG
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+        #else
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+        #endif
+                [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
+            }else {
+                //开源
+        #ifdef DEBUG
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=testID",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+        #else
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+        #endif
+
+                if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
+                    [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
                 }
             }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD showError:@"json解析失败" toView:[UIApplication sharedApplication].keyWindow];
-                    failure(nil,jsonerror);
-                });
-                
+        return url;
+    };
+
+    [TIoTCoreRequestObject shared].configH5CookieBlock = ^(NSMutableURLRequest *request) {
+        TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+            if ([TIoTAppConfig appTypeWithModel:model] == 0){
+        #ifdef DEBUG
+                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+        #endif
             }
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showError:error.localizedDescription toView:[UIApplication sharedApplication].keyWindow];
-                failure(nil,error);
-            });
-        }
+        return request;
+    };
+
+    [self invokeResponseBlock];
+
+    [[TIoTCoreRequestObject shared] postWithoutToken:urlStr Param:param success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSString *reason, NSError *error) {
+        failure(reason,error);
     }];
-    [task resume];
+
 }
 
 
@@ -238,62 +157,32 @@ failure:(FailureResponseBlock)failure
 - (void)getSigForUpload:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    
-    NSMutableDictionary *accessParam = [NSMutableDictionary dictionaryWithDictionary:param];
-    [accessParam setValue:urlStr forKey:@"Action"];
-    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
-    
-    NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/studioapp/AppCosAuth"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
-    
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
-    
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        WCLog(@"收到action==%@==%@",urlStr,[[NSString alloc] initWithData:data encoding:4]);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonerror = nil;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-            if (jsonerror == nil) {
-                if ([dic[kCode] integerValue] == 0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD dismissInView:[UIApplication sharedApplication].keyWindow];
-                        success(dic[kData]);
-                    });
-                }
-                else
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [MBProgressHUD showError:dic[kMsg] toView:[UIApplication sharedApplication].keyWindow];
-                        failure(dic[kMsg],nil);
-                         [self judgeUserSignoutWithReturnToken:dic];
-                    });
-                    
-                }
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD showError:@"json解析失败" toView:[UIApplication sharedApplication].keyWindow];
-                    failure(nil,jsonerror);
-                });
-                
-            }
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showError:error.localizedDescription toView:[UIApplication sharedApplication].keyWindow];
-                failure(nil,error);
-            });
-        }
+ 
+    [self invokeResponseBlock];
+
+    [[TIoTCoreRequestObject shared] getSigForUpload:urlStr Param:param success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSString *reason, NSError *error) {
+        failure(reason, error);
     }];
-    [task resume];
+    
 }
 
+- (void)invokeResponseBlock {
+    [TIoTCoreRequestObject shared].tipsDismissBlock = ^{
+        [MBProgressHUD dismissInView:[UIApplication sharedApplication].keyWindow];
+    };
+    
+    __weak __typeof(self)weakSelf = self;
+    [TIoTCoreRequestObject shared].tipsErrorShowBlock = ^(NSString *errorTipsString, NSDictionary *resposeDic) {
+        [MBProgressHUD showError:errorTipsString toView:[UIApplication sharedApplication].keyWindow];
+        [weakSelf judgeUserSignoutWithReturnToken:resposeDic];
+    };
+    
+    [TIoTCoreRequestObject shared].tipsNetWorkErrorBlock = ^(NSString *localizedDescription) {
+        [MBProgressHUD showError:localizedDescription toView:[UIApplication sharedApplication].keyWindow];
+    };
+}
 
 /// 根据token code 判断是否退出登录
 - (void)judgeUserSignoutWithReturnToken:(NSDictionary *)descriptionDic {
