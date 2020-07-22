@@ -55,7 +55,7 @@ static NSString *cellId = @"rc62368";
     [[TIoTRequestObject shared] post:AppDeleteRoom Param:param success:^(id responseObject) {
         [HXYNotice addUpdateRoomListPost];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -69,7 +69,7 @@ static NSString *cellId = @"rc62368";
         
         self.roomInfo = @[@{@"title":@"房间名称",@"name":name}];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

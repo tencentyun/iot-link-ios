@@ -74,7 +74,7 @@
         [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
             [HXYNotice addUpdateFamilyListPost];
             [self cancel];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }

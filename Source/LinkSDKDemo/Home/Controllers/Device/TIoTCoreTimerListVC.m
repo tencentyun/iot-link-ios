@@ -80,7 +80,7 @@ static NSString *cellId = @"ub67989";
         [self.timers removeAllObjects];
         [self.timers addObjectsFromArray:responseObject[@"TimerList"]];
         [self.tableView reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -90,7 +90,7 @@ static NSString *cellId = @"ub67989";
     [[TIoTCoreDeviceSet shared] deleteTimerWithProductId:self.productId deviceName:self.deviceName timerId:timerId success:^(id  _Nonnull responseObject) {
         [self.timers removeObjectAtIndex:row];
         [self.tableView reloadData];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
     

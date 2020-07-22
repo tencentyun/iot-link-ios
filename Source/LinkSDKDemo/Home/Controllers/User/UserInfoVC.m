@@ -39,7 +39,7 @@
         self.phoneNum.text = [TIoTCoreUserManage shared].phoneNumber;
         [self.header sd_setImageWithURL:[NSURL URLWithString:[TIoTCoreUserManage shared].avatar]];
         NSLog(@"头像==%@",[TIoTCoreUserManage shared].avatar);
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
     
@@ -79,7 +79,7 @@
                     
                     [[TIoTCoreAccountSet shared] updateUserWithNickName:@"" avatar:result.location success:^(id  _Nonnull responseObject) {
                         [MBProgressHUD showSuccess:@"修改成功"];
-                    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+                    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                         
                     }];
                     
@@ -90,7 +90,7 @@
         
         [[QCloudCOSTransferMangerService defaultCOSTransferManager] UploadObject:request];
         
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -214,7 +214,7 @@
 - (IBAction)signOut:(id)sender {
     [[TIoTCoreAccountSet shared] signOutOnSuccess:^(id  _Nonnull responseObject) {
         [UIApplication sharedApplication].keyWindow.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

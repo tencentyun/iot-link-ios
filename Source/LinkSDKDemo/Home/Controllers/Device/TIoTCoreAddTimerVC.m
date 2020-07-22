@@ -165,7 +165,7 @@ static NSString *cellId = @"rv23244";
     
     [[TIoTCoreDeviceSet shared] createTimerWithProductId:self.productId deviceName:self.deviceName timerName:self.timerName days:self.repeatData timePoint:self.picker.date repeat:1 data:self.publishData success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         [MBProgressHUD showError:reason];
     }];
 }
@@ -190,7 +190,7 @@ static NSString *cellId = @"rv23244";
     
     [[TIoTCoreDeviceSet shared] modifyTimerWithTimerId:self.timerInfo[@"TimerId"] productId:self.productId deviceName:self.deviceName timerName:self.timerName days:self.repeatData timePoint:self.picker.date repeat:1 data:self.publishData success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"修改成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

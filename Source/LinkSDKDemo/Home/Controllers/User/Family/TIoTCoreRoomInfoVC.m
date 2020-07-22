@@ -51,7 +51,7 @@ static NSString *cellId = @"rc62368";
 {
     [[TIoTCoreFamilySet shared] deleteRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] success:^(id  _Nonnull responseObject) {
         [MBProgressHUD showSuccess:@"删除成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }
@@ -61,7 +61,7 @@ static NSString *cellId = @"rc62368";
     [[TIoTCoreFamilySet shared] modifyRoomWithFamilyId:self.familyId roomId:self.roomDic[@"RoomId"] name:name success:^(id  _Nonnull responseObject) {
         self.roomInfo = @[@{@"title":@"房间名称",@"name":name}];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error) {
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
 }

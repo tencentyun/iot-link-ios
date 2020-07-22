@@ -101,7 +101,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             [selfWeak.navigationController pushViewController:vc animated:YES];
             [MBProgressHUD dismissInView:selfWeak.view];
 
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD dismissInView:selfWeak.view];
         }];
     };
@@ -192,7 +192,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             }
         }
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [MBProgressHUD dismissInView:self.view];
     }];
 }
@@ -209,7 +209,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self.productCollectionView reloadData];
         [self refreshScrollContentSize];
         [MBProgressHUD dismissInView:self.view];
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [MBProgressHUD dismissInView:self.view];
     }];
 }
@@ -233,7 +233,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self jumpConfigVC:@"智能配网"];
         WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self jumpConfigVC:@"智能配网"];
     }];
 }

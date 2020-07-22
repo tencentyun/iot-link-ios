@@ -259,7 +259,7 @@
             self.networkToken = responseObject[@"Token"];
         }
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
         NSLog(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
     }];
@@ -412,7 +412,7 @@
             self.isTokenbindedStatus = YES;
             [self bindingDevidesWithData:deviceData];
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         NSLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
@@ -425,7 +425,7 @@
         [[TIoTCoreRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.networkToken,@"FamilyId":[TIoTCoreUserManage shared].familyId ? [TIoTCoreUserManage shared].familyId:@"",@"RoomId":roomId} success:^(id responseObject) {
 
             [self compareSuccessResult];
-        } failure:^(NSString *reason, NSError *error) {
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaildResult:@"绑定设备失败"];
         }];
     }else {

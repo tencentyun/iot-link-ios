@@ -384,7 +384,7 @@ static NSString *itemId3 = @"i_ooo454";
             NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
             [self loadData:config];
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -401,7 +401,7 @@ static NSString *itemId3 = @"i_ooo454";
             [self getDeviceData:dic andBaseInfo:DataTemplateDic];
             
         }
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
@@ -427,7 +427,7 @@ static NSString *itemId3 = @"i_ooo454";
         [self layoutHeader];
         [self.coll reloadData];
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
     }];
 }
@@ -442,7 +442,7 @@ static NSString *itemId3 = @"i_ooo454";
     
     [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         
-    } failure:^(NSString *reason, NSError *error) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }

@@ -35,7 +35,7 @@
 - (void)sendVerificationCodeWithEmail:(NSString *)email success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     NSDictionary *tmpDic = @{@"Type":@"register",@"Email":email};
@@ -43,20 +43,20 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)checkVerificationCodeWithEmail:(NSString *)email code:(NSString *)code success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     
     if (code == nil) {
-        failure(@"code参数为空",nil);
+        failure(@"code参数为空",nil,@{});
         return;
     }
     
@@ -65,25 +65,25 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
 - (void)createEmailUserWithEmail:(NSString *)email verificationCode:(NSString *)code password:(NSString *)password success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     
     if (code == nil) {
-        failure(@"code参数为空",nil);
+        failure(@"code参数为空",nil,@{});
         return;
     }
     
     if (code == nil) {
-        failure(@"password参数为空",nil);
+        failure(@"password参数为空",nil,@{});
         return;
     }
     
@@ -92,8 +92,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateEmailUser params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -101,12 +101,12 @@
 - (void)sendVerificationCodeWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
@@ -115,24 +115,24 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 - (void)checkVerificationCodeWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (verificationCode == nil) {
-        failure(@"verificationCode参数为空",nil);
+        failure(@"verificationCode参数为空",nil,@{});
         return;
     }
     
@@ -141,30 +141,30 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
 - (void)createPhoneUserWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode password:(NSString *)password success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (verificationCode == nil) {
-        failure(@"verificationCode参数为空",nil);
+        failure(@"verificationCode参数为空",nil,@{});
         return;
     }
     
     if (password == nil) {
-        failure(@"password参数为空",nil);
+        failure(@"password参数为空",nil,@{});
         return;
     }
     
@@ -173,8 +173,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCreateCellphoneUser params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -184,17 +184,17 @@
 - (void)signInWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber password:(NSString *)password success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (password == nil) {
-        failure(@"password参数为空",nil);
+        failure(@"password参数为空",nil,@{});
         return;
     }
     
@@ -209,8 +209,8 @@
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -225,15 +225,15 @@
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 
 }
 - (void)signInByWechatWithCode:(NSString *)code Success:(SRHandler)success failure:(FRHandler)failure
 {
     if (code == nil) {
-        failure(@"code参数为空",nil);
+        failure(@"code参数为空",nil,@{});
         return;
     }
     
@@ -243,8 +243,8 @@
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -255,8 +255,8 @@
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         [[TIoTCoreUserManage shared] clear];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -268,7 +268,7 @@
 - (void)sendCodeForResetWithEmail:(NSString *)email success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     NSDictionary *tmpDic = @{@"Type":@"resetpass",@"Email":email};
@@ -276,8 +276,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendEmailVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -285,11 +285,11 @@
 - (void)checkCodeForResetWithEmail:(NSString *)email code:(NSString *)code success:(SRHandler)success failure:(FRHandler)failure
 {
     if (email == nil) {
-        failure(@"email参数为空",nil);
+        failure(@"email参数为空",nil,@{});
         return;
     }
     if (code == nil) {
-        failure(@"code参数为空",nil);
+        failure(@"code参数为空",nil,@{});
         return;
     }
     
@@ -298,8 +298,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckEmailVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -311,8 +311,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppResetPasswordByEmail params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -324,12 +324,12 @@
 - (void)sendCodeForResetWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
@@ -338,8 +338,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -348,17 +348,17 @@
 - (void)checkCodeForResetWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (verificationCode == nil) {
-        failure(@"verificationCode参数为空",nil);
+        failure(@"verificationCode参数为空",nil,@{});
         return;
     }
     
@@ -367,8 +367,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCheckVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -377,22 +377,22 @@
 - (void)ResetPasswordWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode password:(NSString *)password success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (verificationCode == nil) {
-        failure(@"verificationCode参数为空",nil);
+        failure(@"verificationCode参数为空",nil,@{});
         return;
     }
     
     if (password == nil) {
-        failure(@"password参数为空",nil);
+        failure(@"password参数为空",nil,@{});
         return;
     }
     
@@ -401,8 +401,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppResetPasswordByCellphone params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -418,12 +418,12 @@
     
     BOOL isPass = [NSString judgePassWordLegal:newPassword];
     if (!isPass) {
-        failure(@"新密码不合规",nil);
+        failure(@"新密码不合规",nil,@{});
         return;
     }
     
     if ([currentPassword isEqualToString:newPassword]) {
-        failure(@"新密码不能与旧密码相同",nil);
+        failure(@"新密码不能与旧密码相同",nil,@{});
         return;
     }
     
@@ -432,8 +432,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUserResetPassword params:tmpDic useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -445,12 +445,12 @@
 - (void)sendCodeForBindWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber success:(SRHandler)success failure:(FRHandler)failure
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
@@ -459,8 +459,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppSendVerificationCode params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -468,17 +468,17 @@
 - (void)bindPhoneNumberWithCountryCode:(NSString *)countryCode phoneNumber:(NSString *)phoneNumber verificationCode:(NSString *)verificationCode success:(SRHandler)success failure:(FRHandler)failure;
 {
     if (countryCode == nil) {
-        failure(@"countryCode参数为空",nil);
+        failure(@"countryCode参数为空",nil,@{});
         return;
     }
     
     if (phoneNumber == nil) {
-        failure(@"phoneNumber参数为空",nil);
+        failure(@"phoneNumber参数为空",nil,@{});
         return;
     }
     
     if (verificationCode == nil) {
-        failure(@"verificationCode参数为空",nil);
+        failure(@"verificationCode参数为空",nil,@{});
         return;
     }
     
@@ -491,12 +491,12 @@
         [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
             [TIoTCoreUserManage shared].phoneNumber = phoneNumber;
             success(responseObject);
-        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-            failure(reason,error);
+        } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+            failure(reason,error,dic);
         }];
         
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -511,8 +511,8 @@
         NSDictionary *data = responseObject[@"Data"];
         [[TIoTCoreUserManage shared] saveUserInfo:data];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -521,8 +521,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppCosAuth params:@{@"path":@"iotexplorer-app-logs/user_{uin}/"} useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 
@@ -541,8 +541,8 @@
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":avatar,@"NickName":nickName,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
     
 }
@@ -551,17 +551,17 @@
 - (void)setFeedbackWithText:(NSString *)text contact:(NSString *)contact imageURLs:(NSArray<NSString *> *)urls success:(SRHandler)success failure:(FRHandler)failure
 {
     if (text == nil) {
-        failure(@"text参数为空",nil);
+        failure(@"text参数为空",nil,@{});
         return;
     }
     
     if (contact == nil) {
-        failure(@"contact参数为空",nil);
+        failure(@"contact参数为空",nil,@{});
         return;
     }
     
     if (urls == nil) {
-        failure(@"urls参数为空",nil);
+        failure(@"urls参数为空",nil,@{});
         return;
     }
     
@@ -571,8 +571,8 @@
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUserFeedBack params:tmpDic useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
         success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error) {
-        failure(reason,error);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
     }];
 }
 @end
