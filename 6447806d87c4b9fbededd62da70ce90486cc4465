@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8571fd8d_09e533ff",
+        "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-07-27T03:20:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "766de9c8_bcc402b8",
+      "revId": "6447806d87c4b9fbededd62da70ce90486cc4465",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7acf2603_552b26c9",
         "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "6447806d87c4b9fbededd62da70ce90486cc4465",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d807df2f_eec7dd94",
+        "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-07-27T03:20:59Z",
+      "side": 1,
+      "message": "已修改，用[[UIApplication sharedApplication] delegate].window 进行替换",
+      "parentUuid": "7acf2603_552b26c9",
+      "revId": "6447806d87c4b9fbededd62da70ce90486cc4465",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
