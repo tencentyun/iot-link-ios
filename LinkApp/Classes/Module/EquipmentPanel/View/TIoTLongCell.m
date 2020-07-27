@@ -47,7 +47,8 @@
 
 - (IBAction)switchChanged:(UISwitch *)sender {
     if (self.boolUpdate) {
-        self.boolUpdate(@{self.info[@"id"]:@(self.swich.on)});
+//        self.boolUpdate(@{self.info[@"id"]:@(self.swich.on)});
+        self.boolUpdate(@{self.info[@"id"]: self.swich.on? @1:@0});
     }
 }
 
