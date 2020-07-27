@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "766de9c8_bcc402b8",
+        "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T03:04:39Z",
+      "side": 1,
+      "message": "self是单类的话，需要关注外界调用时候，被self持有的对象释放情况",
+      "revId": "6447806d87c4b9fbededd62da70ce90486cc4465",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7acf2603_552b26c9",
+        "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T03:04:39Z",
+      "side": 1,
+      "message": "尽量不使用keyWindow 获取展示界面。某些情况下会keyWindow获取为nil",
+      "revId": "6447806d87c4b9fbededd62da70ce90486cc4465",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
