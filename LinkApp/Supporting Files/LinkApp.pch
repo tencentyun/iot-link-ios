@@ -32,6 +32,7 @@
 #import "TIoTButton.h"
 #import "TIoTAlertView.h"
 #import "TIoTCoreWMacros.h"
+#import "UIColor+Color.h"
 
 #endif
 

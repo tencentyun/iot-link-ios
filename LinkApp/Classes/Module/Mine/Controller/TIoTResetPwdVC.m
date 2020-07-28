@@ -9,6 +9,7 @@
 #import "TIoTResetPwdVC.h"
 #import "TIoTNavigationController.h"
 #import "TIoTLoginVC.h"
+//#import "TIoTMainVC.h"
 #import "TIoTAppEnvironment.h"
 
 @interface TIoTResetPwdVC ()
@@ -67,6 +68,7 @@
         [MBProgressHUD showSuccess:@"修改成功，请重新登录"];
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+//        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
