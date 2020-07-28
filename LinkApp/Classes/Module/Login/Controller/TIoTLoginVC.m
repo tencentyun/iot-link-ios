@@ -492,7 +492,9 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
                                  @"CountryCode":self.conturyCode,
                                  @"PhoneNumber":self.phoneTF.text,
                                  @"Password":self.pwdTF.text,
-                                 //@"Email":@"",
+//                                 @"Password":@"",
+//                                 @"VerificationCode":@"",
+//                                 @"Email":@"",
                                  };
         [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:nil];

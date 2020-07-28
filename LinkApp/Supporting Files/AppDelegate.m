@@ -12,7 +12,9 @@
 #import "KeyboardManage.h"
 #import "TIoTAppEnvironment.h"
 #import "XGPushManage.h"
-#import "TIoTLoginVC.h"
+//#import "TIoTLoginVC.h"
+#import "TIoTMainVC.h"
+
 #import "WxManager.h"
 #import "WRNavigationBar.h"
 #import "Firebase.h"
@@ -61,7 +63,8 @@
     }
     else{
         
-        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+//        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+                TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         self.window.rootViewController = nav;
     }
     

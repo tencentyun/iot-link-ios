@@ -9,6 +9,7 @@
 #import "TIoTUserInfomationViewController.h"
 #import "TIoTUserInfomationTableViewCell.h"
 #import "TIoTLoginVC.h"
+//#import "TIoTMainVC.h"
 #import "TIoTQCloudCOSXMLManage.h"
 #import "TIoTModifyNikeNameViewController.h"
 #import "TIoTBindPhoneViewController.h"
@@ -197,6 +198,7 @@
     [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+//        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         

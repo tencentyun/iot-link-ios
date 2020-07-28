@@ -71,7 +71,7 @@ failure:(FailureResponseBlock)failure
         return [obj1 compare:obj2 options:comparisonOptions range:range];
     }];
 //    NSArray *keys=  [[param allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    QCLog(@"%@",keys);
+    WCLog(@"%@",keys);
     
     NSMutableString *keyValue = [NSMutableString string];
     for (int i = 0; i < keys.count; i ++) {
@@ -116,7 +116,7 @@ failure:(FailureResponseBlock)failure
         urlString = url;
     }
     
-    QCLog(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
+    WCLog(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
@@ -129,7 +129,7 @@ failure:(FailureResponseBlock)failure
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        QCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
+        WCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
             NSError *jsonerror = nil;

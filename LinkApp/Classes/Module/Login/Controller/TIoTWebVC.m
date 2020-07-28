@@ -108,6 +108,7 @@
 - (void)login {
     [[TIoTCoreUserManage shared] clear];
     UIViewController *loginVc = [NSClassFromString(@"TIoTLoginVC") new];
+//    UIViewController *loginVc = [NSClassFromString(@"TIoTMainVC") new];
     [loginVc setValue:@(YES) forKeyPath:@"isExpireAt"];
     TIoTNavigationController *vc = [[TIoTNavigationController alloc] initWithRootViewController:loginVc];
     vc.modalPresentationStyle = UIModalPresentationOverFullScreen;
