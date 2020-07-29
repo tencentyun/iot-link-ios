@@ -8,6 +8,7 @@
 
 #import "TIoTMainVC.h"
 #import "TIoTRegisterViewController.h"
+#import "TIoTVCLoginAccountVC.h"
 
 @interface TIoTMainVC ()
 @property (nonatomic, strong) UIImageView   *headerImage;
@@ -45,7 +46,7 @@
     [self.view addSubview:self.registButton];
     [self.registButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.welcomeLalel.mas_bottom).offset(133 * kScreenAllHeightScale);
-        make.height.mas_equalTo(45 * kScreenAllHeightScale);
+        make.height.mas_equalTo(45);
         make.left.equalTo(self.view.mas_left).offset(30 * kScreenAllWidthScale);
         make.right.equalTo(self.view.mas_right).offset(-30 * kScreenAllWidthScale);
         make.centerX.equalTo(self.view);
@@ -106,7 +107,8 @@
 }
 
 - (void)loginOldAccount {
-    
+    TIoTVCLoginAccountVC *loginAccount = [[TIoTVCLoginAccountVC alloc]init];
+    [self.navigationController pushViewController:loginAccount animated:YES];
 }
 
 

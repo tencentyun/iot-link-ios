@@ -14,7 +14,7 @@
 
     [self layoutIfNeeded];
     
-    CGFloat marge = 8;
+    CGFloat marge = 10;
     
     CGSize titleSize = self.titleLabel.bounds.size;
     CGSize imageSize = self.imageView.frame.size;
