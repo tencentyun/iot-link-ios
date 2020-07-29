@@ -62,20 +62,20 @@
         }
     }];
     
-    [self.scrollView addSubview:self.contentView];
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.leading.bottom.equalTo(self.scrollView);
-        make.width.height.equalTo(self.scrollView);
-    }];
-    
-    [self.scrollView addSubview:self.contentView2];
-    [self.contentView2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.trailing.bottom.equalTo(self.scrollView);
-        make.width.height.equalTo(self.scrollView);
-        make.leading.equalTo(self.contentView.mas_trailing);
-    }];
-    
-    
+    if (self.defaultPhoneOrEmail != nil) {
+        
+        if ([NSString judgePhoneNumberLegal:self.defaultPhoneOrEmail]) {
+            //手机号注册
+            [self showPhoneRegisterStyle];
+        }else if ([NSString judgeEmailLegal:self.defaultPhoneOrEmail]) {
+            //邮箱注册
+            [self showEmailRegisterStyle];
+        }
+        
+    }else {
+        [self showPhoneRegisterStyle];
+    }
+
     UIButton *emailRegisterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [emailRegisterBtn setTitle:@"使用邮箱注册" forState:UIControlStateNormal];
     [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
@@ -127,6 +127,38 @@
         make.top.equalTo(procolTV.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-24);
         make.height.mas_equalTo(48);
+    }];
+}
+
+- (void)showPhoneRegisterStyle {
+    //先显示手机注册
+    [self.scrollView addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.leading.bottom.equalTo(self.scrollView);
+        make.width.height.equalTo(self.scrollView);
+    }];
+    
+    [self.scrollView addSubview:self.contentView2];
+    [self.contentView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.trailing.bottom.equalTo(self.scrollView);
+        make.width.height.equalTo(self.scrollView);
+        make.leading.equalTo(self.contentView.mas_trailing);
+    }];
+}
+
+- (void)showEmailRegisterStyle {
+    //先显示邮箱注册
+    [self.scrollView addSubview:self.contentView2];
+    [self.contentView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.leading.bottom.equalTo(self.scrollView);
+        make.width.height.equalTo(self.scrollView);
+    }];
+    
+    [self.scrollView addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.trailing.bottom.equalTo(self.scrollView);
+        make.width.height.equalTo(self.scrollView);
+        make.leading.equalTo(self.contentView2.mas_trailing);
     }];
 }
 
