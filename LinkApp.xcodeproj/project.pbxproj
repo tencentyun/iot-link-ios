@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6524CFC0F5001169AE /* TIoTMainVC.m */; };
+		6D785E6C24D0434F001169AE /* TIoTVCLoginAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
@@ -298,6 +299,8 @@
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		6D785E6424CFC0F5001169AE /* TIoTMainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMainVC.h; sourceTree = "<group>"; };
 		6D785E6524CFC0F5001169AE /* TIoTMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMainVC.m; sourceTree = "<group>"; };
+		6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVCLoginAccountVC.h; sourceTree = "<group>"; };
+		6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTVCLoginAccountVC.m; sourceTree = "<group>"; };
 		6DADCDBC24C1417700B95D83 /* LinkSDKDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinkSDKDemo.entitlements; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -1371,6 +1374,8 @@
 				ED93D98C23CBFDD000E3FD7D /* TIoTLoginVC.m */,
 				6D785E6424CFC0F5001169AE /* TIoTMainVC.h */,
 				6D785E6524CFC0F5001169AE /* TIoTMainVC.m */,
+				6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */,
+				6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2294,6 +2299,7 @@
 				D2C7D7F42330B76500C97A04 /* TIoTEquipmentTableViewCell.m in Sources */,
 				ED6DA52723C9CC5F00FDDC97 /* WRNavigationBar.m in Sources */,
 				D23104FC23306DE60003069D /* KeyboardManage.m in Sources */,
+				6D785E6C24D0434F001169AE /* TIoTVCLoginAccountVC.m in Sources */,
 				EDC630A623D03B190079B64E /* TIoTOptionalView.m in Sources */,
 				F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */,
 				EDA7677B23699A250036C8B7 /* TIoTHelpCell.m in Sources */,

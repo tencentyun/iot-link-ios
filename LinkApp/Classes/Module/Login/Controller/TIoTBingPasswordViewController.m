@@ -178,7 +178,7 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
-        }];;
+        }];
         
     }
     else if (self.registerType == EmailRegister){
