@@ -12,7 +12,7 @@
 #import "KeyboardManage.h"
 #import "TIoTAppEnvironment.h"
 #import "XGPushManage.h"
-//#import "TIoTLoginVC.h"
+#import "TIoTLoginVC.h"
 #import "TIoTMainVC.h"
 
 #import "WxManager.h"
