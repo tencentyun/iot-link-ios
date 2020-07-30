@@ -60,6 +60,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"验证码登录";
     self.conturyCode = @"86";
+    self.conturyCode2 = @"86";
     self.loginStyle = YES;
     
     [self.view addSubview:self.scrollView];
@@ -445,7 +446,7 @@
 - (void)loginSure {
     
     NSDictionary *tmpDic = nil;
-    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    
     if (self.loginStyle == YES) {     //验证码登录
         if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text]) {
             
@@ -474,7 +475,7 @@
             [self emailLoginWith:tmpDic];
         }
     }else {         //账号密码登录
-        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text]) {
+        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text]) {
             
             //手机号密码登录
             tmpDic = @{
@@ -486,7 +487,7 @@
             
             [self phoneLoginWith:tmpDic];
             
-        }else  if ([NSString judgeEmailLegal:self.phoneAndEmailTF.text]) {
+        }else  if ([NSString judgeEmailLegal:self.phoneAndEmailTF2.text]) {
             //邮件账号密码登录
             tmpDic = @{
                 @"Type":@"email",
@@ -501,6 +502,7 @@
 }
 
 - (void)phoneLoginWith:(NSDictionary *)tmpDic {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
         
@@ -514,6 +516,7 @@
 }
 
 - (void)emailLoginWith:(NSDictionary *)tmpDic {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
         
