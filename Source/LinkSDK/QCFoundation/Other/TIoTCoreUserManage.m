@@ -17,6 +17,12 @@
 @synthesize nickName = _nickName;
 @synthesize phoneNumber = _phoneNumber;
 
+@synthesize countryCode = _countryCode;
+@synthesize email = _email;
+@synthesize hasPassword = _hasPassword;
+@synthesize WxOpenID = _WxOpenID;
+@synthesize requestID = _requestID;
+
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
@@ -130,7 +136,65 @@
     [[NSUserDefaults standardUserDefaults] setValue:phoneNumber forKey:@"phone_number"];
 }
 
+- (NSString *)countryCode {
+    if (!_countryCode) {
+        _countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_Code"];
+    }
+    return _countryCode;
+}
 
+- (void)setCountryCode:(NSString *)countryCode {
+    _countryCode = countryCode;
+    [[NSUserDefaults standardUserDefaults] setValue:countryCode forKey:@"country_Code"];
+}
+
+- (NSString *)email {
+    if (!_email) {
+        _email = [[NSUserDefaults standardUserDefaults] valueForKey:@"email_"];
+    }
+    return _email;
+}
+
+- (void)setEmail:(NSString *)email {
+    _email = email;
+    [[NSUserDefaults standardUserDefaults] setValue:email forKey:@"email_"];
+}
+
+- (NSString *)WxOpenID {
+    if (!_WxOpenID) {
+        _WxOpenID = [[NSUserDefaults standardUserDefaults] valueForKey:@"WxOpen_ID"];
+    }
+    return _WxOpenID;
+}
+
+- (void)setWxOpenID:(NSString *)WxOpenID {
+    _WxOpenID = WxOpenID;
+    [[NSUserDefaults standardUserDefaults] setValue:WxOpenID forKey:@"WxOpen_ID"];
+}
+
+- (NSString *)hasPassword {
+    if (!_hasPassword) {
+        _hasPassword = [[NSUserDefaults standardUserDefaults] valueForKey:@"has_Password"];
+    }
+    return _hasPassword;
+}
+
+- (void)setHasPassword:(NSString *)hasPassword {
+    _hasPassword = hasPassword;
+    [[NSUserDefaults standardUserDefaults] setValue:hasPassword forKey:@"has_Password"];
+}
+
+- (NSString *)requestID {
+    if (!_requestID) {
+        _requestID = [[NSUserDefaults standardUserDefaults] valueForKey:@"request_ID"];
+    }
+    return _requestID;
+}
+
+- (void)setRequestID:(NSString *)requestID {
+    _requestID = requestID;
+    [[NSUserDefaults standardUserDefaults] setValue:requestID forKey:@"request_ID"];
+}
 
 //保存accessToken
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt{
@@ -153,6 +217,21 @@
     if (userInfo[@"PhoneNumber"]) {
         self.phoneNumber = userInfo[@"PhoneNumber"];
     }
+    if (userInfo[@"Email"]) {
+        self.email = userInfo[@"Email"];
+    }
+    if (userInfo[@"HasPassword"]) {
+        self.hasPassword = [NSString stringWithFormat:@"%@",userInfo[@"HasPassword"]];
+    }
+    if (userInfo[@"CountryCode"]) {
+        self.countryCode = userInfo[@"CountryCode"];
+    }
+    if (userInfo[@"WxOpenID"]) {
+        self.WxOpenID = userInfo[@"WxOpenID"];
+    }
+    if (userInfo[@"RequestId"]) {
+        self.requestID = userInfo[@"RequestId"];
+    }
 }
 
 
@@ -163,6 +242,16 @@
     self.avatar = @"";
     self.phoneNumber = @"";
     self.expireAt = @"";
+    self.countryCode = @"";
+    self.email = @"";
+    self.hasPassword = @"";
+    self.WxOpenID = @"";
+    self.requestID = @"";
 }
 
+
+//@synthesize countryCode = _countryCode;
+//@synthesize email = _email;
+//@synthesize hasPassword = _hasPassword;
+//@synthesize WxOpenID = _WxOpenID;
 @end
