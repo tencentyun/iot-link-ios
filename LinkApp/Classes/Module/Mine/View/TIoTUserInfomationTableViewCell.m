@@ -22,7 +22,7 @@
 @implementation TIoTUserInfomationTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView{
-    static NSString *ID = @"TIoTUserInfomationTableViewCell";
+//    static NSString *ID = @"TIoTUserInfomationTableViewCell";
     TIoTUserInfomationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[TIoTUserInfomationTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID
@@ -43,7 +43,7 @@
         self.titleLab.font = [UIFont wcPfRegularFontOfSize:16];
         [self.contentView addSubview:self.titleLab];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView).offset(20);
+            make.left.equalTo(self.contentView).offset(30);
             make.centerY.equalTo(self.contentView);
         }];
         
@@ -61,7 +61,7 @@
         [self.contentView addSubview:self.arrowImageView];
         [self.arrowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.titleLab);
-            make.right.equalTo(self.contentView).offset(-20);
+            make.right.equalTo(self.contentView).offset(-30);
             make.height.width.mas_equalTo(18);
         }];
         

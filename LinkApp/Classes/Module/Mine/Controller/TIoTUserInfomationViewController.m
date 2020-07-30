@@ -19,6 +19,7 @@
 #import "TIoTAppEnvironment.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import "TIoTUploadObj.h"
+#import "TIoTAccountAndSafeVC.h"
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -254,22 +255,26 @@
             [self bindPhone];
         }
     }
-    else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]){
-        
-        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
-            
-            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-            [av alertWithTitle:@"请先绑定手机号" message:@"当前未绑定手机号，无法进行修改密码" cancleTitlt:@"取消" doneTitle:@"绑定"];
-            av.doneAction = ^(NSString *text) {
-                [self bindPhone];
-            };
-            [av showInView:[UIApplication sharedApplication].keyWindow];
-            
-            return;
-        }
-        
-        TIoTResetPwdVC *vc = [TIoTResetPwdVC new];
-        [self.navigationController pushViewController:vc animated:YES];
+//    else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]){
+//
+//        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
+//
+//            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+//            [av alertWithTitle:@"请先绑定手机号" message:@"当前未绑定手机号，无法进行修改密码" cancleTitlt:@"取消" doneTitle:@"绑定"];
+//            av.doneAction = ^(NSString *text) {
+//                [self bindPhone];
+//            };
+//            [av showInView:[UIApplication sharedApplication].keyWindow];
+//
+//            return;
+//        }
+//
+//        TIoTResetPwdVC *vc = [TIoTResetPwdVC new];
+//        [self.navigationController pushViewController:vc animated:YES];
+//    }
+    else if([self.dataArr[indexPath.row][@"title"] isEqualToString:@"账户与安全"]) {
+        TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
+        [self.navigationController pushViewController:accountAndSafeVC animated:YES];
     }
 }
 
@@ -388,8 +393,9 @@
         _dataArr = @[
         @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
         @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
-        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
-        @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
+        @{@"title":@"账户与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
+//        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
+//        @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
         ];
     }
     

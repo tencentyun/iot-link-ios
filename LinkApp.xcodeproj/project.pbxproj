@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6524CFC0F5001169AE /* TIoTMainVC.m */; };
 		6D785E6C24D0434F001169AE /* TIoTVCLoginAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */; };
+		6D982C8824D2BB2D0080C961 /* TIoTAccountAndSafeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */; };
+		6D982C8B24D2DB350080C961 /* TIoTBindAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C8A24D2DB350080C961 /* TIoTBindAccountVC.m */; };
+		6D982C9124D31A5E0080C961 /* TIoTBindAccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9024D31A5E0080C961 /* TIoTBindAccountView.m */; };
+		6D982C9424D33FF40080C961 /* TIoTModifyAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9324D33FF40080C961 /* TIoTModifyAccountVC.m */; };
+		6D982C9724D340150080C961 /* TIoTModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9624D340150080C961 /* TIoTModifyView.m */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
@@ -311,6 +316,16 @@
 		6D785E6524CFC0F5001169AE /* TIoTMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMainVC.m; sourceTree = "<group>"; };
 		6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVCLoginAccountVC.h; sourceTree = "<group>"; };
 		6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTVCLoginAccountVC.m; sourceTree = "<group>"; };
+		6D982C8624D2BB2D0080C961 /* TIoTAccountAndSafeVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAccountAndSafeVC.h; sourceTree = "<group>"; };
+		6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAccountAndSafeVC.m; sourceTree = "<group>"; };
+		6D982C8924D2DB350080C961 /* TIoTBindAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTBindAccountVC.h; sourceTree = "<group>"; };
+		6D982C8A24D2DB350080C961 /* TIoTBindAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTBindAccountVC.m; sourceTree = "<group>"; };
+		6D982C8F24D31A5E0080C961 /* TIoTBindAccountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTBindAccountView.h; sourceTree = "<group>"; };
+		6D982C9024D31A5E0080C961 /* TIoTBindAccountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTBindAccountView.m; sourceTree = "<group>"; };
+		6D982C9224D33FF40080C961 /* TIoTModifyAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyAccountVC.h; sourceTree = "<group>"; };
+		6D982C9324D33FF40080C961 /* TIoTModifyAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyAccountVC.m; sourceTree = "<group>"; };
+		6D982C9524D340150080C961 /* TIoTModifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyView.h; sourceTree = "<group>"; };
+		6D982C9624D340150080C961 /* TIoTModifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyView.m; sourceTree = "<group>"; };
 		6DADCDBC24C1417700B95D83 /* LinkSDKDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LinkSDKDemo.entitlements; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -1001,6 +1016,10 @@
 				D2E11EB12331C4FA00C388A5 /* TIoTMineTableViewCell.m */,
 				D2E11EB62331CF4900C388A5 /* TIoTUserInfomationTableViewCell.h */,
 				D2E11EB72331CF4900C388A5 /* TIoTUserInfomationTableViewCell.m */,
+				6D982C8F24D31A5E0080C961 /* TIoTBindAccountView.h */,
+				6D982C9024D31A5E0080C961 /* TIoTBindAccountView.m */,
+				6D982C9524D340150080C961 /* TIoTModifyView.h */,
+				6D982C9624D340150080C961 /* TIoTModifyView.m */,
 				EDA7677923699A250036C8B7 /* TIoTHelpCell.h */,
 				EDA7677A23699A250036C8B7 /* TIoTHelpCell.m */,
 				ED72905B238E2AEC00175739 /* TIoTPhotoCell.h */,
@@ -1046,6 +1065,12 @@
 				ED153C6923712028007E9C4F /* TIoTResetPwdVC.m */,
 				ED69BE89237ABAC90023F5FC /* TIoTTextVC.h */,
 				ED69BE8A237ABAC90023F5FC /* TIoTTextVC.m */,
+				6D982C8624D2BB2D0080C961 /* TIoTAccountAndSafeVC.h */,
+				6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */,
+				6D982C8924D2DB350080C961 /* TIoTBindAccountVC.h */,
+				6D982C8A24D2DB350080C961 /* TIoTBindAccountVC.m */,
+				6D982C9224D33FF40080C961 /* TIoTModifyAccountVC.h */,
+				6D982C9324D33FF40080C961 /* TIoTModifyAccountVC.m */,
 				ED800C8F240C9EFA0045A268 /* Message */,
 				ED9C15D223B9DE1C00CAC848 /* Family */,
 				ED800C9C240CB2270045A268 /* TIoTAboutVC.h */,
@@ -2309,6 +2334,7 @@
 				ED6D120623C8598400A7A333 /* TIoTTimerListCell.m in Sources */,
 				D2C7AA02232F6AA5005E8006 /* main.m in Sources */,
 				EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */,
+				6D982C8824D2BB2D0080C961 /* TIoTAccountAndSafeVC.m in Sources */,
 				ED3FDA7F2418890300EE60D5 /* TIoTModifyRoomVC.m in Sources */,
 				ED932E4023BB1AD800F73F35 /* TIoTEnumView.m in Sources */,
 				ED6BA5A823C57DED00BE9EC9 /* TIoTFamilyMemberCell.m in Sources */,
@@ -2338,6 +2364,7 @@
 				A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */,
 				D2A2CD33234EBBE50039EB51 /* TIoTModifyNikeNameViewController.m in Sources */,
 				D2C7D80B2330CA6500C97A04 /* SGQRCodeScanView.m in Sources */,
+				6D982C9124D31A5E0080C961 /* TIoTBindAccountView.m in Sources */,
 				D2310513233077D40003069D /* TIoTAppEnvironment.m in Sources */,
 				D2038B8C2331D5F10036F6B9 /* TIoTMessageViewController.m in Sources */,
 				D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */,
@@ -2378,6 +2405,7 @@
 				ED9C15C223B9C9E900CAC848 /* TIoTRepeatVC.m in Sources */,
 				D23104D42330678F0003069D /* NSTimer+BlockSupport.m in Sources */,
 				D2038BC023322E0A0036F6B9 /* TIoTAddActionView.m in Sources */,
+				6D982C9724D340150080C961 /* TIoTModifyView.m in Sources */,
 				ED6FD93A23CADBAB002DEC32 /* UINavigationController+CustomUI.m in Sources */,
 				ED9C15CB23B9D71F00CAC848 /* TIoTAddFamilyVC.m in Sources */,
 				EDF126FE23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m in Sources */,
@@ -2403,6 +2431,7 @@
 				D2038BCC233319440036F6B9 /* HXYNotice.m in Sources */,
 				D2A2CD29234DBDC00039EB51 /* TIoTQCloudCOSXMLManage.m in Sources */,
 				ED6BA5BA23C5C10C00BE9EC9 /* TIoTRoomInfoVC.m in Sources */,
+				6D982C9424D33FF40080C961 /* TIoTModifyAccountVC.m in Sources */,
 				ED9494452372B2F200797037 /* TIoTMessageTextCell.m in Sources */,
 				D2038BBD23322DF40036F6B9 /* TIoTChoseDayView.m in Sources */,
 				ED153C6A23712028007E9C4F /* TIoTResetPwdVC.m in Sources */,
@@ -2414,6 +2443,7 @@
 				ED9C15B423B998DB00CAC848 /* TIoTAddTimerVC.m in Sources */,
 				D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */,
 				ED6BA5B023C5B10700BE9EC9 /* TIoTRoomCell.m in Sources */,
+				6D982C8B24D2DB350080C961 /* TIoTBindAccountVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

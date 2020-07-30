@@ -23,6 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *avatar;
 @property (nonatomic, copy, nullable) NSString *nickName;
 @property (nonatomic, copy, nullable) NSString *phoneNumber;
+@property (nonatomic, copy, nullable) NSString *countryCode;
+@property (nonatomic, copy, nullable) NSString *email;
+@property (nonatomic, copy, nullable) NSString *hasPassword;
+@property (nonatomic, copy, nullable) NSString *WxOpenID;
+@property (nonatomic, copy, nullable) NSString *requestID;
 
 @property (nonatomic,copy) NSString *familyId;//
 @property (nonatomic,copy) NSString *currentRoomId;
