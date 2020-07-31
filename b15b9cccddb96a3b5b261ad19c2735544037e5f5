@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b90cc174_e6647fef",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTVCLoginAccountVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-31T01:48:16Z",
+      "side": 1,
+      "message": "errorCode是否是数字表示的",
+      "revId": "b15b9cccddb96a3b5b261ad19c2735544037e5f5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce4329a_595511f8",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTVCLoginAccountVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-31T01:48:16Z",
+      "side": 1,
+      "message": "errorCode是否是数字表示的",
+      "revId": "b15b9cccddb96a3b5b261ad19c2735544037e5f5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
