@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8ca37564_5df87abe",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTVCLoginAccountVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-07-31T01:57:42Z",
+      "side": 1,
+      "message": "{\n    \"Response\": {\n      \"Error\": {\n        \"Code\": \"InvalidParameterValue.EmailInvalid\",\n        \"Message\": \"邮箱错误\"\n      },\n      \"RequestId\": \"f92406b3-5a9a-4fe8-bc43-45e3d794bb68\"\n    }\n  }\n\n 错误码服务器返回数据结构中为字符串: InvalidParameterValue.ErrorUserNotExists",
+      "parentUuid": "b90cc174_e6647fef",
+      "revId": "b15b9cccddb96a3b5b261ad19c2735544037e5f5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ce4329a_595511f8",
         "filename": "LinkApp/Classes/Module/Login/Controller/TIoTVCLoginAccountVC.m",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "b15b9cccddb96a3b5b261ad19c2735544037e5f5",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1610b277_7c2e6b84",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTVCLoginAccountVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-07-31T01:57:42Z",
+      "side": 1,
+      "message": "{\n    \"Response\": {\n      \"Error\": {\n        \"Code\": \"InvalidParameterValue.EmailInvalid\",\n        \"Message\": \"邮箱错误\"\n      },\n      \"RequestId\": \"f92406b3-5a9a-4fe8-bc43-45e3d794bb68\"\n    }\n  }\n\n 错误码服务器返回数据结构中为字符串: InvalidParameterValue.ErrorUserNotExists",
+      "parentUuid": "4ce4329a_595511f8",
+      "revId": "b15b9cccddb96a3b5b261ad19c2735544037e5f5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
