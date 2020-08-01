@@ -1,20 +1,20 @@
 //
-//  TIoTBindAccountView.m
+//  TIoTModifyPasswordView.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/7/30.
+//  Created by ccharlesren on 2020/8/1.
 //  Copyright © 2020 Winext. All rights reserved.
 //
 
-#import "TIoTBindAccountView.h"
+#import "TIoTModifyPasswordView.h"
 
-@interface TIoTBindAccountView ()
+@interface TIoTModifyPasswordView ()
 
 @property (nonatomic, strong) UIView        *contentView;
 
 @end
 
-@implementation TIoTBindAccountView
+@implementation TIoTModifyPasswordView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -25,6 +25,7 @@
 }
 
 - (void)setUpUI {
+    
     self.backgroundColor = [UIColor whiteColor];
     
     CGFloat kSpace = 15;
@@ -124,23 +125,6 @@
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(48);
     }];
-
-}
-
--(void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    NSString *placeHoldString = @"";
-    if (self.bindAccoutType == BindAccountPhoneType) {
-        placeHoldString = @"请输入手机号";
-        _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-    }else if (self.bindAccoutType == BindAccountEmailType) {
-        placeHoldString = @"请输入邮箱";
-        _phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
-    }
-    NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
-    self.phoneOrEmailTF.attributedPlaceholder = attriStr;
-    
 }
 
 #pragma mark - setter and getter
@@ -239,22 +223,23 @@
 }
 
 - (void)confirmClickButton {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountConfirmClickButtonWithAccountType:)]) {
-        [self.delegate bindAccountConfirmClickButtonWithAccountType:self.bindAccoutType];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(modifyPasswordConfirmClickButton)]) {
+        [self.delegate modifyPasswordConfirmClickButton];
     }
 }
 
 -(void)changedTextField:(UITextField *)textField {
 
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountChangedTextFieldWithAccountType:)]) {
-        [self.delegate bindAccountChangedTextFieldWithAccountType:self.bindAccoutType];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(modifyPasswordChangedTextField)]) {
+        [self.delegate modifyPasswordChangedTextField];
     }
 }
 
 - (void)sendCode:(UIButton *)button {
 
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountSendCodeWithAccountType:)]) {
-        [self.delegate bindAccountSendCodeWithAccountType:self.bindAccoutType];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(modifyPasswordSendCode)]) {
+        [self.delegate modifyPasswordSendCode];
     }
     
 }

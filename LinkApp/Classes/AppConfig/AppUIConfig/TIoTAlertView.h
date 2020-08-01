@@ -28,4 +28,5 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 
 - (void)showInView:(UIView *)superView;
 
+- (void)showSingleConfrimButton;
 @end

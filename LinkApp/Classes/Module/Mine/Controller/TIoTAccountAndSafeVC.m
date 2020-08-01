@@ -12,6 +12,7 @@
 #import "TIoTModifyAccountVC.h"
 #import "WxManager.h"
 #import "TIoTAppConfig.h"
+#import "TIoTModifyPasswordVC.h"
 
 @interface TIoTAccountAndSafeVC ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -56,6 +57,7 @@
     
     //手机号、邮箱、微信如果是未绑定状态，点击后则跳转到对应的绑定页面，如果已经绑定，则跳转到修改对应账号页面。
     if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"手机号"]) {
+        
         if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
             TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
             bindPhoneVC.accountType = AccountType_Phone;
@@ -67,6 +69,7 @@
         }
         
     }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"邮箱"]) {
+        
         if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
             TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
             bindEmailVC.accountType = AccountType_Email;
@@ -76,13 +79,19 @@
             modifyVC.accountType = AccountModifyType_Email;
             [self.navigationController pushViewController:modifyVC animated:YES];
         }
+        
     }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"微信"]) {
+        
         if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
             //微信绑定
             [self wxBindClick];
         }else {
         }
+        
     }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
+        
+        TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
+        [self.navigationController pushViewController:modifyPassword animated:YES];
         
     }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
         
@@ -118,12 +127,7 @@
         [MBProgressHUD dismissInView:self.view];
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         [self bindWeiXinWithOpenID:responseObject[@"Data"][@"Openid"]];
-        
-        //信鸽推送注册
-//        [[XGPushManage sharedXGPushManage] bindPushToken];
-//        [HXYNotice addLoginInPost];
-        
-        
+
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -196,8 +200,12 @@
             @{@"title":@"账号注销",@"value":@"",@"vc":@"",@"haveArrow":@"1"},
         ]];
         
-        if (![[TIoTCoreUserManage shared].hasPassword isEqual: @"1"]) {    //没有设置密码
-            [_dataArr removeObjectAtIndex:3];
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {
+            if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
+                [_dataArr removeObjectAtIndex:3];
+            }
+        }else {
+//            [_dataArr removeObjectAtIndex:3];
         }
     }
     

@@ -40,6 +40,7 @@
 {
     self.nameL.text = title;
     self.messageL.text = message;
+    self.messageL.textAlignment = NSTextAlignmentCenter;
     self.messageT.placeholder = message;
     [self.cancleBtn setTitle:cancleTitlt forState:UIControlStateNormal];
     [self.doneBtn setTitle:doneTitle forState:UIControlStateNormal];
@@ -69,6 +70,7 @@
     
     UILabel *name = [[UILabel alloc] init];
     name.text = @"房间名称";
+    name.textAlignment = NSTextAlignmentCenter;
     name.textColor = kFontColor;
     name.font = [UIFont boldSystemFontOfSize:20];
     [bgView addSubview:name];
@@ -179,6 +181,11 @@
     }
 }
 
+- (void)showSingleConfrimButton {
+    self.cancleBtn.hidden = YES;
+    
+    [self done];
+}
 
 #pragma mark - textf
 //
