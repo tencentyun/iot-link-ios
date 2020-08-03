@@ -20,6 +20,8 @@
 
 @implementation TIoTConfigInputView
 
+@synthesize inputText = _inputText;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -91,6 +93,10 @@
 - (void)setInputText:(NSString *)inputText {
     _inputText = inputText;
     self.textField.text = _inputText;
+}
+
+- (NSString *)inputText {
+    return self.textField.text;
 }
 
 @end

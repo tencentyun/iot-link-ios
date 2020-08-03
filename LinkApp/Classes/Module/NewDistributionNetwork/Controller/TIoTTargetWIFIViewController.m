@@ -12,8 +12,12 @@
 #import "TIoTWIFIListView.h"
 
 #import "TIoTWIFITipViewController.h"
+#import "TIoTStartConfigViewController.h"
+#import <CoreLocation/CoreLocation.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
+#import <NetworkExtension/NetworkExtension.h>
 
-@interface TIoTTargetWIFIViewController ()
+@interface TIoTTargetWIFIViewController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) TIoTStepTipView *stepTipView;
 
@@ -23,6 +27,11 @@
 
 @property (nonatomic, strong) TIoTWIFIListView *wifiListView;
 
+@property (nonatomic, strong) NSDictionary *dataDic;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NSMutableDictionary *wifiInfo;
+
 @end
 
 @implementation TIoTTargetWIFIViewController
@@ -30,14 +39,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setupUI];
 }
 
 - (void)setupUI{
-    self.title = @"一键配网";
+    self.title = [_dataDic objectForKey:@"title"];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:@[@"配置硬件", @"选择目标WiFi", @"开始配网"]];
+    self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[_dataDic objectForKey:@"stepTipArr"]];
     self.stepTipView.step = 2;
     [self.view addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -49,7 +57,7 @@
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    topicLabel.text = @"请输入WiFi密码";
+    topicLabel.text = [_dataDic objectForKey:@"topic"];
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -58,10 +66,10 @@
         make.height.mas_equalTo(24);
     }];
     
-    self.wifiInputView = [[TIoTConfigInputView alloc] initWithTitle:@"WIFI" placeholder:@"请点击箭头按钮选择WIFI" haveButton:YES];
+    self.wifiInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"wifiInputTitle"] placeholder:[_dataDic objectForKey:@"wifiInputPlaceholder"] haveButton:[[_dataDic objectForKey:@"wifiInputHaveButton"] boolValue]];
     WeakObj(self)
     self.wifiInputView.buttonAction = ^{
-        selfWeak.wifiListView = [[TIoTWIFIListView alloc] init];
+        selfWeak.wifiListView.hidden = NO;
         [[UIApplication sharedApplication].keyWindow addSubview:selfWeak.wifiListView];
         [selfWeak.wifiListView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo([UIApplication sharedApplication].keyWindow);
@@ -75,18 +83,46 @@
         make.height.mas_equalTo(56);
     }];
     
-    self.pwdInputView = [[TIoTConfigInputView alloc] initWithTitle:@"密码" placeholder:@"请输入密码（非必填）" haveButton:NO];
+    self.pwdInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"pwdInputTitle"] placeholder:[_dataDic objectForKey:@"pwdInputPlaceholder"] haveButton:[[_dataDic objectForKey:@"pwdInputHaveButton"] boolValue]];
     [self.view addSubview:self.pwdInputView];
     [self.pwdInputView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.height.equalTo(self.wifiInputView);
         make.top.equalTo(self.wifiInputView.mas_bottom);
     }];
     
-    UILabel *makeLabel = [[UILabel alloc] init];
-    makeLabel.textColor = kRGBColor(51, 51, 51);
-    makeLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    makeLabel.text = @"操作方式:";
-    [self.view addSubview:makeLabel];
+    NSString *makeText = [_dataDic objectForKey:@"make"];
+    
+    if (makeText && makeText.length) {
+        UILabel *makeLabel = [[UILabel alloc] init];
+        makeLabel.textColor = kRGBColor(51, 51, 51);
+        makeLabel.font = [UIFont wcPfMediumFontOfSize:14];
+        makeLabel.text = makeText;
+        [self.view addSubview:makeLabel];
+        [makeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.pwdInputView.mas_bottom).offset(20);
+            make.left.equalTo(self.view).offset(16);
+            make.right.equalTo(self.view).offset(-16);
+            make.height.mas_equalTo(24);
+        }];
+        
+        NSString *stepText = [_dataDic objectForKey:@"stepDiscribe"];
+        
+        if (stepText && stepText.length) {
+            UILabel *stepLabel = [[UILabel alloc] init];
+            NSString *stepLabelText = stepText;
+            NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
+            paragraph.lineSpacing = 6.0;
+            // 字体: 大小 颜色 行间距
+            NSAttributedString * attributedStr = [[NSAttributedString alloc]initWithString:stepLabelText attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:kRGBColor(51, 51, 51),NSParagraphStyleAttributeName:paragraph}];
+            stepLabel.attributedText = attributedStr;
+            stepLabel.numberOfLines = 0;
+            [self.view addSubview:stepLabel];
+            [stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(makeLabel);
+                make.top.equalTo(makeLabel.mas_bottom).offset(4);
+            }];
+        }
+    }
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
@@ -104,11 +140,241 @@
     }];
 }
 
+- (void)showLocationTips
+{
+
+    if(![CLLocationManager locationServicesEnabled]){
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
+        if (app_Name == nil) {
+            app_Name = [infoDict objectForKey:@"CFBundleName"];
+        }
+        
+        NSString *messageString = [NSString stringWithFormat:@"[前往：设置 - 隐私 - 定位服务 - %@] 允许应用访问", app_Name];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+    }
+    else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        NSString *messageString = [NSString stringWithFormat:@"前往：设置开启定位服务"];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+                if (success) {
+                    NSLog(@"成功");
+                }
+                else
+                {
+                    NSLog(@"失败");
+                }
+            }];
+        }];
+        
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+        
+    }
+}
+
+#pragma mark private Method
+
+- (void)getWifiInfos {
+    if (@available(iOS 13.0, *)) {
+        [self.locationManager requestWhenInUseAuthorization];
+    } else {
+        [self.wifiInfo removeAllObjects];
+        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        self.wifiInputView.inputText = self.wifiInfo[@"name"];
+    }
+}
+
+- (NSDictionary *)getWifiSsid {
+    [self scanWifiInfos];
+    NSDictionary *wifiDic;
+    CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
+    if (!wifiInterfaces) {
+        return nil;
+    }
+    NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;
+    for (NSString *interfaceName in interfaces) {
+        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((__bridge CFStringRef)(interfaceName));
+        
+        if (dictRef) {
+            NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
+    
+            wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID]};
+            WCLog(@"network info -> %@", wifiDic);
+            CFRelease(dictRef);
+        }
+    }
+    
+    CFRelease(wifiInterfaces);
+    return wifiDic;
+}
+
+- (void)scanWifiInfos{
+
+    NSMutableDictionary* options = [[NSMutableDictionary alloc] init];
+    [options setObject:@"" forKey: kNEHotspotHelperOptionDisplayName];
+    dispatch_queue_t queue = dispatch_queue_create("EFNEHotspotHelperDemo", NULL);
+
+    NSLog(@"2.Try");
+    BOOL returnType = [NEHotspotHelper registerWithOptions: options queue: queue handler: ^(NEHotspotHelperCommand * cmd) {
+
+        NSLog(@"4.Finish");
+        NEHotspotNetwork* network;
+        if (cmd.commandType == kNEHotspotHelperCommandTypeEvaluate || cmd.commandType == kNEHotspotHelperCommandTypeFilterScanList) {
+            // 遍历 WiFi 列表，打印基本信息
+            for (network in cmd.networkList) {
+                NSString* wifiInfoString = [[NSString alloc] initWithFormat: @"---------------------------\nSSID: %@\nMac地址: %@\n信号强度: %f\nCommandType:%ld\n---------------------------\n\n", network.SSID, network.BSSID, network.signalStrength, (long)cmd.commandType];
+                NSLog(@"%@", wifiInfoString);
+
+                // 检测到指定 WiFi 可设定密码直接连接
+                if ([network.SSID isEqualToString: @"测试 WiFi"]) {
+                    [network setConfidence: kNEHotspotHelperConfidenceHigh];
+                    [network setPassword: @"123456789"];
+                    NEHotspotHelperResponse *response = [cmd createResponse: kNEHotspotHelperResultSuccess];
+                    NSLog(@"Response CMD: %@", response);
+                    [response setNetworkList: @[network]];
+                    [response setNetwork: network];
+                    [response deliver];
+                }
+            }
+        }
+    }];
+
+    // 注册成功 returnType 会返回一个 Yes 值，否则 No
+    NSLog(@"3.Result: %@", returnType == YES ? @"Yes" : @"No");
+    
+#warning TODU - modify if judge condition
+    if (!returnType) {
+        self.wifiListView.wifiListArray = @[@"tcloud1", @"tcloud2", @"tcloud3", @"tcloud4", @"tcloud5"];//= [NSArray array];
+    }
+}
+
+#pragma mark public Method
+
+- (void)showWiFiListView {
+    if (self.wifiListView) {
+        self.wifiListView.hidden = NO;
+    }
+}
+
 #pragma mark eventResponse
 
 - (void)nextClick:(UIButton *)sender {
-    TIoTWIFITipViewController *vc = [[TIoTWIFITipViewController alloc] init];
+    [self.wifiInfo setObject:self.wifiInputView.inputText forKey:@"name"];
+    [self.wifiInfo setObject:self.pwdInputView.inputText forKey:@"pwd"];
+    [self.wifiInfo setObject:self.currentDistributionToken forKey:@"token"];
+    
+    TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
+    vc.wifiInfo = [self.wifiInfo copy];
+    vc.roomId = self.roomId;
+    vc.configHardwareStyle = self.configHardwareStyle;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        [self.wifiInfo removeAllObjects];
+        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        self.wifiInputView.inputText = self.wifiInfo[@"name"];
+    }
+    else if (status == kCLAuthorizationStatusNotDetermined)
+    {
+        [manager requestWhenInUseAuthorization];
+    }
+    else
+    {
+        [self showLocationTips];
+    }
+}
+
+#pragma mark setter or getter
+
+- (void)setConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle {
+    _configHardwareStyle = configHardwareStyle;
+    switch (configHardwareStyle) {
+        case TIoTConfigHardwareStyleSoftAP:
+        {
+            _dataDic = @{@"title": @"热点配网",
+                         @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
+                         @"topic": @"请输入WiFi密码",
+                         @"wifiInputTitle": @"WIFI",
+                         @"wifiInputPlaceholder": @"请点击箭头按钮选择WIFI",
+                         @"wifiInputHaveButton": @(YES),
+                         @"pwdInputTitle": @"密码",
+                         @"pwdInputPlaceholder": @"请输入密码（非必填）",
+                         @"pwdInputHaveButton": @(NO),
+                         @"make": @"操作方式:",
+                         @"stepDiscribe": @"1. 点击WiFi名称右侧的下拉按钮，选择设备热点。\n2. 填写设备热点密码，若无密码则可忽略。\n3. 点击下一步，开始配网。"
+            };
+        }
+            break;
+            
+        case TIoTConfigHardwareStyleSmartConfig:
+        {
+            _dataDic = @{@"title": @"一键配网",
+                         @"stepTipArr": @[@"配置硬件", @"选择目标WiFi", @"开始配网"],
+                         @"topic": @"请输入WiFi密码",
+                         @"wifiInputTitle": @"WIFI",
+                         @"wifiInputPlaceholder": @"请点击箭头按钮选择WIFI",
+                         @"wifiInputHaveButton": @(YES),
+                         @"pwdInputTitle": @"密码",
+                         @"pwdInputPlaceholder": @"请输入密码",
+                         @"pwdInputHaveButton": @(NO),
+                         @"make": @"",
+                         @"stepDiscribe": @""
+            };
+        }
+            break;
+            
+        default:
+            break;
+    }
+    [self setupUI];
+    [self getWifiInfos];
+}
+
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [CLLocationManager new];
+        _locationManager.delegate = self;
+    }
+    return _locationManager;
+}
+
+- (NSMutableDictionary *)wifiInfo{
+    if (_wifiInfo == nil) {
+        _wifiInfo = [NSMutableDictionary dictionary];
+    }
+    return _wifiInfo;
+}
+
+- (TIoTWIFIListView *)wifiListView {
+    if (!_wifiListView) {
+        _wifiListView = [[TIoTWIFIListView alloc] init];
+
+        WeakObj(self)
+        _wifiListView.refreshAction = ^{
+            [selfWeak scanWifiInfos];
+        };
+        
+        _wifiListView.accessWifiAction = ^{
+            selfWeak.wifiListView.hidden = YES;
+            TIoTWIFITipViewController *vc = [[TIoTWIFITipViewController alloc] init];
+            vc.title = selfWeak.title;
+            [selfWeak.navigationController pushViewController:vc animated:YES];
+        };
+    }
+    return _wifiListView;
 }
 
 @end
