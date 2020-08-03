@@ -61,7 +61,11 @@ failure:(FailureResponseBlock)failure
             [MBProgressHUD showError:reason toView:[[UIApplication sharedApplication] delegate].window];
             failure(reason, error, dic);
         }else {
-            [MBProgressHUD showError:error.localizedDescription toView:[[UIApplication sharedApplication] delegate].window];
+            if ([urlStr isEqualToString:AppGetDeviceBindTokenState] && ([error.localizedDescription isEqualToString:@"请求超时。"] || [error.localizedDescription isEqualToString:@"似乎已断开与互联网的连接。"])) {
+                
+            } else {
+                [MBProgressHUD showError:error.localizedDescription toView:[[UIApplication sharedApplication] delegate].window];
+            }
             failure(reason, error,nil);
         }
         

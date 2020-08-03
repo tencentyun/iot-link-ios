@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTConfigHardwareViewController : UIViewController
 
+/// 配网类型
+@property (nonatomic, assign) TIoTConfigHardwareStyle configHardwareStyle;
+@property (nonatomic, copy) NSString *roomId;
+
 @end
 
 NS_ASSUME_NONNULL_END

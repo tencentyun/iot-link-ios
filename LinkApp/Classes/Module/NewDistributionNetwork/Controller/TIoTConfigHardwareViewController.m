@@ -14,6 +14,10 @@
 
 @property (nonatomic, strong) TIoTStepTipView *stepTipView;
 
+@property (nonatomic, strong) NSDictionary *dataDic;
+
+@property (nonatomic, strong) NSString *networkToken;
+
 @end
 
 @implementation TIoTConfigHardwareViewController
@@ -21,14 +25,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setupUI];
+    _networkToken = @"";
 }
 
 - (void)setupUI{
-    self.title = @"一键配网";
+    self.title = [_dataDic objectForKey:@"title"];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:@[@"配置硬件", @"选择目标WiFi", @"开始配网"]];
+    self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[_dataDic objectForKey:@"stepTipArr"]];
     self.stepTipView.step = 1;
     [self.view addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -40,7 +44,7 @@
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    topicLabel.text = @"将设备设置为一键配网模式";
+    topicLabel.text = [_dataDic objectForKey:@"topic"];
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -71,7 +75,7 @@
 //    }];
     
     UILabel *stepLabel = [[UILabel alloc] init];
-    NSString *stepLabelText = @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
+    NSString *stepLabelText = [_dataDic objectForKey:@"stepDiscribe"];
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     paragraph.lineSpacing = 6.0;
     // 字体: 大小 颜色 行间距
@@ -101,11 +105,62 @@
     }];
 }
 
+- (void)getSoftApToken {
+    [[TIoTRequestObject shared] post:AppCreateDeviceBindToken Param:@{} success:^(id responseObject) {
+
+        WCLog(@"AppCreateDeviceBindToken----responseObject==%@",responseObject);
+        
+        if (![NSObject isNullOrNilWithObject:responseObject[@"Token"]]) {
+            self.networkToken = responseObject[@"Token"];
+        }
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+        WCLog(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
+    }];
+}
+
 #pragma mark eventResponse
 
 - (void)nextClick:(UIButton *)sender {
     TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
+    vc.step = 2;
+    vc.configHardwareStyle = _configHardwareStyle;
+    vc.currentDistributionToken = self.networkToken;
+    vc.roomId = self.roomId;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark setter or getter
+
+- (void)setConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle {
+    _configHardwareStyle = configHardwareStyle;
+    switch (configHardwareStyle) {
+        case TIoTConfigHardwareStyleSoftAP:
+        {
+            _dataDic = @{@"title": @"热点配网",
+                         @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
+                         @"topic": @"将设备设置为热点配网模式",
+                         @"stepDiscribe": @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。"
+            };
+        }
+            break;
+            
+        case TIoTConfigHardwareStyleSmartConfig:
+        {
+            _dataDic = @{@"title": @"一键配网",
+                         @"stepTipArr": @[@"配置硬件", @"选择目标WiFi", @"开始配网"],
+                         @"topic": @"将设备设置为一键配网模式",
+                         @"stepDiscribe": @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。"
+            };
+        }
+            break;
+            
+        default:
+            break;
+    }
+    [self setupUI];
+    [self getSoftApToken];
 }
 
 @end

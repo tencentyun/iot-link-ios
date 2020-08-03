@@ -7,7 +7,8 @@
 //
 
 #import "TIoTWIFITipViewController.h"
-#import "TIoTConfigResultViewController.h"
+#import "TIoTTargetWIFIViewController.h"
+#import "UIImage+Ex.h"
 
 @interface TIoTWIFITipViewController ()
 
@@ -22,7 +23,6 @@
 }
 
 - (void)setupUI{
-    self.title = @"一键配网";
     self.view.backgroundColor = [UIColor whiteColor];
     
     UILabel *topicLabel = [[UILabel alloc] init];
@@ -60,7 +60,7 @@
 
     UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [selectButton setImage:[UIImage imageNamed:@"new_distri_check"] forState:UIControlStateSelected];
-    [selectButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    [selectButton setImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     selectButton.layer.borderWidth = 0.5f;
     selectButton.layer.borderColor = kMainColor.CGColor;
     selectButton.backgroundColor = [UIColor whiteColor];
@@ -103,17 +103,35 @@
 #pragma mark eventResponse
 
 - (void)refreshClick:(UIButton *)sender {
-    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+    // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
+    TIoTTargetWIFIViewController *vc = [self findViewController:NSStringFromClass([TIoTTargetWIFIViewController class])];
+    if (vc) {
+        // 找到需要返回的控制器的处理方式
+        [vc showWiFiListView];
+        [self.navigationController popToViewController:vc animated:YES];
+    }else{
+        // 没找到需要返回的控制器的处理方式
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 - (void)selectClick:(UIButton *)sender {
     sender.selected = !sender.selected;
-    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:@"连接失败" message:@"请检查您的WiFi密码是否正确" cancleTitlt:nil doneTitle:@"我知道了"];
-    av.doneAction = ^(NSString *text) {
-//        [self bindPhone];
-    };
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:sender.selected forKey:@"wifi_tip_konwn"];
+    [defaults synchronize];
+}
+
+-(id)findViewController:(NSString*)className{
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:NSClassFromString(className)]) {
+            return viewController;
+        }
+    }
+    return nil;
 }
 
 @end

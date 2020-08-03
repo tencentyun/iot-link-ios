@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 右侧按钮响应事件
 @property (nonatomic, copy) void (^buttonAction)(void);
+/// 文本框输入响应事件
+@property (nonatomic, copy) void (^textChangedAction)(NSString *changedText);
 
 @end
 
