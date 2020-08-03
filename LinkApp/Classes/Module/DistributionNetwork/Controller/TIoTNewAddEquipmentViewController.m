@@ -3,7 +3,7 @@
 //  TenextCloud
 //
 //  Created by Sun on 2020/5/27.
-//  Copyright © 2020 Winext. All rights reserved.
+//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTNewAddEquipmentViewController.h"
@@ -18,6 +18,8 @@
 #import "TIoTNavigationController.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
+
+#import "TIoTConfigHardwareViewController.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -58,7 +60,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     [self.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
     
     [HXYNotice changeAddDeviceTypeListener:self reaction:@selector(receiveChangeAddDeviceType:)];
-    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
+//    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
 }
 
 #pragma mark - other
@@ -151,13 +153,14 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)jumpConfigVC:(NSString *)title{
-    TIoTDistributionNetworkViewController *vc = [[TIoTDistributionNetworkViewController alloc] init];
+    TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
+    if ([title isEqualToString:@"智能配网"]) {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
+    } else {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
+    }
     vc.roomId = self.roomId;
-    vc.title = title;
-
-    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:vc];
-    nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    [self presentViewController:nav animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)receiveChangeAddDeviceType:(NSNotification *)noti{
@@ -170,7 +173,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)popHomeVC {
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

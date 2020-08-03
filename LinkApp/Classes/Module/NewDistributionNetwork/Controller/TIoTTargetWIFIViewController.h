@@ -12,6 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTTargetWIFIViewController : UIViewController
 
+/// 配网类型
+@property (nonatomic, assign) TIoTConfigHardwareStyle configHardwareStyle;
+
+@property (nonatomic, assign) NSInteger step;
+/// WIFI信息(ssid name pwd)
+@property (nonatomic, copy) NSDictionary *softApWifiInfo;
+@property (nonatomic, copy) NSString *roomId;
+@property (nonatomic, copy) NSString *currentDistributionToken;
+
+- (void)showWiFiListView;
+
 @end
 
 NS_ASSUME_NONNULL_END

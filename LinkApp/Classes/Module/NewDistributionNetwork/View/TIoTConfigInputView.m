@@ -20,6 +20,8 @@
 
 @implementation TIoTConfigInputView
 
+@synthesize inputText = _inputText;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -35,6 +37,7 @@
         self.button.hidden = !haveButton;
         self.textField.enabled = !haveButton;
         self.textField.placeholder = placeholder;
+        self.textField.secureTextEntry = !haveButton;
     }
     return self;
 }
@@ -53,6 +56,7 @@
     self.textField = [[UITextField alloc] init];
     self.textField.font = [UIFont wcPfRegularFontOfSize:17];
     self.textField.textColor = [UIColor blackColor];
+    [self.textField addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self addSubview:self.textField];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.titleLabel);
@@ -86,11 +90,21 @@
     }
 }
 
+- (void)changedTextField:(UITextField *)textField {
+    if (self.textChangedAction) {
+        self.textChangedAction(textField.text);
+    }
+}
+
 #pragma mark setter or getter
 
 - (void)setInputText:(NSString *)inputText {
     _inputText = inputText;
     self.textField.text = _inputText;
+}
+
+- (NSString *)inputText {
+    return self.textField.text;
 }
 
 @end

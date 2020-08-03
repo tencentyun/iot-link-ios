@@ -77,6 +77,13 @@ static CGFloat weatherHeight = 60;
 
 #pragma mark lifeCircle
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.tableView) {
+        [self getFamilyList];
+    }
+}
+
 - (void)dealloc{
     [HXYNotice removeListener:self];
 }

@@ -67,6 +67,12 @@ typedef NS_ENUM(NSInteger,WCThemeStyle) {
 };
 
 
+typedef NS_ENUM(NSInteger, TIoTConfigHardwareStyle) {
+    TIoTConfigHardwareStyleSmartConfig = 0,
+    TIoTConfigHardwareStyleSoftAP = 1
+};
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTUIProxy : NSObject
