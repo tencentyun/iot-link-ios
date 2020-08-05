@@ -10,8 +10,8 @@
 #import "TIoTAppEnvironment.h"
 #import "UIViewController+GetController.h"
 #import "TIoTNavigationController.h"
-#import "TIoTLoginVC.h"
-//#import "TIoTMainVC.h"
+//#import "TIoTLoginVC.h"
+#import "TIoTMainVC.h"
 #import "TIoTCoreRequestObj.h"
 #import "ReachabilityManager.h"
 #import "TIoTCoreSocketCover.h"
@@ -287,8 +287,8 @@ static NSString *heartBeatReqID = @"5002";
             
             [[TIoTAppEnvironment shareEnvironment] loginOut];
             
-            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
-//            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
+//            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
             [UIViewController getCurrentViewController].view.window.rootViewController = nav;
         }];
         [alert addAction:alertA];

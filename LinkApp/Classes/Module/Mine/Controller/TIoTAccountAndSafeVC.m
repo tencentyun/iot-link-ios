@@ -13,6 +13,7 @@
 #import "WxManager.h"
 #import "TIoTAppConfig.h"
 #import "TIoTModifyPasswordVC.h"
+#import "TIoTCancelAccountVC.h"
 
 @interface TIoTAccountAndSafeVC ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -60,6 +61,11 @@
         
         if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
             TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
+            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+                if (bindSuccess == YES) {
+                    [self.tableView reloadData];
+                }
+            };
             bindPhoneVC.accountType = AccountType_Phone;
             [self.navigationController pushViewController:bindPhoneVC animated:YES];
         }else {
@@ -73,6 +79,11 @@
         if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
             TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
             bindEmailVC.accountType = AccountType_Email;
+            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+                if (bindSuccess == YES) {
+                    [self.tableView reloadData];
+                }
+            };
             [self.navigationController pushViewController:bindEmailVC animated:YES];
         }else {
             TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
@@ -94,7 +105,8 @@
         [self.navigationController pushViewController:modifyPassword animated:YES];
         
     }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
-        
+        TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
+        [self.navigationController pushViewController:cancelAccountVC animated:YES];
     }
 }
 
@@ -123,7 +135,16 @@
     }
     NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue};
     
-    [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
+//    [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
+//        [MBProgressHUD dismissInView:self.view];
+//        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
+//        [self bindWeiXinWithOpenID:responseObject[@"Data"][@"Openid"]];
+//
+//    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//    }];
+    
+    [[TIoTRequestObject shared] postWithoutToken:AppUpdateUserByWeixin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         [self bindWeiXinWithOpenID:responseObject[@"Data"][@"Openid"]];
@@ -140,7 +161,7 @@
         [MBProgressHUD showSuccess:@"绑定成功"];
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"WxOpenID":openid}];
         [self getWeiXinNickAndRefresh];
-        [HXYNotice addModifyUserInfoPost];
+
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -187,11 +208,18 @@
         
         NSString *weixin = @"未绑定";
         NSString *weixinArrow = @"1";
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].nickName]) {
+        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].WxOpenID]) {
+            if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].phoneNumber] && [NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].email]) {
+                
+                //手机号为空，邮箱为空，还能登陆，则一定为微信登录（验证码登录需要手机号/邮箱登录需要填写邮箱）
+                weixin = [TIoTCoreUserManage shared].nickName;
+                weixinArrow = @"0";
+            }
+        }else {
+                //wxOpenID不为空，则一定用微信更新过个人信息，此时可以认为获取到用户的微信信息
             weixin = [TIoTCoreUserManage shared].nickName;
             weixinArrow = @"0";
         }
-        
         _dataArr = [NSMutableArray arrayWithArray:@[
             @{@"title":@"手机号",@"value":phoneNumber,@"vc":@"",@"haveArrow":@"1"},
             @{@"title":@"邮箱",@"value":email,@"vc":@"",@"haveArrow":@"1"},

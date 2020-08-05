@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D65A44224D7F3B5000C9BF1 /* TIoTCancelAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */; };
 		6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6524CFC0F5001169AE /* TIoTMainVC.m */; };
 		6D785E6C24D0434F001169AE /* TIoTVCLoginAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */; };
 		6D982C8824D2BB2D0080C961 /* TIoTAccountAndSafeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */; };
@@ -314,6 +315,8 @@
 /* Begin PBXFileReference section */
 		0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCancelAccountVC.h; sourceTree = "<group>"; };
+		6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCancelAccountVC.m; sourceTree = "<group>"; };
 		6D785E6424CFC0F5001169AE /* TIoTMainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMainVC.h; sourceTree = "<group>"; };
 		6D785E6524CFC0F5001169AE /* TIoTMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMainVC.m; sourceTree = "<group>"; };
 		6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVCLoginAccountVC.h; sourceTree = "<group>"; };
@@ -1081,6 +1084,8 @@
 				6D982C9324D33FF40080C961 /* TIoTModifyAccountVC.m */,
 				6D982C9824D422DE0080C961 /* TIoTModifyPasswordVC.h */,
 				6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */,
+				6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */,
+				6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */,
 				ED800C8F240C9EFA0045A268 /* Message */,
 				ED9C15D223B9DE1C00CAC848 /* Family */,
 				ED800C9C240CB2270045A268 /* TIoTAboutVC.h */,
@@ -2403,6 +2408,7 @@
 				A4F5B12524D263CA00F83B5F /* TIoTConfigResultViewController.m in Sources */,
 				ED6DA52323C9B21500FDDC97 /* TIoTUserCell.m in Sources */,
 				ED800C9F240CB2270045A268 /* TIoTAboutVC.m in Sources */,
+				6D65A44224D7F3B5000C9BF1 /* TIoTCancelAccountVC.m in Sources */,
 				D20621B223559DD100142DAC /* TIoTDistributionNetCollectionViewCell.m in Sources */,
 				6D982C9A24D422DE0080C961 /* TIoTModifyPasswordVC.m in Sources */,
 				EDB2F91E23B5DC7C00CDD4A6 /* FamilyModel.m in Sources */,

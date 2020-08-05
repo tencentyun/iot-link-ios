@@ -28,6 +28,7 @@ FOUNDATION_EXPORT NSString *const AppResetPasswordByEmail;//邮箱重置密码
 
 FOUNDATION_EXPORT NSString *const AppGetToken;//手机号邮箱登录
 FOUNDATION_EXPORT NSString *const AppGetTokenByWeiXin;//微信登录
+FOUNDATION_EXPORT NSString *const AppUpdateUserByWeixin;//获取openid
 
 FOUNDATION_EXPORT NSString *const AppGetUser;//查询用户基本信息
 FOUNDATION_EXPORT NSString *const AppUpdateUser;//修改用户基本信息

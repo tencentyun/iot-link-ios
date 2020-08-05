@@ -10,8 +10,8 @@
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
 #import "TIoTNavigationController.h"
-#import "TIoTLoginVC.h"
-//#import "TIoTMainVC.h"
+//#import "TIoTLoginVC.h"
+#import "TIoTMainVC.h"
 #import "UIViewController+GetController.h"
 
 #import "TIoTCoreRequestObject.h"
@@ -43,6 +43,9 @@ failure:(FailureResponseBlock)failure
     
     [[TIoTCoreRequestObject shared]postRequestWithAction:urlStr url:nil isWithoutToken:NO param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
         NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
+        #ifdef DEBUG
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr]];
+        #endif
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -212,8 +215,8 @@ failure:(FailureResponseBlock)failure
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTAppEnvironment shareEnvironment] loginOut];
-    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
-//    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
+//    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
+    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
     [UIViewController getCurrentViewController].view.window.rootViewController = nav;
 }
 

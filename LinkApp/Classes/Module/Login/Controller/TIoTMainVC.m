@@ -32,9 +32,13 @@
     
     [self.view addSubview:self.headerImage];
     [self.headerImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(92 * kScreenAllHeightScale);
+        if (@available (iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(100 * kScreenAllHeightScale);
+        }else {
+            make.top.equalTo(self.view).offset(64 + 100 * kScreenAllHeightScale);
+        }
         make.centerX.equalTo(self.view);
-        make.width.height.mas_equalTo(72 * kScreenAllHeightScale);
+        make.width.height.mas_equalTo(100 * kScreenAllHeightScale);
     }];
     
     [self.view addSubview:self.welcomeLalel];
