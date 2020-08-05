@@ -252,10 +252,15 @@
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
         WCLog(@"用户协议");
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"腾讯连连用户服务协议V1.0(1)" ofType:@"docx"];
         TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"用户协议";
-        vc.filePath = path;
+        #ifdef DEBUG
+        NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:ServiceProtocolURl];
+        [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+        vc.urlPath = tempMutStr;
+        #else
+            vc.urlPath = ServiceProtocolURl;
+        #endif
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
         
@@ -265,7 +270,13 @@
         WCLog(@"隐私");
         TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"隐私政策";
-        vc.urlPath = @"https://privacy.qq.com";
+        #ifdef DEBUG
+        NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:PrivacyProtocolURL];
+        [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+        vc.urlPath = tempMutStr;
+        #else
+            vc.urlPath = PrivacyProtocolURL;
+        #endif
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
     }

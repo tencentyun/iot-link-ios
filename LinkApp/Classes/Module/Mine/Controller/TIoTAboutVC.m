@@ -32,7 +32,13 @@
 - (IBAction)privacyPolicy:(UITapGestureRecognizer *)sender {
     TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"隐私政策";
-    vc.urlPath = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy";
+#ifdef DEBUG
+    NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:PrivacyProtocolURL];
+    [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+    vc.urlPath = tempMutStr;
+#else
+    vc.urlPath = PrivacyProtocolURL;
+#endif
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -40,7 +46,13 @@
     
     TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"用户协议";
-    vc.urlPath = @"https://docs.qq.com/doc/DY3ducUxmYkRUd2x2?pub=1&dver=2.1.0";
+#ifdef DEBUG
+    NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:ServiceProtocolURl];
+    [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+    vc.urlPath = tempMutStr;
+#else
+    vc.urlPath = ServiceProtocolURl;
+#endif
     [self.navigationController pushViewController:vc animated:YES];
 }
 
