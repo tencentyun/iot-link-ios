@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^RefreshLoadBlock)(BOOL bindSuccess);
+
 typedef NS_ENUM(NSInteger, AccountType) {
     AccountType_Phone,
     AccountType_Email
@@ -21,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  初始化对象时候必须赋值
  */
 @property (nonatomic, assign) AccountType accountType;
+
+@property (nonatomic, copy) RefreshLoadBlock resfreshResponseBlock;
 
 @end
 

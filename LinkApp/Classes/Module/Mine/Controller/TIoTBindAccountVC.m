@@ -134,7 +134,7 @@
         
     }else if (accountType == BindAccountEmailType) {
         
-        tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"Email":self.bindAccountView.phoneOrEmailTF.text};
+        tmpDic = @{@"Type":@"register",@"Email":self.bindAccountView.phoneOrEmailTF.text};
         actioinString = AppSendEmailVerificationCode;
     }
     
@@ -184,13 +184,14 @@
     if (accountType == BindAccountPhoneType) {
         tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"Password":self.bindAccountView.passwordTF.text};
     }else if (accountType ==BindAccountEmailType) {
-        tmpDic = @{@"CountryCode":self.conturyCode,@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"Password":self.bindAccountView.passwordTF.text};
+        tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"Password":self.bindAccountView.passwordTF.text};
     }
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"绑定成功"];
         [[TIoTCoreUserManage shared] saveUserInfo:tmpDic];
-        [HXYNotice addModifyUserInfoPost];
+        self.resfreshResponseBlock(YES);
+        [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];

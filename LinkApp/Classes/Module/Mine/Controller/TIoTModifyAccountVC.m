@@ -131,7 +131,7 @@
         
     }else if (accountType == ModifyAccountEmailType) {
         
-        tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"Email":self.modifyView.phoneOrEmailTF.text};
+        tmpDic = @{@"Type":@"register",@"Email":self.modifyView.phoneOrEmailTF.text};
         actioinString = AppSendEmailVerificationCode;
     }
     
@@ -169,13 +169,13 @@
     if (accountType == ModifyAccountPhoneType) {
         tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.modifyView.phoneOrEmailTF.text,@"VerificationCode":self.modifyView.verificationCodeTF.text};
     }else if (accountType == ModifyAccountEmailType) {
-        tmpDic = @{@"CountryCode":self.conturyCode,@"Email":self.modifyView.phoneOrEmailTF.text,@"VerificationCode":self.modifyView.verificationCodeTF.text};
+        tmpDic = @{@"Email":self.modifyView.phoneOrEmailTF.text,@"VerificationCode":self.modifyView.verificationCodeTF.text};
     }
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD showSuccess:@"修改成功"];
         [[TIoTCoreUserManage shared] saveUserInfo:tmpDic];
-        [HXYNotice addModifyUserInfoPost];
+
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
