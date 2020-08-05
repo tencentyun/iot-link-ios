@@ -221,6 +221,7 @@
         _cancelButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         _cancelButton.layer.cornerRadius = 20;
         _contentPart1.layer.masksToBounds = YES;
+        [_cancelButton addTarget:self action:@selector(cancelAccountClick) forControlEvents:UIControlEventTouchUpInside];
         
     }
     return _cancelButton;
@@ -235,15 +236,10 @@
 
 - (void)checkCanceled {
     if (self.protocolButton.selected) {
-
-        
         self.cancelButton.enabled = YES;
     }else {
 
         self.cancelButton.enabled = NO;
-        
-        
-        
     }
 
 }
@@ -255,6 +251,11 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)cancelAccountClick {
+    WCLog(@"cancel account ");
+}
+
+#pragma mark - private method
 - (CAGradientLayer *)setGradientLayer:(UIColor*)startColor endColor:(UIColor*)endColor targetView:(UIView *)targetView alpha:(CGFloat)alpha{
     //初始化CAGradientlayer对象，使它的大小为UIView的大小
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
@@ -279,26 +280,6 @@
     gradientLayer.locations = @[@(0.5f), @(1.0f)];
     
     return gradientLayer;
-}
-
-- (UIImage *)imageWithView:(UIView *)view
-{
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
-    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
-    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return snapshotImage;
-}
-
-- (UIImage *)makeImageWithView:(UIView *)view withSize:(CGSize)size
-{
-    // 下面方法，第一个参数表示区域大小。第二个参数表示是否是非透明的。如果需要显示半透明效果，需要传NO，否则传YES。第三个参数就是屏幕密度了，关键就是第三个参数 [UIScreen mainScreen].scale。
-    UIGraphicsBeginImageContextWithOptions(size, YES, [UIScreen mainScreen].scale);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-    
 }
 
 - (UIImage *)gradientImageWithColors:(NSArray *)colors rect:(CGRect)rect
