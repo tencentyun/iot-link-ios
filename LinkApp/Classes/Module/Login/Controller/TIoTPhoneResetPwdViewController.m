@@ -252,10 +252,15 @@
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
         WCLog(@"用户协议");
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"腾讯连连用户服务协议V1.0(1)" ofType:@"docx"];
+//        NSString *path = [[NSBundle mainBundle] pathForResource:@"腾讯连连用户服务协议V1.0(1)" ofType:@"docx"];
         TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"用户协议";
-        vc.filePath = path;
+//        vc.filePath = path;
+        #ifdef DEBUG
+            vc.urlPath = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service&uin=testReleaseID";
+        #else
+            vc.urlPath = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service";
+        #endif
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
         
@@ -265,7 +270,11 @@
         WCLog(@"隐私");
         TIoTWebVC *vc = [TIoTWebVC new];
         vc.title = @"隐私政策";
-        vc.urlPath = @"https://privacy.qq.com";
+        #ifdef DEBUG
+            vc.urlPath = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy&uin=testReleaseID";
+        #else
+            vc.urlPath = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy";
+        #endif
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
     }
