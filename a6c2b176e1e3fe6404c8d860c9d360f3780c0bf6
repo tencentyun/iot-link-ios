@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff691dc7_ea748588",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTAboutVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-05T06:12:34Z",
+      "side": 1,
+      "message": "建议最好是吧url统一写到某个配置文件中",
+      "revId": "a6c2b176e1e3fe6404c8d860c9d360f3780c0bf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
