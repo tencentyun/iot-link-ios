@@ -117,4 +117,8 @@ NSString *const AppRemoveUserShareDevice = @"AppRemoveUserShareDevice";//删除�
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心
 
+//===============用户协议、隐私协议链接
+
+NSString *const ServiceProtocolURl = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service";//用户协议
+NSString *const PrivacyProtocolURL = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy";//隐私协议
 @end
