@@ -51,7 +51,7 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+//                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
@@ -111,7 +111,7 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+//                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
