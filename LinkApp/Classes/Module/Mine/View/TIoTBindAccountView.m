@@ -124,6 +124,20 @@
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(48);
     }];
+    
+    if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
+        self.passwordTF.hidden = YES;
+        self.passwordConfirmTF.hidden = YES;
+        [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(line2.mas_bottom).offset(60 * kScreenAllHeightScale);
+        }];
+    }else {
+        self.passwordTF.hidden = NO;
+        self.passwordConfirmTF.hidden = NO;
+        [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(line4.mas_bottom).offset(60 * kScreenAllHeightScale);
+        }];
+    }
 
 }
 
