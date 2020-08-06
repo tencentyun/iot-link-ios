@@ -16,6 +16,24 @@
       "revId": "a6c2b176e1e3fe6404c8d860c9d360f3780c0bf6",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5a7952b_46d90760",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTAboutVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-06T02:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff691dc7_ea748588",
+      "revId": "a6c2b176e1e3fe6404c8d860c9d360f3780c0bf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
