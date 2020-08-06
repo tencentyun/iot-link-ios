@@ -133,7 +133,7 @@
         
         busivalue = @"studioappOpensource";
     }
-    NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue};
+    NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue,@"AccessToken":[TIoTCoreUserManage shared].accessToken};
     
 //    [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
 //        [MBProgressHUD dismissInView:self.view];
@@ -143,7 +143,7 @@
 //    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 //
 //    }];
-    
+//    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
     [[TIoTRequestObject shared] postWithoutToken:AppUpdateUserByWeixin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];

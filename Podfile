@@ -31,6 +31,7 @@ target 'LinkApp' do
   pod 'YYModel', '1.0.4'
   pod 'TZImagePickerController', '3.2.1'
   pod 'MGJRouter', '0.10.0'
+  pod 'TrueTime','5.0.3'
 end
 
 target 'LinkSDKDemo' do

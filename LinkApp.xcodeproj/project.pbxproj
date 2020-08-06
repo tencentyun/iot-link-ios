@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D65A44224D7F3B5000C9BF1 /* TIoTCancelAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */; };
+		6D65A44C24DBE85F000C9BF1 /* SwiftModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44B24DBE85F000C9BF1 /* SwiftModule.swift */; };
 		6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6524CFC0F5001169AE /* TIoTMainVC.m */; };
 		6D785E6C24D0434F001169AE /* TIoTVCLoginAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */; };
 		6D982C8824D2BB2D0080C961 /* TIoTAccountAndSafeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */; };
@@ -94,7 +95,7 @@
 		D2B29EE3235FEDF10086BDFA /* TIoTChoseValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B29EE2235FEDF10086BDFA /* TIoTChoseValueView.m */; };
 		D2B29EE6235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B29EE5235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m */; };
 		D2B29EE92360200A0086BDFA /* TIoTDeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B29EE82360200A0086BDFA /* TIoTDeviceData.m */; };
-		D2C7A9F4232F6AA4005E8006 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7A9F3232F6AA4005E8006 /* AppDelegate.m */; };
+		D2C7A9F4232F6AA4005E8006 /* TIoTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */; };
 		D2C7A9FC232F6AA5005E8006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */; };
 		D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */; };
 		D2C7AA02232F6AA5005E8006 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7AA01232F6AA5005E8006 /* main.m */; };
@@ -317,6 +318,8 @@
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCancelAccountVC.h; sourceTree = "<group>"; };
 		6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCancelAccountVC.m; sourceTree = "<group>"; };
+		6D65A44A24DBE85E000C9BF1 /* LinkApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		6D65A44B24DBE85F000C9BF1 /* SwiftModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModule.swift; sourceTree = "<group>"; };
 		6D785E6424CFC0F5001169AE /* TIoTMainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMainVC.h; sourceTree = "<group>"; };
 		6D785E6524CFC0F5001169AE /* TIoTMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMainVC.m; sourceTree = "<group>"; };
 		6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVCLoginAccountVC.h; sourceTree = "<group>"; };
@@ -490,8 +493,8 @@
 		D2B29EE72360200A0086BDFA /* TIoTDeviceData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDeviceData.h; sourceTree = "<group>"; };
 		D2B29EE82360200A0086BDFA /* TIoTDeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceData.m; sourceTree = "<group>"; };
 		D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "腾讯连连.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2C7A9F2232F6AA4005E8006 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		D2C7A9F3232F6AA4005E8006 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppDelegate.h; sourceTree = "<group>"; };
+		D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppDelegate.m; sourceTree = "<group>"; };
 		D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2C7A9FE232F6AA5005E8006 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2C7AA00232F6AA5005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1565,16 +1568,18 @@
 			isa = PBXGroup;
 			children = (
 				ED8D76BF237CEE5B00E358C9 /* html */,
-				D2C7A9F2232F6AA4005E8006 /* AppDelegate.h */,
-				D2C7A9F3232F6AA4005E8006 /* AppDelegate.m */,
+				D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */,
+				D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */,
 				D2C7AA00232F6AA5005E8006 /* Info.plist */,
 				6DD4E82E248927830056A162 /* GoogleService-Info.plist */,
 				D2C7AA01232F6AA5005E8006 /* main.m */,
 				D2C7AA25232F6EBC005E8006 /* LinkApp.pch */,
+				6D65A44B24DBE85F000C9BF1 /* SwiftModule.swift */,
 				D23104AE232F929D0003069D /* Localizable.strings */,
 				F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */,
 				F4DAB24724A3551F00F1B270 /* LinkAppCommon.xcconfig */,
 				F4C5DE0D24A0B7C40098F18B /* app-config.json */,
+				6D65A44A24DBE85E000C9BF1 /* LinkApp-Bridging-Header.h */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -2065,6 +2070,7 @@
 				TargetAttributes = {
 					D2C7A9EE232F6AA4005E8006 = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1150;
 						SystemCapabilities = {
 							com.apple.AccessWiFi = {
 								enabled = 0;
@@ -2390,7 +2396,8 @@
 				D27ACA1123614DA50074C2B3 /* TIoTDeviceDetailTableViewCell.m in Sources */,
 				6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */,
 				D2038BA2233200930036F6B9 /* TIoTSendPhoneCodeViewController.m in Sources */,
-				D2C7A9F4232F6AA4005E8006 /* AppDelegate.m in Sources */,
+				6D65A44C24DBE85F000C9BF1 /* SwiftModule.swift in Sources */,
+				D2C7A9F4232F6AA4005E8006 /* TIoTAppDelegate.m in Sources */,
 				ED9C15D023B9DCB700CAC848 /* TIoTFamilyInfoVC.m in Sources */,
 				ED5767182410AED70070D218 /* ReachabilityManager.m in Sources */,
 				D20621BB23559E5600142DAC /* TYCyclePagerView.m in Sources */,
@@ -2706,6 +2713,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -2771,6 +2779,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_NAME = "腾讯连连";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -2782,6 +2793,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -2847,6 +2859,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link;
 				PRODUCT_NAME = "腾讯连连";
 				PROVISIONING_PROFILE_SPECIFIER = com.tencent.iot.explorer.link_Production_SignProvision;
+				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};

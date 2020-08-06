@@ -182,9 +182,19 @@
     NSDictionary *tmpDic = nil;
     
     if (accountType == BindAccountPhoneType) {
-        tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"Password":self.bindAccountView.passwordTF.text};
+        if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
+            tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text};
+        }else {
+            tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"NewPasword":self.bindAccountView.passwordTF.text};
+        }
+        
     }else if (accountType ==BindAccountEmailType) {
-        tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"Password":self.bindAccountView.passwordTF.text};
+        if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
+            tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text};
+        }else {
+            tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"NewPasword":self.bindAccountView.passwordTF.text};
+        }
+        
     }
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {

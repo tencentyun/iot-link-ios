@@ -52,6 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///时间戳转日期
 + (NSString *)convertTimestampToTime:(id)timestamp byDateFormat:(NSString *)format;
 
+///时间转特定格式的字符串
++ (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date;
+
 ///获取UTC格式时间
 + (NSString *)getNowUTCTimeString;
 
