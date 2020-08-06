@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *phoneNumber;
 @property (nonatomic, copy, nullable) NSString *countryCode;
 @property (nonatomic, copy, nullable) NSString *email;
-@property (nonatomic, copy, nullable) NSString *hasPassword;
+@property (nonatomic, copy, nullable) NSString *hasPassword;    //0 用户没有设置密码  1 用户已经设置密码
 @property (nonatomic, copy, nullable) NSString *WxOpenID;
 @property (nonatomic, copy, nullable) NSString *requestID;
 
