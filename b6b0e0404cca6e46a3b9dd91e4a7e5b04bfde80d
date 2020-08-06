@@ -22,6 +22,30 @@
       "revId": "b6b0e0404cca6e46a3b9dd91e4a7e5b04bfde80d",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62ea2f69_38c9337b",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-06T02:18:06Z",
+      "side": 1,
+      "message": "目前这种太多啦，下个版本搞国际化的时候还需要再过一遍",
+      "parentUuid": "7abad44a_952a15e8",
+      "range": {
+        "startLine": 206,
+        "startChar": 64,
+        "endLine": 206,
+        "endChar": 66
+      },
+      "revId": "b6b0e0404cca6e46a3b9dd91e4a7e5b04bfde80d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
