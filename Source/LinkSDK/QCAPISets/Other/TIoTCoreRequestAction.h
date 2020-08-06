@@ -42,7 +42,7 @@ FOUNDATION_EXPORT NSString *const AppUserFeedBack;//用户意见反馈
 FOUNDATION_EXPORT NSString *const AppCosAuth;//上传图片获取信息
 
 FOUNDATION_EXPORT NSString *const AppGetTokenTicket;//得到一次性的TokenTicket
-
+FOUNDATION_EXPORT NSString *const AppUserCancelAccount;//账户注销
 
 //MARK: 消息
 

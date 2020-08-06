@@ -1,12 +1,12 @@
 //
-//  AppDelegate.m
+//  TIoTAppDelegate.m
 //  TenextCloud
 //
 //  Created by 侯兴宇 on 2019/9/16.
 //  Copyright © 2019 Winext. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "TIoTAppDelegate.h"
 #import "TIoTTabBarViewController.h"
 #import "TIoTNavigationController.h"
 #import "KeyboardManage.h"
@@ -19,12 +19,7 @@
 #import "WRNavigationBar.h"
 #import "Firebase.h"
 
-@interface AppDelegate ()
-
-@end
-
-@implementation AppDelegate
-
+@implementation TIoTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -49,6 +44,10 @@
         //上报用户userid
         [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
     }
+    
+    TrueTimeClient *client = [TrueTimeClient sharedInstance];
+    [client startWithPool:@[@"time.apple.com"] port:123];
+    self.timeClient = client;
     
     // 1.创建窗口
     self.window = [[UIWindow alloc] init];

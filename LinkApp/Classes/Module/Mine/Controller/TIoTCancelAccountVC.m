@@ -9,6 +9,11 @@
 #import "TIoTCancelAccountVC.h"
 #import "TIoTWebVC.h"
 #import "UIImage+Ex.h"
+#import "TIoTAppEnvironment.h"
+#import "TIoTNavigationController.h"
+#import "TIoTMainVC.h"
+@import TrueTime;
+#import "TIoTAppDelegate.h"
 
 @interface TIoTCancelAccountVC ()
 @property (nonatomic, strong) UILabel   *cancelTitle;
@@ -16,6 +21,7 @@
 @property (nonatomic, strong) UILabel   *contentPart2;
 @property (nonatomic, strong) UILabel   *contentPart3;
 @property (nonatomic, strong) UILabel   *contentPart4;
+@property (nonatomic, strong) UILabel   *contentPart5;
 @property (nonatomic, strong) UIView    *bottomView;
 @property (nonatomic, strong) UIButton  *protocolButton;
 @property (nonatomic, strong) UIButton  *cancelButton;
@@ -28,6 +34,7 @@
     // Do any additional setup after loading the view.
     
     [self setUpUI];
+    
 }
 
 - (void)setUpUI {
@@ -77,21 +84,38 @@
     [self.view addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            }else {
+                make.bottom.equalTo(self.view.mas_bottom).offset(- 35 * kScreenAllHeightScale);
+            }
         }else {
-            make.bottom.equalTo(self.view.mas_bottom);
+            make.bottom.equalTo(self.view.mas_bottom).offset(- 35 * kScreenAllHeightScale);
         }
         make.leading.trailing.equalTo(self.view);
         make.height.mas_equalTo(100 * kScreenAllHeightScale);
     }];
     
+    TIoTAppDelegate *appDelegate = (TIoTAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
+    NSDate *now = [[appDelegate.timeClient referenceTime] now];
+    if (now == nil) {
+        now = [NSDate date];
+    }
+    
+    int days = 7;
+    NSTimeInterval oneDay = 24 * 60 * 60;
+    NSDate *appointDate = [now initWithTimeIntervalSinceNow: oneDay * days];
+    NSString *appointDataString = [NSString converDataToFormat:@"yyyy-MM-dd HH:mm:ss" withData:appointDate];
+    [self setContentLabelFormatWithLabel:self.contentPart2 contentString:[NSString stringWithFormat:@"如果您确定“注销账号”，账号将注销于\n%@",appointDataString] textColour:nil textFont:nil];
     
 }
 
 - (UILabel *)cancelTitle {
     if (!_cancelTitle) {
         _cancelTitle = [[UILabel alloc]init];
-        [self setContentLabelFormatWithLabel:_cancelTitle contentString:@"注销当前账号" textColour:nil textFont:[UIFont wcPfBoldFontOfSize:24]];
+        [self setContentLabelFormatWithLabel:_cancelTitle contentString:@"注销须知" textColour:nil textFont:[UIFont wcPfBoldFontOfSize:24]];
     }
     return _cancelTitle;
 }
@@ -99,7 +123,8 @@
 - (UILabel *)contentPart1 {
     if (!_contentPart1) {
         _contentPart1 = [[UILabel alloc]init];
-        [self setContentLabelFormatWithLabel:_contentPart1 contentString:@"注销账号后，您的账号下所有信息和数据将被清空。" textColour:nil textFont:nil];
+        _contentPart1.numberOfLines = 0;
+        [self setContentLabelFormatWithLabel:_contentPart1 contentString:@"请您确保账号处于安全状态下且是本人申请注销。注销账号是不可恢复的操作，账号被注销后，您账号下的所有信息、数据将被永久删除，无法找回。为避免您的损失，请谨慎进行账号注销操作。" textColour:nil textFont:nil];
     }
     return _contentPart1;;
 }
@@ -108,7 +133,7 @@
     if (!_contentPart2) {
         _contentPart2 = [[UILabel alloc]init];
         _contentPart2.numberOfLines = 0;
-        [self setContentLabelFormatWithLabel:_contentPart2 contentString:@"如果您确定“注销账号”，账号将注销于\n2020-XX-XX 00:00:00" textColour:nil textFont:nil];
+        [self setContentLabelFormatWithLabel:_contentPart2 contentString:@"如果您确定“注销账号”，账号将注销于\n2020年8月3日 00:00:00" textColour:nil textFont:nil];
     }
     return _contentPart2;
 }
@@ -125,7 +150,8 @@
 - (UILabel *)contentPart4 {
     if (!_contentPart4) {
         _contentPart4 = [[UILabel alloc]init];
-        [self setContentLabelFormatWithLabel:_contentPart4 contentString:@"感谢您的使用！" textColour:nil textFont:nil];
+        _contentPart4.numberOfLines = 0;
+        [self setContentLabelFormatWithLabel:_contentPart4 contentString:@"注：如腾讯连连账号是通过第三方软件（微信） 进行登录的，您所注销的账号仅影响腾讯连连内的账号与数据，并不会影响您在微信的账号信息。" textColour:nil textFont:nil];
     }
     return _contentPart4;
 }
@@ -252,7 +278,35 @@
 }
 
 - (void)cancelAccountClick {
-    WCLog(@"cancel account ");
+
+    TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    [modifyAlertView alertWithTitle:@"确定注销账号吗" message:@"注销后，此账户下的所有用户数据也将被永久删除" cancleTitlt:@"取消" doneTitle:@"确认"];
+    modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
+        
+        [self cacelAccountPostMehtod];
+    };
+    [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+
+}
+
+
+- (void)cacelAccountPostMehtod {
+    [[TIoTRequestObject shared] post:AppUserCancelAccount Param:@{} success:^(id responseObject) {
+        
+         TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:[UIImage imageNamed:@"success_icon"]];
+        [modifyAlertView alertWithTitle:@"账号已申请注销" message:@"如需撤销，请在7日内登录腾讯连连" cancleTitlt:@"" doneTitle:@"确认"];
+        [modifyAlertView showSingleConfrimButton];
+        modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
+            
+            [[TIoTAppEnvironment shareEnvironment] loginOut];
+            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
+            self.view.window.rootViewController = nav;
+        };
+        [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 
 #pragma mark - private method

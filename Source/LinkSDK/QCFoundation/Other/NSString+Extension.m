@@ -51,6 +51,17 @@
 
 }
 
++ (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date {
+    NSDate *destinationDate = date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+
+    [formatter setDateFormat:format];
+
+    NSString*timeString=[formatter stringFromDate:destinationDate];
+
+    return timeString;
+}
+
 + (NSString *)objectToJson:(id)obj{
     if (obj == nil) {
         return nil;

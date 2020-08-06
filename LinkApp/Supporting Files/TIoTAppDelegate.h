@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  TIoTAppDelegate.h
 //  TenextCloud
 //
 //  Created by 侯兴宇 on 2019/9/16.
@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@import TrueTime;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface TIoTAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-
+@property (nonatomic, strong) TrueTimeClient *timeClient;
 @end
 

@@ -20,6 +20,8 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 
 - (instancetype)initWithFrame:(CGRect)frame andStyle:(WCAlertViewStyle)style;
 
+- (instancetype)initWithFrame:(CGRect)frame withTopImage:(UIImage *)topImage;
+
 @property (nonatomic, strong) void (^doneAction)(NSString *text);
 @property (nonatomic, assign) NSInteger maxLength;
 @property (nonatomic, copy) NSString *defaultText;//输入框默认文本

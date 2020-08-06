@@ -18,7 +18,7 @@
 @property (nonatomic,strong) UITextField *messageT;
 @property (nonatomic,strong) UIButton *cancleBtn;
 @property (nonatomic,strong) UIButton *doneBtn;
-
+@property (nonatomic, strong) UIImage *successTopImage;
 
 @property (nonatomic) CGRect oriFrame;
 
@@ -32,6 +32,15 @@
         self.style = style;
         [self setupUI];
         [self addKeyboardNote];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame withTopImage:(UIImage *)topImage {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.successTopImage = topImage;
+        [self setUpViews];
     }
     return self;
 }
@@ -50,6 +59,100 @@
 {
     _defaultText = defaultText;
     self.messageT.text = defaultText;
+}
+
+- (void)setUpViews {
+    
+    self.backgroundColor = kRGBAColor(0, 0, 0, 0.7);
+    
+    UIView *bgView = [[UIView alloc] init];
+    bgView.backgroundColor = [UIColor whiteColor];
+    bgView.layer.cornerRadius = 10;
+    [self addSubview:bgView];
+    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self);
+        make.width.mas_equalTo(kScreenWidth - 60);
+    }];
+    
+    UIImageView *topImage = nil;
+    if (self.successTopImage) {
+        topImage = [[UIImageView alloc]initWithImage:self.successTopImage];
+        [bgView addSubview:topImage];
+        [topImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(bgView.mas_top).offset(25 * kScreenAllHeightScale);
+            make.centerX.equalTo(bgView.mas_centerX);
+            make.width.height.mas_equalTo(40 * kScreenAllHeightScale);
+        }];
+    }
+    
+    UILabel *name = [[UILabel alloc] init];
+    name.text = @"";
+    name.textAlignment = NSTextAlignmentCenter;
+    name.textColor = kFontColor;
+    name.font = [UIFont boldSystemFontOfSize:20];
+    [bgView addSubview:name];
+    self.nameL = name;
+    [name mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.mas_equalTo(20);
+        if (topImage != nil) {
+            make.top.equalTo(topImage.mas_bottom).offset(22 *kScreenAllHeightScale);
+        }else {
+            make.top.mas_equalTo(30);
+        }
+        
+        make.trailing.mas_equalTo(-20);
+    }];
+    
+    UILabel *content = [[UILabel alloc] init];
+    content.text = @"";
+    content.numberOfLines = 0;
+    content.textColor = kFontColor;
+    content.font = [UIFont systemFontOfSize:16];
+    [bgView addSubview:content];
+    self.messageL = content;
+    [content mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.mas_equalTo(20);
+        make.top.equalTo(name.mas_bottom).offset(20);
+        make.trailing.mas_equalTo(-20);
+    }];
+    
+    UIView *line = [[UIView alloc]init];
+    line.backgroundColor = kLineColor;
+    [bgView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(bgView);
+        make.height.mas_equalTo(1);
+        make.top.equalTo(content.mas_bottom).offset(20 *kScreenAllHeightScale);
+    }];
+    
+    UIStackView *stack = [[UIStackView alloc] init];
+    stack.distribution = UIStackViewDistributionFillEqually;
+    stack.alignment = UIStackViewAlignmentFill;
+    [bgView addSubview:stack];
+    [stack mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(bgView);
+        make.top.equalTo(line.mas_bottom);
+        make.bottom.equalTo(bgView.mas_bottom);
+        make.height.mas_equalTo(50 * kScreenAllHeightScale);
+    }];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitle:@"取消" forState:UIControlStateNormal];
+    [btn setTitleColor:kFontColor forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:20];
+    [btn addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
+    btn.layer.cornerRadius = 4;
+    [stack addArrangedSubview:btn];
+    self.cancleBtn = btn;
+    
+    UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn2 setTitle:@"确定" forState:UIControlStateNormal];
+    [btn2 setTitleColor:kMainColor forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:20];
+    [btn2 addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
+    btn2.layer.cornerRadius = 4;
+    [stack addArrangedSubview:btn2];
+    self.doneBtn = btn2;
 }
 
 - (void)setupUI

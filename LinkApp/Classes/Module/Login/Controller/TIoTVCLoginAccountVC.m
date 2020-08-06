@@ -37,6 +37,7 @@
 @property (nonatomic, strong) UIButton *loginAccountButton;
 @property (nonatomic, strong) UIButton *weixinLoginButton;
 
+@property (nonatomic, strong) NSString *cancelAccountTimeString;
 @end
 
 @implementation TIoTVCLoginAccountVC
@@ -532,8 +533,14 @@
     
     [MBProgressHUD dismissInView:nil];
     [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-    [self loginSuccess];
     
+    if (responseObject[@"Data"][@"CancelAccountTime"]) {
+        self.cancelAccountTimeString = [NSString stringWithFormat:@"%@",responseObject[@"Data"][@"CancelAccountTime"]];
+    }else {
+        self.cancelAccountTimeString = nil;
+    }
+    
+    [self loginSuccess];
     //信鸽推送注册
     [[XGPushManage sharedXGPushManage] bindPushToken];
     
@@ -607,12 +614,28 @@
             [MBProgressHUD dismissInView:self.view];
             [HXYNotice postLoginInTicketToken:ticket];
             [self dismissViewControllerAnimated:YES completion:nil];
+            [self judgeCancelAccountTip];
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD dismissInView:self.view];
         }];
     } else {
         self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+        [self judgeCancelAccountTip];
+    }
+}
+
+- (void)judgeCancelAccountTip {
+    if (self.cancelAccountTimeString != nil) {
+        
+        NSString *tempStr = [NSString convertTimestampToTime:self.cancelAccountTimeString byDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        [modifyAlertView alertWithTitle:@"账号注销已终止" message:[NSString stringWithFormat:@"由于你在申请“账号注销”后的7天内重新登录，该账号在%@提交的“账号注销”申请已被撤销",tempStr] cancleTitlt:@"" doneTitle:@"确认"];
+        [modifyAlertView showSingleConfrimButton];
+        modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
+        
+        };
+        [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
     }
 }
 
@@ -643,8 +666,13 @@
         [MBProgressHUD dismissInView:self.view];
         [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
         
-        [self loginSuccess];
+        if (responseObject[@"Data"][@"CancelAccountTime"]) {
+            self.cancelAccountTimeString = [NSString stringWithFormat:@"%@",responseObject[@"Data"][@"CancelAccountTime"]];
+        }else {
+            self.cancelAccountTimeString = nil;
+        }
         
+        [self loginSuccess];
         //信鸽推送注册
         [[XGPushManage sharedXGPushManage] bindPushToken];
         [HXYNotice addLoginInPost];
