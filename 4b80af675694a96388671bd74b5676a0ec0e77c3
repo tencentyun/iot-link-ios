@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87353522_e71c8e86",
+        "filename": "LinkApp/Classes/Universal/TIoTRequestObject.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-07T02:23:43Z",
+      "side": 1,
+      "message": "debug环境打开",
+      "revId": "4b80af675694a96388671bd74b5676a0ec0e77c3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
