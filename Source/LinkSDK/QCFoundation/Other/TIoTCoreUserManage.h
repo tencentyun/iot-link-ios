@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *hasPassword;
 @property (nonatomic, copy, nullable) NSString *WxOpenID;
 @property (nonatomic, copy, nullable) NSString *requestID;
+@property (nonatomic, copy, nullable) NSString *hasBindWxOpenID;       //判断微信是否绑定成功  0 没有绑定  1已经绑定成功
 
 @property (nonatomic,copy) NSString *familyId;//
 @property (nonatomic,copy) NSString *currentRoomId;

@@ -278,8 +278,8 @@
 }
 
 - (void)cancelAccountClick {
-
-    TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    
+    TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
     [modifyAlertView alertWithTitle:@"确定注销账号吗" message:@"注销后，此账户下的所有用户数据也将被永久删除" cancleTitlt:@"取消" doneTitle:@"确认"];
     modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         
