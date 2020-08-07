@@ -63,7 +63,7 @@
 
 - (BOOL)iPhoneX{
     if (@available(iOS 11.0, *)) {
-        if ([UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom > 0) {
+        if ([[UIApplication sharedApplication].delegate window].safeAreaInsets.bottom > 0) {
             return YES;
         }
         return NO;

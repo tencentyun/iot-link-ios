@@ -88,7 +88,7 @@
 }
 
 - (void)show{
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [[[UIApplication sharedApplication].delegate window] addSubview:self];
     
     [UIView animateWithDuration:0.2 animations:^{
         self.whiteView.frame = CGRectMake(0, 0, kScreenWidth, self.currentHeight);
