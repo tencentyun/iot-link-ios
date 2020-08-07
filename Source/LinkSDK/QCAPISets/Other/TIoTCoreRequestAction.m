@@ -25,7 +25,7 @@ NSString *const AppResetPasswordByEmail = @"AppResetPasswordByEmail";
 
 NSString *const AppGetToken = @"AppGetToken";
 NSString *const AppGetTokenByWeiXin = @"AppGetTokenByWeiXin";
-NSString *const AppUpdateUserByWeixin = @"AppUpdateUserByWeixin";
+NSString *const AppUpdateUserByWeiXin = @"AppUpdateUserByWeiXin";
 
 NSString *const AppGetUser = @"AppGetUser";
 NSString *const AppUpdateUser = @"AppUpdateUser";

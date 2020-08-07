@@ -202,6 +202,18 @@
     self.expireAt = [NSString stringWithFormat:@"%@",expireAt];
 }
 
+-(NSString *)hasBindWxOpenID {
+    if (!_hasBindWxOpenID) {
+        _hasBindWxOpenID = [[NSUserDefaults standardUserDefaults] valueForKey:@"Has_WxOpenID"];
+    }
+    return _hasBindWxOpenID;
+}
+
+- (void)setHasWxOpenID:(NSString *)hasBindWxOpenID {
+    _hasBindWxOpenID = hasBindWxOpenID;
+    [[NSUserDefaults standardUserDefaults] setValue:hasBindWxOpenID forKey:@"Has_WxOpenID"];
+}
+
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
     
@@ -235,6 +247,9 @@
     if (userInfo[@"Openid"]) {
         self.WxOpenID = userInfo[@"Openid"];
     }
+    if (userInfo[@"HasWxOpenID"]) {
+        self.hasWxOpenID = [NSString stringWithFormat:@"%@",userInfo[@"HasWxOpenID"]];
+    }
 }
 
 
@@ -250,6 +265,7 @@
     self.hasPassword = @"";
     self.WxOpenID = @"";
     self.requestID = @"";
+    self.hasBindWxOpenID = @"";
 }
 
 
