@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17b3db96_93f58fa9",
+        "filename": "LinkApp/Classes/Module/Mine/View/TIoTBindAccountView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-07T02:08:39Z",
+      "side": 1,
+      "message": "建议判断常量放到宏里，或者添加hasPassword取值注释",
+      "revId": "32983ecfe2a8d09e7921b9b9c5eb861d6a2f42cd",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
