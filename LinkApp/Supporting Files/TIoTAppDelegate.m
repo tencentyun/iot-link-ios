@@ -23,7 +23,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    self.isDebug = false;
+#if DEBUG
+    self.isDebug = true;
+#endif
     [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType:WCAppEnvironmentTypeRelease];
     [[TIoTWebSocketManage shared] SRWebSocketOpen];
     
@@ -70,8 +73,6 @@
     [self setNavBarAppearence];
     // 4.显示窗口
     [self.window makeKeyAndVisible];
-    
-    
     return YES;
 }
 
