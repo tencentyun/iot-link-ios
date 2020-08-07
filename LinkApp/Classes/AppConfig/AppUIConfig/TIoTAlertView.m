@@ -88,7 +88,7 @@
     UILabel *name = [[UILabel alloc] init];
     name.text = @"";
     name.textAlignment = NSTextAlignmentCenter;
-    name.textColor = kFontColor;
+    name.textColor = [UIColor colorWithHexString:@"#15161A"];
     name.font = [UIFont boldSystemFontOfSize:20];
     [bgView addSubview:name];
     self.nameL = name;
@@ -106,7 +106,7 @@
     UILabel *content = [[UILabel alloc] init];
     content.text = @"";
     content.numberOfLines = 0;
-    content.textColor = kFontColor;
+    content.textColor = [UIColor colorWithHexString:@"#6C7078"];
     content.font = [UIFont systemFontOfSize:16];
     [bgView addSubview:content];
     self.messageL = content;
@@ -138,19 +138,21 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:@"取消" forState:UIControlStateNormal];
-    [btn setTitleColor:kFontColor forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor colorWithHexString:@"#6C7078"] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
+    [btn setBackgroundColor:[UIColor whiteColor]];
     [btn addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
-    btn.layer.cornerRadius = 4;
+    btn.layer.cornerRadius = 10;
     [stack addArrangedSubview:btn];
     self.cancleBtn = btn;
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
     [btn2 setTitleColor:kMainColor forState:UIControlStateNormal];
+    [btn2 setBackgroundColor:[UIColor whiteColor]];
     btn2.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn2 addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
-    btn2.layer.cornerRadius = 4;
+    btn2.layer.cornerRadius = 10;
     [stack addArrangedSubview:btn2];
     self.doneBtn = btn2;
 }

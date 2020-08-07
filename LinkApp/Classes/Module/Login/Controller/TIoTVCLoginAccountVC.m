@@ -574,32 +574,28 @@
         NSDictionary *tmpDic = @{@"Type":@"login",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneAndEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
 
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             //验证码登录时，如果用户没有注册，则跳转到单独注册页面，让用户输入密码进行注册
-            NSString *errorCode = responseObject[@"Error"][@"Code"];
+            NSString *errorCode = dic[@"data"][@"Error"][@"Code"];
             if ([errorCode isEqual: @"InvalidParameterValue.ErrorUserNotExists"]) {
                 TIoTRegisterViewController *registerVC = [[TIoTRegisterViewController alloc]init];
                 registerVC.defaultPhoneOrEmail = self.phoneAndEmailTF.text;
                 [self.navigationController pushViewController:registerVC animated:YES];
             }
-
-        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-
         }];
 
     }else if ([NSString judgeEmailLegal:self.phoneAndEmailTF.text]) {       //邮箱获取验证码
         NSDictionary *tmpDic = @{@"Type":@"login",@"Email":self.phoneAndEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
 
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             //验证码登录时，如果用户没有注册，则跳转到单独注册页面，让用户输入密码进行注册
-            NSString *errorCode = responseObject[@"Error"][@"Code"];
+            NSString *errorCode = dic[@"data"][@"Error"][@"Code"];
             if ([errorCode isEqual: @"InvalidParameterValue.ErrorUserNotExists"]) {
                 TIoTRegisterViewController *registerVC = [[TIoTRegisterViewController alloc]init];
                 registerVC.defaultPhoneOrEmail = self.phoneAndEmailTF.text;
                 [self.navigationController pushViewController:registerVC animated:YES];
             }
-
-        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-
         }];
     }
 
@@ -629,7 +625,8 @@
     if (self.cancelAccountTimeString != nil) {
         
         NSString *tempStr = [NSString convertTimestampToTime:self.cancelAccountTimeString byDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+
+        TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
         [modifyAlertView alertWithTitle:@"账号注销已终止" message:[NSString stringWithFormat:@"由于你在申请“账号注销”后的7天内重新登录，该账号在%@提交的“账号注销”申请已被撤销",tempStr] cancleTitlt:@"" doneTitle:@"确认"];
         [modifyAlertView showSingleConfrimButton];
         modifyAlertView.doneAction = ^(NSString * _Nonnull text) {

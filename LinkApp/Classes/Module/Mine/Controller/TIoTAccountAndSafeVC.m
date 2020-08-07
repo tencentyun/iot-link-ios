@@ -134,21 +134,12 @@
         busivalue = @"studioappOpensource";
     }
     NSDictionary *tmpDic = @{@"code":code,@"busi":busivalue,@"AccessToken":[TIoTCoreUserManage shared].accessToken};
-    
-//    [[TIoTRequestObject shared] postWithoutToken:AppGetTokenByWeiXin Param:tmpDic success:^(id responseObject) {
-//        [MBProgressHUD dismissInView:self.view];
-//        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-//        [self bindWeiXinWithOpenID:responseObject[@"Data"][@"Openid"]];
-//
-//    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//
-//    }];
-//    [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
-    [[TIoTRequestObject shared] postWithoutToken:AppUpdateUserByWeixin Param:tmpDic success:^(id responseObject) {
-        [MBProgressHUD dismissInView:self.view];
-        [[TIoTCoreUserManage shared] saveAccessToken:responseObject[@"Data"][@"Token"] expireAt:responseObject[@"Data"][@"ExpireAt"]];
-        [self bindWeiXinWithOpenID:responseObject[@"Data"][@"Openid"]];
 
+    [[TIoTRequestObject shared] postWithoutToken:AppUpdateUserByWeiXin Param:tmpDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+
+        [MBProgressHUD showSuccess:@"绑定成功"];
+        [self getWeiXinNickAndRefresh];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -208,17 +199,17 @@
         
         NSString *weixin = @"未绑定";
         NSString *weixinArrow = @"1";
-        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].WxOpenID]) {
-            if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].phoneNumber] && [NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].email]) {
-                
-                //手机号为空，邮箱为空，还能登陆，则一定为微信登录（验证码登录需要手机号/邮箱登录需要填写邮箱）
-                weixin = [TIoTCoreUserManage shared].nickName;
+        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasBindWxOpenID]) {
+            // hasBindWxOpenID 字段为空
+            weixinArrow = @"0";
+        }else {
+            //hasBindWxOpenID  0 未绑定微信 1 已经绑定微信
+            if ([[TIoTCoreUserManage shared].nickName isEqualToString:@"0"]) {
+                weixinArrow = @"1";
+            }else if ([[TIoTCoreUserManage shared].nickName isEqualToString:@"1"]){
+                    weixin = [TIoTCoreUserManage shared].nickName;
                 weixinArrow = @"0";
             }
-        }else {
-                //wxOpenID不为空，则一定用微信更新过个人信息，此时可以认为获取到用户的微信信息
-            weixin = [TIoTCoreUserManage shared].nickName;
-            weixinArrow = @"0";
         }
         _dataArr = [NSMutableArray arrayWithArray:@[
             @{@"title":@"手机号",@"value":phoneNumber,@"vc":@"",@"haveArrow":@"1"},
