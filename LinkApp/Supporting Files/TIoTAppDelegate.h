@@ -14,5 +14,6 @@
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, strong) TrueTimeClient *timeClient;
+@property (nonatomic, assign) BOOL isDebug;
 @end
 

@@ -18,12 +18,16 @@
 #import "WxManager.h"
 #import "WRNavigationBar.h"
 #import "Firebase.h"
+#import "腾讯连连-Swift.h"
 
 @implementation TIoTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    self.isDebug = false;
+#if DEBUG
+    self.isDebug = true;
+#endif
     [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType:WCAppEnvironmentTypeRelease];
     [[TIoTWebSocketManage shared] SRWebSocketOpen];
     
@@ -70,8 +74,6 @@
     [self setNavBarAppearence];
     // 4.显示窗口
     [self.window makeKeyAndVisible];
-    
-    
     return YES;
 }
 
