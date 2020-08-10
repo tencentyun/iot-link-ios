@@ -34,17 +34,17 @@
     return model;
 }
 
-// 0为公版； 1为开源
+// 0为公版或开源； 1为用户
 + (NSInteger)appTypeWithModel:(TIoTAppConfigModel *)model {
 
     if (model.TencentIotLinkAppkey == nil || model.TencentIotLinkAppSecret == nil) {
      //
         return 0;
     }else if ([model.TencentIotLinkAppkey isEqualToString:@"请输入从物联网开发平台申请的Appkey, 正式发布前务必填写"] || [model.TencentIotLinkAppSecret isEqualToString:@"请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责"]) {
-    //拉取源码走公版
+    //拉取源码走开源
         return 0;
     }else {
-    //开源
+    //（用户版本）
         return 1;
     }
 }
