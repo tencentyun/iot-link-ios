@@ -256,7 +256,7 @@
         vc.title = @"用户协议";
         #ifdef DEBUG
         NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:ServiceProtocolURl];
-        [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+        [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",QCDebugConfig.GlobalDebugUin] atIndex:55];
         vc.urlPath = tempMutStr;
         #else
             vc.urlPath = ServiceProtocolURl;
@@ -272,7 +272,7 @@
         vc.title = @"隐私政策";
         #ifdef DEBUG
         NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:PrivacyProtocolURL];
-        [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+        [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",QCDebugConfig.GlobalDebugUin] atIndex:55];
         vc.urlPath = tempMutStr;
         #else
             vc.urlPath = PrivacyProtocolURL;

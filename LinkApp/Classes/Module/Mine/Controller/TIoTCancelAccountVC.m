@@ -274,7 +274,7 @@
     vc.title = @"腾讯连连账号注销协议";
     #ifdef DEBUG
         NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:CancelAccountURL];
-        [tempMutStr insertString:@"?uin=testReleaseID" atIndex:55];
+        [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",QCDebugConfig.GlobalDebugUin] atIndex:55];
         vc.urlPath = tempMutStr;
     #else
         vc.urlPath = CancelAccountURL;

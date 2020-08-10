@@ -44,14 +44,14 @@ failure:(FailureResponseBlock)failure
     [[TIoTCoreRequestObject shared]postRequestWithAction:urlStr url:nil isWithoutToken:NO param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
         NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
         #ifdef DEBUG
-                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr]];
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, QCDebugConfig.GlobalDebugUin]];
         #endif
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+                [request setValue:[NSString stringWithFormat:@"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
@@ -93,7 +93,7 @@ failure:(FailureResponseBlock)failure
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
                 //公版
         #ifdef DEBUG
-                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=testReleaseID",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr, QCDebugConfig.GlobalDebugUin]];
         #else
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
         #endif
@@ -101,7 +101,7 @@ failure:(FailureResponseBlock)failure
             }else {
                 //开源
         #ifdef DEBUG
-                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=testID",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined, QCDebugConfig.GlobalDebugUin]];
         #else
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
         #endif
@@ -115,7 +115,7 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:@"uin=help_center_h5_api" forHTTPHeaderField:@"Cookie"];
+                [request setValue:[NSString stringWithFormat: @"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
