@@ -221,6 +221,7 @@
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
 		F4833EBC24DD2E100033FAB2 /* QCDebugtools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBB24DD2E100033FAB2 /* QCDebugtools.swift */; };
 		F4833EBE24DD302F0033FAB2 /* QCLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBD24DD302F0033FAB2 /* QCLaunchManager.swift */; };
+		F4833EC524E17E340033FAB2 /* QCDebugConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* QCDebugConfig.swift */; };
 		F4C5DE0B24A07E3E0098F18B /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */; };
 		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
@@ -706,6 +707,7 @@
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F4833EBB24DD2E100033FAB2 /* QCDebugtools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QCDebugtools.swift; sourceTree = "<group>"; };
 		F4833EBD24DD302F0033FAB2 /* QCLaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCLaunchManager.swift; sourceTree = "<group>"; };
+		F4833EC424E17E340033FAB2 /* QCDebugConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QCDebugConfig.swift; sourceTree = "<group>"; };
 		F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLaunch.png; sourceTree = "<group>"; };
 		F4C5DE0D24A0B7C40098F18B /* app-config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "app-config.json"; sourceTree = "<group>"; };
 		F4C5DE0F24A0B7FE0098F18B /* TIoTAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppConfig.h; sourceTree = "<group>"; };
@@ -1715,6 +1717,7 @@
 			children = (
 				F4833EBD24DD302F0033FAB2 /* QCLaunchManager.swift */,
 				F4833EBB24DD2E100033FAB2 /* QCDebugtools.swift */,
+				F4833EC424E17E340033FAB2 /* QCDebugConfig.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2468,6 +2471,7 @@
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
 				D23104D82330678F0003069D /* UIView+XDPExtension.m in Sources */,
 				A4DC768224D126780079F12C /* TIoTConfigInputView.m in Sources */,
+				F4833EC524E17E340033FAB2 /* QCDebugConfig.swift in Sources */,
 				D2038BCC233319440036F6B9 /* HXYNotice.m in Sources */,
 				D2A2CD29234DBDC00039EB51 /* TIoTQCloudCOSXMLManage.m in Sources */,
 				ED6BA5BA23C5C10C00BE9EC9 /* TIoTRoomInfoVC.m in Sources */,
