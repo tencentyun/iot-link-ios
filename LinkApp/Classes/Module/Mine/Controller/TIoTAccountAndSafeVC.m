@@ -27,6 +27,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.title = @"账号与安全";
+    
     [self setUpUI];
 }
 
