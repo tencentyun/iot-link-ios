@@ -632,7 +632,7 @@
         modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         
         };
-        [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+        [modifyAlertView showInView:[[UIApplication sharedApplication] delegate].window];
     }
 }
 

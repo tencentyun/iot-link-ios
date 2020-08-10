@@ -290,7 +290,7 @@
         
         [self cacelAccountPostMehtod];
     };
-    [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+    [modifyAlertView showInView:[[UIApplication sharedApplication] delegate].window];
 
 }
 
@@ -307,7 +307,7 @@
             TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
             self.view.window.rootViewController = nav;
         };
-        [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+        [modifyAlertView showInView:[[UIApplication sharedApplication] delegate].window];
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
