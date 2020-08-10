@@ -204,10 +204,10 @@
             weixinArrow = @"0";
         }else {
             //hasBindWxOpenID  0 未绑定微信 1 已经绑定微信
-            if ([[TIoTCoreUserManage shared].nickName isEqualToString:@"0"]) {
+            if ([[TIoTCoreUserManage shared].hasBindWxOpenID isEqualToString:@"0"]) {
                 weixinArrow = @"1";
-            }else if ([[TIoTCoreUserManage shared].nickName isEqualToString:@"1"]){
-                    weixin = [TIoTCoreUserManage shared].nickName;
+            }else if ([[TIoTCoreUserManage shared].hasBindWxOpenID isEqualToString:@"1"]){
+                    weixin = @"已绑定";
                 weixinArrow = @"0";
             }
         }

@@ -89,7 +89,7 @@
     name.text = @"";
     name.textAlignment = NSTextAlignmentCenter;
     name.textColor = [UIColor colorWithHexString:@"#15161A"];
-    name.font = [UIFont boldSystemFontOfSize:20];
+    name.font = [UIFont wcPfRegularFontOfSize:16];
     [bgView addSubview:name];
     self.nameL = name;
     [name mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -107,7 +107,7 @@
     content.text = @"";
     content.numberOfLines = 0;
     content.textColor = [UIColor colorWithHexString:@"#6C7078"];
-    content.font = [UIFont systemFontOfSize:16];
+    content.font = [UIFont wcPfRegularFontOfSize:14];
     [bgView addSubview:content];
     self.messageL = content;
     [content mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -139,18 +139,27 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:@"取消" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor colorWithHexString:@"#6C7078"] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:20];
+    btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn setBackgroundColor:[UIColor whiteColor]];
     [btn addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 10;
     [stack addArrangedSubview:btn];
     self.cancleBtn = btn;
     
+    UIView *lineBtn = [[UIView alloc]init];
+    lineBtn.backgroundColor = kLineColor;
+    [bgView addSubview:lineBtn];
+    [lineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(btn);
+        make.leading.equalTo(btn.mas_trailing);
+        make.width.mas_equalTo(1);
+    }];
+    
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
     [btn2 setTitleColor:kMainColor forState:UIControlStateNormal];
     [btn2 setBackgroundColor:[UIColor whiteColor]];
-    btn2.titleLabel.font = [UIFont systemFontOfSize:20];
+    btn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn2 addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     btn2.layer.cornerRadius = 10;
     [stack addArrangedSubview:btn2];
