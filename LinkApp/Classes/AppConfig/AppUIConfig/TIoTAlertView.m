@@ -21,7 +21,7 @@
 @property (nonatomic, strong) UIImage *successTopImage;
 
 @property (nonatomic) CGRect oriFrame;
-
+@property (nonatomic,strong) UIView *lineBtn;   //取消和确定两个按钮之间分割线
 @end
 @implementation TIoTAlertView
 
@@ -146,10 +146,10 @@
     [stack addArrangedSubview:btn];
     self.cancleBtn = btn;
     
-    UIView *lineBtn = [[UIView alloc]init];
-    lineBtn.backgroundColor = kLineColor;
-    [bgView addSubview:lineBtn];
-    [lineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.lineBtn = [[UIView alloc]init];
+    self.lineBtn.backgroundColor = kLineColor;
+    [bgView addSubview:self.lineBtn];
+    [self.lineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(btn);
         make.leading.equalTo(btn.mas_trailing);
         make.width.mas_equalTo(1);
@@ -297,7 +297,7 @@
 
 - (void)showSingleConfrimButton {
     self.cancleBtn.hidden = YES;
-    
+    self.lineBtn.hidden = YES;
     [self done];
 }
 
