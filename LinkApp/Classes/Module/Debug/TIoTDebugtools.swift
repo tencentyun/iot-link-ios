@@ -140,10 +140,22 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     @objc func jumpControl() {
-//        let vc = TIoTWebVC()
-//        vc.title = "用户协议";
-//        vc.urlPath = "http://www.baiduc.com";
-//        
-//        TIoTAPPConfig.iot_navigation.pushViewController(vc, animated: true)
+        let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "请输入您的调试URL(http://www.baidu.com)"
+        }
+        alert.addAction(UIAlertAction(title: "确定", style: UIAlertAction.Style.default, handler: { (action) in
+            
+            let vc = TIoTWebVC()
+            vc.title = "用户协议";
+            if let text = alert.textFields?.first?.text, text.count > 0 {
+                vc.urlPath = text
+            }else {
+                vc.urlPath = "http://www.baidu.com";
+            }
+            TIoTAPPConfig.iot_navigation.pushViewController(vc, animated: true)
+            
+        }))
+        TIoTAPPConfig.iot_topController.present(alert, animated: true, completion: nil)
     }
 }
