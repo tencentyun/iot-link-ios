@@ -223,10 +223,10 @@
         
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {
             if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
-                [_dataArr removeObjectAtIndex:3];
+//                [_dataArr removeObjectAtIndex:3];
             }
         }else {
-//            [_dataArr removeObjectAtIndex:3];
+            [_dataArr removeObjectAtIndex:3];
         }
     }
     

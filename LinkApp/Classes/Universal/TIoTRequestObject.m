@@ -51,7 +51,7 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:[NSString stringWithFormat:@"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
+//                [request setValue:[NSString stringWithFormat:@"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
@@ -115,7 +115,7 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
         #ifdef DEBUG
-                [request setValue:[NSString stringWithFormat: @"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
+//                [request setValue:[NSString stringWithFormat: @"uin=%@",QCDebugConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
         #endif
             }
         return request;
