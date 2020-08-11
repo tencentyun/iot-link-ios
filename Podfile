@@ -1,5 +1,7 @@
 platform :ios, '10.0'
 #inhibit_all_warnings!
+use_frameworks!
+
 #
 #post_install do |installer|
 #    installer.pods_project.targets.each do |target|
@@ -32,6 +34,9 @@ target 'LinkApp' do
   pod 'TZImagePickerController', '3.2.1'
   pod 'MGJRouter', '0.10.0'
   pod 'TrueTime','5.0.3'
+  
+  pod 'LumberjackConsole', git: 'https://github.com/tonychanchen/LumberjackConsole.git', branch: 'master', :configurations => ['Debug']
+  pod 'CocoaLumberjack/Swift', '3.6.2', :configurations => ['Debug']
 end
 
 target 'LinkSDKDemo' do
