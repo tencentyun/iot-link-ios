@@ -35,9 +35,9 @@
     
     switch (type) {
         case WCAppEnvironmentTypeRelease:{
-            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
-            self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi";
-            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
+            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //公版接入层
+            self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //开源版接入层
+            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi"; //应用层
             self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
             self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
             self.wxShareType = 0;

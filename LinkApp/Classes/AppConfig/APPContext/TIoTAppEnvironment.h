@@ -27,17 +27,17 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 /**
  已登录baseurl
  */
-@property (nonatomic , copy) NSString *baseUrlForLogined;
+@property (nonatomic , copy) NSString *baseUrlForLogined; //应用层（huxinbang）
 
 /**
  登录前需要签名baseurl
  */
-@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined;
+@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined; //开源版接入层（chenhuizhong）
 
 /**
  未登录baseurl
  */
-@property (nonatomic , copy) NSString *baseUrl;
+@property (nonatomic , copy) NSString *baseUrl; //公版接入层（chenhuizhong）
 
 /**
 长连接

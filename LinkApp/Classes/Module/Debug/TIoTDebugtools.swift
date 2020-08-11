@@ -34,7 +34,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             singleTon.debugWindow.addSubview(button)
             
             //LogUI
-            //                PTEDashboard.shared().show()
+            PTEDashboard.shared().show()
         })
     }()
     
@@ -132,11 +132,21 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     @objc func changeToDebug() {
         TIoTAPPConfig.iot_appdelegate.isDebug = true
         MBProgressHUD.showError("已切换至测试环境", to: TIoTAPPConfig.iot_appdelegate.window)
+        
+        TIoTAppEnvironment.share().loginOut()
+        let nav = TIoTNavigationController(rootViewController: TIoTLoginVC())
+        TIoTAPPConfig.iot_window.rootViewController = nav
     }
     
     @objc func changeToRelease() {
         TIoTAPPConfig.iot_appdelegate.isDebug = false
         MBProgressHUD.showError("已切换至现网环境", to: TIoTAPPConfig.iot_appdelegate.window)
+        
+        DDLogInfo("测试swiftLog---\(#column)+\(#file)")
+        
+        TIoTAppEnvironment.share().loginOut()
+        let nav = TIoTNavigationController(rootViewController: TIoTLoginVC())
+        TIoTAPPConfig.iot_window.rootViewController = nav
     }
     
     @objc func jumpControl() {
