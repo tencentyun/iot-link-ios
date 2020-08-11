@@ -48,6 +48,7 @@ failure:(FailureResponseBlock)failure
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
         }
 //        #endif
+        DDLogInfo(@"请求URL--->%@",url);
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -60,6 +61,8 @@ failure:(FailureResponseBlock)failure
             }
         return request;
     } success:^(id responseObject) {
+        DDLogInfo(@"请求Response--->%@",responseObject);
+        
         [MBProgressHUD dismissInView:[[UIApplication sharedApplication] delegate].window];
         success(responseObject);
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
@@ -120,6 +123,7 @@ failure:(FailureResponseBlock)failure
                     [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
                 }
             }
+        DDLogInfo(@"请求URL--->%@",url);
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -132,6 +136,8 @@ failure:(FailureResponseBlock)failure
             }
         return request;
     } success:^(id responseObject) {
+        DDLogInfo(@"请求Response--->%@",responseObject);
+        
         [MBProgressHUD dismissInView:[[UIApplication sharedApplication] delegate].window];
         success(responseObject);
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {

@@ -5,3 +5,6 @@
 #import "TIoTAppDelegate.h"
 #import "MBProgressHUD+XDP.h"
 #import "TIoTWebVC.h"
+#import <LumberjackConsole/PTEDashboard.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+

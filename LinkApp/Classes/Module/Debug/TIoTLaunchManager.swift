@@ -11,6 +11,7 @@ extension UIApplication {
         let appdelegate = UIApplication.shared.delegate as! TIoTAppDelegate
         if appdelegate.isDebug {
             TIoTDebugtools.awake()
+            TIoTLogTask.awake()
         }
     }()
         

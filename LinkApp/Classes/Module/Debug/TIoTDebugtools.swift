@@ -34,7 +34,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             singleTon.debugWindow.addSubview(button)
             
             //LogUI
-            //                PTEDashboard.shared().show()
+            PTEDashboard.shared().show()
         })
     }()
     
@@ -137,6 +137,8 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     @objc func changeToRelease() {
         TIoTAPPConfig.iot_appdelegate.isDebug = false
         MBProgressHUD.showError("已切换至现网环境", to: TIoTAPPConfig.iot_appdelegate.window)
+        
+        DDLogInfo("测试swiftLog---\(#column)+\(#file)")
     }
     
     @objc func jumpControl() {
