@@ -38,4 +38,9 @@ class TIoTAPPConfig: NSObject {
         }
         return iot_appdelegate.window.rootViewController ?? UIViewController()
     }
+    
+    //isDebug
+    public static var isDebug: Bool {
+        return iot_appdelegate.isDebug
+    }
 }

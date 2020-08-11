@@ -40,7 +40,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     @objc func showDebugView() {
         
-        //        debugWindow.windowLevel = UIWindow.Level(rawValue: UIWindow.Level.statusBar.rawValue+100)
+//                debugWindow.windowLevel = UIWindow.Level(rawValue: UIWindow.Level.statusBar.rawValue+100)
         debugWindow.frame = CGRect(x: 60, y: 26, width: tableView.frame.size.width, height: tableView.frame.size.height)
         debugWindow.addSubview(tableView)
     }
@@ -74,8 +74,8 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     lazy var dataSource: Array = { () -> [Dictionary<String, String>] in
         let dataSource = [["title":"跳转H5", "SEL":"jumpControl"],
                           ["title":"修改全局uin", "SEL":"changeGlobalUin"],
-                          ["title":"切换至测试环境", "SEL":"testDemo"],
-                          ["title":"切换至现网环境", "SEL":"testDemo"]
+                          ["title":"切换至测试环境", "SEL":"changeToDebug"],
+                          ["title":"切换至现网环境", "SEL":"changeToRelease"]
         ]
         return dataSource
     }()
@@ -89,6 +89,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         let object: Dictionary<String, String> = dataSource[indexPath.row]
         cell.textLabel?.text = object["title"]
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 15)
         return cell
     }
     
@@ -116,16 +117,33 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             textField.placeholder = "请您输入替换全局uin"
         }
         alert.addAction(UIAlertAction(title: "确定", style: UIAlertAction.Style.default, handler: { (action) in
-            if let textField = alert.textFields?.first {
+            if let text = alert.textFields?.first?.text, text.count > 0 {
                 
-                TIoTAPPConfig.GlobalDebugUin = textField.text ?? "help_center_h5_api"
+                TIoTAPPConfig.GlobalDebugUin = text
+                MBProgressHUD.showError("全局uin已切换至\(text)", to: TIoTAPPConfig.iot_appdelegate.window)
+            }else {
+                MBProgressHUD.showError("默认为help_center_h5_api", to: TIoTAPPConfig.iot_appdelegate.window)
             }
             
         }))
         TIoTAPPConfig.iot_topController.present(alert, animated: true, completion: nil)
     }
     
+    @objc func changeToDebug() {
+        TIoTAPPConfig.iot_appdelegate.isDebug = true
+        MBProgressHUD.showError("已切换至测试环境", to: TIoTAPPConfig.iot_appdelegate.window)
+    }
+    
+    @objc func changeToRelease() {
+        TIoTAPPConfig.iot_appdelegate.isDebug = false
+        MBProgressHUD.showError("已切换至现网环境", to: TIoTAPPConfig.iot_appdelegate.window)
+    }
+    
     @objc func jumpControl() {
-        TIoTAPPConfig.iot_navigation.pushViewController(UIViewController(), animated: true)
+//        let vc = TIoTWebVC()
+//        vc.title = "用户协议";
+//        vc.urlPath = "http://www.baiduc.com";
+//        
+//        TIoTAPPConfig.iot_navigation.pushViewController(vc, animated: true)
     }
 }

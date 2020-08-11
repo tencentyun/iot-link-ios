@@ -34,6 +34,23 @@
     return self;
 }
 
+- (void)setUrlPath:(NSString *)urlPath {
+    
+    // Debug 就切到uin测试环境
+    if (TIoTAPPConfig.isDebug) {
+        NSURLComponents *components = [NSURLComponents componentsWithString:urlPath];
+        NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray arrayWithArray:components.queryItems];
+        NSURLQueryItem *nameItem = [NSURLQueryItem queryItemWithName:@"uin" value:TIoTAPPConfig.GlobalDebugUin];
+        [queryItems addObject:nameItem];
+        components.queryItems = queryItems;
+        
+        _urlPath = components.URL.absoluteString;
+    }else {
+        //现网环境
+        _urlPath = urlPath;
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
