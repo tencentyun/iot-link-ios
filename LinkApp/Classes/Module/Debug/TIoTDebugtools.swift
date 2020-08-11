@@ -9,12 +9,12 @@
 import UIKit
 import Foundation
 
-class QCDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
+class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    static let singleTon = QCDebugtools()
+    static let singleTon = TIoTDebugtools()
     
     @objc public static func awake() {
-        QCDebugtools.taskDidLoad
+        TIoTDebugtools.taskDidLoad
     }
     
     deinit {

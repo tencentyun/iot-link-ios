@@ -194,7 +194,7 @@
             TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
 #ifdef DEBUG
-                url = [NSString stringWithFormat:@"%@/%@/?uin=%@&appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, QCDebugConfig.GlobalDebugUin, bundleId, ticket];
+                url = [NSString stringWithFormat:@"%@/%@/?uin=%@&appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, TIoTAPPConfig.GlobalDebugUin, bundleId, ticket];
 #else
                 url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
 #endif
