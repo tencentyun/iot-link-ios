@@ -274,13 +274,7 @@
 - (void)cancelProtocolClick {
     TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"腾讯连连账号注销协议";
-    #ifdef DEBUG
-        NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:CancelAccountURL];
-        [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",TIoTAPPConfig.GlobalDebugUin] atIndex:55];
-        vc.urlPath = tempMutStr;
-    #else
-        vc.urlPath = CancelAccountURL;
-    #endif
+    vc.urlPath = CancelAccountURL;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

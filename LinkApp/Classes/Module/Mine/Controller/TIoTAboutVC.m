@@ -32,13 +32,7 @@
 - (IBAction)privacyPolicy:(UITapGestureRecognizer *)sender {
     TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"隐私政策";
-#ifdef DEBUG
-    NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:PrivacyProtocolURL];
-    [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",TIoTAPPConfig.GlobalDebugUin] atIndex:55];
-    vc.urlPath = tempMutStr;
-#else
     vc.urlPath = PrivacyProtocolURL;
-#endif
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -46,13 +40,7 @@
     
     TIoTWebVC *vc = [TIoTWebVC new];
     vc.title = @"用户协议";
-#ifdef DEBUG
-    NSMutableString *tempMutStr = [[NSMutableString alloc] initWithString:ServiceProtocolURl];
-    [tempMutStr insertString:[NSString stringWithFormat:@"?uin=%@",TIoTAPPConfig.GlobalDebugUin] atIndex:55];
-    vc.urlPath = tempMutStr;
-#else
     vc.urlPath = ServiceProtocolURl;
-#endif
     [self.navigationController pushViewController:vc animated:YES];
 }
 
