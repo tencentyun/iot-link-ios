@@ -73,7 +73,9 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     //配置title和执行的方法
     lazy var dataSource: Array = { () -> [Dictionary<String, String>] in
         let dataSource = [["title":"跳转H5", "SEL":"jumpControl"],
-                          ["title":"修改全局uin", "SEL":"testDemo"]
+                          ["title":"修改全局uin", "SEL":"changeGlobalUin"],
+                          ["title":"切换至测试环境", "SEL":"testDemo"],
+                          ["title":"切换至现网环境", "SEL":"testDemo"]
         ]
         return dataSource
     }()
@@ -101,16 +103,29 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     @objc func testDemo() {
         
-        var prorororo = 0.1
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
-            
-            prorororo = prorororo + 0.1
+//        var prorororo = 0.1
+//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+//
+//            prorororo = prorororo + 0.1
+//        }
+    }
+    
+    @objc func changeGlobalUin() {
+        let alert = UIAlertController(title: "输入uin", message: nil, preferredStyle: UIAlertController.Style.alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "请您输入替换全局uin"
         }
-        
-        
+        alert.addAction(UIAlertAction(title: "确定", style: UIAlertAction.Style.default, handler: { (action) in
+            if let textField = alert.textFields?.first {
+                
+                TIoTAPPConfig.GlobalDebugUin = textField.text ?? "help_center_h5_api"
+            }
+            
+        }))
+        TIoTAPPConfig.iot_topController.present(alert, animated: true, completion: nil)
     }
     
     @objc func jumpControl() {
-//        uf_navigation.pushViewController(ViewController(), animated: true)
+        TIoTAPPConfig.iot_navigation.pushViewController(UIViewController(), animated: true)
     }
 }
