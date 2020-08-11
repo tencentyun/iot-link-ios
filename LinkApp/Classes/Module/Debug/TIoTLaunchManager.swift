@@ -10,7 +10,7 @@ extension UIApplication {
     public static let runOnce: Void = {
         let appdelegate = UIApplication.shared.delegate as! TIoTAppDelegate
         if appdelegate.isDebug {
-            QCDebugtools.awake()
+            TIoTDebugtools.awake()
         }
     }()
         

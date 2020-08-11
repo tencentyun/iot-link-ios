@@ -1,5 +1,5 @@
 //
-//  QCDebugConfig.swift
+//  TIoTDebugConfig.swift
 //  LinkApp
 //
 //  Created by eagleychen on 2020/8/10.
@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class QCDebugConfig: NSObject {
+class TIoTAPPConfig: NSObject {
 
     public static let GlobalDebugUin = "help_center_h5_api"
 }
