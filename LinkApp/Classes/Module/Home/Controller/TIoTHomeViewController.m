@@ -30,6 +30,7 @@
 #import "MGJRouter.h"
 
 #import "Firebase.h"
+#import "TIoTNewVersionTipView.h"
 
 static CGFloat weatherHeight = 60;
 
@@ -100,9 +101,31 @@ static CGFloat weatherHeight = 60;
     [self getFamilyList];
     
     [self registFeedBackRouterController];
+    [self checkNewVersion];
     
 }
 
+- (void)checkNewVersion {
+    
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *tmpDic = @{@"ClientVersion": appVersion, @"Channel":@(0), @"AppPlatform": @"ios"};
+    [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
+        NSDictionary *versionInfo = responseObject[@"VersionInfo"];
+        if (versionInfo) {
+            [self showNewVersionViewWithDict:versionInfo];
+        }
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+- (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
+    TIoTNewVersionTipView *newVersionView = [[TIoTNewVersionTipView alloc] initWithVersionInfo:versionInfo];
+    [[UIApplication sharedApplication].keyWindow addSubview:newVersionView];
+    [newVersionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+    }];
+}
 
 #pragma mark - Other
 

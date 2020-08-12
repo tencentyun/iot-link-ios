@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -120,6 +120,9 @@
                         <constraint firstItem="X03-RV-BeC" firstAttribute="centerY" secondItem="aoE-nG-xBd" secondAttribute="centerY" id="pya-xF-Ozb"/>
                         <constraint firstItem="Bww-BU-0fF" firstAttribute="centerY" secondItem="aoE-nG-xBd" secondAttribute="centerY" id="rzq-pX-iSk"/>
                     </constraints>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="82K-rw-eKp" appends="YES" id="BXv-SR-vJB"/>
+                    </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aWU-4F-E2K">
                     <rect key="frame" x="20" y="453.5" width="374" height="1"/>
@@ -166,6 +169,11 @@
         <tapGestureRecognizer id="Qmg-vP-9LE">
             <connections>
                 <action selector="protocol:" destination="-1" id="FJc-rh-3dW"/>
+            </connections>
+        </tapGestureRecognizer>
+        <tapGestureRecognizer id="82K-rw-eKp">
+            <connections>
+                <action selector="checkNewVersion:" destination="-1" id="xcB-30-EB0"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

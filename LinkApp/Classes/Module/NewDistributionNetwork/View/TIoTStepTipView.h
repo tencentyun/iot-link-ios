@@ -17,8 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param array 标题数据array
 - (instancetype)initWithTitlesArray:(NSArray *)array;
 
-///当前处于第几步
+/// 当前处于第几步
 @property (nonatomic, assign) NSInteger step;
+/// 展示进度条动画
+@property (nonatomic, assign) BOOL showAnimate;
 
 @end
 

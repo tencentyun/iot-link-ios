@@ -10,6 +10,8 @@
 #import "TIoTWebVC.h"
 #import <QuickLook/QLPreviewController.h>
 
+#import "TIoTNewVersionTipView.h"
+
 @interface TIoTAboutVC ()
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLab;
@@ -25,7 +27,9 @@
     
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [info objectForKey:@"CFBundleShortVersionString"];
-    self.versionLab.text = [NSString stringWithFormat:@"v%@",appVersion];
+    self.versionLab.numberOfLines = 2;
+    self.versionLab.textAlignment = NSTextAlignmentCenter;
+    self.versionLab.text = [NSString stringWithFormat:@"当前版本\nv%@",appVersion];
 }
 
 
@@ -43,5 +47,28 @@
     vc.urlPath = ServiceProtocolURl;
     [self.navigationController pushViewController:vc animated:YES];
 }
+
+- (IBAction)checkNewVersion:(UITapGestureRecognizer *)sender {
+    
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *tmpDic = @{@"ClientVersion": appVersion, @"Channel":@(0), @"AppPlatform": @"ios"};
+    [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
+        NSDictionary *versionInfo = responseObject[@"VersionInfo"];
+        if (versionInfo) {
+            [self showNewVersionViewWithDict:versionInfo];
+        }
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD showError:@"您的应用为最新版本" toView:self.view];
+    }];
+}
+
+- (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
+    TIoTNewVersionTipView *newVersionView = [[TIoTNewVersionTipView alloc] initWithVersionInfo:versionInfo];
+    [[UIApplication sharedApplication].keyWindow addSubview:newVersionView];
+    [newVersionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+    }];
+}
+
 
 @end

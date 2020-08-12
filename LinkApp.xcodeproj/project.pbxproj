@@ -25,10 +25,12 @@
 		8E48716B237B7FFB2110FC9A /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D52DA8F938AE612B18A9EF4A /* Pods_LinkApp.framework */; };
 		A40565E424D040C900A15699 /* TIoTConfigHardwareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */; };
 		A40565E724D040EE00A15699 /* TIoTStepTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E624D040EE00A15699 /* TIoTStepTipView.m */; };
+		A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */; };
 		A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE62247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m */; };
 		A43FCE66247E464900A7CEF3 /* TIoTCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE65247E464900A7CEF3 /* TIoTCategoryTableViewCell.m */; };
 		A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE68247E63E900A7CEF3 /* TIoTProductCell.m */; };
 		A43FCE6C247E7DA800A7CEF3 /* TIoTDiscoverProductView.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FCE6B247E7DA800A7CEF3 /* TIoTDiscoverProductView.m */; };
+		A45734D324E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A45734D224E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m */; };
 		A4902DB324D2B7610045BD96 /* TIoTConnectStepTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4902DB224D2B7610045BD96 /* TIoTConnectStepTipView.m */; };
 		A4C0DC4524D192DD00AECADA /* TIoTWIFIListView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C0DC4424D192DD00AECADA /* TIoTWIFIListView.m */; };
 		A4DC767F24D1227A0079F12C /* TIoTTargetWIFIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DC767E24D1227A0079F12C /* TIoTTargetWIFIViewController.m */; };
@@ -353,6 +355,8 @@
 		A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTConfigHardwareViewController.m; sourceTree = "<group>"; };
 		A40565E524D040EE00A15699 /* TIoTStepTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTStepTipView.h; sourceTree = "<group>"; };
 		A40565E624D040EE00A15699 /* TIoTStepTipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTStepTipView.m; sourceTree = "<group>"; };
+		A40574A524E2AF1E00836FB7 /* TIoTNewVersionTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNewVersionTipView.h; sourceTree = "<group>"; };
+		A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNewVersionTipView.m; sourceTree = "<group>"; };
 		A43FCE61247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNewAddEquipmentViewController.h; sourceTree = "<group>"; };
 		A43FCE62247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNewAddEquipmentViewController.m; sourceTree = "<group>"; };
 		A43FCE64247E464900A7CEF3 /* TIoTCategoryTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCategoryTableViewCell.h; sourceTree = "<group>"; };
@@ -361,6 +365,8 @@
 		A43FCE68247E63E900A7CEF3 /* TIoTProductCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTProductCell.m; sourceTree = "<group>"; };
 		A43FCE6A247E7DA800A7CEF3 /* TIoTDiscoverProductView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDiscoverProductView.h; sourceTree = "<group>"; };
 		A43FCE6B247E7DA800A7CEF3 /* TIoTDiscoverProductView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDiscoverProductView.m; sourceTree = "<group>"; };
+		A45734D124E3E1010060D1A0 /* TIoTDeviceWIFITipViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDeviceWIFITipViewController.h; sourceTree = "<group>"; };
+		A45734D224E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceWIFITipViewController.m; sourceTree = "<group>"; };
 		A4902DB124D2B7610045BD96 /* TIoTConnectStepTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTConnectStepTipView.h; sourceTree = "<group>"; };
 		A4902DB224D2B7610045BD96 /* TIoTConnectStepTipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTConnectStepTipView.m; sourceTree = "<group>"; };
 		A4C0DC4324D192DD00AECADA /* TIoTWIFIListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWIFIListView.h; sourceTree = "<group>"; };
@@ -947,6 +953,8 @@
 				A4F5B12424D263CA00F83B5F /* TIoTConfigResultViewController.m */,
 				A4F5B12924D2A7DB00F83B5F /* TIoTStartConfigViewController.h */,
 				A4F5B12A24D2A7DB00F83B5F /* TIoTStartConfigViewController.m */,
+				A45734D124E3E1010060D1A0 /* TIoTDeviceWIFITipViewController.h */,
+				A45734D224E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1138,6 +1146,8 @@
 				D2C7D7F32330B76500C97A04 /* TIoTEquipmentTableViewCell.m */,
 				EDC630A423D03B190079B64E /* TIoTOptionalView.h */,
 				EDC630A523D03B190079B64E /* TIoTOptionalView.m */,
+				A40574A524E2AF1E00836FB7 /* TIoTNewVersionTipView.h */,
+				A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2358,6 +2368,7 @@
 				D20621BF2355B1B300142DAC /* SYPaneView.m in Sources */,
 				A4902DB324D2B7610045BD96 /* TIoTConnectStepTipView.m in Sources */,
 				D2038BC92333145B0036F6B9 /* TIoTActionTypeTableViewCell.m in Sources */,
+				A45734D324E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m in Sources */,
 				D2B29EE92360200A0086BDFA /* TIoTDeviceData.m in Sources */,
 				A4F5B12B24D2A7DB00F83B5F /* TIoTStartConfigViewController.m in Sources */,
 				ED800C98240CA2A50045A268 /* TIoTMessageNoticeVC.m in Sources */,
@@ -2388,6 +2399,7 @@
 				ED8D1F6F242B500300900B80 /* TIoTTipView.m in Sources */,
 				D2DAC4C623386173006DB67C /* BluetoothCentralManager.m in Sources */,
 				D2A2CD39234ECC6D0039EB51 /* TIoTRefreshFooter.m in Sources */,
+				A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */,
 				D2E11EB82331CF4900C388A5 /* TIoTUserInfomationTableViewCell.m in Sources */,
 				D2E976B8233D969A00182443 /* TIoTWebSocketManage.m in Sources */,
 				A40565E724D040EE00A15699 /* TIoTStepTipView.m in Sources */,

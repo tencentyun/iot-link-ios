@@ -13,6 +13,7 @@
 
 #import "TIoTWIFITipViewController.h"
 #import "TIoTStartConfigViewController.h"
+#import "TIoTDeviceWIFITipViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <NetworkExtension/NetworkExtension.h>
@@ -65,7 +66,7 @@
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    topicLabel.text = [_dataDic objectForKey:@"topic"];
+    topicLabel.text = (self.step == 3 ? @"将手机WiFi连接设备热点" : [_dataDic objectForKey:@"topic"]);
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -77,14 +78,19 @@
     self.wifiInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"wifiInputTitle"] placeholder:[_dataDic objectForKey:@"wifiInputPlaceholder"] haveButton:[[_dataDic objectForKey:@"wifiInputHaveButton"] boolValue]];
     WeakObj(self)
     self.wifiInputView.buttonAction = ^{
-        if (selfWeak.tipImageView) {
-            [selfWeak.tipImageView removeFromSuperview];
+//        if (selfWeak.tipImageView) {
+//            [selfWeak.tipImageView removeFromSuperview];
+//        }
+
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        if ([[UIApplication sharedApplication] canOpenURL:url]){
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         }
-        selfWeak.wifiListView.hidden = NO;
-        [[UIApplication sharedApplication].keyWindow addSubview:selfWeak.wifiListView];
-        [selfWeak.wifiListView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo([UIApplication sharedApplication].keyWindow);
-        }];
+//        selfWeak.wifiListView.hidden = NO;
+//        [[UIApplication sharedApplication].keyWindow addSubview:selfWeak.wifiListView];
+//        [selfWeak.wifiListView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+//        }];
     };
     [self.view addSubview:self.wifiInputView];
     [self.wifiInputView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,26 +100,26 @@
     }];
     
     if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP && self.step == 3) {
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.image = [UIImage imageNamed:@"new_distri_rectangle"];
-        [self.view addSubview:imageView];
-        self.tipImageView = imageView;
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.wifiInputView.mas_top).offset(36);
-            make.right.equalTo(self.view);
-            make.width.mas_equalTo(224);
-            make.height.mas_equalTo(82);
-        }];
-        
-        UILabel *tipLabel = [[UILabel alloc] init];
-        tipLabel.textColor = [UIColor whiteColor];
-        tipLabel.font = [UIFont wcPfRegularFontOfSize:14];
-        tipLabel.text = @"点击这里选择热点";
-        [imageView addSubview:tipLabel];
-        [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(imageView).offset(25);
-            make.centerX.equalTo(imageView);
-        }];
+//        UIImageView *imageView = [[UIImageView alloc] init];
+//        imageView.image = [UIImage imageNamed:@"new_distri_rectangle"];
+//        [self.view addSubview:imageView];
+//        self.tipImageView = imageView;
+//        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.wifiInputView.mas_top).offset(36);
+//            make.right.equalTo(self.view);
+//            make.width.mas_equalTo(224);
+//            make.height.mas_equalTo(82);
+//        }];
+//        
+//        UILabel *tipLabel = [[UILabel alloc] init];
+//        tipLabel.textColor = [UIColor whiteColor];
+//        tipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+//        tipLabel.text = @"点击这里选择热点";
+//        [imageView addSubview:tipLabel];
+//        [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(imageView).offset(25);
+//            make.centerX.equalTo(imageView);
+//        }];
     }
     
     self.pwdInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"pwdInputTitle"] placeholder:(self.step == 3 ? @"请输入密码（非必填）" : [_dataDic objectForKey:@"pwdInputPlaceholder"]) haveButton:[[_dataDic objectForKey:@"pwdInputHaveButton"] boolValue]];
@@ -166,6 +172,7 @@
                 make.left.right.equalTo(makeLabel);
                 make.top.equalTo(makeLabel.mas_bottom).offset(4);
             }];
+            
         }
     }
     
@@ -326,12 +333,11 @@
     
     if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
         if (self.step == 2) {
-            TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
-            vc.step = 3;
+            TIoTDeviceWIFITipViewController *vc = [[TIoTDeviceWIFITipViewController alloc] init];
             vc.configHardwareStyle = _configHardwareStyle;
-            vc.currentDistributionToken = self.currentDistributionToken;
             vc.roomId = self.roomId;
-            vc.softApWifiInfo = [self.wifiInfo copy];
+            vc.currentDistributionToken = self.currentDistributionToken;
+            vc.wifiInfo = [self.wifiInfo copy];
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
@@ -400,7 +406,7 @@
                          @"pwdInputPlaceholder": @"请输入密码",
                          @"pwdInputHaveButton": @(NO),
                          @"make": @"操作方式:",
-                         @"stepDiscribe": @"1. 点击WiFi名称右侧的下拉按钮，选择设备热点。\n2. 填写设备热点密码，若无密码则可忽略。\n3. 点击下一步，开始配网。"
+                         @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
             };
         }
             break;
