@@ -54,6 +54,8 @@
 #define kFontColor kRGBColor(51, 51, 51)
 //背景颜色
 #define kBgColor [UIColor whiteColor]
+//背景颜色
+#define kBackgroundHexColor @"#F5F5F5"
 
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
