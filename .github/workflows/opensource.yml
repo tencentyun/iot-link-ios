@@ -28,7 +28,8 @@ jobs:
       run: |
         sh .github/script/archive.sh Debug
     - name: Deploy App to PGY
-      run: curl -F 'file=@./LinkApp.ipa' -F "_api_key=$RELEASE_PGYER_API_KEY" https://www.pgyer.com/apiv2/app/upload
+#      run: curl -F 'file=@./LinkApp.ipa' -F "_api_key=$RELEASE_PGYER_API_KEY" https://www.pgyer.com/apiv2/app/upload
+      run: curl -F "file=@./LinkApp.ipa" -F "_api_key=$RELEASE_PGYER_API_KEY" https://upload.pgyer.com/apiv2/app/upload
       env:
         RELEASE_PGYER_API_KEY: ${{ secrets.IOT_PGYER_API_KEY }}
     - name: upload dSYM
