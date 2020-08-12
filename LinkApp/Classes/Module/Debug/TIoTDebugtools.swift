@@ -33,8 +33,10 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             //            appdelegate.window?.addSubview(button)
             singleTon.debugWindow.addSubview(button)
             
+#if DEBUG
             //LogUI
             PTEDashboard.shared().show()
+#endif
         })
     }()
     

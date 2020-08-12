@@ -2757,11 +2757,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "$(LinkAPP_BUNDLE_SIGN)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 89W69LHLD3;
+				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2818,10 +2818,10 @@
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "腾讯连连";
-				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2838,11 +2838,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LinkApp/TenextCloud.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "$(LinkAPP_BUNDLE_SIGN)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FN2V63AD2J;
+				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2899,10 +2899,10 @@
 					"$(PROJECT_DIR)/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "腾讯连连";
-				PROVISIONING_PROFILE_SPECIFIER = com.tencent.iot.explorer.link_Production_SignProvision;
+				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

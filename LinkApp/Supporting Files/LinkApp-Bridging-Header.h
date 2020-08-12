@@ -8,6 +8,10 @@
 #import "TIoTLoginVC.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTNavigationController.h"
-#import <LumberjackConsole/PTEDashboard.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
+
+#ifdef DEBUG
+    #import <LumberjackConsole/PTEDashboard.h>
+#endif
+
 

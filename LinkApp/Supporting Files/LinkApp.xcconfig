@@ -9,3 +9,7 @@
 
 LinkAPP_NAME = 连连开源体验
 LinkAPP_WEIXIN_APPID = wx3c5a586d7fbcbace
+LinkAPP_BUNDLE_TEAM = 89W69LHLD3
+LinkAPP_BUNDLE_SIGN = Apple Development: Chao Ren (45U44KXTL9)
+LinkAPP_BUNDLE_ID = com.tencent.iot.explorer.link.opensource
+LinkAPP_BUNDLE_PROVISIONING = iot_dev_test
