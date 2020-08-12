@@ -14,9 +14,9 @@ rm -rf Podfile.lock
 BUILD_TYPE=$1
 
  
-xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration $BUILD_TYPE
+xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Release
  
-xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration $BUILD_TYPE -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
+xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Release -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
  
 if [ $1 == 'Debug' ]; then
     xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./

@@ -36,7 +36,7 @@ target 'LinkApp' do
   pod 'TrueTime','5.0.3'
   
   pod 'LumberjackConsole', git: 'https://github.com/tonychanchen/LumberjackConsole.git', branch: 'master', :configurations => ['Debug']
-  pod 'CocoaLumberjack/Swift', '3.6.2', :configurations => ['Debug']
+  pod 'CocoaLumberjack/Swift', '3.6.2'
 end
 
 target 'LinkSDKDemo' do
