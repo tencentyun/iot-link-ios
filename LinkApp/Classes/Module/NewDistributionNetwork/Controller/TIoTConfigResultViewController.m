@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) NSDictionary *dataDic;
 
+@property (nonatomic, strong) NSDictionary *devieceData;
+
 @end
 
 @implementation TIoTConfigResultViewController
@@ -29,10 +31,11 @@
     [self.view addGestureRecognizer:pan];
 }
 
-- (instancetype)initWithConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle success:(BOOL)success {
+- (instancetype)initWithConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle success:(BOOL)success devieceData:(NSDictionary *)devieceData {
     if (self = [super init]) {
         _configHardwareStyle = configHardwareStyle;
         _success = success;
+        _devieceData = devieceData;
     }
     return self;
 }
@@ -72,7 +75,7 @@
         make.height.mas_equalTo(24);
     }];
     
-    NSString *describe = _success ? [NSString stringWithFormat:@"设备名称:%@", @"客厅摄像头"] : @"请检查以下信息";
+    NSString *describe = _success ? [NSString stringWithFormat:@"设备名称:%@", [_devieceData objectForKey:@"deviceName"]] : @"请检查以下信息";
     UILabel *describeLabel = [[UILabel alloc] init];
     describeLabel.textColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     describeLabel.font = [UIFont wcPfRegularFontOfSize:14];

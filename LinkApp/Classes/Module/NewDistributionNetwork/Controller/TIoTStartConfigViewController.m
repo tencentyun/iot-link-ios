@@ -348,12 +348,12 @@
 #pragma mark private Method
 
 - (void)connectFaild {
-    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:NO];
+    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:NO devieceData:nil];
     [self.navigationController pushViewController:vc animated:YES];
 }
 //配网成功
 - (void)connectSucess:(NSDictionary *)devieceData{
-    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:YES];
+    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:YES devieceData:devieceData];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

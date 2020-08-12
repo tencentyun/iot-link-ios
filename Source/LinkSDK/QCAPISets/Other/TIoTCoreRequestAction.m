@@ -40,6 +40,7 @@ NSString *const AppCosAuth = @"AppCosAuth";
 
 NSString *const AppGetTokenTicket = @"AppGetTokenTicket";
 NSString *const AppUserCancelAccount = @"AppUserCancelAccount";
+NSString *const AppGetLatestVersion = @"AppGetLatestVersion";
 //===============消息
 NSString *const AppGetMessages = @"AppGetMessages";
 NSString *const AppDeleteMessage = @"AppDeleteMessage";

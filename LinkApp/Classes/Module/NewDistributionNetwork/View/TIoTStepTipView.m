@@ -20,6 +20,7 @@
     self = [super init];
     if (self) {
         _titlesArray = array;
+        _showAnimate = YES;
     }
     return self;
 }
@@ -52,20 +53,22 @@
             } else if (self.step == i + 1) {
                 view.backgroundColor = kRGBColor(219, 219, 219);
                 
-                CAShapeLayer *layer = [CAShapeLayer layer];
-                layer.fillColor = kMainColor.CGColor;
-                UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, view.frame.size.width*0.5, view.frame.size.height)];
-                layer.path = path.CGPath;
-                [view.layer addSublayer:layer];
-                
-                CABasicAnimation *pathAnima = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
-                pathAnima.duration = 2.0f;
-                pathAnima.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                pathAnima.fromValue = [NSNumber numberWithFloat:0.0f];
-                pathAnima.toValue = [NSNumber numberWithFloat:1.0f];
-                pathAnima.fillMode = kCAFillModeForwards;
-                pathAnima.removedOnCompletion = NO;
-                [layer addAnimation:pathAnima forKey:@"strokeEndAnimation"];
+                if (_showAnimate) {
+                    CAShapeLayer *layer = [CAShapeLayer layer];
+                    layer.fillColor = kMainColor.CGColor;
+                    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, view.frame.size.width*0.5, view.frame.size.height)];
+                    layer.path = path.CGPath;
+                    [view.layer addSublayer:layer];
+                    
+                    CABasicAnimation *pathAnima = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
+                    pathAnima.duration = 2.0f;
+                    pathAnima.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                    pathAnima.fromValue = [NSNumber numberWithFloat:0.0f];
+                    pathAnima.toValue = [NSNumber numberWithFloat:1.0f];
+                    pathAnima.fillMode = kCAFillModeForwards;
+                    pathAnima.removedOnCompletion = NO;
+                    [layer addAnimation:pathAnima forKey:@"strokeEndAnimation"];
+                }
 
             } else {
                 view.backgroundColor = kMainColor;
