@@ -42,11 +42,11 @@ failure:(FailureResponseBlock)failure
     [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTAppEnvironment shareEnvironment].platform;
     
     [[TIoTCoreRequestObject shared]postRequestWithAction:urlStr url:nil isWithoutToken:NO param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
-        NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
+//        NSURL *url = [NSURL URLWithString:[TIoTAppEnvironment shareEnvironment].baseUrlForLogined];
 //        #ifdef DEBUG
-        if (TIoTAPPConfig.isDebug) {
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
-        }
+//        if (TIoTAPPConfig.isDebug) {
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+//        }
 //        #endif
         DDLogInfo(@"请求URL--->%@",url);
         return url;
@@ -54,9 +54,9 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
 //        #ifdef DEBUG
-                if (TIoTAPPConfig.isDebug) {
+//                if (TIoTAPPConfig.isDebug) {
                     [request setValue:[NSString stringWithFormat:@"uin=%@",TIoTAPPConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
-                }
+//                }
 //        #endif
             }
         return request;
@@ -100,23 +100,23 @@ failure:(FailureResponseBlock)failure
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
                 //公版
 //        #ifdef DEBUG
-                if (TIoTAPPConfig.isDebug) {
+//                if (TIoTAPPConfig.isDebug) {
                     url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
-                }else {
+//                }else {
 //        #else
-                    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
-                }
+//                    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr]];
+//                }
 //        #endif
                 [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
             }else {
                 //开源
 //        #ifdef DEBUG
-                if (TIoTAPPConfig.isDebug) {
+//                if (TIoTAPPConfig.isDebug) {
                     url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined, TIoTAPPConfig.GlobalDebugUin]];
-                }else {
+//                }else {
 //        #else
-                    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
-                }
+//                    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined]];
+//                }
 //        #endif
 
                 if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
@@ -129,9 +129,9 @@ failure:(FailureResponseBlock)failure
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
             if ([TIoTAppConfig appTypeWithModel:model] == 0){
 //        #ifdef DEBUG
-                if (TIoTAPPConfig.isDebug) {
+//                if (TIoTAPPConfig.isDebug) {
                     [request setValue:[NSString stringWithFormat: @"uin=%@",TIoTAPPConfig.GlobalDebugUin] forHTTPHeaderField:@"Cookie"];
-                }
+//                }
 //        #endif
             }
         return request;
