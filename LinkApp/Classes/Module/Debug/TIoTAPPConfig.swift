@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 class TIoTAPPConfig: NSObject {
 
-    public static var GlobalDebugUin = "help_center_h5_api"
+    public static var GlobalDebugUin = NSUUID().uuidString //"help_center_h5_api"
     
     //app delegate
     public static var iot_appdelegate: TIoTAppDelegate {

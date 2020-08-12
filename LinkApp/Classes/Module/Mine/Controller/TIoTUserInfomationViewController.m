@@ -41,6 +41,16 @@
     [HXYNotice addModifyUserInfoListener:self reaction:@selector(modifyUserInfo:)];
     
     [self setupUI];
+    
+    //给UIView添加5次点击复制全局uin，让用户注册去
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+    gesture.numberOfTapsRequired = 5;
+    [self.view addGestureRecognizer:gesture];
+}
+
+- (void)tapGesture:(UITapGestureRecognizer *)gesture {
+    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+    pastboard.string = TIoTAPPConfig.GlobalDebugUin;
 }
 
 - (void)dealloc{
