@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
-               BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
+               BuildableName = "LinkApp.app"
                BlueprintName = "LinkApp"
                ReferencedContainer = "container:LinkApp.xcodeproj">
             </BuildableReference>
@@ -67,7 +67,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
-            BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
+            BuildableName = "LinkApp.app"
             BlueprintName = "LinkApp"
             ReferencedContainer = "container:LinkApp.xcodeproj">
          </BuildableReference>
@@ -90,7 +90,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2C7A9EE232F6AA4005E8006"
-            BuildableName = "&#x817e;&#x8baf;&#x8fde;&#x8fde;.app"
+            BuildableName = "LinkApp.app"
             BlueprintName = "LinkApp"
             ReferencedContainer = "container:LinkApp.xcodeproj">
          </BuildableReference>
