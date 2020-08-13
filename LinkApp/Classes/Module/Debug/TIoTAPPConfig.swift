@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import KeychainAccess
 
 @objcMembers
 class TIoTAPPConfig: NSObject {
 
-    public static var GlobalDebugUin = NSUUID().uuidString //"help_center_h5_api"
+    public static var GlobalDebugUin = KCManager.getUUID() //"help_center_h5_api"
     
     //app delegate
     public static var iot_appdelegate: TIoTAppDelegate {
@@ -42,5 +43,24 @@ class TIoTAPPConfig: NSObject {
     //isDebug
     public static var isDebug: Bool {
         return iot_appdelegate.isDebug
+    }
+}
+
+
+class KCManager: NSObject {
+    
+    class func getUUID() -> String {
+        
+        let keychain = Keychain(service: "com.tencent.iot.explorer").accessibility(.alwaysThisDeviceOnly)
+        
+        let uuidkey = "com.tencent.iot.uuidkey"
+        
+        if let uuidres = keychain[uuidkey] {
+            return uuidres
+        }else{
+            let uuidres = NSUUID().uuidString
+            keychain["com.tencent.iot.uuidkey"] = uuidres
+            return uuidres
+        }
     }
 }

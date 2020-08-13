@@ -37,6 +37,7 @@ target 'LinkApp' do
   
   pod 'LumberjackConsole', git: 'https://github.com/tonychanchen/LumberjackConsole.git', branch: 'master', :configurations => ['Debug']
   pod 'CocoaLumberjack/Swift', '3.6.2'
+  pod 'KeychainAccess', '4.2.0'
 end
 
 target 'LinkSDKDemo' do
