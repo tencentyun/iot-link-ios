@@ -495,7 +495,7 @@
 		D2B29EE5235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChoseValueTableViewCell.m; sourceTree = "<group>"; };
 		D2B29EE72360200A0086BDFA /* TIoTDeviceData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDeviceData.h; sourceTree = "<group>"; };
 		D2B29EE82360200A0086BDFA /* TIoTDeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceData.m; sourceTree = "<group>"; };
-		D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "腾讯连连.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2C7A9EF232F6AA4005E8006 /* LinkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppDelegate.h; sourceTree = "<group>"; };
 		D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppDelegate.m; sourceTree = "<group>"; };
 		D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1551,7 +1551,7 @@
 		D2C7A9F0232F6AA4005E8006 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */,
+				D2C7A9EF232F6AA4005E8006 /* LinkApp.app */,
 				F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */,
 				F4F3D54824935D75005D3396 /* QCAPISets.framework */,
 				F4F3D6C024936280005D3396 /* QCDeviceCenter.framework */,
@@ -2003,7 +2003,7 @@
 			);
 			name = LinkApp;
 			productName = TenextCloud;
-			productReference = D2C7A9EF232F6AA4005E8006 /* 腾讯连连.app */;
+			productReference = D2C7A9EF232F6AA4005E8006 /* LinkApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F4F3D52824935BD3005D3396 /* LinkSDKDemo */ = {
@@ -2820,7 +2820,7 @@
 				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
-				PRODUCT_NAME = "腾讯连连";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2901,7 +2901,7 @@
 				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
-				PRODUCT_NAME = "腾讯连连";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
