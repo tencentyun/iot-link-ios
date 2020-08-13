@@ -8,8 +8,9 @@ if [ $1 == 'Debug' ]; then
     sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 fi
 
-rm -rf Podfile.lock
-/usr/local/bin/pod install --verbose --no-repo-update
+#rm -rf Podfile.lock
+#/usr/local/bin/pod install --verbose --no-repo-update
+/usr/local/bin/pod install
  
 BUILD_TYPE=$1
 
