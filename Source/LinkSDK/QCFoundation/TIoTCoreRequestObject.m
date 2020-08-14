@@ -101,11 +101,13 @@ failure:(FailureResponseBlock)failure
         [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
         [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
         [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+//        [accessParam setValue:@"22" forKey:@"RegionId"];
     }else {
         accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
         [accessParam setValue:actionStr forKey:@"Action"];
         [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
         [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+//        [accessParam setValue:@"22" forKey:@"RegionId"];
     }
     
     NSURL *urlString = nil;

@@ -154,7 +154,9 @@
 #pragma mark eventResponse
 - (void)userClick:(id)sender{
     TIoTUserInfomationViewController *vc = [[TIoTUserInfomationViewController alloc] init];
-    vc.title = @"个人信息";
+//    vc.title = @"个人信息";
+    //国际化版本
+    vc.title = @"账号";
     [self.navigationController pushViewController:vc animated:YES];
 }
 

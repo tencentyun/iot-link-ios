@@ -63,11 +63,27 @@
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.view);
+//        make.left.right.top.bottom.equalTo(self.view);
+        
+        //国际化版本
+        make.left.right.bottom.equalTo(self.view);
+        if (@available (iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        }else {
+            make.top.equalTo(self.view.mas_top);
+        }
     }];
     
-    [self addTableHeaderView];
-    [self addTableFooterView];
+//    [self addTableHeaderView];
+//    [self addTableFooterView];
+    
+    
+    //国际化版本
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 16 * kScreenAllHeightScale)];
+    headerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    self.tableView.tableHeaderView = headerView;
+
+    [self addTableViewFooterView];
 }
 
 - (void)addTableHeaderView{
@@ -122,6 +138,42 @@
     
     
     self.tableView.tableFooterView = footerView;
+}
+
+- (void)addTableViewFooterView {
+    
+    CGFloat kSignoutBtnHeight = 0.0 ;  //348:  5个cell高度 + 三个headerView高度
+    
+    if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+        kSignoutBtnHeight = kScreenHeight - 348 *kScreenAllHeightScale - [TIoTUIProxy shareUIProxy].tabbarAddHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight;
+    }else {
+        kSignoutBtnHeight = kScreenHeight - 348 *kScreenAllHeightScale - [TIoTUIProxy shareUIProxy].navigationBarHeight;
+    }
+    
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kSignoutBtnHeight)];
+    footerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    
+    UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [deleteEquipmentBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    [deleteEquipmentBtn setTitleColor:[UIColor colorWithHexString:kSignoutHexColor] forState:UIControlStateNormal];
+    deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    [deleteEquipmentBtn addTarget:self action:@selector(loginoutClick:) forControlEvents:UIControlEventTouchUpInside];
+    deleteEquipmentBtn.backgroundColor = [UIColor whiteColor];
+    [footerView addSubview:deleteEquipmentBtn];
+    [deleteEquipmentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(footerView).offset(30);
+        make.right.equalTo(footerView).offset(-30);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.bottom.equalTo(footerView).offset(-20 * kScreenAllHeightScale);
+        }else {
+            make.bottom.equalTo(footerView).offset(-40 * kScreenAllHeightScale);
+        }
+        
+        make.height.mas_equalTo(40 * kScreenAllHeightScale);
+    }];
+    
+    self.tableView.tableFooterView = footerView;
+
 }
 
 //选择获取图片方式
@@ -226,20 +278,33 @@
 
 #pragma mark TableViewDelegate && TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataArr.count;
+//    return self.dataArr.count;
+    
+    //国际化版本
+    NSArray *sectionDataArray = self.dataArr[section];
+    return sectionDataArray.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+//    return 1;
+    
+    //国际化版本
+    return self.dataArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
+//    cell.dic = self.dataArr[indexPath.row];
+//    return cell;
+    
+    //国际化版本
     TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
-    cell.dic = self.dataArr[indexPath.row];
+    cell.dic = self.dataArr[indexPath.section][indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    /*
     if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"昵称"]) {
         
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
@@ -286,11 +351,63 @@
         TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
         [self.navigationController pushViewController:accountAndSafeVC animated:YES];
     }
+    */
+    
+    //国际化版本
+    NSArray *tempSectionArray = self.dataArr[indexPath.section];
+    if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"头像"]) {
+        [self editIcon];
+    }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"昵称"]) {
+
+            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+            [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
+            av.maxLength = 10;
+            av.defaultText = tempSectionArray[indexPath.row][@"value"];
+            av.doneAction = ^(NSString * _Nonnull text) {
+                if (text.length > 0) {
+                    [self modifyName:text];
+                }
+                else
+                {
+                    [MBProgressHUD showMessage:@"昵称长度非法" icon:@""];
+                }
+            };
+        [av showInView:[[UIApplication sharedApplication] delegate].window];
+
+    //        WCModifyNikeNameViewController *vc = [[WCModifyNikeNameViewController alloc] init];
+    //        [self.navigationController pushViewController:vc animated:YES];
+        } else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"电话号码"]){
+            if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
+                [self bindPhone];
+            }
+        }else if([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"账号与安全"]) {
+            TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
+            [self.navigationController pushViewController:accountAndSafeVC animated:YES];
+        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"温度单位"]) {
+            
+        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
+            
+        }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.1;
 }
 
 /// 决定具体cell是否显示提示
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 1) {
+//    if (indexPath.row == 1) {
+//        return YES;
+//    }else {
+//        return NO;
+//    }
+    
+    //国际化版本
+    if (indexPath.section == 0 && indexPath.row == 2) {
         return YES;
     }else {
         return NO;
@@ -373,12 +490,19 @@
 #pragma mark setter or getter
 - (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] init];
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.rowHeight = 60;
+//        _tableView = [[UITableView alloc] init];
+//        _tableView.backgroundColor = [UIColor clearColor];
+//        _tableView.rowHeight = 60;
+        
+        //国际化版本
+        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+        _tableView.rowHeight = 50 *kScreenAllHeightScale;
+        
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        [_tableView registerClass:[TIoTUserInfomationTableViewCell class] forCellReuseIdentifier:ID];
     }
     
     return _tableView;
@@ -400,12 +524,24 @@
         NSString *haveArrow = @"1";
         if ([TIoTCoreUserManage shared].phoneNumber && [TIoTCoreUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
         
+//        _dataArr = @[
+//        @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+//        @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+//        @{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
+////        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
+////        @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
+//        ];
+        
+        //国际化版本
         _dataArr = @[
-        @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-        @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
-        @{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
-//        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
-//        @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
+            @[@{@"title":@"头像",@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
+              @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+              @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+            ],
+            @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+            @[@{@"title":@"温度单位",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"},
+              @{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"},
+            ],
         ];
     }
     
