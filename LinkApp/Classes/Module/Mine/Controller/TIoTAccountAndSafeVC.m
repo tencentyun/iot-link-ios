@@ -58,31 +58,9 @@
 
 - (NSInteger )tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    //国际化版本
-//    switch (section) {
-//        case 0:{
-//            NSArray *accountArray = self.dataArr[0];
-//            return accountArray.count;
-//         break;
-//
-//        }
-//        case 1: {
-//            NSArray *regionArray = self.dataArr[1];
-//            return regionArray.count;
-//            break ;
-//        }
-//        case 2: {
-//            NSArray *resetPasswordArray = self.dataArr[2];
-//            return resetPasswordArray.count;
-//            break ;
-//        }
-//        case 3: {
-//            NSArray *cancelAccountArray = self.dataArr[3];
-//            return cancelAccountArray.count;
-//            break;
-//        }
-//        default:
-//            break;
-//    }
+//    NSArray *sectionDataArray = self.dataArr[section];
+//    return sectionDataArray.count;
+    
     return self.dataArr.count;
 }
 

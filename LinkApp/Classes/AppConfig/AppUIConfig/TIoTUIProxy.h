@@ -56,7 +56,8 @@
 #define kBgColor [UIColor whiteColor]
 //背景颜色
 #define kBackgroundHexColor @"#F5F5F5"
-
+//红色
+#define kSignoutHexColor @"#FF584C"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;

@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UILabel *valueLab;
 @property (nonatomic, strong) UIView *lineView;
+@property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UIImageView *arrowImageView;
 
 @property (nonatomic, strong) MASConstraint *rightValue;
@@ -73,6 +74,16 @@
             self.rightValue = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
             make.centerY.equalTo(self.contentView);
         }];
+        
+        //国际化
+        self.iconImageView = [[UIImageView alloc]init];
+        [self.contentView addSubview:self.iconImageView];
+        [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            self.rightValue = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
+            make.centerY.equalTo(self.contentView);
+            make.height.mas_equalTo(24 * kScreenAllHeightScale);
+            make.width.mas_equalTo(24 * kScreenAllWidthScale);
+        }];
     }
     return self;
 }
@@ -88,6 +99,16 @@
     else{
         self.arrowImageView.hidden = YES;
         [self.rightValue setOffset:18];
+    }
+    
+    //国际化
+    if ([NSString isNullOrNilWithObject:dic[@"Avatar"]]) {
+        self.iconImageView.hidden = YES;
+        self.valueLab.hidden = NO;
+    }else {
+        [self.iconImageView setImageWithURLStr:[TIoTCoreUserManage shared].avatar placeHolder:@"icon-avatar_man"];
+        self.iconImageView.hidden = NO;
+        self.valueLab.hidden = YES;
     }
 }
 
