@@ -22,8 +22,8 @@ jobs:
           ${{ runner.os }}-pods-
     - name: Install GPG
       run: brew install gnupg
-#    - name: install fir
-#      run: gem install fir-cli
+    - name: install fir
+      run: gem install fir-cli
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
     - name: Decrypt large secret
@@ -36,12 +36,9 @@ jobs:
     - name: Build archive
       run: |
         sh .github/script/archive.sh Debug
-    - name: Deploy App to PGY
-#      run: curl -F 'file=@./LinkApp.ipa' -F "_api_key=$RELEASE_PGYER_API_KEY" https://www.pgyer.com/apiv2/app/upload
-      run: curl -F "file=@./LinkApp.ipa" -F "_api_key=$RELEASE_PGYER_API_KEY" https://upload.pgyer.com/apiv2/app/upload
+    - name: Deploy App to fir
+      run: fir publish LinkApp.ipa -T $RELEASE_PGYER_API_KEY --oversea_turbo
       env:
-        RELEASE_PGYER_API_KEY: ${{ secrets.IOT_PGYER_API_KEY }}
-#    - name: Deploy App to fir
-#      run: fir publish LinkApp.ipa -T $RELEASE_PGYER_API_KEY
+        RELEASE_PGYER_API_KEY: ${{ secrets.IOT_FIRIM_API_TOKEN }}
     - name: upload dSYM
       run: ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
