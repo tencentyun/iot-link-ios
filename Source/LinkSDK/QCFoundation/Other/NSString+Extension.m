@@ -218,6 +218,7 @@
     return NO;
 }
 
+
 + (NSString *)matchVersionNum:(NSString *)checkString {
     if (checkString == nil || [checkString isEqualToString:@""]) {
         return @"";
@@ -235,6 +236,23 @@
         return string;
     }
     return @"";
+}
+
+
++ (BOOL)isPureIntOrFloat:(NSString *)string {
+    
+    NSScanner* scanInt = [NSScanner scannerWithString:string];
+    int valInt;
+    
+    NSScanner* scanFloat = [NSScanner scannerWithString:string];
+    float valFloat;
+    
+    if (([scanInt scanInt:&valInt] && [scanInt isAtEnd]) || ([scanFloat scanFloat:&valFloat] && [scanFloat isAtEnd])) {
+        return YES;
+    }else {
+        return NO;
+    }
+    
 }
 
 @end

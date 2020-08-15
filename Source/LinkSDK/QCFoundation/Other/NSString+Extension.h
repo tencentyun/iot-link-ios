@@ -77,6 +77,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 检测版本号  要求，必须是三位，x.x.x的形式  每位x的范围分别为1-99,0-99,0-99。
 + (NSString *)matchVersionNum:(NSString *)checkString;
+
+/// 判断是否是纯数字
++ (BOOL)isPureIntOrFloat:(NSString *)string;
+
 @end
 
 NS_ASSUME_NONNULL_END
