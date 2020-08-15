@@ -58,6 +58,8 @@
 #define kBackgroundHexColor @"#F5F5F5"
 //红色
 #define kSignoutHexColor @"#FF584C"
+//温度字体颜色
+#define kTemperatureHexColor @"#15161A"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;
