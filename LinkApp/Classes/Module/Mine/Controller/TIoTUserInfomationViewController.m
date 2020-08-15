@@ -20,6 +20,8 @@
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import "TIoTUploadObj.h"
 #import "TIoTAccountAndSafeVC.h"
+#import "TIoTCustomActionSheet.h"
+#import "NSString+Extension.h"
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -27,7 +29,7 @@
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (strong, nonatomic) UIImagePickerController *picker;
 @property (nonatomic, strong) TIoTQCloudCOSXMLManage *cosXml;
-@property (nonatomic, copy) NSArray *dataArr;
+@property (nonatomic, copy) NSMutableArray *dataArr;
 @property (nonatomic, copy) NSString *picUrl;
 
 @end
@@ -384,7 +386,61 @@
             TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
             [self.navigationController pushViewController:accountAndSafeVC animated:YES];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"温度单位"]) {
+            TIoTCustomActionSheet *actionSheet = [[TIoTCustomActionSheet alloc]initWithFrame:[UIScreen mainScreen].bounds];
+            actionSheet.choiceFahrenheitBlock = ^{
+                //摄氏温度转华氏温度值，并上报用户配置信息
+                //客户端目前模糊匹配处理：包含 “华氏” “℉”默认为是需要转换单位，进一步判断如果是纯数字则转换，不是则只替换单位,转化摄氏类似
+                //华氏 = 摄氏 * 1.8 +32
+                //摄氏 = （华氏 - 32）/ 1.8
+                
+                NSString *temperatureString = tempSectionArray[indexPath.row][@"value"];
+                if (temperatureString) {
+                    if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]) {
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℃" withString:@""];
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"摄氏" withString:@""];
+                        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+                            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
+                            NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℃",celsiusMeasurement.doubleValue] forKey:@"value"];
+                        }else {
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℃",temperatureString] forKey:@"value"];
+                        }
+                        
+                        //设置用户配置
+                        [self reportTemperatureWithUnit:@"C"];
+                    }else {
+                        [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                    }
+                }
+                
+            };
             
+            actionSheet.choiceCelsiusBlock = ^{
+                //华氏温度转换摄氏温度值，并上报用户配置信息
+                NSString *temperatureString = tempSectionArray[indexPath.row][@"value"];
+                if (temperatureString) {
+                    if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]) {
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℉" withString:@""];
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"华氏" withString:@""];
+                        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+                            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
+                            NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℉",fahrenheitMeasurement.doubleValue] forKey:@"value"];
+                        }else {
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℉",temperatureString] forKey:@"value"];
+                        }
+                        
+                        //设置用户配置
+                        [self reportTemperatureWithUnit:@"F"];
+                        
+                    }else {
+                        [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                    }
+                }
+
+            };
+            
+            [actionSheet shwoActionSheetView];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
             
         }
@@ -433,6 +489,27 @@
         UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
         NSString *userID = [TIoTCoreUserManage shared].userId;
         pastboard.string = (userID != nil ? userID : @"");
+    }
+}
+
+#pragma mark - event
+- (void)reportTemperatureWithUnit:(NSString *)unitString {
+    if ([unitString isEqualToString:@"F"]) {
+        //转华氏温度
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"F"} success:^(id responseObject) {
+            [MBProgressHUD dismissInView:self.view];
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
+    }else if ([unitString isEqualToString:@"C"]) {
+        //转摄氏温度
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"C"} success:^(id responseObject) {
+            [MBProgressHUD dismissInView:self.view];
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
     }
 }
 
@@ -533,16 +610,16 @@
 //        ];
         
         //国际化版本
-        _dataArr = @[
+        _dataArr = [NSMutableArray arrayWithArray:@[
             @[@{@"title":@"头像",@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
               @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
               @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
             ],
             @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-            @[@{@"title":@"温度单位",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"},
-              @{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"},
+            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"33华氏",@"vc":@"",@"haveArrow":@"1"}],
+              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"}],
             ],
-        ];
+        ]];
     }
     
     return _dataArr;

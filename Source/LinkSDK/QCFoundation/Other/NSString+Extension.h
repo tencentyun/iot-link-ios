@@ -74,6 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 检测中文
 + (BOOL)matchSinogram:(NSString *)checkString;
+
+/// 判断是否是纯数字
++ (BOOL)isPureIntOrFloat:(NSString *)string;
+
 @end
 
 NS_ASSUME_NONNULL_END
