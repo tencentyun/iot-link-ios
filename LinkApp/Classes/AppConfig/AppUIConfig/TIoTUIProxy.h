@@ -60,10 +60,15 @@
 #define kSignoutHexColor @"#FF584C"
 //温度字体颜色
 #define kTemperatureHexColor @"#15161A"
+//时区地区字体颜色
+#define kIndexFontHexColor @"#006EFF"  //kRGBColor(0, 110, 255)
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;
 
+//判断系统语言
+#define CURR_LANG ([[NSLocale preferredLanguages] objectAtIndex:0])
+#define LanguageIsEnglish ([CURR_LANG isEqualToString:@"en-US"] || [CURR_LANG isEqualToString:@"en-CA"] || [CURR_LANG isEqualToString:@"en-GB"] || [CURR_LANG isEqualToString:@"en-CN"] || [CURR_LANG isEqualToString:@"en"])
 
 typedef NS_ENUM(NSInteger,WCThemeStyle) {
     WCThemeSimple,
