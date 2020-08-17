@@ -22,6 +22,9 @@
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DC056E824E7E8F400E06CC4 /* TIoTCustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */; };
 		6DC056EB24E9916A00E06CC4 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */; };
+		6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */; };
+		6DC056F124EA97B100E06CC4 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */; };
+		6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		8E48716B237B7FFB2110FC9A /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D52DA8F938AE612B18A9EF4A /* Pods_LinkApp.framework */; };
@@ -349,6 +352,12 @@
 		6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomActionSheet.m; sourceTree = "<group>"; };
 		6DC056E924E9916A00E06CC4 /* TIoTUserConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TIoTUserConfigModel.h; path = LinkApp/Classes/Module/Mine/View/TIoTUserConfigModel.h; sourceTree = SOURCE_ROOT; };
 		6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TIoTUserConfigModel.m; path = LinkApp/Classes/Module/Mine/View/TIoTUserConfigModel.m; sourceTree = SOURCE_ROOT; };
+		6DC056EC24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseTimeZoneVC.h; sourceTree = "<group>"; };
+		6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseTimeZoneVC.m; sourceTree = "<group>"; };
+		6DC056EF24EA97B100E06CC4 /* TIoTUserRegionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTUserRegionModel.h; sourceTree = SOURCE_ROOT; };
+		6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTUserRegionModel.m; sourceTree = SOURCE_ROOT; };
+		6DC056F224EAEF2C00E06CC4 /* TIoTChooseRegionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseRegionVC.h; sourceTree = "<group>"; };
+		6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseRegionVC.m; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
@@ -972,9 +981,9 @@
 		D210C7D32341D7EB00A53B08 /* XWCountryCode */ = {
 			isa = PBXGroup;
 			children = (
-				D210C7D42341D7EB00A53B08 /* XWCountryCodeController.h */,
-				D210C7D52341D7EB00A53B08 /* sortedNameEN.plist */,
 				D210C7D62341D7EB00A53B08 /* sortedNameCH.plist */,
+				D210C7D52341D7EB00A53B08 /* sortedNameEN.plist */,
+				D210C7D42341D7EB00A53B08 /* XWCountryCodeController.h */,
 				D210C7D72341D7EB00A53B08 /* XWCountryCodeController.m */,
 			);
 			path = XWCountryCode;
@@ -1009,6 +1018,8 @@
 			children = (
 				6DC056E924E9916A00E06CC4 /* TIoTUserConfigModel.h */,
 				6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */,
+				6DC056EF24EA97B100E06CC4 /* TIoTUserRegionModel.h */,
+				6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1083,6 +1094,8 @@
 				6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */,
 				6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */,
 				6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */,
+				6DC056EC24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.h */,
+				6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */,
 				ED800C8F240C9EFA0045A268 /* Message */,
 				ED9C15D223B9DE1C00CAC848 /* Family */,
 				ED800C9C240CB2270045A268 /* TIoTAboutVC.h */,
@@ -1497,6 +1510,8 @@
 				6D785E6524CFC0F5001169AE /* TIoTMainVC.m */,
 				6D785E6A24D0434F001169AE /* TIoTVCLoginAccountVC.h */,
 				6D785E6B24D0434F001169AE /* TIoTVCLoginAccountVC.m */,
+				6DC056F224EAEF2C00E06CC4 /* TIoTChooseRegionVC.h */,
+				6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2213,10 +2228,12 @@
 				ED7B178123BEDB5900B61567 /* TIoTPanelHeaderView.m in Sources */,
 				6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */,
 				D23104D32330678F0003069D /* NSAttributedString+XDPAdd.m in Sources */,
+				6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */,
 				ED7B178B23BF0A8B00B61567 /* TIoTNumberView.m in Sources */,
 				FF831E0224D1CC9100F797EA /* TIoTWIFITableViewCell.m in Sources */,
 				D2038BA8233204170036F6B9 /* TIoTPanelTableViewCell.m in Sources */,
 				ED7B177E23BED1C900B61567 /* TIoTBoolView.m in Sources */,
+				6DC056F124EA97B100E06CC4 /* TIoTUserRegionModel.m in Sources */,
 				D20621BF2355B1B300142DAC /* SYPaneView.m in Sources */,
 				A4902DB324D2B7610045BD96 /* TIoTConnectStepTipView.m in Sources */,
 				D2038BC92333145B0036F6B9 /* TIoTActionTypeTableViewCell.m in Sources */,
@@ -2282,6 +2299,7 @@
 				D23104D62330678F0003069D /* UIView+XDPGesture.m in Sources */,
 				D23104BE233066810003069D /* KeyChainUntil.m in Sources */,
 				ED6DA51E23C99BBE00FDDC97 /* TIoTPopoverVC.m in Sources */,
+				6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */,
 				D23104F223306A0E0003069D /* TIoTTabBarViewController.m in Sources */,
 				D2A2CD25234C66790039EB51 /* UIViewController+GetController.m in Sources */,
 				D297C35C2366753100918921 /* TIoTStringView.m in Sources */,

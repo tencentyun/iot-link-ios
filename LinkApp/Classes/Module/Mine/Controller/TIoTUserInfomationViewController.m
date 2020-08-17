@@ -26,6 +26,7 @@
 #import "TIoTRefreshHeader.h"
 #import "TIoTUserConfigModel.h"
 #import <YYModel.h>
+#import "TIoTChooseTimeZoneVC.h"
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -529,7 +530,9 @@
             
             [actionSheet shwoActionSheetView];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
-            
+#warning TOTO 跳转时区列表
+//            TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
+//            [self.navigationController pushViewController:timeZoneVC animated:YES];
         }
 }
 

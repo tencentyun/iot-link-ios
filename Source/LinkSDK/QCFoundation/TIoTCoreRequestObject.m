@@ -126,6 +126,10 @@ failure:(FailureResponseBlock)failure
         request =  configH5CookieBlock(request);
     }
     
+    if ([accessParam.allKeys containsObject:@"Keys"]) {
+        [request setValue:@"vscode-restclient" forHTTPHeaderField:@"user-agent"];
+    }
+    
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPMethod = @"POST";
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
