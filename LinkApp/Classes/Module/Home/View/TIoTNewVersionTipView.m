@@ -104,7 +104,7 @@
     UILabel *versionNumLabel = [[UILabel alloc] init];
     versionNumLabel.textColor = kRGBColor(136, 136, 136);
     versionNumLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    versionNumLabel.text = [NSString stringWithFormat:@"版本号：V:%@", [versionInfo objectForKey:@"AppVersion"]];
+    versionNumLabel.text = [NSString stringWithFormat:@"版本号：V%@", [versionInfo objectForKey:@"AppVersion"]];
     [paramView addSubview:versionNumLabel];
     [versionNumLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(paramView).offset(9);

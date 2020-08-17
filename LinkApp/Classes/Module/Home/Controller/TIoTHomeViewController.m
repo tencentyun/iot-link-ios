@@ -31,6 +31,7 @@
 
 #import "Firebase.h"
 #import "TIoTNewVersionTipView.h"
+#import "NSString+Extension.h"
 
 static CGFloat weatherHeight = 60;
 
@@ -108,15 +109,40 @@ static CGFloat weatherHeight = 60;
 - (void)checkNewVersion {
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSDictionary *tmpDic = @{@"ClientVersion": appVersion, @"Channel":@(0), @"AppPlatform": @"ios"};
-    [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
-        NSDictionary *versionInfo = responseObject[@"VersionInfo"];
-        if (versionInfo) {
-            [self showNewVersionViewWithDict:versionInfo];
+    appVersion = [NSString matchVersionNum:appVersion];
+    if (appVersion.length) { //满足要求，必须是三位，x.x.x的形式  每位x的范围分别为1-99,0-99,0-99。
+        NSDictionary *tmpDic = @{@"ClientVersion": appVersion, @"Channel":@(0), @"AppPlatform": @"ios"};
+        [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
+            NSDictionary *versionInfo = responseObject[@"VersionInfo"];
+            if (versionInfo) {
+                NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
+                if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion]) {
+                    [self showNewVersionViewWithDict:versionInfo];
+                }
+            }
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
+    }
+    
+}
+
+- (BOOL)isTheVersion:(NSString *)theVersion laterThanLocalVersion:(NSString *)localVersion {
+    NSArray *localArr = [localVersion componentsSeparatedByString:@"."];
+    NSArray *theArr = [theVersion componentsSeparatedByString:@"."];
+    for (int i = 0; i<localArr.count; i++) {
+        NSInteger localIndex = [localArr[i] integerValue];
+        NSInteger theIndex;
+        if (i < theArr.count) {
+            theIndex = [theArr[i] integerValue];
+        } else {
+            theIndex = 0;
         }
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
-    }];
+        if (theIndex > localIndex) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
