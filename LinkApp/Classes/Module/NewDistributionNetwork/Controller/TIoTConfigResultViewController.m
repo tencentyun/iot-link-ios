@@ -112,7 +112,7 @@
     [changeButton addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:changeButton];
     [changeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(describeLabel.mas_bottom).offset(141*kScreenAllHeightScale);
+        make.top.equalTo(describeLabel.mas_bottom).offset(291*kScreenAllHeightScale);
         make.centerX.equalTo(self.view);
         make.width.mas_equalTo(150);
         make.height.mas_equalTo(72);

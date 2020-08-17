@@ -55,7 +55,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [self performSelector:@selector(clock4Timer:) withObject:@(1) afterDelay:3.0f];
 }
 
 - (void)setupUI{
@@ -63,7 +62,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[_dataDic objectForKey:@"stepTipArr"]];
-    self.stepTipView.step = 3;
+    self.stepTipView.step = _configHardwareStyle == TIoTConfigHardwareStyleSmartConfig ? 3 : 4;
     [self.view addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(20 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
@@ -90,6 +89,8 @@
         make.width.mas_equalTo(166);
         make.height.mas_equalTo(114);
     }];
+    
+    [self performSelector:@selector(clock4Timer:) withObject:@(1) afterDelay:0.5f];
 }
 
 - (void)clock4Timer:(NSNumber *)count {
@@ -97,7 +98,7 @@
         return;
     } else {
         self.connectStepTipView.step = count.intValue;
-        [self performSelector:@selector(clock4Timer:) withObject:@(count.intValue+1) afterDelay:3.0f];
+//        [self performSelector:@selector(clock4Timer:) withObject:@(count.intValue+1) afterDelay:3.0f];
     }
 }
 
@@ -146,24 +147,23 @@
 }
 
 - (void)connectWiFiCheckTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
-//    if (@available(iOS 11.0, *)) { //去连接wifi
-//        NSLog(@"wifiInfo :%@", self.wifiInfo);
-//        NSString *Ssid = self.wifiInfo[@"name"];
-//        NSString *Pwd = self.wifiInfo[@"pwd"];
-//         NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
-//
-//        __weak __typeof(self)weakSelf = self;
-//        [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
-//            if (nil == error) {
-//                NSLog(@"Connected!!");
-//                [weakSelf checkTokenStateWithCirculationWithDeviceData:data];
-//            } else {
-//                NSLog (@"connect WiFi Error :%@", error);
-//            }
-//        }];
-//    } else {
+    if (@available(iOS 11.0, *)) { //去连接wifi
+        NSLog(@"wifiInfo :%@", self.wifiInfo);
+        NSString *Ssid = self.wifiInfo[@"name"];
+        NSString *Pwd = self.wifiInfo[@"pwd"];
+         NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
+
+        __weak __typeof(self)weakSelf = self;
+        [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
+            if (nil == error) {
+                NSLog(@">=iOS 11 Connected!!");
+            } else {
+                NSLog (@">=iOS 11 connect WiFi Error :%@", error);
+            }
+        }];
+    }
+    
         [self checkTokenStateWithCirculationWithDeviceData:data];
-//    }
 }
 
 //token 2秒轮询查看设备状态
@@ -203,11 +203,14 @@
             self.isTokenbindedStatus = NO;
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
 
-            if (self.connectStepTipView.step < 3) {
-                self.connectStepTipView.step = 3;
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.connectStepTipView.step < 3) {
+                    self.connectStepTipView.step = 3;
+                }
+            });
             
             self.isTokenbindedStatus = YES;
+            [self releaseAlloc];
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
                 [self bindingDevidesWithData:deviceData];
@@ -224,8 +227,15 @@
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
         NSString *roomId = self.roomId ?: @"0";
         [[TIoTRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.connectStepTipView.step < 4) {
+                    self.connectStepTipView.step = 4;
+                }
+            });
             [self releaseAlloc];
-            [self connectSucess:deviceData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self connectSucess:deviceData];
+            });
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaild];
         }];
@@ -307,9 +317,11 @@
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
     WCLog(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
-    if (self.connectStepTipView.step < 1) {
-        self.connectStepTipView.step = 1;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.connectStepTipView.step < 1) {
+            self.connectStepTipView.step = 1;
+        }
+    });
 }
 
 - (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
@@ -322,9 +334,11 @@
     self.signInfo = dictionary;
     WCLog(@"嘟嘟嘟 %@",dictionary);
     //手机与设备连接成功,收到设备的udp数据
-    if (self.connectStepTipView.step < 2) {
-        self.connectStepTipView.step = 2;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.connectStepTipView.step < 2) {
+            self.connectStepTipView.step = 2;
+        }
+    });
     
     if ([dictionary[@"cmdType"] integerValue] == 2) {
         //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
