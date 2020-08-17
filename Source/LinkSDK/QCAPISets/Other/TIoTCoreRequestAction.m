@@ -27,6 +27,7 @@ NSString *const AppGetToken = @"AppGetToken";
 NSString *const AppGetTokenByWeiXin = @"AppGetTokenByWeiXin";
 NSString *const AppUpdateUserByWeiXin = @"AppUpdateUserByWeiXin";
 
+NSString *const AppGetGlobalConfig = @"AppGetGlobalConfig";
 NSString *const AppGetUser = @"AppGetUser";
 NSString *const AppUpdateUser = @"AppUpdateUser";
 NSString *const AppGetUserSetting = @"AppGetUserSetting";
