@@ -22,6 +22,10 @@
 #import "TIoTAccountAndSafeVC.h"
 #import "TIoTCustomActionSheet.h"
 #import "NSString+Extension.h"
+#import <MJRefresh.h>
+#import "TIoTRefreshHeader.h"
+#import "TIoTUserConfigModel.h"
+#import <YYModel.h>
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -48,6 +52,10 @@
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     gesture.numberOfTapsRequired = 5;
     [self.view addGestureRecognizer:gesture];
+    
+    //国际化版本
+    [self setupRefreshView];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)tapGesture:(UITapGestureRecognizer *)gesture {
@@ -57,6 +65,18 @@
 
 - (void)dealloc{
     [HXYNotice removeListener:self];
+}
+
+//国际化版本
+- (void)setupRefreshView {
+    // 下拉刷新
+    WeakObj(self);
+    self.tableView.mj_header = [TIoTRefreshHeader headerWithRefreshingBlock:^{
+        [selfWeak requestUserConfigMessage];
+    }];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    self.tableView.mj_header.automaticallyChangeAlpha = YES;
 }
 
 #pragma mark privateMethods
@@ -256,7 +276,6 @@
     }];
 }
 
-#pragma mark - event
 - (void)loginoutClick:(id)sender{
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
@@ -267,6 +286,70 @@
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
+    }];
+}
+
+- (void)reportTemperatureWithUnit:(NSString *)unitString {
+    if ([unitString isEqualToString:@"F"]) {
+        //转华氏温度
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"F"} success:^(id responseObject) {
+            [MBProgressHUD dismissInView:self.view];
+            if (![[responseObject allKeys] containsObject:@"Error"]) {
+                NSMutableDictionary *temperatureDic = self.dataArr[2][0];
+                [temperatureDic setValue:@"℉" forKey:@"value"];
+                NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:2];
+                [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+            }
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
+    }else if ([unitString isEqualToString:@"C"]) {
+        //转摄氏温度
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"C"} success:^(id responseObject) {
+            [MBProgressHUD dismissInView:self.view];
+            if (![[responseObject allKeys] containsObject:@"Error"]) {
+                NSMutableDictionary *temperatureDic = self.dataArr[2][0];
+                [temperatureDic setValue:@"℃" forKey:@"value"];
+                NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:2];
+                [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+            }
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
+    }
+}
+
+- (void)requestUserConfigMessage {
+    [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
+        TIoTUserConfigModel *model = [TIoTUserConfigModel yy_modelWithJSON:responseObject[@"UserSetting"]];
+        
+//        _dataArr = [NSMutableArray arrayWithArray:@[
+//            @[@{@"title":@"头像",@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
+//              @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+//              @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+//            ],
+//            @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+//            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"33华氏",@"vc":@"",@"haveArrow":@"1"}],
+//              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"}],
+//            ],
+//        ]];
+
+        NSArray *userConfigArray = self.dataArr[2];
+        NSMutableDictionary *temperatureDic = userConfigArray[0];
+        if ([model.TemperatureUnit isEqualToString:@"C"]) {
+            [temperatureDic setValue:@"℃" forKey:@"value"];
+            
+        }else if ([model.TemperatureUnit isEqualToString:@"F"]) {
+            [temperatureDic setValue:@"℉" forKey:@"value"];
+        }
+        
+        NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:2];
+        [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView.mj_header endRefreshing];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        [self.tableView.mj_header endRefreshing];
     }];
 }
 
@@ -401,13 +484,15 @@
                         if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                             NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
                             NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
-                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℃",celsiusMeasurement.doubleValue] forKey:@"value"];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℉",celsiusMeasurement.doubleValue] forKey:@"value"];
                         }else {
-                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℃",temperatureString] forKey:@"value"];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℉",temperatureString] forKey:@"value"];
                         }
                         
                         //设置用户配置
-                        [self reportTemperatureWithUnit:@"C"];
+                        [self reportTemperatureWithUnit:@"F"];
+                    }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
+                        
                     }else {
                         [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
                     }
@@ -425,13 +510,15 @@
                         if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                             NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
                             NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
-                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℉",fahrenheitMeasurement.doubleValue] forKey:@"value"];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%f℃",fahrenheitMeasurement.doubleValue] forKey:@"value"];
                         }else {
-                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℉",temperatureString] forKey:@"value"];
+                            [tempSectionArray[indexPath.row] setValue:[NSString stringWithFormat:@"%@℃",temperatureString] forKey:@"value"];
                         }
                         
                         //设置用户配置
-                        [self reportTemperatureWithUnit:@"F"];
+                        [self reportTemperatureWithUnit:@"C"];
+                        
+                    }else if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]){
                         
                     }else {
                         [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
@@ -489,27 +576,6 @@
         UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
         NSString *userID = [TIoTCoreUserManage shared].userId;
         pastboard.string = (userID != nil ? userID : @"");
-    }
-}
-
-#pragma mark - event
-- (void)reportTemperatureWithUnit:(NSString *)unitString {
-    if ([unitString isEqualToString:@"F"]) {
-        //转华氏温度
-        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"F"} success:^(id responseObject) {
-            [MBProgressHUD dismissInView:self.view];
-        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            [MBProgressHUD dismissInView:self.view];
-        }];
-    }else if ([unitString isEqualToString:@"C"]) {
-        //转摄氏温度
-        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-        [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"TemperatureUnit":@"C"} success:^(id responseObject) {
-            [MBProgressHUD dismissInView:self.view];
-        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            [MBProgressHUD dismissInView:self.view];
-        }];
     }
 }
 
@@ -616,8 +682,8 @@
               @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
             ],
             @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"33华氏",@"vc":@"",@"haveArrow":@"1"}],
-              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"}],
+            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
             ],
         ]];
     }

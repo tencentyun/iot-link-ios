@@ -154,6 +154,7 @@
 - (void)chooseFahrenheitStyle {
     if (self.choiceFahrenheitBlock) {
         self.choiceFahrenheitBlock();
+        [self dismissActionView];
     }
     
 }
@@ -162,6 +163,7 @@
 - (void)chooseCelsius {
     if (self.choiceCelsiusBlock) {
         self.choiceCelsiusBlock();
+        [self dismissActionView];
     }
 }
 
