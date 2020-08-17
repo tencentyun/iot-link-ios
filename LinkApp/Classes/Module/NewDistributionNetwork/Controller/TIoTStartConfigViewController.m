@@ -153,7 +153,6 @@
         NSString *Pwd = self.wifiInfo[@"pwd"];
          NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
 
-        __weak __typeof(self)weakSelf = self;
         [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
             if (nil == error) {
                 NSLog(@">=iOS 11 Connected!!");

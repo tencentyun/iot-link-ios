@@ -9,6 +9,9 @@
 #import "TIoTConfigResultViewController.h"
 #import "TIoTStartConfigViewController.h"
 
+#import "TIoTWebVC.h"
+#import "TIoTAppEnvironment.h"
+
 @interface TIoTConfigResultViewController ()
 
 /// 配网类型
@@ -104,6 +107,19 @@
     }];
     stepLabel.hidden = _success;
     
+    if (!_success) {
+        UIButton *moreResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [moreResultBtn setTitle:@"查看更多失败原因" forState:UIControlStateNormal];
+        [moreResultBtn addTarget:self action:@selector(moreErrorResult:) forControlEvents:UIControlEventTouchUpInside];
+        moreResultBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        [moreResultBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+        [self.view addSubview:moreResultBtn];
+        [moreResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(topicLabel);
+            make.top.equalTo(stepLabel.mas_bottom).offset(5);
+        }];
+    }
+    
     NSString *changeTitle = _success ? @"继续添加其他设备" : [NSString stringWithFormat:@"切换到%@", _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? @"一键配网" : @"热点配网"];
     UIButton *changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [changeButton setTitle:changeTitle forState:UIControlStateNormal];
@@ -165,6 +181,28 @@
     } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
         [HXYNotice postChangeAddDeviceType:1];
     }
+}
+
+- (void)moreErrorResult:(UIButton *)sender {
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+            [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+
+                WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+                NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+                TIoTWebVC *vc = [TIoTWebVC new];
+                vc.title = @"帮助中心";
+                NSString *url = nil;
+                NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+
+                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@#/pages/Functional/HelpCenter/QnAList/QnAList?genCateID=config7", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
+                vc.urlPath = url;
+                vc.needJudgeJump = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+                [MBProgressHUD dismissInView:self.view];
+
+            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+                [MBProgressHUD dismissInView:self.view];
+            }];
 }
 
 - (void)nextClick:(UIButton *)sender {
