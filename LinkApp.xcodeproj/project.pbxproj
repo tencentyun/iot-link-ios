@@ -287,9 +287,6 @@
 		F4F3D7D124938EBE005D3396 /* RegistVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D78A24938EBD005D3396 /* RegistVC.xib */; };
 		F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D78B24938EBD005D3396 /* RegistVC.m */; };
 		F4F3D7D324938EBE005D3396 /* LoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D78D24938EBD005D3396 /* LoginVC.xib */; };
-		F4F3D7D424938EBE005D3396 /* QCFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F3D79024938EBD005D3396 /* QCFoundation.framework */; };
-		F4F3D7D524938EBE005D3396 /* QCAPISets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F3D79124938EBD005D3396 /* QCAPISets.framework */; };
-		F4F3D7D624938EBE005D3396 /* QCDeviceCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F3D79224938EBD005D3396 /* QCDeviceCenter.framework */; };
 		F4F3D7D724938EBE005D3396 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D79624938EBD005D3396 /* LaunchScreen.storyboard */; };
 		F4F3D7D824938EBE005D3396 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D79824938EBD005D3396 /* Main.storyboard */; };
 		FC676764BA53AB5A84D06600 /* Pods_LinkSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE44B77A5A39DFA35767EB7D /* Pods_LinkSDKDemo.framework */; };
@@ -828,9 +825,6 @@
 		F4F3D78C24938EBD005D3396 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		F4F3D78D24938EBD005D3396 /* LoginVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginVC.xib; sourceTree = "<group>"; };
 		F4F3D78E24938EBD005D3396 /* RegistVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistVC.h; sourceTree = "<group>"; };
-		F4F3D79024938EBD005D3396 /* QCFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QCFoundation.framework; sourceTree = "<group>"; };
-		F4F3D79124938EBD005D3396 /* QCAPISets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QCAPISets.framework; sourceTree = "<group>"; };
-		F4F3D79224938EBD005D3396 /* QCDeviceCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QCDeviceCenter.framework; sourceTree = "<group>"; };
 		F4F3D79324938EBD005D3396 /* QCFrameworkDemo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = QCFrameworkDemo.entitlements; sourceTree = "<group>"; };
 		F4F3D79424938EBD005D3396 /* QCPrefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCPrefix.pch; sourceTree = "<group>"; };
 		F4F3D79724938EBD005D3396 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -867,10 +861,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F3D7D624938EBE005D3396 /* QCDeviceCenter.framework in Frameworks */,
-				F4F3D7D524938EBE005D3396 /* QCAPISets.framework in Frameworks */,
 				6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */,
-				F4F3D7D424938EBE005D3396 /* QCFoundation.framework in Frameworks */,
 				FC676764BA53AB5A84D06600 /* Pods_LinkSDKDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1769,7 +1760,6 @@
 				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
 				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
 				F4F3D79524938EBD005D3396 /* Base.lproj */,
-				F4F3D78F24938EBD005D3396 /* Framework */,
 				F4F3D73524938EBD005D3396 /* Home */,
 				F4F3D72124938EBD005D3396 /* Other */,
 				F4F3D79324938EBD005D3396 /* QCFrameworkDemo.entitlements */,
@@ -1951,16 +1941,6 @@
 				F4F3D78A24938EBD005D3396 /* RegistVC.xib */,
 			);
 			path = Account;
-			sourceTree = "<group>";
-		};
-		F4F3D78F24938EBD005D3396 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-				F4F3D79024938EBD005D3396 /* QCFoundation.framework */,
-				F4F3D79124938EBD005D3396 /* QCAPISets.framework */,
-				F4F3D79224938EBD005D3396 /* QCDeviceCenter.framework */,
-			);
-			path = Framework;
 			sourceTree = "<group>";
 		};
 		F4F3D79524938EBD005D3396 /* Base.lproj */ = {
