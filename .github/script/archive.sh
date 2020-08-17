@@ -2,11 +2,27 @@
 
 #bin/bsah - l
 
+git branch
+echo "本地branch"
+git branch -r
+echo "远程branch"
+
+rb=$GIT_BRANCH_IMAGE_VERSION
 rc=$(git rev-parse --short HEAD)
-#echo $rc
+rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
+rt=${rtt#*v}
+
+echo $rb
+echo $rc
+echo $rt
+
 if [ $1 == 'Debug' ]; then
-    sed -i "" '/LinkAPP_VERSION/ s/$/.'$rc'/' LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rb+git.$rc/g" LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+else
+    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rt+git.$rc/g" LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 fi
+
+cat LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 
 #rm -rf Podfile.lock
 #/usr/local/bin/pod install --verbose --no-repo-update
@@ -24,6 +40,3 @@ if [ $1 == 'Debug' ]; then
 else
     xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsRelease.plist  -exportPath ./
 fi
-
-
- 
