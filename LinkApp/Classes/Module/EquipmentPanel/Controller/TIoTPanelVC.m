@@ -298,6 +298,7 @@ static NSString *itemId3 = @"i_ooo454";
             };
             self.bigBtnView = ev;
             [self.coll addSubview:ev];
+            [self wr_setNavBarBackgroundAlpha:1];
         }
         else if ([type isEqualToString:@"enum"])
         {
