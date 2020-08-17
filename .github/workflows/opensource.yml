@@ -1,12 +1,6 @@
 name: iOS CI
 
-on:
-  # Trigger the workflow on push or pull request,
-  # but only for the master branch
-  push:
-      branches: [ master ]
-  pull_request:
-      branches: [ master ]
+on: [push, pull_request]
       
 jobs:
   Build:
@@ -35,6 +29,8 @@ jobs:
       run: sudo xcode-select -switch /Applications/Xcode_11.4.app && /usr/bin/xcodebuild -version
     - name: Build archive
       run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        export GIT_BRANCH_IMAGE_VERSION=$VERSION
         sh .github/script/archive.sh Debug
     - name: Deploy App to fir
       run: fir publish LinkApp.ipa -T $RELEASE_PGYER_API_KEY --oversea_turbo
