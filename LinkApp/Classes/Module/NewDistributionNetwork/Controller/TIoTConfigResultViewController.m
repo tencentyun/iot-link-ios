@@ -102,6 +102,7 @@
         make.left.right.equalTo(topicLabel);
 //        make.height.mas_equalTo(100);
     }];
+    stepLabel.hidden = _success;
     
     NSString *changeTitle = _success ? @"继续添加其他设备" : [NSString stringWithFormat:@"切换到%@", _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? @"一键配网" : @"热点配网"];
     UIButton *changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
