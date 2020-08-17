@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a4f6d00_2009c020",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-17T03:26:55Z",
+      "side": 1,
+      "message": "添加na-ashburn注视，下个版本需替换为api获取地区",
+      "revId": "539478717a16b8e45882255cc4bf1e2b2d823943",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
