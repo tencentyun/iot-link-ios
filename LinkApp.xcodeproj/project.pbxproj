@@ -742,9 +742,6 @@
 		F4F3D53A24935BD3005D3396 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F4F3D53C24935BD3005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F3D53D24935BD3005D3396 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F4F3D54824935D75005D3396 /* QCAPISets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCAPISets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F3D6C024936280005D3396 /* QCDeviceCenter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCDeviceCenter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F3D70024936E58005D3396 /* QCFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QCFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D72F24938EBD005D3396 /* NSObject+ro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ro.m"; sourceTree = "<group>"; };
 		F4F3D73224938EBD005D3396 /* NSObject+ro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ro.h"; sourceTree = "<group>"; };
 		F4F3D73724938EBD005D3396 /* ControlInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlInfo.m; sourceTree = "<group>"; };
@@ -866,27 +863,6 @@
 			files = (
 				6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */,
 				FC676764BA53AB5A84D06600 /* Pods_LinkSDKDemo.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D54524935D75005D3396 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6BD24936280005D3396 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6FD24936E58005D3396 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1564,9 +1540,6 @@
 			children = (
 				D2C7A9EF232F6AA4005E8006 /* LinkApp.app */,
 				F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */,
-				F4F3D54824935D75005D3396 /* QCAPISets.framework */,
-				F4F3D6C024936280005D3396 /* QCDeviceCenter.framework */,
-				F4F3D70024936E58005D3396 /* QCFoundation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1959,30 +1932,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		F4F3D54324935D75005D3396 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6BB24936280005D3396 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6FB24936E58005D3396 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		D2C7A9EE232F6AA4005E8006 /* LinkApp */ = {
 			isa = PBXNativeTarget;
@@ -2025,60 +1974,6 @@
 			productReference = F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F4F3D54724935D75005D3396 /* QCAPISets */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F4F3D55124935D75005D3396 /* Build configuration list for PBXNativeTarget "QCAPISets" */;
-			buildPhases = (
-				F4F3D54324935D75005D3396 /* Headers */,
-				F4F3D54424935D75005D3396 /* Sources */,
-				F4F3D54524935D75005D3396 /* Frameworks */,
-				F4F3D54624935D75005D3396 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QCAPISets;
-			productName = LinkSDK;
-			productReference = F4F3D54824935D75005D3396 /* QCAPISets.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		F4F3D6BF24936280005D3396 /* QCDeviceCenter */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F4F3D6C924936280005D3396 /* Build configuration list for PBXNativeTarget "QCDeviceCenter" */;
-			buildPhases = (
-				F4F3D6BB24936280005D3396 /* Headers */,
-				F4F3D6BC24936280005D3396 /* Sources */,
-				F4F3D6BD24936280005D3396 /* Frameworks */,
-				F4F3D6BE24936280005D3396 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QCDeviceCenter;
-			productName = QCDeviceCenter;
-			productReference = F4F3D6C024936280005D3396 /* QCDeviceCenter.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		F4F3D6FF24936E58005D3396 /* QCFoundation */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F4F3D70924936E58005D3396 /* Build configuration list for PBXNativeTarget "QCFoundation" */;
-			buildPhases = (
-				F4F3D6FB24936E58005D3396 /* Headers */,
-				F4F3D6FC24936E58005D3396 /* Sources */,
-				F4F3D6FD24936E58005D3396 /* Frameworks */,
-				F4F3D6FE24936E58005D3396 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QCFoundation;
-			productName = QCFoundation;
-			productReference = F4F3D70024936E58005D3396 /* QCFoundation.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2104,15 +1999,6 @@
 					F4F3D52824935BD3005D3396 = {
 						CreatedOnToolsVersion = 11.5;
 					};
-					F4F3D54724935D75005D3396 = {
-						CreatedOnToolsVersion = 11.5;
-					};
-					F4F3D6BF24936280005D3396 = {
-						CreatedOnToolsVersion = 11.5;
-					};
-					F4F3D6FF24936E58005D3396 = {
-						CreatedOnToolsVersion = 11.5;
-					};
 				};
 			};
 			buildConfigurationList = D2C7A9EA232F6AA4005E8006 /* Build configuration list for PBXProject "LinkApp" */;
@@ -2131,9 +2017,6 @@
 			targets = (
 				D2C7A9EE232F6AA4005E8006 /* LinkApp */,
 				F4F3D52824935BD3005D3396 /* LinkSDKDemo */,
-				F4F3D54724935D75005D3396 /* QCAPISets */,
-				F4F3D6BF24936280005D3396 /* QCDeviceCenter */,
-				F4F3D6FF24936E58005D3396 /* QCFoundation */,
 			);
 		};
 /* End PBXProject section */
@@ -2214,27 +2097,6 @@
 				F4F3D7AD24938EBE005D3396 /* TIoTCoreFamilyInfoCell.xib in Resources */,
 				F4F3D7BC24938EBE005D3396 /* TIoTCoreRoomInfoVC.xib in Resources */,
 				F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D54624935D75005D3396 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6BE24936280005D3396 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6FE24936E58005D3396 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2556,27 +2418,6 @@
 				F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */,
 				F4F3D7C824938EBE005D3396 /* TIoTCoreRepeatVC.m in Sources */,
 				F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D54424935D75005D3396 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6BC24936280005D3396 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4F3D6FC24936E58005D3396 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2969,174 +2810,6 @@
 			};
 			name = Release;
 		};
-		F4F3D55224935D75005D3396 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCAPISets/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.LinkSDK;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		F4F3D55324935D75005D3396 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCAPISets/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.LinkSDK;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		F4F3D6CA24936280005D3396 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCDeviceCenter/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.QCDeviceCenter;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		F4F3D6CB24936280005D3396 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCDeviceCenter/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.QCDeviceCenter;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		F4F3D70A24936E58005D3396 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCFoundation/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.QCFoundation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		F4F3D70B24936E58005D3396 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 89W69LHLD3;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/LinkSDK/QCFoundation/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.QCFoundation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3163,33 +2836,6 @@
 			buildConfigurations = (
 				F4F3D53F24935BD3005D3396 /* Debug */,
 				F4F3D54024935BD3005D3396 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F4F3D55124935D75005D3396 /* Build configuration list for PBXNativeTarget "QCAPISets" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F4F3D55224935D75005D3396 /* Debug */,
-				F4F3D55324935D75005D3396 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F4F3D6C924936280005D3396 /* Build configuration list for PBXNativeTarget "QCDeviceCenter" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F4F3D6CA24936280005D3396 /* Debug */,
-				F4F3D6CB24936280005D3396 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F4F3D70924936E58005D3396 /* Build configuration list for PBXNativeTarget "QCFoundation" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F4F3D70A24936E58005D3396 /* Debug */,
-				F4F3D70B24936E58005D3396 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
