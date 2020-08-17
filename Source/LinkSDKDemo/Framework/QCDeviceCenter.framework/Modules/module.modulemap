@@ -1,6 +1,0 @@
-framework module QCDeviceCenter {
-  umbrella header "QCDeviceCenter.h"
-
-  export *
-  module * { export * }
-}
