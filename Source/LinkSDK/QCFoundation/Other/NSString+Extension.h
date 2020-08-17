@@ -74,6 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 检测中文
 + (BOOL)matchSinogram:(NSString *)checkString;
+
+/// 检测版本号  要求，必须是三位，x.x.x的形式  每位x的范围分别为1-99,0-99,0-99。
++ (NSString *)matchVersionNum:(NSString *)checkString;
 @end
 
 NS_ASSUME_NONNULL_END

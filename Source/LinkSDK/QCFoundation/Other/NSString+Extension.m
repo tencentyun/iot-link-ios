@@ -218,4 +218,23 @@
     return NO;
 }
 
++ (NSString *)matchVersionNum:(NSString *)checkString {
+    if (checkString == nil || [checkString isEqualToString:@""]) {
+        return @"";
+    }
+    
+    NSString *pattern = @"([1-9]\\d|[1-9])(\\.([1-9]\\d|\\d)){2}";
+    NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    NSArray *results = [regular matchesInString:checkString options:0 range:NSMakeRange(0, checkString.length)];
+    if (results.count > 0) {
+        NSTextCheckingResult* result = results[0];
+        //从NSTextCheckingResult类中取出range属性
+        NSRange range = result.range;
+        //从原文本中将字段取出并存入一个NSMutableArray中
+        NSString *string = [checkString substringWithRange:range];
+        return string;
+    }
+    return @"";
+}
+
 @end
