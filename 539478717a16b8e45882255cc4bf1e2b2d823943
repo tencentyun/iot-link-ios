@@ -16,6 +16,24 @@
       "revId": "539478717a16b8e45882255cc4bf1e2b2d823943",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd470408_53a2ead3",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-17T03:36:36Z",
+      "side": 1,
+      "message": "这一版是写死的，下一版会优化这里，后台在注册和登录接口返回：\nna-ashburn ：美东  \nap-guangzhou ：国内\n\n美东在请求的时候，加一个请求参数RegionId: 22\n国内的RegionId，不填或者填1",
+      "parentUuid": "7a4f6d00_2009c020",
+      "revId": "539478717a16b8e45882255cc4bf1e2b2d823943",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
