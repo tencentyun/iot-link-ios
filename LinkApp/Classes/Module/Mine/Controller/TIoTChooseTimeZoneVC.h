@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^returnTimeZoneBlock) (NSString *timeZone,NSString *cityName);
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTChooseTimeZoneVC : UIViewController
+
+@property (nonatomic, copy) returnTimeZoneBlock returnTimeZoneBlock;
 
 @end
 
