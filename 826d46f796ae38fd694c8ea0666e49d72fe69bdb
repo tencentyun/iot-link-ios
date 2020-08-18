@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a399005a_36876400",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-18T03:25:20Z",
+      "side": 1,
+      "message": "好的，在文件中加注释说明。\n\nKey:  配置项名称：* 表示所有配置，RegionListCN 中文区域列表， RegionListEN 英文区域列表，RegisterRegionListEN 英文注册区域列表，RegisterRegionListCN 中文注册区域列表\n\n注：http://tapd.oa.com/NEW_IOT/markdown_wikis/show/#1220393192001647367 （接口文档）",
+      "parentUuid": "e22fbc7b_0e75b7f8",
+      "revId": "826d46f796ae38fd694c8ea0666e49d72fe69bdb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60f91eb9_bd6ae490",
         "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "826d46f796ae38fd694c8ea0666e49d72fe69bdb",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23e166ef_2e4069e4",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-18T03:25:20Z",
+      "side": 1,
+      "message": "已添加 Done",
+      "parentUuid": "60f91eb9_bd6ae490",
+      "revId": "826d46f796ae38fd694c8ea0666e49d72fe69bdb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
