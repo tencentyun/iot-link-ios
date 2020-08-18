@@ -8,7 +8,6 @@
 
 #import "HomeVC.h"
 #import "TIoTCoreEquipmentTableViewCell.h"
-#import "NSObject+ro.h"
 #import "CMPageTitleContentView.h"
 #import "ControlDeviceVC.h"
 
@@ -71,7 +70,7 @@ static NSString *cellID = @"DODO";
         if (self.familyTitlesView) {
             [self.familyTitlesView removeFromSuperview];
         }
-        titView.frame = CGRectMake(60, [NSObject navigationBarHeight], kScreenWidth - 60, 44);
+        titView.frame = CGRectMake(60, kNavBarAndStatusBarHeight, kScreenWidth - 60, 44);
         self.familyTitlesView = titView;
         self.familyTitlesView.isGetSelectedView = YES;
     }
@@ -80,7 +79,7 @@ static NSString *cellID = @"DODO";
         if (self.roomTitlesView) {
             [self.roomTitlesView removeFromSuperview];
         }
-        titView.frame = CGRectMake(60, [NSObject navigationBarHeight] + 44 + 2, kScreenWidth - 60, 44);
+        titView.frame = CGRectMake(60, kNavBarAndStatusBarHeight + 44 + 2, kScreenWidth - 60, 44);
         self.roomTitlesView = titView;
         self.roomTitlesView.isGetSelectedView = YES;
     }

@@ -38,7 +38,7 @@
     [self addGestureRecognizer:singleFingerOne];
     
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 300 + [NSObject tabbarAddHeight])];
+    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 300 + kBottomSafeHeight)];
     self.whiteView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.whiteView];
 //    [self.whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,7 +105,7 @@
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(line.mas_bottom);
         make.leading.trailing.mas_equalTo(0);
-        make.bottom.mas_equalTo(-[NSObject tabbarAddHeight]);
+        make.bottom.mas_equalTo(-kBottomSafeHeight);
         make.height.mas_equalTo(60);
     }];
     
@@ -122,7 +122,7 @@
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     
     [UIView animateWithDuration:0.2 animations:^{
-        self.whiteView.frame = CGRectMake(0, kScreenHeight - 300 - [NSObject tabbarAddHeight], kScreenWidth, 300 + [NSObject tabbarAddHeight]);
+        self.whiteView.frame = CGRectMake(0, kScreenHeight - 300 - kBottomSafeHeight, kScreenWidth, 300 + kBottomSafeHeight);
     }];
 }
 

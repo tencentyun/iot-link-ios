@@ -240,7 +240,6 @@
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
 		F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */; };
 		F4F3D53E24935BD3005D3396 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D53D24935BD3005D3396 /* main.m */; };
-		F4F3D79F24938EBE005D3396 /* NSObject+ro.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D72F24938EBD005D3396 /* NSObject+ro.m */; };
 		F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73724938EBD005D3396 /* ControlInfo.m */; };
 		F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D73A24938EBD005D3396 /* SelectView.m */; };
 		F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */; };
@@ -751,8 +750,6 @@
 		F4F3D53A24935BD3005D3396 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F4F3D53C24935BD3005D3396 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F3D53D24935BD3005D3396 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F4F3D72F24938EBD005D3396 /* NSObject+ro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ro.m"; sourceTree = "<group>"; };
-		F4F3D73224938EBD005D3396 /* NSObject+ro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ro.h"; sourceTree = "<group>"; };
 		F4F3D73724938EBD005D3396 /* ControlInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlInfo.m; sourceTree = "<group>"; };
 		F4F3D73824938EBD005D3396 /* ControlInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlInfo.h; sourceTree = "<group>"; };
 		F4F3D73A24938EBD005D3396 /* SelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectView.m; sourceTree = "<group>"; };
@@ -1778,8 +1775,6 @@
 		F4F3D72124938EBD005D3396 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D73224938EBD005D3396 /* NSObject+ro.h */,
-				F4F3D72F24938EBD005D3396 /* NSObject+ro.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -2402,7 +2397,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F3D79F24938EBE005D3396 /* NSObject+ro.m in Sources */,
 				F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
