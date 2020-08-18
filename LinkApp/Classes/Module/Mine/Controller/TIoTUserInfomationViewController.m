@@ -530,9 +530,8 @@
             
             [actionSheet shwoActionSheetView];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
-#warning TOTO 跳转时区列表
-//            TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
-//            [self.navigationController pushViewController:timeZoneVC animated:YES];
+            TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
+            [self.navigationController pushViewController:timeZoneVC animated:YES];
         }
 }
 

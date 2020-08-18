@@ -14,14 +14,13 @@
 @interface TIoTChooseTimeZoneVC ()<UITableViewDataSource,UITableViewDelegate,UISearchResultsUpdating> {
     
     UISearchController *_searchController;
-    NSDictionary *_sortedNameDict;
-    NSMutableArray *_indexArray;
+    
     NSMutableArray *_results;
 }
 
-@property (nonatomic, strong) NSArray  *dataArray;
 @property (nonatomic, strong) UITableView *tableView;
-
+@property (nonatomic, strong) NSDictionary *sortedNameDict;
+@property (nonatomic, strong) NSMutableArray *indexArray;
 @end
 
 @implementation TIoTChooseTimeZoneVC
@@ -29,18 +28,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    self.view.backgroundColor = [UIColor whiteColor];
-//    self.navigationItem.title = @"选择时区";
-//    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(back) image:@"backNac" selectImage:@"backNac"];
-//    [self creatSubviews];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.title = @"选择时区";
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(back) image:@"backNac" selectImage:@"backNac"];
+    [self creatSubviews];
     [self requestTimeZoneList];
 }
 
+#pragma mark - private method
+
 - (void)creatSubviews {
+    _results = [NSMutableArray arrayWithCapacity:1];
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.trailing.leading.equalTo(self.view);
+        make.trailing.bottom.leading.equalTo(self.view);
         if (@available (iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
         }else {
@@ -53,7 +55,7 @@
     _searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     self.automaticallyAdjustsScrollViewInsets = false;
-    
+
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _tableView.bounds.size.width, _searchController.searchBar.bounds.size.height)];
     [headerView addSubview:_searchController.searchBar];
     _tableView.tableHeaderView = headerView;
@@ -70,7 +72,10 @@
         [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegionListEN"} success:^(id responseObject) {
             TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
             TIoTConfigModel *configModel = userRegionModel.Configs[0];
-            NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+            
+            [self recombinationDataWithConfigModel:configModel];
+            
+            [self.tableView reloadData];
             
         
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
@@ -80,16 +85,100 @@
         [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegionListCN"} success:^(id responseObject) {
             TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
             TIoTConfigModel *configModel = userRegionModel.Configs[0];
-            NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
-            
         
+            [self recombinationDataWithConfigModel:configModel];
+            
+            [self.tableView reloadData];
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
             
         }];
     }
 }
 
-- (NSString *)showCodeStringIndex:(NSIndexPath *)indexPath {
+//重组接口返回数据接口
+- (void)recombinationDataWithConfigModel:(TIoTConfigModel *)configModel {
+    
+    /*
+     *  创建所需原始数据    如: @["Asia/Shanghai + Beijing","Asia/Hong_Kong + Hong Kong",];
+     *  timeListArray    接口请求后的json数据
+     */
+    
+    NSMutableArray *originalArray = [[NSMutableArray alloc]init];
+    NSString *separateString = @" + ";
+
+    NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    [timeListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *itemDic = [obj copy];
+        [originalArray addObject:[NSString stringWithFormat:@"%@%@%@",itemDic[@"TZ"],separateString,itemDic[@"Title"]]];
+    }];
+
+    TIoTLog(@"timeListArray====%@",timeListArray);
+    TIoTLog(@"originalArray===%@",originalArray);
+
+    /*
+     根据时区名称排序
+     */
+    NSArray *TZSortedArray = [self charactersOrder:(NSArray *)originalArray];
+    TIoTLog(@"TZSortedArray==%@",TZSortedArray);
+
+    /*
+     获取第一个字母 组成目标数据格式 如:A =     (
+         "Anchorage + America/Anchorage",
+         "Askt + America/Anchorage",
+         "EST + America/Atikokan",
+         "Chicago + America/Chicago",
+         "MST + America/Creston",
+         "Denver + America/Denver",
+         "Detroit + America/Detroit",
+         "Los Angeles + America/Los_Angeles",
+         "PST + America/Los_Angeles",
+         "New York + America/New_York",
+         "CST + America/Regina",
+         "Hong Kong + Asia/Hong_Kong",
+         "Macao + Asia/Macao",
+         "Beijing + Asia/Shanghai",
+         "Taiwan + Asia/Taipei"
+     );
+     P =     (
+         "Hawaii + Pacific/Honolulu",
+         "Honolulu + Pacific/Honolulu"
+     );
+     */
+    
+    NSMutableDictionary *TZDic = [[NSMutableDictionary alloc]init];
+    
+    [TZSortedArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *zoneString = obj;
+        NSString *firstString = [zoneString substringToIndex:1];
+        NSMutableArray *TZNameArray = [TZDic objectForKey:firstString];
+
+        NSString *TZString = [TZSortedArray[idx] componentsSeparatedByString:separateString].firstObject;
+        NSString *regionString = [TZSortedArray[idx] componentsSeparatedByString:separateString].lastObject;
+
+        if (TZNameArray) {
+            [TZNameArray addObject:[NSString stringWithFormat:@"%@%@%@",regionString,separateString,TZString]];
+        }else {
+            [TZDic setValue:[@[[NSString stringWithFormat:@"%@%@%@",regionString,separateString,TZString]] mutableCopy] forKey:firstString];
+        }
+    }];
+
+    TIoTLog(@"TZDic===%@",TZDic);
+
+    self.sortedNameDict = [[NSDictionary alloc]initWithDictionary:TZDic];
+    self.indexArray = [[NSMutableArray alloc] initWithArray:[[self.sortedNameDict allKeys] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2];
+    }]];
+}
+
+//数组排序
+- (NSArray *)charactersOrder:(NSArray*)array
+{
+    NSArray *stringArr = array;
+    NSArray *result  = [stringArr sortedArrayUsingSelector:@selector(localizedCompare:)];
+    return result;
+}
+
+- (NSString *)showTimeZoneStringIndex:(NSIndexPath *)indexPath {
     NSString *showCodeSting;
     if (_searchController.isActive) {
         if (_results.count > indexPath.row) {
@@ -108,25 +197,21 @@
 
 - (void)selectCodeIndex:(NSIndexPath *)indexPath {
     
-    NSString * originText = [self showCodeStringIndex:indexPath];
-    NSArray  * array = [originText componentsSeparatedByString:@"+"];
-    NSString * countryName = [array.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSString * code = array.lastObject;
+    NSString * originText = [self showTimeZoneStringIndex:indexPath];
+    NSArray  * array = [originText componentsSeparatedByString:@" + "];
+    NSString * cityName = [array.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * timeZone = array.lastObject;
     
-//    if (self.deleagete && [self.deleagete respondsToSelector:@selector(returnCountryName:code:)]) {
-//        [self.deleagete returnCountryName:countryName code:code];
-//    }
-//
-//    if (self.returnCountryCodeBlock != nil) {
-//        self.returnCountryCodeBlock(countryName,code);
-//    }
+    if (self.returnTimeZoneBlock != nil) {
+        self.returnTimeZoneBlock(timeZone,cityName);
+    }
     
     _searchController.active = NO;
     [_searchController.searchBar resignFirstResponder];
     
     [self.navigationController popViewControllerAnimated:YES];
     
-    WCLog(@"选择国家: %@   代码: %@",countryName,code);
+    WCLog(@"城市名称: %@   城市时区: %@",cityName,timeZone);
 }
 
 - (void)back{
@@ -134,6 +219,7 @@
 }
 
 #pragma mark - UISearchResultsUpdating
+
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     if (_results.count > 0) {
         [_results removeAllObjects];
@@ -152,6 +238,7 @@
 }
 
 #pragma mark - UITableViewDelegate && UITableViewDataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (_searchController.isActive) {
         return 1;
@@ -180,11 +267,11 @@
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    NSString *area = [self showCodeStringIndex:indexPath];
-    cell.textLabel.text = [area componentsSeparatedByString:@" "].firstObject;
+    NSString *area = [self showTimeZoneStringIndex:indexPath];
+    cell.textLabel.text = [area componentsSeparatedByString:@" + "].firstObject;
     cell.textLabel.textColor = kFontColor;
     cell.textLabel.font = [UIFont systemFontOfSize:18];
-    cell.detailTextLabel.text = [area componentsSeparatedByString:@" "].lastObject;
+    cell.detailTextLabel.text = [area componentsSeparatedByString:@" + "].lastObject;
     cell.detailTextLabel.textColor = kMainColor;
     cell.detailTextLabel.font = [UIFont systemFontOfSize:18 weight:UIFontWeightBold];
     return cell;
@@ -236,10 +323,14 @@
         
     }
     
-    
     return bgview;
 }
 
+#pragma mark - 选择国际获取代码
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self selectCodeIndex:indexPath];
+}
 
 #pragma mark - setter and getter
 
@@ -259,16 +350,5 @@
     return _tableView;
 }
 
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
