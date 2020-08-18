@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "0097eb92_04752f8a",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-18T02:27:18Z",
+      "side": 1,
+      "message": "weakself无用了",
+      "revId": "b0a99dd00fd401b04710282878378077dc3999df",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "399ac178_ef979d34",
         "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
         "patchSetId": 1
