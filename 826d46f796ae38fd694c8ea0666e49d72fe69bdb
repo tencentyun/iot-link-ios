@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e22fbc7b_0e75b7f8",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-18T02:22:01Z",
+      "side": 1,
+      "message": "常量添加注释，或者统一到到常量配置文件",
+      "revId": "826d46f796ae38fd694c8ea0666e49d72fe69bdb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f91eb9_bd6ae490",
+        "filename": "LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-18T02:22:01Z",
+      "side": 1,
+      "message": "此处判断若为预留入口，建议加入 #waring TODO",
+      "revId": "826d46f796ae38fd694c8ea0666e49d72fe69bdb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
