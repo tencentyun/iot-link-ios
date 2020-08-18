@@ -20,9 +20,5 @@ failure:(FailureResponseBlock)failure;
 
 - (void)getSigForUpload:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
                 failure:(FailureResponseBlock)failure;
-
-- (void)getAccessTokenForWeiXin:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
-failure:(FailureResponseBlock)failure;
-
 @end
 

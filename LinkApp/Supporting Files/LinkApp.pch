@@ -36,13 +36,13 @@
 
 #import "LinkApp-Swift.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+//#import <CocoaLumberjack/CocoaLumberjack.h>
 #endif
 
-#ifdef DEBUG
-    static const int ddLogLevel = DDLogLevelVerbose;
-#else
-    static const int ddLogLevel = DDLogLevelError;
-#endif
+//#ifdef DEBUG
+//    static const int ddLogLevel = DDLogLevelVerbose;
+//#else
+//    static const int ddLogLevel = DDLogLevelError;
+//#endif
 #endif /* TenextCloud_pch */
 

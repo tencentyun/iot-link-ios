@@ -1,9 +1,4 @@
 PODS:
-  - CocoaLumberjack (3.6.2):
-    - CocoaLumberjack/Core (= 3.6.2)
-  - CocoaLumberjack/Core (3.6.2)
-  - CocoaLumberjack/Swift (3.6.2):
-    - CocoaLumberjack/Core
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
@@ -102,9 +97,6 @@ PODS:
   - GTMSessionFetcher/Core (1.4.0)
   - IQKeyboardManager (6.1.1)
   - KeychainAccess (4.2.0)
-  - LumberjackConsole (3.3.1):
-    - CocoaLumberjack (>= 3.x)
-    - NBUCore (>= 2.1.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
   - MGJRouter (0.10.0)
@@ -114,7 +106,6 @@ PODS:
     - nanopb/encode (= 1.30905.0)
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
-  - NBUCore (2.1.0)
   - PromisesObjC (1.2.9)
   - Protobuf (3.12.0)
   - QCloudCore (5.5.2)
@@ -131,15 +122,13 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - CocoaLumberjack/Swift (= 3.6.2)
   - Crashlytics (= 3.14.0)
   - Fabric (= 1.10.2)
   - FDFullscreenPopGesture (= 1.1)
   - Firebase/Analytics (= 6.26.0)
   - Firebase/Performance (= 6.26.0)
   - IQKeyboardManager (= 6.1.1)
-  - KeychainAccess
-  - LumberjackConsole (from `https://github.com/tonychanchen/LumberjackConsole.git`, branch `master`)
+  - KeychainAccess (= 4.2.0)
   - Masonry (= 1.1.0)
   - MGJRouter (= 0.10.0)
   - MJRefresh (= 3.2.0)
@@ -153,7 +142,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - CocoaLumberjack
     - Crashlytics
     - Fabric
     - FDFullscreenPopGesture
@@ -179,7 +167,6 @@ SPEC REPOS:
     - MGJRouter
     - MJRefresh
     - nanopb
-    - NBUCore
     - PromisesObjC
     - Protobuf
     - QCloudCore
@@ -191,19 +178,10 @@ SPEC REPOS:
     - YYModel
 
 EXTERNAL SOURCES:
-  LumberjackConsole:
-    :branch: master
-    :git: https://github.com/tonychanchen/LumberjackConsole.git
   TIoTLinkKit:
     :path: "./"
 
-CHECKOUT OPTIONS:
-  LumberjackConsole:
-    :commit: 8f31332fb4d871e81340402044496b4fff7ed7a2
-    :git: https://github.com/tonychanchen/LumberjackConsole.git
-
 SPEC CHECKSUMS:
-  CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
@@ -224,13 +202,11 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
-  LumberjackConsole: c5fcf48e08da5313d060225901737496cf9140ca
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MGJRouter: 15d94541eb2cc81eff7d577337288feb7ae9575f
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
-  NBUCore: 201af50441f48513ef6d5823a5fc12c9e1f288cd
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
@@ -242,6 +218,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: d5d94f62c21e9b82393c365f6e2cf68902fdbc24
+PODFILE CHECKSUM: 4555f6a00331b1ba1010d627365a22de5f34bde5
 
 COCOAPODS: 1.9.3
