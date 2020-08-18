@@ -16,7 +16,6 @@
 #import "MBProgressHUD+XDP.h"
 
 #import "TIoTCoreAPISets.h"
-#import "NSObject+ro.h"
 #import "TIoTCoreQMacros.h"
 #endif
 
