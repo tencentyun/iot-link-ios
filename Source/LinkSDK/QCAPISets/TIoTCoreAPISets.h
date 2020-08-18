@@ -20,3 +20,5 @@ FOUNDATION_EXPORT const unsigned char QCAPISetsVersionString[];
 #import "TIoTCoreDeviceSet.h"
 #import "TIoTCoreFamilySet.h"
 #import "TIoTCoreMessageSet.h"
+
+FOUNDATION_EXPORT const NSString *TIoTLinkKitShortVersionString;

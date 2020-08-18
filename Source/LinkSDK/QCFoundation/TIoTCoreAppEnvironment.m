@@ -8,6 +8,8 @@
 
 #import "TIoTCoreAppEnvironment.h"
 
+NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
+
 @interface TIoTCoreAppEnvironment ()
 
 @property (nonatomic , assign) WCAppEnvironmentType type;
@@ -24,6 +26,15 @@
         _inst = [[self alloc] init];
     });
     return _inst;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self configBuglySDKInfos];
+    }
+    return self;
 }
 
 - (void)setEnvironment:(WCAppEnvironmentType)environment
@@ -56,6 +67,26 @@
         default:
             break;
     }
+}
+
+- (void)configBuglySDKInfos {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString * componentId = @"3c26077475";
+        NSString * version = TIoTLinkKitShortVersionString;
+        if (componentId && version) {
+            NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
+            // 读取已有信息并记录
+            NSDictionary * dict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"BuglySDKInfos"];
+            if (dict) {
+                [dictionary addEntriesFromDictionary:dict];
+            }
+            // 添加当前组件的唯⼀一标识和版本
+            [dictionary setValue:version forKey:componentId];
+            // 写⼊入更更新的信息
+            [[NSUserDefaults standardUserDefaults] setObject:[NSDictionary dictionaryWithDictionary:dictionary] forKey:@"BuglySDKInfos"];
+        }
+    });
 }
 
 @end
