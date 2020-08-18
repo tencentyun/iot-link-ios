@@ -1,0 +1,47 @@
+From ceb62320acb95486317464d980b3ce8d00fa1734 Mon Sep 17 00:00:00 2001
+From: ccharlesren <ccharlesren@tencent.com>
+Date: Tue, 18 Aug 2020 14:58:11 +0800
+Subject: [PATCH] 添加自定义TIoTLog(用于utf-8编码，控制台可直接显示汉字)
+
+Change-Id: If52f99efb041c27cdd4b97d3758b155a2f9511fe
+---
+
+diff --git a/LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m b/LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m
+index ebcde6b..83a239f 100644
+--- a/LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m
++++ b/LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m
+@@ -66,7 +66,6 @@
+             TIoTConfigModel *configModel = userRegionModel.Configs[0];
+             NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+             
+-        
+         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+             
+         }];
+diff --git a/LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m b/LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m
+index 68767bb..aa56e44 100644
+--- a/LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m
++++ b/LinkApp/Classes/Module/Mine/Controller/TIoTChooseTimeZoneVC.m
+@@ -82,7 +82,6 @@
+             TIoTConfigModel *configModel = userRegionModel.Configs[0];
+             NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+             
+-        
+         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+             
+         }];
+diff --git a/Source/LinkSDK/QCDeviceCenter/Other/TIoTCoreWMacros.h b/Source/LinkSDK/QCDeviceCenter/Other/TIoTCoreWMacros.h
+index 7d8adc2..b19b163 100644
+--- a/Source/LinkSDK/QCDeviceCenter/Other/TIoTCoreWMacros.h
++++ b/Source/LinkSDK/QCDeviceCenter/Other/TIoTCoreWMacros.h
+@@ -19,3 +19,10 @@
+ #else
+ #define WCLog(...)
+ #endif
++
++ 
++#ifdef DEBUG
++#define TIoTLog(FORMAT, ...) fprintf(stderr,"\n %s:%d   %s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],__LINE__, [[[NSString alloc] initWithData:[[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] dataUsingEncoding:NSUTF8StringEncoding] encoding:NSNonLossyASCIIStringEncoding] UTF8String]);
++#else
++#define TIoTLog(...)
++#endif
