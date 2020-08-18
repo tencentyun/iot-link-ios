@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91372fc9_f045a71f",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTConfigResultViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-18T01:57:22Z",
+      "side": 1,
+      "message": "uin目前不用区分，统一在TIoTwebVC中setUrlPath添加了。uin如果不在网页上注册，也不会到测试环境",
+      "revId": "658ec9c077518ff280ad155dda55adbe3dc684c9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
