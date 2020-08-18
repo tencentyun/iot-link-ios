@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399ac178_ef979d34",
+        "filename": "LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-18T01:47:12Z",
+      "side": 1,
+      "message": "建议这里查下，在2秒轮询结束时候（成功或失败），time、time2是否确认cancel哈",
+      "range": {
+        "startLine": 235,
+        "startChar": 18,
+        "endLine": 235,
+        "endChar": 30
+      },
+      "revId": "b0a99dd00fd401b04710282878378077dc3999df",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
