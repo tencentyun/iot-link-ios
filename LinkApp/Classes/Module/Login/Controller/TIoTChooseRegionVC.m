@@ -66,7 +66,6 @@
             TIoTConfigModel *configModel = userRegionModel.Configs[0];
             NSArray *timeListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
             
-        
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
             
         }];
