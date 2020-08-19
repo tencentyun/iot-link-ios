@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3826cb12_df58277d",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T03:00:31Z",
+      "side": 1,
+      "message": "还有这里  腾讯连连SDK内存地址范围",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a1c0091_5b8cf30c",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T03:00:31Z",
+      "side": 1,
+      "message": "这里是不是   TIoT异常结束     好一点。",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e68c09_80e0508e",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T03:00:31Z",
+      "side": 1,
+      "message": "这里写腾讯连连SDK内存地址范围 是不是好一点。",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
