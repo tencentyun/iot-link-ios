@@ -11,9 +11,6 @@
 NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
 
 @interface TIoTCoreAppEnvironment ()
-
-@property (nonatomic , assign) WCAppEnvironmentType type;
-
 @end
 
 @implementation TIoTCoreAppEnvironment
@@ -33,40 +30,24 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
     self = [super init];
     if (self) {
         [self configBuglySDKInfos];
+        [self setEnvironment];
     }
     return self;
 }
 
-- (void)setEnvironment:(WCAppEnvironmentType)environment
-{
-    _environment = environment;
+- (void)setEnvironment {
+
+    self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //应用端 API 登录前所使用的 API URL(开源版和公版)
+    self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //应用端 API 登录前所使用的 API URL https://cloud.tencent.com/document/product/1081/40773
     
-    switch (environment) {
-        case WCAppEnvironmentTypeRelease:{
-            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
-            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
-            self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
-            self.wxShareType = 0;
-            self.action = @"YunApi";
-            self.appKey = @"";
-            self.appSecret = @"";
-            self.platform = @"iOS";
-        }
-            break;
-        case WCAppEnvironmentTypeDebug:{
-            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
-            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
-            self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
-            self.wxShareType = 1;
-            self.action = @"YunApi";
-            self.appKey = @"";
-            self.appSecret = @"";
-            self.platform = @"iOS";
-        }
-            break;
-        default:
-            break;
-    }
+    self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi"; //应用端 API 登录后所使用的 API URL https://cloud.tencent.com/document/product/1081/40773
+    self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";        //长连接通信 https://cloud.tencent.com/document/product/1081/40792
+    self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
+    self.wxShareType = 0;
+    self.action = @"YunApi";
+    self.appKey = @"";
+    self.appSecret = @"";
+    self.platform = @"iOS";
 }
 
 - (void)configBuglySDKInfos {

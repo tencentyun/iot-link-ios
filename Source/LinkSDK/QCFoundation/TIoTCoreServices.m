@@ -23,9 +23,7 @@
 
 
 
-- (void)setAppKey:(NSString *)appkey
-{
-    [TIoTCoreAppEnvironment shareEnvironment].environment = WCAppEnvironmentTypeRelease;
+- (void)setAppKey:(NSString *)appkey{
     
     [TIoTCoreAppEnvironment shareEnvironment].appKey = appkey;
     _appKey = appkey;
