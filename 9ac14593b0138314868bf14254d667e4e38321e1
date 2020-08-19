@@ -16,6 +16,24 @@
       "revId": "9ac14593b0138314868bf14254d667e4e38321e1",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "513ff02e_528d4a96",
+        "filename": "Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T03:27:30Z",
+      "side": 1,
+      "message": "不需要手动维护的，在ci中会将手动打的版本号写入次文件。在#561.1次提交的。deploypod.yml 中",
+      "parentUuid": "9e00fbc6_2d6930cf",
+      "revId": "9ac14593b0138314868bf14254d667e4e38321e1",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
