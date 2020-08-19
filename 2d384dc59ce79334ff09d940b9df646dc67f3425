@@ -16,6 +16,24 @@
       "revId": "2d384dc59ce79334ff09d940b9df646dc67f3425",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45fc3ad9_5d6e03a0",
+        "filename": "Source/LinkSDK/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-19T06:03:38Z",
+      "side": 1,
+      "message": "又有修改哈",
+      "parentUuid": "deb04c99_7b9da23c",
+      "revId": "2d384dc59ce79334ff09d940b9df646dc67f3425",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
