@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07012153_f682b526",
+        "filename": "LinkApp/Supporting Files/LinkApp-Bridging-Header.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T03:00:03Z",
+      "side": 1,
+      "message": "Pod上去掉了这个库，是不用了么？后面也不用就不注释了，去掉这个代码？",
+      "revId": "b9c947de15cf117d6d53acf573997b26df92186a",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
