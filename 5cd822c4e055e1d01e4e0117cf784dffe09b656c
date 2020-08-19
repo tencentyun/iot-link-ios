@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a57b9487_8be00427",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T03:33:43Z",
+      "side": 1,
+      "message": "已修复",
+      "parentUuid": "3826cb12_df58277d",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a1c0091_5b8cf30c",
         "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "91ed1add_0139f422",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T03:33:43Z",
+      "side": 1,
+      "message": "已修复",
+      "parentUuid": "2a1c0091_5b8cf30c",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42e68c09_80e0508e",
         "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8222a47a_3e6c6f54",
+        "filename": "Source/LinkSDK/QCFoundation/log/TIoTCoreLogReport.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T03:33:43Z",
+      "side": 1,
+      "message": "已修复",
+      "parentUuid": "42e68c09_80e0508e",
+      "revId": "5cd822c4e055e1d01e4e0117cf784dffe09b656c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
