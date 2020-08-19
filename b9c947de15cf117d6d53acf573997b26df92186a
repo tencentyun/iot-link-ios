@@ -16,6 +16,24 @@
       "revId": "b9c947de15cf117d6d53acf573997b26df92186a",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "568afc83_83d5ab8a",
+        "filename": "LinkApp/Supporting Files/LinkApp-Bridging-Header.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T03:43:48Z",
+      "side": 1,
+      "message": "已删除无用代码",
+      "parentUuid": "07012153_f682b526",
+      "revId": "b9c947de15cf117d6d53acf573997b26df92186a",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
