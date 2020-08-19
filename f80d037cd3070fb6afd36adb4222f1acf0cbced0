@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d590d57f_aa4e718e",
+        "filename": "ceb6232.diff",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T03:01:29Z",
+      "side": 1,
+      "message": "这个diff文件，去掉噢？",
+      "revId": "f80d037cd3070fb6afd36adb4222f1acf0cbced0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
