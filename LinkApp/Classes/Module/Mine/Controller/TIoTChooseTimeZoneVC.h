@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^returnTimeZoneBlock) (NSString *timeZone,NSString *cityName);
+typedef void(^returnTimeZoneBlock) (NSString * _Nonnull timeZone,NSString * _Nonnull cityName);
 
 NS_ASSUME_NONNULL_BEGIN
 

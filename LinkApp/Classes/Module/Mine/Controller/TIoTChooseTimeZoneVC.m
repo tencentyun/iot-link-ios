@@ -14,7 +14,6 @@
 @interface TIoTChooseTimeZoneVC ()<UITableViewDataSource,UITableViewDelegate,UISearchResultsUpdating> {
     
     UISearchController *_searchController;
-    
     NSMutableArray *_results;
 }
 
@@ -69,6 +68,7 @@
     */
     
     if (LanguageIsEnglish) {
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegionListEN"} success:^(id responseObject) {
             TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
             TIoTConfigModel *configModel = userRegionModel.Configs[0];
@@ -77,11 +77,12 @@
             
             [self.tableView reloadData];
             
-        
+            [MBProgressHUD dismissInView:self.view];
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            
+            [MBProgressHUD dismissInView:self.view];
         }];
     }else {
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegionListCN"} success:^(id responseObject) {
             TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
             TIoTConfigModel *configModel = userRegionModel.Configs[0];
@@ -89,9 +90,11 @@
             [self recombinationDataWithConfigModel:configModel];
             
             [self.tableView reloadData];
+            
+            [MBProgressHUD dismissInView:self.view];
 
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            
+            [MBProgressHUD dismissInView:self.view];
         }];
     }
 }

@@ -16,16 +16,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@class TIoTReginListModel;
 @interface TIoTConfigModel : NSObject
-@property (nonatomic, copy) NSString *Key;
-@property (nonatomic, copy) NSString *Value;
+@property (nonatomic, copy) NSString *Key;      //中文 RegionListCN  英文 RegionListEN
+@property (nonatomic, copy) NSString *Value;    //文本字符转
 @end
 
-@interface TIoTReginListModel : NSObject
-@property (nonatomic, copy) NSString *TZ;
-@property (nonatomic, copy) NSString *Title;
+@interface TIoTTimeZoneListModel : NSObject
+@property (nonatomic, copy) NSString *TZ;       //时区
+@property (nonatomic, copy) NSString *Title;    //城市
+@end
 
+@interface TIoTRegionModel: NSObject
+@property (nonatomic, copy) NSString *Region;  // 中国 ap-guangzhou  美东 na-ashburn
+@property (nonatomic, copy) NSString *RegionID; // 中国 RegionID 1   美东 RegionID 22
+@property (nonatomic, copy) NSString *Title;  //区域名称
 @end
 
 NS_ASSUME_NONNULL_END
