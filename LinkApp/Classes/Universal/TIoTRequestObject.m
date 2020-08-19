@@ -38,11 +38,11 @@ NSString  * const kInvalidParameterValueInvalidAccessToken = @"InvalidParameterV
 failure:(FailureResponseBlock)failure
 {
     
-    [TIoTCoreRequestObject shared].customEnvrionmentAppSecretStirng = [TIoTAppEnvironment shareEnvironment].appKey;
-    [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTAppEnvironment shareEnvironment].platform;
+    [TIoTCoreRequestObject shared].customEnvrionmentAppSecretStirng = [TIoTCoreAppEnvironment shareEnvironment].appKey;
+    [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTCoreAppEnvironment shareEnvironment].platform;
     
     [[TIoTCoreRequestObject shared]postRequestWithAction:urlStr url:nil isWithoutToken:NO param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -79,8 +79,8 @@ failure:(FailureResponseBlock)failure
 failure:(FailureResponseBlock)failure
 {
     
-    [TIoTCoreRequestObject shared].customEnvrionmentAppSecretStirng = [TIoTAppEnvironment shareEnvironment].appKey;
-    [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTAppEnvironment shareEnvironment].platform;
+    [TIoTCoreRequestObject shared].customEnvrionmentAppSecretStirng = [TIoTCoreAppEnvironment shareEnvironment].appKey;
+    [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTCoreAppEnvironment shareEnvironment].platform;
     
     [[TIoTCoreRequestObject shared] postRequestWithAction:urlStr url:nil isWithoutToken:YES param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -88,10 +88,10 @@ failure:(FailureResponseBlock)failure
         
         if ([TIoTAppConfig appTypeWithModel:model] == 0){
             //公版和开源
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTAppEnvironment shareEnvironment].baseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
             [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
         }else {
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?uin=%@",[TIoTAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined, TIoTAPPConfig.GlobalDebugUin]];
+            url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined];
             if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
                 [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
             }
@@ -149,10 +149,10 @@ failure:(FailureResponseBlock)failure
             [keyValue appendFormat:@"&%@=%@",key,param[key]];
         }
     }
-    if ([NSString matchSinogram:[TIoTAppEnvironment shareEnvironment].appSecret]) {
+    if ([NSString matchSinogram:[TIoTCoreAppEnvironment shareEnvironment].appSecret]) {
         return @"";
     }
-    return [NSString HmacSha1:[TIoTAppEnvironment shareEnvironment].appSecret data:keyValue];
+    return [NSString HmacSha1:[TIoTCoreAppEnvironment shareEnvironment].appSecret data:keyValue];
 }
 
 

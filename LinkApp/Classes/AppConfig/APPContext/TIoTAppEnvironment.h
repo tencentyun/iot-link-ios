@@ -7,73 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TIoTCoreAppEnvironment.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
-    WCAppEnvironmentTypeRelease,
-    WCAppEnvironmentTypeDebug,
-    WCAppEnvironmentTypeTest
-};
 
 @interface TIoTAppEnvironment : NSObject
 
 + (instancetype)shareEnvironment;
 
-- (void)selectEnvironmentType:(WCAppEnvironmentType)type;
+- (void)selectEnvironmentType;
 
 - (void)loginOut;
-
-/**
- 已登录baseurl
- */
-@property (nonatomic , copy) NSString *baseUrlForLogined; //应用层（huxinbang）
-
-/**
- 登录前需要签名baseurl
- */
-@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined; //开源版接入层（chenhuizhong）
-
-/**
- 未登录baseurl
- */
-@property (nonatomic , copy) NSString *baseUrl; //公版接入层（chenhuizhong）
-
-/**
-长连接
-*/
-@property (nonatomic , copy) NSString *wsUrl;
-
-/**
-h5
-*/
-@property (nonatomic , copy) NSString *h5Url;
-
-/**
- 微信分享要的type
- */
-@property (nonatomic , assign) NSInteger wxShareType;
-
-/**
- action
- */
-@property (nonatomic , copy) NSString *action;
-
-/**
- appKey
- */
-@property (nonatomic , copy) NSString *appKey;
-
-/**
- appSecret
- */
-@property (nonatomic , copy) NSString *appSecret;
-
-/**
- platform
- */
-@property (nonatomic , copy) NSString *platform;
-
 
 @end
 

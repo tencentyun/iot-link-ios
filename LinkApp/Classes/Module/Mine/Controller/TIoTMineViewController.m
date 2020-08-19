@@ -190,15 +190,10 @@
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             TIoTWebVC *vc = [TIoTWebVC new];
             vc.title = self.dataArr[indexPath.row][@"title"];
-            NSString *url = nil;
+            
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
-            TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-            if ([TIoTAppConfig appTypeWithModel:model] == 0){
-                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
-            }else{
-                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
-            }
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
             vc.urlPath = url;
             vc.needJudgeJump = YES;
             [self.navigationController pushViewController:vc animated:YES];

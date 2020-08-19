@@ -60,7 +60,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)instanceSocketManager {
     
-    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTAppEnvironment shareEnvironment].wsUrl;
+    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
     [TIoTCoreSocketManager shared].delegate = self;
                           
 }
@@ -265,7 +265,7 @@ static NSString *heartBeatReqID = @"5002";
 //心跳数据
 - (NSDictionary *)heartData:(NSArray *)deviceIds {
     return @{
-        @"action":[TIoTAppEnvironment shareEnvironment].action,
+        @"action":[TIoTCoreAppEnvironment shareEnvironment].action,
         @"reqId":[[NSUUID UUID] UUIDString],
         @"params":@{
             @"Action": @"AppDeviceTraceHeartBeat",
@@ -316,10 +316,10 @@ static NSString *heartBeatReqID = @"5002";
         return;
     }
     
-    NSDictionary *dic = @{@"Platform":[TIoTAppEnvironment shareEnvironment].platform,
+    NSDictionary *dic = @{@"Platform":[TIoTCoreAppEnvironment shareEnvironment].platform,
                           @"RequestId":[[NSUUID UUID] UUIDString],
-                          @"action":[TIoTAppEnvironment shareEnvironment].action,
-                          @"AppKey":[TIoTAppEnvironment shareEnvironment].appKey,
+                          @"action":[TIoTCoreAppEnvironment shareEnvironment].action,
+                          @"AppKey":[TIoTCoreAppEnvironment shareEnvironment].appKey,
     };
     
     NSDictionary *dataDic = [[TIoTCoreSocketCover shared] sendDataDictionaryWithParamDic:paramDic withArgumentDic:dic withRequestURL:requestURL complete:sucess];

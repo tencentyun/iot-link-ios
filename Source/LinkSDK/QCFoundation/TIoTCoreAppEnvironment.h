@@ -10,18 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
-    WCAppEnvironmentTypeRelease,
-    WCAppEnvironmentTypeDebug,
-    WCAppEnvironmentTypeTest
-};
 
 @interface TIoTCoreAppEnvironment : NSObject
 
 + (instancetype)shareEnvironment;
-
-
-@property (nonatomic, assign) WCAppEnvironmentType environment;
 
 /**
  已登录baseurl
@@ -34,9 +26,19 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 @property (nonatomic , copy) NSString *baseUrl;
 
 /**
+ 登录前需要签名baseurl
+ */
+@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined;
+
+/**
 长连接
 */
 @property (nonatomic , copy) NSString *wsUrl;
+
+/**
+h5
+*/
+@property (nonatomic , copy) NSString *h5Url;
 
 /**
  微信分享要的type
@@ -64,6 +66,7 @@ typedef NS_ENUM(NSUInteger,WCAppEnvironmentType){
 @property (nonatomic , copy) NSString *platform;
 
 
+- (void)setEnvironment;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -12,9 +12,6 @@
 #import "TIoTAppConfig.h"
 
 @interface TIoTAppEnvironment ()
-
-@property (nonatomic , assign) WCAppEnvironmentType type;
-
 @end
 
 @implementation TIoTAppEnvironment
@@ -29,48 +26,21 @@
     return _environment;
 }
 
-- (void)selectEnvironmentType:(WCAppEnvironmentType)type{
-    self.type = type;
+- (void)selectEnvironmentType{
+
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     
-    switch (type) {
-        case WCAppEnvironmentTypeRelease:{
-            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //公版接入层
-            self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //开源版接入层
-            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi"; //应用层
-            self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
-            self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
-            self.wxShareType = 0;
-            self.action = @"YunApi";
-            self.appKey = model.TencentIotLinkAppkey;
-            self.appSecret = model.TencentIotLinkAppSecret;
-            self.platform = @"iOS";
-        }
-            break;
-        case WCAppEnvironmentTypeDebug:{
-            self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
-            self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi";
-            self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";
-            self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";
-            self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
-            self.wxShareType = 1;
-            self.action = @"YunApi";
-            self.appKey = model.TencentIotLinkAppkey;
-            self.appSecret = model.TencentIotLinkAppSecret;
-            self.platform = @"iOS";
-        }
-            break;
-        default:
-            break;
-    }
+    TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
+    [environment setEnvironment];
     
+    environment.appKey = model.TencentIotLinkAppkey;
+    environment.appSecret = model.TencentIotLinkAppSecret;
 }
 
 - (void)loginOut {
 //    [[XGPushManage sharedXGPushManage] stopPushService];
     [HXYNotice addLoginOutPost];
     [[TIoTCoreUserManage shared] clear];
-    
 }
 
 @end

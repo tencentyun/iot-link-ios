@@ -27,7 +27,7 @@
 #if DEBUG
     self.isDebug = true;
 #endif
-    [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType:WCAppEnvironmentTypeRelease];
+    [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType];
     [[TIoTWebSocketManage shared] SRWebSocketOpen];
     
     //注册键盘全局事件

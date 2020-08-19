@@ -85,19 +85,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             TIoTWebVC *vc = [TIoTWebVC new];
             vc.title = @"帮助中心";
-            NSString *url = nil;
+
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
-            TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-            if ([TIoTAppConfig appTypeWithModel:model] == 0){
-//#ifdef DEBUG
-                url = [NSString stringWithFormat:@"%@/%@/?uin=%@&appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, TIoTAPPConfig.GlobalDebugUin, bundleId, ticket];
-//#else
-//                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
-//#endif
-            }else{
-                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
-            }
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
             vc.urlPath = url;
             vc.needJudgeJump = YES;
             [selfWeak.navigationController pushViewController:vc animated:YES];
