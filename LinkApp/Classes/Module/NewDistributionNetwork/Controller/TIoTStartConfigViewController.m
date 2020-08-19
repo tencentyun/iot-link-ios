@@ -41,6 +41,19 @@
 
 @implementation TIoTStartConfigViewController
 
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+    //去重
+    if (self.smartConfig) {
+        [self.smartConfig stopAddDevice];
+    }
+    if (self.softAP) {
+        [self.softAP stopAddDevice];
+    }
+    onceToken = 0;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     //禁止返回
     id traget = self.navigationController.interactivePopGestureRecognizer.delegate;
@@ -148,18 +161,20 @@
 
 - (void)connectWiFiCheckTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
     if (@available(iOS 11.0, *)) { //去连接wifi
-        NSLog(@"wifiInfo :%@", self.wifiInfo);
-        NSString *Ssid = self.wifiInfo[@"name"];
-        NSString *Pwd = self.wifiInfo[@"pwd"];
-         NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
+        if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+            NSLog(@"wifiInfo :%@", self.wifiInfo);
+            NSString *Ssid = self.wifiInfo[@"name"];
+            NSString *Pwd = self.wifiInfo[@"pwd"];
+             NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
 
-        [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
-            if (nil == error) {
-                NSLog(@">=iOS 11 Connected!!");
-            } else {
-                NSLog (@">=iOS 11 connect WiFi Error :%@", error);
-            }
-        }];
+            [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
+                if (nil == error) {
+                    NSLog(@">=iOS 11 Connected!!");
+                } else {
+                    NSLog (@">=iOS 11 connect WiFi Error :%@", error);
+                }
+            }];
+        }
     }
     
         [self checkTokenStateWithCirculationWithDeviceData:data];
@@ -193,6 +208,8 @@
     });
 }
 
+static dispatch_once_t onceToken;
+
 //获取设备绑定token状态
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
     [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
@@ -210,7 +227,6 @@
             
             self.isTokenbindedStatus = YES;
             [self releaseAlloc];
-            static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
                 [self bindingDevidesWithData:deviceData];
             });
@@ -232,9 +248,7 @@
                 }
             });
             [self releaseAlloc];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self connectSucess:deviceData];
-            });
+            [self connectSucess:deviceData];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaild];
         }];
