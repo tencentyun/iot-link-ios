@@ -325,17 +325,6 @@
 - (void)requestUserConfigMessage {
     [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
         TIoTUserConfigModel *model = [TIoTUserConfigModel yy_modelWithJSON:responseObject[@"UserSetting"]];
-        
-//        _dataArr = [NSMutableArray arrayWithArray:@[
-//            @[@{@"title":@"头像",@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
-//              @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-//              @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
-//            ],
-//            @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-//            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"33华氏",@"vc":@"",@"haveArrow":@"1"}],
-//              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"XXX",@"vc":@"",@"haveArrow":@"1"}],
-//            ],
-//        ]];
 
         NSArray *userConfigArray = self.dataArr[2];
         NSMutableDictionary *temperatureDic = userConfigArray[0];
@@ -345,6 +334,9 @@
         }else if ([model.TemperatureUnit isEqualToString:@"F"]) {
             [temperatureDic setValue:@"℉" forKey:@"value"];
         }
+        
+        NSMutableDictionary *timeZoneDic = userConfigArray[1];
+        [timeZoneDic setValue:model.Region forKey:@"value"];
         
         NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:2];
         [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
@@ -531,6 +523,24 @@
             [actionSheet shwoActionSheetView];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
             TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
+            timeZoneVC.returnTimeZoneBlock = ^(NSString * _Nonnull timeZone, NSString * _Nonnull cityName) {
+
+                [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+                [[TIoTRequestObject shared]post:AppUpdateUserSetting Param:@{@"Region":timeZone} success:^(id responseObject) {
+                    [MBProgressHUD dismissInView:self.view];
+                    if (![[responseObject allKeys] containsObject:@"Error"]) {
+
+                        NSMutableDictionary *TimeZoneDic = self.dataArr[2][1];
+                        [TimeZoneDic setValue:timeZone forKey:@"value"];
+                        NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:2];
+                        [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+
+                    }
+                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                    [MBProgressHUD dismissInView:self.view];
+                }];
+
+            };
             [self.navigationController pushViewController:timeZoneVC animated:YES];
         }
 }

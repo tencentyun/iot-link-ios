@@ -13,6 +13,7 @@
 #import "TIoTMainVC.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAlertView.h"
+#import "TIoTChooseRegionVC.h"
 
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
@@ -174,13 +175,25 @@
 
 - (void)choseAreaCode:(id)sender{
     
-    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
-    countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
-        self.conturyCode = code;
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
-    };
+//    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
+//    countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
+//        self.conturyCode = code;
+//        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
+//    };
+//
+//    [self.navigationController pushViewController:countryCodeVC animated:YES];
     
-    [self.navigationController pushViewController:countryCodeVC animated:YES];
+    TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
+    regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
+        [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
+        if ([region isEqualToString:@"ap-guangzhou"]) {
+            self.conturyCode = @"86";
+        }else if ([region isEqualToString:@"na-ashburn"]) {
+            self.conturyCode = @"1";
+        }
+        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+    };
+    [self.navigationController pushViewController:regionVC animated:YES];
 }
 
 - (void)modifyStyleChange:(UIButton *)sender {

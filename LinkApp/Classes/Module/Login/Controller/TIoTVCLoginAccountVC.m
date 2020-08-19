@@ -15,6 +15,7 @@
 #import "TIoTAppConfig.h"
 #import "TIoTPhoneResetPwdViewController.h"
 #import "TIoTRegisterViewController.h"
+#import "TIoTChooseRegionVC.h"
 
 @interface TIoTVCLoginAccountVC ()<UITextViewDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -548,22 +549,48 @@
 
 - (void)choseAreaCode:(id)sender{
     
-    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
+//    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
+//    if (self.loginStyle == YES) {
+//
+//        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
+//            self.conturyCode = code;
+//            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
+//        };
+//    }else {
+//
+//        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
+//            self.conturyCode2 = code;
+//            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
+//        };
+//    }
+//
+//    [self.navigationController pushViewController:countryCodeVC animated:YES];
+    
+    
+    TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
     if (self.loginStyle == YES) {
-        
-        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
-            self.conturyCode = code;
-            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
+        regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
+            if ([region isEqualToString:@"ap-guangzhou"]) {
+                self.conturyCode = @"86";
+            }else if ([region isEqualToString:@"na-ashburn"]) {
+                self.conturyCode = @"1";
+            }
+            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         };
     }else {
-        
-        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
-            self.conturyCode2 = code;
-            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
+        regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
+            if ([region isEqualToString:@"ap-guangzhou"]) {
+                self.conturyCode = @"86";
+            }else if ([region isEqualToString:@"na-ashburn"]) {
+                self.conturyCode = @"1";
+            }
+            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         };
     }
-    
-    [self.navigationController pushViewController:countryCodeVC animated:YES];
+
+    [self.navigationController pushViewController:regionVC animated:YES];
 }
 
 - (void)sendCode:(UIButton *)button {

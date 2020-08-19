@@ -214,6 +214,33 @@
     [[NSUserDefaults standardUserDefaults] setValue:hasBindWxOpenID forKey:@"Has_WxOpenID"];
 }
 
+//@property (nonatomic, copy, nullable) NSString *RegionId;           // 22 美东  1 国内
+//@property (nonatomic, copy, nullable) NSString *region;             // 美东 na-ashburn 国内 ap-guangzhou
+
+- (NSString *)userRegionId {
+    if (!_userRegionId) {
+        _userRegionId = [[NSUserDefaults standardUserDefaults] valueForKey:@"Region_Id"];
+    }
+    return _userRegionId;
+}
+
+- (void)setRegionId:(NSString *)RegionId {
+    _userRegionId = RegionId;
+    [[NSUserDefaults standardUserDefaults] setValue:RegionId forKey:@"Region_Id"];
+}
+
+- (NSString *)userRegion {
+    if (!_userRegion) {
+        _userRegion = [[NSUserDefaults standardUserDefaults] valueForKey:@"region"];
+    }
+    return _userRegion;
+}
+
+- (void)setRegion:(NSString *)region {
+    _userRegion = region;
+    [[NSUserDefaults standardUserDefaults] setValue:region forKey:@"region"];
+}
+
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
     
@@ -250,6 +277,12 @@
     if (userInfo[@"HasWxOpenID"]) {
         self.hasWxOpenID = [NSString stringWithFormat:@"%@",userInfo[@"HasWxOpenID"]];
     }
+    if (userInfo[@"RegionID"]) {
+        self.userRegionId = [NSString stringWithFormat:@"%@",userInfo[@"RegionID"]];
+    }
+    if (userInfo[@"Region"]) {
+        self.userRegion = userInfo[@"Region"];
+    }
 }
 
 
@@ -266,6 +299,8 @@
     self.WxOpenID = @"";
     self.requestID = @"";
     self.hasBindWxOpenID = @"";
+    self.userRegionId = @"";
+    self.userRegion = @"";
 }
 
 

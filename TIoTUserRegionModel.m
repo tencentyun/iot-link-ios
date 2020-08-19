@@ -18,6 +18,10 @@
 
 @end
 
-@implementation TIoTReginListModel
+@implementation TIoTTimeZoneListModel
+
+@end
+
+@implementation TIoTRegionModel
 
 @end
