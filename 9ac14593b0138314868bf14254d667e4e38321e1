@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e00fbc6_2d6930cf",
+        "filename": "Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T02:50:13Z",
+      "side": 1,
+      "message": "这里记得需要手动维护，是不是可以在咱们发布版本的checklist里面把需要手动维护的地方都写清晰点。",
+      "revId": "9ac14593b0138314868bf14254d667e4e38321e1",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
