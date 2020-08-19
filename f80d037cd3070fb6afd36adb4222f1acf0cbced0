@@ -16,6 +16,24 @@
       "revId": "f80d037cd3070fb6afd36adb4222f1acf0cbced0",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0d5af9c_28f13b41",
+        "filename": "ceb6232.diff",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-19T06:04:44Z",
+      "side": 1,
+      "message": "好的，已经删除。",
+      "parentUuid": "d590d57f_aa4e718e",
+      "revId": "f80d037cd3070fb6afd36adb4222f1acf0cbced0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
