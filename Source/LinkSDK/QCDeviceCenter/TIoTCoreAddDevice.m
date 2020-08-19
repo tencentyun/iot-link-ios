@@ -22,7 +22,6 @@
 //获取网关
 #import <arpa/inet.h>
 #import <ifaddrs.h>
-#import "getgateway.h"
 
 #import "NSObject+additions.h"
 #import "NSString+Extension.h"
