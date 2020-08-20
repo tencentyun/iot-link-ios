@@ -582,11 +582,11 @@
         regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
             if ([region isEqualToString:@"ap-guangzhou"]) {
-                self.conturyCode = @"86";
+                self.conturyCode2 = @"86";
             }else if ([region isEqualToString:@"na-ashburn"]) {
-                self.conturyCode = @"1";
+                self.conturyCode2 = @"1";
             }
-            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         };
     }
 

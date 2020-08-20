@@ -27,10 +27,11 @@
 @property (nonatomic, strong) UIButton *deleteEmailBtn;
 
 @property (nonatomic, strong) UIView *contentView2;//邮箱登录的
+@property (nonatomic, strong) UIButton *areaCodeBtn2;
 @property (nonatomic, strong) UITextField *emailTF;
 
 @property (nonatomic, copy) NSString *conturyCode;
-
+@property (nonatomic, copy) NSString *conturyCode2;
 
 
 @end
@@ -51,6 +52,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"手机注册";
     self.conturyCode = @"86";
+    self.conturyCode2 = @"86";
     
     [self.view addSubview:self.scrollView];
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -229,14 +231,26 @@
 //    [self.navigationController pushViewController:countryCodeVC animated:YES];
     
     TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
+    
     regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
-        if ([region isEqualToString:@"ap-guangzhou"]) {
-            self.conturyCode = @"86";
-        }else if ([region isEqualToString:@"na-ashburn"]) {
-            self.conturyCode = @"1";
+        
+        if (self->_emailStyle == NO) {
+            if ([region isEqualToString:@"ap-guangzhou"]) {
+                self.conturyCode = @"86";
+            }else if ([region isEqualToString:@"na-ashburn"]) {
+                self.conturyCode = @"1";
+            }
+            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+        }else {
+            if ([region isEqualToString:@"ap-guangzhou"]) {
+                self.conturyCode2 = @"86";
+            }else if ([region isEqualToString:@"na-ashburn"]) {
+                self.conturyCode2 = @"1";
+            }
+            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         }
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+        
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
@@ -414,6 +428,28 @@
     if (!_contentView2) {
         _contentView2 = [[UIView alloc] init];
         _contentView2.backgroundColor = [UIColor whiteColor];
+        
+        self.areaCodeBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitleColor:kFontColor forState:UIControlStateNormal];
+        self.areaCodeBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        self.areaCodeBtn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
+        //    self.areaCodeBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 13, 0, 13);
+        [self.areaCodeBtn2 addTarget:self action:@selector(choseAreaCode:) forControlEvents:UIControlEventTouchUpInside];
+        [_contentView2 addSubview:self.areaCodeBtn2];
+        [self.areaCodeBtn2 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.leading.mas_equalTo(20);
+            make.top.mas_equalTo(40*kScreenAllHeightScale);
+            make.height.mas_equalTo(30);
+        }];
+        
+        UIImageView *imgV = [UIImageView new];
+        imgV.image = [UIImage imageNamed:@"mineArrow"];
+        [_contentView2 addSubview:imgV];
+        [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.leading.equalTo(self.areaCodeBtn2.mas_trailing).offset(5);
+            make.centerY.equalTo(self.areaCodeBtn2);
+        }];
         
         UIButton *dodo = [UIButton buttonWithType:UIButtonTypeCustom];
         [_contentView2 addSubview:dodo];
