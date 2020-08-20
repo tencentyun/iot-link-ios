@@ -8,14 +8,16 @@
 
 #import "TIoTNewVersionTipView.h"
 
-@interface TIoTNewVersionTipView () <UIGestureRecognizerDelegate>
+@interface TIoTNewVersionTipView () <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 /// 背景视图
 @property (nonatomic, strong) UIView *bgView;
 
-//@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 /// 版本提示数据
-//@property (nonatomic, strong) NSArray *versionsArray;
+@property (nonatomic, strong) NSArray *contentsArray;
+
+@property (nonatomic, assign) CGFloat totalContentHeight;
 /// 版本更新数据
 @property (nonatomic, strong) NSDictionary *versionInfo;
 
@@ -38,19 +40,9 @@
     return self;
 }
 
-//- (instancetype)initWithFrame:(CGRect)frame {
-//
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        [self addGestureRecognizer:self.deepTap];
-//        self.userInteractionEnabled = YES;
-//        [self setupUI];
-//        self.backgroundColor = [UIColor colorWithWhite:.0f alpha:0.6f];
-//    }
-//    return self;
-//}
-
 - (void)setupUIWithVersionInfo:(NSDictionary *)versionInfo {
+    [self combinationDataDic];
+    
     self.bgView = [[UIView alloc] init];
     self.bgView.backgroundColor = [UIColor whiteColor];
     self.bgView.layer.cornerRadius = 15.0f;
@@ -65,7 +57,7 @@
     titleLabel.textColor = [UIColor blackColor];
     titleLabel.font = [UIFont wcPfBoldFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.text = [versionInfo objectForKey:@"Title"];//@"版本升级V2.0";
+    titleLabel.text = [versionInfo objectForKey:@"Title"];
     [self.bgView addSubview:titleLabel];
     [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.bgView).offset(20);
@@ -73,29 +65,30 @@
         make.height.mas_equalTo(64);
     }];
     
-//    self.tableView = [[UITableView alloc] init];
-//    self.tableView.backgroundColor = [UIColor clearColor];
-//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    self.tableView.delegate = self;
-//    self.tableView.dataSource = self;
-    UILabel *contentLabel = [[UILabel alloc] init];
-    contentLabel.textColor = [UIColor blackColor];
-    contentLabel.font = [UIFont wcPfBoldFontOfSize:18];
-    contentLabel.numberOfLines = 0;
-    contentLabel.text = [versionInfo objectForKey:@"Content"];
-    [self.bgView addSubview:contentLabel];
-    [contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.tableView = [[UITableView alloc] init];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.bgView addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titleLabel.mas_bottom).offset(14);
         make.left.equalTo(self.bgView).offset(20);
         make.centerX.equalTo(self.bgView);
-        make.height.mas_greaterThanOrEqualTo(30);
+        if (self.totalContentHeight  == 0) {
+            make.height.mas_greaterThanOrEqualTo(30);
+        } else if (self.totalContentHeight < 158) {
+            make.height.mas_equalTo(self.totalContentHeight);
+        } else {
+            make.height.mas_lessThanOrEqualTo(158);
+        }
     }];
     
     UIView *paramView = [[UIView alloc] init];
     paramView.backgroundColor = kRGBColor(242, 242, 242);
     [self.bgView addSubview:paramView];
     [paramView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(contentLabel.mas_bottom).offset(10);
+        make.top.equalTo(self.tableView.mas_bottom).offset(10);
         make.left.equalTo(self.bgView).offset(20);
         make.centerX.equalTo(self.bgView);
         make.height.mas_equalTo(84);
@@ -204,6 +197,13 @@
     NSString *url = [_versionInfo objectForKey:@"DownloadURL"];
     if (url && url.length) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        return;
+    }
+    NSInteger channel = [[_versionInfo objectForKey:@"Channel"] integerValue];
+    if (channel == 1) { //如果是channel来源是APP Store
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/cn/app/id1517576629?mt=8"]];
+    } else if (channel == 0) { //如果是channel来源是testFlight
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://testflight.apple.com/join/QBK6YYqw"]];
     }
 }
 
@@ -220,42 +220,53 @@
     return YES;
 }
 
-//#pragma mark TableViewDelegate && TableViewDataSource
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    return self.versionsArray.count;
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    static NSString *ID = @"TIoTNewVersionTipCell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-//    if (!cell) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    }
-//    cell.textLabel.text = self.versionsArray[indexPath.row];
-//    cell.textLabel.numberOfLines = 0;
-//    cell.textLabel.font = [UIFont wcPfRegularFontOfSize:14];
-//    cell.textLabel.textColor = kRGBColor(136, 136, 136);
-//    return cell;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    NSString *text = self.versionsArray[indexPath.row];
-//    CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(kScreenWidth - 95 * kScreenAllWidthScale - 40, kScreenHeight)
-//                       options:NSStringDrawingUsesLineFragmentOrigin
-//                    attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}
-//                       context:nil].size.height;
-//    return textHeight + 18;
-//}
+#pragma mark TableViewDelegate && TableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return _contentsArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *ID = @"TIoTNewVersionTipCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    NSDictionary *dic = _contentsArray[indexPath.row];
+    cell.textLabel.text = [dic objectForKey:@"text"];
+    cell.textLabel.numberOfLines = 0;
+    cell.textLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    cell.textLabel.textColor = kRGBColor(136, 136, 136);
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *dic = _contentsArray[indexPath.row];
+    CGFloat textHeight = [[dic objectForKey:@"rowHeight"] floatValue];
+    return textHeight;
+}
 
 #pragma mark setter or getter
 
-//- (NSArray *)versionsArray {
-//    if (!_versionsArray) {
-//        _versionsArray = @[@"1.优化新增配网设备功能，添加智能设备更加方便", @"2.优化帮助与反馈，用户问题更加及时解决与通知", @"3.修复了一些已知bug"];
-//    }
-//    return _versionsArray;
-//}
+- (void)combinationDataDic {
+    NSString *content = [_versionInfo objectForKey:@"Content"];
+    NSArray *arr = [content componentsSeparatedByString:@"\n"];
+    NSMutableArray *mArr = [NSMutableArray array];
+    CGFloat totalContentHeight = 0;
+    for (NSString *text in arr) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        [dic setValue:text forKey:@"text"];
+        CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(kScreenWidth - 95 * kScreenAllWidthScale - 40, kScreenHeight)
+           options:NSStringDrawingUsesLineFragmentOrigin
+        attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}
+           context:nil].size.height;
+        [dic setValue:@(textHeight + 18) forKey:@"rowHeight"];
+        [mArr addObject:[dic copy]];
+        totalContentHeight = totalContentHeight + (textHeight + 18);
+    }
+    _contentsArray = [NSArray arrayWithArray:mArr];
+    _totalContentHeight = totalContentHeight;
+}
 
 - (UITapGestureRecognizer *)deepTap {
     if (!_deepTap) {
