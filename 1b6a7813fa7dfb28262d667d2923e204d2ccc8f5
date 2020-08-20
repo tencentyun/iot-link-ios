@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "826d0a34_0e183fd4",
+        "filename": "LinkApp/Classes/Module/Home/View/TIoTNewVersionTipView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-20T11:04:05Z",
+      "side": 1,
+      "message": "建议可以将url常量放在appconfig.swift文件或者统一的配置文件中",
+      "revId": "1b6a7813fa7dfb28262d667d2923e204d2ccc8f5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
