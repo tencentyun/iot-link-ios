@@ -317,10 +317,10 @@ static dispatch_once_t onceToken;
             NSString *Ssid = self.wifiInfo[@"name"];
             NSString *Pwd = self.wifiInfo[@"pwd"];
             NSString *Token = self.wifiInfo[@"token"];
-            NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd,@"token":Token};
+            NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd,@"token":Token,@"region":[TIoTCoreUserManage shared].userRegion};
             [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
         } else {
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"],@"region":[TIoTCoreUserManage shared].userRegion} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
         }
         self.sendCount ++;
     });
