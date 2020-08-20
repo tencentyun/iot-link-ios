@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "048c9090_d2160441",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-20T07:06:19Z",
+      "side": 1,
+      "message": "建议if和else里面一摸一样的代码去重，只吧不一样部分的放在if判断里",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "014ba0d0_24ead148",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-20T07:06:19Z",
+      "side": 1,
+      "message": "choseAreaCode去重，封装单独一个以便复用",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
