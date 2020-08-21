@@ -177,9 +177,9 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-        [HXYNotice postChangeAddDeviceType:0];
+        [HXYNotice postChangeAddDeviceType:(!_success ? 0 : 1)];
     } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-        [HXYNotice postChangeAddDeviceType:1];
+        [HXYNotice postChangeAddDeviceType:(!_success ? 1 : 0)];
     }
 }
 

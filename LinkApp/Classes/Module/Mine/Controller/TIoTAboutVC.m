@@ -74,24 +74,32 @@
 - (void)checkNewVersion {
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    appVersion = [NSString matchVersionNum:appVersion];
-    if (appVersion.length) { //满足要求，必须是三位，x.x.x的形式  每位x的范围分别为1-99,0-99,0-99。
-        NSDictionary *tmpDic = @{@"ClientVersion": appVersion, @"Channel":@(0), @"AppPlatform": @"ios"};
-        [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
-            NSDictionary *versionInfo = responseObject[@"VersionInfo"];
-            if (versionInfo) {
-                self.versionInfo = versionInfo;
-                NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
-                if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion]) {
-                    self.showLastestVerion = YES;
-                    self.versionLab.text = [NSString stringWithFormat:@"当前版本\nv%@",appVersion];
-                }
-            }
-        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-            
-        }];
+#warning TODU: 持续集成的包master+git形式没有x.x.x的版本号 为了方便产品体验 手动维护版本号 2.1.0
+    if ([appVersion containsString:@"master"]) {
+        [self getLatestVersionRequestWithVersion:@"2.1.0"];
+    } else {
+        appVersion = [NSString matchVersionNum:appVersion];
+        if (appVersion.length) { //满足要求，必须是三位，x.x.x的形式  每位x的范围分别为1-99,0-99,0-99。
+            [self getLatestVersionRequestWithVersion:appVersion];
+        }
     }
+}
     
+- (void)getLatestVersionRequestWithVersion:(NSString *)version {
+    NSDictionary *tmpDic = @{@"ClientVersion": version, @"Channel":@(0), @"AppPlatform": @"ios"};
+    [[TIoTRequestObject shared] postWithoutToken:AppGetLatestVersion Param:tmpDic success:^(id responseObject) {
+        NSDictionary *versionInfo = responseObject[@"VersionInfo"];
+        if (versionInfo) {
+            self.versionInfo = versionInfo;
+            NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
+            if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:version]) {
+                self.showLastestVerion = YES;
+                self.versionLab.text = [NSString stringWithFormat:@"当前版本\nv%@",version];
+            }
+        }
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
 }
 
 - (BOOL)isTheVersion:(NSString *)theVersion laterThanLocalVersion:(NSString *)localVersion {
