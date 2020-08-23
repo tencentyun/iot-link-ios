@@ -22,6 +22,11 @@
 @synthesize hasPassword = _hasPassword;
 @synthesize WxOpenID = _WxOpenID;
 @synthesize requestID = _requestID;
+@synthesize hasBindWxOpenID = _hasBindWxOpenID;
+@synthesize userRegionId = _userRegionId;
+@synthesize userRegion = _userRegion;
+@synthesize countryTitle = _countryTitle;
+@synthesize countryTitleEN = _countryTitleEN;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -241,6 +246,30 @@
     [[NSUserDefaults standardUserDefaults] setValue:region forKey:@"region"];
 }
 
+- (NSString *)countryTitle {
+    if (!_countryTitle) {
+        _countryTitle = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_Title"];
+    }
+    return _countryTitle;
+}
+
+- (void)setCountryTitle:(NSString *)countryTitle {
+    _countryTitle = countryTitle;
+    [[NSUserDefaults standardUserDefaults] setValue:countryTitle forKey:@"country_Title"];
+}
+
+- (NSString *)countryTitleEN {
+    if (!_countryTitleEN) {
+        _countryTitleEN = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_TitleEN"];
+    }
+    return _countryTitleEN;
+}
+
+- (void)setCountryTitleEN:(NSString *)countryTitleEN {
+    _countryTitleEN = countryTitleEN;
+    [[NSUserDefaults standardUserDefaults] setValue:countryTitleEN forKey:@"country_TitleEN"];
+}
+
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
     
@@ -283,8 +312,13 @@
     if (userInfo[@"Region"]) {
         self.userRegion = userInfo[@"Region"];
     }
+    if (userInfo[@"Title"]) {
+        self.countryTitle = userInfo[@"Title"];
+    }
+    if (userInfo[@"TitleEN"]) {
+        self.countryTitleEN = userInfo[@"TitleEN"];
+    }
 }
-
 
 - (void)clear{
     self.accessToken = @"";
@@ -301,6 +335,8 @@
     self.hasBindWxOpenID = @"";
     self.userRegionId = @"";
     self.userRegion = @"";
+    self.countryTitle = @"";
+    self.countryTitleEN = @"";
 }
 
 
