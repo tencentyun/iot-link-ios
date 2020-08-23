@@ -66,38 +66,69 @@
     * RegisterRegionListEN 英文注册区域列表，RegisterRegionListCN 中文注册区域列表
     */
     
-    if (LanguageIsEnglish) {
-        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListEN"} success:^(id responseObject) {
-            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
-            TIoTConfigModel *configModel = userRegionModel.Configs[0];
-            
-            [self recombinationDataWithConfigModel:configModel];
-            
-            [self.tableView reloadData];
-            [MBProgressHUD dismissInView:self.view];
-        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            [MBProgressHUD dismissInView:self.view];
-        }];
-    }else {
-        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListCN"} success:^(id responseObject) {
-            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
-            TIoTConfigModel *configModel = userRegionModel.Configs[0];
-            
-            [self recombinationDataWithConfigModel:configModel];
-            
-            [self.tableView reloadData];
-            
-            [MBProgressHUD dismissInView:self.view];
-        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-            [MBProgressHUD dismissInView:self.view];
-        }];
-    }
+//    if (LanguageIsEnglish) {
+//        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+//        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListEN"} success:^(id responseObject) {
+//            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
+//            TIoTConfigModel *configModel = userRegionModel.Configs[0];
+//
+//            [self recombinationDataWithConfigModel:configModel];
+//
+//            [self.tableView reloadData];
+//            [MBProgressHUD dismissInView:self.view];
+//        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+//            [MBProgressHUD dismissInView:self.view];
+//        }];
+//    }else {
+//        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
+//        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListCN"} success:^(id responseObject) {
+//            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
+//            TIoTConfigModel *configModel = userRegionModel.Configs[0];
+//
+//            [self recombinationDataWithConfigModel:configModel];
+//
+//            [self.tableView reloadData];
+//
+//            [MBProgressHUD dismissInView:self.view];
+//        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+//            [MBProgressHUD dismissInView:self.view];
+//        }];
+//    }
+    
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
+
+        NSArray *regionListArray = (NSArray *)responseObject;
+        
+        if (LanguageIsEnglish) {
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
+
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    
+                    [self recombinationDataWithConfigModel:regionListArray];
+                    
+                    [self.tableView reloadData];
+                }
+            }];
+        }else {
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
+
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    [self recombinationDataWithConfigModel:regionListArray];
+                    [self.tableView reloadData];
+                }
+            }];
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
 }
 
 //重组接口返回数据接口
-- (void)recombinationDataWithConfigModel:(TIoTConfigModel *)configModel {
+- (void)recombinationDataWithConfigModel:(NSArray *)regionList {
     
     /*
      *  创建所需原始数据    如: @["Asia/Shanghai + Beijing","Asia/Hong_Kong + Hong Kong",];
@@ -107,11 +138,16 @@
     NSMutableArray *originalArray = [[NSMutableArray alloc]init];
     NSString *separateString = @" + ";
 
-    NSArray *regionListArray = [NSJSONSerialization JSONObjectWithData:[configModel.Value dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    NSArray *regionListArray = regionList;
     [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
         NSDictionary *itemDic = [obj copy];
-        [originalArray addObject:[NSString stringWithFormat:@"%@%@%@%@%@",itemDic[@"Title"],separateString,itemDic[@"RegionID"],separateString,itemDic[@"Region"]]];
+        if (LanguageIsEnglish) {
+            [originalArray addObject:[NSString stringWithFormat:@"%@%@%@%@%@%@%@",itemDic[@"TitleEN"],separateString,itemDic[@"RegionID"],separateString,itemDic[@"CountryCode"],separateString,itemDic[@"Region"]]];
+        }else {
+            [originalArray addObject:[NSString stringWithFormat:@"%@%@%@%@%@%@%@",itemDic[@"Title"],separateString,itemDic[@"RegionID"],separateString,itemDic[@"CountryCode"],separateString,itemDic[@"Region"]]];
+        }
+        
     }];
 
     TIoTLog(@"timeListArray====%@",regionListArray);
@@ -154,8 +190,9 @@
         NSString *firstString = [zoneString substringToIndex:1];
         NSMutableArray *regionTitleArray = [regionDic objectForKey:firstString];
 
-        NSString *TZString = [regionSortedArray[idx] componentsSeparatedByString:separateString].firstObject;
+        NSString *titleString = [regionSortedArray[idx] componentsSeparatedByString:separateString].firstObject;
         NSString *regionID = [regionSortedArray[idx] componentsSeparatedByString:separateString][1];
+        NSString *countryCode = [regionSortedArray[idx] componentsSeparatedByString:separateString][2];
         NSString *regionString = [regionSortedArray[idx] componentsSeparatedByString:separateString].lastObject;
 
         //获取汉子的首字母,把中文转拼音
@@ -173,9 +210,9 @@
         NSString *regionFirstString = [[ms substringToIndex:1] uppercaseString];
         
         if (regionTitleArray) {
-            [regionTitleArray addObject:[NSString stringWithFormat:@"%@%@%@%@%@",TZString,separateString,regionID,separateString,regionString]];
+            [regionTitleArray addObject:[NSString stringWithFormat:@"%@%@%@%@%@%@%@",titleString,separateString,regionID,separateString,countryCode,separateString,regionString]];
         }else {
-            [regionDic setValue:[@[[NSString stringWithFormat:@"%@%@%@%@%@",TZString,separateString,regionID,separateString,regionString]] mutableCopy] forKey:regionFirstString];
+            [regionDic setValue:[@[[NSString stringWithFormat:@"%@%@%@%@%@%@%@",titleString,separateString,regionID,separateString,countryCode,separateString,regionString]] mutableCopy] forKey:regionFirstString];
         }
     }];
 
@@ -221,13 +258,17 @@
     NSString * title = [array.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString * region = array.lastObject;
     NSString * regionID = array[1];
+    NSString * countryCode = array[2];
     
-//    if (self.deleagete && [self.deleagete respondsToSelector:@selector(returnCountryName:code:)]) {
-//        [self.deleagete returnCountryName:countryName code:code];
-//    }
-//
     if (self.returnRegionBlock != nil) {
-        self.returnRegionBlock(title, region, regionID);
+        self.returnRegionBlock(title, region, regionID,countryCode);
+        
+        if (LanguageIsEnglish) {
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"TitleEN":title,@"Region":region,@"RegionID":regionID,@"CountryCode":countryCode}];
+        }else {
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"Title":title,@"Region":region,@"RegionID":regionID,@"CountryCode":countryCode}];
+        }
+        
     }
     
     _searchController.active = NO;
