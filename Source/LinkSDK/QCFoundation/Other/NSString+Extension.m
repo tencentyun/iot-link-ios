@@ -23,6 +23,23 @@
     return timeString;
 }
 
++ (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)timeFormatter {
+    
+     NSDate *dateNow = [NSDate date];
+
+    //以秒为单位先获取当前时区时间戳
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+     [formatter setDateFormat: timeFormatter]; // 设置想要的格式，hh与HH的区别:分别表示12小时制,24小时制
+     //设置时区,这一点对时间的处理很重要
+    NSTimeZone*timeZone=[NSTimeZone timeZoneWithName:tiemzone];
+     [formatter setTimeZone:timeZone];
+
+    NSString *timeString = [formatter stringFromDate:dateNow];
+    
+    return timeString;
+
+}
+
 ///获取UTC格式时间
 + (NSString *)getNowUTCTimeString{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -49,6 +66,36 @@
 
     return timeString;
 
+}
+
++ (NSString *)getTimeStampWithString:(NSString *)timeString withFormatter:(NSString *)formatter withTimezone:(NSString *)timezone{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];// 创建一个时间格式化对象
+    [dateFormatter setDateFormat:formatter]; //设定时间的格式
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    NSDate *tempDate = [dateFormatter dateFromString:timeString];//将字符串转换为时间对象
+    NSString *timeStr = [NSString stringWithFormat:@"%ld", (long)[tempDate timeIntervalSince1970]];//字符串转成时间戳,精确到毫秒*1000
+    return timeStr;
+}
+
++ (NSString *)convertTimestampToTimeZone:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone {
+    
+    long long time=[timestamp longLongValue];
+    if ([NSString stringWithFormat:@"%@",timestamp].length == 13) {
+        time = time / 1000;
+    }
+    
+    NSDate *date = [[NSDate alloc]initWithTimeIntervalSince1970:time];
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    
+    formatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    
+    [formatter setDateFormat:format];
+
+    NSString*timeString=[formatter stringFromDate:date];
+
+    return timeString;
+    
 }
 
 + (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date {
@@ -132,12 +179,17 @@
 
 + (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum
 {
-    BOOL result = NO;
+//    ‘en-US’: /^(1?|(1\-)?)\d{10,12}$/
+//    'en-US': /^(\+?1)?[2-9]\d{2}[2-9](?!11)\d{6}$/
     NSString *regex = @"^1\\d{10}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
-    result = [pred evaluateWithObject:phoneNum];
-    
-    return result;
+    NSString *regexUS = @"^[0-9]\\d{9}$";
+    NSPredicate *predUS = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regexUS];
+    if ([pred evaluateWithObject:phoneNum] || [predUS evaluateWithObject:phoneNum]) {
+        return  YES;
+    }else {
+        return NO;
+    }
 }
 
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data
@@ -221,4 +273,11 @@
     
 }
 
++ (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString {
+    NSRange startRange = [originString rangeOfString:startString];
+    NSRange endRange = [originString rangeOfString:endString];
+    NSRange range = NSMakeRange(startRange.location + startRange.length, endRange.location + 1  - startRange.location - startRange.length);
+    NSString *result = [originString substringWithRange:range];
+    return result;
+}
 @end

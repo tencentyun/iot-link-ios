@@ -45,12 +45,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum;
 
+//返回设置时区当前时间
++ (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)formatter;
 
 /// 获取当前时间时间戳
 + (NSString *)getNowTimeString;
 
 ///时间戳转日期
 + (NSString *)convertTimestampToTime:(id)timestamp byDateFormat:(NSString *)format;
+
+///字符串转时间戳
++ (NSString *)getTimeStampWithString:(NSString *)timeString withFormatter:(NSString *)formatter withTimezone:(NSString *)timezone;
+
+///时间转时区
++ (NSString *)convertTimestampToTimeZone:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone;
 
 ///时间转特定格式的字符串
 + (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date;
@@ -81,6 +89,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 判断是否是纯数字
 + (BOOL)isPureIntOrFloat:(NSString *)string;
 
+/// 截取指定指定字符串之间的String
++ (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString;
 @end
 
 NS_ASSUME_NONNULL_END
