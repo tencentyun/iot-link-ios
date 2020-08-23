@@ -487,7 +487,7 @@
                     }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
                         
                     }else {
-                        [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                        [MBProgressHUD showError:@"设置失败" toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
                 
@@ -514,7 +514,7 @@
                     }else if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]){
                         
                     }else {
-                        [MBProgressHUD showError:@"温度值不符合要求，设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                        [MBProgressHUD showError:@"设置失败" toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
 
