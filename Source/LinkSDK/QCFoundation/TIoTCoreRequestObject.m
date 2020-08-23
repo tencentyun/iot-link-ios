@@ -176,4 +176,56 @@ failure:(FailureResponseBlock)failure
     [task resume];
 }
 
+- (void)getRequestURLString:(NSString *)requestString success:(SuccessResponseBlock)success
+failure:(FailureResponseBlock)failure {
+    
+    NSURL *urlString = [NSURL URLWithString:requestString];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        WCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200) {
+            NSError *jsonerror = nil;
+
+            if (jsonerror == nil) {
+                
+                if (jsonString != nil) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSString *responseString = (NSString *)jsonString;
+                        NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:@"[" end:@"]"]];
+                        [resultSubString insertString:@"[" atIndex:0];
+                        NSDictionary *regionListDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+                        success(regionListDic);
+                    });
+                }
+                else
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(jsonString,nil,@{});
+                    });
+                }
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(nil,jsonerror,@{});
+                });
+            }
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(nil,error,@{});
+            });
+        }
+    }];
+    [task resume];
+}
+
 @end

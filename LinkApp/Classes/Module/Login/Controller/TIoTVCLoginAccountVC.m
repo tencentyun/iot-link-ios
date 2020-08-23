@@ -16,7 +16,9 @@
 #import "TIoTPhoneResetPwdViewController.h"
 #import "TIoTRegisterViewController.h"
 #import "TIoTChooseRegionVC.h"
-
+#import "TIoTAppConfig.h"
+#import "TIoTUserRegionModel.h"
+#import "YYModel.h"
 @interface TIoTVCLoginAccountVC ()<UITextViewDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL     loginStyle;            // YES 验证码  NO 手机/邮箱
@@ -478,7 +480,7 @@
         }
     }else {         //账号密码登录
         if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text]) {
-            
+
             //手机号密码登录
             tmpDic = @{
                 @"Type":@"phone",
@@ -486,9 +488,9 @@
                 @"PhoneNumber":self.phoneAndEmailTF2.text,
                 @"Password":self.passwordTF.text,
             };
-            
+
             [self phoneLoginWith:tmpDic];
-            
+
         }else  if ([NSString judgeEmailLegal:self.phoneAndEmailTF2.text]) {
             //邮件账号密码登录
             tmpDic = @{
@@ -497,9 +499,10 @@
                 @"Email":self.phoneAndEmailTF2.text,
                 @"Password":self.passwordTF.text,
             };
-            
+
             [self emailLoginWith:tmpDic];
         }
+        
     }
 }
 
@@ -515,6 +518,52 @@
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+    
+//    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
+//
+//        NSArray *regionListArray = (NSArray *)responseObject;
+//
+//        if (LanguageIsEnglish) {
+//            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                NSDictionary *regionDic = obj;
+//                if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
+//
+//                    [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
+//
+//                        [MBProgressHUD dismissInView:nil];
+//                        [self loginWithResponseData:responseObject];
+//                        [HXYNotice addLoginInPost];
+//
+//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//                    }];
+//
+//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+//                }
+//            }];
+//        }else {
+//            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                NSDictionary *regionDic = obj;
+//                if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
+//
+//                    [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
+//
+//                        [MBProgressHUD dismissInView:nil];
+//                        [self loginWithResponseData:responseObject];
+//                        [HXYNotice addLoginInPost];
+//
+//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//                    }];
+//
+//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+//
+//                }
+//            }];
+//        }
+//    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+//
+//    }];
 }
 
 - (void)emailLoginWith:(NSDictionary *)tmpDic {
@@ -566,30 +615,19 @@
 //
 //    [self.navigationController pushViewController:countryCodeVC animated:YES];
     
-    
     TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
-    if (self.loginStyle == YES) {
-        regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
-            [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
-            if ([region isEqualToString:@"ap-guangzhou"]) {
-                self.conturyCode = @"86";
-            }else if ([region isEqualToString:@"na-ashburn"]) {
-                self.conturyCode = @"1";
-            }
+    
+    regionVC.returnRegionBlock = ^(NSString * _Nonnull Title,NSString * _Nonnull region,NSString * _Nonnull RegionID,NSString *_Nullable CountryCode) {
+    
+        if (self.loginStyle == YES) {
+            self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
-        };
-    }else {
-        regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
-            [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
-            if ([region isEqualToString:@"ap-guangzhou"]) {
-                self.conturyCode2 = @"86";
-            }else if ([region isEqualToString:@"na-ashburn"]) {
-                self.conturyCode2 = @"1";
-            }
+        }else {
+             self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
-        };
-    }
-
+        }
+        
+    };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
 

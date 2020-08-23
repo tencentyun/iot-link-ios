@@ -52,6 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///时间戳转日期
 + (NSString *)convertTimestampToTime:(id)timestamp byDateFormat:(NSString *)format;
 
+///时间转时区
++ (NSString *)convertTimestampToTimeZocne:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone;
+
 ///时间转特定格式的字符串
 + (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date;
 
@@ -81,6 +84,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 判断是否是纯数字
 + (BOOL)isPureIntOrFloat:(NSString *)string;
 
+/// 截取指定指定字符串之间的String
++ (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -51,6 +51,27 @@
 
 }
 
++ (NSString *)convertTimestampToTimeZocne:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone {
+    
+    long long time=[timestamp longLongValue];
+    if ([NSString stringWithFormat:@"%@",timestamp].length == 13) {
+        time = time / 1000;
+    }
+    
+    NSDate *date = [[NSDate alloc]initWithTimeIntervalSince1970:time];
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    
+    formatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    
+    [formatter setDateFormat:format];
+
+    NSString*timeString=[formatter stringFromDate:date];
+
+    return timeString;
+    
+}
+
 + (NSString *)converDataToFormat:(NSString *)format withData:(NSDate *)date {
     NSDate *destinationDate = date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
@@ -132,12 +153,17 @@
 
 + (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum
 {
-    BOOL result = NO;
+//    ‘en-US’: /^(1?|(1\-)?)\d{10,12}$/
+//    'en-US': /^(\+?1)?[2-9]\d{2}[2-9](?!11)\d{6}$/
     NSString *regex = @"^1\\d{10}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
-    result = [pred evaluateWithObject:phoneNum];
-    
-    return result;
+    NSString *regexUS = @"^[0-9]\\d{9}$";
+    NSPredicate *predUS = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regexUS];
+    if ([pred evaluateWithObject:phoneNum] || [predUS evaluateWithObject:phoneNum]) {
+        return  YES;
+    }else {
+        return NO;
+    }
 }
 
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data
@@ -255,4 +281,11 @@
     
 }
 
++ (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString {
+    NSRange startRange = [originString rangeOfString:startString];
+    NSRange endRange = [originString rangeOfString:endString];
+    NSRange range = NSMakeRange(startRange.location + startRange.length, endRange.location + 1  - startRange.location - startRange.length);
+    NSString *result = [originString substringWithRange:range];
+    return result;
+}
 @end

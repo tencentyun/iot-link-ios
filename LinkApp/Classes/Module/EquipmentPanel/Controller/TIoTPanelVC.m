@@ -28,6 +28,8 @@
 #import "WRNavigationBar.h"
 
 #import "UIImage+Ex.h"
+#import "TIoTUserConfigModel.h"
+#import "YYModel.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -56,7 +58,7 @@ static NSString *itemId3 = @"i_ooo454";
 @property (nonatomic,strong) TIoTBaseBigBtnView *bigBtnView;
 
 
-
+@property (nonatomic,strong) NSDictionary *userConfigDic;
 @property (nonatomic,strong) TIoTDeviceData *deviceInfo;
 
 @property (nonatomic) WCThemeStyle themeStyle;
@@ -379,15 +381,24 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)getProductsConfig
 {
-    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
-        NSArray *data = responseObject[@"Data"];
-        if (data.count > 0) {
-            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
-            [self loadData:config];
-        }
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+    //先获取用户配置信息
+    [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
+        self.userConfigDic = [[NSDictionary alloc]initWithDictionary:responseObject[@"UserSetting"]];
         
+        [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
+            NSArray *data = responseObject[@"Data"];
+            if (data.count > 0) {
+                NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+                [self loadData:config];
+            }
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
     }];
+    
+    
 }
 
 - (void)loadData:(NSDictionary *)dic {
@@ -581,8 +592,9 @@ static NSString *itemId3 = @"i_ooo454";
 {
     
     if (indexPath.row < self.deviceInfo.properties.count) {
-        NSDictionary *pro = self.deviceInfo.properties[indexPath.row];
+        NSMutableDictionary *pro = self.deviceInfo.properties[indexPath.row];
         NSString *type = pro[@"ui"][@"type"];
+        [pro setValue:self.userConfigDic forKey:@"Userconfig"];
         if ([type isEqualToString:@"btn-col-3"] || [type isEqualToString:@"btn-col-2"]) {
             TIoTMediumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId3 forIndexPath:indexPath];
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
