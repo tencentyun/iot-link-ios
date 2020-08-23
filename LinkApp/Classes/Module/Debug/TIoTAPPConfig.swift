@@ -44,6 +44,11 @@ class TIoTAPPConfig: NSObject {
     public static var isDebug: Bool {
         return iot_appdelegate.isDebug
     }
+    
+    // static config list
+    public static var regionlistString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/37/config1.js"
+    }
 }
 
 

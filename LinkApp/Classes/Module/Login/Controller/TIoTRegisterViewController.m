@@ -232,22 +232,13 @@
     
     TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
     
-    regionVC.returnRegionBlock = ^(NSString * _Nonnull Title, NSString * _Nonnull region, NSString * _Nonnull RegionID) {
-        [[TIoTCoreUserManage shared] saveUserInfo:@{@"RegionID":RegionID,@"Region":region}];
-        
+    regionVC.returnRegionBlock = ^(NSString * _Nonnull Title,NSString * _Nonnull region,NSString * _Nonnull RegionID,NSString *_Nullable CountryCode) {
+    
         if (self->_emailStyle == NO) {
-            if ([region isEqualToString:@"ap-guangzhou"]) {
-                self.conturyCode = @"86";
-            }else if ([region isEqualToString:@"na-ashburn"]) {
-                self.conturyCode = @"1";
-            }
+            self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         }else {
-            if ([region isEqualToString:@"ap-guangzhou"]) {
-                self.conturyCode2 = @"86";
-            }else if ([region isEqualToString:@"na-ashburn"]) {
-                self.conturyCode2 = @"1";
-            }
+             self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
         }
         
