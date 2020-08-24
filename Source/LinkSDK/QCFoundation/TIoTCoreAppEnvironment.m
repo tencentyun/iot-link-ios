@@ -37,10 +37,14 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
 
 - (void)setEnvironment {
 
-    self.baseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //应用端 API 登录前所使用的 API URL(开源版和公版)
-    self.signatureBaseUrlBeforeLogined = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //应用端 API 登录前所使用的 API URL https://cloud.tencent.com/document/product/1081/40773
+    //公版&开源体验版使用
+    self.studioBaseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //接入层 API 登录前所使用的 API URL(开源版和公版)
+    self.studioBaseUrlForLogined = @"https://iot.cloud.tencent.com/api/studioapp/tokenapi"; //接入层 API（目前等同于应用端 API）
     
+    //OEM App 使用
+    self.baseUrl = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //应用端 API 登录前所使用的 API(需签名) URL https://cloud.tencent.com/document/product/1081/40773
     self.baseUrlForLogined = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi"; //应用端 API 登录后所使用的 API URL https://cloud.tencent.com/document/product/1081/40773
+    
     self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";        //长连接通信 https://cloud.tencent.com/document/product/1081/40792
     self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
     self.wxShareType = 0;

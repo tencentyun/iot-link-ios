@@ -16,19 +16,24 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareEnvironment;
 
 /**
- 已登录baseurl
- */
-@property (nonatomic , copy) NSString *baseUrlForLogined;
-
-/**
  未登录baseurl
  */
 @property (nonatomic , copy) NSString *baseUrl;
 
 /**
- 登录前需要签名baseurl
+ 已登录baseurl
  */
-@property (nonatomic, copy) NSString *signatureBaseUrlBeforeLogined;
+@property (nonatomic , copy) NSString *baseUrlForLogined;
+
+/**
+ 未登录baseurl,公版&开源体验版使用
+ */
+@property (nonatomic , copy) NSString *studioBaseUrl;
+
+/**
+ 已登录baseurl,公版&开源体验版使用
+ */
+@property (nonatomic , copy) NSString *studioBaseUrlForLogined;
 
 /**
 长连接

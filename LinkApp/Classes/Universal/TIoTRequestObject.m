@@ -42,7 +42,17 @@ failure:(FailureResponseBlock)failure
     [TIoTCoreRequestObject shared].customEnvrionmenPlatform = [TIoTCoreAppEnvironment shareEnvironment].platform;
     
     [[TIoTCoreRequestObject shared]postRequestWithAction:urlStr url:nil isWithoutToken:NO param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+        
+        TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+        NSURL *url = nil;
+        if ([TIoTAppConfig appTypeWithModel:model] == 0){
+            //公版和开源
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+        }else {
+            //OEM
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined,urlStr]];
+        }
+        
         return url;
     } isShowHelpCenter:^NSMutableURLRequest *(NSMutableURLRequest *request) {
         TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
@@ -88,10 +98,11 @@ failure:(FailureResponseBlock)failure
         
         if ([TIoTAppConfig appTypeWithModel:model] == 0){
             //公版和开源
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
             [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
         }else {
-            url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].signatureBaseUrlBeforeLogined];
+//            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr]];
+            url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrl];
             if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
                 [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
             }
