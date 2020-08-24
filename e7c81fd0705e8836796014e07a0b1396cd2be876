@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7fa151a1_82451647",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-24T02:07:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9758a96e_0422d226",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "014ba0d0_24ead148",
         "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
         "patchSetId": 1
