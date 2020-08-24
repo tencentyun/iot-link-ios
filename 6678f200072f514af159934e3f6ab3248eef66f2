@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60f49581_abd3c20d",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-24T02:04:07Z",
+      "side": 1,
+      "message": "countrycode目前放在静态配置文件中了，另外单词拼写错了\nhttps://imgcache.qq.com/qzone/qzactStatics/qcloud/data/37/config1.js",
+      "revId": "6678f200072f514af159934e3f6ab3248eef66f2",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
