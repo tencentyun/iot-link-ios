@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9758a96e_0422d226",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTChooseRegionVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-24T02:04:41Z",
+      "side": 1,
+      "message": "好的，这部分内容还会在[#578]中还有修改，最后一并优化整理",
+      "parentUuid": "048c9090_d2160441",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "014ba0d0_24ead148",
         "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-20T07:06:19Z",
       "side": 1,
       "message": "choseAreaCode去重，封装单独一个以便复用",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36617055_ff6b58b5",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-24T02:04:41Z",
+      "side": 1,
+      "message": "好的，会在[#574]中优化代码",
+      "parentUuid": "014ba0d0_24ead148",
       "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
