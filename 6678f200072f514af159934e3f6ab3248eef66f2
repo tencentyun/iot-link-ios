@@ -34,6 +34,24 @@
       "revId": "6678f200072f514af159934e3f6ab3248eef66f2",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a13ca89_ed697382",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-24T02:15:59Z",
+      "side": 1,
+      "message": "86硬编码需在578修改",
+      "parentUuid": "28ec175b_6340f8a3",
+      "revId": "6678f200072f514af159934e3f6ab3248eef66f2",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
