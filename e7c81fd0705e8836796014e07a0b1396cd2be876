@@ -69,6 +69,24 @@
       "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1bd04d2_36feadba",
+        "filename": "LinkApp/Classes/Module/Login/Controller/TIoTRegisterViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-24T02:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36617055_ff6b58b5",
+      "revId": "e7c81fd0705e8836796014e07a0b1396cd2be876",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
