@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property NSString *XgAccessId;
 @property NSString *XgAccessKey;
+@property NSString *XgUSAAccessId;
+@property NSString *XgUSAAccessKey;
 
 @property NSString *TencentMapSDKValue;
 @end

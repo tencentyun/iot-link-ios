@@ -698,7 +698,9 @@
         
         [self loginSuccess];
         //信鸽推送注册
+        [[XGPushManage sharedXGPushManage] startPushService];
         [[XGPushManage sharedXGPushManage] bindPushToken];
+        
         [HXYNotice addLoginInPost];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
