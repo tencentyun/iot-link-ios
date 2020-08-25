@@ -116,7 +116,8 @@ static CGFloat weatherHeight = 60;
             NSDictionary *versionInfo = responseObject[@"VersionInfo"];
             if (versionInfo) {
                 NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
-                if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion]) {
+                NSInteger upgradeType = [[versionInfo objectForKey:@"UpgradeType"] integerValue];
+                if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion] && upgradeType!= 2) {//upgradeType为2时是静默升级在home页不显示，在关于页面的版本一栏点击可显示
                     [self showNewVersionViewWithDict:versionInfo];
                 }
             }
@@ -140,6 +141,8 @@ static CGFloat weatherHeight = 60;
         }
         if (theIndex > localIndex) {
             return YES;
+        } else if (theIndex < localIndex) {
+            return NO;
         }
     }
     return NO;

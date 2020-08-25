@@ -107,6 +107,8 @@
         }
         if (theIndex > localIndex) {
             return YES;
+        } else if (theIndex < localIndex) {
+            return NO;
         }
     }
     return NO;

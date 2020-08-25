@@ -173,6 +173,7 @@
             make.height.mas_equalTo(50);
             make.bottom.equalTo(self.bgView);
         }];
+        self.deepTap.enabled = NO;
     } else {
         [confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(line1View.mas_bottom);
