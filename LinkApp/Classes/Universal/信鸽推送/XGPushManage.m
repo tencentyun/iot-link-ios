@@ -35,8 +35,16 @@
 #ifdef DEBUG
     [XGPush.defaultManager setEnableDebug:YES];
 #endif
+    [XGPush.defaultManager stopXGNotification];
+    
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    [XGPush.defaultManager startXGWithAppID:model.XgAccessId.intValue appKey:model.XgAccessKey delegate:self];
+    
+    NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
+    if ([regionID isEqualToString:@"1"]) {
+        [XGPush.defaultManager startXGWithAppID:model.XgAccessId.intValue appKey:model.XgAccessKey delegate:self];
+    }else {
+        [XGPush.defaultManager startXGWithAppID:model.XgUSAAccessId.intValue appKey:model.XgUSAAccessKey delegate:self];
+    }
     
     if (XGPush.defaultManager.xgApplicationBadgeNumber > 0) {
         [XGPush.defaultManager setXgApplicationBadgeNumber:0];
@@ -75,6 +83,7 @@
     //绑定信鸽
     self.deviceToken = xgToken;
     WCLog(@"信鸽推送deviceToken：%@------xgToken：%@",deviceToken, xgToken);
+    [self bindPushToken];
 }
 
 // iOS 10 新增 API 无论APP当前在前台还是后台点击通知都会走该 API
