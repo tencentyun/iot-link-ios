@@ -10,7 +10,6 @@
 #import "TIoTAppEnvironment.h"
 #import "UIViewController+GetController.h"
 #import "TIoTNavigationController.h"
-//#import "TIoTLoginVC.h"
 #import "TIoTMainVC.h"
 #import "TIoTCoreRequestObj.h"
 #import "ReachabilityManager.h"
@@ -286,8 +285,6 @@ static NSString *heartBeatReqID = @"5002";
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"重新登录" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
             [[TIoTAppEnvironment shareEnvironment] loginOut];
-            
-//            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
             TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
             [UIViewController getCurrentViewController].view.window.rootViewController = nav;
         }];

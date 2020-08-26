@@ -60,14 +60,9 @@
 //    //国际化版本
     NSArray *sectionDataArray = self.dataArr[section];
     return sectionDataArray.count;
-    
-//    return self.dataArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
-//    cell.dic = self.dataArr[indexPath.row];
-//    return cell;
     
     //国际化版本
     TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
@@ -76,61 +71,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //手机号、邮箱、微信如果是未绑定状态，点击后则跳转到对应的绑定页面，如果已经绑定，则跳转到修改对应账号页面。
-    
-//    if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"手机号"]) {
-//
-//        if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-//            TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
-//            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
-//                if (bindSuccess == YES) {
-//                    [self.tableView reloadData];
-//                }
-//            };
-//            bindPhoneVC.accountType = AccountType_Phone;
-//            [self.navigationController pushViewController:bindPhoneVC animated:YES];
-//        }else {
-//            TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
-//            modifyVC.accountType = AccountModifyType_Phone;
-//            [self.navigationController pushViewController:modifyVC animated:YES];
-//        }
-//
-//    }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"邮箱"]) {
-//
-//        if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-//            TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
-//            bindEmailVC.accountType = AccountType_Email;
-//            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
-//                if (bindSuccess == YES) {
-//                    [self.tableView reloadData];
-//                }
-//            };
-//            [self.navigationController pushViewController:bindEmailVC animated:YES];
-//        }else {
-//            TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
-//            modifyVC.accountType = AccountModifyType_Email;
-//            [self.navigationController pushViewController:modifyVC animated:YES];
-//        }
-//
-//    }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"微信"]) {
-//
-//        if ([self.dataArr[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-//            //微信绑定
-//            [self wxBindClick];
-//        }else {
-//        }
-//
-//    }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
-//
-//        TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
-//        [self.navigationController pushViewController:modifyPassword animated:YES];
-//
-//    }else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
-//        TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
-//        [self.navigationController pushViewController:cancelAccountVC animated:YES];
-//    }
-    
     
     NSArray *sectionArray = self.dataArr[indexPath.section];
     //国际化版本
@@ -274,13 +214,10 @@
 
 - (UITableView *)tableView {
     if (!_tableView) {
-//        _tableView = [[UITableView alloc]init];
         //国际化版本
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-//        _tableView.backgroundColor = [UIColor clearColor];
-        //国际化版本
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         _tableView.rowHeight = 60;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -294,7 +231,6 @@
 
         NSString *phoneNumber = @"未绑定";
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].phoneNumber]) {
-//            phoneNumber = [TIoTCoreUserManage shared].phoneNumber;
             //国际化版本
             phoneNumber = [NSString stringWithFormat:@"%@-%@",[TIoTCoreUserManage shared].countryCode,[TIoTCoreUserManage shared].phoneNumber];
         }
@@ -318,21 +254,6 @@
                 weixinArrow = @"0";
             }
         }
-//        _dataArr = [NSMutableArray arrayWithArray:@[
-//            @{@"title":@"手机号",@"value":phoneNumber,@"vc":@"",@"haveArrow":@"1"},
-//            @{@"title":@"邮箱",@"value":email,@"vc":@"",@"haveArrow":@"1"},
-//            @{@"title":@"微信",@"value":weixin,@"vc":@"",@"haveArrow":weixinArrow},
-//            @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"},
-//            @{@"title":@"账号注销",@"value":@"",@"vc":@"",@"haveArrow":@"1"},
-//        ]];
-//
-//        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {
-//            if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
-//            }
-//        }else {
-//            [_dataArr removeObjectAtIndex:3];
-//        }
-        
         
         // 国际化版本
         NSString *region = @"";

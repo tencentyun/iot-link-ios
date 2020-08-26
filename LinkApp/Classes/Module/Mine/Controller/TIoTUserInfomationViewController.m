@@ -8,7 +8,6 @@
 
 #import "TIoTUserInfomationViewController.h"
 #import "TIoTUserInfomationTableViewCell.h"
-//#import "TIoTLoginVC.h"
 #import "TIoTMainVC.h"
 #import "TIoTQCloudCOSXMLManage.h"
 #import "TIoTModifyNikeNameViewController.h"
@@ -282,7 +281,6 @@
     
     [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
         [[TIoTAppEnvironment shareEnvironment] loginOut];
-//        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         self.view.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -356,7 +354,6 @@
 
 #pragma mark TableViewDelegate && TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    return self.dataArr.count;
     
     //国际化版本
     NSArray *sectionDataArray = self.dataArr[section];
@@ -364,16 +361,12 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    return 1;
     
     //国际化版本
     return self.dataArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
-//    cell.dic = self.dataArr[indexPath.row];
-//    return cell;
     
     //国际化版本
     TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
@@ -382,54 +375,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    /*
-    if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"昵称"]) {
-        
-        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
-        av.maxLength = 10;
-        av.defaultText = self.dataArr[indexPath.row][@"value"];
-        av.doneAction = ^(NSString * _Nonnull text) {
-            if (text.length > 0) {
-                [self modifyName:text];
-            }
-            else
-            {
-                [MBProgressHUD showMessage:@"昵称长度非法" icon:@""];
-            }
-        };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
-        
-//        WCModifyNikeNameViewController *vc = [[WCModifyNikeNameViewController alloc] init];
-//        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"电话号码"]){
-        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
-            [self bindPhone];
-        }
-    }
-//    else if ([self.dataArr[indexPath.row][@"title"] isEqualToString:@"修改密码"]){
-//
-//        if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
-//
-//            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-//            [av alertWithTitle:@"请先绑定手机号" message:@"当前未绑定手机号，无法进行修改密码" cancleTitlt:@"取消" doneTitle:@"绑定"];
-//            av.doneAction = ^(NSString *text) {
-//                [self bindPhone];
-//            };
-//            [av showInView:[UIApplication sharedApplication].keyWindow];
-//
-//            return;
-//        }
-//
-//        TIoTResetPwdVC *vc = [TIoTResetPwdVC new];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    }
-    else if([self.dataArr[indexPath.row][@"title"] isEqualToString:@"账号与安全"]) {
-        TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
-        [self.navigationController pushViewController:accountAndSafeVC animated:YES];
-    }
-    */
     
     //国际化版本
     NSArray *tempSectionArray = self.dataArr[indexPath.section];
@@ -555,11 +500,6 @@
 
 /// 决定具体cell是否显示提示
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (indexPath.row == 1) {
-//        return YES;
-//    }else {
-//        return NO;
-//    }
     
     //国际化版本
     if (indexPath.section == 0 && indexPath.row == 2) {
@@ -645,10 +585,6 @@
 #pragma mark setter or getter
 - (UITableView *)tableView{
     if (_tableView == nil) {
-//        _tableView = [[UITableView alloc] init];
-//        _tableView.backgroundColor = [UIColor clearColor];
-//        _tableView.rowHeight = 60;
-        
         //国际化版本
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
@@ -678,14 +614,6 @@
         
         NSString *haveArrow = @"1";
         if ([TIoTCoreUserManage shared].phoneNumber && [TIoTCoreUserManage shared].phoneNumber.length > 0) haveArrow = @"0";
-        
-//        _dataArr = @[
-//        @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-//        @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
-//        @{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
-////        @{@"title":@"电话号码",@"value":[TIoTCoreUserManage shared].phoneNumber,@"vc":@"",@"haveArrow":haveArrow},
-////        @{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}
-//        ];
         
         //国际化版本
         _dataArr = [NSMutableArray arrayWithArray:@[
