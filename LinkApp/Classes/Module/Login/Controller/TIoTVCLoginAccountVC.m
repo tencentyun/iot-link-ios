@@ -67,6 +67,10 @@
     self.conturyCode2 = @"86";
     self.loginStyle = YES;
     
+    //不选地区列表赋默认值
+    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
+    [TIoTCoreUserManage shared].userRegionId = @"1";
+    
     [self.view addSubview:self.scrollView];
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);

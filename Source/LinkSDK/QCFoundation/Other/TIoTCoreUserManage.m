@@ -27,6 +27,7 @@
 @synthesize userRegion = _userRegion;
 @synthesize countryTitle = _countryTitle;
 @synthesize countryTitleEN = _countryTitleEN;
+@synthesize localTimezone = _localTimezone;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -226,6 +227,10 @@
     if (!_userRegionId) {
         _userRegionId = [[NSUserDefaults standardUserDefaults] valueForKey:@"Region_Id"];
     }
+    
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"Region_Id"] == nil) {
+        _userRegionId = @"1";
+    }
     return _userRegionId;
 }
 
@@ -238,12 +243,15 @@
     if (!_userRegion) {
         _userRegion = [[NSUserDefaults standardUserDefaults] valueForKey:@"region"];
     }
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"region"] == nil) {
+        _userRegion = @"ap-guangzhou";
+    }
     return _userRegion;
 }
 
-- (void)setRegion:(NSString *)region {
-    _userRegion = region;
-    [[NSUserDefaults standardUserDefaults] setValue:region forKey:@"region"];
+- (void)setUserRegion:(NSString *)userRegion {
+    _userRegion = userRegion;
+    [[NSUserDefaults standardUserDefaults] setValue:userRegion forKey:@"region"];
 }
 
 - (NSString *)countryTitle {
@@ -318,6 +326,9 @@
     if (userInfo[@"TitleEN"]) {
         self.countryTitleEN = userInfo[@"TitleEN"];
     }
+    if (userInfo[@"localTimezone"]) {
+        self.localTimezone = userInfo[@"localTimezone"];
+    }
 }
 
 - (void)clear{
@@ -337,6 +348,7 @@
     self.userRegion = @"";
     self.countryTitle = @"";
     self.countryTitleEN = @"";
+    self.localTimezone = @"";
 }
 
 
