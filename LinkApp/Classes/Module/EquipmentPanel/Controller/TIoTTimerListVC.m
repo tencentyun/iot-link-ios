@@ -106,18 +106,19 @@ static NSString *cellId = @"ub67989";
         [self.timers removeAllObjects];
         [self.timers addObjectsFromArray:responseObject[@"TimerList"]];
         [self refreshUI:[responseObject[@"Total"] integerValue]];
-        NSArray *timerListArray = responseObject[@"TimerList"];
-        [timerListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableDictionary *timerListDic = [[NSMutableDictionary alloc]initWithDictionary:obj];
-            
-            NSDateFormatter *fomatter = [[NSDateFormatter alloc] init];
-            NSString *timezoneString = self.actions[0][@"Region"];
-            fomatter.timeZone = [NSTimeZone timeZoneWithName:timezoneString];
-            [fomatter setDateFormat: @"HH:mm"];
-            NSString *timeStamp = [NSString getNowTimeStingWithTimeZone:timezoneString formatter:@"HH:mm"];
-            
-            NSString*timeString = obj[@"TimePoint"];
-        }];
+//        NSArray *timerListArray = responseObject[@"TimerList"];
+//        [timerListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//
+//            NSMutableDictionary *timerListDic = [[NSMutableDictionary alloc]initWithDictionary:obj];
+//
+//            NSDateFormatter *fomatter = [[NSDateFormatter alloc] init];
+//            NSString *timezoneString = self.actions[0][@"Region"];
+//            fomatter.timeZone = [NSTimeZone timeZoneWithName:timezoneString];
+//            [fomatter setDateFormat: @"HH:mm"];
+//            NSString *timeStamp = [NSString getNowTimeStingWithTimeZone:timezoneString formatter:@"HH:mm"];
+//
+//            NSString*timeString = obj[@"TimePoint"];
+//        }];
         
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {

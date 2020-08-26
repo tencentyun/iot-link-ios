@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ControlInfo : NSObject
 
-@property (nonatomic,copy) NSString *theme;
+//@property (nonatomic,copy) NSString *theme;
 @property (nonatomic,copy) NSDictionary *navBar;
 @property (nonatomic,assign) BOOL timingProject;
 
