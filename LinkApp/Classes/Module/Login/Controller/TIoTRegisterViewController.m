@@ -44,6 +44,9 @@
     // Do any additional setup after loading the view.
     
     [self setupUI];
+    //不选地区列表赋默认值
+    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
+    [TIoTCoreUserManage shared].userRegionId = @"1";
 }
 
 #pragma mark privateMethods
