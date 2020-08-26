@@ -522,52 +522,6 @@
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
-    
-//    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
-//
-//        NSArray *regionListArray = (NSArray *)responseObject;
-//
-//        if (LanguageIsEnglish) {
-//            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                NSDictionary *regionDic = obj;
-//                if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
-//
-//                    [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
-//
-//                        [MBProgressHUD dismissInView:nil];
-//                        [self loginWithResponseData:responseObject];
-//                        [HXYNotice addLoginInPost];
-//
-//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//
-//                    }];
-//
-//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
-//                }
-//            }];
-//        }else {
-//            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                NSDictionary *regionDic = obj;
-//                if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
-//
-//                    [[TIoTRequestObject shared] postWithoutToken:AppGetToken Param:tmpDic success:^(id responseObject) {
-//
-//                        [MBProgressHUD dismissInView:nil];
-//                        [self loginWithResponseData:responseObject];
-//                        [HXYNotice addLoginInPost];
-//
-//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//
-//                    }];
-//
-//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
-//
-//                }
-//            }];
-//        }
-//    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-//
-//    }];
 }
 
 - (void)emailLoginWith:(NSDictionary *)tmpDic {
@@ -601,23 +555,6 @@
 }
 
 - (void)choseAreaCode:(id)sender{
-    
-//    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
-//    if (self.loginStyle == YES) {
-//
-//        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
-//            self.conturyCode = code;
-//            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
-//        };
-//    }else {
-//
-//        countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
-//            self.conturyCode2 = code;
-//            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",countryName] forState:UIControlStateNormal];
-//        };
-//    }
-//
-//    [self.navigationController pushViewController:countryCodeVC animated:YES];
     
     TIoTChooseRegionVC *regionVC = [[TIoTChooseRegionVC alloc]init];
     

@@ -10,7 +10,6 @@
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
 #import "TIoTNavigationController.h"
-//#import "TIoTLoginVC.h"
 #import "TIoTMainVC.h"
 #import "UIViewController+GetController.h"
 
@@ -224,7 +223,6 @@ failure:(FailureResponseBlock)failure
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTAppEnvironment shareEnvironment] loginOut];
-//    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTLoginVC alloc] init]];
     TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
     [UIViewController getCurrentViewController].view.window.rootViewController = nav;
 }
