@@ -183,10 +183,6 @@
 
           }
           case 1: {
-
-              break;
-          }
-          case 2: {
               if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
 
                   TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
@@ -195,7 +191,7 @@
               }
               break;
           }
-          case 3: {
+          case 2: {
               if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
                   TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
                   [self.navigationController pushViewController:cancelAccountVC animated:YES];
