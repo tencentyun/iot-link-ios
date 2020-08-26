@@ -31,6 +31,11 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
      [formatter setDateFormat: timeFormatter]; // 设置想要的格式，hh与HH的区别:分别表示12小时制,24小时制
      //设置时区,这一点对时间的处理很重要
+    if (tiemzone == nil || [tiemzone isEqualToString:@""]) {
+        NSTimeZone*timeZone=[NSTimeZone timeZoneWithName:tiemzone];
+    }else {
+        NSTimeZone*timeZone=[NSTimeZone systemTimeZone];
+    }
     NSTimeZone*timeZone=[NSTimeZone timeZoneWithName:tiemzone];
      [formatter setTimeZone:timeZone];
 
