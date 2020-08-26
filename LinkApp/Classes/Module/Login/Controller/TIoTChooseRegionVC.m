@@ -66,35 +66,6 @@
     * RegisterRegionListEN 英文注册区域列表，RegisterRegionListCN 中文注册区域列表
     */
     
-//    if (LanguageIsEnglish) {
-//        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-//        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListEN"} success:^(id responseObject) {
-//            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
-//            TIoTConfigModel *configModel = userRegionModel.Configs[0];
-//
-//            [self recombinationDataWithConfigModel:configModel];
-//
-//            [self.tableView reloadData];
-//            [MBProgressHUD dismissInView:self.view];
-//        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-//            [MBProgressHUD dismissInView:self.view];
-//        }];
-//    }else {
-//        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
-//        [[TIoTRequestObject shared] postWithoutToken:AppGetGlobalConfig Param:@{@"Keys":@"RegisterRegionListCN"} success:^(id responseObject) {
-//            TIoTUserRegionModel *userRegionModel = [TIoTUserRegionModel yy_modelWithJSON:responseObject];
-//            TIoTConfigModel *configModel = userRegionModel.Configs[0];
-//
-//            [self recombinationDataWithConfigModel:configModel];
-//
-//            [self.tableView reloadData];
-//
-//            [MBProgressHUD dismissInView:self.view];
-//        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-//            [MBProgressHUD dismissInView:self.view];
-//        }];
-//    }
-    
     [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
 
         NSArray *regionListArray = (NSArray *)responseObject;
