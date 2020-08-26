@@ -81,7 +81,7 @@
 
 - (void)refresh
 {
-    self.theme.text = self.ci.theme;
+//    self.theme.text = self.ci.theme;
     self.navBar.text = [self.ci.navBar[@"visible"] boolValue] ? @"显示" : @"不显示";
     NSString *templateId = self.ci.navBar[@"templateId"];
     if (templateId && templateId.length > 0) {
