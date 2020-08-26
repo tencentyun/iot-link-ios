@@ -79,15 +79,8 @@ int getLocalIP(in_addr_t * addr)
 
 
 
-unsigned char * getdefaultgateway(in_addr_t * addr)
+int getdefaultgateway(in_addr_t * addr)
 {
-    unsigned char * octet=malloc(4);
-#if 0
-    /* net.route.0.inet.dump.0.0 ? */
-    int mib[] = {CTL_NET, PF_ROUTE, 0, AF_INET,
-        NET_RT_DUMP, 0, 0/*tableid*/};
-#endif
-    /* net.route.0.inet.flags.gateway */
     int mib[] = {CTL_NET, PF_ROUTE, 0, AF_INET,
         NET_RT_FLAGS, RTF_GATEWAY};
     size_t l;
@@ -95,14 +88,15 @@ unsigned char * getdefaultgateway(in_addr_t * addr)
     struct rt_msghdr * rt;
     struct sockaddr * sa;
     struct sockaddr * sa_tab[RTAX_MAX];
-    int i; 
+    int i;
+    int r = -1;
     if(sysctl(mib, sizeof(mib)/sizeof(int), 0, &l, 0, 0) < 0) {
-        return octet;
+        return -1;
     }
     if(l>0) {
         buf = malloc(l);
         if(sysctl(mib, sizeof(mib)/sizeof(int), buf, &l, 0, 0) < 0) {
-            return octet;
+            return -1;
         }
         for(p=buf; p<buf+l; p+=rt->rtm_msglen) {
             rt = (struct rt_msghdr *)p;
@@ -120,15 +114,21 @@ unsigned char * getdefaultgateway(in_addr_t * addr)
                && sa_tab[RTAX_DST]->sa_family == AF_INET
                && sa_tab[RTAX_GATEWAY]->sa_family == AF_INET) {
                 
-             
-                for (int i=0; i<4; i++){
-                    octet[i] = ( ((struct sockaddr_in *)(sa_tab[RTAX_GATEWAY]))->sin_addr.s_addr >> (i*8) ) & 0xFF;
-                }
                 
+                if(((struct sockaddr_in *)sa_tab[RTAX_DST])->sin_addr.s_addr == 0) {
+                    char ifName[128];
+                    if_indextoname(rt->rtm_index,ifName);
+                    
+                    if(strcmp("en0",ifName)==0){
+                        
+                        *addr = ((struct sockaddr_in *)(sa_tab[RTAX_GATEWAY]))->sin_addr.s_addr;
+                        r = 0;
+                    }
+                }
             }
         }
         free(buf);
     }
-    return octet;
+    return r;
 }
 #endif
