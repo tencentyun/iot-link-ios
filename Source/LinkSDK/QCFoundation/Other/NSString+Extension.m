@@ -204,6 +204,20 @@
     return ip;
 }
 
++ (NSString *)getGatewayIP {
+    NSString *ipString = nil;
+    struct in_addr gatewayaddr;
+    int r = getdefaultgateway1(&(gatewayaddr.s_addr));
+    if(r >= 0) {
+        ipString = [NSString stringWithFormat: @"%s",inet_ntoa(gatewayaddr)];
+        NSLog(@"default gateway : %@", ipString );
+    } else {
+        NSLog(@"getdefaultgateway() failed");
+    }
+    
+    return ipString;
+}
+
 + (BOOL)matchSinogram:(NSString *)checkString {
     if (checkString == nil || [checkString isEqualToString:@""]) {
         return NO;

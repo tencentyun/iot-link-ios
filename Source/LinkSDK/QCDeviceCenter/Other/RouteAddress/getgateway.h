@@ -28,4 +28,7 @@
 
 unsigned char * getdefaultgateway(in_addr_t * addr);
 
+// C语言的方法获得当前路由器的IP地址
+int getdefaultgateway1(in_addr_t * addr);
+
 #endif
