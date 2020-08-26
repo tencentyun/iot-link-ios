@@ -27,7 +27,6 @@
 @synthesize userRegion = _userRegion;
 @synthesize countryTitle = _countryTitle;
 @synthesize countryTitleEN = _countryTitleEN;
-@synthesize localTimezone = _localTimezone;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -326,9 +325,6 @@
     if (userInfo[@"TitleEN"]) {
         self.countryTitleEN = userInfo[@"TitleEN"];
     }
-    if (userInfo[@"localTimezone"]) {
-        self.localTimezone = userInfo[@"localTimezone"];
-    }
 }
 
 - (void)clear{
@@ -348,7 +344,6 @@
     self.userRegion = @"";
     self.countryTitle = @"";
     self.countryTitleEN = @"";
-    self.localTimezone = @"";
 }
 
 
