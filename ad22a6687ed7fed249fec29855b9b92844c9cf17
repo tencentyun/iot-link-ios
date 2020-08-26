@@ -33,6 +33,24 @@
       "revId": "ad22a6687ed7fed249fec29855b9b92844c9cf17",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e3fda6c_7a933d2b",
+        "filename": "Source/LinkSDK/QCFoundation/Other/TIoTCoreUserManage.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-08-26T04:00:33Z",
+      "side": 1,
+      "message": "好的，后期统一优化处理",
+      "parentUuid": "55cccfee_a58f8c8f",
+      "revId": "ad22a6687ed7fed249fec29855b9b92844c9cf17",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
