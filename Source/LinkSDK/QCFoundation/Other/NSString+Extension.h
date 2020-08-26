@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 获取网关
 + (NSString *)getGateway;
+/// 获取网关IP
++ (NSString *)getGatewayIP;
 
 /// 检测中文
 + (BOOL)matchSinogram:(NSString *)checkString;
