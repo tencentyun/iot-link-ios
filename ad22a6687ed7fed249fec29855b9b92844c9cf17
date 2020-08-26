@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0ae86b8_859f041e",
+        "filename": "LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTAddTimerVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-26T03:53:47Z",
+      "side": 1,
+      "message": "建议 ： NSDateFormatter后面可以做一下性能优化。",
+      "revId": "ad22a6687ed7fed249fec29855b9b92844c9cf17",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
