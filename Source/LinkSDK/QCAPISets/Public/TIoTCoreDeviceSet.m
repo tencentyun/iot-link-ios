@@ -268,7 +268,7 @@
         
         DeviceInfo *obj = [[DeviceInfo alloc] init];
         
-        obj.theme = standard[@"theme"];
+//        obj.theme = standard[@"theme"];
         obj.navBar = standard[@"navBar"];
         obj.timingProject = [standard[@"timingProject"] boolValue];
         
