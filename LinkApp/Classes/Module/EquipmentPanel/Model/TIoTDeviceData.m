@@ -98,8 +98,8 @@
     NSDictionary *standard = uiInfo[@"Panel"][@"standard"];
         if (standard && baseInfo && deviceInfo) {
             
-            self.theme = standard[@"theme"];
-            self.bgImgId = standard[@"bgImgId"];
+//            self.theme = standard[@"theme"];
+//            self.bgImgId = standard[@"bgImgId"];
             self.navBar = standard[@"navBar"];
             self.timingProject = [standard[@"timingProject"] boolValue];
             
