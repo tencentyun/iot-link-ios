@@ -107,8 +107,7 @@
     UILabel *packageSizeLabel = [[UILabel alloc] init];
     packageSizeLabel.textColor = kRGBColor(136, 136, 136);
     packageSizeLabel.font = [UIFont wcPfRegularFontOfSize:14];
-#warning TODU:https://docs.qq.com/doc/DYUVlZFR3U0ZRWEJG   iOS问题1写死一个数组，下个版本再改掉
-    packageSizeLabel.text = @"安装包大小：33.98M";//[NSString stringWithFormat:@"安装包大小：%.2fM", [[versionInfo objectForKey:@"PackageSize"] floatValue]];
+    packageSizeLabel.text = [NSString stringWithFormat:@"安装包大小：%.2fM", [[versionInfo objectForKey:@"PackageSize"] floatValue]];
     [paramView addSubview:packageSizeLabel];
     [packageSizeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(versionNumLabel.mas_bottom).offset(4);
