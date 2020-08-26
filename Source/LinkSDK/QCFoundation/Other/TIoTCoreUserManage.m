@@ -257,6 +257,9 @@
     if (!_countryTitle) {
         _countryTitle = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_Title"];
     }
+    if (_countryTitle == nil) {
+        _countryTitle = @"中国大陆";
+    }
     return _countryTitle;
 }
 
@@ -268,6 +271,9 @@
 - (NSString *)countryTitleEN {
     if (!_countryTitleEN) {
         _countryTitleEN = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_TitleEN"];
+    }
+    if (_countryTitleEN == nil) {
+        _countryTitleEN = @"Chinese Mainland";
     }
     return _countryTitleEN;
 }
