@@ -31,7 +31,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
+    [TIoTCoreSocketManager shared].delegate = self;
     [TIoTCoreDeviceSet shared].deviceChange = ^(NSDictionary *changeInfo) {
         if ([self.deviceInfo[@"DeviceId"] isEqualToString:changeInfo[@"DeviceId"]]) {
             [self receiveData:changeInfo];
@@ -69,8 +69,8 @@
     for (NSString *key in keys) {
         for (NSMutableDictionary *propertie in self.ci.zipData) {
             if ([key isEqualToString:propertie[@"id"]]) {
-                NSMutableDictionary *dic = propertie[@"status"];
-                [dic setObject:reportDic[key] forKey:@"Value"];
+//                NSMutableDictionary *dic = propertie[@"status"];
+                [propertie setObject:reportDic[key] forKey:@"Value"];
                 break;
             }
         }

@@ -14,6 +14,7 @@
 #import "TIoTCoreRequestObj.h"
 #import "ReachabilityManager.h"
 #import "TIoTCoreSocketCover.h"
+#import "TIoTCoreDeviceSet.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -303,6 +304,7 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     NSDictionary *dataDic = [[TIoTCoreSocketCover shared] registerDeviceParamterActive:deviceIds withAction:requestURL complete:sucess];
+    
     [[TIoTCoreSocketManager shared] sendData:dataDic];
     
 }

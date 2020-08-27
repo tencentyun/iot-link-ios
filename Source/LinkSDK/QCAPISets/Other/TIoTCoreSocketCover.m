@@ -37,7 +37,7 @@ static NSString *registDeviceReqID = @"5001";
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [TIoTCoreSocketManager shared].delegate = self;
+//        [TIoTCoreSocketManager shared].delegate = self;
     }
     return self;
 }
