@@ -11,7 +11,7 @@
 #import "TIoTSoftapConnectViewController.h"
 
 #import <CoreLocation/CoreLocation.h>
-#import <SystemConfiguration/CaptiveNetwork.h>
+#import "TIoTCoreUtil.h"
 #import "ReachabilityManager.h"
 
 @interface TIoTWIFINetViewController ()<CLLocationManagerDelegate,UITextFieldDelegate>
@@ -60,7 +60,7 @@
             case NetworkReachabilityStatusReachableViaWiFi:
                 NSLog(@"WIFI");
                 [weakself.wifiInfo removeAllObjects];
-                [weakself.wifiInfo setDictionary:[weakself getWifiSsid]];
+                [weakself.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
                 weakself.wifiNameTF.text = weakself.wifiInfo[@"name"];
 
                 break;
@@ -226,7 +226,7 @@
         
         if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
             [self.wifiInfo removeAllObjects];
-            [self.wifiInfo setDictionary:[self getWifiSsid]];
+            [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
             self.wifiNameTF.text = self.wifiInfo[@"name"];
         } else {
             [self.locationManager requestWhenInUseAuthorization];
@@ -243,33 +243,9 @@
     else
     {
         [self.wifiInfo removeAllObjects];
-        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiNameTF.text = self.wifiInfo[@"name"];
     }
-}
-
-- (NSDictionary *)getWifiSsid{
-    
-    NSDictionary *wifiDic;
-    CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
-    if (!wifiInterfaces) {
-        return nil;
-    }
-    NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;
-    for (NSString *interfaceName in interfaces) {
-        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((__bridge CFStringRef)(interfaceName));
-        
-        if (dictRef) {
-            NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
-    
-            wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID]};
-            WCLog(@"network info -> %@", wifiDic);
-            CFRelease(dictRef);
-        }
-    }
-    
-    CFRelease(wifiInterfaces);
-    return wifiDic;
 }
 
 #pragma mark - event
@@ -368,7 +344,7 @@
 {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
         [self.wifiInfo removeAllObjects];
-        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiNameTF.text = self.wifiInfo[@"name"];
     }
     else if (status == kCLAuthorizationStatusNotDetermined)

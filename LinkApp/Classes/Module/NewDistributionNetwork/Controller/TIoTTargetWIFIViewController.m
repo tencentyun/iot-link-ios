@@ -11,11 +11,11 @@
 #import "TIoTConfigInputView.h"
 #import "TIoTWIFIListView.h"
 
+#import "TIoTCoreUtil.h" 
 #import "TIoTWIFITipViewController.h"
 #import "TIoTStartConfigViewController.h"
 #import "TIoTDeviceWIFITipViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import <SystemConfiguration/CaptiveNetwork.h>
 #import <NetworkExtension/NetworkExtension.h>
 
 @interface TIoTTargetWIFIViewController () <CLLocationManagerDelegate>
@@ -247,33 +247,9 @@
         [self.locationManager requestWhenInUseAuthorization];
     } else {
         [self.wifiInfo removeAllObjects];
-        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiInputView.inputText = self.wifiInfo[@"name"];
     }
-}
-
-- (NSDictionary *)getWifiSsid {
-    [self scanWifiInfos];
-    NSDictionary *wifiDic;
-    CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
-    if (!wifiInterfaces) {
-        return nil;
-    }
-    NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;
-    for (NSString *interfaceName in interfaces) {
-        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((__bridge CFStringRef)(interfaceName));
-        
-        if (dictRef) {
-            NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
-    
-            wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID]};
-            WCLog(@"network info -> %@", wifiDic);
-            CFRelease(dictRef);
-        }
-    }
-    
-    CFRelease(wifiInterfaces);
-    return wifiDic;
 }
 
 - (void)scanWifiInfos{
@@ -362,7 +338,7 @@
         
         if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
             [self.wifiInfo removeAllObjects];
-            [self.wifiInfo setDictionary:[self getWifiSsid]];
+            [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
             self.wifiInputView.inputText = self.wifiInfo[@"name"];
         } else {
             [self.locationManager requestWhenInUseAuthorization];
@@ -376,7 +352,7 @@
 {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
         [self.wifiInfo removeAllObjects];
-        [self.wifiInfo setDictionary:[self getWifiSsid]];
+        [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiInputView.inputText = self.wifiInfo[@"name"];
     }
     else if (status == kCLAuthorizationStatusNotDetermined)
