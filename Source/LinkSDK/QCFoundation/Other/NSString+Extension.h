@@ -91,6 +91,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 截取指定指定字符串之间的String
 + (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString;
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END
