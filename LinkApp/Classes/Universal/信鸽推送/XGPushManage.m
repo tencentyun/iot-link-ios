@@ -67,7 +67,7 @@
 
 - (void)bindPushToken
 {
-    if (self.deviceToken) {
+    if (self.deviceToken && [TIoTCoreUserManage shared].accessToken) {
         
         [[TIoTRequestObject shared] post:@"AppBindXgToken" Param:@{@"Token":self.deviceToken,@"Platform":@"ios"} success:^(id responseObject) {
             
