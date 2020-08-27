@@ -66,7 +66,8 @@
         self.rightImg.hidden = YES;
         self.swich.hidden = NO;
         
-        self.swich.on = [info[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
+//        self.swich.on = [info[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
+        self.swich.on = [info[@"Value"] integerValue] == 0 ? NO : YES;
     }
     else
     {
@@ -76,16 +77,18 @@
         
         if ([define[@"type"] isEqualToString:@"enum"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_color"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]];
+//            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]];
+            NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"]]?:@"";
             self.content.text = define[@"mapping"][key];
         }
         else if ([define[@"type"] isEqualToString:@"int"] || [define[@"type"] isEqualToString:@"float"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_light"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"] ?: @""];
+//            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"] ?: @""];
+            NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"] ?: @""];
             
             if ([info[@"id"]isEqualToString:@"Temperature"]) {
                 NSDictionary *userconfig = info[@"Userconfig"];
-                self.content.text = [self judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:[NSString stringWithFormat:@"%@%@",key,define[@"unit"]]];;
+                self.content.text = [self judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:[NSString stringWithFormat:@"%@%@",key,define[@"unit"]]];
             }else {
                 self.content.text = [NSString stringWithFormat:@"%@%@",key,define[@"unit"]];
             }

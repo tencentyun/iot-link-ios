@@ -31,6 +31,8 @@
 #import "TIoTUserConfigModel.h"
 #import "YYModel.h"
 
+#import "TIoTCoreDeviceSet.h"
+
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
 #define kSectionInset UIEdgeInsetsMake(10, 16, 10, 16)

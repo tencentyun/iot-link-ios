@@ -31,13 +31,13 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
      [formatter setDateFormat: timeFormatter]; // 设置想要的格式，hh与HH的区别:分别表示12小时制,24小时制
      //设置时区,这一点对时间的处理很重要
+    NSTimeZone *timeZoneObj = nil;
     if (tiemzone == nil || [tiemzone isEqualToString:@""]) {
-        NSTimeZone*timeZone=[NSTimeZone timeZoneWithName:tiemzone];
+        timeZoneObj=[NSTimeZone timeZoneWithName:tiemzone];
     }else {
-        NSTimeZone*timeZone=[NSTimeZone systemTimeZone];
+        timeZoneObj=[NSTimeZone systemTimeZone];
     }
-    NSTimeZone*timeZone=[NSTimeZone timeZoneWithName:tiemzone];
-     [formatter setTimeZone:timeZone];
+     [formatter setTimeZone:timeZoneObj];
 
     NSString *timeString = [formatter stringFromDate:dateNow];
     
@@ -284,5 +284,75 @@
     NSRange range = NSMakeRange(startRange.location + startRange.length, endRange.location + 1  - startRange.location - startRange.length);
     NSString *result = [originString substringWithRange:range];
     return result;
+}
+
+///纯数字摄氏度转华氏度转换（模糊匹配 以F: 华氏  C: 摄氏）
+- (NSString *)changeTemperatureValue:(NSString *)temperatureString userConfig:(NSString *)configString {
+    if ([configString isEqualToString:@"F"]) {
+        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
+            NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
+            return [NSString stringWithFormat:@"%f",celsiusMeasurement.doubleValue];
+        }else {
+            return temperatureString;
+        }
+    }else if ([configString isEqualToString:@"C"]) {
+        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
+            NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
+            return [NSString stringWithFormat:@"%f",fahrenheitMeasurement.doubleValue];
+        }else {
+            return temperatureString;
+        }
+    }else {
+        return temperatureString;
+    }
+}
+
+- (NSString *)judepTemperatureWithUserConfig:(NSString *)configString templeUnit:(NSString *)unitString {
+    if ([configString isEqualToString:@"F"]) {
+        if ([unitString containsString:@"摄氏"] || [unitString containsString:@"℃"]) {
+            return [self chanageTemperatureUnitWith:unitString];
+        }else {
+            return unitString;
+        }
+    }else if ([configString isEqualToString:@"C"]) {
+        if ([unitString containsString:@"华氏"] || [unitString containsString:@"℉"]) {
+            return [self chanageTemperatureUnitWith:unitString];
+        }else {
+            return unitString;
+        }
+    }else {
+        return unitString;
+    }
+}
+
+///字符串模糊匹配摄氏度与华氏度转化 （"摄氏" "℃" "华氏" "℉"）
+- (NSString *)chanageTemperatureUnitWith:(NSString *)temperatureString {
+    
+        if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]) {
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℃" withString:@""];
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"摄氏" withString:@""];
+            if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+                NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
+                NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
+                return [NSString stringWithFormat:@"%f℉",celsiusMeasurement.doubleValue];
+            }else {
+                return [NSString stringWithFormat:@"%@℉",temperatureString];
+            }
+            
+        }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℉" withString:@""];
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"华氏" withString:@""];
+            if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
+                NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
+                NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
+                return [NSString stringWithFormat:@"%f℃",fahrenheitMeasurement.doubleValue];
+            }else {
+                return [NSString stringWithFormat:@"%@℃",temperatureString];
+            }
+        }else {
+            return temperatureString;
+        }
 }
 @end

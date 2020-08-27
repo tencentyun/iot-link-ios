@@ -82,7 +82,7 @@
                 for (NSMutableDictionary *propertie in self.properties) {
                     if ([key isEqualToString:propertie[@"id"]]) {
                         NSMutableDictionary *dic = propertie[@"status"];
-                        [dic setObject:reportDic[key] forKey:@"Value"];
+                        [propertie setObject:reportDic[key] forKey:@"Value"];
                         break;
                     }
                 }
