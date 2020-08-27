@@ -30,10 +30,34 @@ cp .github/script/*.mobileprovision ~/Library/MobileDevice/Provisioning\ Profile
 echo "List profiles"
 ls ~/Library/MobileDevice/Provisioning\ Profiles/
 
-security create-keychain -p "" build.keychain
-security import .github/script/apple_dev.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$P12_EXPORT_CCHARLESREN_PASSWORD" -A
+#security create-keychain -p "" build.keychain
+#security import .github/script/apple_dev.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$P12_EXPORT_CCHARLESREN_PASSWORD" -A
+#
+#security list-keychains -s ~/Library/Keychains/build.keychain
+#security default-keychain -s ~/Library/Keychains/build.keychain
+#security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+#security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-security list-keychains -s ~/Library/Keychains/build.keychain
-security default-keychain -s ~/Library/Keychains/build.keychain
-security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+
+# Create temporary keychain https://www.soinside.com/question/2TAiumaLpa7y3jpSY6NViE
+KEYCHAIN="MyApp.keychain"
+KEYCHAIN_PASSWORD="MyApp"
+security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+
+# Append keychain to the search list
+security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | sed s/\"//g)
+security list-keychains
+
+# Unlock the keychain
+security set-keychain-settings "$KEYCHAIN"
+security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+
+# Import certificate
+security import .github/script/apple_dev.p12 -k "$KEYCHAIN" -P "$P12_EXPORT_CCHARLESREN_PASSWORD" -T "/usr/bin/codesign"
+
+# Detect the iOS identity
+IOS_IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN" | head -1 | grep '"' | sed -e 's/[^"]*"//' -e 's/".*//')
+IOS_UUID=$(security find-identity -v -p codesigning "$KEYCHAIN" | head -1 | grep '"' | awk '{print $2}')
+
+# New requirement for MacOS 10.12+
+security set-key-partition-list -S apple-tool:,apple: -s -k $KEYCHAIN_PASSWORD $KEYCHAIN
