@@ -1,7 +1,8 @@
 #!/bin/sh
  
-rm -rf Podfile.lock
-/usr/local/bin/pod install --verbose --no-repo-update
+#rm -rf Podfile.lock
+#/usr/local/bin/pod install --verbose --no-repo-update
+/usr/local/bin/pod install
 
 xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Debug
  
