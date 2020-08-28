@@ -9,6 +9,7 @@
 #import "XGPushManage.h"
 #import <UserNotifications/UserNotifications.h>
 #import "XGPush.h"
+#import "XGPushPrivate.h"  /// 如果是海外集群需要导入此头文件
 #import "MGJRouter.h"
 #import "TIoTFeedBackViewController.h"
 #import "TIoTAppConfig.h"
@@ -38,12 +39,13 @@
     [XGPush.defaultManager stopXGNotification];
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    
     NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
     if ([regionID isEqualToString:@"1"]) {
-        [XGPush.defaultManager startXGWithAppID:model.XgAccessId.intValue appKey:model.XgAccessKey delegate:self];
+        [XGPush.defaultManager startXGWithAccessID:model.XgAccessId.intValue accessKey:model.XgAccessKey delegate:self];
     }else {
-        [XGPush.defaultManager startXGWithAppID:model.XgUSAAccessId.intValue appKey:model.XgUSAAccessKey delegate:self];
+        
+        [XGPush.defaultManager configureClusterDomainName:@"tpns.hk.tencent.com"];
+        [XGPush.defaultManager startXGWithAccessID:model.XgUSAAccessId.intValue accessKey:model.XgUSAAccessKey delegate:self];
     }
     
     if (XGPush.defaultManager.xgApplicationBadgeNumber > 0) {
