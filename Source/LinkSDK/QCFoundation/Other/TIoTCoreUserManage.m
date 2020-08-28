@@ -233,9 +233,9 @@
     return _userRegionId;
 }
 
-- (void)setRegionId:(NSString *)RegionId {
-    _userRegionId = RegionId;
-    [[NSUserDefaults standardUserDefaults] setValue:RegionId forKey:@"Region_Id"];
+- (void)setUserRegionId:(NSString *)userRegionId {
+    _userRegionId = userRegionId;
+    [[NSUserDefaults standardUserDefaults] setValue:userRegionId forKey:@"Region_Id"];
 }
 
 - (NSString *)userRegion {
