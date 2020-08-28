@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */; };
+		6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */; };
 		6D65A44224D7F3B5000C9BF1 /* TIoTCancelAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */; };
 		6D65A44C24DBE85F000C9BF1 /* SwiftModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44B24DBE85F000C9BF1 /* SwiftModule.swift */; };
 		6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D785E6524CFC0F5001169AE /* TIoTMainVC.m */; };
@@ -21,9 +23,7 @@
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DC056E824E7E8F400E06CC4 /* TIoTCustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */; };
-		6DC056EB24E9916A00E06CC4 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */; };
 		6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */; };
-		6DC056F124EA97B100E06CC4 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */; };
 		6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
@@ -323,6 +323,10 @@
 /* Begin PBXFileReference section */
 		0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		6D01E86724F8EE7400234872 /* TIoTUserRegionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTUserRegionModel.h; sourceTree = "<group>"; };
+		6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTUserConfigModel.m; sourceTree = "<group>"; };
+		6D01E86924F8EE7400234872 /* TIoTUserConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTUserConfigModel.h; sourceTree = "<group>"; };
+		6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTUserRegionModel.m; sourceTree = "<group>"; };
 		6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCancelAccountVC.h; sourceTree = "<group>"; };
 		6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCancelAccountVC.m; sourceTree = "<group>"; };
 		6D65A44A24DBE85E000C9BF1 /* LinkApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkApp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -349,12 +353,8 @@
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DC056E624E7E8F400E06CC4 /* TIoTCustomActionSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomActionSheet.h; sourceTree = "<group>"; };
 		6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomActionSheet.m; sourceTree = "<group>"; };
-		6DC056E924E9916A00E06CC4 /* TIoTUserConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TIoTUserConfigModel.h; path = LinkApp/Classes/Module/Mine/View/TIoTUserConfigModel.h; sourceTree = SOURCE_ROOT; };
-		6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TIoTUserConfigModel.m; path = LinkApp/Classes/Module/Mine/View/TIoTUserConfigModel.m; sourceTree = SOURCE_ROOT; };
 		6DC056EC24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseTimeZoneVC.h; sourceTree = "<group>"; };
 		6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseTimeZoneVC.m; sourceTree = "<group>"; };
-		6DC056EF24EA97B100E06CC4 /* TIoTUserRegionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTUserRegionModel.h; sourceTree = SOURCE_ROOT; };
-		6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTUserRegionModel.m; sourceTree = SOURCE_ROOT; };
 		6DC056F224EAEF2C00E06CC4 /* TIoTChooseRegionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseRegionVC.h; sourceTree = "<group>"; };
 		6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseRegionVC.m; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -890,6 +890,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		6D01E86624F8EA3C00234872 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6D01E86924F8EE7400234872 /* TIoTUserConfigModel.h */,
+				6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */,
+				6D01E86724F8EE7400234872 /* TIoTUserRegionModel.h */,
+				6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		9172D49D607895D45538B791 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1005,20 +1016,9 @@
 			children = (
 				D231048F232F866A0003069D /* Controller */,
 				D231048E232F86610003069D /* View */,
-				D231048C232F864E0003069D /* Model */,
+				6D01E86624F8EA3C00234872 /* Model */,
 			);
 			path = Mine;
-			sourceTree = "<group>";
-		};
-		D231048C232F864E0003069D /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				6DC056E924E9916A00E06CC4 /* TIoTUserConfigModel.h */,
-				6DC056EA24E9916A00E06CC4 /* TIoTUserConfigModel.m */,
-				6DC056EF24EA97B100E06CC4 /* TIoTUserRegionModel.h */,
-				6DC056F024EA97B100E06CC4 /* TIoTUserRegionModel.m */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		D231048E232F86610003069D /* View */ = {
@@ -2228,7 +2228,6 @@
 				FF831E0224D1CC9100F797EA /* TIoTWIFITableViewCell.m in Sources */,
 				D2038BA8233204170036F6B9 /* TIoTPanelTableViewCell.m in Sources */,
 				ED7B177E23BED1C900B61567 /* TIoTBoolView.m in Sources */,
-				6DC056F124EA97B100E06CC4 /* TIoTUserRegionModel.m in Sources */,
 				D20621BF2355B1B300142DAC /* SYPaneView.m in Sources */,
 				A4902DB324D2B7610045BD96 /* TIoTConnectStepTipView.m in Sources */,
 				D2038BC92333145B0036F6B9 /* TIoTActionTypeTableViewCell.m in Sources */,
@@ -2279,7 +2278,6 @@
 				ED7B178723BEF01800B61567 /* SliderView.m in Sources */,
 				ED67E59123C3138600BE7628 /* TIoTMediumCell.m in Sources */,
 				ED7A568A2444406A005B4E5E /* TIoTDeviceDetailVC.m in Sources */,
-				6DC056EB24E9916A00E06CC4 /* TIoTUserConfigModel.m in Sources */,
 				D23104BD233066810003069D /* UUIDUntil.m in Sources */,
 				D20621AF235597DC00142DAC /* TIoTDistributionNetworkViewController.m in Sources */,
 				D2310492232F872F0003069D /* TIoTMineViewController.m in Sources */,
@@ -2307,6 +2305,7 @@
 				D2038B8C2331D5F10036F6B9 /* TIoTMessageViewController.m in Sources */,
 				D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */,
 				D2A2CD1F234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m in Sources */,
+				6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */,
 				ED800C95240CA28A0045A268 /* TIoTMessageFamilyVC.m in Sources */,
 				D20621BC23559E5600142DAC /* TYCyclePagerTransformLayout.m in Sources */,
 				D2C7D80E2330CA7D00C97A04 /* TIoTScanlViewController.m in Sources */,
@@ -2366,6 +2365,7 @@
 				F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */,
 				EDA7677B23699A250036C8B7 /* TIoTHelpCell.m in Sources */,
 				D210C8452341F46200A53B08 /* JHVerificationCodeView.m in Sources */,
+				6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */,
 				D2D5DA262362E68600BB0FBE /* TIoTTimeView.m in Sources */,
 				D231049A232F88040003069D /* TIoTHomeViewController.m in Sources */,
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
