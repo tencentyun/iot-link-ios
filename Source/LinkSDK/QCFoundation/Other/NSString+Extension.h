@@ -92,8 +92,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 截取指定指定字符串之间的String
 + (NSString *)interceptingString:(NSString *)originString withFrom:(NSString *)startString end:(NSString *)endString;
 
+///纯数字摄氏度转华氏度转换（模糊匹配 以F: 华氏  C: 摄氏）
++ (NSString *)changeTemperatureValue:(NSString *)temperatureString userConfig:(NSString *)configStrin;
 
-
+/// 模糊匹配摄氏温度和华氏温度转换方法 (模糊匹配 以F: 华氏  C: 摄氏）
++ (NSString *)judepTemperatureWithUserConfig:(NSString *)configString templeUnit:(NSString *)unitString;
 @end
 
 NS_ASSUME_NONNULL_END

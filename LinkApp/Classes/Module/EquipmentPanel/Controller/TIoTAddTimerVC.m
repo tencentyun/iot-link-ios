@@ -11,6 +11,7 @@
 #import "TIoTTimerCell.h"
 #import "TIoTChoseValueView.h"
 #import "TIoTSlideView.h"
+#import "NSString+Extension.h"
 
 static NSString *cellId = @"rv23244";
 @interface TIoTAddTimerVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -103,7 +104,7 @@ static NSString *cellId = @"rv23244";
                         //国际化版本 温度转换
                         if ([pro[@"id"]isEqualToString:@"Temperature"]) {
                             NSDictionary *userconfig = pro[@"Userconfig"];
-                            acCon = [self judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:[NSString stringWithFormat:@"%@%@",key,pro[@"define"][@"unit"]]];;
+                            acCon = [NSString judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:[NSString stringWithFormat:@"%@%@",key,pro[@"define"][@"unit"]]];;
                         }else {
                             acCon = [NSString stringWithFormat:@"%@%@",key,pro[@"define"][@"unit"]];
                         }
@@ -385,10 +386,10 @@ static NSString *cellId = @"rv23244";
             NSMutableDictionary *tempUnitDic = pro[@"define"];
             if ([pro[@"id"]isEqualToString:@"Temperature"]) {
                 NSDictionary *userconfig = pro[@"Userconfig"];
-                [tempUnitDic setValue:[self changeTemperatureValue:tempUnitDic[@"max"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"max"];
-                [tempUnitDic setValue:[self changeTemperatureValue:tempUnitDic[@"min"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"min"];
-                [tempUnitDic setValue:[self changeTemperatureValue:tempUnitDic[@"start"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"start"];
-                [tempUnitDic setValue:[self judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:tempUnitDic[@"unit"]] forKey:@"unit"];
+                [tempUnitDic setValue:[NSString changeTemperatureValue:tempUnitDic[@"max"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"max"];
+                [tempUnitDic setValue:[NSString changeTemperatureValue:tempUnitDic[@"min"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"min"];
+                [tempUnitDic setValue:[NSString changeTemperatureValue:tempUnitDic[@"start"] userConfig:userconfig[@"TemperatureUnit"]] forKey:@"start"];
+                [tempUnitDic setValue:[NSString judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:tempUnitDic[@"unit"]] forKey:@"unit"];
             }
             [pro setValue:tempUnitDic forKey:@"define"];
             slideView.dic = pro;
@@ -565,75 +566,6 @@ static NSString *cellId = @"rv23244";
     }
     
     return con;
-}
-
-- (NSString *)chanageTemperatureUnitWith:(NSString *)temperatureString {
-    
-        if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]) {
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℃" withString:@""];
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"摄氏" withString:@""];
-            if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
-                NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
-                NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
-                return [NSString stringWithFormat:@"%f℉",celsiusMeasurement.doubleValue];
-            }else {
-                return [NSString stringWithFormat:@"%@℉",temperatureString];
-            }
-            
-        }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℉" withString:@""];
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"华氏" withString:@""];
-            if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
-                NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
-                NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
-                return [NSString stringWithFormat:@"%f℃",fahrenheitMeasurement.doubleValue];
-            }else {
-                return [NSString stringWithFormat:@"%@℃",temperatureString];
-            }
-        }else {
-            return temperatureString;
-        }
-}
-
-//纯数字转换
-- (NSString *)changeTemperatureValue:(NSString *)temperatureString userConfig:(NSString *)configString {
-    if ([configString isEqualToString:@"F"]) {
-        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
-            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
-            NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
-            return [NSString stringWithFormat:@"%f",celsiusMeasurement.doubleValue];
-        }else {
-            return temperatureString;
-        }
-    }else if ([configString isEqualToString:@"C"]) {
-        if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
-            NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
-            NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
-            return [NSString stringWithFormat:@"%f",fahrenheitMeasurement.doubleValue];
-        }else {
-            return temperatureString;
-        }
-    }else {
-        return temperatureString;
-    }
-}
-
-- (NSString *)judepTemperatureWithUserConfig:(NSString *)configString templeUnit:(NSString *)unitString {
-    if ([configString isEqualToString:@"F"]) {
-        if ([unitString containsString:@"摄氏"] || [unitString containsString:@"℃"]) {
-            return [self chanageTemperatureUnitWith:unitString];
-        }else {
-            return unitString;
-        }
-    }else if ([configString isEqualToString:@"C"]) {
-        if ([unitString containsString:@"华氏"] || [unitString containsString:@"℉"]) {
-            return [self chanageTemperatureUnitWith:unitString];
-        }else {
-            return unitString;
-        }
-    }else {
-        return unitString;
-    }
 }
 
 @end
