@@ -176,10 +176,12 @@
         // 没找到需要返回的控制器的处理方式
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
-    if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-        [HXYNotice postChangeAddDeviceType:0];
-    } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-        [HXYNotice postChangeAddDeviceType:1];
+    if (!_success) {
+        if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+            [HXYNotice postChangeAddDeviceType:0];
+        } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+            [HXYNotice postChangeAddDeviceType:1];
+        }
     }
 }
 
