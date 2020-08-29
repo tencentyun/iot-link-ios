@@ -25,13 +25,19 @@
 
 ## 快速开始
 
-用户需要根据实际情况调整 **app-config.json** 中的内容，app-config.json 位于项目的/LinkApp/Supporting Files目录，如截图所示位置。
-
-  <img src="https://main.qcloudimg.com/raw/9ec816f953a63db89c87dfc854da4544/image20200628162555.png" alt="image-20200619141407513" style="zoom: 67%;" />
-
-  app-config.json 需要配置的内容，如下图所示。
+用户需要根据实际情况调整 **app-config.json** 中的内容，app-config.json 位于项目的/LinkApp/Supporting Files目录下 app-config.json 需要配置的内容，如所示。   
   
-  <img src="https://main.qcloudimg.com/raw/a4ac3c516d4382d19727e49a789c0adb/image-20200619200309488.png" style="zoom:67%;" />
+```json
+{
+  "WXAccessAppId": "",
+  "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+  "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+  "XgAccessId": "",
+  "XgAccessKey": "",
+  "XgUSAAccessId": "",
+  "XgUSAAccessKey": ""
+}
+```   
 
 **1、物联网平台**
 * **TencentIotLinkAppkey** 和 **TencentIotLinkAppSecret** 请使用在[物联网开发平台](https://cloud.tencent.com/product/iotexplorer)创建应用时生成的 **APP Key** 和 **APP Secret**。<u>***App Key 和 App Secret 用于访问应用端 API 时生成签名串，参见[应用端 API 简介](https://cloud.tencent.com/document/product/1081/40773)。签名算法务必在服务端实现，腾讯连连 App 开源版的使用方式仅为演示，请勿将 App Key 和 App Secret 保存在客户端，避免泄露***</u>。
@@ -47,9 +53,7 @@
 **3、 Firebase （可选）**
 
 &emsp;&emsp;腾讯连连开源体验版集成了 **Firebase** 插件，用于记录应用的异常日志和性能状况。
-* 若用户确认使用 Firebase 插件，需通过 [Firebase 官网](https://firebase.google.cn/?hl=zh-cn) 创建应用并获取 **GoogleService-Info.plist** 文件；将 GoogleService-Info.plist 文件放在 app 目录下，如图所示位置。
-  
-  <img src="https://main.qcloudimg.com/raw/253d800fde2ff6f6b5ad85d264db8928/image-20200622184506.png" alt="image-20200619150459211" style="zoom:67%;" />
+* 若用户确认使用 Firebase 插件，需通过 [Firebase 官网](https://firebase.google.cn/?hl=zh-cn) 创建应用并获取 **GoogleService-Info.plist** 文件；将 GoogleService-Info.plist 文件放在项目 /LinkApp/Supporting Files 目录下。
 
 **4、微信授权登录（可选）**
   
@@ -58,12 +62,31 @@
 * 若确认使用自定义的微信授权登录，需要在[微信开放平台](https://open.weixin.qq.com/)注册开发者帐号，创建移动应用，审核通过后，即可获得相应的 AppID 和 AppSecret，[申请步骤](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Development_Guide.html)；同时需要自行搭建微信授权登录的**接入服务器**，可参考接入服务器的[接口](https://cloud.tencent.com/document/product/1081/40781)。
 
    使用微信授权登录还需：
-    - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***。
-  <img src="https://main.qcloudimg.com/raw/015e14483c561991f8b23993ccd30ee2/image-20200622184257.png" alt="image-20200619141407513" style="zoom: 50%;" />
+    - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在 app-config.json 文件中修改 **WXAccessAppId**  配置项，如下：   
+   
+  ```json
+{
+  "WXAccessAppId": "",
+  "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+  "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+  "XgAccessId": "",
+  "XgAccessKey": "",
+  "XgUSAAccessId": "",
+  "XgUSAAccessKey": ""
+}
+```
+    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在工程中 Supporting Files  目录下的 LinkApp.xcconfig 文件中修改 **LinkAPP_WEIXIN_APPID** 配置项，如下：
 
-    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***。
-
-  <img src="https://main.qcloudimg.com/raw/e67eec45b7861b46f471789e569017e0/image20200628150316.png" alt="image-20200619162858817" style="zoom: 50%;" />
+ ```json
+{
+  LinkAPP_NAME = 
+  LinkAPP_WEIXIN_APPID = 
+  LinkAPP_BUNDLE_TEAM =
+  LinkAPP_BUNDLE_SIGN = 
+  LinkAPP_BUNDLE_ID = 
+  LinkAPP_BUNDLE_PROVISIONING = 
+}
+```
 
 * 若不使用微信授权登录功能，**WXAccessAppId** 设置为**长度为0字符串**即可。​    
 
