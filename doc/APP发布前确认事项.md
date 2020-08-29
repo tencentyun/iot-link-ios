@@ -19,7 +19,5 @@
   * 用户需要使用从腾讯推送平台自建应用所获得的 **XgAccessId** 和 **XgAccessKey**，来替换 APP 中对应的字符串。
   * 用户需要使用从微信开发平台自建应用所获得的 **WXAccessAppId**，来替换 APP 中对应的字符串。
 
-* 如果用户确认接入 Firebase，用户需要使用从 Firebase 官网自建应用获得 **GoogleService-Info.plist**，替换 APP 中对应的文件，如下图所示：   
-
-  <img src="https://main.qcloudimg.com/raw/7c17279a720b92ffb875e1b7ed46e89c/image-20200622184506.png" alt="image-20200622184506"  width = "35%" height = "50%"  /> 
+* 如果用户确认接入 Firebase，用户需要使用从 Firebase 官网自建应用获得 **GoogleService-Info.plist**，替换 APP 中 /LinkApp/Supporting Files 目录下的 **GoogleService-Info.plist** 文件。   
 
