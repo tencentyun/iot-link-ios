@@ -17,9 +17,9 @@ echo $rc
 echo $rt
 
 if [ $1 == 'Debug' ]; then
-    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rb+git.$rc/g" LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rb+git.$rc/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 else
-    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rt+git.$rc/g" LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+    sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rt+git.$rc/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 fi
 
 cat LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
