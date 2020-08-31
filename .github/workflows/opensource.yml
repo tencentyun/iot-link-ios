@@ -49,5 +49,5 @@ jobs:
         
     - name: upload dSYM
       run: |
-        ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+        ./Pods/Fabric/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
         ./Pods/Fabric/upload-symbols -gsp ./Source/LinkSDKDemo/GoogleService-Info.plist -p ios ./LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
