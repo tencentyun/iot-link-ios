@@ -1,0 +1,9 @@
+{
+	"WXAccessAppId": "wx3c5a586d7fbcbace",
+	"TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+	"TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+	"XgAccessId": "1600012367",
+	"XgAccessKey": "IA2MA3SNYWF5",
+    "XgUSAAccessId": "1630001536",
+    "XgUSAAccessKey": "ISH1Z2BMPTAB"
+}
