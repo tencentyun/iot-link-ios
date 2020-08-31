@@ -35,15 +35,36 @@ jobs:
         gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.ipa
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
-    - name: Upload ipa to github
-      uses: actions/upload-artifact@v2
+#    - name: Upload ipa to github
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: ipa
+#        path: LinkApp.ipa.gpg
+#    - name: Upload dSYM to github
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: dSYM
+#        path: LinkApp.dSYM.zip.gpg
+    
+    - name: Upload ipa Asset
+      uses: actions/upload-release-asset@v1
       with:
-        name: ipa
-        path: LinkApp.ipa.gpg
-    - name: Upload dSYM to github
-      uses: actions/upload-artifact@v2
+        upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: LinkApp.ipa.gpg
+        asset_name: LinkApp
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Upload ipa Asset
+      uses: actions/upload-release-asset@v1
       with:
-        name: dSYM
-        path: LinkApp.dSYM.zip.gpg
+        upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: LinkApp.dSYM.zip.gpg
+        asset_name: dSYM
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: upload dSYM
-      run: ./Pods/Fabric/upload-symbols -gsp ./LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+      run: ./Pods/Fabric/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
