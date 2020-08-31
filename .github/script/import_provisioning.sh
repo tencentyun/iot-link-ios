@@ -10,13 +10,21 @@ if [ $1 == 'Debug' ]; then
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/link_sdk_demo.mobileprovision.asc > .github/script/devsdkdemo.mobileprovision
+else if [ $1 == 'ReleaseBeta' ]; then
+    echo "ReleaseBeta"
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/apple_dev_beta.p12.asc > .github/script/apple_dev.p12
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/apple_dev_beta.mobileprovision.asc > .github/script/dev.mobileprovision
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > Source/LinkApp/Supporting\ Files/app-config.json
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkAppBeta.xcconfig.asc > Source/LinkApp/Supporting\ Files/LinkApp.xcconfig
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/ExportOptionsReleaseBeta.plist.asc > .github/script/ExportOptionsRelease.plist
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > Source/LinkApp/Supporting\ Files/GoogleService-Info.plist
 else
     echo "Release"
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.p12.asc > .github/script/apple_dev.p12
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.mobileprovision.asc > .github/script/dev.mobileprovision
-    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > LinkApp/Supporting\ Files/app-config.json
-    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkApp.xcconfig.asc > LinkApp/Supporting\ Files/LinkApp.xcconfig
-    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > LinkApp/Supporting\ Files/GoogleService-Info.plist
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > Source/LinkApp/Supporting\ Files/app-config.json
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkApp.xcconfig.asc > Source/LinkApp/Supporting\ Files/LinkApp.xcconfig
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > Source/LinkApp/Supporting\ Files/GoogleService-Info.plist
 fi
 
 

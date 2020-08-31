@@ -20,13 +20,24 @@ jobs:
       run: brew install gnupg
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
-    - name: Decrypt large secret
+    
+    - if: "github.event.release.prerelease"
+      name: Decrypt large secret1
+      run: sh .github/script/import_provisioning.sh ReleaseBeta
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
+        P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
+        
+    - if: "!github.event.release.prerelease"
+      name: Decrypt large secret2
       run: sh .github/script/import_provisioning.sh Release
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
+      
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_11.5.app && /usr/bin/xcodebuild -version
+
     - name: Build archive
       run: |
         sh .github/script/archive.sh Release
@@ -35,6 +46,7 @@ jobs:
         gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.ipa
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
+        
 #    - name: Upload ipa to github
 #      uses: actions/upload-artifact@v2
 #      with:
