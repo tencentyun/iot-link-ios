@@ -17,7 +17,8 @@ jobs:
       run: |
         set -eo pipefail
         
-        VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+        temptag=$(git describe --tags `git rev-list --tags --max-count=1`)
+        VERSION=${temptag#*v}
         echo $VERSION
         export LIB_VERSION=$VERSION
         
