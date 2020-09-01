@@ -26,8 +26,8 @@ jobs:
         
         sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
         
-        pod lib lint --allow-warnings
-        pod trunk push --allow-warnings
+        pod lib lint --verbose --allow-warnings --use-libraries
+        pod trunk push --verbose --allow-warnings --use-libraries
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
 
@@ -43,7 +43,7 @@ jobs:
       
         sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
       
-        pod lib lint --allow-warnings
-        pod trunk push --allow-warnings
+        pod lib lint --verbose --allow-warnings --use-libraries
+        pod trunk push --verbose --allow-warnings --use-libraries
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
