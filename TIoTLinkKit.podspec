@@ -9,36 +9,19 @@
 Pod::Spec.new do |s|
   s.name             = 'TIoTLinkKit'
   s.version          = ENV['LIB_VERSION'] || '0.1.3'
-  s.summary          = 'A short description of TIoTLinkKit.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
+  s.summary          = '腾讯连连APP SDK是腾讯云物联网平台提供，设备厂商可通过SDK将设备接入腾讯云物联网平台，来进行设备管理'
+  
   s.description      = <<-DESC
 TODO: Add long description of the pod here.
                        DESC
 
   s.homepage         = 'https://github.com/tencentyun/iot-link-ios'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'iot-ios-sdk' => 'tonychanchen@gmail.com' }
+  s.author           = { 'iot-ios-sdk' => 'dev@goodow.com' }
   s.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => "v#{s.version}" }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
   s.source_files  = 'Source/LinkSDK/**/*.{h,m,c}'
-  # s.vendored_frameworks = 'Source/LinkSDKDemo/Framework/QCAPISets.framework', 'Source/LinkSDKDemo/Framework/QCDeviceCenter.framework', 'Source/LinkSDKDemo/Framework/QCFoundation.framework'
-  
-  # s.resource_bundles = {
-  #   'QIotLinkKit' => ['QIotLinkKit/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
   s.dependency 'MBProgressHUD', '1.1.0'
 end
