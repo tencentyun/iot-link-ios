@@ -13,36 +13,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
-    - if: "github.event.release.prerelease"
-      name: Deploy to CocoapodsPre
+    - name: Deploy to CocoapodsPre
       run: |
         set -eo pipefail
         
-        rttt=$(git describe --tags `git rev-list --tags --max-count=1`)
-        rtt=${rttt#*v}
-        VERSION=${rtt//beta./beta}
+        VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
         echo $VERSION
         export LIB_VERSION=$VERSION
         
         sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
         
-        pod lib lint --verbose --allow-warnings --use-libraries
-        pod trunk push --verbose --allow-warnings --use-libraries
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
-
-    - if: "!github.event.release.prerelease"
-      name: Deploy to Cocoapods
-      run: |
-        set -eo pipefail
-  
-        rttt=$(git describe --tags `git rev-list --tags --max-count=1`)
-        VERSION=${rttt#*v}
-        echo $VERSION
-        export LIB_VERSION=$VERSION
-      
-        sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
-      
         pod lib lint --verbose --allow-warnings --use-libraries
         pod trunk push --verbose --allow-warnings --use-libraries
       env:
