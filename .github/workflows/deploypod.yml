@@ -12,15 +12,37 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Deploy to Cocoapods
+    
+    - if: "github.event.release.prerelease"
+      name: Deploy to CocoapodsPre
       run: |
         set -eo pipefail
         
-        VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+        rttt=$(git describe --tags `git rev-list --tags --max-count=1`)
+        rtt=${rttt#*v}
+        VERSION=${rtt//beta./beta}
+        echo $VERSION
         export LIB_VERSION=$VERSION
         
         sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
         
+        pod lib lint --allow-warnings
+        pod trunk push --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
+
+    - if: "!github.event.release.prerelease"
+      name: Deploy to Cocoapods
+      run: |
+        set -eo pipefail
+  
+        rttt=$(git describe --tags `git rev-list --tags --max-count=1`)
+        VERSION=${rttt#*v}
+        echo $VERSION
+        export LIB_VERSION=$VERSION
+      
+        sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
+      
         pod lib lint --allow-warnings
         pod trunk push --allow-warnings
       env:
