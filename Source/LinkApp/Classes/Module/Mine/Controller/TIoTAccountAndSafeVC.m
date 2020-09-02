@@ -74,73 +74,61 @@
     
     NSArray *sectionArray = self.dataArr[indexPath.section];
     //国际化版本
-      switch (indexPath.section) {
-          case 0:{
-              if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"手机号"]) {
+    
+    if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"手机号"]) {
 
-                  if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-                      TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
-                      bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
-                          if (bindSuccess == YES) {
-                              [self.tableView reloadData];
-                          }
-                      };
-                      bindPhoneVC.accountType = AccountType_Phone;
-                      [self.navigationController pushViewController:bindPhoneVC animated:YES];
-                  }else {
-                      TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
-                      modifyVC.accountType = AccountModifyType_Phone;
-                      [self.navigationController pushViewController:modifyVC animated:YES];
-                  }
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+            
+            __weak typeof(self) weakSelf = self;
+            TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
+            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+                if (bindSuccess == YES) {
+                    [weakSelf.tableView reloadData];
+                }
+            };
+            bindPhoneVC.accountType = AccountType_Phone;
+            [self.navigationController pushViewController:bindPhoneVC animated:YES];
+        }else {
+            TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
+            modifyVC.accountType = AccountModifyType_Phone;
+            [self.navigationController pushViewController:modifyVC animated:YES];
+        }
 
-              }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"邮箱"]) {
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"邮箱"]) {
 
-                  if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-                      TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
-                      bindEmailVC.accountType = AccountType_Email;
-                      bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
-                          if (bindSuccess == YES) {
-                              [self.tableView reloadData];
-                          }
-                      };
-                      [self.navigationController pushViewController:bindEmailVC animated:YES];
-                  }else {
-                      TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
-                      modifyVC.accountType = AccountModifyType_Email;
-                      [self.navigationController pushViewController:modifyVC animated:YES];
-                  }
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+            __weak typeof(self) weakSelf = self;
+            TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
+            bindEmailVC.accountType = AccountType_Email;
+            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+                if (bindSuccess == YES) {
+                    [weakSelf.tableView reloadData];
+                }
+            };
+            [self.navigationController pushViewController:bindEmailVC animated:YES];
+        }else {
+            TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
+            modifyVC.accountType = AccountModifyType_Email;
+            [self.navigationController pushViewController:modifyVC animated:YES];
+        }
 
-              }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"微信"]) {
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"微信"]) {
 
-                  if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
-                      //微信绑定
-                      [self wxBindClick];
-                  }else {
-                  }
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+            //微信绑定
+            [self wxBindClick];
+        }else {
+        }
 
-              }
-           break;
-
-          }
-          case 1: {
-              if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
-
-                  TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
-                  [self.navigationController pushViewController:modifyPassword animated:YES];
-
-              }
-              break;
-          }
-          case 2: {
-              if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
-                  TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
-                  [self.navigationController pushViewController:cancelAccountVC animated:YES];
-              }
-              break;
-          }
-          default:
-              break;
-      }
+    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
+        
+        TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
+        [self.navigationController pushViewController:modifyPassword animated:YES];
+        
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
+        TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
+        [self.navigationController pushViewController:cancelAccountVC animated:YES];
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -257,7 +245,7 @@
         
         // 国际化版本
         NSString *region = @"";
-        if (LanguageIsEnglish) {
+        if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
             region = [TIoTCoreUserManage shared].countryTitleEN;
         }else {
             region = [TIoTCoreUserManage shared].countryTitle;
@@ -272,8 +260,8 @@
         ]];
 
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {
-            if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
-
+            if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"0"]) {
+                [_dataArr removeObjectAtIndex:2];
             }
         }else {
             [_dataArr removeObjectAtIndex:2];
