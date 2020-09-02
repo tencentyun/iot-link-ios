@@ -37,13 +37,13 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
 
 - (void)setEnvironment {
 
-    //公版&开源体验版使用
-    self.studioBaseUrl = @"https://iot.cloud.tencent.com/api/studioapp";  //接入层 API 登录前所使用的 API URL(开源版和公版)
-    self.studioBaseUrlForLogined = @"https://iot.cloud.tencent.com/api/studioapp/tokenapi"; //接入层 API（目前等同于应用端 API）
+    //公版&开源体验版使用  当在 app-config.json 中配置 TencentIotLinkAppkey TencentIotLinkAppSecret 后，将自动切换为 OEM 版本。
+    self.studioBaseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
+    self.studioBaseUrlForLogined = @"https://iot.cloud.tencent.com/api/studioapp/tokenapi";
     
     //OEM App 使用
-    self.oemAppApi = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; //应用端 API 登录前所使用的 API(需签名) URL https://cloud.tencent.com/document/product/1081/40773
-    self.oemTokenApi = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi"; //应用端 API 登录后所使用的 API URL https://cloud.tencent.com/document/product/1081/40773
+    self.oemAppApi = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; // 需要替换为自建后台服务地址。 https://cloud.tencent.com/document/product/1081/40773
+    self.oemTokenApi = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";  // 可安全在设备端调用。 https://cloud.tencent.com/document/product/1081/40773
     
     self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";        //长连接通信 https://cloud.tencent.com/document/product/1081/40792
     self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
