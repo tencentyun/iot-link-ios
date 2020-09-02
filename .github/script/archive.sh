@@ -9,8 +9,8 @@ echo "远程branch"
 
 rb=$GIT_BRANCH_IMAGE_VERSION
 rc=$(git rev-parse --short HEAD)
-rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
-rt=${rtt#*v}
+rt=$(git describe --tags `git rev-list --tags --max-count=1`)
+#rt=${rtt#*v}
 
 echo $rb
 echo $rc
