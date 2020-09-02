@@ -16,6 +16,24 @@
       "revId": "654bbfdf7bb658fad4d5fed21ef57e3a7665179e",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ef83c27_566a8623",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-02T06:04:54Z",
+      "side": 1,
+      "message": "自测没有泄漏，保险起见已做处理，",
+      "parentUuid": "78adeff5_6d33dc9d",
+      "revId": "654bbfdf7bb658fad4d5fed21ef57e3a7665179e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
