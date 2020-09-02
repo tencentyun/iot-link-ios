@@ -32,7 +32,7 @@
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    NSURL *url  = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined];
+    NSURL *url  = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi];
         
     [self postRequestWithAction:urlStr url:url isWithoutToken:NO param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
 
@@ -45,7 +45,7 @@ failure:(FailureResponseBlock)failure
 failure:(FailureResponseBlock)failure
 {
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];
     
     [self postRequestWithAction:urlStr url:url isWithoutToken:YES param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
 }

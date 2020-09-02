@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  未登录baseurl
  */
-@property (nonatomic , copy) NSString *baseUrl;
+@property (nonatomic , copy) NSString *oemAppApi;
 
 /**
  已登录baseurl
  */
-@property (nonatomic , copy) NSString *baseUrlForLogined;
+@property (nonatomic , copy) NSString *oemTokenApi;
 
 /**
  未登录baseurl,公版&开源体验版使用
