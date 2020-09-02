@@ -681,7 +681,7 @@
         
         [HXYNotice addLoginInPost];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+        [MBProgressHUD showError:@"请确保已按官网文档接入微信登录"];
     }];
 }
 
