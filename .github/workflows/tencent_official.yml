@@ -41,39 +41,17 @@ jobs:
     - name: Build archive
       run: |
         sh .github/script/archive.sh Release
-        zip -q -r -m -o "LinkApp.dSYM.zip" LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
-        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.dSYM.zip
-        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.ipa
+        zip -q -r -o "LinkApp.zip" LinkApp.ipa LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkApp.zip
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
-        
-#    - name: Upload ipa to github
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: ipa
-#        path: LinkApp.ipa.gpg
-#    - name: Upload dSYM to github
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: dSYM
-#        path: LinkApp.dSYM.zip.gpg
-    
-    - name: Upload ipa Asset
+
+    - name: Upload LinkApp Asset
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: LinkApp.ipa.gpg
-        asset_name: LinkApp
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Upload ipa Asset
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: LinkApp.dSYM.zip.gpg
-        asset_name: dSYM
+        asset_path: LinkApp.zip.gpg
+        asset_name: LinkApp.zip.gpg
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
