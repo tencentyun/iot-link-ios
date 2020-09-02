@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "4ba2e2f2_e90989f2",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-02T06:46:13Z",
+      "side": 1,
+      "message": "优化点：拉取时区列表优化，建议进入app，拉取获取一次即可。无需实时请求，此链接更新不频繁",
+      "revId": "5be67a741bf3da4763cfd37398254f6bba3ac3a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8643de07_e2f6c69c",
         "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
         "patchSetId": 1
