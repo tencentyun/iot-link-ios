@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dba4c53c_dac06b5d",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-02T06:49:41Z",
+      "side": 1,
+      "message": "好的，已添加优化列表中，在其他分支优化。",
+      "parentUuid": "4ba2e2f2_e90989f2",
+      "revId": "5be67a741bf3da4763cfd37398254f6bba3ac3a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8643de07_e2f6c69c",
         "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "5be67a741bf3da4763cfd37398254f6bba3ac3a3",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3935b223_7d7e4cff",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-02T06:49:41Z",
+      "side": 1,
+      "message": "已修改，删除无用逻辑",
+      "parentUuid": "8643de07_e2f6c69c",
+      "revId": "5be67a741bf3da4763cfd37398254f6bba3ac3a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
