@@ -47,6 +47,34 @@
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 16 * kScreenAllHeightScale)];
     headerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     self.tableView.tableHeaderView = headerView;
+    
+    //拉去静态配置文件（地区列表），根据手机系统判断显示账号地区
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
+
+        NSArray *regionListArray = (NSArray *)responseObject;
+        
+        if (LanguageIsEnglish) {
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
+
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    [self.tableView reloadData];
+                }
+            }];
+        }else {
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
+
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    [self.tableView reloadData];
+                }
+            }];
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
 }
 
 #pragma mark - tableViewDataSource and tableViewDelegate
@@ -245,7 +273,7 @@
         
         // 国际化版本
         NSString *region = @"";
-        if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+        if (LanguageIsEnglish) {
             region = [TIoTCoreUserManage shared].countryTitleEN;
         }else {
             region = [TIoTCoreUserManage shared].countryTitle;
