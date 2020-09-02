@@ -22,7 +22,7 @@ else
     sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rt+git.$rc/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 fi
 
-cat LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 
 #rm -rf Podfile.lock
 #/usr/local/bin/pod install --verbose --no-repo-update
