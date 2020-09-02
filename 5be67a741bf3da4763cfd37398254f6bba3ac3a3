@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8643de07_e2f6c69c",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-02T06:32:07Z",
+      "side": 1,
+      "message": "if和else中逻辑是一样的",
+      "revId": "5be67a741bf3da4763cfd37398254f6bba3ac3a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
