@@ -34,7 +34,7 @@
     NSString *appVersion = [info objectForKey:@"CFBundleShortVersionString"];
     self.versionLab.numberOfLines = 2;
     self.versionLab.textAlignment = NSTextAlignmentCenter;
-    self.versionLab.text = [NSString stringWithFormat:@"v%@",appVersion];
+    self.versionLab.text = [NSString stringWithFormat:@"%@",appVersion];
     [self checkNewVersion];
 }
 
@@ -84,7 +84,7 @@
                 NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
                 if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion]) {
                     self.showLastestVerion = YES;
-                    self.versionLab.text = [NSString stringWithFormat:@"当前版本\nv%@",appVersion];
+                    self.versionLab.text = [NSString stringWithFormat:@"当前版本\n%@",appVersion];
                 }
             }
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
