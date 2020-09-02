@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78adeff5_6d33dc9d",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-02T05:25:30Z",
+      "side": 1,
+      "message": "建议检查内存是否泄漏",
+      "revId": "654bbfdf7bb658fad4d5fed21ef57e3a7665179e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
