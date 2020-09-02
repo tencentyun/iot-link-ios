@@ -8,6 +8,7 @@
 
 #import "TIoTCoreUserManage.h"
 #import "NSString+Extension.h"
+#import "NSObject+additions.h"
 
 @implementation TIoTCoreUserManage
 @synthesize accessToken = _accessToken;
@@ -227,7 +228,7 @@
         _userRegionId = [[NSUserDefaults standardUserDefaults] valueForKey:@"Region_Id"];
     }
     
-    if (_userRegionId == nil) {
+    if ([NSString isNullOrNilWithObject:_userRegionId]) {
         _userRegionId = @"1";
     }
     return _userRegionId;
@@ -242,7 +243,7 @@
     if (!_userRegion) {
         _userRegion = [[NSUserDefaults standardUserDefaults] valueForKey:@"region"];
     }
-    if (_userRegion == nil) {
+    if ([NSString isNullOrNilWithObject:_userRegion]) {
         _userRegion = @"ap-guangzhou";
     }
     return _userRegion;
@@ -257,7 +258,7 @@
     if (!_countryTitle) {
         _countryTitle = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_Title"];
     }
-    if (_countryTitle == nil) {
+    if ([NSString isNullOrNilWithObject:_countryTitle]) {
         _countryTitle = @"中国大陆";
     }
     return _countryTitle;
@@ -272,7 +273,7 @@
     if (!_countryTitleEN) {
         _countryTitleEN = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_TitleEN"];
     }
-    if (_countryTitleEN == nil) {
+    if ([NSString isNullOrNilWithObject:_countryTitleEN]) {
         _countryTitleEN = @"Chinese Mainland";
     }
     return _countryTitleEN;
