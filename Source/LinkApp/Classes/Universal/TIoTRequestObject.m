@@ -129,7 +129,11 @@ failure:(FailureResponseBlock)failure
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
         if (reason != nil) {
-            [MBProgressHUD showError:reason toView:[[UIApplication sharedApplication] delegate].window];
+            if ([urlStr isEqualToString:AppGetLatestVersion]) {
+                
+            } else {
+                [MBProgressHUD showError:reason toView:[[UIApplication sharedApplication] delegate].window];
+            }
             if (![dic isEqualToDictionary:@{}]) {
                 [self judgeUserSignoutWithReturnToken:dic];
             }
