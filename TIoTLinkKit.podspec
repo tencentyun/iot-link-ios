@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TIoTLinkKit'
-  s.version          = ENV['LIB_VERSION'] || '0.1.3'
+  s.version          = ENV['LIB_VERSION'] || '1.0.0'
   s.summary          = '腾讯连连APP SDK是腾讯云物联网平台提供，应用开发厂商可通过SDK将设备接入腾讯云物联网平台，来进行设备管理'
   
   s.description      = <<-DESC
