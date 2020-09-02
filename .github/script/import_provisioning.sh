@@ -24,6 +24,7 @@ else
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/tencent_official.mobileprovision.asc > .github/script/dev.mobileprovision
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/app-config.json.asc > Source/LinkApp/Supporting\ Files/app-config.json
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/LinkApp.xcconfig.asc > Source/LinkApp/Supporting\ Files/LinkApp.xcconfig
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/ExportOptionsRelease.plist.asc > .github/script/ExportOptionsRelease.plist
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/GoogleService-Info.plist.asc > Source/LinkApp/Supporting\ Files/GoogleService-Info.plist
 fi
 
