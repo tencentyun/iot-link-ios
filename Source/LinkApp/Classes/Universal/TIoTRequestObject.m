@@ -58,7 +58,7 @@ failure:(FailureResponseBlock)failure
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
         }else {
             //OEM
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrlForLogined,urlStr]];
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi,urlStr]];
         }
         
         return url;
@@ -109,8 +109,8 @@ failure:(FailureResponseBlock)failure
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrl,urlStr, TIoTAPPConfig.GlobalDebugUin]];
             [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
         }else {
-//            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].baseUrl,urlStr]];
-            url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].baseUrl];
+//            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];
+            url = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].oemAppApi];
             if (![TIoTAppConfig isOriginAppkeyAndSecret:model]) {
                 [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
             }
