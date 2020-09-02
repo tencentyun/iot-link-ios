@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "041b2042_cc714668",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTAccountAndSafeVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-02T07:01:16Z",
+      "side": 1,
+      "message": "requestID 还是 userRegionId ？",
+      "revId": "bdcbe5d794746e5cab07e7d75ceb05c352b3ad92",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
