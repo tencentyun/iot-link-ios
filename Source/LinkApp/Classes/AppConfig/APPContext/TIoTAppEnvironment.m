@@ -35,6 +35,8 @@
     
     environment.appKey = model.TencentIotLinkAppkey;
     environment.appSecret = model.TencentIotLinkAppSecret;
+    
+//    environment.oemAppApi = @"需要替换为自建后台服务地址";
 }
 
 - (void)loginOut {
