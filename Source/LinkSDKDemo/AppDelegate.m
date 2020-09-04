@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "TIoTCoreFoundation.h"
 #import "Firebase.h"
+#import "TIoTCoreAppEnvironment.h"
 
 @interface AppDelegate ()
 
@@ -20,9 +21,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [[TIoTCoreServices shared] setAppKey:@"您的Key"];
-    [TIoTCoreServices shared].logEnable = YES;
+//    [[TIoTCoreServices shared] setAppKey:@"您的Key"];
+//    [TIoTCoreServices shared].logEnable = YES;
     
+    TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
+    [environment setEnvironment];
+    
+    environment.appKey = @"物联网开发平台申请的 App Key";
+    environment.appSecret = @"物联网开发平台申请的 App Secret";
+
     //firebase注册
     [FIRApp configure];
     
