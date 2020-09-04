@@ -45,9 +45,14 @@ failure:(FailureResponseBlock)failure
 failure:(FailureResponseBlock)failure
 {
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];
-    
-    [self postRequestWithAction:urlStr url:url isWithoutToken:YES param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];    
+    [self postRequestWithAction:urlStr url:url isWithoutToken:YES param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
+        TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
+        if(environment.appSecret.length > 0) {
+            [accessParam setValue:[self getSignatureWithParam:accessParam] forKey:@"Signature"];
+        }
+        return url;
+    } isShowHelpCenter:nil success:success failure:failure];
 }
 
 
