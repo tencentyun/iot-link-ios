@@ -9,11 +9,9 @@ target 'LinkApp' do
   pod 'Masonry', '1.1.0'
   pod 'SDWebImage', '4.4.2'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
-  pod 'Firebase/Analytics', '6.26.0'
-  pod 'Fabric', '1.10.2'
-  pod 'Crashlytics', '3.14.0'
-  pod 'Firebase/Performance', '6.26.0'
-  
+  pod 'Firebase/Analytics', '6.31.1'
+  pod 'Firebase/Crashlytics', '6.31.1'
+  pod 'Firebase/Performance', '6.31.1'
   pod 'MJRefresh', '3.2.0'
   pod 'IQKeyboardManager', '6.1.1'
   pod 'FDFullscreenPopGesture', '1.1'
@@ -32,10 +30,9 @@ target 'LinkSDKDemo' do
   pod 'Masonry', '1.1.0'
   pod 'SDWebImage', '4.4.2'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
-  pod 'Firebase/Analytics', '6.26.0'
-  pod 'Fabric', '1.10.2'
-  pod 'Crashlytics', '3.14.0'
-  pod 'Firebase/Performance', '6.26.0'
+  pod 'Firebase/Analytics', '6.31.1'
+  pod 'Firebase/Crashlytics', '6.31.1'
+  pod 'Firebase/Performance', '6.31.1'
 end
 
 
