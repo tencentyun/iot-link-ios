@@ -4,10 +4,6 @@
 
 项目工程中包含三大块，App 体验模块、SDK Demo、SDK 模块。 用户可通过 App 体验产品功能，通过现有 App 快速搭建起属于自己的 IoT 应用。 也可通过 SDK 接入到自己的工程来完成与腾讯云物联网开发平台对接功能。
 
-  
-
-  <img src="https://main.qcloudimg.com/raw/1db56b17fe7f333b5d78ed6a717c0cf3/Picture1_APP_SDK_SDKDemo.png" alt="image-20200619150459211" style="zoom:67%;" />
-
 
   
 
