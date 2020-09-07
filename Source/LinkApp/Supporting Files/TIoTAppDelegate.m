@@ -46,6 +46,7 @@
     if ([TIoTCoreUserManage shared].userId != nil) {
         //上报用户userid
         [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
+        [[FIRCrashlytics crashlytics] setUserID:[TIoTCoreUserManage shared].userId];
     }
     
     TrueTimeClient *client = [TrueTimeClient sharedInstance];

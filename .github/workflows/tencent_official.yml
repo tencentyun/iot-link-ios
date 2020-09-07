@@ -57,4 +57,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: upload dSYM
-      run: ./Pods/Fabric/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+      run: ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM

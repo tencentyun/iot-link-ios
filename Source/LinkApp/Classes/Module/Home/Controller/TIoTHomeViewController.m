@@ -466,6 +466,7 @@ static CGFloat weatherHeight = 60;
             [[TIoTCoreUserManage shared] saveUserInfo:data];
             //上报用户userid
             [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
+            [[FIRCrashlytics crashlytics] setUserID:[TIoTCoreUserManage shared].userId];
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
