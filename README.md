@@ -60,7 +60,7 @@
    使用微信授权登录还需：
     - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在 app-config.json 文件中修改 **WXAccessAppId**  配置项，如下：   
    
-  ```json
+```json
 {
   "WXAccessAppId": "",
   "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
@@ -71,9 +71,9 @@
   "XgUSAAccessKey": ""
 }
 ```
-    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在工程中 Supporting Files  目录下的 LinkApp.xcconfig 文件中修改 **LinkAPP_WEIXIN_APPID** 配置项，如下：
+    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在工程中 Supporting Files  目录下的 LinkApp.xcconfig 文件中修改 **LinkAPP_WEIXIN_APPID** 配置项，如下：   
 
- ```json
+```json
 {
   LinkAPP_NAME = 
   LinkAPP_WEIXIN_APPID = 
