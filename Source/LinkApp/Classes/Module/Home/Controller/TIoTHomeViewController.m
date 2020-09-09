@@ -33,7 +33,7 @@
 #import "TIoTNewVersionTipView.h"
 #import "NSString+Extension.h"
 
-static CGFloat weatherHeight = 60;
+static CGFloat weatherHeight = 10;
 
 @interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
 
@@ -802,7 +802,7 @@ static CGFloat weatherHeight = 60;
         
         
         self.weatherLab = [[UILabel alloc] init];
-        self.weatherLab.attributedText = [self handleWeather];
+//        self.weatherLab.attributedText = [self handleWeather];
         [weatherView addSubview:self.weatherLab];
         [self.weatherLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.mas_equalTo(16);
@@ -861,7 +861,7 @@ static CGFloat weatherHeight = 60;
         
         
         UILabel *wea = [[UILabel alloc] init];
-        wea.attributedText = [self handleWeather];
+//        wea.attributedText = [self handleWeather];
         [weatherView2 addSubview:wea];
         self.weatherLab2 = wea;
         [wea mas_makeConstraints:^(MASConstraintMaker *make) {
