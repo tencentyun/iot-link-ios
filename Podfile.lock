@@ -124,9 +124,9 @@ PODS:
 
 DEPENDENCIES:
   - FDFullscreenPopGesture (= 1.1)
-  - Firebase/Analytics
-  - Firebase/Crashlytics
-  - Firebase/Performance
+  - Firebase/Analytics (= 6.31.1)
+  - Firebase/Crashlytics (= 6.31.1)
+  - Firebase/Performance (= 6.31.1)
   - IQKeyboardManager (= 6.1.1)
   - KeychainAccess (= 4.2.0)
   - Masonry (= 1.1.0)
@@ -212,6 +212,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: cfa96693a771ba139ff90439b6185ac15e442c81
+PODFILE CHECKSUM: eff53b2f306542c01260d52cf6e5290a8d104dc6
 
 COCOAPODS: 1.9.3
