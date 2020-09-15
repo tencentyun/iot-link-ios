@@ -8,7 +8,7 @@ on:
       - 'LICENSE'
       - 'TIoTLinkKit.podspec'
     tags-ignore:  # 屏蔽掉发release打tag事件
-      - '*'
+      - 'v*'
 
 jobs:
   Build:
