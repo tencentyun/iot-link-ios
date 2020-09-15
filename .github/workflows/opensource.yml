@@ -1,7 +1,15 @@
 name: iOS CI
 
-on: [push, pull_request]
-      
+on:
+  push:
+    paths-ignore: # 有時候不想要改個文档也触发 github actions
+      - 'doc/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'TIoTLinkKit.podspec'
+    tags-ignore:  # 屏蔽掉发release打tag事件
+      - '*'
+
 jobs:
   Build:
     runs-on: macOS-latest
