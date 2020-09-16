@@ -116,9 +116,27 @@ failure:(FailureResponseBlock)failure
         
     }
     
+    
     if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].userRegionId]) {
         [accessParam setValue:[TIoTCoreUserManage shared].userRegionId forKey:@"RegionId"];
     }
+    
+    //接口中英文语言国际化返回判断参数
+    NSString *regionStr = @"";
+    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString: "1"]) {
+        regionStr = @"CN";
+    }else if ([[TIoTCoreUserManage shared].userRegionId isEqualToString: "22"]) {
+        regionStr = @"US";
+    }
+    NSString *langStr = @"";
+    if (LanguageIsEnglish) {
+        langStr = @"en";
+    }else {
+        langStr = @"zh";
+    }
+    
+    NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
+    [accessParam setValue:@"en-CN" forKey:@"lang"];
     
     NSURL *urlString = nil;
     
