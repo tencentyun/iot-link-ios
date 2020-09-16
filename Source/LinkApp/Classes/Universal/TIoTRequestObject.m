@@ -56,6 +56,8 @@ failure:(FailureResponseBlock)failure
         if ([TIoTAppConfig appTypeWithModel:model] == 0){
             //公版和开源
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
+            [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
+            [accessParam setValue:@"iOS" forKey:@"Platform"];
         }else {
             //OEM
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi,urlStr]];
