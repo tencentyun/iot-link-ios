@@ -116,6 +116,9 @@ failure:(FailureResponseBlock)failure
         
     }
     
+    //接口中英文语言国际化返回判断参数
+    [accessParam setValue:@"en-CN" forKey:@"lang"];
+    
     if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].userRegionId]) {
         [accessParam setValue:[TIoTCoreUserManage shared].userRegionId forKey:@"RegionId"];
     }
