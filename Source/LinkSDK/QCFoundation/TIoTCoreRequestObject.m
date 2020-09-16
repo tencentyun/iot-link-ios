@@ -17,6 +17,7 @@
 #define kMsg @"msg"
 #define kData @"data"
 
+
 @implementation TIoTCoreRequestObject
 
 + (TIoTCoreRequestObject *)shared {
@@ -116,9 +117,29 @@ failure:(FailureResponseBlock)failure
         
     }
     
+    
     if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].userRegionId]) {
         [accessParam setValue:[TIoTCoreUserManage shared].userRegionId forKey:@"RegionId"];
     }
+    
+    //接口中英文语言国际化返回判断参数
+    NSString *regionStr = @"CN";
+    NSString *langAndRegionStr = [[NSLocale currentLocale] localeIdentifier];
+    
+    if ([[[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:1] isEqualToString:@"CN"]) {
+        regionStr = @"CN";
+    }else if ([[[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:1] isEqualToString:@"US"]) {
+        regionStr = @"US";
+    }
+    NSString *langStr = @"zh";
+    if ([[[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:0] isEqualToString:@"en"]) {
+        langStr = @"en";
+    }else if ([[[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:0] isEqualToString:@"zh"]){
+        langStr = @"zh";
+    }
+    
+    NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
+    [accessParam setValue:langValueString forKey:@"lang"];
     
     NSURL *urlString = nil;
     
