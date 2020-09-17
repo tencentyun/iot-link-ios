@@ -114,7 +114,8 @@ static NSString *heartBeatReqID = @"5002";
 
 //ping
 - (void)heartBeatAction:(NSTimer *)timer {
-    NSDictionary *params = timer.userInfo;
+//    NSDictionary *params = timer.userInfo;
+    NSDictionary *params = @{@"action": @"Hello", @"reqId": heartBeatReqID}; //心跳包格式
     
     if ([TIoTCoreSocketManager shared].socketReadyState == WC_OPEN) {
         [[TIoTCoreSocketManager shared] sendData:params];

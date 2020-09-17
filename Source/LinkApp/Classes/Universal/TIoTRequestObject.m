@@ -76,6 +76,11 @@ failure:(FailureResponseBlock)failure
         
         if (reason != nil) {
             [MBProgressHUD showError:reason toView:[[UIApplication sharedApplication] delegate].window];
+            
+            if (![dic isEqualToDictionary:@{}]) {
+                [self judgeUserSignoutWithReturnToken:dic];
+            }
+            
             failure(reason, error, dic);
         }else {
             if ([urlStr isEqualToString:AppGetDeviceBindTokenState] && ([error.localizedDescription isEqualToString:@"请求超时。"] || [error.localizedDescription isEqualToString:@"似乎已断开与互联网的连接。"])) {
