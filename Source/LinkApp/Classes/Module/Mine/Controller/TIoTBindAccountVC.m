@@ -165,9 +165,25 @@
         isPhoneTypeOrEmail = [NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text];
     }
     
-    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.bindAccountView.verificationCodeTF.text] && (self.bindAccountView.passwordTF.text.length >= 8 && self.bindAccountView.passwordConfirmTF.text.length >= 8)) {
-        self.bindAccountView.confirmButton.backgroundColor =kMainColor;
-        self.bindAccountView.confirmButton.enabled = YES;
+    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.bindAccountView.verificationCodeTF.text]) {
+        
+        if (self.bindAccountView.passwordTF.isHidden || self.bindAccountView.passwordConfirmTF.isHidden) {
+            
+            self.bindAccountView.confirmButton.backgroundColor =kMainColor;
+            self.bindAccountView.confirmButton.enabled = YES;
+            
+        }else if (self.bindAccountView.passwordTF.text.length >= 1 && self.bindAccountView.passwordConfirmTF.text.length >= 1) {
+            
+            self.bindAccountView.confirmButton.backgroundColor =kMainColor;
+            self.bindAccountView.confirmButton.enabled = YES;
+            
+        }else {
+            
+            self.bindAccountView.confirmButton.backgroundColor = kMainColorDisable;
+            self.bindAccountView.confirmButton.enabled = NO;
+        }
+        
+        
     }else {
         self.bindAccountView.confirmButton.backgroundColor = kMainColorDisable;
         self.bindAccountView.confirmButton.enabled = NO;
