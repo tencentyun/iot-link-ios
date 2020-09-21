@@ -82,7 +82,7 @@ static CGFloat weatherHeight = 10;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (self.tableView) {
-        [self getFamilyList];
+        [self getRoomList:self.currentFamilyId];;
     }
 }
 
