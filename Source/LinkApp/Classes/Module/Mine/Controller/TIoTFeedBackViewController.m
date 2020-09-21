@@ -152,7 +152,7 @@ static NSInteger maxNumber = 100;
     
     
     UILabel *contactTipLab = [[UILabel alloc] init];
-    contactTipLab.text = @"输入有效联系方式以便开发者联系你(选填)";
+    contactTipLab.text = @"输入有效联系方式以便开发者联系您（选填）";
     contactTipLab.textColor = kFontColor;
     contactTipLab.font = [UIFont systemFontOfSize:16];
     [scroll addSubview:contactTipLab];
@@ -163,7 +163,7 @@ static NSInteger maxNumber = 100;
     
     
     self.contactTF = [[UITextField alloc] init];
-    self.contactTF.placeholder = @"手机号/邮箱";
+    self.contactTF.placeholder = @"手机号码/邮箱";
     self.contactTF.backgroundColor = kRGBColor(245, 245, 245);
     self.contactTF.leftViewMode = UITextFieldViewModeAlways;
     self.contactTF.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
