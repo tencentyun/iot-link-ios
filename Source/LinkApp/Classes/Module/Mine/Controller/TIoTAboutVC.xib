@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,8 +20,12 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_logo" translatesAutoresizingMaskIntoConstraints="NO" id="GFr-pu-XOU">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="aboutMe_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="GFr-pu-XOU">
                     <rect key="frame" x="157" y="104" width="100" height="80.5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80.5" id="DTC-jP-jtV"/>
+                        <constraint firstAttribute="width" constant="100" id="Yca-X6-9N9"/>
+                    </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TMS-hz-BTH">
                     <rect key="frame" x="20" y="270.5" width="374" height="1"/>
@@ -42,7 +47,7 @@
                             <rect key="frame" x="376" y="21" width="18" height="18"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="O5U-1u-a5B" secondAttribute="trailing" constant="20" id="1lz-y6-1fW"/>
@@ -75,7 +80,7 @@
                             <rect key="frame" x="376" y="21" width="18" height="18"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <gestureRecognizers/>
                     <constraints>
                         <constraint firstItem="EPV-ft-eb9" firstAttribute="centerY" secondItem="PQ2-BY-jni" secondAttribute="centerY" id="5hK-Z0-B8O"/>
@@ -111,7 +116,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Bww-BU-0fF" secondAttribute="trailing" constant="20" id="X47-1Q-0Kp"/>
@@ -132,6 +137,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xoS-AO-T26" firstAttribute="top" secondItem="PQ2-BY-jni" secondAttribute="bottom" id="0VI-yN-Xsz"/>
@@ -158,7 +164,6 @@
                 <constraint firstItem="TMS-hz-BTH" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="20" id="xFC-ic-SyQ"/>
                 <constraint firstAttribute="trailing" secondItem="aWU-4F-E2K" secondAttribute="trailing" constant="20" id="yGD-fE-xPJ"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="135" y="112"/>
         </view>
         <tapGestureRecognizer id="5OV-pu-piS">
@@ -178,7 +183,10 @@
         </tapGestureRecognizer>
     </objects>
     <resources>
+        <image name="aboutMe_logo.png" width="300" height="242"/>
         <image name="mineArrow" width="18" height="18"/>
-        <image name="mine_logo" width="100" height="80.5"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
