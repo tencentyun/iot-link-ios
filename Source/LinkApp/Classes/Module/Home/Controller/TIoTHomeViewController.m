@@ -82,7 +82,9 @@ static CGFloat weatherHeight = 10;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (self.tableView) {
-        [self getRoomList:self.currentFamilyId];;
+        if (self.currentFamilyId != nil) {
+            [self getRoomList:self.currentFamilyId];;
+        }
     }
 }
 
@@ -479,6 +481,9 @@ static CGFloat weatherHeight = 10;
 
 - (void)getRoomList:(NSString *)familyId
 {
+    if (familyId == nil) {
+        return;
+    }
     [[TIoTRequestObject shared] post:AppGetRoomList Param:@{@"FamilyId":familyId} success:^(id responseObject) {
         self.rooms = [NSArray yy_modelArrayWithClass:[RoomModel class] json:responseObject[@"RoomList"]];
         
@@ -491,7 +496,9 @@ static CGFloat weatherHeight = 10;
 - (void)loadNewData{
     self.offset = 0;
     NSString *roomId = self.currentRoomId ?: @"";
-    [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
+    NSString *familyId = self.currentFamilyId ?: @"";
+    
+    [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":familyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
         [self endRefresh:NO total:[responseObject[@"Total"] integerValue]];
         [self.dataArr removeAllObjects];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
