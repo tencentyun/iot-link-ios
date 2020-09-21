@@ -66,7 +66,7 @@
 
 - (UIImageView *)headerImage {
     if (!_headerImage) {
-        _headerImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
+        _headerImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Main_logo"]];
         _headerImage.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _headerImage;
