@@ -12,6 +12,11 @@ extension UIApplication {
         if appdelegate.isDebug {
             TIoTDebugtools.awake()
             TIoTLogTask.awake()
+            
+            //调试天气数据
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+5) {
+                TIoTAppUtil.getSesssionDataTask()
+            }
         }
     }()
         
