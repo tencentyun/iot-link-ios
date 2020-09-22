@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) UIView        *contentView;
 
+@property (nonatomic, strong) UILabel *passTipLabel;
+@property (nonatomic, strong) UILabel *tipLabel;
 @end
 
 @implementation TIoTBindAccountView
@@ -44,6 +46,12 @@
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+    }];
+    
+    [self.contentView addSubview:self.tipLabel];
+    [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.phoneOrEmailTF.mas_bottom).offset(3);
+        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
     }];
     
     UIView *line1 = [[UIView alloc]init];
@@ -87,6 +95,12 @@
         make.trailing.equalTo(self.phoneOrEmailTF.mas_trailing);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
         make.top.equalTo(line2.mas_bottom).offset(kSpace);
+    }];
+    
+    [self.contentView addSubview:self.passTipLabel];
+    [self.passTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.passwordTF.mas_bottom).offset(3);
+        make.leading.equalTo(self.passwordTF.mas_leading);
     }];
     
     UIView *line3 = [[UIView alloc]init];
@@ -239,6 +253,28 @@
     return _passwordConfirmTF;;
 }
 
+- (UILabel *)tipLabel {
+    if (!_tipLabel) {
+        _tipLabel = [[UILabel alloc] init];
+        _tipLabel.font = [UIFont systemFontOfSize:12];
+        _tipLabel.text = @"";
+        _tipLabel.textColor = UIColor.redColor;
+        _tipLabel.hidden = YES;
+    }
+    return _tipLabel;
+}
+
+- (UILabel *)passTipLabel {
+    if (!_passTipLabel) {
+        _passTipLabel = [[UILabel alloc] init];
+        _passTipLabel.font = [UIFont systemFontOfSize:12];
+        _passTipLabel.text = @"";
+        _passTipLabel.textColor = UIColor.redColor;
+        _passTipLabel.hidden = YES;
+    }
+    return _passTipLabel;
+}
+
 - (UIButton *)confirmButton {
     if (!_confirmButton) {
         _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -263,6 +299,39 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountChangedTextFieldWithAccountType:)]) {
         [self.delegate bindAccountChangedTextFieldWithAccountType:self.bindAccoutType];
     }
+    
+    //优化提示文案
+    if (textField == self.phoneOrEmailTF) {
+        
+        if (self.phoneOrEmailTF.keyboardType == UIKeyboardTypeNumberPad) { //手机号改密码
+            
+            if ([NSString judgePhoneNumberLegal:self.phoneOrEmailTF.text]) { //手机号合格
+                self.tipLabel.hidden = YES;
+            }else{ //手机号不合格
+                self.tipLabel.hidden = NO;
+                self.tipLabel.text = @"手机号格式不正确";
+            }
+            
+        }else { //邮箱改密码
+            
+            if ([NSString judgeEmailLegal:self.phoneOrEmailTF.text]) { //邮箱合格
+                self.tipLabel.hidden = YES;
+            }else{ //邮箱合格不合格
+                self.tipLabel.hidden = NO;
+                self.tipLabel.text = @"邮箱地址格式不正确";
+            }
+        }
+        
+    }
+    
+    if (textField == self.passwordTF) {
+        if ([NSString judgePassWordLegal:self.passwordTF.text]) {
+            self.passTipLabel.hidden = YES;
+        }else {
+            self.passTipLabel.hidden = NO;
+            self.passTipLabel.text = @"密码支持8-16位，必须包含字母和数字";
+        }
+    }    
 }
 
 - (void)sendCode:(UIButton *)button {
