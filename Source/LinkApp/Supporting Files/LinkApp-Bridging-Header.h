@@ -8,5 +8,6 @@
 #import "TIoTLoginVC.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTNavigationController.h"
+#import "TIoTAppConfig.h"
 
 

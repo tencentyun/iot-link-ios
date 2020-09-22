@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSString *XgUSAAccessKey;
 
 @property NSString *TencentMapSDKValue;
+
+@property NSString *HEweatherKey;
 @end
 
 @interface TIoTAppConfig : NSObject
