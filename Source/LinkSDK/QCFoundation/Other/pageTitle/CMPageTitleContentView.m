@@ -73,6 +73,12 @@
         CGFloat labelX = 0;
         CGFloat labelW = 0;
         
+        CGFloat screenWhidth = [UIScreen mainScreen].bounds.size.width;
+        CGFloat itemWidth = 50;
+        if (self.config.cm_titles.count > 0) {
+            itemWidth = screenWhidth / self.config.cm_titles.count;
+        }
+        
         for (int i = 0; i < self.config.cm_titles.count; i++) {
             CMDisplayTitleLabel *label = [CMDisplayTitleLabel new];
             label.textColor = self.config.cm_normalColor;
@@ -98,9 +104,16 @@
             
             [self addSubview:label];
             
+            if (self.config.cm_contentMode == CMPageTitleContentMode_Center) {
+                labelX = 0;
+            }
+            NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:itemWidth];
+            
+            NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:60];
+            
             NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.titleLabels.lastObject ?: self attribute:self.titleLabels.lastObject ? NSLayoutAttributeRight : NSLayoutAttributeLeft multiplier:1 constant:labelX];
             NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem: self attribute: NSLayoutAttributeCenterY multiplier:1 constant:0];
-            [NSLayoutConstraint activateConstraints:@[leftConstraint,centerYConstraint]];
+            [NSLayoutConstraint activateConstraints:@[leftConstraint,centerYConstraint,widthConstraint,heightConstraint]];
             
             label.userInteractionEnabled = YES;
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickLabel:)];
