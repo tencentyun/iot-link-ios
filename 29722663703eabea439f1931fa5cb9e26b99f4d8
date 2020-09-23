@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138a4801_48dbb1f4",
+        "filename": "Source/LinkSDK/QCFoundation/TIoTCoreRequestObject.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-23T08:47:33Z",
+      "side": 1,
+      "message": "语言国际化需求，与美东账号无关，国际化需求需要获取手机设备语言环境",
+      "revId": "29722663703eabea439f1931fa5cb9e26b99f4d8",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
