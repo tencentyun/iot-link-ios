@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0386a3be_2e33128f",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-23T09:36:15Z",
+      "side": 0,
+      "message": "已经回退",
+      "parentUuid": "e062fde1_e16ec0e3",
+      "revId": "94e85fd167f90f8de84bbcbf84b62774f237c2a7",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f717875d_751f6058",
         "filename": "LinkApp.xcodeproj/project.pbxproj",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "94e85fd167f90f8de84bbcbf84b62774f237c2a7",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e67c1d4_09d444ce",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-23T09:36:15Z",
+      "side": 0,
+      "message": "好的，下次测试不改证书调试",
+      "parentUuid": "f717875d_751f6058",
+      "revId": "94e85fd167f90f8de84bbcbf84b62774f237c2a7",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
