@@ -10,6 +10,8 @@
 
 @interface TIoTModifyView ()
 @property (nonatomic, strong) UIView        *contentView;
+@property (nonatomic, strong) UILabel *tipLabel;
+
 @end
 
 @implementation TIoTModifyView
@@ -42,6 +44,12 @@
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+    }];
+    
+    [self.contentView addSubview:self.tipLabel];
+    [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.phoneOrEmailTF.mas_bottom).offset(3);
+        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
     }];
     
     UIView *line1 = [[UIView alloc]init];
@@ -130,6 +138,17 @@
   
 }
 
+- (UILabel *)tipLabel {
+    if (!_tipLabel) {
+        _tipLabel = [[UILabel alloc] init];
+        _tipLabel.font = [UIFont systemFontOfSize:12];
+        _tipLabel.text = @"";
+        _tipLabel.textColor = UIColor.redColor;
+        _tipLabel.hidden = YES;
+    }
+    return _tipLabel;
+}
+
 - (UIButton *)verificationButton {
     if (!_verificationButton) {
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -178,6 +197,30 @@
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(modifyAccountChangedTextFieldWithAccountType:)]) {
         [self.delegate modifyAccountChangedTextFieldWithAccountType:self.modifyAccoutType];
+    }
+    
+    //优化提示文案
+    if (textField == self.phoneOrEmailTF) {
+        
+        if (self.phoneOrEmailTF.keyboardType == UIKeyboardTypeNumberPad) { //手机号改密码
+            
+            if ([NSString judgePhoneNumberLegal:self.phoneOrEmailTF.text]) { //手机号合格
+                self.tipLabel.hidden = YES;
+            }else{ //手机号不合格
+                self.tipLabel.hidden = NO;
+                self.tipLabel.text = @"手机号格式不正确";
+            }
+            
+        }else { //邮箱改密码
+            
+            if ([NSString judgeEmailLegal:self.phoneOrEmailTF.text]) { //邮箱合格
+                self.tipLabel.hidden = YES;
+            }else{ //邮箱合格不合格
+                self.tipLabel.hidden = NO;
+                self.tipLabel.text = @"邮箱地址格式不正确";
+            }
+        }
+        
     }
 }
 

@@ -7,9 +7,10 @@
 
   
 
-## 下载安装
+## 安装包指引
 
-[腾讯连连下载](https://github.com/tencentyun/iot-link-ios/wiki/下载安装)
+* [腾讯连连体验包下载](https://github.com/tencentyun/iot-link-ios/wiki/下载安装)
+* [腾讯连连AppStore包上传指引](https://github.com/tencentyun/iot-link-ios/wiki/AppStore包上传指引)
 
   
 
@@ -58,31 +59,31 @@
 * 若确认使用自定义的微信授权登录，需要在[微信开放平台](https://open.weixin.qq.com/)注册开发者帐号，创建移动应用，审核通过后，即可获得相应的 AppID 和 AppSecret，[申请步骤](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Development_Guide.html)；同时需要自行搭建微信授权登录的**接入服务器**，可参考接入服务器的[接口](https://cloud.tencent.com/document/product/1081/40781)。
 
    使用微信授权登录还需：
-    - 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在 app-config.json 文件中修改 **WXAccessAppId**  配置项，如下：   
-   
-  ```json
-{
-  "WXAccessAppId": "",
-  "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
-  "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
-  "XgAccessId": "",
-  "XgAccessKey": "",
-  "XgUSAAccessId": "",
-  "XgUSAAccessKey": ""
-}
-```
-    - 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在工程中 Supporting Files  目录下的 LinkApp.xcconfig 文件中修改 **LinkAPP_WEIXIN_APPID** 配置项，如下：
+   * 将配置项 **WXAccessAppId** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在 app-config.json 文件中修改 **WXAccessAppId**  配置项，如下：
+   ```json
+      {
+        "WXAccessAppId": "",
+        "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+        "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+        "XgAccessId": "",
+        "XgAccessKey": "",
+        "XgUSAAccessId": "",
+        "XgUSAAccessKey": ""
+      }
+   ```   
 
- ```json
-{
-  LinkAPP_NAME = 
-  LinkAPP_WEIXIN_APPID = 
-  LinkAPP_BUNDLE_TEAM =
-  LinkAPP_BUNDLE_SIGN = 
-  LinkAPP_BUNDLE_ID = 
-  LinkAPP_BUNDLE_PROVISIONING = 
-}
-```
+
+   * 最后将配置项 **LinkAPP_WEIXIN_APPID** 设置为在微信开放平台申请并获得的 **AppID**；***<u>同时请遵从官方建议自建微信接入服务器，保证 AppSecret 不被泄露</u>***；在工程中 Supporting Files  目录下的 LinkApp.xcconfig 文件中修改 **LinkAPP_WEIXIN_APPID** 配置项，如下：
+   ```
+      {
+        LinkAPP_NAME = 
+        LinkAPP_WEIXIN_APPID = 
+        LinkAPP_BUNDLE_TEAM =
+        LinkAPP_BUNDLE_SIGN = 
+        LinkAPP_BUNDLE_ID = 
+        LinkAPP_BUNDLE_PROVISIONING = 
+      }
+   ```   
 
 * 若不使用微信授权登录功能，**WXAccessAppId** 设置为**长度为0字符串**即可。​    
 
