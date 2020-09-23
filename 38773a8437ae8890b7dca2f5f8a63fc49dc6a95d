@@ -16,6 +16,24 @@
       "revId": "38773a8437ae8890b7dca2f5f8a63fc49dc6a95d",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "304cc30f_54100fd3",
+        "filename": "Source/LinkSDK/QCFoundation/TIoTCoreRequestObject.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-23T09:36:23Z",
+      "side": 1,
+      "message": "已经在patch3修改",
+      "parentUuid": "2fb66142_b97e2294",
+      "revId": "38773a8437ae8890b7dca2f5f8a63fc49dc6a95d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }

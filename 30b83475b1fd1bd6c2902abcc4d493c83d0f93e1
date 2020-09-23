@@ -16,6 +16,24 @@
       "revId": "30b83475b1fd1bd6c2902abcc4d493c83d0f93e1",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "660d0e46_f0a9120e",
+        "filename": "Source/LinkSDK/QCFoundation/TIoTCoreRequestObject.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-23T09:36:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fbe2f72_364f43d2",
+      "revId": "30b83475b1fd1bd6c2902abcc4d493c83d0f93e1",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
