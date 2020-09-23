@@ -34,6 +34,8 @@
 @property (nonatomic, copy) NSString *conturyCode2;
 
 
+@property (nonatomic, strong) UILabel *phoneTipLabel;
+@property (nonatomic, strong) UILabel *emailTipLabel;
 @end
 
 @implementation TIoTRegisterViewController
@@ -221,6 +223,26 @@
 
 -(void)changedTextField:(UITextField *)textField{
     [self checkSendCode];
+    
+    //优化提示文案
+    if (textField == self.phoneTF) {//手机号改密码
+        
+        if ([NSString judgePhoneNumberLegal:textField.text]) { //手机号合格
+            self.phoneTipLabel.hidden = YES;
+        }else{ //手机号不合格
+            self.phoneTipLabel.hidden = NO;
+            self.phoneTipLabel.text = @"手机号格式不正确";
+        }
+        
+    }else { //邮箱改密码
+        
+        if ([NSString judgeEmailLegal:textField.text]) { //邮箱合格
+            self.emailTipLabel.hidden = YES;
+        }else{ //邮箱合格不合格
+            self.emailTipLabel.hidden = NO;
+            self.emailTipLabel.text = @"邮箱地址格式不正确";
+        }
+    }
 }
 
 - (void)choseAreaCode:(id)sender{
@@ -354,6 +376,7 @@
     if (_scrollView == nil) {
         _scrollView = [[UIScrollView alloc] init];
         _scrollView.backgroundColor = [UIColor whiteColor];
+        _scrollView.clipsToBounds = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.scrollEnabled = NO;
     }
@@ -401,6 +424,17 @@
             make.trailing.mas_equalTo(-24);
             make.top.equalTo(self.areaCodeBtn.mas_bottom).offset(20);
             make.height.mas_equalTo(48);
+        }];
+        
+        self.phoneTipLabel = [[UILabel alloc] init];
+        self.phoneTipLabel.font = [UIFont systemFontOfSize:12];
+        self.phoneTipLabel.text = @"手机号格式不正确";
+        self.phoneTipLabel.textColor = UIColor.redColor;
+        self.phoneTipLabel.hidden = YES;
+        [self.contentView addSubview:self.phoneTipLabel];
+        [self.phoneTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.phoneTF.mas_bottom).offset(3);
+            make.leading.equalTo(self.phoneTF.mas_leading);
         }];
         
         UIView *lineView = [[UIView alloc] init];
@@ -467,6 +501,18 @@
             make.trailing.mas_equalTo(-24);
             make.top.equalTo(dodo.mas_bottom).offset(20);
             make.height.mas_equalTo(48);
+        }];
+        
+        
+        self.emailTipLabel = [[UILabel alloc] init];
+        self.emailTipLabel.font = [UIFont systemFontOfSize:12];
+        self.emailTipLabel.text = @"邮箱地址格式不正确";
+        self.emailTipLabel.textColor = UIColor.redColor;
+        self.emailTipLabel.hidden = YES;
+        [self.contentView2 addSubview:self.emailTipLabel];
+        [self.emailTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.emailTF.mas_bottom).offset(3);
+            make.leading.equalTo(self.emailTF.mas_leading);
         }];
         
         UIView *lineView = [[UIView alloc] init];
