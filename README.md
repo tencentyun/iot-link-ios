@@ -10,7 +10,6 @@
 ## 安装包指引
 
 * [腾讯连连体验包下载](https://github.com/tencentyun/iot-link-ios/wiki/下载安装)
-* [腾讯连连AppStore包上传指引](https://github.com/tencentyun/iot-link-ios/wiki/AppStore包上传指引)
 
   
 
