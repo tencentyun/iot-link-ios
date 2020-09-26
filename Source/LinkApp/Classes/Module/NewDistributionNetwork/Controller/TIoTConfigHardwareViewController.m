@@ -23,7 +23,7 @@
 
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong) UILabel *stepLabel;
-@property (nonatomic, strong) UIView *contentView;
+
 @end
 
 @implementation TIoTConfigHardwareViewController
@@ -47,22 +47,15 @@
             // Fallback on earlier versions
             make.top.equalTo(self.view.mas_top).offset(64);
         }
-    }];
-    
-    self.contentView = [[UIView alloc]init];
-    self.contentView.backgroundColor = [UIColor whiteColor];
-    [self.scrollView addSubview:self.contentView];
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.equalTo(self.scrollView);
         make.width.mas_equalTo(kScreenWidth);
     }];
 
     self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[_dataDic objectForKey:@"stepTipArr"]];
     self.stepTipView.step = 1;
-    [self.contentView addSubview:self.stepTipView];
+    [self.scrollView addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(20);
-        make.width.equalTo(self.contentView);
+        make.top.equalTo(self.scrollView).offset(20);
+        make.width.equalTo(self.scrollView);
         make.height.mas_equalTo(54);
     }];
     
@@ -70,10 +63,10 @@
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
     topicLabel.text = [_dataDic objectForKey:@"topic"];
-    [self.contentView addSubview:topicLabel];
+    [self.scrollView addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(16);
-        make.right.equalTo(self.contentView).offset(-16);
+        make.left.equalTo(self.scrollView).offset(16);
+        make.right.equalTo(self.scrollView).offset(-16);
         make.top.equalTo(self.stepTipView.mas_bottom).offset(20);
         make.height.mas_equalTo(24);
     }];
@@ -82,15 +75,27 @@
     
 //    UIImageView *self.imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_distri_tip"]];
     self.imgView = [[UIImageView alloc] init];
+    
     if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-        [self.imgView setImageWithURLStr:self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"bgImg"] placeHolder:@"new_distri_tip"];
+        NSString *softAPImageUrlString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"bgImg"];
+        if ([NSString isNullOrNilWithObject:softAPImageUrlString]) {
+            self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
+        }else {
+            [self.imgView setImageWithURLStr:softAPImageUrlString placeHolder:@"new_distri_tip"];
+        }
     }else if (self.configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-        [self.imgView setImageWithURLStr:self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"bgImg"] placeHolder:@"new_distri_tip"];
+        NSString *smartImageeUrlString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"bgImg"];
+        if ([NSString isNullOrNilWithObject:smartImageeUrlString]) {
+            self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
+        }else {
+            [self.imgView setImageWithURLStr:smartImageeUrlString placeHolder:@"new_distri_tip"];
+        }
+        
     }
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.contentView addSubview:self.imgView];
+    [self.scrollView addSubview:self.imgView];
     [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.contentView);
+        make.centerX.equalTo(self.scrollView);
         make.leading.mas_greaterThanOrEqualTo(16);
         make.trailing.mas_lessThanOrEqualTo(-16);
         make.top.equalTo(topicLabel.mas_bottom).offset(10);
@@ -116,10 +121,10 @@
     NSAttributedString * attributedStr = [[NSAttributedString alloc]initWithString:stepLabelText attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:kRGBColor(51, 51, 51),NSParagraphStyleAttributeName:paragraph}];
     self.stepLabel.attributedText = attributedStr;
     self.stepLabel.numberOfLines = 0;
-    [self.contentView addSubview:self.stepLabel];
+    [self.scrollView addSubview:self.stepLabel];
     [self.stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(16);
-        make.right.equalTo(self.contentView).offset(-19);
+        make.left.equalTo(self.imgView);
+        make.right.equalTo(self.imgView);
         make.top.equalTo(self.imgView.mas_bottom).offset(10);
     }];
     
@@ -139,9 +144,9 @@
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.backgroundColor = kMainColor;
     nextBtn.layer.cornerRadius = 2;
-    [self.contentView addSubview:nextBtn];
+    [self.scrollView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(40);
+        make.left.equalTo(self.scrollView).offset(40);
         make.top.equalTo(self.stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.width.mas_equalTo(kScreenWidth - 80);
         make.height.mas_equalTo(45);
@@ -151,7 +156,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     CGFloat contentHeight = 100 + 54 + 24 + CGRectGetHeight(self.imgView.frame)+ CGRectGetHeight(self.stepLabel.frame) + 45 + [TIoTUIProxy shareUIProxy].navigationBarHeight;
     if (contentHeight > kScreenHeight) {
         self.scrollView.scrollEnabled = YES;
