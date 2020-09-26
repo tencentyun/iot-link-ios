@@ -27,7 +27,7 @@ static NSString *cellId = @"rc62368";
 
 - (void)setupUI
 {
-    self.title = @"房间设置";
+    self.title = NSLocalizedString(@"room_setting", @"房间设置");
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
@@ -36,7 +36,7 @@ static NSString *cellId = @"rc62368";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"删除房间" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"delete_room", @"删除房间") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kWarnColor];
@@ -67,7 +67,7 @@ static NSString *cellId = @"rc62368";
         
         [HXYNotice addUpdateRoomListPost];
         
-        self.roomInfo = @[@{@"title":@"房间名称",@"name":name}];
+        self.roomInfo = @[@{@"title":NSLocalizedString(@"room_name_tip", @"房间名称"),@"name":name}];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -92,7 +92,7 @@ static NSString *cellId = @"rc62368";
 {
     if (indexPath.row == 0) {
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        [av alertWithTitle:@"房间名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
+        [av alertWithTitle:NSLocalizedString(@"room_name_tip", @"房间名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {
             if (text.length > 0) {
@@ -108,7 +108,7 @@ static NSString *cellId = @"rc62368";
 - (NSArray *)roomInfo
 {
     if (!_roomInfo) {
-        _roomInfo = @[@{@"title":@"房间名称",@"name":self.roomDic[@"RoomName"]}];
+        _roomInfo = @[@{@"title":NSLocalizedString(@"room_name_tip", @"房间名称"),@"name":self.roomDic[@"RoomName"]}];
     }
     return _roomInfo;
 }

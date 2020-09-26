@@ -69,7 +69,7 @@
     
     [[TIoTRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
         
-        [MBProgressHUD showSuccess:@"添加成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"add_sucess", @"添加成功")];
         [self.navigationController popToRootViewControllerAnimated:YES];
         [HXYNotice addUpdateDeviceListPost];
         
@@ -81,7 +81,7 @@
 
 - (void)processQRCodeResult:(NSString *)result {
     if (result) {
-        [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"正在处理..."];
+        [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:NSLocalizedString(@"Processing", @"正在处理...")];
         [obtain stopRunning];
         [obtain playSoundName:@"SGQRCode.bundle/sound.caf"];
         
@@ -155,8 +155,8 @@
 }
 
 - (void)setupNavigationBar {
-    self.navigationItem.title = @"扫一扫";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:(UIBarButtonItemStyleDone) target:self action:@selector(rightBarButtonItenAction)];
+    self.navigationItem.title = NSLocalizedString(@"scan", @"扫一扫");
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"photoalbum", @"相册") style:(UIBarButtonItemStyleDone) target:self action:@selector(rightBarButtonItenAction)];
 }
 
 - (void)rightBarButtonItenAction {
@@ -200,7 +200,7 @@
         _promptLabel.textAlignment = NSTextAlignmentCenter;
         _promptLabel.font = [UIFont boldSystemFontOfSize:13.0];
         _promptLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
-        _promptLabel.text = @"将二维码/条码放入框内, 即可自动扫描";
+        _promptLabel.text = NSLocalizedString(@"autoscan_QRcode", @"将二维码/条码放入框内, 即可自动扫描");
     }
     return _promptLabel;
 }

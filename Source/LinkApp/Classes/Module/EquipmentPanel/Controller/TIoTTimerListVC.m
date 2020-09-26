@@ -37,7 +37,7 @@ static NSString *cellId = @"ub67989";
 
 #pragma mark privateMethods
 - (void)setupUI{
-    self.title = @"云端定时";
+    self.title = NSLocalizedString(@"cloud_timing", @"云端定时");
     self.view.backgroundColor = kBgColor;
     self.fd_interactivePopDisabled = YES;
     
@@ -54,7 +54,7 @@ static NSString *cellId = @"ub67989";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"添加定时" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"add_timer", @"添加定时") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];
@@ -79,7 +79,7 @@ static NSString *cellId = @"ub67989";
         
         [MBProgressHUD dismissInView:self.view];
         
-        [self.tableView showEmpty:@"添加定时" desc:@"暂无定时,点击任意处进行添加" image:[UIImage imageNamed:@"noTimer"] block:^{
+        [self.tableView showEmpty:NSLocalizedString(@"add_timer", @"添加定时") desc:NSLocalizedString(@"notimer_clickAnywhere_add", @"暂无定时,点击任意处进行添加")  image:[UIImage imageNamed:@"noTimer"] block:^{
             [self toAddTimer];
         }];
         
@@ -191,7 +191,7 @@ static NSString *cellId = @"ub67989";
 // 修改编辑按钮文字
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
+    return NSLocalizedString(@"delete", @"删除");
 }
 
 #pragma mark setter or getter

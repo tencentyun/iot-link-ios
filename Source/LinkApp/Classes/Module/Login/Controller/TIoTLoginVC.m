@@ -136,7 +136,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     }];
     
     UIButton *wxLoginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [wxLoginBtn setTitle:@"微信登录" forState:UIControlStateNormal];
+    [wxLoginBtn setTitle:NSLocalizedString(@"wechat_login", @"微信登录") forState:UIControlStateNormal];
     [wxLoginBtn setTitleColor:kFontColor forState:UIControlStateNormal];
     [wxLoginBtn setImage:[UIImage imageNamed:@"wxlogin"] forState:UIControlStateNormal];
     wxLoginBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:10];
@@ -172,7 +172,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         self.phoneTF = [[UITextField alloc] init];
         self.phoneTF.layer.cornerRadius = 4;
         self.phoneTF.backgroundColor = kLineColor;
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"手机号码" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"phone_number", @"手机号码") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
         self.phoneTF.attributedPlaceholder = as;
         self.phoneTF.keyboardType = UIKeyboardTypeNumberPad;
         self.phoneTF.textColor = kFontColor;
@@ -194,7 +194,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         self.pwdTF = [[UITextField alloc] init];
         self.pwdTF.layer.cornerRadius = 4;
         self.pwdTF.backgroundColor = kLineColor;
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"密码" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"password", @"密码") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
         self.pwdTF.attributedPlaceholder = ap;
         self.pwdTF.textColor = kFontColor;
         self.pwdTF.secureTextEntry = YES;
@@ -231,7 +231,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         self.emailTF = [[UITextField alloc] init];
         _emailTF.layer.cornerRadius = 4;
         _emailTF.backgroundColor = kLineColor;
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"邮箱地址" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_address", @"邮箱地址") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailTF.textColor = kFontColor;
@@ -250,7 +250,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         self.emailPwdTF = [[UITextField alloc] init];
         _emailPwdTF.layer.cornerRadius = 4;
         _emailPwdTF.backgroundColor = kLineColor;
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"密码" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"password", @"密码") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224)}];
         self.emailPwdTF.attributedPlaceholder = ap;
         self.emailPwdTF.textColor = kFontColor;
         self.emailPwdTF.secureTextEntry = YES;
@@ -287,7 +287,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 {
     if (!_welcomeL) {
         _welcomeL = [[UILabel alloc] init];
-        _welcomeL.text = @"欢迎使用腾讯连连";
+        _welcomeL.text = NSLocalizedString(@"welcome_to_use_tencent_ll", @"欢迎使用腾讯连连") ;
         _welcomeL.textColor = [UIColor whiteColor];
         _welcomeL.font = [UIFont systemFontOfSize:20 weight:UIFontWeightMedium];
     }
@@ -348,7 +348,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         
         
         UIButton *forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [forgetPwdBtn setTitle:@"忘记密码" forState:UIControlStateNormal];
+        [forgetPwdBtn setTitle:NSLocalizedString(@"forgot_password", @"忘记密码") forState:UIControlStateNormal];
         [forgetPwdBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
         [forgetPwdBtn addTarget:self action:@selector(forgetPwdClick:) forControlEvents:UIControlEventTouchUpInside];
         forgetPwdBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];

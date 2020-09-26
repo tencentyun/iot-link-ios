@@ -42,7 +42,7 @@
     
     
     UILabel *titlab = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, self.frame.size.width, 20)];
-    titlab.text = @"颜色";
+    titlab.text = NSLocalizedString(@"color_tip", @"颜色");
     titlab.textColor = kFontColor;
     titlab.textAlignment = NSTextAlignmentCenter;
     titlab.font = [UIFont systemFontOfSize:20 weight:UIFontWeightMedium];
@@ -50,7 +50,7 @@
     self.nameLab = titlab;
     
     UILabel *colorLab = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(titlab.frame) + 20, self.frame.size.width, 36)];
-    colorLab.text = @"红色";
+    colorLab.text = NSLocalizedString(@"color_red", @"红色");
     colorLab.textColor = kFontColor;
     colorLab.textAlignment = NSTextAlignmentCenter;
     colorLab.font = [UIFont systemFontOfSize:36 weight:UIFontWeightMedium];

@@ -165,7 +165,7 @@
  @param view 需要显示信息的视图
  */
 + (void)showNetErrorToView:(UIView *)view{
-    [self show:@"似乎已断开与互联网的连接" icon:@"" view:view];
+    [self show:NSLocalizedString(@"network_cannotConnect", @"似乎已断开与互联网的连接") icon:@"" view:view];
 }
 
 /**

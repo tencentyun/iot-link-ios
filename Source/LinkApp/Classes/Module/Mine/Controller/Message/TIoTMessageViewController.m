@@ -30,7 +30,7 @@
 
 - (void)setupUI{
     self.view.backgroundColor = kBgColor;
-    self.title = @"消息通知";
+    self.title = NSLocalizedString(@"message_notification", @"消息通知");
     self.fd_interactivePopDisabled = YES;
     
     [self.view addSubview:self.pageView];

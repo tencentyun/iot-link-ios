@@ -47,7 +47,7 @@ static NSInteger maxNumber = 100;
 #pragma mark privateMethods
 - (void)setupUI{
     self.view.backgroundColor = kBgColor;
-    self.title = @"意见反馈";
+    self.title = NSLocalizedString(@"feedback", @"意见反馈");
     
     UIScrollView *scroll = [[UIScrollView alloc] init];
     [self.view addSubview:scroll];
@@ -64,7 +64,7 @@ static NSInteger maxNumber = 100;
     }];
     
     UILabel *desLab = [[UILabel alloc] init];
-    desLab.text = @"意见反馈";
+    desLab.text = NSLocalizedString(@"feedback", @"意见反馈");
     desLab.textColor = kFontColor;
     desLab.font = [UIFont systemFontOfSize:16];
     [scroll addSubview:desLab];
@@ -84,7 +84,7 @@ static NSInteger maxNumber = 100;
     }];
     
     self.contextTV = [[IQTextView alloc] init];
-    _contextTV.placeholder = @"请填写您的反馈（至少10个字）";
+    _contextTV.placeholder = NSLocalizedString(@"write_feedbackMessage_more10", @"请填写您的反馈（至少10个字）");
     self.contextTV.backgroundColor = kRGBColor(245, 245, 245);
     self.contextTV.font = [UIFont wcPfRegularFontOfSize:16];
     self.contextTV.delegate = self;
@@ -106,7 +106,7 @@ static NSInteger maxNumber = 100;
     }];
     
     UILabel *desLab2 = [[UILabel alloc] init];
-    desLab2.text = @"相关截图";
+    desLab2.text = NSLocalizedString(@"print_picture", @"相关截图");
     desLab2.textColor = kFontColor;
     desLab2.font = [UIFont systemFontOfSize:16];
     [scroll addSubview:desLab2];
@@ -152,7 +152,7 @@ static NSInteger maxNumber = 100;
     
     
     UILabel *contactTipLab = [[UILabel alloc] init];
-    contactTipLab.text = @"输入有效联系方式以便开发者联系您（选填）";
+    contactTipLab.text = NSLocalizedString(@"contact_way", @"输入有效联系方式以便开发者联系您（选填）");
     contactTipLab.textColor = kFontColor;
     contactTipLab.font = [UIFont systemFontOfSize:16];
     [scroll addSubview:contactTipLab];
@@ -163,7 +163,7 @@ static NSInteger maxNumber = 100;
     
     
     self.contactTF = [[UITextField alloc] init];
-    self.contactTF.placeholder = @"手机号码/邮箱";
+    self.contactTF.placeholder = NSLocalizedString(@"phone_or_email", @"手机号码/邮箱");
     self.contactTF.backgroundColor = kRGBColor(245, 245, 245);
     self.contactTF.leftViewMode = UITextFieldViewModeAlways;
     self.contactTF.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
@@ -179,7 +179,7 @@ static NSInteger maxNumber = 100;
     
     
     self.submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.submitBtn setTitle:@"提交" forState:UIControlStateNormal];
+    [self.submitBtn setTitle:NSLocalizedString(@"commit", @"提交") forState:UIControlStateNormal];
     [self.submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.submitBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.submitBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -213,12 +213,12 @@ static NSInteger maxNumber = 100;
 - (void)submitClick:(id)sender{
     
     if (_contextTV.text.length < 10) {
-        [MBProgressHUD showMessage:@"反馈意见至少10个字" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"feedback_message_more10", @"反馈意见至少10个字")  icon:@""];
         return;
     }
     
     if (_contactTF.text.length > 50) {
-        [MBProgressHUD showMessage:@"联系方式请勿超过50字符" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"contactway_less50", @"联系方式请勿超过50字符") icon:@""];
         return;
     }
     
@@ -231,7 +231,7 @@ static NSInteger maxNumber = 100;
     
     
     [[TIoTRequestObject shared] post:AppUserFeedBack Param:@{@"Type":@"advise",@"Desc":self.contextTV.text,@"Contact":self.contactTF.hasText ? self.contactTF.text : @"",@"LogUrl":[urlArr componentsJoinedByString:@","]} success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"反馈成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"feedback_success", @"反馈成功")];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         

@@ -333,7 +333,7 @@
     if ([self.delegate respondsToSelector:@selector(onResult:)]) {
         TIoTCoreResult *result = [TIoTCoreResult new];
         result.code = 6003;
-        result.errMsg = @"udp连接失败";
+        result.errMsg = [NSString stringWithFormat:@"udp%@",NSLocalizedString(@"connect_fail", @"连接失败")];
         [self.delegate onResult:result];
     }
 }

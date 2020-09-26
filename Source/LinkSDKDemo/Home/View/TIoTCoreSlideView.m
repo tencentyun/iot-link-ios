@@ -71,7 +71,7 @@
     }];
     
     self.deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.deleteBtn setTitle:@"删除动作" forState:UIControlStateNormal];
+    [self.deleteBtn setTitle:NSLocalizedString(@"delete_action", @"删除动作") forState:UIControlStateNormal];
     [self.deleteBtn setTitleColor:kMainColor forState:UIControlStateNormal];
     self.deleteBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     self.deleteBtn.hidden = YES;
@@ -107,7 +107,7 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, CGRectGetMaxY(line.frame), kScreenWidth, 60);
-    [btn setTitle:@"确定" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [btn setTitleColor:kFontColor forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:18];
     [btn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];

@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"添加家庭";
+    self.title = NSLocalizedString(@"add_family", @"添加家庭");
     
     [self.nameL addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 //    [self setNav];
@@ -28,8 +28,8 @@
 
 - (void)setNav
 {
-    self.title = @"添加家庭";
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    self.title = NSLocalizedString(@"add_family", @"添加家庭");
+    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.leftBarButtonItem = left;
 }
 
@@ -74,7 +74,7 @@
     if (self.nameL.hasText && self.addressL.hasText) {
         
         [[TIoTCoreFamilySet shared] createFamilyWithName:self.nameL.text address:self.addressL.text success:^(id  _Nonnull responseObject) {
-            [MBProgressHUD showSuccess:@"添加成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"add_sucess", @"添加成功")];
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];
@@ -82,7 +82,7 @@
     }
     else
     {
-        [MBProgressHUD showMessage:@"请将信息填写完整" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"Complete_supplementary_information", @"请将信息填写完整") icon:@""];
     }
     
 }

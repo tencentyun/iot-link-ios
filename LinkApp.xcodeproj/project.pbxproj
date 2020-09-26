@@ -24,12 +24,18 @@
 		6D982C9724D340150080C961 /* TIoTModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9624D340150080C961 /* TIoTModifyView.m */; };
 		6D982C9A24D422DE0080C961 /* TIoTModifyPasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */; };
 		6D982C9D24D51AAC0080C961 /* TIoTModifyPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */; };
+		6D9AD45C251C7B7A004D968A /* TIoTAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DC056E824E7E8F400E06CC4 /* TIoTCustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */; };
 		6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */; };
 		6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */; };
 		6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D2A251B4449004FC023 /* Localizable.strings */; };
+		6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D3F251BB1DD004FC023 /* InfoPlist.strings */; };
+		6DCC3D43251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D45251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib */; };
+		6DCC3D4B251BB878004FC023 /* TIoTCoreAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D4D251BB878004FC023 /* TIoTCoreAddRoomVC.xib */; };
+		6DCC3D53251BB89F004FC023 /* TIoTAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D55251BB89F004FC023 /* TIoTAddRoomVC.xib */; };
+		6DCC3D5B251BB8BE004FC023 /* TIoTAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D5D251BB8BE004FC023 /* TIoTAddFamilyVC.xib */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		8E48716B237B7FFB2110FC9A /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D52DA8F938AE612B18A9EF4A /* Pods_LinkApp.framework */; };
@@ -150,7 +156,6 @@
 		ED6BA5B023C5B10700BE9EC9 /* TIoTRoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5AE23C5B10700BE9EC9 /* TIoTRoomCell.m */; };
 		ED6BA5B123C5B10700BE9EC9 /* TIoTRoomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5AF23C5B10700BE9EC9 /* TIoTRoomCell.xib */; };
 		ED6BA5B523C5B9D000BE9EC9 /* TIoTAddRoomVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5B323C5B9D000BE9EC9 /* TIoTAddRoomVC.m */; };
-		ED6BA5B623C5B9D000BE9EC9 /* TIoTAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5B423C5B9D000BE9EC9 /* TIoTAddRoomVC.xib */; };
 		ED6BA5BA23C5C10C00BE9EC9 /* TIoTRoomInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5B823C5C10C00BE9EC9 /* TIoTRoomInfoVC.m */; };
 		ED6BA5BB23C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */; };
 		ED6BA5BF23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5BD23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m */; };
@@ -184,7 +189,6 @@
 		ED800C98240CA2A50045A268 /* TIoTMessageNoticeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED800C97240CA2A50045A268 /* TIoTMessageNoticeVC.m */; };
 		ED800C9B240CACF20045A268 /* TIoTMessageChildVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED800C9A240CACF20045A268 /* TIoTMessageChildVC.m */; };
 		ED800C9F240CB2270045A268 /* TIoTAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED800C9D240CB2270045A268 /* TIoTAboutVC.m */; };
-		ED800CA0240CB2270045A268 /* TIoTAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED800C9E240CB2270045A268 /* TIoTAboutVC.xib */; };
 		ED85BE9B23C470A000DF7790 /* TIoTBaseBigBtnView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED85BE9A23C470A000DF7790 /* TIoTBaseBigBtnView.m */; };
 		ED8D1F6F242B500300900B80 /* TIoTTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8D1F6E242B500300900B80 /* TIoTTipView.m */; };
 		ED8D76C6237CEE5B00E358C9 /* wifi_type.html in Resources */ = {isa = PBXBuildFile; fileRef = ED8D76C0237CEE5B00E358C9 /* wifi_type.html */; };
@@ -204,7 +208,6 @@
 		ED9C15BA23B9AB3800CAC848 /* TIoTDeviceShareVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED9C15B823B9AB3800CAC848 /* TIoTDeviceShareVC.xib */; };
 		ED9C15C223B9C9E900CAC848 /* TIoTRepeatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED9C15C123B9C9E900CAC848 /* TIoTRepeatVC.m */; };
 		ED9C15CB23B9D71F00CAC848 /* TIoTAddFamilyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED9C15C923B9D71F00CAC848 /* TIoTAddFamilyVC.m */; };
-		ED9C15CC23B9D71F00CAC848 /* TIoTAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED9C15CA23B9D71F00CAC848 /* TIoTAddFamilyVC.xib */; };
 		ED9C15D023B9DCB700CAC848 /* TIoTFamilyInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED9C15CE23B9DCB700CAC848 /* TIoTFamilyInfoVC.m */; };
 		ED9C15D123B9DCB700CAC848 /* TIoTFamilyInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED9C15CF23B9DCB700CAC848 /* TIoTFamilyInfoVC.xib */; };
 		ED9C15D623B9DE6000CAC848 /* TIoTRoomsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED9C15D423B9DE6000CAC848 /* TIoTRoomsVC.m */; };
@@ -236,7 +239,6 @@
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
 		F4833EC724E29BC20033FAB2 /* TIoTLogTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */; };
 		F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */; };
-		F4C5DE0B24A07E3E0098F18B /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */; };
 		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
 		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
@@ -263,7 +265,6 @@
 		F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75024938EBD005D3396 /* FeedbackVC.xib */; };
 		F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75324938EBD005D3396 /* TIoTCoreAddFamilyVC.m */; };
 		F4F3D7B124938EBE005D3396 /* TIoTCoreFamiliesVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75424938EBD005D3396 /* TIoTCoreFamiliesVC.xib */; };
-		F4F3D7B224938EBE005D3396 /* TIoTCoreAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */; };
 		F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75B24938EBD005D3396 /* InviteVC.m */; };
 		F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D75D24938EBD005D3396 /* TIoTCoreAddRoomVC.m */; };
 		F4F3D7B524938EBE005D3396 /* TIoTCoreFamilyInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D75F24938EBD005D3396 /* TIoTCoreFamilyInfoVC.xib */; };
@@ -271,7 +272,6 @@
 		F4F3D7B724938EBE005D3396 /* TIoTCoreFamiliesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76124938EBD005D3396 /* TIoTCoreFamiliesVC.m */; };
 		F4F3D7B824938EBE005D3396 /* TIoTCoreMemberInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */; };
 		F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76324938EBD005D3396 /* TIoTCoreRoomInfoVC.m */; };
-		F4F3D7BA24938EBE005D3396 /* TIoTCoreAddRoomVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */; };
 		F4F3D7BB24938EBE005D3396 /* TIoTCoreMemberInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */; };
 		F4F3D7BC24938EBE005D3396 /* TIoTCoreRoomInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76624938EBD005D3396 /* TIoTCoreRoomInfoVC.xib */; };
 		F4F3D7BD24938EBE005D3396 /* TIoTCoreRoomsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D76724938EBD005D3396 /* TIoTCoreRoomsVC.xib */; };
@@ -368,6 +368,9 @@
 		6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyPasswordVC.m; sourceTree = "<group>"; };
 		6D982C9B24D51AAC0080C961 /* TIoTModifyPasswordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyPasswordView.h; sourceTree = "<group>"; };
 		6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyPasswordView.m; sourceTree = "<group>"; };
+		6D9AD45D251C7B7A004D968A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAboutVC.xib; sourceTree = "<group>"; };
+		6D9AD461251C7B7E004D968A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAboutVC.strings; sourceTree = "<group>"; };
+		6D9AD463251C7B82004D968A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAboutVC.strings"; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DC056E624E7E8F400E06CC4 /* TIoTCustomActionSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomActionSheet.h; sourceTree = "<group>"; };
 		6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomActionSheet.m; sourceTree = "<group>"; };
@@ -377,6 +380,21 @@
 		6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseRegionVC.m; sourceTree = "<group>"; };
 		6DCC3D2B251B4449004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6DCC3D2E251B4459004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6DCC3D3E251BB1DD004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6DCC3D41251BB1E1004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		6DCC3D44251BB7C2004FC023 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTCoreAddFamilyVC.xib; sourceTree = "<group>"; };
+		6DCC3D48251BB7C6004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTCoreAddFamilyVC.strings; sourceTree = "<group>"; };
+		6DCC3D4A251BB7C7004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTCoreAddFamilyVC.strings"; sourceTree = "<group>"; };
+		6DCC3D4C251BB878004FC023 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTCoreAddRoomVC.xib; sourceTree = "<group>"; };
+		6DCC3D50251BB87A004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTCoreAddRoomVC.strings; sourceTree = "<group>"; };
+		6DCC3D52251BB87B004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTCoreAddRoomVC.strings"; sourceTree = "<group>"; };
+		6DCC3D54251BB89F004FC023 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAddRoomVC.xib; sourceTree = "<group>"; };
+		6DCC3D58251BB8A2004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAddRoomVC.strings; sourceTree = "<group>"; };
+		6DCC3D5A251BB8A3004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAddRoomVC.strings"; sourceTree = "<group>"; };
+		6DCC3D5C251BB8BE004FC023 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAddFamilyVC.xib; sourceTree = "<group>"; };
+		6DCC3D60251BB8BF004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAddFamilyVC.strings; sourceTree = "<group>"; };
+		6DCC3D63251BB8C1004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAddFamilyVC.strings"; sourceTree = "<group>"; };
+		6DCC3D65251C3485004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
@@ -612,7 +630,6 @@
 		ED6BA5AF23C5B10700BE9EC9 /* TIoTRoomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTRoomCell.xib; sourceTree = "<group>"; };
 		ED6BA5B223C5B9D000BE9EC9 /* TIoTAddRoomVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAddRoomVC.h; sourceTree = "<group>"; };
 		ED6BA5B323C5B9D000BE9EC9 /* TIoTAddRoomVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAddRoomVC.m; sourceTree = "<group>"; };
-		ED6BA5B423C5B9D000BE9EC9 /* TIoTAddRoomVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTAddRoomVC.xib; sourceTree = "<group>"; };
 		ED6BA5B723C5C10C00BE9EC9 /* TIoTRoomInfoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRoomInfoVC.h; sourceTree = "<group>"; };
 		ED6BA5B823C5C10C00BE9EC9 /* TIoTRoomInfoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRoomInfoVC.m; sourceTree = "<group>"; };
 		ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTRoomInfoVC.xib; sourceTree = "<group>"; };
@@ -671,7 +688,6 @@
 		ED800C9A240CACF20045A268 /* TIoTMessageChildVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMessageChildVC.m; sourceTree = "<group>"; };
 		ED800C9C240CB2270045A268 /* TIoTAboutVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAboutVC.h; sourceTree = "<group>"; };
 		ED800C9D240CB2270045A268 /* TIoTAboutVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAboutVC.m; sourceTree = "<group>"; };
-		ED800C9E240CB2270045A268 /* TIoTAboutVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTAboutVC.xib; sourceTree = "<group>"; };
 		ED85BE9923C470A000DF7790 /* TIoTBaseBigBtnView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTBaseBigBtnView.h; sourceTree = "<group>"; };
 		ED85BE9A23C470A000DF7790 /* TIoTBaseBigBtnView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTBaseBigBtnView.m; sourceTree = "<group>"; };
 		ED8D1F6D242B500300900B80 /* TIoTTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTipView.h; sourceTree = "<group>"; };
@@ -702,7 +718,6 @@
 		ED9C15C123B9C9E900CAC848 /* TIoTRepeatVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRepeatVC.m; sourceTree = "<group>"; };
 		ED9C15C823B9D71F00CAC848 /* TIoTAddFamilyVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAddFamilyVC.h; sourceTree = "<group>"; };
 		ED9C15C923B9D71F00CAC848 /* TIoTAddFamilyVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAddFamilyVC.m; sourceTree = "<group>"; };
-		ED9C15CA23B9D71F00CAC848 /* TIoTAddFamilyVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTAddFamilyVC.xib; sourceTree = "<group>"; };
 		ED9C15CD23B9DCB700CAC848 /* TIoTFamilyInfoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTFamilyInfoVC.h; sourceTree = "<group>"; };
 		ED9C15CE23B9DCB700CAC848 /* TIoTFamilyInfoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTFamilyInfoVC.m; sourceTree = "<group>"; };
 		ED9C15CF23B9DCB700CAC848 /* TIoTFamilyInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTFamilyInfoVC.xib; sourceTree = "<group>"; };
@@ -748,7 +763,6 @@
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
 		F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLogTask.swift; sourceTree = "<group>"; };
 		F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAppUtil.swift; sourceTree = "<group>"; };
-		F4C5DE0A24A07E3E0098F18B /* AppLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLaunch.png; sourceTree = "<group>"; };
 		F4C5DE0D24A0B7C40098F18B /* app-config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "app-config.json"; sourceTree = "<group>"; };
 		F4C5DE0F24A0B7FE0098F18B /* TIoTAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppConfig.h; sourceTree = "<group>"; };
 		F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTAppConfig.m; sourceTree = "<group>"; };
@@ -799,7 +813,6 @@
 		F4F3D75424938EBD005D3396 /* TIoTCoreFamiliesVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreFamiliesVC.xib; sourceTree = "<group>"; };
 		F4F3D75524938EBD005D3396 /* TIoTCoreAddRoomVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreAddRoomVC.h; sourceTree = "<group>"; };
 		F4F3D75624938EBD005D3396 /* TIoTCoreFamiliesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamiliesVC.h; sourceTree = "<group>"; };
-		F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreAddFamilyVC.xib; sourceTree = "<group>"; };
 		F4F3D75824938EBD005D3396 /* TIoTCoreMemberInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreMemberInfoVC.h; sourceTree = "<group>"; };
 		F4F3D75924938EBD005D3396 /* TIoTCoreRoomInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreRoomInfoVC.h; sourceTree = "<group>"; };
 		F4F3D75A24938EBD005D3396 /* TIoTCoreFamilyInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTCoreFamilyInfoVC.h; sourceTree = "<group>"; };
@@ -812,7 +825,6 @@
 		F4F3D76124938EBD005D3396 /* TIoTCoreFamiliesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreFamiliesVC.m; sourceTree = "<group>"; };
 		F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreMemberInfoVC.xib; sourceTree = "<group>"; };
 		F4F3D76324938EBD005D3396 /* TIoTCoreRoomInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreRoomInfoVC.m; sourceTree = "<group>"; };
-		F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreAddRoomVC.xib; sourceTree = "<group>"; };
 		F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTCoreMemberInfoVC.m; sourceTree = "<group>"; };
 		F4F3D76624938EBD005D3396 /* TIoTCoreRoomInfoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreRoomInfoVC.xib; sourceTree = "<group>"; };
 		F4F3D76724938EBD005D3396 /* TIoTCoreRoomsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TIoTCoreRoomsVC.xib; sourceTree = "<group>"; };
@@ -932,6 +944,7 @@
 				6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */,
 				6D4E1E81251899ED003BE1D9 /* aboutMe_logo.png */,
 				6DCC3D2A251B4449004FC023 /* Localizable.strings */,
+				6DCC3D3F251BB1DD004FC023 /* InfoPlist.strings */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -1132,7 +1145,7 @@
 				ED9C15D223B9DE1C00CAC848 /* Family */,
 				ED800C9C240CB2270045A268 /* TIoTAboutVC.h */,
 				ED800C9D240CB2270045A268 /* TIoTAboutVC.m */,
-				ED800C9E240CB2270045A268 /* TIoTAboutVC.xib */,
+				6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */,
 				EDAF9844241F7F1F0049859F /* TIoTShareDevicesVC.h */,
 				EDAF9845241F7F1F0049859F /* TIoTShareDevicesVC.m */,
 				EDAF9846241F7F1F0049859F /* TIoTShareDevicesVC.xib */,
@@ -1712,7 +1725,7 @@
 				EDB2F91523B59A3100CDD4A6 /* TIoTFamiliesVC.xib */,
 				ED9C15C823B9D71F00CAC848 /* TIoTAddFamilyVC.h */,
 				ED9C15C923B9D71F00CAC848 /* TIoTAddFamilyVC.m */,
-				ED9C15CA23B9D71F00CAC848 /* TIoTAddFamilyVC.xib */,
+				6DCC3D5D251BB8BE004FC023 /* TIoTAddFamilyVC.xib */,
 				ED9C15CD23B9DCB700CAC848 /* TIoTFamilyInfoVC.h */,
 				ED9C15CE23B9DCB700CAC848 /* TIoTFamilyInfoVC.m */,
 				ED9C15CF23B9DCB700CAC848 /* TIoTFamilyInfoVC.xib */,
@@ -1721,7 +1734,7 @@
 				ED9C15D523B9DE6000CAC848 /* TIoTRoomsVC.xib */,
 				ED6BA5B223C5B9D000BE9EC9 /* TIoTAddRoomVC.h */,
 				ED6BA5B323C5B9D000BE9EC9 /* TIoTAddRoomVC.m */,
-				ED6BA5B423C5B9D000BE9EC9 /* TIoTAddRoomVC.xib */,
+				6DCC3D55251BB89F004FC023 /* TIoTAddRoomVC.xib */,
 				ED6BA5B723C5C10C00BE9EC9 /* TIoTRoomInfoVC.h */,
 				ED6BA5B823C5C10C00BE9EC9 /* TIoTRoomInfoVC.m */,
 				ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */,
@@ -1905,10 +1918,10 @@
 				F4F3D76024938EBD005D3396 /* InviteVC.xib */,
 				F4F3D75524938EBD005D3396 /* TIoTCoreAddRoomVC.h */,
 				F4F3D75D24938EBD005D3396 /* TIoTCoreAddRoomVC.m */,
-				F4F3D76424938EBD005D3396 /* TIoTCoreAddRoomVC.xib */,
+				6DCC3D4D251BB878004FC023 /* TIoTCoreAddRoomVC.xib */,
 				F4F3D75E24938EBD005D3396 /* TIoTCoreAddFamilyVC.h */,
 				F4F3D75324938EBD005D3396 /* TIoTCoreAddFamilyVC.m */,
-				F4F3D75724938EBD005D3396 /* TIoTCoreAddFamilyVC.xib */,
+				6DCC3D45251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib */,
 				F4F3D75824938EBD005D3396 /* TIoTCoreMemberInfoVC.h */,
 				F4F3D76524938EBD005D3396 /* TIoTCoreMemberInfoVC.m */,
 				F4F3D76224938EBD005D3396 /* TIoTCoreMemberInfoVC.xib */,
@@ -2096,8 +2109,9 @@
 				ED78229E241B70FA00919FF6 /* TIoTMessageText2Cell.xib in Resources */,
 				ED9C15B523B998DB00CAC848 /* TIoTAddTimerVC.xib in Resources */,
 				ED9C15BA23B9AB3800CAC848 /* TIoTDeviceShareVC.xib in Resources */,
-				ED9C15CC23B9D71F00CAC848 /* TIoTAddFamilyVC.xib in Resources */,
-				ED6BA5B623C5B9D000BE9EC9 /* TIoTAddRoomVC.xib in Resources */,
+				6DCC3D5B251BB8BE004FC023 /* TIoTAddFamilyVC.xib in Resources */,
+				6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */,
+				6DCC3D53251BB89F004FC023 /* TIoTAddRoomVC.xib in Resources */,
 				ED932E4523BB286000F73F35 /* TIoTEnumItem.xib in Resources */,
 				ED67E58D23C30B1E00BE7628 /* TIoTLongCell.xib in Resources */,
 				ED8D76C6237CEE5B00E358C9 /* wifi_type.html in Resources */,
@@ -2108,7 +2122,7 @@
 				6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */,
 				ED9C15D723B9DE6000CAC848 /* TIoTRoomsVC.xib in Resources */,
 				ED8D76C8237CEE5B00E358C9 /* img_2.png in Resources */,
-				ED800CA0240CB2270045A268 /* TIoTAboutVC.xib in Resources */,
+				6D9AD45C251C7B7A004D968A /* TIoTAboutVC.xib in Resources */,
 				ED6BA5BB23C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib in Resources */,
 				ED6BA5B123C5B10700BE9EC9 /* TIoTRoomCell.xib in Resources */,
 				ED8D76CA237CEE5B00E358C9 /* img_4.png in Resources */,
@@ -2126,7 +2140,7 @@
 				F4F3D7D824938EBE005D3396 /* Main.storyboard in Resources */,
 				F4F3D7D324938EBE005D3396 /* LoginVC.xib in Resources */,
 				F4F3D7B824938EBE005D3396 /* TIoTCoreMemberInfoVC.xib in Resources */,
-				F4F3D7BA24938EBE005D3396 /* TIoTCoreAddRoomVC.xib in Resources */,
+				6DCC3D4B251BB878004FC023 /* TIoTCoreAddRoomVC.xib in Resources */,
 				F4F3D7BD24938EBE005D3396 /* TIoTCoreRoomsVC.xib in Resources */,
 				F4F3D7B524938EBE005D3396 /* TIoTCoreFamilyInfoVC.xib in Resources */,
 				F4F3D7B124938EBE005D3396 /* TIoTCoreFamiliesVC.xib in Resources */,
@@ -2140,7 +2154,7 @@
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */,
 				F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */,
-				F4F3D7B224938EBE005D3396 /* TIoTCoreAddFamilyVC.xib in Resources */,
+				6DCC3D43251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib in Resources */,
 				F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */,
 				F4F3D7C624938EBE005D3396 /* TIoTCoreAddTimerVC.xib in Resources */,
 				F4F3D7A624938EBE005D3396 /* TIoTCoreFamilyMemberCell.xib in Resources */,
@@ -2534,6 +2548,16 @@
 			name = ConfigHardware_WiFi.png;
 			sourceTree = "<group>";
 		};
+		6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D9AD45D251C7B7A004D968A /* Base */,
+				6D9AD461251C7B7E004D968A /* en */,
+				6D9AD463251C7B82004D968A /* zh-Hans */,
+			);
+			name = TIoTAboutVC.xib;
+			sourceTree = "<group>";
+		};
 		6DCC3D2A251B4449004FC023 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2541,6 +2565,55 @@
 				6DCC3D2E251B4459004FC023 /* zh-Hans */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		6DCC3D3F251BB1DD004FC023 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DCC3D3E251BB1DD004FC023 /* en */,
+				6DCC3D41251BB1E1004FC023 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6DCC3D45251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DCC3D44251BB7C2004FC023 /* Base */,
+				6DCC3D48251BB7C6004FC023 /* en */,
+				6DCC3D4A251BB7C7004FC023 /* zh-Hans */,
+			);
+			name = TIoTCoreAddFamilyVC.xib;
+			sourceTree = "<group>";
+		};
+		6DCC3D4D251BB878004FC023 /* TIoTCoreAddRoomVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DCC3D4C251BB878004FC023 /* Base */,
+				6DCC3D50251BB87A004FC023 /* en */,
+				6DCC3D52251BB87B004FC023 /* zh-Hans */,
+			);
+			name = TIoTCoreAddRoomVC.xib;
+			sourceTree = "<group>";
+		};
+		6DCC3D55251BB89F004FC023 /* TIoTAddRoomVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DCC3D54251BB89F004FC023 /* Base */,
+				6DCC3D58251BB8A2004FC023 /* en */,
+				6DCC3D5A251BB8A3004FC023 /* zh-Hans */,
+			);
+			name = TIoTAddRoomVC.xib;
+			sourceTree = "<group>";
+		};
+		6DCC3D5D251BB8BE004FC023 /* TIoTAddFamilyVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DCC3D5C251BB8BE004FC023 /* Base */,
+				6DCC3D60251BB8BF004FC023 /* en */,
+				6DCC3D63251BB8C1004FC023 /* zh-Hans */,
+			);
+			name = TIoTAddFamilyVC.xib;
 			sourceTree = "<group>";
 		};
 		D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */ = {
@@ -2557,6 +2630,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F4F3D53524935BD3005D3396 /* Base */,
+				6DCC3D65251C3485004FC023 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -2716,7 +2790,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2776,7 +2850,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
+				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2797,7 +2871,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2857,7 +2931,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
+				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

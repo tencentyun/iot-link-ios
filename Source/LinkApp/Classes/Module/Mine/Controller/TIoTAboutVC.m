@@ -28,7 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.showLastestVerion = NO;
-    self.title = @"关于我们";
+    self.title = NSLocalizedString(@"about_me", @"关于我们");
     
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [info objectForKey:@"CFBundleShortVersionString"];
@@ -41,7 +41,7 @@
 
 - (IBAction)privacyPolicy:(UITapGestureRecognizer *)sender {
     TIoTWebVC *vc = [TIoTWebVC new];
-    vc.title = @"隐私政策";
+    vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
     vc.urlPath = PrivacyProtocolURL;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -49,7 +49,7 @@
 - (IBAction)protocol:(UITapGestureRecognizer *)sender {
     
     TIoTWebVC *vc = [TIoTWebVC new];
-    vc.title = @"用户协议";
+    vc.title =  @"用户协议";
     vc.urlPath = ServiceProtocolURl;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -59,7 +59,7 @@
     if (self.showLastestVerion && self.versionInfo) {
         [self showNewVersionViewWithDict:self.versionInfo];
     } else {
-        [MBProgressHUD showError:@"您的应用为最新版本" toView:self.view];
+        [MBProgressHUD showError:NSLocalizedString(@"no_need_upgrade", @"您的应用为最新版本")  toView:self.view];
     }
 }
 
@@ -84,7 +84,7 @@
                 NSString *theVersion = [versionInfo objectForKey:@"AppVersion"];
                 if (theVersion.length && [self isTheVersion:theVersion laterThanLocalVersion:appVersion]) {
                     self.showLastestVerion = YES;
-                    self.versionLab.text = [NSString stringWithFormat:@"当前版本\n%@",appVersion];
+                    self.versionLab.text = [NSString stringWithFormat:@"%@\n%@",NSLocalizedString(@"current_version", @"当期版本"),appVersion];
                 }
             }
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {

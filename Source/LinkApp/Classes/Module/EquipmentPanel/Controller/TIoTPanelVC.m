@@ -93,7 +93,7 @@ static NSString *itemId3 = @"i_ooo454";
     }
     else
     {
-        self.title = @"控制面板";
+        self.title = NSLocalizedString(@"control_panel", @"控制面板");
     }
 }
 
@@ -233,7 +233,7 @@ static NSString *itemId3 = @"i_ooo454";
                 [self.stackView addArrangedSubview:vv];
                 
                 UILabel *barLab = [[UILabel alloc] init];
-                barLab.text = @"定时";
+                barLab.text = NSLocalizedString(@"timer", @"定时");
                 barLab.font = [UIFont systemFontOfSize:10];
                 barLab.textColor = kFontColor;
                 [vv addSubview:barLab];
@@ -621,7 +621,7 @@ static NSString *itemId3 = @"i_ooo454";
     else
     {
         TIoTLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
-        [cell setShowInfo:@{@"name":@"云端定时",@"content":@""}];
+        [cell setShowInfo:@{@"name":NSLocalizedString(@"cloud_timing", @"云端定时"),@"content":@""}];
         [cell setThemeStyle:self.themeStyle];
         cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
             [self reportDeviceData:uploadInfo];

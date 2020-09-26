@@ -65,7 +65,7 @@
     }];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:@"家庭管理" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"family_manager", @"家庭管理") forState:UIControlStateNormal];
     [btn setTitleColor:kMainColor forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:18];
     [btn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];

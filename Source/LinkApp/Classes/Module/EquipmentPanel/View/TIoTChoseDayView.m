@@ -32,7 +32,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [self.backBtn setTitle:NSLocalizedString(@"back", @"返回") forState:UIControlStateNormal];
     [self.backBtn addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
     self.backBtn.backgroundColor = [UIColor greenColor];
     [self addSubview:self.backBtn];
@@ -44,7 +44,7 @@
     }];
     
     self.sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sureBtn setTitle:@"确认" forState:UIControlStateNormal];
+    [self.sureBtn setTitle:NSLocalizedString(@"verify", @"确认") forState:UIControlStateNormal];
     [self.sureBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
     self.sureBtn.backgroundColor = [UIColor blueColor];
     [self addSubview:self.sureBtn];
@@ -107,13 +107,13 @@
 - (NSArray *)dataArr{
     if (_dataArr == nil) {
         _dataArr = @[
-                     @{@"title":@"星期一",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期二",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期三",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期四",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期五",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期六",@"id":@"",@"isChose":@""},
-                     @{@"title":@"星期日",@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_monday", @"星期一") ,@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_tuesday", @"星期二"),@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_wednesday", @"星期三"),@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_thursday", @"星期四"),@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_friday", @"星期五"),@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_saturday", @"星期六"),@"id":@"",@"isChose":@""},
+                     @{@"title":NSLocalizedString(@"choseDayView_sunday", @"星期日"),@"id":@"",@"isChose":@""},
                      ];
     }
     return _dataArr;

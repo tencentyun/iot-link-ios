@@ -48,7 +48,7 @@
     }];
     
     self.saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    [self.saveBtn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
     [self.saveBtn addTarget:self action:@selector(saveClick:) forControlEvents:UIControlEventTouchUpInside];
     self.saveBtn.backgroundColor = [UIColor blueColor];
     [self.whiteView addSubview:self.saveBtn];
@@ -59,7 +59,7 @@
     }];
     
     self.actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.actionBtn setTitle:@"设备动作" forState:UIControlStateNormal];
+    [self.actionBtn setTitle: NSLocalizedString(@"device_action", @"设备动作") forState:UIControlStateNormal];
     [self.actionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.actionBtn addTarget:self action:@selector(actionClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.whiteView addSubview:self.actionBtn];
@@ -70,7 +70,7 @@
     }];
     
     self.repeatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.repeatBtn setTitle:@"重复" forState:UIControlStateNormal];
+    [self.repeatBtn setTitle:NSLocalizedString(@"repeat", @"重复") forState:UIControlStateNormal];
     [self.repeatBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.repeatBtn addTarget:self action:@selector(repeatClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.whiteView addSubview:self.repeatBtn];
@@ -88,7 +88,7 @@
     }];
     
     UILabel *titleLab = [[UILabel alloc] init];
-    titleLab.text = @"添加定时";
+    titleLab.text = NSLocalizedString(@"add_timer", @"添加定时");
     [self.whiteView addSubview:titleLab];
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.datePicker.mas_top);

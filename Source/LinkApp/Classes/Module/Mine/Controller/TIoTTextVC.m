@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"帮助";
+    self.title = NSLocalizedString(@"help", @"帮助");
     self.view.backgroundColor = kBgColor;
     
     if ([self.content isEqualToString:@"web"]) {

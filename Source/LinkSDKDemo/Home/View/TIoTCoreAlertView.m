@@ -68,7 +68,7 @@
     }];
     
     UILabel *name = [[UILabel alloc] init];
-    name.text = @"房间名称";
+    name.text = NSLocalizedString(@"room_name_tip", @"房间名称");
     name.textColor = kFontColor;
     name.font = [UIFont boldSystemFontOfSize:20];
     [bgView addSubview:name];
@@ -136,7 +136,7 @@
     }];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:@"取消" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [btn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kRGBColor(230, 230, 230)];
@@ -146,7 +146,7 @@
     self.cancleBtn = btn;
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn2 setTitle:@"确定" forState:UIControlStateNormal];
+    [btn2 setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn2 setBackgroundColor:kMainColor];

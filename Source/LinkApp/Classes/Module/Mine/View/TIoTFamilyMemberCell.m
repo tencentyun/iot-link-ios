@@ -25,7 +25,7 @@
 {
     [self.headerImg setImageWithURLStr:info[@"Avatar"] placeHolder:@"userDefalut"];
     self.nameL.text = info[@"NickName"];
-    self.authorL.text = [info[@"Role"] integerValue] == 1 ? @"所有者" : @"成员";
+    self.authorL.text = [info[@"Role"] integerValue] == 1 ? NSLocalizedString(@"role_owner", @"所有者") : NSLocalizedString(@"role_member", @"成员") ;
 }
 
 @end

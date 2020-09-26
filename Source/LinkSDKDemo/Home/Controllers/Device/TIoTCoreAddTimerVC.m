@@ -33,7 +33,7 @@ static NSString *cellId = @"rv23244";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"添加定时";
+    self.title = NSLocalizedString(@"add_timer", @"添加定时");
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTCoreTimerCell" bundle:nil] forCellReuseIdentifier:cellId];
     
@@ -69,8 +69,8 @@ static NSString *cellId = @"rv23244";
     
     
     NSMutableArray *firstSection = [NSMutableArray array];
-    [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"name":@"名称设置",@"content":timeName,@"isAdd":@"0"}]];
-    [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"name":@"重复",@"content":repeatContent,@"isAdd":@"0"}]];
+    [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"name":NSLocalizedString(@"timing_name", @"名称设置") ,@"content":timeName,@"isAdd":@"0"}]];
+    [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"name":NSLocalizedString(@"repeat", @"重复"),@"content":repeatContent,@"isAdd":@"0"}]];
     [self.dataArr addObject:firstSection];
     
     if (self.actions) {
@@ -118,7 +118,7 @@ static NSString *cellId = @"rv23244";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"保存" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];
@@ -189,7 +189,7 @@ static NSString *cellId = @"rv23244";
     
     
     [[TIoTCoreDeviceSet shared] modifyTimerWithTimerId:self.timerInfo[@"TimerId"] productId:self.productId deviceName:self.deviceName timerName:self.timerName days:self.repeatData timePoint:self.picker.date repeat:1 data:self.publishData success:^(id  _Nonnull responseObject) {
-        [MBProgressHUD showSuccess:@"修改成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
@@ -234,7 +234,7 @@ static NSString *cellId = @"rv23244";
         action.backgroundColor = [UIColor whiteColor];
         
         UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, kScreenWidth - 40, 20)];
-        lab.text = @"设备动作";
+        lab.text =  NSLocalizedString(@"device_action", @"设备动作");
         [action addSubview:lab];
         [view addSubview:action];
     }
@@ -251,7 +251,7 @@ static NSString *cellId = @"rv23244";
                 NSMutableDictionary *dic = self.dataArr[0][0];
                 
                 TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-                [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
+                [av alertWithTitle:NSLocalizedString(@"timing_name", @"名称设置")  message:NSLocalizedString(@"less10characters", @"10字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
                 av.maxLength = 10;
                 av.defaultText = dic[@"content"];
                 av.doneAction = ^(NSString * _Nonnull text) {
@@ -376,13 +376,13 @@ static NSString *cellId = @"rv23244";
     NSString *con = @"";
     
     if ([repeats[1] boolValue] == NO && [repeats[2] boolValue] == NO && [repeats[3] boolValue] == NO && [repeats[4] boolValue] == NO && [repeats[5] boolValue] == NO && [repeats[6] boolValue] && [repeats[0] boolValue]) {
-        con = @"周末";
+        con = NSLocalizedString(@"weekend", @"周末");
     }
     else if ([repeats[1] boolValue] && [repeats[2] boolValue] && [repeats[3] boolValue] && [repeats[4] boolValue] && [repeats[5] boolValue] && [repeats[6] boolValue] == NO && [repeats[0] boolValue] == NO) {
-        con = @"工作日";
+        con =NSLocalizedString(@"work_day", @"工作日");
     }
     else if ([repeats[1] boolValue] && [repeats[2] boolValue] && [repeats[3] boolValue] && [repeats[4] boolValue] && [repeats[5] boolValue] && [repeats[6] boolValue] && [repeats[0] boolValue]) {
-        con = @"每天";
+        con = NSLocalizedString(@"everyday", @"每天");
     }
     else
     {
@@ -391,25 +391,25 @@ static NSString *cellId = @"rv23244";
                 NSString *weakday = @"";
                 switch (i) {
                     case 0:
-                        weakday = @"周日";
+                        weakday = NSLocalizedString(@"sunday", @"周日");
                         break;
                     case 1:
-                        weakday = @"周一";
+                        weakday = NSLocalizedString(@"monday", @"周一") ;
                         break;
                     case 2:
-                        weakday = @"周二";
+                        weakday = NSLocalizedString(@"tuesday", @"周二");
                         break;
                     case 3:
-                        weakday = @"周三";
+                        weakday = NSLocalizedString(@"wednesday", @"周三");
                         break;
                     case 4:
-                        weakday = @"周四";
+                        weakday = NSLocalizedString(@"thursday", @"周四");
                         break;
                     case 5:
-                        weakday = @"周五";
+                        weakday = NSLocalizedString(@"friday", @"周五");
                         break;
                     case 6:
-                        weakday = @"周六";
+                        weakday = NSLocalizedString(@"saturday", @"周六");
                         break;
                         
                     default:
@@ -431,13 +431,13 @@ static NSString *cellId = @"rv23244";
     NSString *con = @"";
     
     if ((BOOL)(repeats[1] - '0') == NO && (BOOL)(repeats[2] - '0') == NO && (BOOL)(repeats[3] - '0') == NO && (BOOL)(repeats[4] - '0') == NO && (BOOL)(repeats[5] - '0') == NO && (BOOL)(repeats[6] - '0') && (BOOL)(repeats[0] - '0')) {
-        con = @"周末";
+        con = NSLocalizedString(@"weekend", @"周末");
     }
     else if ((BOOL)(repeats[1] - '0') && (BOOL)(repeats[2] - '0') && (BOOL)(repeats[3] - '0') && (BOOL)(repeats[4] - '0') && (BOOL)(repeats[5] - '0') && (BOOL)(repeats[6] - '0') == NO && (BOOL)(repeats[0] - '0') == NO) {
-        con = @"工作日";
+        con = NSLocalizedString(@"work_day", @"工作日");
     }
     else if ((BOOL)(repeats[1] - '0') && (BOOL)(repeats[2] - '0') && (BOOL)(repeats[3] - '0') && (BOOL)(repeats[4] - '0') && (BOOL)(repeats[5] - '0') && (BOOL)(repeats[6] - '0') && (BOOL)(repeats[0] - '0')) {
-        con = @"每天";
+        con = NSLocalizedString(@"everyday", @"每天");
     }
     else
     {
@@ -447,25 +447,25 @@ static NSString *cellId = @"rv23244";
                 NSString *weakday = @"";
                 switch (i) {
                     case 0:
-                        weakday = @"周日";
+                        weakday = NSLocalizedString(@"sunday", @"周日");
                         break;
                     case 1:
-                        weakday = @"周一";
+                        weakday = NSLocalizedString(@"monday", @"周一") ;
                         break;
                     case 2:
-                        weakday = @"周二";
+                        weakday = NSLocalizedString(@"tuesday", @"周二");
                         break;
                     case 3:
-                        weakday = @"周三";
+                        weakday = NSLocalizedString(@"wednesday", @"周三");
                         break;
                     case 4:
-                        weakday = @"周四";
+                        weakday = NSLocalizedString(@"thursday", @"周四");
                         break;
                     case 5:
-                        weakday = @"周五";
+                        weakday = NSLocalizedString(@"friday", @"周五");
                         break;
                     case 6:
-                        weakday = @"周六";
+                        weakday = NSLocalizedString(@"saturday", @"周六");
                         break;
 
                     default:

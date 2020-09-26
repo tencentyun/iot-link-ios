@@ -116,7 +116,7 @@
 - (UILabel *)cancelTitle {
     if (!_cancelTitle) {
         _cancelTitle = [[UILabel alloc]init];
-        [self setContentLabelFormatWithLabel:_cancelTitle contentString:@"注销须知" textColour:nil textFont:[UIFont wcPfBoldFontOfSize:24]];
+        [self setContentLabelFormatWithLabel:_cancelTitle contentString:NSLocalizedString(@"logout_must_know", @"注销须知") textColour:nil textFont:[UIFont wcPfBoldFontOfSize:24]];
     }
     return _cancelTitle;
 }
@@ -125,7 +125,7 @@
     if (!_clearContentPart) {
         _clearContentPart = [[UILabel alloc]init];
         _clearContentPart.numberOfLines = 0;
-        [self setContentLabelFormatWithLabel:_clearContentPart contentString:@"请您确保账号处于安全状态下且是本人申请注销。注销账号是不可恢复的操作，账号被注销后，您账号下的所有信息、数据将被永久删除，无法找回。为避免您的损失，请谨慎进行账号注销操作。" textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
+        [self setContentLabelFormatWithLabel:_clearContentPart contentString:NSLocalizedString(@"logout_text_for_attention1", @"请您确保账号处于安全状态下且是本人申请注销。注销账号是不可恢复的操作，账号被注销后，您账号下的所有信息、数据将被永久删除，无法找回。为避免您的损失，请谨慎进行账号注销操作。") textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
     }
     return _clearContentPart;
 }
@@ -152,7 +152,7 @@
     if (!_endContentPart) {
         _endContentPart = [[UILabel alloc]init];
         _endContentPart.numberOfLines = 0;
-        [self setContentLabelFormatWithLabel:_endContentPart contentString:@"注：如腾讯连连账号是通过第三方软件（微信） 进行登录的，您所注销的账号仅影响腾讯连连内的账号与数据，并不会影响您在微信的账号信息。" textColour:nil textFont:nil];
+        [self setContentLabelFormatWithLabel:_endContentPart contentString: NSLocalizedString(@"logout_text_for_attention3", @"注：如腾讯连连账号是通过第三方软件（微信） 进行登录的，您所注销的账号仅影响腾讯连连内的账号与数据，并不会影响您在微信的账号信息。")  textColour:nil textFont:nil];
     }
     return _endContentPart;
 }
@@ -188,7 +188,7 @@
         }];
         
         UILabel *cancelProtocolLabel = [[UILabel alloc]init];
-        [self setContentLabelFormatWithLabel:cancelProtocolLabel contentString:@"我已了解" textColour:nil textFont:nil];
+        [self setContentLabelFormatWithLabel:cancelProtocolLabel contentString:NSLocalizedString(@"already_known", @"我已了解") textColour:nil textFont:nil];
         [_bottomView addSubview:cancelProtocolLabel];
         [cancelProtocolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.protocolButton.mas_centerY);
@@ -196,7 +196,7 @@
         }];
         
         UIButton *protocolDetailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [protocolDetailBtn setTitle:@"《腾讯连连账号注销协议》" forState:UIControlStateNormal];
+        [protocolDetailBtn setTitle:NSLocalizedString(@"tencentll_account_logout_agreement", @"《腾讯连连账号注销协议》") forState:UIControlStateNormal];
         [protocolDetailBtn setTitleColor:kMainColor forState:UIControlStateNormal];
         [protocolDetailBtn addTarget:self action:@selector(cancelProtocolClick) forControlEvents:UIControlEventTouchUpInside];
         protocolDetailBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -243,7 +243,7 @@
         UIImage *backImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#FD8989"],[UIColor colorWithHexString:@"#FA5151"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
         [_cancelButton setBackgroundImage:backImage forState:UIControlStateNormal];
         _cancelButton.enabled = NO;
-        [_cancelButton setTitle:@"注销" forState:UIControlStateNormal];
+        [_cancelButton setTitle:NSLocalizedString(@"logout_text", @"注销")  forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _cancelButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         _cancelButton.layer.cornerRadius = 20;
@@ -281,7 +281,7 @@
 - (void)cancelAccountClick {
     
     TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
-    [modifyAlertView alertWithTitle:@"确定注销账号吗" message:@"注销后，此账户下的所有用户数据也将被永久删除" cancleTitlt:@"取消" doneTitle:@"确认"];
+    [modifyAlertView alertWithTitle:NSLocalizedString(@"confirm_to_cancel_account_title", @"确定注销账号吗") message:NSLocalizedString(@"confirm_to_cancel_account_content", @"注销后，此账户下的所有用户数据也将被永久删除")  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
     modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         
         [self cacelAccountPostMehtod];
@@ -295,7 +295,7 @@
     [[TIoTRequestObject shared] post:AppUserCancelAccount Param:@{} success:^(id responseObject) {
         
          TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:[UIImage imageNamed:@"success_icon"]];
-        [modifyAlertView alertWithTitle:@"账号已申请注销" message:@"如需撤销，请在7日内登录腾讯连连" cancleTitlt:@"" doneTitle:@"确认"];
+        [modifyAlertView alertWithTitle:NSLocalizedString(@"cancel_account_request_success_title", @"账号已申请注销")  message:NSLocalizedString(@"cancel_account_request_success_content", @"如需撤销，请在7日内登录腾讯连连")  cancleTitlt:@"" doneTitle:NSLocalizedString(@"verify", @"确认")];
         [modifyAlertView showSingleConfrimButton];
         modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
             

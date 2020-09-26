@@ -32,7 +32,7 @@
 @property (nonatomic, strong) NSMutableArray *categoryArr;
 @property (nonatomic, strong) NSMutableArray *productArr;
 @property (nonatomic, strong) NSMutableArray *recommendArr;
-
+@property (nonatomic, strong) NSDictionary *configData;
 @end
 
 @implementation TIoTNewAddEquipmentViewController
@@ -84,7 +84,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             TIoTWebVC *vc = [TIoTWebVC new];
-            vc.title = @"帮助中心";
+            vc.title = NSLocalizedString(@"help_center", @"帮助中心");
 
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
@@ -145,7 +145,8 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
 - (void)jumpConfigVC:(NSString *)title{
     TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
-    if ([title isEqualToString:@"智能配网"]) {
+    vc.configurationData = self.configData;
+    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
         vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
     } else {
         vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
@@ -157,9 +158,9 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 - (void)receiveChangeAddDeviceType:(NSNotification *)noti{
     NSInteger deviceType = [noti.object integerValue];
     if (deviceType == 0) {
-        [self jumpConfigVC:@"智能配网"];
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     } else if (deviceType == 1) {
-        [self jumpConfigVC:@"自助配网"];
+        [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
     }
 }
 
@@ -209,26 +210,28 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)getProductsConfig:(NSString *)productId{
-    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+//    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[@"N8DFPW6WTJ"]} success:^(id responseObject) {
         
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
             NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = [[NSDictionary alloc]initWithDictionary:config];
             WCLog(@"AppGetProductsConfig config%@", config);
             NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
             if (wifiConfTypeList.count > 0) {
                 NSString *configType = wifiConfTypeList.firstObject;
                 if ([configType isEqualToString:@"softap"]) {
-                    [self jumpConfigVC:@"自助配网"];
+                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
                     return;
                 }
             }
         }
-        [self jumpConfigVC:@"智能配网"];
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
         WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [self jumpConfigVC:@"智能配网"];
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     }];
 }
 
@@ -304,7 +307,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 120, 38)];
                 label.font = [UIFont wcPfRegularFontOfSize:14];
                 label.textColor = kRGBColor(136, 136, 136);
-                label.text = @"推荐";
+                label.text = NSLocalizedString(@"recommend", @"推荐");
                 [headerView addSubview:label];
             } else {
                 headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerId2 forIndexPath:indexPath];
@@ -351,7 +354,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         NSString *productId = dic[@"ProductId"]?:@"";
         [self getProductsConfig:productId];
     } else {
-        [self jumpConfigVC:@"智能配网"];
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     }
 }
 

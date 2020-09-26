@@ -60,9 +60,9 @@
 {
     if (!_titles) {
         _titles = @[@{@"name":@"个人信息",@"vc":@"UserInfoVC"},
-                    @{@"name":@"家庭管理",@"vc":@"TIoTCoreFamiliesVC"},
-                    @{@"name":@"消息通知",@"vc":@"MessageVC"},
-                    @{@"name":@"意见反馈",@"vc":@"FeedbackVC"}];
+                    @{@"name":NSLocalizedString(@"family_manager", @"家庭管理"),@"vc":@"TIoTCoreFamiliesVC"},
+                    @{@"name":NSLocalizedString(@"message_notification", @"消息通知"),@"vc":@"MessageVC"},
+                    @{@"name":NSLocalizedString(@"feedback", @"意见反馈"),@"vc":@"FeedbackVC"}];
     }
     return _titles;
 }

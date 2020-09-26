@@ -50,13 +50,13 @@
 
 - (IBAction)resetPassword:(id)sender {
     UIViewController *vc = [NSClassFromString(@"RegistVC") new];
-    vc.title = @"重置密码";
+    vc.title = NSLocalizedString(@"reset_password", @"重置密码");
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)regist:(id)sender {
     UIViewController *vc = [NSClassFromString(@"RegistVC") new];
-    vc.title = @"注册";
+    vc.title = NSLocalizedString(@"register", @"注册");
     [self.navigationController pushViewController:vc animated:YES];
 }
 

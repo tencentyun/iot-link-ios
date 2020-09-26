@@ -32,7 +32,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)setupUI
 {
-    self.title = @"房间管理";
+    self.title = NSLocalizedString(@"room_manager", @"房间管理");
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
@@ -43,7 +43,7 @@ static NSString *cellId = @"wd9765";
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-        [btn setTitle:@"添加房间" forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:20];
         [btn setBackgroundColor:kMainColor];
@@ -73,7 +73,7 @@ static NSString *cellId = @"wd9765";
     if ([data[@"Total"] integerValue] == 0) {
         
         [MBProgressHUD dismissInView:self.view];
-        [self.tableView showEmpty:@"添加房间" desc:@"当前暂无房间" image:[UIImage imageNamed:@"noDevice"] block:^{
+        [self.tableView showEmpty:NSLocalizedString(@"add_room", @"添加房间") desc:NSLocalizedString(@"now_noRoom", @"当前暂无房间") image:[UIImage imageNamed:@"noDevice"] block:^{
             [self toAddRoom];
         }];
         

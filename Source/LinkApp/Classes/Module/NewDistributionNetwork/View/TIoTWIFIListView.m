@@ -55,7 +55,7 @@
     tipLabel.textColor = [UIColor blackColor];
     tipLabel.font = [UIFont wcPfRegularFontOfSize:14];
     tipLabel.textAlignment = NSTextAlignmentCenter;
-    tipLabel.text = @"建议使用2.4G WiFi";
+    tipLabel.text = NSLocalizedString(@"suggest_use2.4GWIFI", @"建议使用2.4G WiFi");
     [self.bgView addSubview:tipLabel];
     [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.bgView);
@@ -63,7 +63,7 @@
     }];
     
     self.refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.refreshButton setTitle:@"刷新" forState:UIControlStateNormal];
+    [self.refreshButton setTitle:NSLocalizedString(@"refresh", @"刷新") forState:UIControlStateNormal];
     [self.refreshButton setTitleColor:kMainColor forState:UIControlStateNormal];
     self.refreshButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.refreshButton addTarget:self action:@selector(refreshClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -99,7 +99,7 @@
     
     UIButton *accessWifiButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [accessWifiButton setImage:[UIImage imageNamed:@"new_distri_info"] forState:UIControlStateNormal];
-    [accessWifiButton setTitle:@"点击获取WiFi列表" forState:UIControlStateNormal];
+    [accessWifiButton setTitle:NSLocalizedString(@"click_getWIFIList", @"点击获取WiFi列表") forState:UIControlStateNormal];
     [accessWifiButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, -5, 0.0, 0.0)];
     [accessWifiButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     accessWifiButton.titleLabel.font = [UIFont wcPfMediumFontOfSize:17];
@@ -126,7 +126,7 @@
     }];
     
     self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [self.cancelButton setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [self.cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.cancelButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [self.cancelButton addTarget:self action:@selector(cancelClick:) forControlEvents:UIControlEventTouchUpInside];

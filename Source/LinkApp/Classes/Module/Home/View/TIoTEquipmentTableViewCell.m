@@ -116,12 +116,12 @@
     }
     
     if ([dataDic[@"Online"] integerValue] == 1) {
-        self.desLab.text = @"设备在线";
+        self.desLab.text = NSLocalizedString(@"online", @"设备在线");
         self.desLab.textColor = kRGBColor(26, 173, 25);
 //        [self.switchBtn setBackgroundImage:[UIImage imageNamed:@"switchOn"] forState:UIControlStateNormal];
     }
     else{
-        self.desLab.text = @"设备离线";
+        self.desLab.text = NSLocalizedString(@"device_outline", @"设备离线");
         self.desLab.textColor = kRGBColor(204, 204, 204);
 //        [self.switchBtn setBackgroundImage:[UIImage imageNamed:@"switchOff"] forState:UIControlStateNormal];
     }

@@ -40,7 +40,7 @@ static NSString *itemId2 = @"pfDDD";
 
 - (void)setupUI
 {
-    self.title = @"家庭详情";
+    self.title =  NSLocalizedString(@"family_detail", @"家庭详情") ;
     
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerId];
@@ -63,7 +63,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)deleteFamily
 {
     [[TIoTCoreFamilySet shared] deleteFamilyWithFamilyId:self.familyInfo[@"FamilyId"] name:self.familyInfo[@"FamilyName"] success:^(id  _Nonnull responseObject) {
-        [MBProgressHUD showSuccess:@"删除成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"delete_success", @"删除成功")];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];
@@ -96,7 +96,7 @@ static NSString *itemId2 = @"pfDDD";
     if ([self.familyInfo[@"Role"] integerValue] == 1) {//删除
         
         TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-        [av alertWithTitle:@"您确定要删除该家庭吗？" message:@"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除" cancleTitlt:@"取消" doneTitle:@"删除"];
+        [av alertWithTitle:NSLocalizedString(@"toast_delete_family_title", @"您确定要删除该家庭吗？")  message:NSLocalizedString(@"toast_delete_family_content", @"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
         };
@@ -147,7 +147,7 @@ static NSString *itemId2 = @"pfDDD";
         
         if (indexPath.section == 1) {
             UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, kScreenWidth - 40, 20)];
-            lab.text = @"家庭成员";
+            lab.text = NSLocalizedString(@"family_member", @"家庭成员");
             lab.textColor = kFontColor;
             lab.font = [UIFont systemFontOfSize:18];
             [view addSubview:lab];
@@ -175,7 +175,7 @@ static NSString *itemId2 = @"pfDDD";
             [view addSubview:deleteBtn];
             
             if ([self.familyInfo[@"Role"] integerValue] == 1) {
-                [deleteBtn setTitle:@"删除家庭" forState:UIControlStateNormal];
+                [deleteBtn setTitle:NSLocalizedString(@"delete_family", @"删除家庭") forState:UIControlStateNormal];
                 
                 if (self.familyCount <= 1) {
                     deleteBtn.enabled = NO;
@@ -183,7 +183,7 @@ static NSString *itemId2 = @"pfDDD";
             }
             else
             {
-                [deleteBtn setTitle:@"退出家庭" forState:UIControlStateNormal];
+                [deleteBtn setTitle:NSLocalizedString(@"exit_family", @"退出家庭") forState:UIControlStateNormal];
             }
             
         }
@@ -199,7 +199,7 @@ static NSString *itemId2 = @"pfDDD";
             case 0:
             {
                 TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-                [av alertWithTitle:@"家庭名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
+                [av alertWithTitle:NSLocalizedString(@"family_name", @"家庭名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
                 av.maxLength = 20;
                 av.doneAction = ^(NSString * _Nonnull text) {
                     if (text.length > 0) {
@@ -219,7 +219,7 @@ static NSString *itemId2 = @"pfDDD";
             case 2:
             {
                 UIViewController *vc = [NSClassFromString(@"InviteVC") new];
-                [vc setValue:@"邀请成员" forKey:@"title"];
+                [vc setValue:NSLocalizedString(@"invite_member", @"邀请成员") forKey:@"title"];
                 [vc setValue:self.familyInfo[@"FamilyId"] forKey:@"familyId"];
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -280,11 +280,11 @@ static NSString *itemId2 = @"pfDDD";
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
         NSMutableArray *firstSection = [NSMutableArray array];
-        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"家庭名称",@"name":self.familyInfo[@"FamilyName"]}]];
-        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"房间管理",@"name":@""}]];
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"]}]];
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@""}]];
         
         if ([self.familyInfo[@"Role"] integerValue] == 1) {
-            [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"邀请家庭成员",@"name":@""}]];
+            [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"invite_family_member", @"邀请家庭成员"),@"name":@""}]];
         }
         
         [_dataArr addObject:firstSection];

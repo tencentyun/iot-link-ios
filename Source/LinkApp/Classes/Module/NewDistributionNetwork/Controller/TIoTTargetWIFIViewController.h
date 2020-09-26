@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSDictionary *softApWifiInfo;
 @property (nonatomic, copy) NSString *roomId;
 @property (nonatomic, copy) NSString *currentDistributionToken;
-
+@property (nonatomic, copy) NSDictionary *configConnentData;
 - (void)showWiFiListView;
 
 @end

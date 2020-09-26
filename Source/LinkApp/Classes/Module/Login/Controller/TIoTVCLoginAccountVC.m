@@ -62,7 +62,7 @@
 - (void)setUpUI {
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"验证码登录";
+    self.title = NSLocalizedString(@"verify_code_login", @"验证码登录");
     self.conturyCode = @"86";
     self.conturyCode2 = @"86";
     self.loginStyle = YES;
@@ -103,7 +103,7 @@
     }];
     
     UIButton *verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [verificationCodeButton setTitle:@"账号密码登录" forState:UIControlStateNormal];
+    [verificationCodeButton setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
     [verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
     verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [verificationCodeButton addTarget:self action:@selector(loginStyleChange:) forControlEvents:UIControlEventTouchUpInside];
@@ -182,7 +182,7 @@
         _contentView.backgroundColor = [UIColor whiteColor];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -256,7 +256,7 @@
         _contentView2.backgroundColor = [UIColor whiteColor];
         
         self.areaCodeBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn2 setTitleColor:kFontColor forState:UIControlStateNormal];
         self.areaCodeBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -335,7 +335,7 @@
         _phoneAndEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
         _phoneAndEmailTF.textColor = [UIColor blackColor];
         _phoneAndEmailTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"手机号码/邮箱地址" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _phoneAndEmailTF.attributedPlaceholder = ap;
         _phoneAndEmailTF.clearButtonMode = UITextFieldViewModeAlways;
         [_phoneAndEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -346,7 +346,7 @@
 - (UIButton *)verificationButton {
     if (!_verificationButton) {
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_verificationButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
@@ -360,7 +360,7 @@
         _verificationcodeTF.keyboardType = UIKeyboardTypePhonePad;
         _verificationcodeTF.textColor = [UIColor blackColor];
         _verificationcodeTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:@"验证码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"verification_code", @"验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _verificationcodeTF.attributedPlaceholder = apVerification;
         _verificationcodeTF.clearButtonMode = UITextFieldViewModeAlways;
         [_verificationcodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -371,7 +371,7 @@
 - (UIButton *)forgetPasswordButton {
     if (!_forgetPasswordButton) {
         _forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_forgetPasswordButton setTitle:@"忘记密码" forState:UIControlStateNormal];
+        [_forgetPasswordButton setTitle:NSLocalizedString(@"forgot_password", @"忘记密码") forState:UIControlStateNormal];
         [_forgetPasswordButton setTitleColor:kMainColor forState:UIControlStateNormal];
         _forgetPasswordButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_forgetPasswordButton addTarget:self action:@selector(forgetPasswordClick) forControlEvents:UIControlEventTouchUpInside];
@@ -385,7 +385,7 @@
         _phoneAndEmailTF2.keyboardType = UIKeyboardTypeEmailAddress;
         _phoneAndEmailTF2.textColor = [UIColor blackColor];
         _phoneAndEmailTF2.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"手机号码/邮箱地址" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _phoneAndEmailTF2.attributedPlaceholder = ap;
         _phoneAndEmailTF2.clearButtonMode = UITextFieldViewModeAlways;
         [_phoneAndEmailTF2 addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -400,7 +400,7 @@
         _passwordTF.textColor = [UIColor blackColor];
         _passwordTF.secureTextEntry = YES;
         _passwordTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:@"密码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"password", @"密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#bbbbbb"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
         _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -411,7 +411,7 @@
 - (UIButton *)weixinLoginButton {
     if (!_weixinLoginButton) {
         _weixinLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
+        [_weixinLoginButton setTitle:NSLocalizedString(@"wechat", @"微信") forState:UIControlStateNormal];
         [_weixinLoginButton setTitleColor:kFontColor forState:UIControlStateNormal];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"wxlogin"] forState:UIControlStateNormal];
         _weixinLoginButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:10];
@@ -430,24 +430,24 @@
     [self.view endEditing:YES];
     self.loginAccountButton.backgroundColor = kMainColorDisable;
     self.loginAccountButton.enabled = NO;
-    if ([sender.titleLabel.text containsString:@"验证码"]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
         self.loginStyle = YES;
-        self.title = @"验证码登录";
+        self.title = NSLocalizedString(@"verify_code_login", @"验证码登录");
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        [sender setTitle:@"账号密码登录" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
         self.forgetPasswordButton.hidden = YES;
         self.phoneAndEmailTF2.text = @"";
         self.passwordTF.text = @"";
-        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
     }else {
         self.loginStyle = NO;
-        self.title = @"账号密码登录";
+        self.title = NSLocalizedString(@"account_passwd_login", @"账号密码登录");
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
-        [sender setTitle:@"验证码登录" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"verify_code_login", @"验证码登录") forState:UIControlStateNormal];
         self.forgetPasswordButton.hidden = NO;
         self.phoneAndEmailTF.text = @"";
         self.verificationcodeTF.text = @"";
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
     }
 }
 
@@ -633,7 +633,7 @@
         NSString *tempStr = [NSString convertTimestampToTime:self.cancelAccountTimeString byDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 
         TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
-        [modifyAlertView alertWithTitle:@"账号注销已终止" message:[NSString stringWithFormat:@"由于你在申请“账号注销”后的7天内重新登录，该账号在%@提交的“账号注销”申请已被撤销",tempStr] cancleTitlt:@"" doneTitle:@"确认"];
+        [modifyAlertView alertWithTitle:NSLocalizedString(@"cancel_account_stopped_title", @"账号注销已终止") message:[NSString stringWithFormat:@"由于你在申请“账号注销”后的7天内重新登录，该账号在%@提交的“账号注销”申请已被撤销",tempStr] cancleTitlt:@"" doneTitle:NSLocalizedString(@"verify", @"确认")];
         [modifyAlertView showSingleConfrimButton];
         modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         
@@ -681,7 +681,7 @@
         
         [HXYNotice addLoginInPost];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [MBProgressHUD showError:@"请确保已按官网文档接入微信登录"];
+        [MBProgressHUD showError:NSLocalizedString(@"ensure_import_wechat_login_with_offical_doc", @"请确保已按官网文档接入微信登录")];
     }];
 }
 

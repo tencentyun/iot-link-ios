@@ -21,7 +21,7 @@ static NSString *cellId = @"ededf";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"重复";
+    self.title = NSLocalizedString(@"repeat", @"重复");
     [self configData];
     self.tableView.rowHeight = 60;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -34,7 +34,7 @@ static NSString *cellId = @"ededf";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"保存" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];
@@ -116,7 +116,7 @@ static NSString *cellId = @"ededf";
 - (NSArray *)week
 {
     if (!_week) {
-        _week = @[@"每周日",@"每周一",@"每周二",@"每周三",@"每周四",@"每周五",@"每周六"];
+        _week = @[NSLocalizedString(@"every_sunday", @"每周日"),NSLocalizedString(@"every_monday", @"每周一"),NSLocalizedString(@"every_tuesday",@"每周二"),NSLocalizedString(@"every_wednesday", @"每周三"),NSLocalizedString(@"every_wednesday", @"每周四"),NSLocalizedString(@"every_friday", @"每周五"),NSLocalizedString(@"every_saturday", @"每周六")];
     }
     return _week;
 }

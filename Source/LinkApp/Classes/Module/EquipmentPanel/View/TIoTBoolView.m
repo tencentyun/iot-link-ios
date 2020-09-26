@@ -43,7 +43,7 @@
     
     
     self.iLab = [[UILabel alloc] init];
-    _iLab.text = @"电源开关：关闭";
+    _iLab.text = NSLocalizedString(@"power_off",  @"电源开关：关闭");
     _iLab.font = [UIFont systemFontOfSize:18];
     _iLab.textColor = kFontColor;
     _iLab.textAlignment = NSTextAlignmentCenter;
@@ -68,7 +68,7 @@
 {
     [super setInfo:info];
     NSInteger key = [info[@"status"][@"Value"] integerValue];
-    self.iLab.text = key == 0 ? @"电源开关：关闭" : @"电源开关：开启";
+    self.iLab.text = key == 0 ? NSLocalizedString(@"power_off",  @"电源开关：关闭") : NSLocalizedString(@"power_on", @"电源开关：开启");
     
     if (self.style == WCThemeSimple) {
         

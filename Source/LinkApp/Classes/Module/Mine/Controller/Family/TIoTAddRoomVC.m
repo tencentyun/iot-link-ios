@@ -18,14 +18,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"添加房间";
+    self.title = NSLocalizedString(@"add_room", @"添加房间");
 //    [self setNav];
 }
 
 - (void)setNav
 {
-    self.title = @"添加房间";
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    self.title = NSLocalizedString(@"add_room", @"添加房间");
+    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.leftBarButtonItem = left;
 }
 
@@ -39,7 +39,7 @@
 - (IBAction)done:(UIButton *)sender {
     
     if (!self.roomTF.hasText) {
-        [MBProgressHUD showMessage:@"请填写房间名" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"write_room_name", @"请填写房间名") icon:@""];
         return;
     }
     NSDictionary *param = @{@"FamilyId":self.familyId,@"Name":self.roomTF.text};

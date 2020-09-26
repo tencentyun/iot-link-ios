@@ -76,7 +76,7 @@
     }];
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    [nextBtn setTitle:NSLocalizedString(@"next", @"下一步") forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -108,10 +108,12 @@
 
 - (NSDictionary *)dataDic {
     if (!_dataDic) {
-        _dataDic = @{@"title": @"热点配网",
-                     @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
-                     @"topic": @"将手机WiFi连接设备热点",
-                     @"stepDiscribe": @"请前往手机WiFi设置界面，连接上图所示设备WiFi"
+        
+        NSString *guideDiscirbe = self.connectGuideData[@"message"] ? : NSLocalizedString(@"leavefor_setupWIFI_connectDevice", @"请前往手机WiFi设置界面，连接上图所示设备WiFi");
+        _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
+                     @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                     @"topic": NSLocalizedString(@"soft_ap_hotspot_set", @"将手机WiFi连接设备热点"),
+                     @"stepDiscribe": guideDiscirbe
         };
     }
     return _dataDic;

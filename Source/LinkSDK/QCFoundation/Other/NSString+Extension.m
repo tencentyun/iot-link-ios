@@ -322,13 +322,13 @@
 
 + (NSString *)judepTemperatureWithUserConfig:(NSString *)configString templeUnit:(NSString *)unitString {
     if ([configString isEqualToString:@"F"]) {
-        if ([unitString containsString:@"摄氏"] || [unitString containsString:@"℃"]) {
+        if ([unitString containsString:NSLocalizedString(@"celsius_Hanzi", @"摄氏")] || [unitString containsString:@"℃"]) {
             return [self chanageTemperatureUnitWith:unitString];
         }else {
             return unitString;
         }
     }else if ([configString isEqualToString:@"C"]) {
-        if ([unitString containsString:@"华氏"] || [unitString containsString:@"℉"]) {
+        if ([unitString containsString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏")] || [unitString containsString:@"℉"]) {
             return [self chanageTemperatureUnitWith:unitString];
         }else {
             return unitString;
@@ -341,9 +341,9 @@
 ///字符串模糊匹配摄氏度与华氏度转化 （"摄氏" "℃" "华氏" "℉"）
 + (NSString *)chanageTemperatureUnitWith:(NSString *)temperatureString {
     
-        if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]) {
+        if ([temperatureString containsString:NSLocalizedString(@"celsius_Hanzi", @"摄氏")] || [temperatureString containsString:@"℃"]) {
             temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℃" withString:@""];
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"摄氏" withString:@""];
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:NSLocalizedString(@"celsius_Hanzi", @"摄氏") withString:@""];
             if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                 if (@available(iOS 10.0, *)) {
                     NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
@@ -357,9 +357,9 @@
                 return [NSString stringWithFormat:@"%@℉",temperatureString];
             }
             
-        }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
+        }else if ([temperatureString containsString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏")] || [temperatureString containsString:@"℉"]){
             temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℉" withString:@""];
-            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"华氏" withString:@""];
+            temperatureString = [temperatureString stringByReplacingOccurrencesOfString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏") withString:@""];
             if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                 if (@available(iOS 10.0, *)) {
                     NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];

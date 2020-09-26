@@ -217,7 +217,7 @@
     
     UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancleBtn addTarget:self action:@selector(cancleClick:) forControlEvents:UIControlEventTouchUpInside];
-    [cancleBtn setTitle:@"关闭" forState:UIControlStateNormal];
+    [cancleBtn setTitle:NSLocalizedString(@"off", @"关闭") forState:UIControlStateNormal];
     [cancleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [cancleBtn sizeToFit];
@@ -249,7 +249,7 @@
     [[NSRunLoop currentRunLoop] addTimer:self.progressTimer forMode:NSRunLoopCommonModes];
     
     self.progressLab = [[UILabel alloc] init];
-    self.progressLab.text = @"连接中";
+    self.progressLab.text = NSLocalizedString(@"connection", @"连接中");
     self.progressLab.textColor = kRGBColor(51, 51, 51);
     self.progressLab.font = [UIFont wcPfSemiboldFontOfSize:24];
     [self.contentView addSubview:self.progressLab];
@@ -259,7 +259,7 @@
     }];
     
     self.tipLab = [[UILabel alloc] init];
-    self.tipLab.text = @"请将设备与手机尽量靠近";
+    self.tipLab.text = NSLocalizedString(@"connect_toast", @"请将设备与手机尽量靠近") ;
     self.tipLab.textColor = kRGBColor(51, 51, 51);
     self.tipLab.font = [UIFont wcPfRegularFontOfSize:16];
     [self.view addSubview:self.tipLab];
@@ -281,12 +281,12 @@
 - (void)connectSucess:(NSDictionary *)devieceData{
     [self releaseAlloc];
     self.tipLab.hidden = YES;
-    self.progressLab.text = @"连接成功";
+    self.progressLab.text = NSLocalizedString(@"connect_success", @"连接成功");
 //    [self.pan sucess];
     self.pan.progress = 1;
     
     UIButton *tryAgainBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [tryAgainBtn setTitle:@"继续添加新设备" forState:UIControlStateNormal];
+    [tryAgainBtn setTitle:NSLocalizedString(@"add_new_device", @"继续添加新设备") forState:UIControlStateNormal];
     [tryAgainBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     tryAgainBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [tryAgainBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -302,7 +302,7 @@
     
     
     UIButton *changeTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [changeTypeBtn setTitle:@"返回首页" forState:UIControlStateNormal];
+    [changeTypeBtn setTitle:NSLocalizedString(@"back_home", @"返回首页") forState:UIControlStateNormal];
     [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [changeTypeBtn addTarget:self action:@selector(backHome:) forControlEvents:UIControlEventTouchUpInside];
@@ -323,7 +323,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self releaseAlloc];
         self.tipLab.hidden = YES;
-        self.progressLab.text = @"连接失败";
+        self.progressLab.text = NSLocalizedString(@"connect_fail", @"连接失败");
 //        [self.pan faild];
         self.pan.progress = 0;
         
@@ -331,7 +331,7 @@
         errorResultLab.numberOfLines = 0;
         errorResultLab.textColor = kRGBColor(153, 153, 153);
         errorResultLab.font = [UIFont wcPfRegularFontOfSize:14];
-        errorResultLab.text = @"1、检查设备是否通电，并按照指引进入配网模式\n2、检查WIFI是否正常（暂时只支持2.4G路由器）\n3、检查WIFI密码是否错误";
+        errorResultLab.text = NSLocalizedString(@"connect_step", @"1、检查设备是否通电，并按照指引进入配网模式\n2、检查WIFI是否正常（暂时只支持2.4G路由器）\n3、检查WIFI密码是否错误");
         errorResultLab.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:errorResultLab];
         [errorResultLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -341,7 +341,7 @@
         }];
         
         UIButton *moreResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [moreResultBtn setTitle:@"查看更多失败原因" forState:UIControlStateNormal];
+        [moreResultBtn setTitle:NSLocalizedString(@"see_more_fail_cause",  @"查看更多失败原因") forState:UIControlStateNormal];
         [moreResultBtn addTarget:self action:@selector(moreErrorResult:) forControlEvents:UIControlEventTouchUpInside];
         moreResultBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [moreResultBtn setTitleColor:kRGBColor(235, 61, 61) forState:UIControlStateNormal];
@@ -352,7 +352,7 @@
         }];
         
         UIButton *tryAgainBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [tryAgainBtn setTitle:@"按步骤重试" forState:UIControlStateNormal];
+        [tryAgainBtn setTitle:NSLocalizedString(@"connect_again", @"按步骤重试")  forState:UIControlStateNormal];
         [tryAgainBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         tryAgainBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [tryAgainBtn addTarget:self action:@selector(tryAgainClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -368,7 +368,7 @@
         
         
         UIButton *changeTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [changeTypeBtn setTitle:@"切换配网方式" forState:UIControlStateNormal];
+        [changeTypeBtn setTitle:NSLocalizedString(@"tab_connect_way", @"切换配网方式") forState:UIControlStateNormal];
         [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [changeTypeBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -402,7 +402,7 @@
 
 - (void)cancleClick:(id)sender{
     TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:@"退出添加设备" message:@"当前正在添加设备，是否确认退出" cancleTitlt:@"取消" doneTitle:@"确定"];
+    [av alertWithTitle:NSLocalizedString(@"退出添加设备", @"退出添加设备") message:NSLocalizedString(@"addDevicing_confirmSignout", @"当前正在添加设备，是否确认退出") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self releaseAlloc];
         [self dismissViewControllerAnimated:YES completion:nil];

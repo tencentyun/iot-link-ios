@@ -72,7 +72,7 @@
         }];
     }
     else {
-        [MBProgressHUD showError:@"未安装微信或版本过低"];
+        [MBProgressHUD showError:NSLocalizedString(@"uninstalled_LastestWeiChat", @"未安装微信或版本过低")];
     }
 }
 
@@ -261,7 +261,7 @@
     if ([resp isKindOfClass:[SendMessageToWXResp class]]) {  // 分享
         SendMessageToWXResp*response=(SendMessageToWXResp*)resp;
         if (response.errCode == WXSuccess) {
-            [MBProgressHUD showSuccess:@"分享成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"share_success", @"分享成功")];
             if (self.shareBlk) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.shareBlk(nil,nil);
@@ -289,22 +289,22 @@
     NSString * errStr = @"";
     switch (errCode) {
         case WXErrCodeCommon:
-            errStr = @"普通错误类型";
+            errStr = NSLocalizedString(@"generalType_error", @"普通错误类型");
             break;
         case WXErrCodeUserCancel:
-            errStr = @"取消微信操作";
+            errStr = NSLocalizedString(@"cancel_Weichat_action", @"取消微信操作");
             break;
         case WXErrCodeSentFail:
-            errStr = @"发送失败";
+            errStr = NSLocalizedString(@"sendFailure", @"发送失败");
             break;
         case WXErrCodeAuthDeny:
-            errStr = @"授权失败";
+            errStr = NSLocalizedString(@"auth_failed", @"授权失败");
             break;
         case WXErrCodeUnsupport:
-            errStr = @"微信不支持";
+            errStr = NSLocalizedString(@"Weichat_nonsupport", @"微信不支持");
             break;
         default:
-            errStr = @"未知错误";
+            errStr = NSLocalizedString(@"unknown_error", @"未知错误");
             break;
     }
     return errStr;

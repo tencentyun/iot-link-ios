@@ -44,7 +44,7 @@
     
     
     UILabel *name = [[UILabel alloc] init];
-    name.text = @"设备已离线";
+    name.text = NSLocalizedString(@"device_offline", @"设备已离线");
     name.textColor = kFontColor;
     name.textAlignment = NSTextAlignmentCenter;
     name.font = [UIFont boldSystemFontOfSize:20];
@@ -57,7 +57,7 @@
     
     
     UILabel *content = [[UILabel alloc] init];
-    content.text = @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。";
+    content.text = NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。");
     content.numberOfLines = 0;
     content.textColor = kFontColor;
     content.font = [UIFont systemFontOfSize:16];
@@ -70,7 +70,7 @@
     
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:@"问题反馈" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"q_feedback", @"问题反馈")  forState:UIControlStateNormal];
     [btn setTitleColor:kMainColor forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn addTarget:self action:@selector(toFeedback) forControlEvents:UIControlEventTouchUpInside];
@@ -85,7 +85,7 @@
     
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn2 setTitle:@"返回首页" forState:UIControlStateNormal];
+    [btn2 setTitle:NSLocalizedString(@"back_home", @"返回首页")  forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn2 setBackgroundColor:kMainColor];

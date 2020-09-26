@@ -30,11 +30,11 @@
     
     //首页
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
-    [self addChildVc:homeVC title:@"首页" image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
+    [self addChildVc:homeVC title:NSLocalizedString(@"main_tab_1", @"首页") image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
 
     //个人中心
     TIoTMineViewController *mineVC = [[TIoTMineViewController alloc] init];
-    [self addChildVc:mineVC title:@"我的" image:@"mineDefaultTabbar" selectedImage:@"mineSelectTabbar"];
+    [self addChildVc:mineVC title: NSLocalizedString(@"main_tab_3", @"我的")  image:@"mineDefaultTabbar" selectedImage:@"mineSelectTabbar"];
 
     self.delegate = self;
     

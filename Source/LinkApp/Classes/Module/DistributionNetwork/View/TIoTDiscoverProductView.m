@@ -33,7 +33,7 @@
     UILabel *tipLab = [[UILabel alloc] init];
     tipLab.font = [UIFont wcPfRegularFontOfSize:16];
     tipLab.textColor = [UIColor blackColor];
-    tipLab.text = @"正在扫描附近设备";
+    tipLab.text = NSLocalizedString(@"scanning_device", @"正在扫描附近设备");
     [self addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self).offset(16.55);
@@ -101,7 +101,7 @@
     UILabel *tipLab = [[UILabel alloc] init];
     tipLab.font = [UIFont wcPfRegularFontOfSize:16];
     tipLab.textColor = [UIColor blackColor];
-    tipLab.text = @"已发现如下设备";
+    tipLab.text = NSLocalizedString(@"scanned_devices",  @"已发现如下设备");
     [headerView addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(headerView).offset(15.5);
@@ -135,7 +135,7 @@
     UILabel *tipLab = [[UILabel alloc] init];
     tipLab.font = [UIFont wcPfRegularFontOfSize:16];
     tipLab.textColor = [UIColor blackColor];
-    tipLab.text = @"当前蓝牙适配器不可用";
+    tipLab.text = NSLocalizedString(@"current_bluetooth_disabled", @"当前蓝牙适配器不可用");
     [self addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self).offset(16.8);
@@ -171,7 +171,7 @@
     }];
 
     UIButton *retryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [retryBtn setTitle:@"重试" forState:UIControlStateNormal];
+    [retryBtn setTitle:NSLocalizedString(@"scanning_retry", @"重试") forState:UIControlStateNormal];
     [retryBtn setTitleColor:kRGBColor(0, 110, 255) forState:UIControlStateNormal];
     retryBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [retryBtn addTarget:self action:@selector(retry) forControlEvents:UIControlEventTouchUpInside];

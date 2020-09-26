@@ -259,7 +259,7 @@
         _countryTitle = [[NSUserDefaults standardUserDefaults] valueForKey:@"country_Title"];
     }
     if ([NSString isNullOrNilWithObject:_countryTitle]) {
-        _countryTitle = @"中国大陆";
+        _countryTitle = NSLocalizedString(@"china_main_land", @"中国大陆");
     }
     return _countryTitle;
 }

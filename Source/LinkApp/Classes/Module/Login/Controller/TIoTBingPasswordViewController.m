@@ -40,11 +40,11 @@
 #pragma mark privateMethods
 - (void)setUpUI{
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"设置密码";
+    self.title = NSLocalizedString(@"set_password", @"设置密码");
     
     
     self.passWordTF = [[UITextField alloc] init];
-    self.passWordTF.placeholder = @"密码";
+    self.passWordTF.placeholder = NSLocalizedString(@"password", @"密码");
     self.passWordTF.textColor = kFontColor;
     self.passWordTF.clearButtonMode = UITextFieldViewModeAlways;
     self.passWordTF.secureTextEntry = YES;
@@ -69,7 +69,7 @@
     }];
     
     self.passWordTF2 = [[UITextField alloc] init];
-    self.passWordTF2.placeholder = @"请再次输入密码";
+    self.passWordTF2.placeholder = NSLocalizedString(@"inport_Password_again", @"请再次输入密码");
     self.passWordTF2.textColor = kFontColor;
     self.passWordTF2.secureTextEntry = YES;
     self.passWordTF2.clearButtonMode = UITextFieldViewModeAlways;
@@ -94,7 +94,7 @@
     }];
     
     UILabel *tipLab = [[UILabel alloc] init];
-    tipLab.text = @"密码8～16位需包含字母和数字";
+    tipLab.text = NSLocalizedString(@"password_format", @"密码8～16位需包含字母和数字");
     tipLab.textColor = kRGBColor(153, 153, 153);
     tipLab.font = [UIFont wcPfRegularFontOfSize:12];
     [self.view addSubview:tipLab];
@@ -104,7 +104,7 @@
     }];
     
     self.downBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.downBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [self.downBtn setTitle:NSLocalizedString(@"finish", @"完成") forState:UIControlStateNormal];
     [self.downBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.downBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.downBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -147,13 +147,13 @@
 - (void)sureClick:(id)sender{
     
     if (![self.passWordTF.text isEqualToString:self.passWordTF2.text]) {
-        [MBProgressHUD showMessage:@"两次输入的密码不一致" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:self.passWordTF.text];
     if (!isPass) {
-        [MBProgressHUD showMessage:@"密码不合规" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
     

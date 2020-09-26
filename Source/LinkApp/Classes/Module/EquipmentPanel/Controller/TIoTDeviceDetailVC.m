@@ -22,7 +22,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"设备信息";
+    self.title = NSLocalizedString(@"device_info", @"设备信息");
     self.view.backgroundColor = kBgColor;
     
     [self.view addSubview:self.tableView];
@@ -64,11 +64,11 @@
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"厂家名称",@"value":@"-",@"needArrow":@"0"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"产品型号",@"value":@"-",@"needArrow":@"0"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"MAC地址",@"value":@"-",@"needArrow":@"0"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"IP地址",@"value":@"-",@"needArrow":@"0"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"固件版本",@"value":@"-",@"needArrow":@"0"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"factory_name", @"厂家名称") ,@"value":@"-",@"needArrow":@"0"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"product_model", @"产品型号"),@"value":@"-",@"needArrow":@"0"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"mac_address", @"MAC地址"),@"value":@"-",@"needArrow":@"0"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"ip_address", @"IP地址"),@"value":@"-",@"needArrow":@"0"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"firmware_version", @"固件版本"),@"value":@"-",@"needArrow":@"0"}]];
     }
     return _dataArr;
 }
