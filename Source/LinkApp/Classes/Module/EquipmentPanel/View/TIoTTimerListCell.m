@@ -66,13 +66,13 @@
     NSString *con = @"";
     
     if ((BOOL)(repeats[1] - '0') == NO && (BOOL)(repeats[2] - '0') == NO && (BOOL)(repeats[3] - '0') == NO && (BOOL)(repeats[4] - '0') == NO && (BOOL)(repeats[5] - '0') == NO && (BOOL)(repeats[6] - '0') && (BOOL)(repeats[0] - '0')) {
-        con = @"周末";
+        con = NSLocalizedString(@"weekend", @"周末");
     }
     else if ((BOOL)(repeats[1] - '0') && (BOOL)(repeats[2] - '0') && (BOOL)(repeats[3] - '0') && (BOOL)(repeats[4] - '0') && (BOOL)(repeats[5] - '0') && (BOOL)(repeats[6] - '0') == NO && (BOOL)(repeats[0] - '0') == NO) {
-        con = @"工作日";
+        con = NSLocalizedString(@"work_day", @"工作日");
     }
     else if ((BOOL)(repeats[1] - '0') && (BOOL)(repeats[2] - '0') && (BOOL)(repeats[3] - '0') && (BOOL)(repeats[4] - '0') && (BOOL)(repeats[5] - '0') && (BOOL)(repeats[6] - '0') && (BOOL)(repeats[0] - '0')) {
-        con = @"每天";
+        con = NSLocalizedString(@"everyday", @"每天");
     }
     else
     {
@@ -82,25 +82,25 @@
                 NSString *weakday = @"";
                 switch (i) {
                     case 0:
-                        weakday = @"周日";
+                        weakday = NSLocalizedString(@"sunday", @"周日");
                         break;
                     case 1:
-                        weakday = @"周一";
+                        weakday = NSLocalizedString(@"monday", @"周一") ;
                         break;
                     case 2:
-                        weakday = @"周二";
+                        weakday = NSLocalizedString(@"tuesday", @"周二");
                         break;
                     case 3:
-                        weakday = @"周三";
+                        weakday = NSLocalizedString(@"wednesday", @"周三");
                         break;
                     case 4:
-                        weakday = @"周四";
+                        weakday = NSLocalizedString(@"thursday", @"周四");
                         break;
                     case 5:
-                        weakday = @"周五";
+                        weakday = NSLocalizedString(@"friday", @"周五");
                         break;
                     case 6:
-                        weakday = @"周六";
+                        weakday = NSLocalizedString(@"saturday", @"周六");
                         break;
 
                     default:
@@ -113,7 +113,7 @@
     }
     
     if (con.length == 0) {
-        con = @"仅一次";
+        con = NSLocalizedString(@"only_one_time", @"仅一次");
     }
     
     return con;

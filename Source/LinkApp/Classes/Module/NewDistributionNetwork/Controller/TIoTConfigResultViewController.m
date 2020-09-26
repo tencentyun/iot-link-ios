@@ -50,7 +50,7 @@
 }
 
 - (void)setupUI{
-    NSString *title = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? @"热点配网" : @"一键配网";
+    NSString *title = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAP_distributionNetwork", @"热点配网") : NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网");
     self.title = title;
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -64,7 +64,7 @@
         make.width.height.mas_equalTo(53.3);
     }];
     
-    NSString *topic = _success ? @"配网完成,设备添加成功" : @"配网失败";
+    NSString *topic = _success ? NSLocalizedString(@"distributionNetworkSuccess_addDeviceSuccess", @"配网完成,设备添加成功") : NSLocalizedString(@"distributionNetwork_failure", @"配网失败");
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = [UIColor blackColor];
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
@@ -78,7 +78,7 @@
         make.height.mas_equalTo(24);
     }];
     
-    NSString *describe = _success ? [NSString stringWithFormat:@"设备名称:%@", [_devieceData objectForKey:@"deviceName"]] : @"请检查以下信息";
+    NSString *describe = _success ? [NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"device_name", @"设备名称"), [_devieceData objectForKey:@"deviceName"]] : NSLocalizedString(@"", @"请检查以下信息");
     UILabel *describeLabel = [[UILabel alloc] init];
     describeLabel.textColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     describeLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -109,7 +109,7 @@
     
     if (!_success) {
         UIButton *moreResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [moreResultBtn setTitle:@"查看更多失败原因" forState:UIControlStateNormal];
+        [moreResultBtn setTitle:NSLocalizedString(@"see_more_fail_cause",  @"查看更多失败原因") forState:UIControlStateNormal];
         [moreResultBtn addTarget:self action:@selector(moreErrorResult:) forControlEvents:UIControlEventTouchUpInside];
         moreResultBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [moreResultBtn setTitleColor:kMainColor forState:UIControlStateNormal];
@@ -120,7 +120,7 @@
         }];
     }
     
-    NSString *changeTitle = _success ? @"继续添加其他设备" : [NSString stringWithFormat:@"切换到%@", _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? @"一键配网" : @"热点配网"];
+    NSString *changeTitle = _success ? NSLocalizedString(@"continue_addDevice", @"继续添加其他设备") : [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"changeTo", @"切换到"), _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网") : NSLocalizedString(@"softAP_distributionNetwork", @"热点配网")];
     UIButton *changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [changeButton setTitle:changeTitle forState:UIControlStateNormal];
     [changeButton setTitleColor:kMainColor forState:UIControlStateNormal];
@@ -134,7 +134,7 @@
         make.height.mas_equalTo(72);
     }];
     
-    NSString *nextTitle = _success ? @"完成" : @"重试";
+    NSString *nextTitle = _success ? NSLocalizedString(@"finish", @"完成") :NSLocalizedString(@"scanning_retry", @"重试");
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [nextBtn setTitle:nextTitle forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -192,7 +192,7 @@
                 WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
                 NSString *ticket = responseObject[@"TokenTicket"]?:@"";
                 TIoTWebVC *vc = [TIoTWebVC new];
-                vc.title = @"帮助中心";
+                vc.title = NSLocalizedString(@"help_center", @"帮助中心");
                 NSString *url = nil;
                 NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 

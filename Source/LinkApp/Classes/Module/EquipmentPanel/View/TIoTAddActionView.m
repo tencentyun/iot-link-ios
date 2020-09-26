@@ -38,7 +38,7 @@
     [HXYNotice addActionDownListener:self reaction:@selector(addActionDown:)];
     
     self.backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [self.backBtn setTitle:NSLocalizedString(@"back", @"返回") forState:UIControlStateNormal];
     [self.backBtn addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
     self.backBtn.backgroundColor = [UIColor greenColor];
     [self addSubview:self.backBtn];
@@ -50,7 +50,7 @@
     }];
     
     self.sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sureBtn setTitle:@"确认" forState:UIControlStateNormal];
+    [self.sureBtn setTitle:NSLocalizedString(@"verify", @"确认") forState:UIControlStateNormal];
     [self.sureBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
     self.sureBtn.backgroundColor = [UIColor blueColor];
     [self addSubview:self.sureBtn];
@@ -74,7 +74,7 @@
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 70)];
     
     UIButton *addActionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addActionBtn setTitle:@"添加动作" forState:UIControlStateNormal];
+    [addActionBtn setTitle:NSLocalizedString(@"add_action", @"添加动作") forState:UIControlStateNormal];
     [addActionBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
     [addActionBtn addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
     [footerView addSubview:addActionBtn];
@@ -196,7 +196,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [self.backBtn setTitle:NSLocalizedString(@"back", @"返回") forState:UIControlStateNormal];
     [self.backBtn addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
     self.backBtn.backgroundColor = [UIColor greenColor];
     [self addSubview:self.backBtn];
@@ -270,7 +270,7 @@
 
 - (NSArray *)dataArr{
     if (_dataArr == nil) {
-        _dataArr = @[@"开关",@"亮度",@"颜色"];
+        _dataArr = @[NSLocalizedString(@"switch", @"开关"),NSLocalizedString(@"light_degree", @"亮度"),NSLocalizedString(@"color_tip", @"颜色")];
     }
     return _dataArr;
 }
@@ -300,7 +300,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [self.backBtn setTitle:NSLocalizedString(@"back", @"返回") forState:UIControlStateNormal];
     [self.backBtn addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
     self.backBtn.backgroundColor = [UIColor greenColor];
     [self addSubview:self.backBtn];
@@ -357,7 +357,7 @@
 
 - (NSArray *)dataArr{
     if (_dataArr == nil) {
-        _dataArr = @[@"关闭",@"开启"];
+        _dataArr = @[NSLocalizedString(@"off", @"关闭"),NSLocalizedString(@"on",@"开启")];
     }
     return _dataArr;
 }

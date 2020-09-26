@@ -1,0 +1,69 @@
+
+/* Class = "UILabel"; text = "配网结果"; ObjectID = "0UT-8Q-pjL"; */
+"0UT-8Q-pjL.text" = "配网结果";
+
+/* Class = "UINavigationItem"; title = "配网"; ObjectID = "3AE-fh-G7Z"; */
+"3AE-fh-G7Z.title" = "配网";
+
+/* Class = "UINavigationItem"; title = "切换WiFi"; ObjectID = "5Ax-iW-dHL"; */
+"5Ax-iW-dHL.title" = "切换WiFi";
+
+/* Class = "UILabel"; text = "bssid："; ObjectID = "B4F-FS-kye"; */
+"B4F-FS-kye.text" = "bssid：";
+
+/* Class = "UIButton"; normalTitle = "确认已切换至目标热点并开始配网"; ObjectID = "FOZ-8J-UdC"; */
+"FOZ-8J-UdC.normalTitle" = "确认已切换至目标热点并开始配网";
+
+/* Class = "UITextField"; placeholder = "wifi名"; ObjectID = "Fvp-zp-6Qh"; */
+"Fvp-zp-6Qh.placeholder" = "wifi名";
+
+/* Class = "UITextField"; placeholder = "wifi名"; ObjectID = "IWB-I7-4aK"; */
+"IWB-I7-4aK.placeholder" = "wifi名";
+
+/* Class = "UIButton"; normalTitle = "绑定设备"; ObjectID = "JAZ-C8-usm"; */
+"JAZ-C8-usm.normalTitle" = "绑定设备";
+
+/* Class = "UIBarButtonItem"; title = "添加"; ObjectID = "XXa-Cp-TKq"; */
+"XXa-Cp-TKq.title" = "添加";
+
+/* Class = "UITextField"; placeholder = "wifi密码"; ObjectID = "bYl-yH-Bef"; */
+"bYl-yH-Bef.placeholder" = "wifi密码";
+
+/* Class = "UINavigationItem"; title = "softap"; ObjectID = "cT3-GG-Os1"; */
+"cT3-GG-Os1.title" = "softap";
+
+/* Class = "UILabel"; text = "家庭："; ObjectID = "fQZ-Uz-aZi"; */
+"fQZ-Uz-aZi.text" = "家庭：";
+
+/* Class = "UIButton"; normalTitle = "切换手机连接的热点"; ObjectID = "ku2-38-Vkg"; */
+"ku2-38-Vkg.normalTitle" = "切换手机连接的热点";
+
+/* Class = "UIButton"; normalTitle = "SoftAP"; ObjectID = "m0x-6W-h5d"; */
+"m0x-6W-h5d.normalTitle" = "SoftAP";
+
+/* Class = "UIButton"; normalTitle = "开始配网1"; ObjectID = "meU-Ix-yDJ"; */
+"meU-Ix-yDJ.normalTitle" = "开始配网1";
+
+/* Class = "UILabel"; text = "结果"; ObjectID = "npY-KZ-Zyx"; */
+"npY-KZ-Zyx.text" = "结果";
+
+/* Class = "UIButton"; normalTitle = "SmartConfig"; ObjectID = "qlz-OY-zRD"; */
+"qlz-OY-zRD.normalTitle" = "SmartConfig";
+
+/* Class = "UIButton"; normalTitle = "下一步"; ObjectID = "rMf-bX-AjD"; */
+"rMf-bX-AjD.normalTitle" = "下一步";
+
+/* Class = "UILabel"; text = "房间："; ObjectID = "sEl-Pg-y0B"; */
+"sEl-Pg-y0B.text" = "房间：";
+
+/* Class = "UITextField"; placeholder = "wifi密码"; ObjectID = "sWE-zz-awq"; */
+"sWE-zz-awq.placeholder" = "wifi密码";
+
+/* Class = "UINavigationItem"; title = "smartconfig"; ObjectID = "uOe-d4-4X7"; */
+"uOe-d4-4X7.title" = "smartconfig";
+
+/* Class = "UITabBarItem"; title = "首页"; ObjectID = "veI-49-KT3"; */
+"veI-49-KT3.title" = "首页";
+
+/* Class = "UITabBarItem"; title = "我的"; ObjectID = "yXe-ol-6FD"; */
+"yXe-ol-6FD.title" = "我的";

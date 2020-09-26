@@ -9,6 +9,7 @@
 #import "TIoTConfigHardwareViewController.h"
 #import "TIoTStepTipView.h"
 #import "TIoTTargetWIFIViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface TIoTConfigHardwareViewController ()
 
@@ -18,6 +19,11 @@
 
 @property (nonatomic, strong) NSString *networkToken;
 
+@property (nonatomic, strong) UIScrollView *scrollView;
+
+@property (nonatomic, strong) UIImageView *imgView;
+@property (nonatomic, strong) UILabel *stepLabel;
+@property (nonatomic, strong) UIView *contentView;
 @end
 
 @implementation TIoTConfigHardwareViewController
@@ -32,12 +38,31 @@
     self.title = [_dataDic objectForKey:@"title"];
     self.view.backgroundColor = [UIColor whiteColor];
     
+    [self.view addSubview:self.scrollView];
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        } else {
+            // Fallback on earlier versions
+            make.top.equalTo(self.view.mas_top).offset(64);
+        }
+    }];
+    
+    self.contentView = [[UIView alloc]init];
+    self.contentView.backgroundColor = [UIColor whiteColor];
+    [self.scrollView addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.equalTo(self.scrollView);
+        make.width.mas_equalTo(kScreenWidth);
+    }];
+
     self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[_dataDic objectForKey:@"stepTipArr"]];
     self.stepTipView.step = 1;
-    [self.view addSubview:self.stepTipView];
+    [self.contentView addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(20 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
-        make.width.equalTo(self.view);
+        make.top.equalTo(self.contentView).offset(20);
+        make.width.equalTo(self.contentView);
         make.height.mas_equalTo(54);
     }];
     
@@ -45,18 +70,27 @@
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
     topicLabel.text = [_dataDic objectForKey:@"topic"];
-    [self.view addSubview:topicLabel];
+    [self.contentView addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(16);
-        make.right.equalTo(self.view).offset(-16);
+        make.left.equalTo(self.contentView).offset(16);
+        make.right.equalTo(self.contentView).offset(-16);
         make.top.equalTo(self.stepTipView.mas_bottom).offset(20);
         make.height.mas_equalTo(24);
     }];
     
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_distri_tip"]];
-    [self.view addSubview:imgView];
-    [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
+    
+    
+//    UIImageView *self.imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_distri_tip"]];
+    self.imgView = [[UIImageView alloc] init];
+    if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+        [self.imgView setImageWithURLStr:self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"bgImg"] placeHolder:@"new_distri_tip"];
+    }else if (self.configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+        [self.imgView setImageWithURLStr:self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"bgImg"] placeHolder:@"new_distri_tip"];
+    }
+    self.imgView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.contentView addSubview:self.imgView];
+    [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.contentView);
         make.leading.mas_greaterThanOrEqualTo(16);
         make.trailing.mas_lessThanOrEqualTo(-16);
         make.top.equalTo(topicLabel.mas_bottom).offset(10);
@@ -70,39 +104,61 @@
 //    [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.equalTo(self.view).offset(16);
 //        make.right.equalTo(self.view).offset(-16);
-//        make.top.equalTo(imgView.mas_bottom).offset(10);
+//        make.top.equalTo(self.imgView.mas_bottom).offset(10);
 //        make.height.mas_equalTo(24);
 //    }];
     
-    UILabel *stepLabel = [[UILabel alloc] init];
+    self.stepLabel = [[UILabel alloc] init];
     NSString *stepLabelText = [_dataDic objectForKey:@"stepDiscribe"];
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     paragraph.lineSpacing = 6.0;
     // 字体: 大小 颜色 行间距
     NSAttributedString * attributedStr = [[NSAttributedString alloc]initWithString:stepLabelText attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:kRGBColor(51, 51, 51),NSParagraphStyleAttributeName:paragraph}];
-    stepLabel.attributedText = attributedStr;
-    stepLabel.numberOfLines = 0;
-    [self.view addSubview:stepLabel];
-    [stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(16);
-        make.right.equalTo(self.view).offset(-19);
-        make.top.equalTo(imgView.mas_bottom).offset(10);
+    self.stepLabel.attributedText = attributedStr;
+    self.stepLabel.numberOfLines = 0;
+    [self.contentView addSubview:self.stepLabel];
+    [self.stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(16);
+        make.right.equalTo(self.contentView).offset(-19);
+        make.top.equalTo(self.imgView.mas_bottom).offset(10);
     }];
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    NSString *exploreNextString = @"";
+    if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+        exploreNextString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"btnText"];
+    }else if (self.configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+        exploreNextString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"btnText"];
+    }
+    
+    NSString *softApNextString = exploreNextString ? : NSLocalizedString(@"next", @"下一步");
+
+    [nextBtn setTitle: softApNextString forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.backgroundColor = kMainColor;
     nextBtn.layer.cornerRadius = 2;
-    [self.view addSubview:nextBtn];
+    [self.contentView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(40);
-        make.top.equalTo(stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.left.equalTo(self.contentView).offset(40);
+        make.top.equalTo(self.stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.width.mas_equalTo(kScreenWidth - 80);
         make.height.mas_equalTo(45);
     }];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    CGFloat contentHeight = 100 + 54 + 24 + CGRectGetHeight(self.imgView.frame)+ CGRectGetHeight(self.stepLabel.frame) + 45 + [TIoTUIProxy shareUIProxy].navigationBarHeight;
+    if (contentHeight > kScreenHeight) {
+        self.scrollView.scrollEnabled = YES;
+    }else {
+        self.scrollView.scrollEnabled = NO;
+    }
+    self.scrollView.contentSize = CGSizeMake(kScreenWidth,contentHeight);
 }
 
 - (void)getSoftApToken {
@@ -138,20 +194,27 @@
     switch (configHardwareStyle) {
         case TIoTConfigHardwareStyleSoftAP:
         {
-            _dataDic = @{@"title": @"热点配网",
-                         @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
-                         @"topic": @"将设备设置为热点配网模式",
-                         @"stepDiscribe": @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。"
+            
+            NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
+            NSString *softAPDiscribeString = softAPExploreString ?:@"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。";
+            
+            _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"setDevice_softAP_distributionNetwork", @"将设备设置为热点配网模式"),
+                         @"stepDiscribe":softAPDiscribeString
             };
         }
             break;
             
         case TIoTConfigHardwareStyleSmartConfig:
         {
-            _dataDic = @{@"title": @"一键配网",
-                         @"stepTipArr": @[@"配置硬件", @"选择目标WiFi", @"开始配网"],
-                         @"topic": @"将设备设置为一键配网模式",
-                         @"stepDiscribe": @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。"
+            NSString *smartExploreString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"message"];
+            NSString *smartDiccribeString = smartExploreString ? : @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
+            
+            _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"setupDevoice_SmartConfig_distributionNetwork", @"将设备设置为一键配网模式"),
+                         @"stepDiscribe": smartDiccribeString
             };
         }
             break;
@@ -161,6 +224,14 @@
     }
     [self setupUI];
     [self getSoftApToken];
+}
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] init];
+        _scrollView.backgroundColor = [UIColor whiteColor];
+    }
+    return _scrollView;
 }
 
 @end

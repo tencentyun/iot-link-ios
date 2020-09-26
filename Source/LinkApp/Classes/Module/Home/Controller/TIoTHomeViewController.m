@@ -241,7 +241,7 @@ static CGFloat weatherHeight = 10;
         [MBProgressHUD dismissInView:self.view];
         WeakObj(self)
         if (!self.currentRoomId || self.currentRoomId.length == 0) {
-            [self.tableView showEmpty2:@"" desc:@"还没有设备，点击添加" image:[UIImage imageNamed:@"home_no_device"] block:^{
+            [self.tableView showEmpty2:@"" desc:NSLocalizedString(@"noDevice_addClick", @"还没有设备，点击添加") image:[UIImage imageNamed:@"home_no_device"] block:^{
                 [selfWeak addEquipmentViewController];
             }];
             
@@ -253,7 +253,7 @@ static CGFloat weatherHeight = 10;
             self.tableHeaderView.alpha = 0;
             self.tableHeaderView2.alpha = 0;
         } else {
-            [self.tableView showEmpty2:@"" desc:@"还没有设备，点击添加" image:[UIImage imageNamed:@"home_no_device"] block:^{
+            [self.tableView showEmpty2:@"" desc:NSLocalizedString(@"noDevice_addClick", @"还没有设备，点击添加") image:[UIImage imageNamed:@"home_no_device"] block:^{
                 [selfWeak addEquipmentViewController];
             }];
         }
@@ -301,7 +301,7 @@ static CGFloat weatherHeight = 10;
 - (void)addTableHeaderView {
     
     NSMutableArray *roomNames = [NSMutableArray array];
-    [roomNames addObject:@"全部设备"];
+    [roomNames addObject:NSLocalizedString(@"all_devices", @"全部设备")];
     [roomNames addObjectsFromArray:[self.rooms valueForKey:@"RoomName"]];
     
     NSInteger index = 0;
@@ -385,7 +385,7 @@ static CGFloat weatherHeight = 10;
         NSString *url = routerParameters[MGJRouterParameterUserInfo][@"customMessageContent"][@"url"]?:@"";
         if (url.length) {
             TIoTWebVC *vc = [[TIoTWebVC alloc] init];
-            vc.title = @"反馈详情";
+            vc.title = NSLocalizedString(@"feedbak_detail", @"反馈详情");
             vc.urlPath = [self judgeToAppendAppTypeWithUrl:url];
             vc.needJudgeJump = YES;
             UIViewController *topVc = [self topViewController];
@@ -572,7 +572,7 @@ static CGFloat weatherHeight = 10;
 
 - (void)createFamily
 {
-    NSDictionary *param = @{@"Name":@"我的家",@"Address":@""};
+    NSDictionary *param = @{@"Name":NSLocalizedString(@"my_family", @"我的家") ,@"Address":@""};
     [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
         [self getFamilyList];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -757,7 +757,7 @@ static CGFloat weatherHeight = 10;
 //        _navView.backgroundColor = [UIColor whiteColor];
         
         UILabel *titleLab = [[UILabel alloc] init];
-        titleLab.text = @"我的家";
+        titleLab.text = NSLocalizedString(@"my_family", @"我的家");
         titleLab.textColor = [UIColor blackColor];
         titleLab.font = [UIFont boldSystemFontOfSize:24];
         [_navView addSubview:titleLab];

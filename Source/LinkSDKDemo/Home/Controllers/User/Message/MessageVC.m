@@ -125,7 +125,7 @@
 // 修改编辑按钮文字
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
+    return NSLocalizedString(@"delete", @"删除");
 }
 
 @end

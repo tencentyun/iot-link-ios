@@ -46,7 +46,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     self.conturyCode = @"86";
-    self.title = @"找回密码";
+    self.title = NSLocalizedString(@"find_bank_the_password", @"找回密码");
     
     [self.view addSubview:self.scrollView];
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -74,7 +74,7 @@
     
     
     UIButton *emailRegisterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emailRegisterBtn setTitle:@"使用邮箱账号" forState:UIControlStateNormal];
+    [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -110,7 +110,7 @@
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -128,10 +128,10 @@
 }
 
 - (NSMutableAttributedString *)protolStr {
-    NSString *str1 = @"同意遵守腾讯云";
-    NSString *str2 = @"用户协议";
-    NSString *str3 = @"及";
-    NSString *str4= @"隐私政策";
+    NSString *str1 = NSLocalizedString(@"register_agree_1", @"同意并遵守腾讯云");
+    NSString *str2 = NSLocalizedString(@"register_agree_2", @"用户协议");
+    NSString *str3 = NSLocalizedString(@"register_agree_3", @"及");
+    NSString *str4=  NSLocalizedString(@"register_agree_4", @"隐私政策");
     NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@",str1,str2,str3,str4];
     
     NSRange range1 = [showStr rangeOfString:str2];
@@ -205,14 +205,14 @@
         _emailStyle = NO;
         self.emailTF.text = @"";
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        [sender setTitle:@"使用邮箱账号" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     }
     else
     {
         _emailStyle = YES;
         self.phoneTF.text = @"";
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
-        [sender setTitle:@"使用手机账号" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"phone_forgot", @"使用手机账号") forState:UIControlStateNormal];
     }
 }
 
@@ -261,7 +261,7 @@
        
         WCLog(@"用户协议");
         TIoTWebVC *vc = [TIoTWebVC new];
-        vc.title = @"用户协议";
+        vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
         vc.urlPath = ServiceProtocolURl;
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
@@ -271,7 +271,7 @@
         
         WCLog(@"隐私");
         TIoTWebVC *vc = [TIoTWebVC new];
-        vc.title = @"隐私政策";
+        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
         vc.urlPath = PrivacyProtocolURL;
         [self.navigationController pushViewController:vc animated:YES];
         return NO;
@@ -294,7 +294,7 @@
         _contentView.backgroundColor = [UIColor whiteColor];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
@@ -319,7 +319,7 @@
         self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
         self.phoneTF.textColor = kFontColor;
         self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:18];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"手机号码" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"phone_number", @"手机号码") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -364,7 +364,7 @@
         self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailTF.textColor = kFontColor;
         self.emailTF.font = [UIFont wcPfSemiboldFontOfSize:18];
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"邮箱账号" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_account", @"邮箱账号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];

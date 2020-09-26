@@ -49,10 +49,10 @@
 
 - (void)setupUI{
     self.view.backgroundColor = kBgColor;
-    self.title = @"修改昵称";
+    self.title = NSLocalizedString(@"modify_nick", @"修改昵称");
     
     
-    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"confirm", @"确定") style:UIBarButtonItemStylePlain target:self action:@selector(done)];
     [right setTitleTextAttributes:@{NSForegroundColorAttributeName:kFontColor,NSFontAttributeName:[UIFont systemFontOfSize:15]} forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = right;
     
@@ -77,7 +77,7 @@
 - (void)done
 {
     if (self.textField.text.length > 20) {
-        [MBProgressHUD showError:@"昵称请勿超过20字符"];
+        [MBProgressHUD showError:NSLocalizedString(@"nick_less20characters", @"昵称请勿超过20字符")];
         return;
     }
     
@@ -85,7 +85,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
         [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":self.textField.text,@"Avatar":[TIoTCoreUserManage shared].avatar} success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"修改成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":self.textField.text,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -94,7 +94,7 @@
     }
     else
     {
-        [MBProgressHUD showMessage:@"您还未做更改" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"no_modify", @"您还未做更改") icon:@""];
     }
 }
 
@@ -104,7 +104,7 @@
 {
     if (!_textField) {
         _textField = [[UITextField alloc] init];
-        _textField.placeholder = @"请输入昵称";
+        _textField.placeholder = NSLocalizedString(@"input_nick_name", @"请输入昵称");
         _textField.text = [TIoTCoreUserManage shared].nickName;
         _textField.textColor = kRGBColor(51, 51, 51);
         _textField.font = [UIFont wcPfRegularFontOfSize:16];

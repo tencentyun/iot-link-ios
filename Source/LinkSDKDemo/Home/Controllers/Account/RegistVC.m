@@ -36,7 +36,7 @@
     switch (self.seg.selectedSegmentIndex) {
         case 0://手机号
         {
-            if ([self.title isEqualToString:@"注册"]) {
+            if ([self.title isEqualToString:NSLocalizedString(@"register", @"注册")]) {
                 [[TIoTCoreAccountSet shared] sendVerificationCodeWithCountryCode:@"86" phoneNumber:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
@@ -55,7 +55,7 @@
             break;
         case 1://邮箱
         {
-            if ([self.title isEqualToString:@"注册"]) {
+            if ([self.title isEqualToString:NSLocalizedString(@"register", @"注册")]) {
                 [[TIoTCoreAccountSet shared] sendVerificationCodeWithEmail:self.pnT.text success:^(id  _Nonnull responseObject) {
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
@@ -88,9 +88,9 @@
     switch (self.seg.selectedSegmentIndex) {
         case 0://手机号
         {
-            if ([self.title isEqualToString:@"注册"]){
+            if ([self.title isEqualToString:NSLocalizedString(@"register", @"注册")]){
                 [[TIoTCoreAccountSet shared] createPhoneUserWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
-                    [MBProgressHUD showSuccess:@"注册成功"];
+                    [MBProgressHUD showSuccess:NSLocalizedString(@"region_success", @"注册成功")];
                     [self.navigationController popViewControllerAnimated:YES];
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
@@ -100,7 +100,7 @@
             {
                 [[TIoTCoreAccountSet shared] ResetPasswordWithCountryCode:@"86" phoneNumber:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     
-                    [MBProgressHUD showSuccess:@"重置密码成功"];
+                    [MBProgressHUD showSuccess:NSLocalizedString(@"reset_password_success", @"重置密码成功")];
                     [self.navigationController popViewControllerAnimated:YES];
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
@@ -110,9 +110,9 @@
             break;
         case 1:
         {
-            if ([self.title isEqualToString:@"注册"]){
+            if ([self.title isEqualToString:NSLocalizedString(@"register", @"注册")]){
                 [[TIoTCoreAccountSet shared] createEmailUserWithEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
-                    [MBProgressHUD showSuccess:@"注册成功"];
+                    [MBProgressHUD showSuccess:NSLocalizedString(@"region_success", @"注册成功")];
                     [self.navigationController popViewControllerAnimated:YES];
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                     
@@ -122,7 +122,7 @@
             {
                 [[TIoTCoreAccountSet shared] resetPasswordByEmail:self.pnT.text verificationCode:self.codeT.text password:self.passwordT.text success:^(id  _Nonnull responseObject) {
                     
-                    [MBProgressHUD showSuccess:@"重置密码成功"];
+                    [MBProgressHUD showSuccess:NSLocalizedString(@"reset_password_success", @"重置密码成功")];
                     [self.navigationController popViewControllerAnimated:YES];
                     
                 } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {

@@ -94,7 +94,7 @@ static NSUInteger limit = 20;
         
         [MBProgressHUD dismissInView:self.view];
         
-        [self.tableView showEmpty:@"" desc:@"暂无消息" image:[UIImage imageNamed:@"noMessage"] block:^{
+        [self.tableView showEmpty:@"" desc:NSLocalizedString(@"empty_message", @"暂无消息") image:[UIImage imageNamed:@"noMessage"] block:^{
             NSLog(@"水电费水电费");
         }];
         
@@ -248,7 +248,7 @@ static NSUInteger limit = 20;
 // 修改编辑按钮文字
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
+    return NSLocalizedString(@"delete", @"删除");
 }
 
 #pragma mark - setter & getter

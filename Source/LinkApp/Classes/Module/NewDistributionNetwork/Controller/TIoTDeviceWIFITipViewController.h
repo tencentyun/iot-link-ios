@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *currentDistributionToken;
 
+@property (nonatomic, copy) NSDictionary *connectGuideData;
 @end
 
 NS_ASSUME_NONNULL_END

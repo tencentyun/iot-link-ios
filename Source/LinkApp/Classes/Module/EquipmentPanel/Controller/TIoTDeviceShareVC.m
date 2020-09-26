@@ -30,7 +30,7 @@ static NSString *cellId = @"sd0679";
 
 - (void)setupUI
 {
-    self.title = @"设备分享";
+    self.title = NSLocalizedString(@"device_share", @"设备分享");
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTUserCell" bundle:nil] forCellReuseIdentifier:cellId];
     
     
@@ -38,7 +38,7 @@ static NSString *cellId = @"sd0679";
     UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, kScreenWidth - 40, 60)];
     lab.textColor = kFontColor;
     lab.font = [UIFont systemFontOfSize:14];
-    lab.text = @"设备已经单独分享给以下用户";
+    lab.text = NSLocalizedString(@"share_user_hint", @"设备已经单独分享给以下用户");
     [header addSubview:lab];
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(20, 59, kScreenWidth - 40, 1)];
     line.backgroundColor = kLineColor;
@@ -53,7 +53,7 @@ static NSString *cellId = @"sd0679";
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 40, kScreenWidth - 40, 48);
-    [btn setTitle:@"添加分享" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];
@@ -69,7 +69,7 @@ static NSString *cellId = @"sd0679";
 - (void)toShare
 {
     TIoTInvitationVC *vc = [TIoTInvitationVC new];
-    vc.title = @"分享用户";
+    vc.title = NSLocalizedString(@"device_share_to_user", @"分享用户");
     vc.familyId = self.deviceDic[@"FamilyId"];
     vc.productId = self.deviceDic[@"ProductId"];
     vc.deviceName = self.deviceDic[@"DeviceName"];
@@ -115,7 +115,7 @@ static NSString *cellId = @"sd0679";
 // 修改编辑按钮文字
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
+    return NSLocalizedString(@"delete", @"删除");
 }
 
 
@@ -148,7 +148,7 @@ static NSString *cellId = @"sd0679";
     [param setValue:self.deviceDic[@"ProductId"] forKey:@"ProductId"];
     [param setValue:self.deviceDic[@"DeviceName"] forKey:@"DeviceName"];
     [[TIoTRequestObject shared] post:AppRemoveShareDeviceUser Param:param success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"删除成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"delete_success", @"删除成功")];
         [self.userList removeObjectAtIndex:index];
         [self.tableView reloadData];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -164,7 +164,7 @@ static NSString *cellId = @"sd0679";
         
         [MBProgressHUD dismissInView:self.view];
         
-        [self.tableView showEmpty:@"添加分享" desc:@"暂未分享设备,点击任意处进行分享" image:[UIImage imageNamed:@"noShare"] block:^{
+        [self.tableView showEmpty:NSLocalizedString(@"add_device_share", @"添加分享") desc:NSLocalizedString(@"unshare_device_tip_message", @"暂未分享设备,点击任意处进行分享") image:[UIImage imageNamed:@"noShare"] block:^{
             [self toShare];
         }];
         

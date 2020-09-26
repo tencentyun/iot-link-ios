@@ -43,14 +43,14 @@
     
     UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancleBtn addTarget:self action:@selector(cancleClick:) forControlEvents:UIControlEventTouchUpInside];
-    [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancleBtn setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [cancleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [cancleBtn sizeToFit];
     UIBarButtonItem *cancleItem = [[UIBarButtonItem alloc] initWithCustomView:cancleBtn];
     self.navigationItem.leftBarButtonItems  = @[cancleItem];
     
-    if ([self.title isEqualToString:@"智能配网"]) {
+    if ([self.title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
         self.equipmentType = SmartConfig;
     }
     else{
@@ -70,7 +70,7 @@
     self.titleLab = [[UILabel alloc] init];
     self.titleLab.textColor = kRGBColor(51, 51, 51);
     self.titleLab.font = [UIFont wcPfSemiboldFontOfSize:20];
-    self.titleLab.text = self.equipmentType == SmartConfig ? @"将设备设置为智能配网模式" : @"将设备设置为自助配网模式";
+    self.titleLab.text = self.equipmentType == SmartConfig ?  NSLocalizedString(@"smart_config_first", @"将设备设置为智能配网模式") : NSLocalizedString(@"soft_ap_first_title", @"将设备设置为自助配网模式");
     [scroll addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(scroll).offset(30);
@@ -83,7 +83,7 @@
     UILabel *tip1 = [[UILabel alloc] init];
     tip1.textColor = kFontColor;
     tip1.font = [UIFont wcPfRegularFontOfSize:16];
-    tip1.text = @"若指示灯已经在快闪，可跳过该步骤。";
+    tip1.text = NSLocalizedString(@"smart_config_first_hint", @"若指示灯已经在快闪，可跳过该步骤。");
     [scroll addSubview:tip1];
     [tip1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(30);
@@ -103,7 +103,7 @@
     UILabel *tip2 = [[UILabel alloc] init];
     tip2.textColor = kFontColor;
     tip2.font = [UIFont wcPfRegularFontOfSize:16];
-    tip2.text = @"1.接通设备电源。";
+    tip2.text = [NSString stringWithFormat:@"1.%@。",NSLocalizedString(@"plug_in_device", "接通设备电源")];
     [scroll addSubview:tip2];
     [tip2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(30);
@@ -156,7 +156,7 @@
     
     
     self.nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.nextBtn setTitle:self.equipmentType == SmartConfig ? @"提示灯在快闪" : @"提示灯在慢闪" forState:UIControlStateNormal];
+    [self.nextBtn setTitle:self.equipmentType == SmartConfig ? NSLocalizedString(@"smart_config_first_title", @"提示灯在快闪") : NSLocalizedString(@"soft_ap_first_button", @"提示灯在慢闪") forState:UIControlStateNormal];
     [self.nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -173,7 +173,7 @@
 }
 
 - (void)getDistributionNetworkToken {
-    if ([self.title isEqualToString:@"智能配网"]) {
+    if ([self.title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
         [self getSoftApToken];
     }else {
         [self getSoftApToken];
@@ -249,11 +249,11 @@
 {
     if (!_dataArr) {
         if (self.equipmentType == SmartConfig) {
-            _dataArr = @[@{@"img":@"step1",@"desc":@"接通设备电源"},@{@"img":@"step2",@"desc":@"长按复位键(开关)5秒"},@{@"img":@"step3",@"desc":@"指示灯进入快闪状态"}];
+            _dataArr = @[@{@"img":@"step1",@"desc":NSLocalizedString(@"plug_in_device", @"接通设备电源") },@{@"img":@"step2",@"desc":@"长按复位键(开关)5秒"},@{@"img":@"step3",@"desc":@"指示灯进入快闪状态"}];
         }
         else
         {
-            _dataArr = @[@{@"img":@"step1",@"desc":@"接通设备电源"},@{@"img":@"step2",@"desc":@"长按复位键(开关)5秒，指示灯快闪时，再次长按复位键3秒"},@{@"img":@"step3",@"desc":@"指示灯进入慢闪状态"}];
+            _dataArr = @[@{@"img":@"step1",@"desc":NSLocalizedString(@"plug_in_device", @"接通设备电源")},@{@"img":@"step2",@"desc":@"长按复位键(开关)5秒，指示灯快闪时，再次长按复位键3秒"},@{@"img":@"step3",@"desc":@"指示灯进入慢闪状态"}];
         }
     }
     return _dataArr;

@@ -37,7 +37,7 @@ static NSString *cellId = @"ub67989";
 #pragma mark -
 
 - (void)setupUI{
-    self.title = @"云端定时";
+    self.title = NSLocalizedString(@"cloud_timing", @"云端定时");
     self.view.backgroundColor = kBgColor;
     
     
@@ -54,7 +54,7 @@ static NSString *cellId = @"ub67989";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"添加定时" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"add_timer", @"添加定时") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn setBackgroundColor:[UIColor blueColor]];
     [btn addTarget:self action:@selector(addTimer:) forControlEvents:UIControlEventTouchUpInside];
@@ -145,7 +145,7 @@ static NSString *cellId = @"ub67989";
 // 修改编辑按钮文字
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
+    return NSLocalizedString(@"delete", @"删除");
 }
 
 #pragma mark setter or getter

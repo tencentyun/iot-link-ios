@@ -45,18 +45,18 @@
 - (void)sureClick:(id)sender{
     
     if (![self.passWordTF.text isEqualToString:self.passWordTF2.text]) {
-        [MBProgressHUD showMessage:@"两次输入的新密码不一致" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"password_inconformity", @"两次输入的新密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:self.passWordTF.text];
     if (!isPass) {
-        [MBProgressHUD showMessage:@"密码不合规" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
     
     if ([self.oldPwdTF.text isEqualToString:self.passWordTF.text]) {
-        [MBProgressHUD showMessage:@"新密码不能与旧密码相同" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"new_password_equals_old", @"新密码不能与旧密码相同") icon:@"" toView:self.view];
         return;
     }
     
@@ -64,7 +64,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTRequestObject shared] post:AppUserResetPassword Param:tmpDic success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"修改成功，请重新登录"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"modifiedSuccess_relogin", @"修改成功，请重新登录")];
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         self.view.window.rootViewController = nav;
@@ -77,10 +77,10 @@
 
 - (void)setUpUI{
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"修改密码";
+    self.title = NSLocalizedString(@"modify_password", @"修改密码");
     
     self.oldPwdTF = [[UITextField alloc] init];
-    self.oldPwdTF.placeholder = @"旧密码";
+    self.oldPwdTF.placeholder = NSLocalizedString(@"old_password", @"旧密码");
     self.oldPwdTF.textColor = kFontColor;
     self.oldPwdTF.clearButtonMode = UITextFieldViewModeAlways;
     self.oldPwdTF.font = [UIFont wcPfRegularFontOfSize:14];
@@ -105,7 +105,7 @@
     }];
     
     self.passWordTF = [[UITextField alloc] init];
-    self.passWordTF.placeholder = @"密码";
+    self.passWordTF.placeholder = NSLocalizedString(@"password", @"密码");
     self.passWordTF.textColor = kFontColor;
     self.passWordTF.secureTextEntry = YES;
     self.passWordTF.clearButtonMode = UITextFieldViewModeAlways;
@@ -130,7 +130,7 @@
     }];
     
     self.passWordTF2 = [[UITextField alloc] init];
-    self.passWordTF2.placeholder = @"请再次输入密码";
+    self.passWordTF2.placeholder = NSLocalizedString(@"inport_Password_again", @"请再次输入密码");
     self.passWordTF2.textColor = kFontColor;
     self.passWordTF2.secureTextEntry = YES;
     self.passWordTF2.clearButtonMode = UITextFieldViewModeAlways;
@@ -155,7 +155,7 @@
     }];
     
     UILabel *tipLab = [[UILabel alloc] init];
-    tipLab.text = @"密码8～16位需包含字母和数字";
+    tipLab.text = NSLocalizedString(@"password_format", @"密码8～16位需包含字母和数字") ;
     tipLab.textColor = kRGBColor(153, 153, 153);
     tipLab.font = [UIFont wcPfRegularFontOfSize:12];
     [self.view addSubview:tipLab];
@@ -165,7 +165,7 @@
     }];
     
     self.downBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.downBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [self.downBtn setTitle:NSLocalizedString(@"finish", @"完成") forState:UIControlStateNormal];
     [self.downBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.downBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.downBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];

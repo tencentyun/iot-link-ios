@@ -33,11 +33,11 @@
 #pragma mark privateMethods
 - (void)setupUI{
     self.view.backgroundColor = kBgColor;
-    self.title = @"自助配网";
+    self.title = NSLocalizedString(@"soft_ap", @"自助配网");
     
     UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancleBtn addTarget:self action:@selector(cancleClick:) forControlEvents:UIControlEventTouchUpInside];
-    [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancleBtn setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [cancleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [cancleBtn sizeToFit];
@@ -48,7 +48,7 @@
     [self.view addSubview:scroll];
     
     UILabel *tipLab = [[UILabel alloc] init];
-    tipLab.text = @"将手机Wi-Fi连接设备热点";
+    tipLab.text = NSLocalizedString(@"phoenWIFI_connectHot", @"将手机Wi-Fi连接设备热点");
     tipLab.textColor = kRGBColor(51, 51, 51);
     tipLab.font = [UIFont wcPfSemiboldFontOfSize:20];
     [scroll addSubview:tipLab];
@@ -59,7 +59,7 @@
     
     
     UILabel *tip1 = [[UILabel alloc] init];
-    tip1.text = @"1、手机WIFI连接到如下图所示的设备热点";
+    tip1.text = NSLocalizedString(@"soft_ap_hotspot_step_1", @"1.手机WIFI连接到如下图所示的设备热点");
     tip1.textColor = kRGBColor(51, 51, 51);
     tip1.font = [UIFont wcPfRegularFontOfSize:16];
     [scroll addSubview:tip1];
@@ -83,7 +83,7 @@
     
     
     UILabel *tip2 = [[UILabel alloc] init];
-    tip2.text = @"2、返回APP,添加设备";
+    tip2.text = NSLocalizedString(@"soft_ap_hotspot_step_2", @"2.返回APP,添加设备");
     tip2.textColor = kRGBColor(51, 51, 51);
     tip2.font = [UIFont wcPfRegularFontOfSize:16];
     [scroll addSubview:tip2];
@@ -94,7 +94,7 @@
     
     
     UIButton *connectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [connectBtn setTitle:@"连接设备热点" forState:UIControlStateNormal];
+    [connectBtn setTitle:NSLocalizedString(@"soft_ap_connect_hotspot", @"连接设备热点") forState:UIControlStateNormal];
     [connectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     connectBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [connectBtn addTarget:self action:@selector(connectClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,7 +135,7 @@
 {
     self.connectB.backgroundColor = [UIColor whiteColor];
     [self.connectB setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.connectB setTitle:@"重新连接" forState:UIControlStateNormal];
+    [self.connectB setTitle:NSLocalizedString(@"reconnect",  @"重新连接") forState:UIControlStateNormal];
     self.connectB.layer.borderColor = kRGBColor(221, 221, 221).CGColor;
     self.connectB.layer.borderWidth = 1.0;
     
@@ -153,7 +153,7 @@
 
 - (void)nextClick:(id)sender{
     TIoTSoftapWaitVC *vc = [[TIoTSoftapWaitVC alloc] init];
-    vc.title = @"soft ap配网";
+    vc.title = NSLocalizedString(@"softAP_distributionnetwork", @"soft ap配网");
     vc.wifiInfo = self.wifiInfo.copy;
     vc.roomId = self.roomId;
     [self.navigationController pushViewController:vc animated:YES];

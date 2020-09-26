@@ -75,7 +75,7 @@
     UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
 
     UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [deleteEquipmentBtn setTitle:@"删除设备" forState:UIControlStateNormal];
+    [deleteEquipmentBtn setTitle:NSLocalizedString(@"delete_device", @"删除设备") forState:UIControlStateNormal];
     [deleteEquipmentBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:20];
     [deleteEquipmentBtn addTarget:self action:@selector(deleteEquipment:) forControlEvents:UIControlEventTouchUpInside];
@@ -128,7 +128,7 @@
 - (void)deleteEquipment:(id)sender{
     
     TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:@"确定要删除设备吗？" message:@"删除后数据无法直接恢复" cancleTitlt:@"取消" doneTitle:@"删除"];
+    [av alertWithTitle:NSLocalizedString(@"confirm_delete_device", @"确定要删除设备吗？") message:NSLocalizedString(@"delete_toast_content", @"删除后数据无法直接恢复") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self deleteDevice];
     };
@@ -153,10 +153,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备名称"]) {
+    if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_name", @"设备名称")]) {
         
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        [av alertWithTitle:@"设备名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
+        [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {
             if (text.length > 0) {
@@ -167,19 +167,19 @@
         [av showInView:[UIApplication sharedApplication].keyWindow];
         
     }
-    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备分享"])
+    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_share", @"设备分享")])
     {
         TIoTDeviceShareVC *vc = [[TIoTDeviceShareVC alloc] init];
         vc.deviceDic = self.deviceDic;
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"房间设置"])
+    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"room_setting", @"房间设置")])
     {
         TIoTModifyRoomVC *vc = [[TIoTModifyRoomVC alloc] init];
         vc.deviceInfo = self.deviceDic;
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:@"设备信息"])
+    else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_info", @"设备信息")])
     {
         UIViewController *vc = [NSClassFromString(@"TIoTDeviceDetailVC") new];
         [self.navigationController pushViewController:vc animated:YES];
@@ -204,10 +204,10 @@
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"设备名称",@"value":self.deviceDic[@"AliasName"],@"needArrow":@"1"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"设备信息",@"value":@"",@"needArrow":@"1"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"房间设置",@"value":@"",@"needArrow":@"1"}]];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"设备分享",@"value":@"",@"needArrow":@"1"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_name", @"设备名称"),@"value":self.deviceDic[@"AliasName"],@"needArrow":@"1"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_info", @"设备信息"),@"value":@"",@"needArrow":@"1"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_setting", @"房间设置"),@"value":@"",@"needArrow":@"1"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_share", @"设备分享"),@"value":@"",@"needArrow":@"1"}]];
     }
     return _dataArr;
 }

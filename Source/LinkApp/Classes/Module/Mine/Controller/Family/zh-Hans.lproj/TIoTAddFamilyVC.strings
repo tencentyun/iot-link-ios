@@ -1,0 +1,12 @@
+
+/* Class = "UIButton"; normalTitle = "确定"; ObjectID = "5Bl-98-lwI"; */
+"5Bl-98-lwI.normalTitle" = "确定";
+
+/* Class = "UITextField"; placeholder = "填写家庭地址"; ObjectID = "8cI-UG-aHY"; */
+"8cI-UG-aHY.placeholder" = "填写家庭地址";
+
+/* Class = "UILabel"; text = "家庭位置"; ObjectID = "JO1-lU-aT8"; */
+"JO1-lU-aT8.text" = "家庭位置";
+
+/* Class = "UITextField"; placeholder = "填写家庭名称"; ObjectID = "kPD-4z-wD9"; */
+"kPD-4z-wD9.placeholder" = "填写家庭名称";

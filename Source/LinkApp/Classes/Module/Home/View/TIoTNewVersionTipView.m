@@ -97,7 +97,7 @@
     UILabel *versionNumLabel = [[UILabel alloc] init];
     versionNumLabel.textColor = kRGBColor(136, 136, 136);
     versionNumLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    versionNumLabel.text = [NSString stringWithFormat:@"版本号：%@", [versionInfo objectForKey:@"AppVersion"]];
+    versionNumLabel.text = [NSString stringWithFormat:@"%@：%@",NSLocalizedString(@"version_code", @"版本号"),[versionInfo objectForKey:@"AppVersion"]];
     [paramView addSubview:versionNumLabel];
     [versionNumLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(paramView).offset(9);
@@ -107,7 +107,7 @@
     UILabel *packageSizeLabel = [[UILabel alloc] init];
     packageSizeLabel.textColor = kRGBColor(136, 136, 136);
     packageSizeLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    packageSizeLabel.text = [NSString stringWithFormat:@"安装包大小：%.2fM", [[versionInfo objectForKey:@"PackageSize"] floatValue]];
+    packageSizeLabel.text = [NSString stringWithFormat:@"%@：%.2fM",NSLocalizedString(@"package_size", @"安装包大小") , [[versionInfo objectForKey:@"PackageSize"] floatValue]];
     [paramView addSubview:packageSizeLabel];
     [packageSizeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(versionNumLabel.mas_bottom).offset(4);
@@ -117,7 +117,7 @@
     UILabel *releaseTimeLabel = [[UILabel alloc] init];
     releaseTimeLabel.textColor = kRGBColor(136, 136, 136);
     releaseTimeLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    releaseTimeLabel.text = [NSString stringWithFormat:@"发布时间：%@", [NSString convertTimestampToTime:versionInfo[@"ReleaseTime"] byDateFormat:@"yyyy/MM/dd"]];
+    releaseTimeLabel.text = [NSString stringWithFormat:@"%@：%@", NSLocalizedString(@"publish_time", @"发布时间"),[NSString convertTimestampToTime:versionInfo[@"ReleaseTime"] byDateFormat:@"yyyy/MM/dd"]];
     [paramView addSubview:releaseTimeLabel];
     [releaseTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(packageSizeLabel.mas_bottom).offset(4);
@@ -145,7 +145,7 @@
     }];
     
     UIButton *nextTimeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextTimeButton setTitle:@"下次再说" forState:UIControlStateNormal];
+    [nextTimeButton setTitle:NSLocalizedString(@"next_time", @"下次再说")  forState:UIControlStateNormal];
     [nextTimeButton setTitleColor:kRGBColor(136, 136, 136) forState:UIControlStateNormal];
     nextTimeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
     [nextTimeButton addTarget:self action:@selector(nextTimeClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -158,7 +158,7 @@
     }];
     
     UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [confirmButton setTitle:@"立即升级" forState:UIControlStateNormal];
+    [confirmButton setTitle:NSLocalizedString(@"upgrade_now", @"立即升级") forState:UIControlStateNormal];
     [confirmButton setTitleColor:kMainColor forState:UIControlStateNormal];
     confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
     [confirmButton addTarget:self action:@selector(confirmClick:) forControlEvents:UIControlEventTouchUpInside];

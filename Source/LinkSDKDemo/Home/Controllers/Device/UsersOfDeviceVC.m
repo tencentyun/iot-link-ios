@@ -46,7 +46,7 @@
 - (void)add
 {
     UIViewController *vc = [NSClassFromString(@"InviteVC") new];
-    [vc setValue:@"设备分享" forKey:@"title"];
+    [vc setValue:NSLocalizedString(@"device_share", @"设备分享") forKey:@"title"];
     [vc setValue:self.deviceInfo[@"FamilyId"] forKey:@"familyId"];
     [vc setValue:self.deviceInfo[@"ProductId"] forKey:@"productId"];
     [vc setValue:self.deviceInfo[@"DeviceName"] forKey:@"deviceName"];

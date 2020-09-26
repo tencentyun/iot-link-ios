@@ -144,7 +144,7 @@
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     
     UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [deleteEquipmentBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    [deleteEquipmentBtn setTitle:NSLocalizedString(@"logout", @"退出登录") forState:UIControlStateNormal];
     [deleteEquipmentBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:20];
     [deleteEquipmentBtn addTarget:self action:@selector(loginoutClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -176,7 +176,7 @@
     footerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [deleteEquipmentBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    [deleteEquipmentBtn setTitle:NSLocalizedString(@"logout", @"退出登录") forState:UIControlStateNormal];
     [deleteEquipmentBtn setTitleColor:[UIColor colorWithHexString:kSignoutHexColor] forState:UIControlStateNormal];
     deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [deleteEquipmentBtn addTarget:self action:@selector(loginoutClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -201,15 +201,15 @@
 //选择获取图片方式
 - (void)getImageType{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *camera = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *camera = [UIAlertAction actionWithTitle:NSLocalizedString(@"take_photo", @"拍照") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self openSystemPhotoOrCamara:YES];
     }];
     
-    UIAlertAction *photo = [UIAlertAction actionWithTitle:@"从手机相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *photo = [UIAlertAction actionWithTitle:NSLocalizedString(@"choice_from_mobilealbum", @"从手机相册选择")  style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self openSystemPhotoOrCamara:NO];
     }];
     
-    UIAlertAction *cancle = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancle = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIAlertActionStyleCancel handler:nil];
     
     [alert addAction:camera];
     [alert addAction:photo];
@@ -224,7 +224,7 @@
             self.picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }
         else{
-            [MBProgressHUD showError:@"相机打开失败"];
+            [MBProgressHUD showError:NSLocalizedString(@"camera_openFailure", @"相机打开失败")];
             return;
         }
     }
@@ -246,7 +246,7 @@
 - (void)modifyName:(NSString *)name
 {
     if (name.length > 20) {
-        [MBProgressHUD showError:@"昵称请勿超过20字符"];
+        [MBProgressHUD showError:NSLocalizedString(@"nick_less20characters", @"昵称请勿超过20字符")];
         return;
     }
     
@@ -254,7 +254,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
         [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[TIoTCoreUserManage shared].avatar} success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"修改成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
             [HXYNotice addModifyUserInfoPost];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -268,7 +268,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"Avatar":avatar} success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"修改成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"Avatar":avatar}];
         [HXYNotice addModifyUserInfoPost];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -378,12 +378,12 @@
     
     //国际化版本
     NSArray *tempSectionArray = self.dataArr[indexPath.section];
-    if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"头像"]) {
+    if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"avatar", @"头像")]) {
         [self editIcon];
-    }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"昵称"]) {
+    }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"nick", @"昵称")]) {
 
             TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-            [av alertWithTitle:@"名称设置" message:@"10字以内" cancleTitlt:@"取消" doneTitle:@"确定"];
+            [av alertWithTitle:NSLocalizedString(@"timing_name", @"名称设置")  message:NSLocalizedString(@"less10characters", @"10字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
             av.maxLength = 10;
             av.defaultText = tempSectionArray[indexPath.row][@"value"];
             av.doneAction = ^(NSString * _Nonnull text) {
@@ -392,21 +392,21 @@
                 }
                 else
                 {
-                    [MBProgressHUD showMessage:@"昵称长度非法" icon:@""];
+                    [MBProgressHUD showMessage:NSLocalizedString(@"nick_length_illegality", @"昵称长度非法") icon:@""];
                 }
             };
         [av showInView:[[UIApplication sharedApplication] delegate].window];
 
     //        WCModifyNikeNameViewController *vc = [[WCModifyNikeNameViewController alloc] init];
     //        [self.navigationController pushViewController:vc animated:YES];
-        } else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"电话号码"]){
+        } else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"telephone_number", @"电话号码")]){
             if ([TIoTCoreUserManage shared].phoneNumber.length == 0) {
                 [self bindPhone];
             }
-        }else if([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"账号与安全"]) {
+        }else if([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"account_and_safety", @"账号与安全")]) {
             TIoTAccountAndSafeVC *accountAndSafeVC = [[TIoTAccountAndSafeVC alloc]init];
             [self.navigationController pushViewController:accountAndSafeVC animated:YES];
-        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"温度单位"]) {
+        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"the_unit_of_temperature", @"温度单位")]) {
             TIoTCustomActionSheet *actionSheet = [[TIoTCustomActionSheet alloc]initWithFrame:[UIScreen mainScreen].bounds];
             actionSheet.choiceFahrenheitBlock = ^{
                 //摄氏温度转华氏温度值，并上报用户配置信息
@@ -416,9 +416,9 @@
                 
                 NSString *temperatureString = tempSectionArray[indexPath.row][@"value"];
                 if (temperatureString) {
-                    if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]) {
+                    if ([temperatureString containsString:NSLocalizedString(@"celsius_Hanzi", @"摄氏")] || [temperatureString containsString:@"℃"]) {
                         temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℃" withString:@""];
-                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"摄氏" withString:@""];
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:NSLocalizedString(@"celsius_Hanzi", @"摄氏") withString:@""];
                         if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                             NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.fahrenheit];
                             NSMeasurement *celsiusMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.celsius];
@@ -429,10 +429,10 @@
                         
                         //设置用户配置
                         [self reportTemperatureWithUnit:@"F"];
-                    }else if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]){
+                    }else if ([temperatureString containsString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏")] || [temperatureString containsString:@"℉"]){
                         
                     }else {
-                        [MBProgressHUD showError:@"设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
                 
@@ -442,9 +442,9 @@
                 //华氏温度转换摄氏温度值，并上报用户配置信息
                 NSString *temperatureString = tempSectionArray[indexPath.row][@"value"];
                 if (temperatureString) {
-                    if ([temperatureString containsString:@"华氏"] || [temperatureString containsString:@"℉"]) {
+                    if ([temperatureString containsString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏")] || [temperatureString containsString:@"℉"]) {
                         temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"℉" withString:@""];
-                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:@"华氏" withString:@""];
+                        temperatureString = [temperatureString stringByReplacingOccurrencesOfString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏") withString:@""];
                         if ([NSString isPureIntOrFloat:[temperatureString copy]]) {
                             NSMeasurement *measurement = [[NSMeasurement alloc]initWithDoubleValue:temperatureString.floatValue unit:NSUnitTemperature.celsius];
                             NSMeasurement *fahrenheitMeasurement = [measurement measurementByConvertingToUnit:NSUnitTemperature.fahrenheit];
@@ -456,17 +456,17 @@
                         //设置用户配置
                         [self reportTemperatureWithUnit:@"C"];
                         
-                    }else if ([temperatureString containsString:@"摄氏"] || [temperatureString containsString:@"℃"]){
+                    }else if ([temperatureString containsString:NSLocalizedString(@"celsius_Hanzi", @"摄氏")] || [temperatureString containsString:@"℃"]){
                         
                     }else {
-                        [MBProgressHUD showError:@"设置失败" toView:[[UIApplication sharedApplication] delegate].window];
+                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
 
             };
             
             [actionSheet shwoActionSheetView];
-        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:@"时区"]){
+        }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"time_zone", @"时区")]){
             TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
             timeZoneVC.returnTimeZoneBlock = ^(NSString * _Nonnull timeZone, NSString * _Nonnull cityName) {
 
@@ -553,7 +553,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error) {
-                        [MBProgressHUD showError:@"上传失败" toView:selfstrong.view];
+                        [MBProgressHUD showError:NSLocalizedString(@"upload_error", @"上传失败") toView:selfstrong.view];
                     }
                     else
                     {
@@ -617,13 +617,13 @@
         
         //国际化版本
         _dataArr = [NSMutableArray arrayWithArray:@[
-            @[@{@"title":@"头像",@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
-              @{@"title":@"昵称",@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
-              @{@"title":@"用户ID",@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+            @[@{@"title":NSLocalizedString(@"avatar", @"头像"),@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
+              @{@"title":NSLocalizedString(@"nick", @"昵称"),@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+              @{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
             ],
-            @[@{@"title":@"账号与安全",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":@"温度单位",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-              [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"时区",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+            @[@{@"title":NSLocalizedString(@"account_and_safety", @"账号与安全"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+            @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"the_unit_of_temperature", @"温度单位"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+              [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"time_zone", @"时区"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
             ],
         ]];
     }

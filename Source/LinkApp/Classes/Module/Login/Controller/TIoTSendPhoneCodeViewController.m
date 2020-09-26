@@ -43,7 +43,7 @@
 #pragma mark lifeCircle
 - (void)setupUI{
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"验证码";
+    self.title = NSLocalizedString(@"verification_code", @"验证码");
     
     
     JHVCConfig *config     = [[JHVCConfig alloc] init];
@@ -85,10 +85,10 @@
     
     UILabel *tipLab = [[UILabel alloc] init];
     if (self.registerType == PhoneRegister || self.registerType == PhoneResetPwd) {
-        tipLab.text = [NSString stringWithFormat:@"验证码已经发送到您的手机:%@-%@",self.sendCodeDic[@"CountryCode"]?:@"",self.sendCodeDic[@"PhoneNumber"]?:@""];
+        tipLab.text = [NSString stringWithFormat:@"%@%@-%@",NSLocalizedString(@"get_mobile_code_sent", @"验证码已经发送到您的手机:"),self.sendCodeDic[@"CountryCode"]?:@"",self.sendCodeDic[@"PhoneNumber"]?:@""];
     }
     else{
-        tipLab.text = [NSString stringWithFormat:@"验证码已经发送到您的邮箱:%@",self.sendCodeDic[@"Email"]?:@""];
+        tipLab.text = [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"get_email_code_sent", @"验证码已经发送到您的邮箱:"),self.sendCodeDic[@"Email"]?:@""];
     }
     
     tipLab.textColor = kRGBColor(153, 153, 153);
@@ -104,7 +104,7 @@
 
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:12];
-    [self.sendCodeBtn setTitle:@"重新发送(60s)" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(60s)",NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     [self openCountdown];
@@ -116,7 +116,7 @@
     
     
     self.registerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.registerBtn setTitle:self.registerType == LoginedResetPwd ? @"确定" : @"下一步" forState:UIControlStateNormal];
+    [self.registerBtn setTitle:self.registerType == LoginedResetPwd ? NSLocalizedString(@"confirm", @"确定") : NSLocalizedString(@"next", @"下一步") forState:UIControlStateNormal];
     [self.registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.registerBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.registerBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -162,7 +162,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 //设置按钮的样式
-                [selfWeak.sendCodeBtn setTitle:@"重新发送验证码" forState:UIControlStateNormal];
+                [selfWeak.sendCodeBtn setTitle:NSLocalizedString(@"resend_verificationcode", @"重新发送验证码") forState:UIControlStateNormal];
                 selfWeak.sendCodeBtn.userInteractionEnabled = YES;
                 [selfWeak.sendCodeBtn setTitleColor:kMainColor forState:UIControlStateNormal];
             });
@@ -173,7 +173,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 //设置按钮显示读秒效果
-                [selfWeak.sendCodeBtn setTitle:[NSString stringWithFormat:@"重新发送(%.2ds)", seconds] forState:UIControlStateNormal];
+                [selfWeak.sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(%.2ds)", NSLocalizedString(@"resend", @"重新发送"),seconds] forState:UIControlStateNormal];
                 selfWeak.sendCodeBtn.userInteractionEnabled = NO;
                 [selfWeak.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
             });
@@ -223,7 +223,7 @@
             [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"phoneNumber":self.sendCodeDic[@"PhoneNumber"],@"VerificationCode":self.code,@"CountryCode":self.sendCodeDic[@"CountryCode"]} success:^(id responseObject) {
                 UIViewController *userInfoVC = self.navigationController.viewControllers[1];
                 [self.navigationController popToViewController:userInfoVC animated:YES];
-                [MBProgressHUD showSuccess:@"修改成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
                 [TIoTCoreUserManage shared].phoneNumber = self.sendCodeDic[@"PhoneNumber"];
                 [HXYNotice addModifyUserInfoPost];
             } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -243,7 +243,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
         [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"发送成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             [self openCountdown];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
@@ -258,7 +258,7 @@
         
         [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
             [MBProgressHUD dismissInView:self.view];
-            [MBProgressHUD showSuccess:@"发送成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             [self openCountdown];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
