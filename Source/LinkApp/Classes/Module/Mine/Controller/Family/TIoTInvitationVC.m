@@ -67,7 +67,7 @@
     
     
     UIButton *emailRegisterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emailRegisterBtn setTitle:@"使用邮箱账号" forState:UIControlStateNormal];
+    [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -79,7 +79,7 @@
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.sendCodeBtn addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
@@ -133,14 +133,14 @@
         _emailStyle = NO;
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
         self.emailTF.text = @"";
-        [sender setTitle:@"使用邮箱账号" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     }
     else
     {
         _emailStyle = YES;
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
         self.phoneTF.text = @"";
-        [sender setTitle:@"使用手机账号" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"phone_forgot", @"使用手机账号") forState:UIControlStateNormal];
     }
 }
 
@@ -191,20 +191,20 @@
 
 - (void)sendMessageToUser:(NSString *)userId
 {
-    if ([self.title isEqualToString:@"分享用户"]) {
+    if ([self.title isEqualToString:NSLocalizedString(@"device_share_to_user", @"分享用户")]) {
         NSDictionary *param = @{@"FamilyId":self.familyId,@"ProductId":self.productId,@"DeviceName":self.deviceName,@"ToUserID":userId};
         [[TIoTRequestObject shared] post:AppSendShareDeviceInvite Param:param success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"发送邀请成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"send_invitation_success", @"发送邀请成功")];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
     }
-    else if ([self.title isEqualToString:@"邀请成员"])
+    else if ([self.title isEqualToString:NSLocalizedString(@"invite_member", @"邀请成员")])
     {
         NSDictionary *param = @{@"FamilyId":self.familyId,@"ToUserID":userId};
         [[TIoTRequestObject shared] post:AppSendShareFamilyInvite Param:param success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"发送邀请成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"send_invitation_success", @"发送邀请成功")];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
@@ -231,7 +231,7 @@
         _contentView.backgroundColor = [UIColor whiteColor];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
@@ -256,7 +256,7 @@
         self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
         self.phoneTF.textColor = [UIColor blackColor];
         self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:18];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"手机号码" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"phone_number", @"手机号码") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -300,7 +300,7 @@
         self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailTF.textColor = kFontColor;
         self.emailTF.font = [UIFont wcPfSemiboldFontOfSize:18];
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"邮箱账号" attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_account", @"邮箱账号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont systemFontOfSize:18]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];

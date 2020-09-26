@@ -116,8 +116,7 @@ failure:(FailureResponseBlock)failure
         [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
         
     }
-    
-    
+
     if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].userRegionId]) {
         [accessParam setValue:[TIoTCoreUserManage shared].userRegionId forKey:@"RegionId"];
     }

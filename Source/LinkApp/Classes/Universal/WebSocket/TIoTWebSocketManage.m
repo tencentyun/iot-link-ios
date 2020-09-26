@@ -282,8 +282,8 @@ static NSString *heartBeatReqID = @"5002";
 - (BOOL)needLogin{
     if ([[TIoTCoreUserManage shared].expireAt integerValue] <= [[NSString getNowTimeString] integerValue] && [TIoTCoreUserManage shared].accessToken.length > 0) {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"登录已过期" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"重新登录" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"warm_prompt", @"温馨提示") message:NSLocalizedString(@"login_timeout", @"登录已过期") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"relogin", @"重新登录") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
             [[TIoTAppEnvironment shareEnvironment] loginOut];
             TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];

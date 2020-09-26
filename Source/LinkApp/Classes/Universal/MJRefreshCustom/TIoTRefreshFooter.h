@@ -7,7 +7,7 @@
 //
 
 #import "MJRefreshAutoFooter.h"
-#define kXDPRefreshFooterFailure @"加载失败，点击重新加载"
+#define kXDPRefreshFooterFailure NSLocalizedString(@"loadFailure_reload", @"加载失败，点击重新加载")
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTRefreshFooter : MJRefreshAutoFooter

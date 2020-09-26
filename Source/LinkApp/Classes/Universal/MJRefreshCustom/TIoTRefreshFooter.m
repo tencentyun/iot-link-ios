@@ -45,8 +45,8 @@
 - (void)prepare{
     [super prepare];
     [self setTitle:@"" forState:MJRefreshStateIdle];
-    [self setTitle:@"加载中..." forState:MJRefreshStateRefreshing];
-    [self setTitle:@"没有更多了!" forState:MJRefreshStateNoMoreData];
+    [self setTitle:NSLocalizedString(@"loading", @"加载中...")  forState:MJRefreshStateRefreshing];
+    [self setTitle:NSLocalizedString(@"no_more", @"没有更多了!") forState:MJRefreshStateNoMoreData];
 }
 
 - (void)placeSubviews{
@@ -69,7 +69,7 @@
                               context:nil].size.width;
         failureCenterX -= stateWidth / 2 + 6;
         
-        stateWidth = [@"加载中..."
+        stateWidth = [NSLocalizedString(@"loading", @"加载中...")
                                 boundingRectWithSize:self.stateLabel.frame.size
                                 options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:@{NSFontAttributeName:self.stateLabel.font}

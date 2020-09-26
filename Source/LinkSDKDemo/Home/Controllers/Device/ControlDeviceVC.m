@@ -82,7 +82,7 @@
 - (void)refresh
 {
 //    self.theme.text = self.ci.theme;
-    self.navBar.text = [self.ci.navBar[@"visible"] boolValue] ? @"显示" : @"不显示";
+    self.navBar.text = [self.ci.navBar[@"visible"] boolValue] ? NSLocalizedString(@"display", @"显示") : NSLocalizedString(@"no_display", @"不显示");
     NSString *templateId = self.ci.navBar[@"templateId"];
     if (templateId && templateId.length > 0) {
         
@@ -96,10 +96,10 @@
     }
     else
     {
-        self.content1.text = @"不显示";
+        self.content1.text = NSLocalizedString(@"no_display", @"不显示");
     }
-    self.content2.text = [self.ci.navBar[@"timingProject"] boolValue] ? @"云端定时" : @"不显示";
-    self.timing.text = self.ci.timingProject ? @"显示" : @"不显示";
+    self.content2.text = [self.ci.navBar[@"timingProject"] boolValue] ? NSLocalizedString(@"cloud_timing", @"云端定时") : NSLocalizedString(@"no_display", @"不显示");
+    self.timing.text = self.ci.timingProject ? NSLocalizedString(@"display", @"显示")  : NSLocalizedString(@"no_display", @"不显示");
     
     [self.tableView reloadData];
 }
@@ -145,11 +145,11 @@
 
 - (IBAction)delete:(id)sender {
     TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:@"确定要删除设备吗？" message:@"删除后数据无法直接恢复" cancleTitlt:@"取消" doneTitle:@"删除"];
+    [av alertWithTitle:NSLocalizedString(@"confirm_delete_device", @"确定要删除设备吗？") message:NSLocalizedString(@"delete_toast_content", @"删除后数据无法直接恢复") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
     av.doneAction = ^(NSString * _Nonnull text) {
         
         [[TIoTCoreDeviceSet shared] deleteDeviceWithFamilyId:self.deviceInfo[@"FamilyId"] productId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
-            [MBProgressHUD showSuccess:@"删除成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"delete_success", @"删除成功")];
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
@@ -168,12 +168,12 @@
 
 - (IBAction)modifyAlias:(id)sender {
     TIoTCoreAlertView *av = [[TIoTCoreAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-    [av alertWithTitle:@"设备名称" message:@"20字以内" cancleTitlt:@"取消" doneTitle:@"确认"];
+    [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
     av.maxLength = 20;
     av.doneAction = ^(NSString * _Nonnull text) {
         if (text.length > 0) {
             [[TIoTCoreDeviceSet shared] modifyAliasName:text ByProductId:self.deviceInfo[@"ProductId"] andDeviceName:self.deviceInfo[@"DeviceName"] success:^(id  _Nonnull responseObject) {
-                [MBProgressHUD showSuccess:@"修改成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
                 self.title = text;
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 [MBProgressHUD showError:reason];
@@ -225,7 +225,7 @@
 - (void)sendControlData:(NSDictionary *)data {
     
     [[TIoTCoreDeviceSet shared] controlDeviceDataWithProductId:self.deviceInfo[@"ProductId"] deviceName:self.deviceInfo[@"DeviceName"] data:data success:^(id  _Nonnull responseObject) {
-        [MBProgressHUD showSuccess:@"发送成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];

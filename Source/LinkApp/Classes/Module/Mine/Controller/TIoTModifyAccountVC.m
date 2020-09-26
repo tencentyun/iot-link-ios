@@ -85,7 +85,7 @@
 - (UIButton *)areaCodeBtn {
     if (!_areaCodeBtn) {
         _areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -183,7 +183,7 @@
     }
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"修改成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
         [[TIoTCoreUserManage shared] saveUserInfo:tmpDic];
 
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {

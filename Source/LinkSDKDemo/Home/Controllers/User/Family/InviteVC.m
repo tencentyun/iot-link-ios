@@ -22,10 +22,10 @@
 }
 
 - (IBAction)send:(id)sender {
-    if ([self.title isEqualToString:@"邀请成员"]) {
+    if ([self.title isEqualToString:NSLocalizedString(@"invite_member", @"邀请成员")]) {
         if (self.seg.selectedSegmentIndex) {
             [[TIoTCoreFamilySet shared] sendInvitationToEmail:self.tf.text withFamilyId:self.familyId success:^(id  _Nonnull responseObject) {
-                [MBProgressHUD showSuccess:@"发送成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];
@@ -33,17 +33,17 @@
         else
         {
             [[TIoTCoreFamilySet shared] sendInvitationToPhoneNum:self.tf.text withCountryCode:@"86" familyId:self.familyId success:^(id  _Nonnull responseObject) {
-                [MBProgressHUD showSuccess:@"发送成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 [MBProgressHUD showError:reason];
             }];
         }
     }
-    else if ([self.title isEqualToString:@"设备分享"])
+    else if ([self.title isEqualToString:NSLocalizedString(@"device_share", @"设备分享")])
     {
         if (self.seg.selectedSegmentIndex) {
             [[TIoTCoreDeviceSet shared] sendInvitationToEmail:self.tf.text withFamilyId:self.familyId productId:self.productId deviceName:self.deviceName success:^(id  _Nonnull responseObject) {
-                [MBProgressHUD showSuccess:@"发送成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];
@@ -51,7 +51,7 @@
         else
         {
             [[TIoTCoreDeviceSet shared] sendInvitationToPhoneNum:self.tf.text withCountryCode:@"86" familyId:self.familyId productId:self.productId deviceName:self.deviceName success:^(id  _Nonnull responseObject) {
-                [MBProgressHUD showSuccess:@"发送成功"];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"send_success", @"发送成功")];
             } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                 
             }];

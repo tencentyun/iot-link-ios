@@ -40,7 +40,7 @@ static NSString *cellID = @"DODO";
     // Do any additional setup after loading the view.
     
     
-    self.title = @"首页";
+    self.title = NSLocalizedString(@"main_tab_1", @"首页");
     [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
     
 //    [self getFamilyList];
@@ -119,7 +119,7 @@ static NSString *cellID = @"DODO";
 
 - (void)createFamily
 {
-    [[TIoTCoreFamilySet shared] createFamilyWithName:@"我的家" address:@"兰陵" success:^(id  _Nonnull responseObject) {
+    [[TIoTCoreFamilySet shared] createFamilyWithName:NSLocalizedString(@"my_family", @"我的家") address:@"兰陵" success:^(id  _Nonnull responseObject) {
         [self getFamilyList];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         

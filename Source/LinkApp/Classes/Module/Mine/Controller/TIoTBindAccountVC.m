@@ -29,9 +29,9 @@
 - (void)setUpUI{
     self.view.backgroundColor = [UIColor whiteColor];
     if (self.accountType == AccountType_Phone) {
-        self.title = @"绑定手机号";
+        self.title = NSLocalizedString(@"bind_phonenumber", @"绑定手机");
     }else if (self.accountType == AccountType_Email) {
-        self.title = @"绑定邮箱";
+        self.title = NSLocalizedString(@"bind_email_address", @"绑定邮箱");
     }
     
     self.conturyCode = @"86";
@@ -87,7 +87,7 @@
 - (UIButton *)areaCodeBtn {
     if (!_areaCodeBtn) {
         _areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -193,13 +193,13 @@
 - (void)bindAccountConfirmClickButtonWithAccountType:(BindAccountType)accountType {
     
     if (![self.bindAccountView.passwordTF.text isEqualToString:self.bindAccountView.passwordConfirmTF.text]) {
-        [MBProgressHUD showMessage:@"两次输入的密码不一致" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:self.bindAccountView.passwordTF.text];
     if (!isPass) {
-        [MBProgressHUD showMessage:@"密码不合规" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
     
@@ -224,7 +224,7 @@
     }
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"绑定成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
         [[TIoTCoreUserManage shared] saveUserInfo:tmpDic];
         self.resfreshResponseBlock(YES);
         [self.navigationController popViewControllerAnimated:YES];

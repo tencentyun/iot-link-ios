@@ -75,7 +75,7 @@
 - (UILabel *)welcomeLalel {
     if (!_welcomeLalel) {
         _welcomeLalel = [[UILabel alloc]init];
-        _welcomeLalel.text = @"欢迎使用腾讯连连";
+        _welcomeLalel.text = NSLocalizedString(@"welcome_to_use_tencent_ll", @"欢迎使用腾讯连连");
         _welcomeLalel.textColor = [UIColor colorWithHexString:@"#444444"];
         _welcomeLalel.font = [UIFont wcPfRegularFontOfSize:18];
     }
@@ -85,7 +85,7 @@
 - (UIButton *)registButton {
     if (!_registButton) {
         _registButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_registButton setTitle:@"创建新账号" forState:UIControlStateNormal];
+        [_registButton setTitle:NSLocalizedString(@"create_new_account", @"创建新账号") forState:UIControlStateNormal];
         _registButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_registButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registButton addTarget:self action:@selector(createNewAccount) forControlEvents:UIControlEventTouchUpInside];
@@ -97,7 +97,7 @@
 - (UIButton *)loginButton {
     if (!_loginButton) {
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_loginButton setTitle:@"使用已有账号登录" forState:UIControlStateNormal];
+        [_loginButton setTitle:NSLocalizedString(@"use_existed_account_to_login", @"使用已有账号登录") forState:UIControlStateNormal];
         _loginButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_loginButton addTarget:self action:@selector(loginOldAccount) forControlEvents:UIControlEventTouchUpInside];
         [_loginButton setTitleColor:[UIColor colorWithHexString:@"#0052D9"] forState:UIControlStateNormal];

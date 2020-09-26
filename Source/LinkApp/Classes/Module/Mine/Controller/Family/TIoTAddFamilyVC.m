@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"添加家庭";
+    self.title = NSLocalizedString(@"add_family", @"添加家庭");
     
     [self.nameL addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 //    [self setNav];
@@ -27,8 +27,8 @@
 
 - (void)setNav
 {
-    self.title = @"添加家庭";
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    self.title = NSLocalizedString(@"add_family", @"添加家庭");
+    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.leftBarButtonItem = left;
 }
 
@@ -80,7 +80,7 @@
     }
     else
     {
-        [MBProgressHUD showMessage:@"请将信息填写完整" icon:@""];
+        [MBProgressHUD showMessage:NSLocalizedString(@"Complete_supplementary_information", @"请将信息填写完整") icon:@""];
     }
     
 }

@@ -114,11 +114,11 @@
             break;
             
         case CBManagerStateUnsupported:
-            [MBProgressHUD showError:@"您的设备不支持蓝牙或蓝牙4.0"];
+            [MBProgressHUD showError:NSLocalizedString(@"bluetooth_unqualified", @"您的设备不支持蓝牙或蓝牙4.0")];
             break;
             
         case CBManagerStateUnauthorized:
-            [MBProgressHUD showError:@"未授权打开蓝牙"];
+            [MBProgressHUD showError:NSLocalizedString(@"unauthorized_bluetooth", @"未授权打开蓝牙")];
             break;
             
         case CBManagerStatePoweredOff://蓝牙未打开，系统会自动提示打开，所以不用自行提示
@@ -185,7 +185,7 @@
 
 /// 连接外设成功的代理方法
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    [MBProgressHUD showSuccess:[NSString stringWithFormat:@"蓝牙设备 %@ 已连接",peripheral.name]];
+    [MBProgressHUD showSuccess:[NSString stringWithFormat:@"%@ %@ %@",NSLocalizedString(@"bluetoothDevice", @"蓝牙设备"),NSLocalizedString(@"connected", @"已连接"),peripheral.name]];
     
     // 设置设备代理
     [peripheral setDelegate:self];
@@ -206,7 +206,7 @@
 
 ///连接外设中断的代理方法
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    [MBProgressHUD showError:@"连接中断"];
+    [MBProgressHUD showError:NSLocalizedString(@"connected_interrupt", @"连接中断")];
 }
 
 
@@ -278,7 +278,7 @@
 // 写入数据后的回调方法
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
-        [MBProgressHUD showError:@"传输数据失败"];
+        [MBProgressHUD showError:NSLocalizedString(@"transferFailure", @"传输数据失败")];
     }
 }
 

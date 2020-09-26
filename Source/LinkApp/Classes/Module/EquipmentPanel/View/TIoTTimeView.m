@@ -63,7 +63,7 @@
 //    }];
     
     UIButton *cancelB = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelB setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelB setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [cancelB setTitleColor:kMainColor forState:UIControlStateNormal];
     [cancelB addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
     [cancelB.titleLabel setFont:[UIFont wcPfRegularFontOfSize:14]];
@@ -74,7 +74,7 @@
     }];
     
     UIButton *doneB = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneB setTitle:@"确定" forState:UIControlStateNormal];
+    [doneB setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [doneB setTitleColor:kMainColor forState:UIControlStateNormal];
     [doneB.titleLabel setFont:[UIFont wcPfRegularFontOfSize:14]];
     [doneB addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];

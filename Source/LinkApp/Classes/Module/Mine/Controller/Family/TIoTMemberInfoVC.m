@@ -27,10 +27,10 @@
 
 - (void)fillInfo
 {
-    self.title = @"成员设置";
+    self.title = NSLocalizedString(@"member_setting", @"成员设置");
     [self.headImg setImageWithURLStr:self.memberInfo[@"Avatar"] placeHolder:@"userDefalut"];
     self.memberNick.text = self.memberInfo[@"NickName"];
-    self.roleL.text = [self.memberInfo[@"Role"] integerValue] == 1 ? @"所有者" : @"成员";
+    self.roleL.text = [self.memberInfo[@"Role"] integerValue] == 1 ? NSLocalizedString(@"role_owner", @"所有者") : NSLocalizedString(@"role_member",@"成员");
     
     if (self.isOwner && ![[TIoTCoreUserManage shared].userId isEqualToString:self.memberInfo[@"UserID"]]) {
         self.removeBtn.hidden = NO;
@@ -40,7 +40,7 @@
 - (IBAction)done:(UIButton *)sender {
     NSDictionary *param = @{@"MemberID":self.memberInfo[@"UserID"],@"FamilyId":self.familyId};
     [[TIoTRequestObject shared] post:AppDeleteFamilyMember Param:param success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"移除成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"remove_success", @"移除成功")];
         [HXYNotice postUpdateMemberList];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {

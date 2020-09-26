@@ -34,10 +34,10 @@
 - (void)setupUI{
     self.view.backgroundColor = [UIColor whiteColor];
     self.conturyCode = @"86";
-    self.title = @"手机绑定";
+    self.title = NSLocalizedString(@"bind_phone", @"手机绑定");
     
     self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+    [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
     [self.areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
     self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
@@ -58,7 +58,7 @@
     }];
     
     self.phoneTF = [[UITextField alloc] init];
-    self.phoneTF.placeholder = @"手机号码";
+    self.phoneTF.placeholder = NSLocalizedString(@"phone_number", @"手机号码");
     self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
     self.phoneTF.textColor = kFontColor;
     self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:18];
@@ -96,7 +96,7 @@
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];

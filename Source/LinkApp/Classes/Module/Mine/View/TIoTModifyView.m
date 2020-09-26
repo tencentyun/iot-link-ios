@@ -101,10 +101,10 @@
     
     NSString *placeHoldString = @"";
     if (self.modifyAccoutType == ModifyAccountPhoneType) {
-        placeHoldString = @"请输入手机号";
+        placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
     }else if (self.modifyAccoutType == ModifyAccountEmailType) {
-        placeHoldString = @"请输入邮箱";
+        placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
     }
     NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
@@ -129,7 +129,7 @@
         _phoneOrEmailTF.textColor = [UIColor blackColor];
         _phoneOrEmailTF.font = [UIFont wcPfRegularFontOfSize:16];
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:@"请输入手机号" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _phoneOrEmailTF.attributedPlaceholder = ap;
         _phoneOrEmailTF.clearButtonMode = UITextFieldViewModeAlways;
         [_phoneOrEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -152,7 +152,7 @@
 - (UIButton *)verificationButton {
     if (!_verificationButton) {
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_verificationButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
@@ -166,7 +166,7 @@
         _verificationCodeTF.keyboardType = UIKeyboardTypeNumberPad;
         _verificationCodeTF.textColor = [UIColor blackColor];
         _verificationCodeTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_verifycode", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         _verificationCodeTF.attributedPlaceholder = apVerification;
         _verificationCodeTF.clearButtonMode = UITextFieldViewModeAlways;
         [_verificationCodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -177,7 +177,7 @@
 - (UIButton *)confirmButton {
     if (!_confirmButton) {
         _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_confirmButton setTitle:@"确认修改" forState:UIControlStateNormal];
+        [_confirmButton setTitle:NSLocalizedString(@"confirm_to_modify", @"确认修改") forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_confirmButton setBackgroundColor:kMainColorDisable];
         _confirmButton.enabled = NO;

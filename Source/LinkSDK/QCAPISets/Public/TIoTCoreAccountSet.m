@@ -423,7 +423,7 @@
     }
     
     if ([currentPassword isEqualToString:newPassword]) {
-        failure(@"新密码不能与旧密码相同",nil,@{});
+        failure(NSLocalizedString(@"new_password_equals_old", @"新密码不能与旧密码相同"),nil,@{});
         return;
     }
     

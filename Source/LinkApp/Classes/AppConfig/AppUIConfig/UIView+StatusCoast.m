@@ -205,7 +205,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     loadingL.textAlignment = NSTextAlignmentCenter;
     loadingL.font = [UIFont wcPfRegularFontOfSize:13];
     loadingL.textColor = kRGBColor(153, 153, 153);
-    loadingL.text = @"正在加载中...";
+    loadingL.text = NSLocalizedString(@"now_loading", @"正在加载中...");
     [self addSubview:loadingL];
     self.loadingL = loadingL;
     
@@ -257,7 +257,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     statusL.textAlignment = NSTextAlignmentCenter;
     statusL.font = [UIFont wcPfRegularFontOfSize:13 * kScreenAllWidthScale];
     statusL.textColor = kRGBColor(204, 204, 204);
-    statusL.text = @"似乎出了点问题...";
+    statusL.text = NSLocalizedString(@"someError", @"似乎出了点问题...");
     [self addSubview:statusL];
     
     UILabel *reloadL = [[UILabel alloc] initWithFrame:CGRectMake(0, statusL.frame.origin.y + statusL.frame.size.height + 20 * kScreenAllWidthScale, 120 * kScreenAllWidthScale, 36 * kScreenAllWidthScale)];
@@ -267,7 +267,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     reloadL.textAlignment = NSTextAlignmentCenter;
     reloadL.font = [UIFont wcPfRegularFontOfSize:14 * kScreenAllWidthScale];
     reloadL.textColor = kRGBColor(255, 61, 106);
-    reloadL.text = @"重新加载";
+    reloadL.text = NSLocalizedString(@"reload", @"重新加载");
     reloadL.layer.cornerRadius = reloadL.frame.size.height * 0.5;
     reloadL.layer.masksToBounds = YES;
     reloadL.layer.borderWidth = 1;

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 配网类型
 @property (nonatomic, assign) TIoTConfigHardwareStyle configHardwareStyle;
 @property (nonatomic, copy) NSString *roomId;
-
+@property (nonatomic, strong) NSDictionary *configurationData;
 @end
 
 NS_ASSUME_NONNULL_END

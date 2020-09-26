@@ -43,7 +43,7 @@
 - (void)setUpUI {
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"修改密码";
+    self.title = NSLocalizedString(@"modify_password", @"修改密码");
     self.conturyCode = @"86";
     self.conturyCode2 = @"86";
     self.modifyStyle = YES;
@@ -93,7 +93,7 @@
     }];
     
     UIButton *verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [verificationCodeButton setTitle:@"邮箱验证修改" forState:UIControlStateNormal];
+    [verificationCodeButton setTitle:NSLocalizedString(@"email_verify_mofify", @"邮箱验证修改") forState:UIControlStateNormal];
     [verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
     verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [verificationCodeButton addTarget:self action:@selector(modifyStyleChange:) forControlEvents:UIControlEventTouchUpInside];
@@ -118,7 +118,7 @@
 - (UIButton *)areaCodeBtn {
     if (!_areaCodeBtn) {
         _areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"中国大陆"] forState:UIControlStateNormal];
+        [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -161,7 +161,7 @@
 - (UIButton *)comfirmModifyButton {
     if (!_comfirmModifyButton) {
         _comfirmModifyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_comfirmModifyButton setTitle:@"确认修改" forState:UIControlStateNormal];
+        [_comfirmModifyButton setTitle:NSLocalizedString(@"confirm_to_modify", @"确认修改") forState:UIControlStateNormal];
         [_comfirmModifyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_comfirmModifyButton setBackgroundColor:kMainColorDisable];
         _comfirmModifyButton.enabled = NO;
@@ -198,15 +198,15 @@
     
     self.comfirmModifyButton.backgroundColor = kMainColorDisable;
     self.comfirmModifyButton.enabled = NO;
-    if ([sender.titleLabel.text containsString:@"验证码"]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
         self.modifyStyle = YES;
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        [sender setTitle:@"邮箱验证修改" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"email_verify_mofify", @"邮箱验证修改") forState:UIControlStateNormal];
         self.contentView.phoneOrEmailTF.text = @"";
         self.contentView.verificationCodeTF.text = @"";
         self.contentView.passwordTF.text = @"";
         self.contentView.passwordConfirmTF.text = @"";
-        NSString *placeHoldString = placeHoldString = @"请输入手机号";
+        NSString *placeHoldString = placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         self.contentView.phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
         NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         self.contentView.phoneOrEmailTF.attributedPlaceholder = attriStr;
@@ -217,12 +217,12 @@
     }else {
         self.modifyStyle = NO;
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
-        [sender setTitle:@"手机验证码修改" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"phone_verify_code_modify", @"手机验证码修改") forState:UIControlStateNormal];
         self.contentView2.phoneOrEmailTF.text = @"";
         self.contentView2.verificationCodeTF.text = @"";
         self.contentView2.passwordTF.text = @"";
         self.contentView2.passwordConfirmTF.text = @"";
-        NSString *placeHoldString = placeHoldString = @"请输入邮箱";
+        NSString *placeHoldString = placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         self.contentView2.phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
         NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         self.contentView2.phoneOrEmailTF.attributedPlaceholder = attriStr;
@@ -268,7 +268,7 @@
 - (void)modifySuccessAlert {
     
     TIoTAlertView *modifyAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [modifyAlertView alertWithTitle:@"密码修改成功，请重新登录" message:@"" cancleTitlt:@"" doneTitle:@"知道了"];
+    [modifyAlertView alertWithTitle:NSLocalizedString(@"modify_passwd_success", @"密码修改成功，请重新登录") message:@"" cancleTitlt:@"" doneTitle:NSLocalizedString(@"have_known", @"知道了")];
     [modifyAlertView showSingleConfrimButton];
     modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         [[TIoTAppEnvironment shareEnvironment] loginOut];
@@ -304,13 +304,13 @@
 - (void)checkPasswordWithPassword:(NSString *)password confimPassword:(NSString *)confimPassword {
     
     if (![password isEqualToString:confimPassword]) {
-        [MBProgressHUD showMessage:@"两次输入的密码不一致" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:password];
     if (!isPass) {
-        [MBProgressHUD showMessage:@"密码不合规" icon:@"" toView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
 }

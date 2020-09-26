@@ -81,11 +81,11 @@
 #pragma mark - private
 - (void)setupUI{
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"连接WI-FI";
+    self.title = NSLocalizedString(@"smart_config_second_title", @"连接WI-FI");
     
     UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancleBtn addTarget:self action:@selector(cancleClick:) forControlEvents:UIControlEventTouchUpInside];
-    [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancleBtn setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
     [cancleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [cancleBtn sizeToFit];
@@ -111,7 +111,7 @@
     }];
     
     self.wifiPwdTF = [[UITextField alloc] init];
-    self.wifiPwdTF.placeholder = @"请输入Wi-Fi密码";
+    self.wifiPwdTF.placeholder = NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码");
     self.wifiPwdTF.font = [UIFont wcPfRegularFontOfSize:18];
     self.wifiPwdTF.textColor = kRGBColor(51, 51, 51);
     [self.wifiPwdTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -137,7 +137,7 @@
     
     
     self.sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sureBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [self.sureBtn setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [self.sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.sureBtn.titleLabel.font = [UIFont systemFontOfSize:20];
     [self.sureBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -191,8 +191,8 @@
         }
         
         NSString *messageString = [NSString stringWithFormat:@"[前往：设置 - 隐私 - 定位服务 - %@] 允许应用访问", app_Name];
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireLocation", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
         }];
         
@@ -200,9 +200,9 @@
         [self presentViewController:alertC animated:YES completion:nil];
     }
     else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        NSString *messageString = [NSString stringWithFormat:@"前往：设置开启定位服务"];
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_LocationService", @"前往：设置开启定位服务")];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireLocation", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
                 if (success) {
                     NSLog(@"成功");
@@ -257,7 +257,7 @@
     switch (self.equipmentType) {
         case SmartConfig:{
             TIoTConnectViewController *vc = [[TIoTConnectViewController alloc] init];
-            vc.title = @"配网进度";
+            vc.title = NSLocalizedString(@"smart_config_third_connect_progress",  @"配网进度");
             vc.wifiInfo = self.wifiInfo.copy;
             vc.roomId = self.roomId;
             [self.navigationController pushViewController:vc animated:YES];

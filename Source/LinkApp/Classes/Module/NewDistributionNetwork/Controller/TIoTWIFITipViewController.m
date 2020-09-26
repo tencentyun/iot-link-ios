@@ -28,7 +28,7 @@
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = [UIColor blackColor];
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    topicLabel.text = @"iOS WiFi刷新教程";
+    topicLabel.text = NSLocalizedString(@"iOSWIFIRefresh_course", @"iOS WiFi刷新教程");
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(10 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
@@ -40,7 +40,7 @@
     UILabel *describeLabel = [[UILabel alloc] init];
     describeLabel.textColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     describeLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    describeLabel.text = @"完成以下4个步骤，就可以刷新WiFi了";
+    describeLabel.text = NSLocalizedString(@"finishFourSteps_refreshWIFI", @"完成以下4个步骤，就可以刷新WiFi了");
     [self.view addSubview:describeLabel];
     [describeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(topicLabel.mas_bottom);
@@ -75,7 +75,7 @@
     UILabel *selectLabel = [[UILabel alloc] init];
     selectLabel.textColor = kRGBColor(166, 166, 166);
     selectLabel.font = [UIFont wcPfRegularFontOfSize:12];
-    selectLabel.text = @"下次不再提示，直接去刷新";
+    selectLabel.text = NSLocalizedString(@"nextNoTip_refrsh", @"下次不再提示，直接去刷新");
     [self.view addSubview:selectLabel];
     [selectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.height.equalTo(selectButton);
@@ -84,7 +84,7 @@
     }];
 
     UIButton *refreshBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [refreshBtn setTitle:@"看懂了，去刷新" forState:UIControlStateNormal];
+    [refreshBtn setTitle:NSLocalizedString(@"know_refresh", @"看懂了，去刷新") forState:UIControlStateNormal];
     [refreshBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     refreshBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [refreshBtn addTarget:self action:@selector(refreshClick:) forControlEvents:UIControlEventTouchUpInside];

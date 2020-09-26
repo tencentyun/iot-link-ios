@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"选择时区";
+    self.navigationItem.title = NSLocalizedString(@"select_timezone", @"选择时区");
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(back) image:@"backNac" selectImage:@"backNac"];
     [self creatSubviews];
     [self requestTimeZoneList];
@@ -322,7 +322,7 @@
         }
         else
         {
-            title.text = @"热门国家和地区";
+            title.text = NSLocalizedString(@"hot_country", @"热门国家和地区");
         }
         
     }

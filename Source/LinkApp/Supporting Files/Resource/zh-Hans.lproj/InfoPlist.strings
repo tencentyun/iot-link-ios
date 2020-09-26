@@ -1,0 +1,14 @@
+/* 
+  InfoPlist.strings
+  LinkApp
+
+  Created by ccharlesren on 2020/9/24.
+  Copyright © 2020 Tencent. All rights reserved.
+*/
+
+CFBundleName = "连连开源体验";
+NSBluetoothAlwaysUsageDescription = "打开蓝牙用于扫描硬件";
+NSBluetoothPeripheralUsageDescription = "打开蓝牙用于扫描硬件";
+NSCameraUsageDescription = "获取相机权限用于扫描设备二维码";
+NSLocationWhenInUseUsageDescription = "用户获取WIFI信息";
+NSPhotoLibraryUsageDescription = "获取相册权限用于识别本地二维码";

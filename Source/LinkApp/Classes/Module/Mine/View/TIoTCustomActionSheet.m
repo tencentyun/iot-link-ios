@@ -116,7 +116,7 @@
         
         UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [dismissButton addTarget:self action:@selector(dismissActionView) forControlEvents:UIControlEventTouchUpInside];
-        [self setSpecificButtonFormat:dismissButton withTitle:@"取消"];
+        [self setSpecificButtonFormat:dismissButton withTitle:NSLocalizedString(@"cancel", @"取消")];
         [_actionView addSubview:dismissButton];
         [dismissButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.trailing.leading.top.equalTo(_actionView);

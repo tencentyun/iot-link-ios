@@ -66,7 +66,7 @@
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
-    topicLabel.text = (self.step == 3 ? @"将手机WiFi连接设备热点" : [_dataDic objectForKey:@"topic"]);
+    topicLabel.text = (self.step == 3 ? NSLocalizedString(@"soft_ap_hotspot_set", @"将手机WiFi连接设备热点") : [_dataDic objectForKey:@"topic"]);
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -122,7 +122,7 @@
 //        }];
     }
     
-    self.pwdInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"pwdInputTitle"] placeholder:(self.step == 3 ? @"请输入密码（非必填）" : [_dataDic objectForKey:@"pwdInputPlaceholder"]) haveButton:[[_dataDic objectForKey:@"pwdInputHaveButton"] boolValue]];
+    self.pwdInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"pwdInputTitle"] placeholder:(self.step == 3 ? NSLocalizedString(@"inportPassword_unnecessary", @"请输入密码（非必填）"): [_dataDic objectForKey:@"pwdInputPlaceholder"]) haveButton:[[_dataDic objectForKey:@"pwdInputHaveButton"] boolValue]];
     self.pwdInputView.textChangedAction = ^(NSString * _Nonnull changedText) {
         if (selfWeak.step == 2) {
             if (selfWeak.wifiInputView.inputText.length > 0 && selfWeak.pwdInputView.inputText.length > 0) {
@@ -177,7 +177,7 @@
     }
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    [nextBtn setTitle:NSLocalizedString(@"next", @"下一步") forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -211,8 +211,8 @@
         }
         
         NSString *messageString = [NSString stringWithFormat:@"[前往：设置 - 隐私 - 定位服务 - %@] 允许应用访问", app_Name];
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireLocation", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
         }];
         
@@ -220,9 +220,9 @@
         [self presentViewController:alertC animated:YES completion:nil];
     }
     else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        NSString *messageString = [NSString stringWithFormat:@"前往：设置开启定位服务"];
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"App需要访问您的位置用于获取Wi-Fi信息" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_LocationService", @"前往：设置开启定位服务")];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireLocation", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
                 if (success) {
                     NSLog(@"成功");
@@ -314,6 +314,7 @@
             vc.roomId = self.roomId;
             vc.currentDistributionToken = self.currentDistributionToken;
             vc.wifiInfo = [self.wifiInfo copy];
+            vc.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
@@ -372,16 +373,16 @@
     switch (configHardwareStyle) {
         case TIoTConfigHardwareStyleSoftAP:
         {
-            _dataDic = @{@"title": @"热点配网",
-                         @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
-                         @"topic": @"请输入WiFi密码",
+            _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
                          @"wifiInputTitle": @"WIFI",
-                         @"wifiInputPlaceholder": @"请点击箭头按钮选择WIFI",
+                         @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
                          @"wifiInputHaveButton": @(YES),
-                         @"pwdInputTitle": @"密码",
-                         @"pwdInputPlaceholder": @"请输入密码",
+                         @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
+                         @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
                          @"pwdInputHaveButton": @(NO),
-                         @"make": @"操作方式:",
+                         @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
                          @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
             };
         }
@@ -389,14 +390,14 @@
             
         case TIoTConfigHardwareStyleSmartConfig:
         {
-            _dataDic = @{@"title": @"一键配网",
-                         @"stepTipArr": @[@"配置硬件", @"选择目标WiFi", @"开始配网"],
-                         @"topic": @"请输入WiFi密码",
+            _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
                          @"wifiInputTitle": @"WIFI",
-                         @"wifiInputPlaceholder": @"请点击箭头按钮选择WIFI",
+                         @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
                          @"wifiInputHaveButton": @(YES),
-                         @"pwdInputTitle": @"密码",
-                         @"pwdInputPlaceholder": @"请输入密码",
+                         @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
+                         @"pwdInputPlaceholder": NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
                          @"pwdInputHaveButton": @(NO),
                          @"make": @"",
                          @"stepDiscribe": @""

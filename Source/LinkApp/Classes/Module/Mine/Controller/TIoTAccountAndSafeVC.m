@@ -27,7 +27,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"账号与安全";
+    self.title = NSLocalizedString(@"account_and_safety", @"账号与安全");
     
     [self setUpUI];
 }
@@ -93,9 +93,9 @@
     NSArray *sectionArray = self.dataArr[indexPath.section];
     //国际化版本
     
-    if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"手机号"]) {
+    if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"phone_number", @"手机号码")]) {
 
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
             
             __weak typeof(self) weakSelf = self;
             TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
@@ -112,9 +112,9 @@
             [self.navigationController pushViewController:modifyVC animated:YES];
         }
 
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"邮箱"]) {
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"email", @"邮箱")]) {
 
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
             __weak typeof(self) weakSelf = self;
             TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
             bindEmailVC.accountType = AccountType_Email;
@@ -130,20 +130,20 @@
             [self.navigationController pushViewController:modifyVC animated:YES];
         }
 
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"微信"]) {
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"wechat", @"微信")]) {
 
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:@"未绑定"]) {
+        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
             //微信绑定
             [self wxBindClick];
         }else {
         }
 
-    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"修改密码"]) {
+    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"modify_password", @"修改密码")]) {
         
         TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
         [self.navigationController pushViewController:modifyPassword animated:YES];
         
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:@"账号注销"]) {
+    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"account_logout", @"账号注销")]) {
         TIoTCancelAccountVC *cancelAccountVC = [[TIoTCancelAccountVC alloc]init];
         [self.navigationController pushViewController:cancelAccountVC animated:YES];
     }
@@ -185,7 +185,7 @@
     [[TIoTRequestObject shared] postWithoutToken:AppUpdateUserByWeiXin Param:tmpDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
 
-        [MBProgressHUD showSuccess:@"绑定成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
         [self getWeiXinNickAndRefresh];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -196,7 +196,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"WxOpenID":openid} success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"绑定成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
         [[TIoTCoreUserManage shared] saveUserInfo:@{@"WxOpenID":openid}];
         [self getWeiXinNickAndRefresh];
 
@@ -235,18 +235,18 @@
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
 
-        NSString *phoneNumber = @"未绑定";
+        NSString *phoneNumber = NSLocalizedString(@"unbind", @"未绑定");
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].phoneNumber]) {
             //国际化版本
             phoneNumber = [NSString stringWithFormat:@"%@-%@",[TIoTCoreUserManage shared].countryCode,[TIoTCoreUserManage shared].phoneNumber];
         }
         
-        NSString *email = @"未绑定";
+        NSString *email = NSLocalizedString(@"unbind", @"未绑定");
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].email]) {
             email = [TIoTCoreUserManage shared].email;
         }
         
-        NSString *weixin = @"未绑定";
+        NSString *weixin = NSLocalizedString(@"unbind", @"未绑定");
         NSString *weixinArrow = @"1";
         if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasBindWxOpenID]) {
             // hasBindWxOpenID 字段为空
@@ -269,12 +269,12 @@
             region = [TIoTCoreUserManage shared].countryTitle;
         }
         _dataArr = [NSMutableArray arrayWithArray:@[
-            @[@{@"title":@"手机号",@"value":phoneNumber,@"vc":@"",@"haveArrow":@"1"},
-            @{@"title":@"邮箱",@"value":email,@"vc":@"",@"haveArrow":@"1"},
-            @{@"title":@"微信",@"value":weixin,@"vc":@"",@"haveArrow":weixinArrow}],
-            @[@{@"title":@"账号所在地",@"value":region,@"vc":@"",@"haveArrow":@"0"}],
-            @[@{@"title":@"修改密码",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
-            @[@{@"title":@"账号注销",@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+            @[@{@"title":NSLocalizedString(@"phone_number", @"手机号码"),@"value":phoneNumber,@"vc":@"",@"haveArrow":@"1"},
+            @{@"title":NSLocalizedString(@"email", @"邮箱"),@"value":email,@"vc":@"",@"haveArrow":@"1"},
+            @{@"title":NSLocalizedString(@"wechat", @"微信"),@"value":weixin,@"vc":@"",@"haveArrow":weixinArrow}],
+            @[@{@"title":NSLocalizedString(@"location_of_account", @"账户所在地"),@"value":region,@"vc":@"",@"haveArrow":@"0"}],
+            @[@{@"title":NSLocalizedString(@"modify_password", @"修改密码"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
+            @[@{@"title":NSLocalizedString(@"account_logout", @"账号注销"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
         ]];
 
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {

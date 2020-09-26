@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"更换房间";
+    self.title = NSLocalizedString(@"change_room", @"更换房间");
     self.currentRoomId = self.deviceInfo[@"RoomId"];
     self.tableView.rowHeight = 60;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -33,7 +33,7 @@
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"保存" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];
@@ -59,7 +59,7 @@
         
         [MBProgressHUD dismissInView:self.view];
         
-        [self.tableView showEmpty:@"" desc:@"没有可选的房间" image:[UIImage imageNamed:@"noDevice"] block:^{
+        [self.tableView showEmpty:@"" desc:NSLocalizedString(@"no_room", @"没有可选的房间") image:[UIImage imageNamed:@"noDevice"] block:^{
             
         }];
         
@@ -75,7 +75,7 @@
 {
     
     [[TIoTRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":self.deviceInfo[@"ProductId"],@"DeviceName":self.deviceInfo[@"DeviceName"],@"FamilyId": self.deviceInfo[@"FamilyId"],@"RoomId":self.currentRoomId} success:^(id responseObject) {
-        [MBProgressHUD showSuccess:@"保存成功"];
+        [MBProgressHUD showSuccess:NSLocalizedString(@"save_success", @"保存成功")];
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {

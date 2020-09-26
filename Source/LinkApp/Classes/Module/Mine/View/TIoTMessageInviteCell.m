@@ -50,7 +50,7 @@
     NSInteger msgType = [self.msgData[@"MsgType"] integerValue];
     if (msgType == 204) {
         [[TIoTRequestObject shared] post:AppJoinFamily Param:@{@"ShareToken":self.msgData[@"Attachments"][@"ShareToken"]} success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"加入成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"join_success", @"加入成功")];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [MBProgressHUD showError:reason];
         }];
@@ -59,7 +59,7 @@
     {
         NSDictionary *param = @{@"ShareDeviceToken":self.msgData[@"Attachments"][@"ShareToken"],@"ProductId":self.msgData[@"ProductId"],@"DeviceName":self.msgData[@"DeviceName"]};
         [[TIoTRequestObject shared] post:AppBindUserShareDevice Param:param success:^(id responseObject) {
-            [MBProgressHUD showSuccess:@"绑定成功"];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];

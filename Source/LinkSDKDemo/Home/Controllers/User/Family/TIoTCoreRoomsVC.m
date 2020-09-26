@@ -29,7 +29,7 @@ static NSString *cellId = @"wd9765";
 
 - (void)setupUI
 {
-    self.title = @"房间管理";
+    self.title = NSLocalizedString(@"room_manager", @"房间管理");
     
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     self.tableView.rowHeight = 60;
@@ -37,7 +37,7 @@ static NSString *cellId = @"wd9765";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:@"添加房间" forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn setBackgroundColor:kMainColor];

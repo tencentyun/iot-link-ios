@@ -156,7 +156,7 @@
     TIoTUserInfomationViewController *vc = [[TIoTUserInfomationViewController alloc] init];
 //    vc.title = @"个人信息";
     //国际化版本
-    vc.title = @"账号";
+    vc.title = NSLocalizedString(@"account", @"账号");
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -227,11 +227,11 @@
 - (NSArray *)dataArr{
     if (_dataArr == nil) {
         _dataArr = @[
-            @{@"title":@"家庭管理",@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
-            @{@"title":@"共享设备",@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
-            @{@"title":@"消息通知",@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
-            @{@"title":@"帮助中心",@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
-            @{@"title":@"关于我们",@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
+            @{@"title":NSLocalizedString(@"family_manager", @"家庭管理"),@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
+            @{@"title":NSLocalizedString(@"share_device", @"共享设备"),@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
+            @{@"title":NSLocalizedString(@"message_notification", @"消息通知"),@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
+            @{@"title":NSLocalizedString(@"help_center", @"帮助中心"),@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
+            @{@"title":NSLocalizedString(@"about_me", @"关于我们"),@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
         ];
     }
     return _dataArr;

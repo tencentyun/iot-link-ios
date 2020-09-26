@@ -31,9 +31,9 @@
     [super prepare];
     
     // 初始化文字
-    [self setTitle:@"下拉刷新" forState:MJRefreshStateIdle];
-    [self setTitle:@"松手更新" forState:MJRefreshStatePulling];
-    [self setTitle:@"加载中..."  forState:MJRefreshStateRefreshing];
+    [self setTitle:NSLocalizedString(@"pull_to_refresh", @"下拉刷新") forState:MJRefreshStateIdle];
+    [self setTitle:NSLocalizedString(@"release_refresh", @"松手更新") forState:MJRefreshStatePulling];
+    [self setTitle:NSLocalizedString(@"loading", @"加载中...")   forState:MJRefreshStateRefreshing];
 
 }
 

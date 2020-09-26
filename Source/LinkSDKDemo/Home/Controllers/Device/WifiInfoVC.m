@@ -173,7 +173,7 @@
             
         };
         self.sc.connectFaildBlock = ^{
-            [weakSelf connectFaildResult:@"连接失败"];
+            [weakSelf connectFaildResult:NSLocalizedString(@"connect_fail", @"连接失败")];
         };
         [_sc startAddDevice];
         
@@ -191,7 +191,7 @@
     self.softAp.gatewayIpString = ip;
     __weak __typeof(self)weakSelf = self;
     self.softAp.udpFaildBlock = ^{
-        [weakSelf connectFaildResult:@"udp连接失败"];
+        [weakSelf connectFaildResult:[NSString stringWithFormat:@"udp%@",NSLocalizedString(@"connect_fail", @"连接失败")]];
     };
     [self.softAp startAddDevice];
 }

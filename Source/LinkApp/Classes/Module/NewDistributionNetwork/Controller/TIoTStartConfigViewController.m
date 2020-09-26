@@ -117,7 +117,7 @@
 
 - (void)nav_customBack {
     TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:@"退出添加设备" message:@"当前正在添加设备，是否确认退出" cancleTitlt:@"取消" doneTitle:@"确定"];
+    [av alertWithTitle:NSLocalizedString(@"退出添加设备", @"退出添加设备")  message:NSLocalizedString(@"addDevicing_confirmSignout", @"当前正在添加设备，是否确认退出") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self releaseAlloc];
         // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
@@ -392,9 +392,9 @@ static dispatch_once_t onceToken;
     switch (configHardwareStyle) {
         case TIoTConfigHardwareStyleSoftAP:
         {
-            _dataDic = @{@"title": @"热点配网",
-                         @"stepTipArr": @[@"配置硬件", @"设置目标WiFi", @"连接设备", @"开始配网"],
-                         @"connectStepTipArr": @[@"手机与设备连接成功", @"向设备发送信息成功", @"设备连接云端成功", @"初始化成功"]
+            _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"connectStepTipArr": @[NSLocalizedString(@"phone_device_connect", @"手机与设备连接成功"), NSLocalizedString(@"send_DeveceMassge", @"向设备发送信息成功"), NSLocalizedString(@"device_clound_connect", @"设备连接云端成功"), NSLocalizedString(@"init_success", @"初始化成功")]
             };
             [self setupUI];
             [self createSoftAPWith:[NSString getGateway]];
@@ -403,9 +403,9 @@ static dispatch_once_t onceToken;
             
         case TIoTConfigHardwareStyleSmartConfig:
         {
-            _dataDic = @{@"title": @"一键配网",
-                         @"stepTipArr": @[@"配置硬件", @"选择目标WiFi", @"开始配网"],
-                         @"connectStepTipArr": @[@"手机与设备连接成功", @"向设备发送信息成功", @"设备连接云端成功", @"初始化成功"]
+            _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"connectStepTipArr": @[NSLocalizedString(@"phone_device_connect", @"手机与设备连接成功"), NSLocalizedString(@"send_DeveceMassge", @"向设备发送信息成功"), NSLocalizedString(@"device_clound_connect", @"设备连接云端成功"), NSLocalizedString(@"init_success", @"初始化成功")]
             };
             [self setupUI];
             [self tapConfirm];

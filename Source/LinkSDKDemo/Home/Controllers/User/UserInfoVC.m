@@ -70,7 +70,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (error) {
-                    [MBProgressHUD showError:@"上传失败" toView:self.view];
+                    [MBProgressHUD showError:NSLocalizedString(@"upload_error", @"上传失败") toView:self.view];
                 }
                 else
                 {
@@ -78,7 +78,7 @@
                     self.header.image = image;
                     
                     [[TIoTCoreAccountSet shared] updateUserWithNickName:@"" avatar:result.location success:^(id  _Nonnull responseObject) {
-                        [MBProgressHUD showSuccess:@"修改成功"];
+                        [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
                     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
                         
                     }];
@@ -121,15 +121,15 @@
 //选择获取图片方式
 - (void)showActionSheet{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *camera = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *camera = [UIAlertAction actionWithTitle:NSLocalizedString(@"take_photo", @"拍照") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self openSystemPhotoOrCamara:YES];
     }];
     
-    UIAlertAction *photo = [UIAlertAction actionWithTitle:@"从手机相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *photo = [UIAlertAction actionWithTitle:NSLocalizedString(@"choice_from_mobilealbum", @"从手机相册选择") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self openSystemPhotoOrCamara:NO];
     }];
     
-    UIAlertAction *cancle = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancle = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIAlertActionStyleCancel handler:nil];
     
     [alert addAction:camera];
     [alert addAction:photo];
@@ -144,7 +144,7 @@
             self.picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }
         else{
-            [MBProgressHUD showError:@"相机打开失败"];
+            [MBProgressHUD showError:NSLocalizedString(@"camera_openFailure", @"相机打开失败")];
             return;
         }
     }
