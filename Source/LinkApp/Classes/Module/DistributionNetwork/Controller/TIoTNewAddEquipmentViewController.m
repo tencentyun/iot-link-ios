@@ -33,6 +33,7 @@
 @property (nonatomic, strong) NSMutableArray *productArr;
 @property (nonatomic, strong) NSMutableArray *recommendArr;
 @property (nonatomic, strong) NSDictionary *configData;
+@property (nonatomic, strong) NSString *selectedProducetedID;
 @end
 
 @implementation TIoTNewAddEquipmentViewController
@@ -157,11 +158,35 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
 - (void)receiveChangeAddDeviceType:(NSNotification *)noti{
     NSInteger deviceType = [noti.object integerValue];
-    if (deviceType == 0) {
+    
+    [self changedConfigTypeWithProducedID:self.selectedProducetedID withDeviceType:deviceType];
+}
+
+- (void)changedConfigTypeWithProducedID:(NSString *)producedID withDeviceType:(NSInteger)type {
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[producedID]} success:^(id responseObject) {
+        
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = config;
+            WCLog(@"AppGetProductsConfig config%@", config);
+            NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
+            if (wifiConfTypeList.count > 0) {
+               
+                if (type == 0) {   //智能
+                    [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+                }else {             //自助
+                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+                }
+                return;
+            }
+        }
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
-    } else if (deviceType == 1) {
-        [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
-    }
+        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+    }];
 }
 
 - (void)popHomeVC {
@@ -210,8 +235,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)getProductsConfig:(NSString *)productId{
-//    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
-    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[@"N8DFPW6WTJ"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
         
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
@@ -352,8 +376,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     if (self.recommendArr.count && indexPath.section == 0) {//推荐的才去看是否需要跳转到soft ap，其他跳转smart config
         NSDictionary *dic = self.recommendArr[indexPath.row];
         NSString *productId = dic[@"ProductId"]?:@"";
+        self.selectedProducetedID = productId;
         [self getProductsConfig:productId];
     } else {
+        self.selectedProducetedID = @"";
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     }
 }

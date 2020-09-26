@@ -16,6 +16,10 @@
 
 @property (nonatomic, strong) NSDictionary *dataDic;
 
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UILabel *stepLabel;
+
 @end
 
 @implementation TIoTDeviceWIFITipViewController
@@ -29,13 +33,26 @@
     self.title = [self.dataDic objectForKey:@"title"];
     self.view.backgroundColor = [UIColor whiteColor];
     
+    self.scrollView = [[UIScrollView alloc]init];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        } else {
+            // Fallback on earlier versions
+            make.top.equalTo(self.view.mas_top).offset(64);
+        }
+    }];
+
+    
     self.stepTipView = [[TIoTStepTipView alloc] initWithTitlesArray:[self.dataDic objectForKey:@"stepTipArr"]];
     self.stepTipView.showAnimate = NO;
     self.stepTipView.step = 3;
-    [self.view addSubview:self.stepTipView];
+    [self.scrollView addSubview:self.stepTipView];
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(20 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
-        make.width.equalTo(self.view);
+        make.top.equalTo(self.scrollView).offset(20);
+        make.width.equalTo(self.scrollView);
         make.height.mas_equalTo(54);
     }];
     
@@ -43,36 +60,36 @@
     topicLabel.textColor = kRGBColor(51, 51, 51);
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
     topicLabel.text = [self.dataDic objectForKey:@"topic"];
-    [self.view addSubview:topicLabel];
+    [self.scrollView addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(16);
-        make.right.equalTo(self.view).offset(-16);
+        make.left.equalTo(self.scrollView).offset(16);
+        make.right.equalTo(self.scrollView).offset(-16);
         make.top.equalTo(self.stepTipView.mas_bottom).offset(20);
         make.height.mas_equalTo(24);
     }];
 
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.image = [UIImage imageNamed:@"wifieg"];
-    [self.view addSubview:imageView];
-    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.imageView = [[UIImageView alloc] init];
+    self.imageView.image = [UIImage imageNamed:@"wifieg"];
+    [self.view addSubview:self.imageView];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(topicLabel.mas_bottom).offset(20);
-        make.left.equalTo(self.view).offset(20);
-        make.right.equalTo(self.view).offset(-20);
-        make.height.mas_equalTo(imageView.mas_width).multipliedBy(0.8667);
+        make.left.equalTo(self.scrollView).offset(20);
+        make.right.equalTo(self.scrollView).offset(-20);
+        make.height.mas_equalTo(self.imageView.mas_width).multipliedBy(0.8667);
     }];
     
-    UILabel *stepLabel = [[UILabel alloc] init];
+    self.stepLabel = [[UILabel alloc] init];
     NSString *stepLabelText = [self.dataDic objectForKey:@"stepDiscribe"];
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     paragraph.lineSpacing = 6.0;
     // 字体: 大小 颜色 行间距
     NSAttributedString * attributedStr = [[NSAttributedString alloc]initWithString:stepLabelText attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:kRGBColor(51, 51, 51),NSParagraphStyleAttributeName:paragraph}];
-    stepLabel.attributedText = attributedStr;
-    stepLabel.numberOfLines = 0;
-    [self.view addSubview:stepLabel];
-    [stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(imageView);
-        make.top.equalTo(imageView.mas_bottom).offset(20);
+    self.stepLabel.attributedText = attributedStr;
+    self.stepLabel.numberOfLines = 0;
+    [self.scrollView addSubview:self.stepLabel];
+    [self.stepLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.imageView);
+        make.top.equalTo(self.imageView.mas_bottom).offset(20);
     }];
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -82,14 +99,26 @@
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.layer.cornerRadius = 2;
     nextBtn.backgroundColor = kMainColor;
-    [self.view addSubview:nextBtn];
+    [self.scrollView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(40);
-        make.bottom.equalTo(self.view.mas_bottom).offset(-100 * kScreenAllHeightScale);
+        make.left.equalTo(self.scrollView).offset(40);
+        make.top.equalTo(self.stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.width.mas_equalTo(kScreenWidth - 80);
         make.height.mas_equalTo(45);
     }];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    CGFloat contentHeight = 120 + 54 + 24 + CGRectGetHeight(self.imageView.frame)+ CGRectGetHeight(self.stepLabel.frame) + 45 + [TIoTUIProxy shareUIProxy].navigationBarHeight;
+    if (contentHeight > kScreenHeight) {
+        self.scrollView.scrollEnabled = YES;
+    }else {
+        self.scrollView.scrollEnabled = NO;
+    }
+    self.scrollView.contentSize = CGSizeMake(kScreenWidth,contentHeight);
 }
 
 - (void)nextClick:(UIButton *)sender {
