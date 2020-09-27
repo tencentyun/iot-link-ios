@@ -241,6 +241,8 @@
 		F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */; };
 		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
+		F4D48B872520834C00CE90AC /* TIoTBaseMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */; };
+		F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B842520834C00CE90AC /* TIoTMapViewController.m */; };
 		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
 		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
 		F4ECCA9D24B55316006F57FB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4ECCA9C24B55316006F57FB /* libWeChatSDK.a */; };
@@ -767,6 +769,10 @@
 		F4C5DE0F24A0B7FE0098F18B /* TIoTAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAppConfig.h; sourceTree = "<group>"; };
 		F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTAppConfig.m; sourceTree = "<group>"; };
 		F4C5DE1424A0D15B0098F18B /* LinkApp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkApp.xcconfig; sourceTree = "<group>"; };
+		F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTBaseMapViewController.m; sourceTree = "<group>"; };
+		F4D48B842520834C00CE90AC /* TIoTMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTMapViewController.m; sourceTree = "<group>"; };
+		F4D48B852520834C00CE90AC /* TIoTBaseMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTBaseMapViewController.h; sourceTree = "<group>"; };
+		F4D48B862520834C00CE90AC /* TIoTMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTMapViewController.h; sourceTree = "<group>"; };
 		F4DA47DB24977EC20031A048 /* XGMTACloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XGMTACloud.framework; sourceTree = "<group>"; };
 		F4DA47DD24977ECE0031A048 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGForFreeVersion.h; sourceTree = "<group>"; };
@@ -1048,6 +1054,7 @@
 		D231048A232F86380003069D /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				F4D48B822520834C00CE90AC /* Map */,
 				F4833EB824DD2A280033FAB2 /* Debug */,
 				A40565DE24D03CF100A15699 /* NewDistributionNetwork */,
 				D2310493232F87DC0003069D /* Home */,
@@ -1767,6 +1774,17 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		F4D48B822520834C00CE90AC /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F4D48B852520834C00CE90AC /* TIoTBaseMapViewController.h */,
+				F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */,
+				F4D48B862520834C00CE90AC /* TIoTMapViewController.h */,
+				F4D48B842520834C00CE90AC /* TIoTMapViewController.m */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		F4DA47DA24977E880031A048 /* TPNS-SDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -2004,6 +2022,7 @@
 				6DD4E8302489DAAE0056A162 /* ShellScript */,
 				F4F3D55424935D75005D3396 /* Embed Frameworks */,
 				A5345EDEDE5B09979BDD7B55 /* [CP] Embed Pods Frameworks */,
+				1A7F25325696EC7AA45AA23D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2187,6 +2206,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1A7F25325696EC7AA45AA23D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6DD4E8302489DAAE0056A162 /* ShellScript */ = {
@@ -2397,6 +2433,7 @@
 				ED9C15D623B9DE6000CAC848 /* TIoTRoomsVC.m in Sources */,
 				D20621BA23559E5600142DAC /* TYPageControl.m in Sources */,
 				ED782291241B2E7E00919FF6 /* TIoTInvitationVC.m in Sources */,
+				F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */,
 				ED800C9B240CACF20045A268 /* TIoTMessageChildVC.m in Sources */,
 				ED69BE8B237ABAC90023F5FC /* TIoTTextVC.m in Sources */,
 				D23104DD233069F70003069D /* TIoTUIProxy.m in Sources */,
@@ -2461,6 +2498,7 @@
 				ED9C15B423B998DB00CAC848 /* TIoTAddTimerVC.m in Sources */,
 				D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */,
 				ED6BA5B023C5B10700BE9EC9 /* TIoTRoomCell.m in Sources */,
+				F4D48B872520834C00CE90AC /* TIoTBaseMapViewController.m in Sources */,
 				6D982C8B24D2DB350080C961 /* TIoTBindAccountVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
