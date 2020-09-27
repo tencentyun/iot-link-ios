@@ -21,6 +21,7 @@ target 'LinkApp' do
   pod 'MGJRouter', '0.10.0'
   pod 'TrueTime','5.0.3'
   pod 'KeychainAccess', '4.2.0'
+  pod 'Tencent-MapSDK', '4.3.9'
 end
 
 target 'LinkSDKDemo' do
