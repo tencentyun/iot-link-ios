@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46987b6e_0bb5567e",
+        "filename": "Source/LinkApp/Supporting Files/Resource/zh-Hans.lproj/Localizable.strings",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-27T06:51:23Z",
+      "side": 1,
+      "message": "建议规整格式，删除无用换行等",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ca609fa_414648f0",
+        "filename": "Source/LinkSDKDemo/en.lproj/Main.storyboard",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-27T06:51:23Z",
+      "side": 1,
+      "message": "改文件是否应出现在base.Iproj中",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
