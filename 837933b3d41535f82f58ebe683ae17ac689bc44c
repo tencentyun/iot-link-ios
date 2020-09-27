@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9194cc10_6e311c9b",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2793,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-27T08:56:22Z",
+      "side": 1,
+      "message": "本地有回退操作，此文件所以才有改动，已经修改",
+      "parentUuid": "55c3ed85_da929221",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31db552f_2ba6d322",
         "filename": "LinkApp.xcodeproj/project.pbxproj",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e8af38_5c3b1691",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2934,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-27T08:56:22Z",
+      "side": 1,
+      "message": "本地有回退操作，此文件所以才有改动",
+      "parentUuid": "31db552f_2ba6d322",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "efbcc09c_07087938",
+        "filename": "Source/LinkApp/Supporting Files/Resource/zh-Hans.lproj/Localizable.strings",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-27T08:56:22Z",
+      "side": 1,
+      "message": "deno",
+      "parentUuid": "46987b6e_0bb5567e",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ca609fa_414648f0",
         "filename": "Source/LinkSDKDemo/en.lproj/Main.storyboard",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24275eae_77a342e5",
+        "filename": "Source/LinkSDKDemo/en.lproj/Main.storyboard",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-09-27T08:56:22Z",
+      "side": 1,
+      "message": "sdkdemo 中有几个xib文件做了多国处理，APP中xib文件中包含汉字的也进行多国处理，会影响base.Iproj",
+      "parentUuid": "5ca609fa_414648f0",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
