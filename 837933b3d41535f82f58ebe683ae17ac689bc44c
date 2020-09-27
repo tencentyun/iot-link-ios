@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "55c3ed85_da929221",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2793,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-27T07:07:40Z",
+      "side": 1,
+      "message": "证书相关改动需要会退",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31db552f_2ba6d322",
+        "filename": "LinkApp.xcodeproj/project.pbxproj",
+        "patchSetId": 1
+      },
+      "lineNbr": 2934,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-27T07:07:40Z",
+      "side": 1,
+      "message": "证书这块不能改动，否则打包会失败",
+      "revId": "837933b3d41535f82f58ebe683ae17ac689bc44c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46987b6e_0bb5567e",
         "filename": "Source/LinkApp/Supporting Files/Resource/zh-Hans.lproj/Localizable.strings",
         "patchSetId": 1
