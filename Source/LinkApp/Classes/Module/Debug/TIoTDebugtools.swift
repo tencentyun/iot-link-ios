@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import Lottie
 
 class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
@@ -102,11 +103,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     @objc func testDemo() {
         
-//        var prorororo = 0.1
-//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
-//
-//            prorororo = prorororo + 0.1
-//        }
+
         //调试天气数据
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+5) {
             TIoTAppUtil.getWeatherType(location: "116.41,39.92") { (weatherType) in
@@ -153,7 +150,22 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         TIoTAPPConfig.iot_window.rootViewController = nav
     }
     
+    lazy var swipeAnimationView: AnimationView = {
+        let appdelegate = TIoTAPPConfig.iot_appdelegate
+        let view = AnimationView(name: "1834-onboarding-congrats")
+        view.frame = UIScreen.main.bounds
+        view.loopMode = .loop
+        view.isUserInteractionEnabled = false
+        view.contentMode = .scaleAspectFit
+        view.backgroundColor = UIColor.clear
+        appdelegate.window!.addSubview(view)
+        appdelegate.window!.backgroundColor = UIColor.red
+        return view
+    }()
+
     @objc func jumpControl() {
+        swipeAnimationView.play()
+/*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in
             textField.placeholder = "请输入您的调试URL(http://www.baidu.com)"
@@ -171,5 +183,6 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             
         }))
         TIoTAPPConfig.iot_topController.present(alert, animated: true, completion: nil)
+ */
     }
 }
