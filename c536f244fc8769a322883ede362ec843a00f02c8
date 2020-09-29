@@ -22,6 +22,30 @@
       "revId": "c536f244fc8769a322883ede362ec843a00f02c8",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29fc3268_d965e10d",
+        "filename": "doc/项目辅助指南/切换测试环境指引.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-29T08:58:46Z",
+      "side": 1,
+      "message": "已删除",
+      "parentUuid": "8ce353f9_85b530d7",
+      "range": {
+        "startLine": 1,
+        "startChar": 35,
+        "endLine": 1,
+        "endChar": 40
+      },
+      "revId": "c536f244fc8769a322883ede362ec843a00f02c8",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
