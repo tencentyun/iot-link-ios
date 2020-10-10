@@ -21,6 +21,7 @@ target 'LinkApp' do
   pod 'MGJRouter', '0.10.0'
   pod 'TrueTime','5.0.3'
   pod 'KeychainAccess', '4.2.0'
+  pod 'TIoTThridSDK', '1.0.1'
 end
 
 target 'LinkSDKDemo' do
