@@ -257,7 +257,7 @@
     for (NSString *text in arr) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setValue:text forKey:@"text"];
-        CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(kScreenWidth - 95 * kScreenAllWidthScale - 40, kScreenHeight)
+        CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(kScreenWidth - 95 * kScreenAllWidthScale - 40 - 30, kScreenHeight)
            options:NSStringDrawingUsesLineFragmentOrigin
         attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}
            context:nil].size.height;
