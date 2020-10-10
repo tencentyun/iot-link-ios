@@ -234,8 +234,6 @@
 		EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
-		F424F6792505E3D900A18B4A /* libXGExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F424F6782505E3D900A18B4A /* libXGExtension.a */; };
-		F424F67B2505E46C00A18B4A /* libxgidfa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F424F67A2505E46C00A18B4A /* libxgidfa.a */; };
 		F4833EBC24DD2E100033FAB2 /* TIoTDebugtools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */; };
 		F4833EBE24DD302F0033FAB2 /* TIoTLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */; };
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
@@ -245,9 +243,6 @@
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
 		F4D48B872520834C00CE90AC /* TIoTBaseMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */; };
 		F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B842520834C00CE90AC /* TIoTMapViewController.m */; };
-		F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */; };
-		F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4DA47DB24977EC20031A048 /* XGMTACloud.framework */; };
-		F4ECCA9D24B55316006F57FB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4ECCA9C24B55316006F57FB /* libWeChatSDK.a */; };
 		F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D52C24935BD3005D3396 /* AppDelegate.m */; };
 		F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53424935BD3005D3396 /* Main.storyboard */; };
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
@@ -764,8 +759,6 @@
 		EDF93D9723B367A000D477C7 /* TIoTRequestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRequestObject.h; sourceTree = "<group>"; };
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		F424F6782505E3D900A18B4A /* libXGExtension.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libXGExtension.a; sourceTree = "<group>"; };
-		F424F67A2505E46C00A18B4A /* libxgidfa.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libxgidfa.a; sourceTree = "<group>"; };
 		F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDebugtools.swift; sourceTree = "<group>"; };
 		F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLaunchManager.swift; sourceTree = "<group>"; };
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
@@ -779,16 +772,7 @@
 		F4D48B842520834C00CE90AC /* TIoTMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTMapViewController.m; sourceTree = "<group>"; };
 		F4D48B852520834C00CE90AC /* TIoTBaseMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTBaseMapViewController.h; sourceTree = "<group>"; };
 		F4D48B862520834C00CE90AC /* TIoTMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTMapViewController.h; sourceTree = "<group>"; };
-		F4DA47DB24977EC20031A048 /* XGMTACloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XGMTACloud.framework; sourceTree = "<group>"; };
-		F4DA47DD24977ECE0031A048 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
-		F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGForFreeVersion.h; sourceTree = "<group>"; };
-		F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK-Cloud.a"; sourceTree = "<group>"; };
-		F4DA47E024977ECE0031A048 /* XGPushPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPushPrivate.h; sourceTree = "<group>"; };
 		F4DAB24724A3551F00F1B270 /* LinkAppCommon.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkAppCommon.xcconfig; sourceTree = "<group>"; };
-		F4ECCA9924B55316006F57FB /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		F4ECCA9A24B55316006F57FB /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
-		F4ECCA9B24B55316006F57FB /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
-		F4ECCA9C24B55316006F57FB /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D52B24935BD3005D3396 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4F3D52C24935BD3005D3396 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -891,19 +875,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4ECCA9D24B55316006F57FB /* libWeChatSDK.a in Frameworks */,
 				F4103F90249B971100CB678F /* CoreData.framework in Frameworks */,
 				ED9C15E023B9E66300CAC848 /* CoreLocation.framework in Frameworks */,
-				F4DA47E124977ECE0031A048 /* libXG-SDK-Cloud.a in Frameworks */,
-				F424F67B2505E46C00A18B4A /* libxgidfa.a in Frameworks */,
 				ED9C15DE23B9E65000CAC848 /* QuartzCore.framework in Frameworks */,
 				ED9C15DC23B9E63600CAC848 /* libsqlite3.tbd in Frameworks */,
 				D2E97697233C49B900182443 /* libz.tbd in Frameworks */,
 				D2E97695233C49AD00182443 /* SystemConfiguration.framework in Frameworks */,
-				F424F6792505E3D900A18B4A /* libXGExtension.a in Frameworks */,
 				D2E97693233C49A300182443 /* CoreTelephony.framework in Frameworks */,
 				D2E97691233C499700182443 /* UserNotifications.framework in Frameworks */,
-				F4DA47E2249780320031A048 /* XGMTACloud.framework in Frameworks */,
 				D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */,
 				ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */,
 				8E48716B237B7FFB2110FC9A /* Pods_LinkApp.framework in Frameworks */,
@@ -1417,8 +1396,6 @@
 			children = (
 				ED5767172410AED70070D218 /* ReachabilityManager.h */,
 				ED5767162410AED70070D218 /* ReachabilityManager.m */,
-				F4ECCA9824B55316006F57FB /* WechatOpenSDK_NoPay */,
-				F4DA47DA24977E880031A048 /* TPNS-SDK */,
 				ED9C49C223B1F487005D537F /* 信鸽推送 */,
 				D2A2CD34234ECC4E0039EB51 /* MJRefreshCustom */,
 				D2A2CD26234DBD9A0039EB51 /* QCloudCOSXMLManage */,
@@ -1809,31 +1786,6 @@
 				F4D48B842520834C00CE90AC /* TIoTMapViewController.m */,
 			);
 			path = Map;
-			sourceTree = "<group>";
-		};
-		F4DA47DA24977E880031A048 /* TPNS-SDK */ = {
-			isa = PBXGroup;
-			children = (
-				F4DA47DE24977ECE0031A048 /* XGForFreeVersion.h */,
-				F4DA47DD24977ECE0031A048 /* XGPush.h */,
-				F4DA47E024977ECE0031A048 /* XGPushPrivate.h */,
-				F424F67A2505E46C00A18B4A /* libxgidfa.a */,
-				F424F6782505E3D900A18B4A /* libXGExtension.a */,
-				F4DA47DF24977ECE0031A048 /* libXG-SDK-Cloud.a */,
-				F4DA47DB24977EC20031A048 /* XGMTACloud.framework */,
-			);
-			path = "TPNS-SDK";
-			sourceTree = "<group>";
-		};
-		F4ECCA9824B55316006F57FB /* WechatOpenSDK_NoPay */ = {
-			isa = PBXGroup;
-			children = (
-				F4ECCA9924B55316006F57FB /* WXApi.h */,
-				F4ECCA9A24B55316006F57FB /* WXApiObject.h */,
-				F4ECCA9B24B55316006F57FB /* WechatAuthSDK.h */,
-				F4ECCA9C24B55316006F57FB /* libWeChatSDK.a */,
-			);
-			path = WechatOpenSDK_NoPay;
 			sourceTree = "<group>";
 		};
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
