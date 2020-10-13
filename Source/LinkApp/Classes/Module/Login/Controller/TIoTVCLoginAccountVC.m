@@ -19,6 +19,8 @@
 #import "TIoTAppConfig.h"
 #import "TIoTUserRegionModel.h"
 #import "YYModel.h"
+#import "NSObject+CountdownTimer.h"
+
 @interface TIoTVCLoginAccountVC ()<UITextViewDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL     loginStyle;            // YES 验证码  NO 手机/邮箱
@@ -169,14 +171,24 @@
 
 #pragma mark - //判断获取验证码按钮是否可点击
 - (void)judgeVerificationButtonResponse {
-    
-    if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
-        //手机号或邮箱不为空且格式正确
-        [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-        _verificationButton.enabled = YES;
+
+    if ([self.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] ) {
+        if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
+            //手机号或邮箱不为空且格式正确
+            [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            _verificationButton.enabled = YES;
+        }else {
+            [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+            _verificationButton.enabled = NO;
+        }
     }else {
         [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
         _verificationButton.enabled = NO;
+        
+        //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
+        if ([NSString isNullOrNilWithObject:self.phoneAndEmailTF.text] || !([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
+        }
     }
 }
 
@@ -589,11 +601,16 @@
     [self.navigationController pushViewController:regionVC animated:YES];
 }
 
+#pragma mark - 发送验证码
 - (void)sendCode:(UIButton *)button {
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
 
     if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text]) {       //手机号获取验证码
+        
+        //等待发送验证码倒计时
+        [NSObject countdownTimerWithShowView:self.verificationButton inputText:self.phoneAndEmailTF.text phoneOrEmailType:YES];
+        
         NSDictionary *tmpDic = @{@"Type":@"login",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneAndEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
 
@@ -608,6 +625,10 @@
         }];
 
     }else if ([NSString judgeEmailLegal:self.phoneAndEmailTF.text]) {       //邮箱获取验证码
+        
+        //等待发送验证码倒计时
+        [NSObject countdownTimerWithShowView:self.verificationButton inputText:self.phoneAndEmailTF2.text phoneOrEmailType:NO];
+        
         NSDictionary *tmpDic = @{@"Type":@"login",@"Email":self.phoneAndEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
 
@@ -733,6 +754,10 @@
     }
     
     
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
