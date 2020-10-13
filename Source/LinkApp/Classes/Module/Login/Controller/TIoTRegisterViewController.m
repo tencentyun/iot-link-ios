@@ -231,7 +231,7 @@
             self.phoneTipLabel.hidden = YES;
         }else{ //手机号不合格
             self.phoneTipLabel.hidden = NO;
-            self.phoneTipLabel.text = @"手机号格式不正确";
+            self.phoneTipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
         }
         
     }else { //邮箱改密码
@@ -240,7 +240,7 @@
             self.emailTipLabel.hidden = YES;
         }else{ //邮箱合格不合格
             self.emailTipLabel.hidden = NO;
-            self.emailTipLabel.text = @"邮箱地址格式不正确";
+            self.emailTipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
         }
     }
 }
@@ -428,7 +428,7 @@
         
         self.phoneTipLabel = [[UILabel alloc] init];
         self.phoneTipLabel.font = [UIFont systemFontOfSize:12];
-        self.phoneTipLabel.text = @"手机号格式不正确";
+        self.phoneTipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
         self.phoneTipLabel.textColor = UIColor.redColor;
         self.phoneTipLabel.hidden = YES;
         [self.contentView addSubview:self.phoneTipLabel];
@@ -506,7 +506,7 @@
         
         self.emailTipLabel = [[UILabel alloc] init];
         self.emailTipLabel.font = [UIFont systemFontOfSize:12];
-        self.emailTipLabel.text = @"邮箱地址格式不正确";
+        self.emailTipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
         self.emailTipLabel.textColor = UIColor.redColor;
         self.emailTipLabel.hidden = YES;
         [self.contentView2 addSubview:self.emailTipLabel];

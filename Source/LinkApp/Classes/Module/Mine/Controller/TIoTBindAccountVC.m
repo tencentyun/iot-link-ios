@@ -80,6 +80,7 @@
         }];
     }
     
+    [self responseBindVerificationButton];
 }
 
 #pragma mark - setter and getter
@@ -165,7 +166,9 @@
         isPhoneTypeOrEmail = [NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text];
     }
     
-    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.bindAccountView.verificationCodeTF.text]) {
+    [self responseBindVerificationButton];
+    
+    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.bindAccountView.verificationCodeTF.text] && self.bindAccountView.verificationCodeTF.text.length == 6) {
         
         if (self.bindAccountView.passwordTF.isHidden || self.bindAccountView.passwordConfirmTF.isHidden) {
             
@@ -233,6 +236,31 @@
     }];
 }
 
+#pragma mark - 判断获取验证码是否可点击
+- (void)responseBindVerificationButton {
+    
+    if (self.accountType == AccountType_Phone) {
+        //不为空且格式正确
+        if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+            [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.bindAccountView.verificationButton.selected = YES;
+        }else {
+            [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.bindAccountView.verificationButton.selected = NO;
+        }
+    }else if (self.accountType == AccountType_Email) {
+        //不为空且格式正确
+        if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+            [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.bindAccountView.verificationButton.selected = YES;
+        }else {
+            [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.bindAccountView.verificationButton.selected = NO;
+        }
+    }
+    
+    
+}
 
 /*
 #pragma mark - Navigation

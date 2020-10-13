@@ -163,6 +163,21 @@
         make.centerY.equalTo(verificationCodeButton.mas_centerY);
     }];
     
+    //判断获取验证码按钮是否可点击
+    [self judgeVerificationButtonResponse];
+}
+
+#pragma mark - //判断获取验证码按钮是否可点击
+- (void)judgeVerificationButtonResponse {
+    
+    if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
+        //手机号或邮箱不为空且格式正确
+        [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+        _verificationButton.enabled = YES;
+    }else {
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+        _verificationButton.enabled = NO;
+    }
 }
 
 #pragma mark setter or getter
@@ -349,6 +364,8 @@
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+        _verificationButton.enabled = NO;
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _verificationButton;
@@ -693,8 +710,10 @@
 -(void)changedTextField:(UITextField *)textField {
     
     if (self.loginStyle == YES) {    //验证码登录
+
+        [self judgeVerificationButtonResponse];
         
-        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text]) && (![self.verificationcodeTF.text isEqual: @""] && self.verificationcodeTF.text != nil)) {
+        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text]) && (![self.verificationcodeTF.text isEqual: @""] && self.verificationcodeTF.text != nil) && (self.verificationcodeTF.text.length == 6)) {
             self.loginAccountButton.backgroundColor =kMainColor;
             self.loginAccountButton.enabled = YES;
         }else {

@@ -18,7 +18,7 @@
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, assign) BOOL     modifyStyle;            // YES 验证码  NO 手机/邮箱
+@property (nonatomic, assign) BOOL     modifyStyle;            // YES 手机  NO 邮箱
 
 @property (nonatomic, strong) TIoTModifyPasswordView *contentView;
 @property (nonatomic, strong) UIButton *areaCodeBtn;
@@ -110,7 +110,8 @@
         make.trailing.mas_equalTo(-kPadding * kScreenAllWidthScale);
         make.height.mas_equalTo(48 * kScreenAllHeightScale);
     }];
-    
+ 
+    [self responsedModifyPasswordVerifivationButton];
 }
 
 #pragma mark - setter and getter
@@ -281,9 +282,10 @@
 
 - (void)modifyPasswordSendCode {
 
-    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-
     if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text]) {       //手机号获取验证码
+        
+        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+        
         NSDictionary *tmpDic = @{@"Type":@"resetpass",@"CountryCode":self.conturyCode,@"PhoneNumber":self.contentView.phoneOrEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendVerificationCode Param:tmpDic success:^(id responseObject) {
 
@@ -292,6 +294,9 @@
         }];
 
     }else if ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text]) {       //邮箱获取验证码
+        
+        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+        
         NSDictionary *tmpDic = @{@"Type":@"resetpass",@"Email":self.contentView2.phoneOrEmailTF.text};
         [[TIoTRequestObject shared] postWithoutToken:AppSendEmailVerificationCode Param:tmpDic success:^(id responseObject) {
 
@@ -316,10 +321,13 @@
 }
 
 - (void)modifyPasswordChangedTextField {
+    
+    [self responsedModifyPasswordVerifivationButton];
+    
     //需要验证手机号、验证码、密码
 
     if (self.modifyStyle == YES) {
-        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
+        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
             self.comfirmModifyButton.backgroundColor =kMainColor;
             self.comfirmModifyButton.enabled = YES;
         }else {
@@ -329,7 +337,7 @@
         }
         
     }else {
-        if ([NSString judgePhoneNumberLegal:self.contentView2.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView2.verificationCodeTF.text] && (self.contentView2.passwordTF.text.length >= 8 && self.contentView2.passwordConfirmTF.text.length >= 8)) {
+        if ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView2.verificationCodeTF.text] && self.contentView2.verificationCodeTF.text.length == 6 && (self.contentView2.passwordTF.text.length >= 8 && self.contentView2.passwordConfirmTF.text.length >= 8)) {
             self.comfirmModifyButton.backgroundColor =kMainColor;
             self.comfirmModifyButton.enabled = YES;
         }else {
@@ -338,6 +346,29 @@
             self.comfirmModifyButton.enabled = NO;
         }
     }
+}
+
+#pragma mark - 判断获取验证码按钮可否可点击
+- (void)responsedModifyPasswordVerifivationButton {
+    
+    if (self.modifyStyle == YES) {
+        if (![NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] && ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text])) {
+            [self.contentView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.contentView.verificationButton.enabled = YES;
+        }else {
+            [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.contentView.verificationButton.enabled = NO;
+        }
+    }else {
+        if (![NSString isNullOrNilWithObject:self.contentView2.phoneOrEmailTF.text] && ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text])) {
+            [self.contentView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.contentView.verificationButton.enabled = YES;
+        }else {
+            [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.contentView.verificationButton.enabled = NO;
+        }
+    }
+    
 }
 
 @end
