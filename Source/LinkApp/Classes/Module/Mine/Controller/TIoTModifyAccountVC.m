@@ -78,6 +78,8 @@
 
         }];
     }
+    
+    [self responseModifyVerificationButton];
 }
 
 #pragma mark - setter and getter
@@ -161,7 +163,9 @@
         isPhoneTypeOrEmail = [NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text];
     }
     
-    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.modifyView.verificationCodeTF.text]) {
+    [self responseModifyVerificationButton];
+    
+    if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.modifyView.verificationCodeTF.text] && self.modifyView.verificationCodeTF.text.length == 6) {
         self.modifyView.confirmButton.backgroundColor =kMainColor;
         self.modifyView.confirmButton.enabled = YES;
     }else {
@@ -191,14 +195,27 @@
     }];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)responseModifyVerificationButton {
+    
+    if (self.accountType == AccountModifyType_Phone) {
+        if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
+            [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.modifyView.verificationButton.enabled = YES;
+        }else {
+            [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.modifyView.verificationButton.enabled = NO;
+        }
+    }else if (self.accountType == AccountModifyType_Email) {
+        if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text])) {
+            [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            self.modifyView.verificationButton.enabled = YES;
+        }else {
+            [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            self.modifyView.verificationButton.enabled = NO;
+        }
+    }
+    
+    
 }
-*/
 
 @end

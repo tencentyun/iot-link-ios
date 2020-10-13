@@ -303,7 +303,7 @@
 "mobile_phone_number_invalid" = "手机号格式不正确";
 "email_null" = "请输入邮箱地址";
 "email_invalid" = "邮箱地址格式不正确";
-"password_style" = "密码支持8&#8211;20位，必须包含字母和数字";
+"password_style" = "密码支持8-16位，必须包含字母和数字";
 //"toast_password_not_verify" = "两次输入的密码不一致";
 //"toast_login" = "密码修改成功，请重新登录";
 
@@ -696,3 +696,4 @@
 "reset_password" = "重置密码";
 "region_success" = "注册成功";
 "reset_password_success" = "重置密码成功";
+"phoneNumber_error" = "号码错误";

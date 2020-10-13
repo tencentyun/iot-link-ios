@@ -155,6 +155,8 @@
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        _verificationButton.enabled = NO;
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _verificationButton;
@@ -208,7 +210,7 @@
                 self.tipLabel.hidden = YES;
             }else{ //手机号不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = @"手机号格式不正确";
+                self.tipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
             }
             
         }else { //邮箱改密码
@@ -217,7 +219,7 @@
                 self.tipLabel.hidden = YES;
             }else{ //邮箱合格不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = @"邮箱地址格式不正确";
+                self.tipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
             }
         }
         

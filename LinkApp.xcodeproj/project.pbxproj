@@ -25,6 +25,7 @@
 		6D982C9A24D422DE0080C961 /* TIoTModifyPasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */; };
 		6D982C9D24D51AAC0080C961 /* TIoTModifyPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */; };
 		6D9AD45C251C7B7A004D968A /* TIoTAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */; };
+		6DA0DB362534B68600ABD4E5 /* NSObject+CountdownTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA0DB352534B68600ABD4E5 /* NSObject+CountdownTimer.m */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DBBF7B2252336290018DE39 /* TIoTEvaluationDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBBF7B1252336290018DE39 /* TIoTEvaluationDetailVC.m */; };
@@ -370,6 +371,8 @@
 		6D9AD45D251C7B7A004D968A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAboutVC.xib; sourceTree = "<group>"; };
 		6D9AD461251C7B7E004D968A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAboutVC.strings; sourceTree = "<group>"; };
 		6D9AD463251C7B82004D968A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAboutVC.strings"; sourceTree = "<group>"; };
+		6DA0DB342534B68600ABD4E5 /* NSObject+CountdownTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+CountdownTimer.h"; sourceTree = "<group>"; };
+		6DA0DB352534B68600ABD4E5 /* NSObject+CountdownTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+CountdownTimer.m"; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DBBF7B0252336290018DE39 /* TIoTEvaluationDetailVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTEvaluationDetailVC.h; sourceTree = "<group>"; };
 		6DBBF7B1252336290018DE39 /* TIoTEvaluationDetailVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTEvaluationDetailVC.m; sourceTree = "<group>"; };
@@ -1450,6 +1453,8 @@
 				D23104C42330678E0003069D /* NSAttributedString+XDPAdd.m */,
 				D23104CD2330678E0003069D /* NSObject+SwizzlingMethod.h */,
 				D23104C62330678E0003069D /* NSObject+SwizzlingMethod.m */,
+				6DA0DB342534B68600ABD4E5 /* NSObject+CountdownTimer.h */,
+				6DA0DB352534B68600ABD4E5 /* NSObject+CountdownTimer.m */,
 				D23104C22330678E0003069D /* NSTimer+BlockSupport.h */,
 				D23104C52330678E0003069D /* NSTimer+BlockSupport.m */,
 				D23104C72330678E0003069D /* UIView+XDPExtension.h */,
@@ -2460,6 +2465,7 @@
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
 				D23104D82330678F0003069D /* UIView+XDPExtension.m in Sources */,
 				A4DC768224D126780079F12C /* TIoTConfigInputView.m in Sources */,
+				6DA0DB362534B68600ABD4E5 /* NSObject+CountdownTimer.m in Sources */,
 				F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */,
 				D2038BCC233319440036F6B9 /* HXYNotice.m in Sources */,
 				D2A2CD29234DBDC00039EB51 /* TIoTQCloudCOSXMLManage.m in Sources */,
