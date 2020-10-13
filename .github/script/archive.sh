@@ -17,9 +17,13 @@ echo $rc
 echo $rt
 
 if [ $1 == 'Debug' ]; then
+#开源版
     sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rb+git.$rc/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 else
+#公版
     sed -i "" "s/LinkAPP_VERSION.*/LinkAPP_VERSION = $rt/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+    sed -i "" "s/CFBundleName.*/CFBundleName = \"腾讯连连\";/g" Source/LinkApp/Supporting\ Files/Resource/zh-Hans.lproj/InfoPlist.strings
+    sed -i "" "s/CFBundleName.*/CFBundleName = \"TencentLink\";/g" Source/LinkApp/Supporting\ Files/Resource/en.lproj/InfoPlist.strings
 fi
 
 cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
