@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (additions)
 
 + (BOOL)isNullOrNilWithObject:(id)object;
-+ (id)base64Decode:(NSString *)base64String;
 @end
 
 NS_ASSUME_NONNULL_END

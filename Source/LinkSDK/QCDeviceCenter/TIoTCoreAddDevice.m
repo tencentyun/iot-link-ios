@@ -9,7 +9,6 @@
 #import "TIoTCoreAddDevice.h"
 
 #import "TIoTCoreWMacros.h"
-#import "NSObject+so.h"
 
 //smartconfig
 #import "ESPTouchTask.h"

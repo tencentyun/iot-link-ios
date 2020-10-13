@@ -155,12 +155,16 @@
 
 ///base64解码
 + (id)base64Decode:(NSString *)base64{
-    NSData *data= [[NSData alloc] initWithBase64EncodedString:base64 options:0];
     
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:base64 options:0];
     NSError *error = nil;
-    id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    id payload = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
     
-    return obj;
+    if (error == nil) {
+        return payload;
+    }
+    
+    return @{};
 }
 
 + (BOOL)judgePassWordLegal:(NSString*)pwd{

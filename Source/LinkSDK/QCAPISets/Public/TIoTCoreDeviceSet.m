@@ -401,7 +401,7 @@
         return;
     }
     
-    NSDictionary *deviceData = [NSObject base64Decode:signatureInfo];
+    NSDictionary *deviceData = [NSString base64Decode:signatureInfo];
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"TimeStamp":deviceData[@"timestamp"],@"ConnId":deviceData[@"connId"],@"Signature":deviceData[@"signature"],@"DeviceTimestamp":deviceData[@"timestamp"],@"FamilyId":familyId}];
     if (roomId && roomId.length > 0) {
         [param setValue:roomId forKey:@"RoomId"];
