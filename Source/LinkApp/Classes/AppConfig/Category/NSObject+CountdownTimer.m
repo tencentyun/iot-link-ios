@@ -36,7 +36,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responsedVerificationButton:) name:verificationCodeNotification object:nil];
     
 //    WeakObj(self)
-    __block NSInteger time = 20; //倒计时时间
+    __block NSInteger time = 59; //倒计时时间
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
