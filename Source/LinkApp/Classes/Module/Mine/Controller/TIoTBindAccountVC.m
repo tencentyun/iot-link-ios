@@ -10,12 +10,14 @@
 #import "XWCountryCodeController.h"
 #import "TIoTBindAccountView.h"
 #import "TIoTChooseRegionVC.h"
+#import "TIoTCountdownTimer.h"
 
 @interface TIoTBindAccountVC ()<TIoTBindAccountViewDelegate>
 
 @property (nonatomic, strong) UIButton      *areaCodeBtn;
 @property (nonatomic, strong) NSString      *conturyCode;
 @property (nonatomic, strong) TIoTBindAccountView *bindAccountView;
+@property (nonatomic, strong) TIoTCountdownTimer *countdownTimer;
 @end
 
 @implementation TIoTBindAccountVC
@@ -111,6 +113,13 @@
     return _bindAccountView;
 }
 
+- (TIoTCountdownTimer *)countdownTimer {
+    if (!_countdownTimer) {
+        _countdownTimer = [[TIoTCountdownTimer alloc]init];
+    }
+    return _countdownTimer;
+}
+
 #pragma mark - event
 - (void)choseAreaCode:(id)sender{
     
@@ -143,10 +152,16 @@
         tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text};
         actioinString = AppSendVerificationCode;
         
+        //等待发送验证码倒计时
+        [self.countdownTimer startTimerWithShowView:self.bindAccountView.verificationButton inputText:self.bindAccountView.phoneOrEmailTF.text phoneOrEmailType:YES];
+        
     }else if (accountType == BindAccountEmailType) {
         
         tmpDic = @{@"Type":@"register",@"Email":self.bindAccountView.phoneOrEmailTF.text};
         actioinString = AppSendEmailVerificationCode;
+        
+        //等待发送验证码倒计时
+        [self.countdownTimer startTimerWithShowView:self.bindAccountView.verificationButton inputText:self.bindAccountView.phoneOrEmailTF.text phoneOrEmailType:NO];
     }
     
     [[TIoTRequestObject shared] postWithoutToken:actioinString Param:tmpDic success:^(id responseObject) {
@@ -239,37 +254,51 @@
 #pragma mark - 判断获取验证码是否可点击
 - (void)responseBindVerificationButton {
     
-    if (self.accountType == AccountType_Phone) {
-        //不为空且格式正确
-        if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
-            [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-            self.bindAccountView.verificationButton.selected = YES;
-        }else {
-            [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
-            self.bindAccountView.verificationButton.selected = NO;
+    if ([self.bindAccountView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] ) {
+        
+        if (self.accountType == AccountType_Phone) {
+            //不为空且格式正确
+            if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+                [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                self.bindAccountView.verificationButton.enabled = YES;
+            }else {
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                self.bindAccountView.verificationButton.enabled = NO;
+            }
+        }else if (self.accountType == AccountType_Email) {
+            //不为空且格式正确
+            if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+                [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                self.bindAccountView.verificationButton.enabled = YES;
+            }else {
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                self.bindAccountView.verificationButton.enabled = NO;
+            }
         }
-    }else if (self.accountType == AccountType_Email) {
-        //不为空且格式正确
-        if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text])) {
-            [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-            self.bindAccountView.verificationButton.selected = YES;
-        }else {
-            [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
-            self.bindAccountView.verificationButton.selected = NO;
+        
+    }else {
+        [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        self.bindAccountView.verificationButton.enabled = NO;
+        
+        //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
+        if (self.accountType == AccountType_Phone) {
+            if (([NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) || !([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
+            }
+        }else if (self.accountType == AccountType_Email) {
+            if (([NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) || !([NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
+            }
         }
+        
     }
     
     
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)dealloc {
+    [self.countdownTimer closeTimer];
+    [self.countdownTimer clearObserver];
 }
-*/
 
 @end
