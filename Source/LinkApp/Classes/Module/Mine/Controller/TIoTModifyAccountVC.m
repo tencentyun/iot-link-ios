@@ -10,6 +10,7 @@
 #import "XWCountryCodeController.h"
 #import "TIoTModifyView.h"
 #import "TIoTChooseRegionVC.h"
+#import "NSObject+CountdownTimer.h"
 
 @interface TIoTModifyAccountVC ()<TIoTModifyAccountViewDelegate>
 @property (nonatomic, strong) UIButton      *areaCodeBtn;
@@ -141,10 +142,16 @@
         tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"PhoneNumber":self.modifyView.phoneOrEmailTF.text};
         actioinString = AppSendVerificationCode;
         
+        //等待发送验证码倒计时
+        [NSObject countdownTimerWithShowView:self.modifyView.verificationButton inputText:self.modifyView.phoneOrEmailTF.text phoneOrEmailType:YES];
+        
     }else if (accountType == ModifyAccountEmailType) {
         
         tmpDic = @{@"Type":@"register",@"Email":self.modifyView.phoneOrEmailTF.text};
         actioinString = AppSendEmailVerificationCode;
+        
+        //等待发送验证码倒计时
+        [NSObject countdownTimerWithShowView:self.modifyView.verificationButton inputText:self.modifyView.phoneOrEmailTF.text phoneOrEmailType:NO];
     }
     
     [[TIoTRequestObject shared] postWithoutToken:actioinString Param:tmpDic success:^(id responseObject) {
@@ -197,25 +204,45 @@
 
 - (void)responseModifyVerificationButton {
     
-    if (self.accountType == AccountModifyType_Phone) {
-        if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
-            [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-            self.modifyView.verificationButton.enabled = YES;
-        }else {
-            [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
-            self.modifyView.verificationButton.enabled = NO;
+    if ([self.modifyView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
+        if (self.accountType == AccountModifyType_Phone) {
+            if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
+                [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                self.modifyView.verificationButton.enabled = YES;
+            }else {
+                [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                self.modifyView.verificationButton.enabled = NO;
+            }
+        }else if (self.accountType == AccountModifyType_Email) {
+            if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text])) {
+                [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                self.modifyView.verificationButton.enabled = YES;
+            }else {
+                [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                self.modifyView.verificationButton.enabled = NO;
+            }
         }
-    }else if (self.accountType == AccountModifyType_Email) {
-        if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text])) {
-            [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-            self.modifyView.verificationButton.enabled = YES;
-        }else {
-            [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
-            self.modifyView.verificationButton.enabled = NO;
+        
+    }else {
+        [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        self.modifyView.verificationButton.enabled = NO;
+        
+        //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
+        if (self.accountType == AccountModifyType_Phone) {
+            if ([NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] || !([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
+            }
+        }else if (self.accountType == AccountModifyType_Email) {
+            if ([NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] || !([NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text])) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
+            }
         }
     }
     
-    
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
