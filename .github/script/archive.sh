@@ -30,7 +30,7 @@ cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 
 #rm -rf Podfile.lock
 #/usr/local/bin/pod install --verbose --no-repo-update
-/usr/local/bin/pod install
+/usr/local/bin/pod update
  
 BUILD_TYPE=$1
 
