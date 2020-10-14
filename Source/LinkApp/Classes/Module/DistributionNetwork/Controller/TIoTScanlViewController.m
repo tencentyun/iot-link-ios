@@ -8,6 +8,7 @@
 
 #import "TIoTScanlViewController.h"
 #import "SGQRCode.h"
+#import "TIoTConfigHardwareViewController.h"
 
 @interface TIoTScanlViewController (){
     SGQRCodeObtain *obtain;
@@ -17,7 +18,7 @@
 @property (nonatomic, strong) UILabel *promptLabel;
 @property (nonatomic, assign) BOOL isSelectedFlashlightBtn;
 @property (nonatomic, strong) UIView *bottomView;
-
+@property (nonatomic, strong) NSDictionary *configData;
 @end
 
 @implementation TIoTScanlViewController
@@ -89,6 +90,7 @@
             [MBProgressHUD dismissInView:self.view];
             
             NSString *signature = @"";//result;
+            NSString *productId = @"";//productId
             NSDictionary *param = [NSString jsonToObject:result];
             
             if (param) {
@@ -110,6 +112,9 @@
                         if ([param containsString:@"page"]) {
                             page = [[param componentsSeparatedByString:@"="] lastObject];
                         }
+                        if ([param containsString:@"productId"]) {
+                            productId =[[param componentsSeparatedByString:@"="] lastObject];
+                        }
                     }
                     
                 }
@@ -122,7 +127,9 @@
                     } else if ([page isEqualToString:@"smartconfig"]) {
                         [self.navigationController popViewControllerAnimated:YES];
                         [HXYNotice postChangeAddDeviceType:0];
-                    } else { //未知page
+                    } else if ([page isEqualToString:@"adddevice"] && ![NSString isNullOrNilWithObject:productId]){ //设备批量生产的二维码扫描
+                        [self getProductsConfig:productId];
+                    }else {//未知page
                         [self bindDevice:signature];
                     }
                 }
@@ -132,6 +139,45 @@
         });
     }
 }
+
+#pragma mark - 配网请求流程
+- (void)getProductsConfig:(NSString *)productId{
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+        
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = [[NSDictionary alloc]initWithDictionary:config];
+            WCLog(@"AppGetProductsConfig config%@", config);
+            NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
+            if (wifiConfTypeList.count > 0) {
+                NSString *configType = wifiConfTypeList.firstObject;
+                if ([configType isEqualToString:@"softap"]) {
+                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+                    return;
+                }
+            }
+        }
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+    }];
+}
+
+- (void)jumpConfigVC:(NSString *)title{
+    TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
+    vc.configurationData = self.configData;
+    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
+    } else {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
+    }
+    vc.roomId = self.roomId?:@"";
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 
 - (void)setupQRCodeScan {
     WeakObj(self)
