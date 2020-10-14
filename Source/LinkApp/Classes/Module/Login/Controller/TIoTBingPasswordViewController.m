@@ -162,6 +162,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
         [[TIoTRequestObject shared] postWithoutToken:AppCreateCellphoneUser Param:tmpDic success:^(id responseObject) {
+            [[TIoTCoreUserManage shared] signInClear];
             [self.navigationController popToRootViewControllerAnimated:YES];
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -186,6 +187,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
         
         [[TIoTRequestObject shared] postWithoutToken:AppCreateEmailUser Param:tmpDic success:^(id responseObject) {
+            [[TIoTCoreUserManage shared] signInClear];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             

@@ -51,6 +51,19 @@
     [TIoTCoreUserManage shared].userRegionId = @"1";
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (_emailStyle) {
+        if (![NSString isNullOrNilWithObject:self.emailTF.text]) {
+            [TIoTCoreUserManage shared].signIn_Email_Address = self.emailTF.text;
+        }
+    }else {
+        if (![NSString isNullOrNilWithObject:self.phoneTF.text]) {
+            [TIoTCoreUserManage shared].signIn_Phone_Numner = self.phoneTF.text;
+        }
+    }
+}
+
 #pragma mark privateMethods
 - (void)setupUI{
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -138,6 +151,42 @@
         make.right.equalTo(self.view).offset(-24);
         make.height.mas_equalTo(48);
     }];
+ 
+    [self refreshUserActionItems];
+}
+
+#pragma mark - 显示用户之前操作项
+- (void)refreshUserActionItems {
+    
+    // 1、对区域和手机号、邮箱内容赋值或填充  2、对手机号、邮箱格式检测
+    if (_emailStyle) {
+        
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Email_countryCode]) {
+            self.conturyCode2 = [TIoTCoreUserManage shared].signIn_Email_countryCode;
+        }
+        
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Email_Title]) {
+            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Email_Title] forState:UIControlStateNormal];
+        }
+        
+    }else {
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Phone_countryCode]) {
+            self.conturyCode = [TIoTCoreUserManage shared].signIn_Phone_countryCode;
+        }
+        
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Phone_Title]) {
+            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Phone_Title] forState:UIControlStateNormal];
+        }
+    }
+    
+    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Phone_Numner]) {
+        self.phoneTF.text = [TIoTCoreUserManage shared].signIn_Phone_Numner;
+        [self judgePhoneNumberQualifiedWithString:self.phoneTF.text];
+    }
+    
+    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Email_Address]) {
+        self.emailTF.text = [TIoTCoreUserManage shared].signIn_Email_Address;
+    }
 }
 
 - (void)showPhoneRegisterStyle {
@@ -227,21 +276,30 @@
     //优化提示文案
     if (textField == self.phoneTF) {//手机号改密码
         
-        if ([NSString judgePhoneNumberLegal:textField.text]) { //手机号合格
-            self.phoneTipLabel.hidden = YES;
-        }else{ //手机号不合格
-            self.phoneTipLabel.hidden = NO;
-            self.phoneTipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
-        }
+        [self judgePhoneNumberQualifiedWithString:textField.text];
         
     }else { //邮箱改密码
         
-        if ([NSString judgeEmailLegal:textField.text]) { //邮箱合格
-            self.emailTipLabel.hidden = YES;
-        }else{ //邮箱合格不合格
-            self.emailTipLabel.hidden = NO;
-            self.emailTipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
-        }
+        [self judgeEmailAddressQualifiedWithString:textField.text];
+    }
+}
+
+
+- (void)judgePhoneNumberQualifiedWithString:(NSString *)textFieldText {
+    if ([NSString judgePhoneNumberLegal:textFieldText]) { //手机号合格
+        self.phoneTipLabel.hidden = YES;
+    }else{ //手机号不合格
+        self.phoneTipLabel.hidden = NO;
+        self.phoneTipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
+    }
+}
+
+- (void)judgeEmailAddressQualifiedWithString:(NSString *)textFieldText {
+    if ([NSString judgeEmailLegal:textFieldText]) { //邮箱合格
+        self.emailTipLabel.hidden = YES;
+    }else{ //邮箱合格不合格
+        self.emailTipLabel.hidden = NO;
+        self.emailTipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
     }
 }
 
@@ -262,9 +320,13 @@
         if (self->_emailStyle == NO) {
             self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+            [TIoTCoreUserManage shared].signIn_Phone_countryCode = CountryCode;
+            [TIoTCoreUserManage shared].signIn_Phone_Title = Title;
         }else {
              self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+            [TIoTCoreUserManage shared].signIn_Email_countryCode = CountryCode;
+            [TIoTCoreUserManage shared].signIn_Email_Title = Title;
         }
         
     };
@@ -280,16 +342,22 @@
         _emailStyle = NO;
         self.title = NSLocalizedString(@"mobile_phone_register", @"手机注册");
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        self.emailTF.text = @"";
+//        self.emailTF.text = @"";
         [sender setTitle:NSLocalizedString(@"email_to_register", @"使用邮箱注册") forState:UIControlStateNormal];
+        [TIoTCoreUserManage shared].signIn_Email_Address = self.emailTF.text;
     }
     else
     {
         _emailStyle = YES;
         self.title = NSLocalizedString(@"email_register", @"邮箱注册");
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
-        self.phoneTF.text = @"";
+//        self.phoneTF.text = @"";
         [sender setTitle:NSLocalizedString(@"mobile_phone_number_to_register", @"使用手机注册") forState:UIControlStateNormal];
+        [TIoTCoreUserManage shared].signIn_Phone_Numner = self.phoneTF.text;
+        if (![NSString isNullOrNilWithObject:self.emailTF.text]) {
+            [self judgeEmailAddressQualifiedWithString:self.emailTF.text];
+        }
+        
     }
 }
 
@@ -313,6 +381,9 @@
 - (void)sendCode:(id)sender{
     
     if (_emailStyle) {
+        
+        [TIoTCoreUserManage shared].signIn_Email_Address = self.emailTF.text;
+        
         NSDictionary *tmpDic = @{@"Type":@"register",@"Email":self.emailTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
@@ -328,6 +399,8 @@
     }
     else
     {
+        [TIoTCoreUserManage shared].signIn_Phone_Numner = self.phoneTF.text;
+        
         NSDictionary *tmpDic = @{@"Type":@"register",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneTF.text};
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         

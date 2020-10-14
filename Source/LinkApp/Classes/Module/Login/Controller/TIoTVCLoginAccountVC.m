@@ -63,6 +63,12 @@
     [self setUpUI];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self savePhoneOrEmailAccount];
+}
+
 - (void)setUpUI {
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
@@ -167,6 +173,10 @@
         make.centerY.equalTo(verificationCodeButton.mas_centerY);
     }];
     
+    
+    //默认填充用户操作过后项
+    [self optionUserDefaultActionItems];
+    
     //判断获取验证码按钮是否可点击
     [self judgeVerificationButtonResponse];
 }
@@ -191,6 +201,34 @@
         if ([NSString isNullOrNilWithObject:self.phoneAndEmailTF.text] || !([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
         }
+    }
+}
+
+- (void)optionUserDefaultActionItems {
+    
+    //1 对验证码登录和密码登录方式中，区域内容和账号（手机号/邮箱）内容填充，并对账号格式检测
+    if (self.loginStyle == YES) {   //验证码
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_CountryCode]) {
+            self.conturyCode = [TIoTCoreUserManage shared].login_Code_CountryCode;
+        }
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_Title]) {
+            [self.areaCodeBtn setTitle:[TIoTCoreUserManage shared].login_Code_Title forState:UIControlStateNormal];
+        }
+    }else {                         //密码登录
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_CountryCode]) {
+            self.conturyCode2 = [TIoTCoreUserManage shared].login_PhoneEmail_CountryCode;
+        }
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_Title]) {
+            [self.areaCodeBtn2 setTitle:[TIoTCoreUserManage shared].login_PhoneEmail_Title forState:UIControlStateNormal];
+        }
+    }
+    
+    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_Text]) {
+        self.phoneAndEmailTF.text = [TIoTCoreUserManage shared].login_Code_Text;
+    }
+    
+    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_Text]) {
+        self.phoneAndEmailTF2.text = [TIoTCoreUserManage shared].login_PhoneEmail_Text;
     }
 }
 
@@ -474,22 +512,28 @@
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
         [sender setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
         self.forgetPasswordButton.hidden = YES;
-        self.phoneAndEmailTF2.text = @"";
+//        self.phoneAndEmailTF2.text = @"";
         self.passwordTF.text = @"";
         [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        
+        [TIoTCoreUserManage shared].login_PhoneEmail_Text = self.phoneAndEmailTF2.text;
     }else {
         self.loginStyle = NO;
         self.title = NSLocalizedString(@"account_passwd_login", @"账号密码登录");
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
         [sender setTitle:NSLocalizedString(@"verify_code_login", @"验证码登录") forState:UIControlStateNormal];
         self.forgetPasswordButton.hidden = NO;
-        self.phoneAndEmailTF.text = @"";
+//        self.phoneAndEmailTF.text = @"";
         self.verificationcodeTF.text = @"";
         [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        
+        [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF.text;
     }
 }
 
 - (void)loginSure {
+    
+    [self savePhoneOrEmailAccount];
     
     NSDictionary *tmpDic = nil;
     
@@ -601,9 +645,15 @@
         if (self.loginStyle == YES) {
             self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+            
+            [TIoTCoreUserManage shared].login_Code_CountryCode = CountryCode;
+            [TIoTCoreUserManage shared].login_Code_Title = Title;
         }else {
              self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+            
+            [TIoTCoreUserManage shared].login_PhoneEmail_CountryCode = CountryCode;
+            [TIoTCoreUserManage shared].login_PhoneEmail_Title = Title;
         }
         
     };
@@ -733,10 +783,21 @@
 }
 
 - (void)forgetPasswordClick {
+    
+    [self savePhoneOrEmailAccount];
     TIoTPhoneResetPwdViewController *vc = [[TIoTPhoneResetPwdViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)savePhoneOrEmailAccount  {
+    if (![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) {
+        [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF.text;
+    }
+    
+    if (![NSString isNullOrNilWithObject:self.phoneAndEmailTF2.text]) {
+        [TIoTCoreUserManage shared].login_PhoneEmail_Text = self.phoneAndEmailTF2.text;
+    }
+}
 -(void)changedTextField:(UITextField *)textField {
     
     if (self.loginStyle == YES) {    //验证码登录
