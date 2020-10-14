@@ -28,7 +28,7 @@ fi
 
 cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 
-rm -rf Podfile.lock
+#rm -rf Podfile.lock
 #/usr/local/bin/pod install --verbose --no-repo-update
 sudo gem install cocoapods --pre
 /usr/local/bin/pod --version
@@ -46,3 +46,5 @@ if [ $1 == 'Debug' ]; then
 else
     xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsRelease.plist  -exportPath ./
 fi
+
+mv *.ipa LinkApp.ipa
