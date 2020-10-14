@@ -164,7 +164,21 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     }()
 
     @objc func jumpControl() {
-        swipeAnimationView.play()
+//        swipeAnimationView.play()
+        
+        let wxManager = WxManager.shared()
+//        wxManager?.shareWebPageToWXSceneSession(withTitle: "title",
+//                                                description: "desccc",
+//                                                thumbImage: UIImage(named: "equipmentSelectTabbar"),
+//                                                webUrl: "http://www.baidu.com")
+        wxManager?.shareMiniProgramToWXSceneSession(withTitle: "titlet",
+                                                    description: "desccc",
+                                                    path: "",
+                                                    webpageUrl: "http://www.baidu.com", // 兼容微信低版本的url
+                                                    userName: "gh_2aa6447f2b7c",
+                                                    thumbImage: UIImage(named: "equipmentSelectTabbar"),
+                                                    thumbImageUrl: "",
+                                                    complete: nil)
 /*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in
