@@ -17,13 +17,13 @@ jobs:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
-#    - name: pod cache
-#      uses: actions/cache@v2
-#      with:
-#        path: Pods
-#        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-#        restore-keys: |
-#          ${{ runner.os }}-pods-
+    - name: pod cache
+      uses: actions/cache@v2
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
     - name: Install GPG
       run: brew install gnupg
     - name: install fir
@@ -36,7 +36,7 @@ jobs:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
     - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_11.5.app && /usr/bin/xcodebuild -version
+      run: sudo xcode-select -switch /Applications/Xcode_12.app && /usr/bin/xcodebuild -version
     - name: Build archive
       run: |
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
