@@ -16,6 +16,23 @@
       "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "211d478a_a9201064",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-14T08:48:17Z",
+      "side": 1,
+      "message": "timer倒计时时候，推出页面，会造成内存泄漏",
+      "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
