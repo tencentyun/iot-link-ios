@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab720ede_24c2bb44",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-14T08:33:08Z",
+      "side": 1,
+      "message": "通知加载到的观察者是否释放了 removeobserver，存在crash风险",
+      "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
