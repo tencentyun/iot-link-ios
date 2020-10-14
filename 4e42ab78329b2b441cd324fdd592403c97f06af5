@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7d98af1e_517fec4e",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-14T09:42:04Z",
+      "side": 1,
+      "message": "已在patch2中修复",
+      "parentUuid": "ab720ede_24c2bb44",
+      "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "211d478a_a9201064",
         "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "557e213a_138f0469",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-14T09:42:04Z",
+      "side": 1,
+      "message": "已在patch2中修复",
+      "parentUuid": "211d478a_a9201064",
+      "revId": "4e42ab78329b2b441cd324fdd592403c97f06af5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
