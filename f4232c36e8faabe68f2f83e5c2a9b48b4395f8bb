@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6965cd24_0f8ff0ce",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/NSObject+CountdownTimer.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-14T08:22:24Z",
+      "side": 1,
+      "message": "建议NSObject类别统一放已有的NSObject类别中",
+      "revId": "f4232c36e8faabe68f2f83e5c2a9b48b4395f8bb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    }
+  ]
+}
