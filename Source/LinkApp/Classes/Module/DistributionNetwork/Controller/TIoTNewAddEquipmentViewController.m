@@ -144,10 +144,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     self.scrollView.contentSize = CGSizeMake(kScreenWidth, listHeight);
 }
 
-- (void)jumpConfigVC:(NSString *)title{
+- (void)jumpConfigVC:(TIoTConfigHardwareStyle )hardwareStyle{
     TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
     vc.configurationData = self.configData;
-    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+    if (hardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
         vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
     } else {
         vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
@@ -173,20 +173,24 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
             if (wifiConfTypeList.count > 0) {
                
-                if (type == 0) {   //智能
-                    [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
-                }else {             //自助
-                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
-                }
+                [self juegeHardwareStyle:type];
                 return;
             }
         }
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        [self juegeHardwareStyle:type];
         WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        [self juegeHardwareStyle:type];
     }];
+}
+
+- (void)juegeHardwareStyle:(TIoTConfigHardwareStyle )style {
+    if (style == 0) {   //智能
+        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig];
+    }else {             //自助
+        [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];
+    }
 }
 
 - (void)popHomeVC {
@@ -246,16 +250,16 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             if (wifiConfTypeList.count > 0) {
                 NSString *configType = wifiConfTypeList.firstObject;
                 if ([configType isEqualToString:@"softap"]) {
-                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+                    [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];  //自助配网
                     return;
                 }
             }
         }
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig]; //智能配网
         WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig]; //智能配网
     }];
 }
 
@@ -380,7 +384,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self getProductsConfig:productId];
     } else {
         self.selectedProducetedID = @"";
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig];  //智能配网
     }
 }
 
