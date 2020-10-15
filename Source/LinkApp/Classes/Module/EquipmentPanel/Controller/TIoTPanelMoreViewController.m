@@ -156,7 +156,12 @@
     if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_name", @"设备名称")]) {
         
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
+        
+        NSString *tipString = NSLocalizedString(@"less20character", @"20字以内");
+        if (![NSString isNullOrNilWithObject:self.deviceDic[@"DeviceName"]]) {
+            tipString = self.deviceDic[@"DeviceName"];
+        }
+        [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:tipString cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.maxLength = 20;
         av.doneAction = ^(NSString * _Nonnull text) {
             if (text.length > 0) {
