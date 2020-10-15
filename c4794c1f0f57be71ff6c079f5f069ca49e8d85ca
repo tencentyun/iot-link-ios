@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab62c0d0_c9fd0f9d",
+        "filename": "Source/LinkApp/Classes/Module/DistributionNetwork/Controller/TIoTNewAddEquipmentViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-15T05:44:13Z",
+      "side": 1,
+      "message": "jumpConfigVC 方法的参数判断条件也做国际化没有意义，建议用枚举或者确定的string做判断；\n语言国际化一般是用于UI展示在界面的",
+      "revId": "c4794c1f0f57be71ff6c079f5f069ca49e8d85ca",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
