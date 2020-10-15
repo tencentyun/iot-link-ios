@@ -16,6 +16,24 @@
       "revId": "c4794c1f0f57be71ff6c079f5f069ca49e8d85ca",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a83f301_75d7f88c",
+        "filename": "Source/LinkApp/Classes/Module/DistributionNetwork/Controller/TIoTNewAddEquipmentViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-15T07:07:13Z",
+      "side": 1,
+      "message": "在patch2已经优化代码",
+      "parentUuid": "ab62c0d0_c9fd0f9d",
+      "revId": "c4794c1f0f57be71ff6c079f5f069ca49e8d85ca",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
