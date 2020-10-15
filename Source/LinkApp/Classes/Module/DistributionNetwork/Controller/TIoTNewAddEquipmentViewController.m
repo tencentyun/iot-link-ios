@@ -181,11 +181,19 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                 return;
             }
         }
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        if (type == 0) {   //智能
+            [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        }else {             //自助
+            [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+        }
         WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        if (type == 0) {   //智能
+            [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        }else {             //自助
+            [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+        }
     }];
 }
 
