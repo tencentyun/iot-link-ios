@@ -130,6 +130,15 @@
     }
 }
 
++ (NSString *)URLEncode:(NSString *)value
+{
+  return (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                                               (CFStringRef)value,
+                                                                               NULL, // characters to leave unescaped
+                                                                               CFSTR(":!*();@/&?+$,='"),
+                                                                               kCFStringEncodingUTF8);
+}
+
 + (id)jsonToObject:(NSString *)json{
     if (json == nil) {
         return nil;

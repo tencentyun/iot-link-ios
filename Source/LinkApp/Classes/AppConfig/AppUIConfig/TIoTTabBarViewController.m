@@ -11,6 +11,8 @@
 #import "TIoTMineViewController.h"
 #import "TIoTNavigationController.h"
 #import "UIImage+Ex.h"
+#import "TIoTWebVC.h"
+#import "TIoTCoreAppEnvironment.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
@@ -31,7 +33,30 @@
     //首页
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
     [self addChildVc:homeVC title:NSLocalizedString(@"main_tab_1", @"首页") image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
+    
+    //评测
+    TIoTWebVC *webVC = [TIoTWebVC new];
+    webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
+        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
+            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+//            TIoTWebVC *webVC = [TIoTWebVC new];
+            NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId];
+            webController.urlPath = url;
+            [webController loadUrl:url];
+            webController.needJudgeJump = YES;
+            webController.needRefresh = YES;
+            [MBProgressHUD dismissInView:self.view];
+
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            [MBProgressHUD dismissInView:self.view];
+        }];
+    };
+    [self addChildVc:webVC title: NSLocalizedString(@"home_evaluation", @"评测")  image:@"home_evaluation_unsel" selectedImage:@"home_evaluation_sel"];
+    
     //个人中心
     TIoTMineViewController *mineVC = [[TIoTMineViewController alloc] init];
     [self addChildVc:mineVC title: NSLocalizedString(@"main_tab_3", @"我的")  image:@"mineDefaultTabbar" selectedImage:@"mineSelectTabbar"];
@@ -60,9 +85,12 @@
     //[[UITabBar appearance] setBackgroundImage:[UIImage imageWithColor:HWColor(255, 255, 255, 1.0)]];
     // 设置子控制器的文字
     childVc.title = title;
+    
+    // 先给外面传进来的小控制器 包装 一个导航控制器
+    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:childVc];
     // 设置子控制器的图片
-    childVc.tabBarItem.image = [[UIImage imageNamed:image]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];;
-    childVc.tabBarItem.selectedImage = [[UIImage imageNamed:selectedImage]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    nav.tabBarItem.image = [[UIImage imageNamed:image]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];;
+    nav.tabBarItem.selectedImage = [[UIImage imageNamed:selectedImage]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     // 设置文字的样式
     NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
     textAttrs[NSForegroundColorAttributeName] = kXDPTabbarNomalColor;
@@ -71,10 +99,8 @@
     NSMutableDictionary *selectTextAttrs = [NSMutableDictionary dictionary];
     selectTextAttrs[NSForegroundColorAttributeName] = kMainColor;
     selectTextAttrs[NSFontAttributeName] = [UIFont wcPfRegularFontOfSize:kXDPTabbarTitleFont];;
-    [childVc.tabBarItem setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
-    [childVc.tabBarItem setTitleTextAttributes:selectTextAttrs forState:UIControlStateSelected];
-    // 先给外面传进来的小控制器 包装 一个导航控制器
-    TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:childVc];
+    [nav.tabBarItem setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
+    [nav.tabBarItem setTitleTextAttributes:selectTextAttrs forState:UIControlStateSelected];
     // 添加为子控制器
     [self addChildViewController:nav];
 }

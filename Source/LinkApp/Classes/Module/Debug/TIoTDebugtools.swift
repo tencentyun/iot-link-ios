@@ -135,7 +135,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         MBProgressHUD.showError("已切换至测试环境", to: TIoTAPPConfig.iot_appdelegate.window)
         
         TIoTAppEnvironment.share().loginOut()
-        let nav = TIoTNavigationController(rootViewController: TIoTLoginVC())
+        let nav = TIoTNavigationController(rootViewController: TIoTVCLoginAccountVC())
         TIoTAPPConfig.iot_window.rootViewController = nav
     }
     
@@ -146,7 +146,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
 //        DDLogInfo("测试swiftLog---\(#column)+\(#file)")
         
         TIoTAppEnvironment.share().loginOut()
-        let nav = TIoTNavigationController(rootViewController: TIoTLoginVC())
+        let nav = TIoTNavigationController(rootViewController: TIoTVCLoginAccountVC())
         TIoTAPPConfig.iot_window.rootViewController = nav
     }
     

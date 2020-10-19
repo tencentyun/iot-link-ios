@@ -21,6 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)objectToJson:(id)obj;
 
 /**
+ json 字符串中包括中文和转义字符 的 转化
+ */
++ (NSString *)URLEncode:(NSString *)value;
+
+/**
  json字符串转化为数组或者字典
  
  @param json 待转换的json
