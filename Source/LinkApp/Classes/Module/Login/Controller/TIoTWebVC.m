@@ -10,13 +10,13 @@
 #import <WebKit/WebKit.h>
 #import <QuickLook/QLPreviewController.h>
 #import "TIoTNavigationController.h"
-
+#import "TIoTAppEnvironment.h"
+#import "TIoTEvaluationSharedView.h"
 
 @interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler>
 
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
-
 @end
 
 @implementation TIoTWebVC
@@ -58,6 +58,11 @@
     // 控制器 强引用了WKWebView,WKWebView copy(强引用了）configuration， configuration copy （强引用了）userContentController
     // userContentController 强引用了 self （控制器）
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"LoginApp"];
+    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"goDetail"];
+    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"onArticleShare"];
+    if (self.needRefresh == YES) {
+        [self.webView reload];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -66,6 +71,8 @@
     
     // 因此这里要记得移除handlers
     [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"LoginApp"];
+    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"goDetail"];
+    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"onArticleShare"];
 }
 
 - (void)viewDidLoad {
@@ -124,7 +131,7 @@
 
 - (void)login {
     [[TIoTCoreUserManage shared] clear];
-    UIViewController *loginVc = [NSClassFromString(@"TIoTLoginVC") new];
+    UIViewController *loginVc = [NSClassFromString(@"TIoTVCLoginAccountVC") new];
 //    UIViewController *loginVc = [NSClassFromString(@"TIoTMainVC") new];
     [loginVc setValue:@(YES) forKeyPath:@"isExpireAt"];
     TIoTNavigationController *vc = [[TIoTNavigationController alloc] initWithRootViewController:loginVc];
@@ -190,7 +197,64 @@
     NSLog(@"body:%@",message.body);
     if ([message.name isEqualToString:@"LoginApp"]) {
         [self login];
+    }else if ([message.name isEqualToString:@"onArticleShare"]) {
+        
+        [self showSharedView];
+        
+    }else if ([message.name isEqualToString:@"goDetail"]) {
+    
+        [self displayEvaluationDetailWebViewWithURl:message.body[@"url"]];
     }
+}
+
+#pragma mark - 显示自定义分享view
+- (void)showSharedView {
+    TIoTLog(@"弹框");
+    TIoTEvaluationSharedView * shareView = [[TIoTEvaluationSharedView alloc]init];
+    shareView.sharedFriendDic = self.sharedMessageDic;
+    shareView.sharedPathString = self.sharedPathString;
+    shareView.sharedURLString = self.sharedURLString;
+    [self.view addSubview:shareView];
+    [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        }else {
+            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
+        }
+        make.leading.right.bottom.equalTo(self.view);
+    }];
+}
+
+#pragma mark - 跳转详情页
+- (void)displayEvaluationDetailWebViewWithURl:(NSString *)url {
+    NSString *bodyUrlString = url;
+    NSArray *bodyUrlArray = [bodyUrlString componentsSeparatedByString:@"="];
+    NSData *data = [bodyUrlArray.lastObject dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *bodyParamDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSDictionary *itemParamDic =  @{@"articleId":bodyParamDic[@"ArticleId"],@"IsLike":bodyParamDic[@"IsLike"],@"LikeCount":bodyParamDic[@"LikeCount"],@"articleRoute":bodyParamDic[@"articleRoute"],@"articleTitle":bodyParamDic[@"articleTitle"]};
+    NSString *itemParaString = [NSString objectToJson:itemParamDic];
+    NSString *itemJsonString = [NSString URLEncode:itemParaString];
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+            [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+                
+                WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+                NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+                TIoTWebVC *vc = [TIoTWebVC new];
+                vc.title = NSLocalizedString(@"help_center", @"帮助中心");
+                NSString *url = nil;
+                NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+                url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket];
+                vc.sharedMessageDic = bodyParamDic;
+                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/#%@=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString, ticket];
+                vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@",itemJsonString, ticket];
+                vc.urlPath = url;
+                vc.needJudgeJump = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+                [MBProgressHUD dismissInView:self.view];
+
+            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+                [MBProgressHUD dismissInView:self.view];
+            }];
 }
 
 @end

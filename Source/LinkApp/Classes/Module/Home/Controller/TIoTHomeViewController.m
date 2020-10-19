@@ -70,6 +70,8 @@ static CGFloat weatherHeight = 10;
 
 @property (nonatomic) dispatch_semaphore_t sem;
 
+@property (nonatomic, strong) UIButton *testButton;
+
 @end
 
 @implementation TIoTHomeViewController
@@ -106,6 +108,34 @@ static CGFloat weatherHeight = 10;
     [self registFeedBackRouterController];
     [self checkNewVersion];
     
+    //testButton
+    self.testButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.testButton.frame = CGRectMake(200, 500, 100, 80);
+    [self.testButton setTitle:@"评测入口" forState:UIControlStateNormal];
+    [self.testButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [self.testButton addTarget:self action:@selector(enterEcaluationModule) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.testButton];
+}
+
+- (void)enterEcaluationModule {
+
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+
+        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+        TIoTWebVC *vc = [TIoTWebVC new];
+        NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+        NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId];
+        vc.urlPath = url;
+        vc.needJudgeJump = YES;
+        vc.needRefresh = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        [MBProgressHUD dismissInView:self.view];
+
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD dismissInView:self.view];
+    }];
 }
 
 - (void)checkNewVersion {

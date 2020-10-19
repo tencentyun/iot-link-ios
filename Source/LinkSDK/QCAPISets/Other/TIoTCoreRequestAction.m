@@ -118,6 +118,7 @@ NSString *const AppRemoveUserShareDevice = @"AppRemoveUserShareDevice";//删除�
 
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心
+NSString *const H5Evaluation = @"evaluation";//评测
 
 //===============用户协议、隐私协议链接
 
