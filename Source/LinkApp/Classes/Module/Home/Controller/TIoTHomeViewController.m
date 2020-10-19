@@ -105,7 +105,6 @@ static CGFloat weatherHeight = 10;
     
     [self registFeedBackRouterController];
     [self checkNewVersion];
-    
 }
 
 - (void)checkNewVersion {

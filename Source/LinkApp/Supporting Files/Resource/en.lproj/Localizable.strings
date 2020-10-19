@@ -697,3 +697,14 @@
 "region_success" = "注册成功";
 "reset_password_success" = "重置密码成功";
 "phoneNumber_error" = "号码错误";
+
+
+//v1.1.0 版本新加
+"home_projuct" = "连连";
+"home_evaluation" = "评测";
+"home_intelligence" = "智能";
+"home_mine" = "我的";
+"evaluation_friend" = "微信分享";
+"evaluation_copyLink" = "复制链接";
+"evaluation_copyLink_success" = "已复制到剪切板";
+"noWeichat_placeInstall" = "微信未安装，请安装后重试";
