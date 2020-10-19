@@ -75,31 +75,42 @@
     
 //    UIImageView *self.imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_distri_tip"]];
     self.imgView = [[UIImageView alloc] init];
-    
-    if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-        NSString *softAPImageUrlString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"bgImg"];
-        if ([NSString isNullOrNilWithObject:softAPImageUrlString]) {
-            self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
-        }else {
-            [self.imgView setImageWithURLStr:softAPImageUrlString placeHolder:@"new_distri_tip"];
-        }
-    }else if (self.configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-        NSString *smartImageeUrlString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"bgImg"];
-        if ([NSString isNullOrNilWithObject:smartImageeUrlString]) {
-            self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
-        }else {
-            [self.imgView setImageWithURLStr:smartImageeUrlString placeHolder:@"new_distri_tip"];
+        UIImageView *bgmImageView = nil;
+        
+        if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+            NSString *softAPImageUrlString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"bgImg"];
+            if ([NSString isNullOrNilWithObject:softAPImageUrlString]) {
+                self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
+                
+                bgmImageView = [[UIImageView alloc]initWithImage:self.imgView.image];
+            }else {
+                [self.imgView setImageWithURLStr:softAPImageUrlString placeHolder:@"new_distri_tip"];
+                bgmImageView = [[UIImageView alloc]initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:softAPImageUrlString]]]];
+            }
+        }else if (self.configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+            NSString *smartImageeUrlString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"bgImg"];
+            if ([NSString isNullOrNilWithObject:smartImageeUrlString]) {
+                self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
+                bgmImageView = [[UIImageView alloc]initWithImage:self.imgView.image];
+            }else {
+                [self.imgView setImageWithURLStr:smartImageeUrlString placeHolder:@"new_distri_tip"];
+                bgmImageView = [[UIImageView alloc]initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:smartImageeUrlString]]]];
+            }
+            
         }
         
-    }
-    self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.scrollView addSubview:self.imgView];
-    [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.scrollView);
-        make.leading.mas_greaterThanOrEqualTo(16);
-        make.trailing.mas_lessThanOrEqualTo(-16);
-        make.top.equalTo(topicLabel.mas_bottom).offset(10);
-    }];
+        CGFloat kImageHeight = bgmImageView.frame.size.height;
+        CGFloat kImageWeitht = bgmImageView.frame.size.width;
+        self.imgView.contentMode = UIViewContentModeScaleAspectFit;
+        CGFloat kPadding = 16;
+        [self.scrollView addSubview:self.imgView];
+        [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.scrollView);
+            make.leading.mas_greaterThanOrEqualTo(kPadding);
+            make.trailing.mas_lessThanOrEqualTo(-kPadding);
+            make.top.equalTo(topicLabel.mas_bottom).offset(10);
+            make.height.mas_equalTo(kImageHeight/kImageWeitht*(kScreenWidth-2*kPadding));
+        }];
     
 //    UILabel *tipLabel = [[UILabel alloc] init];
 //    tipLabel.textColor = kRGBColor(166, 166, 166);
