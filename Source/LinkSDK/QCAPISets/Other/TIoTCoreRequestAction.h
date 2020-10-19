@@ -127,6 +127,7 @@ FOUNDATION_EXPORT NSString *const AppRemoveUserShareDevice;//删除用户的设�
 
 //===============h5
 FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心
+FOUNDATION_EXPORT NSString *const H5Evaluation;//评测
 
 //===============用户协议、隐私协议链接
 FOUNDATION_EXPORT NSString *const ServiceProtocolURl;//用户协议
