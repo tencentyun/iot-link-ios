@@ -384,6 +384,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self getProductsConfig:productId];
     } else {
         self.selectedProducetedID = @"";
+        self.configData = nil;
         [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig];  //智能配网
     }
 }
