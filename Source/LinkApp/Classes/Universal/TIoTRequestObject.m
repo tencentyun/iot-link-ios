@@ -85,7 +85,7 @@ failure:(FailureResponseBlock)failure
             
             failure(reason, error, dic);
         }else {
-            if ([urlStr isEqualToString:AppGetDeviceBindTokenState] && ([error.localizedDescription isEqualToString:NSLocalizedString(@"request_timeout", @"请求超时。")] || [error.localizedDescription isEqualToString:NSLocalizedString(@"network_cannotConnect", @"似乎已断开与互联网的连接")])) {
+            if ([urlStr isEqualToString:AppGetDeviceBindTokenState]) {
                 
             } else {
                 [MBProgressHUD showError:error.localizedDescription toView:[[UIApplication sharedApplication] delegate].window];
