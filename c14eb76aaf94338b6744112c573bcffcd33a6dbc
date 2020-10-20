@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "48d1b4e6_ae7f6c4f",
+        "filename": "Source/LinkApp/Classes/Module/Evaluation/View/TIoTEvaluationSharedView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-20T09:36:21Z",
+      "side": 1,
+      "message": "已经patch2中修改",
+      "parentUuid": "0ebb0cf9_e1a60472",
+      "revId": "c14eb76aaf94338b6744112c573bcffcd33a6dbc",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75cb1293_125cf393",
         "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "c14eb76aaf94338b6744112c573bcffcd33a6dbc",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f422e214_3c666394",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-20T09:36:21Z",
+      "side": 1,
+      "message": "已经在patch2中已修改",
+      "parentUuid": "75cb1293_125cf393",
+      "revId": "c14eb76aaf94338b6744112c573bcffcd33a6dbc",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
