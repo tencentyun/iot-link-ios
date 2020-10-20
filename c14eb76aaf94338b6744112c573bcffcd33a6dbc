@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ebb0cf9_e1a60472",
+        "filename": "Source/LinkApp/Classes/Module/Evaluation/View/TIoTEvaluationSharedView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-20T03:17:35Z",
+      "side": 1,
+      "message": "建议微信分享dispatch到主线程分享出去，图片下载可放异步操作",
+      "revId": "c14eb76aaf94338b6744112c573bcffcd33a6dbc",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75cb1293_125cf393",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-20T03:17:35Z",
+      "side": 1,
+      "message": "与产品沟通，评测入口需加入到首页底部tabbar中",
+      "revId": "c14eb76aaf94338b6744112c573bcffcd33a6dbc",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
