@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf1edb6b_71b02fc9",
+        "filename": "Source/LinkApp/Classes/Module/Debug/TIoTAPPConfig.swift",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-20T12:23:48Z",
+      "side": 1,
+      "message": "测试完成后，需要改回来",
+      "revId": "fadbf536a11a6a53ab11ccc4718aba9d0113124c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
