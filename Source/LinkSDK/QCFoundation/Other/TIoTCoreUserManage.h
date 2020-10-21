@@ -40,22 +40,22 @@ NS_ASSUME_NONNULL_BEGIN
 /*
  注册页面 用户选择项
  */
-@property (nonatomic, copy, nullable) NSString *signIn_Phone_countryCode;      //注册页面 手机 1 美东 86国内
-@property (nonatomic, copy, nullable) NSString *signIn_Phone_Title;            //注册页面 手机 区域显示title
+@property (nonatomic, copy, nullable) NSString *signIn_countryCode;      //注册页面 手机 1 美东 86国内
+@property (nonatomic, copy, nullable) NSString *signIn_Title;            //注册页面 手机 区域显示title
 @property (nonatomic, copy, nullable) NSString *signIn_Phone_Numner;           //注册页面 手机号码
-@property (nonatomic, copy, nullable) NSString *signIn_Email_countryCode;      //注册页面 邮箱 1 美东 86 国内
-@property (nonatomic, copy, nullable) NSString *signIn_Email_Title;            //注册页面 邮箱 区域显示title
+//@property (nonatomic, copy, nullable) NSString *signIn_Email_countryCode;      //注册页面 邮箱 1 美东 86 国内
+//@property (nonatomic, copy, nullable) NSString *signIn_Email_Title;            //注册页面 邮箱 区域显示title
 @property (nonatomic, copy, nullable) NSString *signIn_Email_Address;          //注册页面 邮箱地址
 
 /*
  登录页面 用户选择项
  */
-@property (nonatomic, copy, nullable) NSString *login_Code_CountryCode;       //登录页面 验证码 1 美东 86 国内
-@property (nonatomic, copy, nullable) NSString *login_Code_Title;              //登录页面 验证码 区域显示title
+@property (nonatomic, copy, nullable) NSString *login_CountryCode;       //登录页面 验证码 1 美东 86 国内
+@property (nonatomic, copy, nullable) NSString *login_Title;              //登录页面 验证码 区域显示title
 @property (nonatomic, copy, nullable) NSString *login_Code_Text;             //登录页面 手机/邮箱
-@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_CountryCode;        //登录页面 手机/邮箱 1 美东 86 国内
-@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Title;              //登录页面 手机/邮箱 区域显示title
-@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Text;            //登录页面 手机/邮箱
+//@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_CountryCode;        //登录页面 手机/邮箱 1 美东 86 国内
+//@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Title;              //登录页面 手机/邮箱 区域显示title
+//@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Text;            //登录页面 手机/邮箱
 
 //保存accessToken 和 有效期
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt;
