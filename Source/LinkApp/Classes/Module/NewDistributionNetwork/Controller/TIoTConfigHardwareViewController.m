@@ -147,7 +147,10 @@
         exploreNextString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"btnText"];
     }
     
-    NSString *softApNextString = exploreNextString ? : NSLocalizedString(@"next", @"下一步");
+    if ([NSString isNullOrNilWithObject:exploreNextString]) {
+        exploreNextString = NSLocalizedString(@"next", @"下一步");
+    }
+    NSString *softApNextString = exploreNextString;
 
     [nextBtn setTitle: softApNextString forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -212,12 +215,14 @@
         {
             
             NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
-            NSString *softAPDiscribeString = softAPExploreString ?:@"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。";
+            if ([NSString isNullOrNilWithObject:softAPExploreString]) {
+                softAPExploreString = @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。";
+            }
             
             _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
                          @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
                          @"topic": NSLocalizedString(@"setDevice_softAP_distributionNetwork", @"将设备设置为热点配网模式"),
-                         @"stepDiscribe":softAPDiscribeString
+                         @"stepDiscribe":softAPExploreString
             };
         }
             break;
@@ -225,12 +230,13 @@
         case TIoTConfigHardwareStyleSmartConfig:
         {
             NSString *smartExploreString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"message"];
-            NSString *smartDiccribeString = smartExploreString ? : @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
-            
+            if ([NSString isNullOrNilWithObject:smartExploreString]) {
+                smartExploreString = @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
+            }
             _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
                          @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
                          @"topic": NSLocalizedString(@"setupDevoice_SmartConfig_distributionNetwork", @"将设备设置为一键配网模式"),
-                         @"stepDiscribe": smartDiccribeString
+                         @"stepDiscribe": smartExploreString
             };
         }
             break;
