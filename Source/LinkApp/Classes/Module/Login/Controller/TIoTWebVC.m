@@ -254,13 +254,12 @@
                 WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
                 NSString *ticket = responseObject[@"TokenTicket"]?:@"";
                 TIoTWebVC *vc = [TIoTWebVC new];
-                vc.title = NSLocalizedString(@"help_center", @"帮助中心");
                 NSString *url = nil;
                 NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-                url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket];
+                url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket,TIoTAPPConfig.GlobalDebugUin];
                 vc.sharedMessageDic = bodyParamDic;
-                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/#%@=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString, ticket];
-                vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@",itemJsonString, ticket];
+                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/#%@=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
+                vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@&uin=%@",itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
                 vc.urlPath = url;
                 vc.needJudgeJump = YES;
                 [self.navigationController pushViewController:vc animated:YES];

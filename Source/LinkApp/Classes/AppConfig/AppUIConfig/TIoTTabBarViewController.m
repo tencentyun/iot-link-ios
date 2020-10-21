@@ -44,7 +44,7 @@
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
 //            TIoTWebVC *webVC = [TIoTWebVC new];
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId];
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId,TIoTAPPConfig.GlobalDebugUin];
             webController.urlPath = url;
             [webController loadUrl:url];
             webController.needJudgeJump = YES;
