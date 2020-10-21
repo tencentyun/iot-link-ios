@@ -228,23 +228,31 @@
     if (accountType == BindAccountPhoneType) {
         if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
             tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text};
+            [self updateUserDataWithDictionary:tmpDic withRequestUserData:NO];
         }else {
             tmpDic = @{@"CountryCode":self.conturyCode,@"PhoneNumber":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"NewPasword":self.bindAccountView.passwordTF.text};
+            [self updateUserDataWithDictionary:tmpDic withRequestUserData:YES];
         }
         
     }else if (accountType ==BindAccountEmailType) {
         if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
             tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text};
+            [self updateUserDataWithDictionary:tmpDic withRequestUserData:NO];
         }else {
             tmpDic = @{@"Email":self.bindAccountView.phoneOrEmailTF.text,@"VerificationCode":self.bindAccountView.verificationCodeTF.text,@"NewPasword":self.bindAccountView.passwordTF.text};
+            
+            [self updateUserDataWithDictionary:tmpDic withRequestUserData:YES];
         }
         
     }
     
-    [[TIoTRequestObject shared] post:AppUpdateUser Param:tmpDic success:^(id responseObject) {
+}
+
+- (void)updateUserDataWithDictionary:(NSDictionary *)dic withRequestUserData:(BOOL )isRefreshUserData {
+    [[TIoTRequestObject shared] post:AppUpdateUser Param:dic success:^(id responseObject) {
         [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
-        [[TIoTCoreUserManage shared] saveUserInfo:tmpDic];
-        self.resfreshResponseBlock(YES);
+        [[TIoTCoreUserManage shared] saveUserInfo:dic];
+        self.resfreshResponseBlock(YES, isRefreshUserData);
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         

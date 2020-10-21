@@ -208,18 +208,18 @@
     
     //1 对验证码登录和密码登录方式中，区域内容和账号（手机号/邮箱）内容填充，并对账号格式检测
     if (self.loginStyle == YES) {   //验证码
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_CountryCode]) {
-            self.conturyCode = [TIoTCoreUserManage shared].login_Code_CountryCode;
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_CountryCode]) {
+            self.conturyCode = [TIoTCoreUserManage shared].login_CountryCode;
         }
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_Title]) {
-            [self.areaCodeBtn setTitle:[TIoTCoreUserManage shared].login_Code_Title forState:UIControlStateNormal];
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Title]) {
+            [self.areaCodeBtn setTitle:[TIoTCoreUserManage shared].login_Title forState:UIControlStateNormal];
         }
     }else {                         //密码登录
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_CountryCode]) {
-            self.conturyCode2 = [TIoTCoreUserManage shared].login_PhoneEmail_CountryCode;
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_CountryCode]) {
+            self.conturyCode2 = [TIoTCoreUserManage shared].login_CountryCode;
         }
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_Title]) {
-            [self.areaCodeBtn2 setTitle:[TIoTCoreUserManage shared].login_PhoneEmail_Title forState:UIControlStateNormal];
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Title]) {
+            [self.areaCodeBtn2 setTitle:[TIoTCoreUserManage shared].login_Title forState:UIControlStateNormal];
         }
     }
     
@@ -227,8 +227,8 @@
         self.phoneAndEmailTF.text = [TIoTCoreUserManage shared].login_Code_Text;
     }
     
-    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_PhoneEmail_Text]) {
-        self.phoneAndEmailTF2.text = [TIoTCoreUserManage shared].login_PhoneEmail_Text;
+    if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Code_Text]) {
+        self.phoneAndEmailTF2.text = [TIoTCoreUserManage shared].login_Code_Text;
     }
 }
 
@@ -516,7 +516,8 @@
         self.passwordTF.text = @"";
         [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         
-        [TIoTCoreUserManage shared].login_PhoneEmail_Text = self.phoneAndEmailTF2.text;
+        [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF2.text;
+        self.phoneAndEmailTF.text = self.phoneAndEmailTF2.text;
     }else {
         self.loginStyle = NO;
         self.title = NSLocalizedString(@"account_passwd_login", @"账号密码登录");
@@ -528,6 +529,8 @@
         [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         
         [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF.text;
+        self.phoneAndEmailTF2.text = self.phoneAndEmailTF.text;
+        
     }
 }
 
@@ -646,14 +649,14 @@
             self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
             
-            [TIoTCoreUserManage shared].login_Code_CountryCode = CountryCode;
-            [TIoTCoreUserManage shared].login_Code_Title = Title;
+            [TIoTCoreUserManage shared].login_CountryCode = CountryCode;
+            [TIoTCoreUserManage shared].login_Title = Title;
         }else {
              self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
             
-            [TIoTCoreUserManage shared].login_PhoneEmail_CountryCode = CountryCode;
-            [TIoTCoreUserManage shared].login_PhoneEmail_Title = Title;
+            [TIoTCoreUserManage shared].login_CountryCode = CountryCode;
+            [TIoTCoreUserManage shared].login_Title = Title;
         }
         
     };
@@ -795,7 +798,7 @@
     }
     
     if (![NSString isNullOrNilWithObject:self.phoneAndEmailTF2.text]) {
-        [TIoTCoreUserManage shared].login_PhoneEmail_Text = self.phoneAndEmailTF2.text;
+        [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF2.text;
     }
 }
 -(void)changedTextField:(UITextField *)textField {

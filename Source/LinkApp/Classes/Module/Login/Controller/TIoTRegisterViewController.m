@@ -161,21 +161,21 @@
     // 1、对区域和手机号、邮箱内容赋值或填充  2、对手机号、邮箱格式检测
     if (_emailStyle) {
         
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Email_countryCode]) {
-            self.conturyCode2 = [TIoTCoreUserManage shared].signIn_Email_countryCode;
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_countryCode]) {
+            self.conturyCode2 = [TIoTCoreUserManage shared].signIn_countryCode;
         }
         
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Email_Title]) {
-            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Email_Title] forState:UIControlStateNormal];
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Title]) {
+            [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Title] forState:UIControlStateNormal];
         }
         
     }else {
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Phone_countryCode]) {
-            self.conturyCode = [TIoTCoreUserManage shared].signIn_Phone_countryCode;
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_countryCode]) {
+            self.conturyCode = [TIoTCoreUserManage shared].signIn_countryCode;
         }
         
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Phone_Title]) {
-            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Phone_Title] forState:UIControlStateNormal];
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Title]) {
+            [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",[TIoTCoreUserManage shared].signIn_Title] forState:UIControlStateNormal];
         }
     }
     
@@ -320,13 +320,13 @@
         if (self->_emailStyle == NO) {
             self.conturyCode = CountryCode;
             [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
-            [TIoTCoreUserManage shared].signIn_Phone_countryCode = CountryCode;
-            [TIoTCoreUserManage shared].signIn_Phone_Title = Title;
+            [TIoTCoreUserManage shared].signIn_countryCode = CountryCode;
+            [TIoTCoreUserManage shared].signIn_Title = Title;
         }else {
              self.conturyCode2 = CountryCode;
             [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
-            [TIoTCoreUserManage shared].signIn_Email_countryCode = CountryCode;
-            [TIoTCoreUserManage shared].signIn_Email_Title = Title;
+            [TIoTCoreUserManage shared].signIn_countryCode = CountryCode;
+            [TIoTCoreUserManage shared].signIn_Title = Title;
         }
         
     };
@@ -357,6 +357,8 @@
         if (![NSString isNullOrNilWithObject:self.emailTF.text]) {
             [self judgeEmailAddressQualifiedWithString:self.emailTF.text];
         }
+        
+        [self refreshUserActionItems];
         
     }
 }

@@ -112,6 +112,13 @@
     return _modifyView;
 }
 
+- (TIoTCountdownTimer *)countdownTimer {
+    if (!_countdownTimer) {
+        _countdownTimer = [[TIoTCountdownTimer alloc]init];
+    }
+    return _countdownTimer;
+}
+
 #pragma mark - event
 - (void)choseAreaCode:(id)sender{
     

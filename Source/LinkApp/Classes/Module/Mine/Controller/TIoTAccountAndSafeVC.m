@@ -99,9 +99,25 @@
             
             __weak typeof(self) weakSelf = self;
             TIoTBindAccountVC * bindPhoneVC = [[TIoTBindAccountVC alloc]init];
-            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+//            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+//                if (bindSuccess == YES) {
+//                    [weakSelf.tableView reloadData];
+//                }
+//            };
+            bindPhoneVC.resfreshResponseBlock = ^(BOOL bindSuccess, BOOL isRefreshUserData) {
                 if (bindSuccess == YES) {
-                    [weakSelf.tableView reloadData];
+                    if (isRefreshUserData == NO) {
+                        [weakSelf.tableView reloadData];
+                    }else {
+                        [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
+                            NSDictionary *data = responseObject[@"Data"];
+                            [[TIoTCoreUserManage shared] saveUserInfo:data];
+                            [weakSelf.tableView reloadData];
+                        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+                        }];
+                    }
+                    
                 }
             };
             bindPhoneVC.accountType = AccountType_Phone;
@@ -118,11 +134,28 @@
             __weak typeof(self) weakSelf = self;
             TIoTBindAccountVC *bindEmailVC = [[TIoTBindAccountVC alloc]init];
             bindEmailVC.accountType = AccountType_Email;
-            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+//            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess) {
+//                if (bindSuccess == YES) {
+//                    [weakSelf.tableView reloadData];
+//                }
+//            };
+            bindEmailVC.resfreshResponseBlock = ^(BOOL bindSuccess, BOOL isRefreshUserData) {
                 if (bindSuccess == YES) {
-                    [weakSelf.tableView reloadData];
+                    if (isRefreshUserData == NO) {
+                        [weakSelf.tableView reloadData];
+                    }else {
+                        [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
+                            NSDictionary *data = responseObject[@"Data"];
+                            [[TIoTCoreUserManage shared] saveUserInfo:data];
+                            [weakSelf.tableView reloadData];
+                        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+                        }];
+                    }
+                    
                 }
             };
+            
             [self.navigationController pushViewController:bindEmailVC animated:YES];
         }else {
             TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];

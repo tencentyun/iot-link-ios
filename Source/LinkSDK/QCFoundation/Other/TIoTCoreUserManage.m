@@ -29,19 +29,19 @@
 @synthesize countryTitle = _countryTitle;
 @synthesize countryTitleEN = _countryTitleEN;
 
-@synthesize signIn_Phone_countryCode = _signIn_Phone_countryCode;
-@synthesize signIn_Phone_Title = _signIn_Phone_Title;
+@synthesize signIn_countryCode = _signIn_countryCode;
+@synthesize signIn_Title = _signIn_Title;
 @synthesize signIn_Phone_Numner = _signIn_Phone_Numner;
-@synthesize signIn_Email_countryCode = _signIn_Email_countryCode;
-@synthesize signIn_Email_Title = _signIn_Email_Title;
+//@synthesize signIn_Email_countryCode = _signIn_Email_countryCode;
+//@synthesize signIn_Email_Title = _signIn_Email_Title;
 @synthesize signIn_Email_Address = _signIn_Email_Address;
 
-@synthesize login_Code_CountryCode = _login_Code_CountryCode;
-@synthesize login_Code_Title = _login_Code_Title;
+@synthesize login_CountryCode = _login_CountryCode;
+@synthesize login_Title = _login_Title;
 @synthesize login_Code_Text = _login_Code_Text;
-@synthesize login_PhoneEmail_CountryCode = _login_PhoneEmail_CountryCode;
-@synthesize login_PhoneEmail_Title = _login_PhoneEmail_Title;
-@synthesize login_PhoneEmail_Text = _login_PhoneEmail_Text;
+//@synthesize login_PhoneEmail_CountryCode = _login_PhoneEmail_CountryCode;
+//@synthesize login_PhoneEmail_Title = _login_PhoneEmail_Title;
+//@synthesize login_PhoneEmail_Text = _login_PhoneEmail_Text;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -299,28 +299,28 @@
 }
 
 #pragma mark - 注册页面用户操作保存项
-- (NSString *)signIn_Phone_countryCode {
-    if (!_signIn_Phone_countryCode) {
-        _signIn_Phone_countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Phone_countryCode"];
+- (NSString *)signIn_countryCode {
+    if (!_signIn_countryCode) {
+        _signIn_countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_countryCode"];
     }
-    return _signIn_Phone_countryCode;
+    return _signIn_countryCode;
 }
 
-- (void)setsignIn_Phone_countryCode:(NSString *)signIn_Phone_countryCode {
-    _signIn_Phone_countryCode = signIn_Phone_countryCode;
-    [[NSUserDefaults standardUserDefaults] setValue:signIn_Phone_countryCode forKey:@"signIn_Phone_countryCode"];
+- (void)setsignIn_countryCode:(NSString *)signIn_countryCode {
+    _signIn_countryCode = signIn_countryCode;
+    [[NSUserDefaults standardUserDefaults] setValue:signIn_countryCode forKey:@"signIn_countryCode"];
 }
 
-- (NSString *)signIn_Phone_Title {
-    if (!_signIn_Phone_Title) {
-        _signIn_Phone_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Phone_Title"];
+- (NSString *)signIn_Title {
+    if (!_signIn_Title) {
+        _signIn_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Title"];
     }
-    return _signIn_Phone_Title;
+    return _signIn_Title;
 }
 
-- (void)setSignIn_Phone_Title:(NSString *)signIn_Phone_Title {
-    _signIn_Phone_Title = signIn_Phone_Title;
-    [[NSUserDefaults standardUserDefaults] setValue:signIn_Phone_Title forKey:@"signIn_Phone_Title"];
+- (void)setsignIn_Title:(NSString *)signIn_Title {
+    _signIn_Title = signIn_Title;
+    [[NSUserDefaults standardUserDefaults] setValue:signIn_Title forKey:@"signIn_Title"];
 }
 
 - (NSString *)signIn_Phone_Numner {
@@ -335,29 +335,29 @@
     [[NSUserDefaults standardUserDefaults] setValue:signIn_Phone_Numner forKey:@"signIn_Phone_Numner"];
 }
 
-- (NSString *)signIn_Email_countryCode {
-    if (!_signIn_Email_countryCode) {
-        _signIn_Email_countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_countryCode"];
-    }
-    return _signIn_Email_countryCode;
-}
-
-- (void)setsignIn_Email_countryCode:(NSString *)signIn_Email_countryCode {
-    _signIn_Email_countryCode = signIn_Email_countryCode;
-    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_countryCode forKey:@"signIn_Email_countryCode"];
-}
-
-- (NSString *)signIn_Email_Title {
-    if (!_signIn_Email_Title) {
-        _signIn_Email_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_Title"];
-    }
-    return _signIn_Email_Title;
-}
-
-- (void)setSignIn_Email_Title:(NSString *)signIn_Email_Title {
-    _signIn_Email_Title = signIn_Email_Title;
-    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_Title forKey:@"signIn_Email_Title"];
-}
+//- (NSString *)signIn_Email_countryCode {
+//    if (!_signIn_Email_countryCode) {
+//        _signIn_Email_countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_countryCode"];
+//    }
+//    return _signIn_Email_countryCode;
+//}
+//
+//- (void)setsignIn_Email_countryCode:(NSString *)signIn_Email_countryCode {
+//    _signIn_Email_countryCode = signIn_Email_countryCode;
+//    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_countryCode forKey:@"signIn_Email_countryCode"];
+//}
+//
+//- (NSString *)signIn_Email_Title {
+//    if (!_signIn_Email_Title) {
+//        _signIn_Email_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_Title"];
+//    }
+//    return _signIn_Email_Title;
+//}
+//
+//- (void)setSignIn_Email_Title:(NSString *)signIn_Email_Title {
+//    _signIn_Email_Title = signIn_Email_Title;
+//    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_Title forKey:@"signIn_Email_Title"];
+//}
 
 - (NSString *)signIn_Email_Address {
     if (!_signIn_Email_Address) {
@@ -372,28 +372,28 @@
 }
 
 #pragma mark - 登录页 用户操作保存项
-- (NSString *)login_Code_CountryCode {
-    if (!_login_Code_CountryCode) {
-        _login_Code_CountryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_Code_CountryCode"];
+- (NSString *)login_CountryCode {
+    if (!_login_CountryCode) {
+        _login_CountryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_CountryCode"];
     }
-    return _login_Code_CountryCode;
+    return _login_CountryCode;
 }
 
-- (void)setlogin_Code_CountryCode:(NSString *)login_Code_CountryCode {
-    _login_Code_CountryCode = login_Code_CountryCode;
-    [[NSUserDefaults standardUserDefaults] setValue:login_Code_CountryCode forKey:@"login_Code_CountryCode"];
+- (void)setlogin_CountryCode:(NSString *)login_CountryCode {
+    _login_CountryCode = login_CountryCode;
+    [[NSUserDefaults standardUserDefaults] setValue:login_CountryCode forKey:@"login_CountryCode"];
 }
 
-- (NSString *)login_Code_Title {
-    if (!_login_Code_Title) {
-        _login_Code_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_Code_Title"];
+- (NSString *)login_Title {
+    if (!_login_Title) {
+        _login_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_Title"];
     }
-    return _login_Code_Title;
+    return _login_Title;
 }
 
-- (void)setlogin_Code_Title:(NSString *)login_Code_Title {
-    _login_Code_Title = login_Code_Title;
-    [[NSUserDefaults standardUserDefaults] setValue:login_Code_Title forKey:@"login_Code_Title"];
+- (void)setlogin_Title:(NSString *)login_Title {
+    _login_Title = login_Title;
+    [[NSUserDefaults standardUserDefaults] setValue:login_Title forKey:@"login_Title"];
 }
 
 - (NSString *)login_Code_Text {
@@ -408,41 +408,41 @@
     [[NSUserDefaults standardUserDefaults] setValue:login_Code_Text forKey:@"login_Code_Text"];
 }
 
-- (NSString *)login_PhoneEmail_CountryCode {
-    if (!_login_PhoneEmail_CountryCode) {
-        _login_PhoneEmail_CountryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_CountryCode"];
-    }
-    return _login_PhoneEmail_CountryCode;
-}
+//- (NSString *)login_PhoneEmail_CountryCode {
+//    if (!_login_PhoneEmail_CountryCode) {
+//        _login_PhoneEmail_CountryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_CountryCode"];
+//    }
+//    return _login_PhoneEmail_CountryCode;
+//}
+//
+//- (void)setlogin_PhoneEmail_CountryCode:(NSString *)login_PhoneEmail_CountryCode {
+//    _login_PhoneEmail_CountryCode = login_PhoneEmail_CountryCode;
+//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_CountryCode forKey:@"login_PhoneEmail_CountryCode"];
+//}
+//
+//- (NSString *)login_PhoneEmail_Title {
+//    if (!_login_PhoneEmail_Title) {
+//        _login_PhoneEmail_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Title"];
+//    }
+//    return _login_PhoneEmail_Title;
+//}
+//
+//- (void)setlogin_PhoneEmail_Title:(NSString *)login_PhoneEmail_Title {
+//    _login_PhoneEmail_Title = login_PhoneEmail_Title;
+//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Title forKey:@"login_PhoneEmail_Title"];
+//}
 
-- (void)setlogin_PhoneEmail_CountryCode:(NSString *)login_PhoneEmail_CountryCode {
-    _login_PhoneEmail_CountryCode = login_PhoneEmail_CountryCode;
-    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_CountryCode forKey:@"login_PhoneEmail_CountryCode"];
-}
-
-- (NSString *)login_PhoneEmail_Title {
-    if (!_login_PhoneEmail_Title) {
-        _login_PhoneEmail_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Title"];
-    }
-    return _login_PhoneEmail_Title;
-}
-
-- (void)setlogin_PhoneEmail_Title:(NSString *)login_PhoneEmail_Title {
-    _login_PhoneEmail_Title = login_PhoneEmail_Title;
-    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Title forKey:@"login_PhoneEmail_Title"];
-}
-
-- (NSString *)login_PhoneEmail_Text {
-    if (!_login_PhoneEmail_Text) {
-        _login_PhoneEmail_Text = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Text"];
-    }
-    return _login_PhoneEmail_Text;
-}
-
-- (void)setlogin_PhoneEmail_Text:(NSString *)login_PhoneEmail_Text {
-    _login_PhoneEmail_Text = login_PhoneEmail_Text;
-    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Text forKey:@"login_PhoneEmail_Text"];
-}
+//- (NSString *)login_PhoneEmail_Text {
+//    if (!_login_PhoneEmail_Text) {
+//        _login_PhoneEmail_Text = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Text"];
+//    }
+//    return _login_PhoneEmail_Text;
+//}
+//
+//- (void)setlogin_PhoneEmail_Text:(NSString *)login_PhoneEmail_Text {
+//    _login_PhoneEmail_Text = login_PhoneEmail_Text;
+//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Text forKey:@"login_PhoneEmail_Text"];
+//}
 
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
@@ -514,12 +514,12 @@
 }
 
 - (void)signInClear {
-    self.signIn_Phone_countryCode = @"";
-    self.signIn_Phone_Title = @"";
+    self.signIn_countryCode = @"";
+    self.signIn_Title = @"";
     self.signIn_Phone_Numner = @"";
-    self.signIn_Email_countryCode = @"";
+//    self.signIn_Email_countryCode = @"";
     self.signIn_Email_Address = @"";
-    self.signIn_Email_Title = @"";
+//    self.signIn_Email_Title = @"";
 }
 
 //@synthesize countryCode = _countryCode;

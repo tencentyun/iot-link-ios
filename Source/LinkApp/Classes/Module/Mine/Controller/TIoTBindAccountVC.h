@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^RefreshLoadBlock)(BOOL bindSuccess);
+typedef void(^RefreshLoadBlock)(BOOL bindSuccess, BOOL isRefreshUserData);
 
 typedef NS_ENUM(NSInteger, AccountType) {
     AccountType_Phone,
