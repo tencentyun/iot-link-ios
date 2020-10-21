@@ -432,7 +432,7 @@
                     }else if ([temperatureString containsString:NSLocalizedString(@"Fahrenheit_Hanzi", @"华氏")] || [temperatureString containsString:@"℉"]){
                         
                     }else {
-                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
+//                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
                 
@@ -459,7 +459,7 @@
                     }else if ([temperatureString containsString:NSLocalizedString(@"celsius_Hanzi", @"摄氏")] || [temperatureString containsString:@"℃"]){
                         
                     }else {
-                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
+//                        [MBProgressHUD showError:NSLocalizedString(@"setup_failfure", @"设置失败") toView:[[UIApplication sharedApplication] delegate].window];
                     }
                 }
 

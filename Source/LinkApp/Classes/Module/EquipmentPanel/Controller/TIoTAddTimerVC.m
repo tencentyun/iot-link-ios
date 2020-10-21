@@ -70,8 +70,8 @@ static NSString *cellId = @"rv23244";
         NSString *TimePoint = self.timerInfo[@"TimePoint"];
         
         NSDateFormatter *fomatter = [[NSDateFormatter alloc] init];
-        NSString *timezoneString = self.actions[0][@"Region"];
-        fomatter.timeZone = [NSTimeZone timeZoneWithName:timezoneString];
+//        NSString *timezoneString = self.actions[0][@"Userconfig"][@"Region"];
+//        fomatter.timeZone = [NSTimeZone timeZoneWithName:timezoneString];
         [fomatter setDateFormat:@"HH:mm"];
         NSDate *date = [fomatter dateFromString:TimePoint];
         self.picker.date = date;
@@ -415,13 +415,18 @@ static NSString *cellId = @"rv23244";
 - (UIDatePicker *)picker
 {
     if (!_picker) {
-        _picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 14, kScreenWidth, 200)];
+        _picker = [[UIDatePicker alloc] init];
+        if (@available(iOS 13.4, *)) {
+            _picker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+        } else {
+            // Fallback on earlier versions
+        }
         _picker.datePickerMode = UIDatePickerModeTime;
+        _picker.frame = CGRectMake(0, 14, kScreenWidth, 200);
         _picker.backgroundColor = [UIColor whiteColor];
         if (self.actions) {
             NSDateFormatter *fomatter = [[NSDateFormatter alloc] init];
-            NSString *timezoneString = self.actions[0][@"Region"];
-            fomatter.timeZone = [NSTimeZone timeZoneWithName:timezoneString];
+            NSString *timezoneString = self.actions[0][@"Userconfig"][@"Region"];
             [fomatter setDateFormat: @"HH:mm"];
             NSString *timeStamp = [NSString getNowTimeStingWithTimeZone:timezoneString formatter:@"HH:mm"];
             NSDate *date = [fomatter dateFromString:timeStamp];
