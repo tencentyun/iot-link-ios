@@ -358,9 +358,9 @@
             [self judgeEmailAddressQualifiedWithString:self.emailTF.text];
         }
         
-        [self refreshUserActionItems];
-        
     }
+    
+    [self refreshUserActionItems];
 }
 
 //- (void)deleteContent:(UIButton *)btn

@@ -532,6 +532,8 @@
         self.phoneAndEmailTF2.text = self.phoneAndEmailTF.text;
         
     }
+    
+    [self optionUserDefaultActionItems];
 }
 
 - (void)loginSure {
