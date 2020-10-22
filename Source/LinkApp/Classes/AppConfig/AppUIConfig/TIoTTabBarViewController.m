@@ -35,29 +35,6 @@
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
     [self addChildVc:homeVC title:NSLocalizedString(@"main_tab_1", @"首页") image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
     
-    
-//    WKWebsiteDataStore *dateStore = [WKWebsiteDataStore defaultDataStore];
-//    [dateStore fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes] completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
-//        for (WKWebsiteDataRecord *record in records)
-//        {
-//            // if ( [record.displayName containsString:@"baidu"]) //取消备注，可以针对某域名清除，否则是全清
-//            // {
-//            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
-//                                                      forDataRecords:@[record] completionHandler:^{
-//                NSLog(@"Cookies for %@ deleted successfully",record.displayName);
-//            }];
-//            // }
-//        }
-//    }];
-    
-    
-    //    NSArray * types =@[WKWebsiteDataTypeMemoryCache,WKWebsiteDataTypeDiskCache]; // 9.0之后才有的
-    //            NSSet *websiteDataTypes = [NSSet setWithArray:types];
-    //            NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
-    //            [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:^{
-    //
-    //            }];
-    
     //评测
     TIoTWebVC *webVC = [TIoTWebVC new];
     webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
@@ -72,7 +49,6 @@
             webController.urlPath = url;
             [webController loadUrl:url];
             webController.needJudgeJump = YES;
-            webController.needRefresh = YES;
             [MBProgressHUD dismissInView:self.view];
 
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
