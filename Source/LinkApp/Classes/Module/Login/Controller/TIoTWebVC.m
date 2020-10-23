@@ -60,9 +60,12 @@
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"LoginApp"];
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"goDetail"];
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"onArticleShare"];
-    if (self.needRefresh == YES) {
+    
+    if (self.needRefresh == YES && ![self.fromWhere isEqualToString:@"Home"]) {
         [self.webView reload];
+        
     }
+    self.fromWhere = @"";
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -137,6 +140,7 @@
     if ([self.webView canGoBack] && self.needJudgeJump) {
         [self.webView goBack];
     } else {
+        
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -258,7 +262,7 @@
                 NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
                 url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket,TIoTAPPConfig.GlobalDebugUin];
                 vc.sharedMessageDic = bodyParamDic;
-                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/#%@=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
+                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/?uin=%@#%@=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation,TIoTAPPConfig.GlobalDebugUin,bodyUrlArray.firstObject,itemJsonString, ticket];
                 vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@&uin=%@",itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
                 vc.urlPath = url;
                 vc.needJudgeJump = YES;

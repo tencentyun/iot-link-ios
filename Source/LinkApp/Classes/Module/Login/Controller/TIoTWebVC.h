@@ -18,6 +18,7 @@ typedef void(^requestTicketRefreshURL)(TIoTWebVC *webController);
 @property (nonatomic,copy) NSString *urlPath;
 @property (nonatomic,assign) BOOL needJudgeJump;//需要判断跳转
 @property (nonatomic,assign) BOOL needRefresh;//刷新当前页
+@property (nonatomic,strong) NSString *fromWhere;//来源，如果是TIoTWebVC 就刷新，是其他的（首页tabbar）就不刷新
 - (void)loadUrl:(NSString *)urlString;
 
 @property (nonatomic, strong) NSDictionary *sharedMessageDic;

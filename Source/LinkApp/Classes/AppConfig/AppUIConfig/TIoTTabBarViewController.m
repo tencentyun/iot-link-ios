@@ -17,7 +17,7 @@
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
-
+@property(nonatomic, strong)TIoTWebVC *webVC;
 @end
 
 @implementation TIoTTabBarViewController
@@ -35,27 +35,34 @@
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
     [self addChildVc:homeVC title:NSLocalizedString(@"main_tab_1", @"首页") image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
     
+    
+    __weak typeof(self) weadkSelf= self;
     //评测
-    TIoTWebVC *webVC = [TIoTWebVC new];
-    webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
+    self.webVC = [TIoTWebVC new];
+    self.webVC.fromWhere = @"Home";
+    self.webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
+        
         [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
-
+            
             WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
-//            TIoTWebVC *webVC = [TIoTWebVC new];
+            //            TIoTWebVC *webVC = [TIoTWebVC new];
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
             NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId,TIoTAPPConfig.GlobalDebugUin];
             webController.urlPath = url;
             [webController loadUrl:url];
             webController.needJudgeJump = YES;
-            [MBProgressHUD dismissInView:self.view];
-
+            webController.needRefresh = YES;
+            
+            [MBProgressHUD dismissInView:weadkSelf.view];
+            
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-            [MBProgressHUD dismissInView:self.view];
+            [MBProgressHUD dismissInView:weadkSelf.view];
         }];
     };
-    [self addChildVc:webVC title: NSLocalizedString(@"home_evaluation", @"评测")  image:@"home_evaluation_unsel" selectedImage:@"home_evaluation_sel"];
+    [self addChildVc:self.webVC title: NSLocalizedString(@"home_evaluation", @"评测")  image:@"home_evaluation_unsel" selectedImage:@"home_evaluation_sel"];
     
     //个人中心
     TIoTMineViewController *mineVC = [[TIoTMineViewController alloc] init];
@@ -67,8 +74,7 @@
 
 #pragma mark - UITabBarControllerDelegate
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
-
-    
+    self.webVC.fromWhere = @"Home";
     return YES;
 }
 
