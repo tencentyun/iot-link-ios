@@ -43,7 +43,7 @@
 - (void)registerApp
 {
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    [WXApi registerApp:model.WXAccessAppId universalLink:@"https://cloud.tencent.com/"];
+    [WXApi registerApp:model.WXAccessAppId universalLink:@"https://iot.cloud.tencent.com/"];
 }
 
 
