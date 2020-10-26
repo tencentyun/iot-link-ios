@@ -12,7 +12,7 @@ import KeychainAccess
 @objcMembers
 class TIoTAPPConfig: NSObject {
 
-    public static var GlobalDebugUin = KCManager.getUUID() //KCManager.getUUID() //"help_center_h5_api"   评测:"evaluation_default"
+    public static var GlobalDebugUin = "evaluation_default" //KCManager.getUUID() //"help_center_h5_api"   评测:"evaluation_default"  h5自定义面板:"h5panel_test"
     
     //app delegate
     public static var iot_appdelegate: TIoTAppDelegate {

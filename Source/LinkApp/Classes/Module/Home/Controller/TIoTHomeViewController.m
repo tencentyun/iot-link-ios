@@ -613,6 +613,26 @@ static CGFloat weatherHeight = 10;
     TIoTNewAddEquipmentViewController *vc = [[TIoTNewAddEquipmentViewController alloc] init];
     vc.roomId = self.currentRoomId ?: @"";
     [self.navigationController pushViewController:vc animated:YES];
+    
+    
+//        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+//        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+//
+//            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+//            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+//            TIoTWebVC *vc = [TIoTWebVC new];
+//            NSString *url = nil;
+//            NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+////            url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket,TIoTAPPConfig.GlobalDebugUin];
+//            vc.urlPath = url;
+//            vc.needJudgeJump = YES;
+//            vc.needRefresh = YES;
+//            [self.navigationController pushViewController:vc animated:YES];
+//            [MBProgressHUD dismissInView:self.view];
+//
+//        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//            [MBProgressHUD dismissInView:self.view];
+//        }];
 }
 
 - (void)selectFamily:(UIButton *)sender
