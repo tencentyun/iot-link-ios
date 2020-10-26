@@ -49,6 +49,7 @@ class TIoTProductsConfigModel: TIoTBaseModel {
 
 @objcMembers class TIoTProfileModel: TIoTBaseModel {
     var ProductId: String?
+    var CategoryId: String?
 }
 
 @objcMembers class TIoTGlobalModel: TIoTBaseModel {
@@ -80,9 +81,12 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var theme: String?
     var bgImgId: String?
     var navBar: TIoTNavBarModel?
+    var properties: TIoTPropertiesModel?
+    var timingProject: String?
     
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
-        return ["navBar": TIoTNavBarModel.classForCoder()]
+        return ["properties": TIoTPropertiesModel.classForCoder(),
+                "navBar": TIoTNavBarModel.classForCoder()]
     }
 }
 

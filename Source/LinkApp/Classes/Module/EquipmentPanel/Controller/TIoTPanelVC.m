@@ -410,17 +410,18 @@ static NSString *itemId3 = @"i_ooo454";
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
-            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+//            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
             
-            [self getDeviceData:dic andBaseInfo:DataTemplateDic];
-            
+            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+            TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
+            [self getDeviceData:config andBaseInfo:product];
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
 
-- (void)getDeviceData:(NSDictionary *)uiInfo andBaseInfo:(NSDictionary *)baseInfo {
+- (void)getDeviceData:(TIoTProductConfigModel *)uiInfo andBaseInfo:(TIoTProductsModel *)baseInfo {
 
     [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
         NSString *tmpStr = (NSString *)responseObject[@"Data"];
