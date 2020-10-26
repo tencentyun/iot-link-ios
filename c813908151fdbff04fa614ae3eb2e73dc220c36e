@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2297759e_47d71c80",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-26T03:41:18Z",
+      "side": 1,
+      "message": "建议删除无用代码",
+      "revId": "c813908151fdbff04fa614ae3eb2e73dc220c36e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
