@@ -162,14 +162,14 @@
 //            tipString = self.deviceDic[@"DeviceName"];
 //        }
         
-        NSString * alias = self.deviceDic[@"AliasName"];
-        if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
-            tipString = self.deviceDic[@"AliasName"];
-        }
-        else
-        {
-            tipString = self.deviceDic[@"DeviceName"];
-        }
+//        NSString * alias = self.deviceDic[@"AliasName"];
+//        if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
+//            tipString = self.deviceDic[@"AliasName"];
+//        }
+//        else
+//        {
+//            tipString = self.deviceDic[@"DeviceName"];
+//        }
         
         [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:tipString cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.maxLength = 20;
