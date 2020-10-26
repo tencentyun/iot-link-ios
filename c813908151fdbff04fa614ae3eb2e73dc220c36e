@@ -16,6 +16,24 @@
       "revId": "c813908151fdbff04fa614ae3eb2e73dc220c36e",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e033491c_f93996c1",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-26T06:02:44Z",
+      "side": 1,
+      "message": "在patch2中已经删除",
+      "parentUuid": "2297759e_47d71c80",
+      "revId": "c813908151fdbff04fa614ae3eb2e73dc220c36e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
