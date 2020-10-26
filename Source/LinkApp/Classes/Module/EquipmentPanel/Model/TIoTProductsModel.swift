@@ -24,34 +24,46 @@ class TIoTProductsModel: TIoTBaseModel {
     var UpdateTime: Int = 0
     
     func getDataTemplateModel() -> TIoTDataTemplateModel? {
-        let model = TIoTDataTemplateModel.yy_model(withJSON: self.DataTemplate)
-        return model
+        if let data = self.DataTemplate {
+            
+            let model = TIoTDataTemplateModel.yy_model(withJSON: data)
+            return model
+        }
+        return nil
     }
 }
 
 @objcMembers class TIoTDataTemplateModel: TIoTBaseModel {
     var version: String?
-    var profile: String?
-    var properties: TIoTPropertiesModel?
+    var profile: TIoTProfileModel?
+    var properties: [TIoTPropertiesModel]?
     var events: Array<Any>?
     var actions: Array<Any>?
     
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
-        return ["properties": TIoTPropertiesModel.classForCoder()]
+        return ["profile": TIoTProfileModel.classForCoder(),
+                "properties": TIoTPropertiesModel.classForCoder()]
     }
 }
 
 @objcMembers class TIoTPropertiesModel: TIoTBaseModel {
     var id: String?
+    var ui: TIoTUIModel?
     var name: String?
     var desc: String?
-    var required: Bool?
+    var required: String?
     var mode: String?
     var define: TIoTDefineModel?
     
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
-        return ["define": TIoTDefineModel.classForCoder()]
+        return ["ui": TIoTUIModel.classForCoder(),
+                "define": TIoTDefineModel.classForCoder()]
     }
+}
+
+@objcMembers class TIoTUIModel: TIoTBaseModel {
+    var type: String?
+    var icon: String?
 }
 
 @objcMembers class TIoTDefineModel: TIoTBaseModel {

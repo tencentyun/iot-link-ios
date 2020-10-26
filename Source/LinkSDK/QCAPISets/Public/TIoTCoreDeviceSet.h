@@ -18,6 +18,24 @@
 
 @property (nonatomic,copy) NSMutableArray *zipData;
 
+@property (nonatomic, copy) NSString *deviceId;
+@property (nonatomic, copy) NSString *aliasName;
+
+@property (nonatomic, copy) NSDictionary *productDic;
+@property (nonatomic, copy) NSDictionary *dataTemplateDic;
+@property (nonatomic, copy) NSDictionary *profileDic;
+@property (nonatomic, copy) NSDictionary *deviceDataDic;
+@property (nonatomic, strong) NSMutableArray *propertiesArr;
+
+
+@property (nonatomic,copy) NSString *bgImgId;
+@property (nonatomic,strong) NSMutableArray *properties;//除去大按钮的数据
+@property (nonatomic,strong) NSMutableDictionary *bigProp;//大按钮数据
+@property (nonatomic,strong) NSMutableArray *allProperties;//所有数据
+
+- (void)handleReportDevice:(NSDictionary *)reportDevice;
+- (void)zipData:(NSDictionary *)uiInfo baseInfo:(NSDictionary *)baseInfo deviceData:(NSDictionary *)deviceInfo;
+
 @end
 
 

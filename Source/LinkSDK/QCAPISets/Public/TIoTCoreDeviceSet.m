@@ -24,6 +24,107 @@
     return _zipData;
 }
 
+
+- (void)handleReportDevice:(NSDictionary *)reportDevice{
+    if ([self.deviceId isEqualToString:reportDevice[@"DeviceId"]]) {
+        
+        NSDictionary *payloadDic = [NSString base64Decode:reportDevice[@"Payload"]];
+        
+        NSDictionary *reportDic = payloadDic[@"state"][@"reported"];
+        if (reportDic == nil) {
+            reportDic = payloadDic[@"payload"][@"state"];
+        }
+        if (reportDic == nil) {
+            reportDic = payloadDic[@"params"];
+        }
+        
+        
+        NSArray *keys = [reportDic allKeys];
+        for (NSString *key in keys) {
+            if ([key isEqualToString:self.bigProp[@"id"]]) {
+                NSMutableDictionary *dic = self.bigProp[@"status"];
+                [dic setObject:reportDic[key] forKey:@"Value"];
+            }
+            else
+            {
+                for (NSMutableDictionary *propertie in self.properties) {
+                    if ([key isEqualToString:propertie[@"id"]]) {
+                        NSMutableDictionary *dic = propertie[@"status"];
+                        [propertie setObject:reportDic[key] forKey:@"Value"];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+- (void)zipData:(NSDictionary *)uiInfo baseInfo:(NSDictionary *)baseInfo deviceData:(NSDictionary *)deviceInfo
+{
+    NSDictionary *standard = uiInfo[@"Panel"][@"standard"];
+    if (standard && baseInfo && deviceInfo) {
+        
+        //            self.theme = standard[@"theme"];
+        //            self.bgImgId = standard[@"bgImgId"];
+        self.navBar = standard[@"navBar"];
+        self.timingProject = [standard[@"timingProject"] boolValue];
+        
+        NSMutableArray *propertiesForUI = [standard[@"properties"] mutableCopy];
+        NSArray *propertiesForInfo = baseInfo[@"properties"];
+        
+        for (int i = 0; i < propertiesForUI.count; i ++) {
+            NSMutableDictionary *proper = propertiesForUI[i];
+            for (NSString *key in [deviceInfo allKeys]) {
+                if ([key isEqualToString:proper[@"id"]]) {
+                    [proper setValue:deviceInfo[key] forKey:@"status"];
+                }
+            }
+            
+            for (NSDictionary *infodic in propertiesForInfo) {
+                
+                if ([infodic[@"id"] isEqualToString:proper[@"id"]]) {
+                    [proper setValue:infodic[@"name"] forKey:@"name"];
+                    [proper setValue:infodic[@"desc"] forKey:@"desc"];
+                    [proper setValue:infodic[@"define"] forKey:@"define"];
+                    break;
+                }
+            }
+            
+            NSString *type = proper[@"ui"][@"type"];
+            if ([type isEqualToString:@"btn-big"]) {
+                //大按钮
+                self.bigProp = proper;
+            }
+            
+        }
+        
+        [self.allProperties addObjectsFromArray:propertiesForUI];
+        
+        if (self.bigProp) {
+            [propertiesForUI removeObject:self.bigProp];
+        }
+        
+        [self.properties addObjectsFromArray:propertiesForUI];
+    }
+}
+
+
+#pragma mark setter or getter
+- (NSMutableArray *)properties{
+    if (_properties == nil) {
+        _properties = [NSMutableArray array];
+    }
+    return _properties;
+}
+
+- (NSMutableArray *)allProperties{
+    if (_allProperties == nil) {
+        _allProperties = [NSMutableArray array];
+    }
+    return _allProperties;
+}
+
 @end
 
 

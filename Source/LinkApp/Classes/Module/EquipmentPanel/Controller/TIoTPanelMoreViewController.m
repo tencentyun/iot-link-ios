@@ -7,7 +7,7 @@
 //
 
 #import "TIoTPanelMoreViewController.h"
-#import "TIoTDeviceData.h"
+#import "TIoTCoreDeviceSet.h"
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"

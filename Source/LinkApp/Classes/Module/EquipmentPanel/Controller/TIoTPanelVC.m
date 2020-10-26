@@ -8,7 +8,7 @@
 
 #import "TIoTPanelVC.h"
 #import "TIoTWaterFlowLayout.h"
-#import "TIoTDeviceData.h"
+#import "TIoTCoreDeviceSet.h"
 #import "TIoTBoolView.h"
 #import "TIoTEnumView.h"
 #import "TIoTNumberView.h"
@@ -61,7 +61,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 
 @property (nonatomic,strong) NSDictionary *userConfigDic;
-@property (nonatomic,strong) TIoTDeviceData *deviceInfo;
+@property (nonatomic,strong) DeviceInfo *deviceInfo;
 
 @property (nonatomic) WCThemeStyle themeStyle;
 @property (nonatomic,strong) MASConstraint *bottomBarHeight;
@@ -412,8 +412,9 @@ static NSString *itemId3 = @"i_ooo454";
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
             NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
             
+//            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+//            TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
             [self getDeviceData:dic andBaseInfo:DataTemplateDic];
-            
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -426,18 +427,9 @@ static NSString *itemId3 = @"i_ooo454";
         NSString *tmpStr = (NSString *)responseObject[@"Data"];
         NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
         
+//        TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
+        
         [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
-        if ([self.deviceInfo.theme isEqualToString:@"simple"]) {
-            self.themeStyle = WCThemeSimple;
-        }
-        else if ([self.deviceInfo.theme isEqualToString:@"standard"])
-        {
-            self.themeStyle = WCThemeStandard;
-        }
-        else if ([self.deviceInfo.theme isEqualToString:@"dark"])
-        {
-            self.themeStyle = WCThemeDark;
-        }
         [self layoutHeader];
         [self.coll reloadData];
         
@@ -770,10 +762,10 @@ static NSString *itemId3 = @"i_ooo454";
     return _stackView;
 }
 
-- (TIoTDeviceData *)deviceInfo
+- (DeviceInfo *)deviceInfo
 {
     if (!_deviceInfo) {
-        _deviceInfo = [[TIoTDeviceData alloc] init];
+        _deviceInfo = [[DeviceInfo alloc] init];
     }
     return _deviceInfo;
 }
