@@ -249,29 +249,29 @@
     NSArray *bodyUrlArray = [bodyUrlString componentsSeparatedByString:@"="];
     NSData *data = [bodyUrlArray.lastObject dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *bodyParamDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-    NSDictionary *itemParamDic =  @{@"articleId":bodyParamDic[@"ArticleId"],@"IsLike":bodyParamDic[@"IsLike"],@"LikeCount":bodyParamDic[@"LikeCount"],@"articleRoute":bodyParamDic[@"articleRoute"],@"articleTitle":bodyParamDic[@"articleTitle"]};
-    NSString *itemParaString = [NSString objectToJson:itemParamDic];
+//    NSDictionary *itemParamDic =  @{@"articleId":bodyParamDic[@"ArticleId"],@"IsLike":bodyParamDic[@"IsLike"],@"LikeCount":bodyParamDic[@"LikeCount"],@"articleRoute":bodyParamDic[@"articleRoute"],@"articleTitle":bodyParamDic[@"articleTitle"]};
+    NSString *itemParaString = [NSString objectToJson:bodyParamDic];
     NSString *itemJsonString = [NSString URLEncode:itemParaString];
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
-            [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
-                
-                WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
-                NSString *ticket = responseObject[@"TokenTicket"]?:@"";
-                TIoTWebVC *vc = [TIoTWebVC new];
-                NSString *url = nil;
-                NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-                url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket,TIoTAPPConfig.GlobalDebugUin];
-                vc.sharedMessageDic = bodyParamDic;
-                vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/?uin=%@#%@=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation,TIoTAPPConfig.GlobalDebugUin,bodyUrlArray.firstObject,itemJsonString, ticket];
-                vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@&uin=%@",itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
-                vc.urlPath = url;
-                vc.needJudgeJump = YES;
-                [self.navigationController pushViewController:vc animated:YES];
-                [MBProgressHUD dismissInView:self.view];
-
-            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-                [MBProgressHUD dismissInView:self.view];
-            }];
+    [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+        
+        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+        TIoTWebVC *vc = [TIoTWebVC new];
+        NSString *url = nil;
+        NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+        url = [NSString stringWithFormat:@"%@/%@/#%@=%@&appID=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bodyUrlArray.firstObject,itemJsonString,bundleId, ticket,TIoTAPPConfig.GlobalDebugUin];
+        vc.sharedMessageDic = bodyParamDic;
+        vc.sharedURLString = [NSString stringWithFormat:@"%@/%@/?uin=%@#%@=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation,TIoTAPPConfig.GlobalDebugUin,bodyUrlArray.firstObject,itemJsonString];
+        vc.sharedPathString = [NSString stringWithFormat:@"pages/Index/TabPages/Evaluation/EvaluationDetail/EvaluationDetail?item=%@&ticket=%@&uin=%@",itemJsonString, ticket,TIoTAPPConfig.GlobalDebugUin];
+        vc.urlPath = url;
+        vc.needJudgeJump = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        [MBProgressHUD dismissInView:self.view];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD dismissInView:self.view];
+    }];
 }
 
 @end
