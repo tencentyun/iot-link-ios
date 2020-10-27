@@ -70,8 +70,6 @@
         [WXApi sendReq:req completion:^(BOOL success) {
             
         }];
-    }else if (![WXApi isWXAppInstalled]){
-        [MBProgressHUD showError:NSLocalizedString(@"noWeichat_placeInstall", @"微信未安装，请安装后重试")];
     }else {
         [MBProgressHUD showError:NSLocalizedString(@"uninstalled_LastestWeiChat", @"未安装微信或版本过低")];
     }
