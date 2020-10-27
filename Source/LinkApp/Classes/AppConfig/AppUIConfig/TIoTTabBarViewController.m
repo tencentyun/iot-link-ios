@@ -39,7 +39,6 @@
     __weak typeof(self) weadkSelf= self;
     //评测
     self.webVC = [TIoTWebVC new];
-    self.webVC.fromWhere = @"Home";
     self.webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
         
         [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
@@ -74,7 +73,7 @@
 
 #pragma mark - UITabBarControllerDelegate
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
-    self.webVC.fromWhere = @"Home";
+    [self.webVC refushEvaluationContent];
     return YES;
 }
 

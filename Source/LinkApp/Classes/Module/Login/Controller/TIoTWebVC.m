@@ -61,11 +61,9 @@
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"goDetail"];
     [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"onArticleShare"];
     
-    if (self.needRefresh == YES && ![self.fromWhere isEqualToString:@"Home"]) {
-        [self.webView reload];
-        
+    if (self.needRefresh) {
+        [self refushEvaluationContent];
     }
-    self.fromWhere = @"";
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -191,6 +189,22 @@
 - (void)LoginSuccessWithTicketToken:(NSNotification *)noti {
     NSString *ticket = noti.object;
     NSString *jsStr = [NSString stringWithFormat:@"LoginResult('%@')",ticket];
+    [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        WCLog(@"%@----%@",result, error);
+    }];
+}
+
+//定点刷新评测内容
+- (void)refushEvaluationContent {
+    NSString *jsStr = [NSString stringWithFormat:@"pageShow('')"];
+    [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        WCLog(@"%@----%@",result, error);
+    }];
+}
+
+//新协议开发中
+- (void)appEventWithH5Response:(NSString *)event {
+    NSString *jsStr = [NSString stringWithFormat:@"%@('')",event];
     [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         WCLog(@"%@----%@",result, error);
     }];
