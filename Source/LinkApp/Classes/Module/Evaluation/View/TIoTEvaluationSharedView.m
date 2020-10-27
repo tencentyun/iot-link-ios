@@ -243,7 +243,7 @@
 
 - (void)sharedWeichat {
     
-    [[WxManager sharedWxManager] authFromWxComplete:^(id obj, NSError *error) {
+    if ([WxManager isWXAppInstalled]) {
         __weak __typeof(self)weakSelf = self;
         dispatch_async(dispatch_queue_create(0, 0), ^{
             UIImage *thumbImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:weakSelf.sharedFriendDic[@"articleImg"]]]];
@@ -253,8 +253,9 @@
                 }];
             });
         });
-    }];
-   
+    }else {
+        [MBProgressHUD showError:NSLocalizedString(@"noWeichat_placeInstall", @"微信未安装，请安装后重试")];
+    }
 }
 
 - (void)copyLink {
