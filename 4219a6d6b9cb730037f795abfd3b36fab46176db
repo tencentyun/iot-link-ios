@@ -16,6 +16,24 @@
       "revId": "4219a6d6b9cb730037f795abfd3b36fab46176db",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2f37afb_913e7e4c",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTTabBarViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-27T05:57:24Z",
+      "side": 1,
+      "message": "在patch2中已经打开",
+      "parentUuid": "02a9033f_3dc813c1",
+      "revId": "4219a6d6b9cb730037f795abfd3b36fab46176db",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
