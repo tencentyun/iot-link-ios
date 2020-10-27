@@ -73,7 +73,6 @@
 
 #pragma mark - UITabBarControllerDelegate
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
-    [self.webVC refushEvaluationContent];
     return YES;
 }
 
