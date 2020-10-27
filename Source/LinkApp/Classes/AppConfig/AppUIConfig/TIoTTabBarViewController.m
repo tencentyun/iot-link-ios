@@ -54,7 +54,7 @@
             webController.urlPath = url;
             [webController loadUrl:url];
             webController.needJudgeJump = YES;
-            webController.needRefresh = YES;
+//            webController.needRefresh = YES;
             
             [MBProgressHUD dismissInView:weadkSelf.view];
             
