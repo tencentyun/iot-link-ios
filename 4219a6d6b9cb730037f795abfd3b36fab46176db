@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02a9033f_3dc813c1",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTTabBarViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-27T05:51:52Z",
+      "side": 1,
+      "message": "需要打开刷新",
+      "revId": "4219a6d6b9cb730037f795abfd3b36fab46176db",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
