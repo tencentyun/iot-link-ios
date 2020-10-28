@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 @class TIoTWebVC;
 typedef void(^requestTicketRefreshURL)(TIoTWebVC *webController);
+typedef void(^refreshDeviceList)(void);
 
 @interface TIoTWebVC : UIViewController
 
@@ -28,6 +30,11 @@ typedef void(^requestTicketRefreshURL)(TIoTWebVC *webController);
 @property (nonatomic, strong) NSString *sharedURLString;
 @property (nonatomic, strong) NSString *sharedPathString;
 @property (nonatomic, copy) requestTicketRefreshURL requestTicketRefreshURLBlock;
+
+@property (nonatomic, strong) NSMutableDictionary *deviceDic;//h5自定义面板
+@property (nonatomic, copy) refreshDeviceList refreshDeviceListBlock;
+@property (nonatomic, strong) WKWebView *webView;
+
 @end
 
 NS_ASSUME_NONNULL_END

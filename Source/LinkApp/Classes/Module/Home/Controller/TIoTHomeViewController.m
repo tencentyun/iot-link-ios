@@ -591,6 +591,7 @@ static CGFloat weatherHeight = 10;
     self.nick2.text = model.FamilyName;
     self.currentFamilyId = model.FamilyId;
     self.currentFamilyRole = model.Role;
+    [TIoTCoreUserManage shared].FamilyType = model.FamilyType;
     
     [self getRoomList:model.FamilyId];
 }
@@ -683,6 +684,39 @@ static CGFloat weatherHeight = 10;
 //        [MBProgressHUD showError:@"请检查网络"];
 //    }
     
+    
+    
+    NSDictionary *deviceDic = self.dataArr[indexPath.row];
+    NSString *deviceID = deviceDic[@"DeviceId"];
+    NSString *familyId = [TIoTCoreUserManage shared].familyId;
+    NSString *roomID = [TIoTCoreUserManage shared].currentRoomId ? : @"0";
+    NSString *familyType = [NSString stringWithFormat:@"%ld",(long)[TIoTCoreUserManage shared].FamilyType];
+   
+    __weak typeof(self) weadkSelf= self;
+    
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+
+        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+        NSString *requestID = responseObject[@"RequestId"]?:@"";
+        NSString *platform = @"iOS";
+        TIoTWebVC *vc = [TIoTWebVC new];
+        NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+        NSString *url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&appID=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,bundleId,roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
+        vc.urlPath = url;
+        vc.needJudgeJump = YES;
+        vc.needRefresh = YES;
+        vc.deviceDic = [weadkSelf.dataArr[indexPath.row] mutableCopy];
+        vc.refreshDeviceListBlock = ^{
+            [weadkSelf getFamilyList];
+        };
+        [weadkSelf.navigationController pushViewController:vc animated:YES];
+        [MBProgressHUD dismissInView:weadkSelf.view];
+
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD dismissInView:weadkSelf.view];
+    }];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

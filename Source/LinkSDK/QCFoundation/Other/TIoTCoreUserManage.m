@@ -32,16 +32,13 @@
 @synthesize signIn_countryCode = _signIn_countryCode;
 @synthesize signIn_Title = _signIn_Title;
 @synthesize signIn_Phone_Numner = _signIn_Phone_Numner;
-//@synthesize signIn_Email_countryCode = _signIn_Email_countryCode;
-//@synthesize signIn_Email_Title = _signIn_Email_Title;
 @synthesize signIn_Email_Address = _signIn_Email_Address;
 
 @synthesize login_CountryCode = _login_CountryCode;
 @synthesize login_Title = _login_Title;
 @synthesize login_Code_Text = _login_Code_Text;
-//@synthesize login_PhoneEmail_CountryCode = _login_PhoneEmail_CountryCode;
-//@synthesize login_PhoneEmail_Title = _login_PhoneEmail_Title;
-//@synthesize login_PhoneEmail_Text = _login_PhoneEmail_Text;
+
+@synthesize FamilyType = _FamilyType;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -335,30 +332,6 @@
     [[NSUserDefaults standardUserDefaults] setValue:signIn_Phone_Numner forKey:@"signIn_Phone_Numner"];
 }
 
-//- (NSString *)signIn_Email_countryCode {
-//    if (!_signIn_Email_countryCode) {
-//        _signIn_Email_countryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_countryCode"];
-//    }
-//    return _signIn_Email_countryCode;
-//}
-//
-//- (void)setsignIn_Email_countryCode:(NSString *)signIn_Email_countryCode {
-//    _signIn_Email_countryCode = signIn_Email_countryCode;
-//    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_countryCode forKey:@"signIn_Email_countryCode"];
-//}
-//
-//- (NSString *)signIn_Email_Title {
-//    if (!_signIn_Email_Title) {
-//        _signIn_Email_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_Title"];
-//    }
-//    return _signIn_Email_Title;
-//}
-//
-//- (void)setSignIn_Email_Title:(NSString *)signIn_Email_Title {
-//    _signIn_Email_Title = signIn_Email_Title;
-//    [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_Title forKey:@"signIn_Email_Title"];
-//}
-
 - (NSString *)signIn_Email_Address {
     if (!_signIn_Email_Address) {
         _signIn_Email_Address = [[NSUserDefaults standardUserDefaults] valueForKey:@"signIn_Email_Address"];
@@ -408,41 +381,17 @@
     [[NSUserDefaults standardUserDefaults] setValue:login_Code_Text forKey:@"login_Code_Text"];
 }
 
-//- (NSString *)login_PhoneEmail_CountryCode {
-//    if (!_login_PhoneEmail_CountryCode) {
-//        _login_PhoneEmail_CountryCode = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_CountryCode"];
-//    }
-//    return _login_PhoneEmail_CountryCode;
-//}
-//
-//- (void)setlogin_PhoneEmail_CountryCode:(NSString *)login_PhoneEmail_CountryCode {
-//    _login_PhoneEmail_CountryCode = login_PhoneEmail_CountryCode;
-//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_CountryCode forKey:@"login_PhoneEmail_CountryCode"];
-//}
-//
-//- (NSString *)login_PhoneEmail_Title {
-//    if (!_login_PhoneEmail_Title) {
-//        _login_PhoneEmail_Title = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Title"];
-//    }
-//    return _login_PhoneEmail_Title;
-//}
-//
-//- (void)setlogin_PhoneEmail_Title:(NSString *)login_PhoneEmail_Title {
-//    _login_PhoneEmail_Title = login_PhoneEmail_Title;
-//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Title forKey:@"login_PhoneEmail_Title"];
-//}
+- (NSInteger )FamilyType {
+    if (!_FamilyType) {
+        _FamilyType = [[[NSUserDefaults standardUserDefaults] valueForKey:@"FamilyType"] intValue];
+    }
+    return _FamilyType;
+}
 
-//- (NSString *)login_PhoneEmail_Text {
-//    if (!_login_PhoneEmail_Text) {
-//        _login_PhoneEmail_Text = [[NSUserDefaults standardUserDefaults] valueForKey:@"login_PhoneEmail_Text"];
-//    }
-//    return _login_PhoneEmail_Text;
-//}
-//
-//- (void)setlogin_PhoneEmail_Text:(NSString *)login_PhoneEmail_Text {
-//    _login_PhoneEmail_Text = login_PhoneEmail_Text;
-//    [[NSUserDefaults standardUserDefaults] setValue:login_PhoneEmail_Text forKey:@"login_PhoneEmail_Text"];
-//}
+- (void)setFamilyType:(NSInteger)FamilyType {
+    _FamilyType = FamilyType;
+    [[NSUserDefaults standardUserDefaults] setValue:@(FamilyType) forKey:@"FamilyType"];
+}
 
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
@@ -511,19 +460,14 @@
     self.userRegion = @"";
     self.countryTitle = @"";
     self.countryTitleEN = @"";
+    self.FamilyType = 0;
 }
 
 - (void)signInClear {
     self.signIn_countryCode = @"";
     self.signIn_Title = @"";
     self.signIn_Phone_Numner = @"";
-//    self.signIn_Email_countryCode = @"";
     self.signIn_Email_Address = @"";
-//    self.signIn_Email_Title = @"";
 }
 
-//@synthesize countryCode = _countryCode;
-//@synthesize email = _email;
-//@synthesize hasPassword = _hasPassword;
-//@synthesize WxOpenID = _WxOpenID;
 @end
