@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;
 
 @property (nonatomic) BOOL isOwner;//是否所有者
-
+@property (nonatomic, copy) NSDictionary *configData;
 
 @end
 

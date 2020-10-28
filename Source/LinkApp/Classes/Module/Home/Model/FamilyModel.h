@@ -15,4 +15,5 @@
 
 @property (nonatomic, assign) NSInteger CreateTime;
 
+@property (nonatomic, assign)  NSInteger FamilyType;
 @end

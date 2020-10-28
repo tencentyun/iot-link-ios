@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString *familyId;//
 @property (nonatomic,copy) NSString *currentRoomId;
-
+@property (nonatomic,assign) NSInteger FamilyType;
 /*
  注册页面 用户选择项
  */

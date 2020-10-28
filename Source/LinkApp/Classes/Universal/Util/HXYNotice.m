@@ -23,6 +23,8 @@ static NSString * const updateTimerList      = @"updateTimerList";
 static NSString * const updateMemberList     = @"updateMemberList";
 static NSString * const changeAddDeviceType  = @"changeAddDeviceType";
 static NSString * const loginInTicketToken   = @"loginInTicketToken";
+static NSString * const appEnterBackground   = @"appEnterBackground";
+static NSString * const appEnterForeground   = @"appEnterForeground";
 
 @implementation HXYNotice
 
@@ -188,4 +190,23 @@ static NSString * const loginInTicketToken   = @"loginInTicketToken";
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:loginInTicketToken object:ticketToken];
 }
+
+//APP进入后台
++ (void)addAPPEnterBackgroundLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:appEnterBackground object:nil];
+}
+
++ (void)postAPPEnterBackground {
+    [[NSNotificationCenter defaultCenter] postNotificationName:appEnterBackground object:nil];
+}
+
+//APP进入前台
++ (void)addAPPEnterForegroundLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:appEnterForeground object:nil];
+}
+
++ (void)postAPPEnterForeground {
+    [[NSNotificationCenter defaultCenter] postNotificationName:appEnterForeground object:nil];
+}
+
 @end
