@@ -31,7 +31,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             button.backgroundColor = UIColor.red
             button.setTitle("D", for: UIControl.State.normal)
             button.addTarget(singleTon, action: #selector(showDebugView), for: UIControl.Event.touchUpInside)
-//            singleTon.debugWindow.addSubview(button)
+            singleTon.debugWindow.addSubview(button)
             //LogUI
 //            PTEDashboard.shared().show()
         })
@@ -72,9 +72,10 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     //配置title和执行的方法
     lazy var dataSource: Array = { () -> [Dictionary<String, String>] in
         let dataSource = [["title":"跳转H5", "SEL":"jumpControl"],
-                          ["title":"修改全局uin", "SEL":"changeGlobalUin"],
-                          ["title":"切换至测试环境", "SEL":"changeToDebug"],
-                          ["title":"切换至现网环境", "SEL":"changeToRelease"]
+//                          ["title":"修改全局uin", "SEL":"changeGlobalUin"],
+//                          ["title":"切换至测试环境", "SEL":"changeToDebug"],
+//                          ["title":"切换至现网环境", "SEL":"changeToRelease"]
+                          ["title":"发送数据到MyLamp", "SEL":"sendBLEData"]
         ]
         return dataSource
     }()
@@ -163,14 +164,17 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         return view
     }()
 
+    lazy var blue: BluetoothCentralManager = {
+        
+        let blue = BluetoothCentralManager.shareBluetooth()!
+        blue.delegate = self
+        return blue
+    }()
+    
     @objc func jumpControl() {
 //        swipeAnimationView.play()
         
-        let wxManager = WxManager.shared()
-//        wxManager?.shareWebPageToWXSceneSession(withTitle: "title",
-//                                                description: "desccc",
-//                                                thumbImage: UIImage(named: "equipmentSelectTabbar"),
-//                                                webUrl: "http://www.baidu.com")
+/*        let wxManager = WxManager.shared()
         wxManager?.shareMiniProgramToWXSceneSession(withTitle: "titlet",
                                                     description: "desccc",
                                                     path: "",
@@ -179,6 +183,10 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
                                                     thumbImage: UIImage(named: "equipmentSelectTabbar"),
                                                     thumbImageUrl: "",
                                                     complete: nil)
+*/
+        
+        
+        blue.scanNearPerpherals()
 /*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in
@@ -198,5 +206,27 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         }))
         TIoTAPPConfig.iot_topController.present(alert, animated: true, completion: nil)
  */
+    }
+    
+    @objc func sendBLEData() {
+        blue.writeData(toBLE: "color")
+    }
+}
+
+
+extension TIoTDebugtools: BluetoothCentralManagerDelegate {
+    func scanPerpheralsUpdatePerpherals(_ perphersArr: [CBPeripheral]!) {
+        
+        for onePerpher in perphersArr {
+            print("dddd------>\(perphersArr)")
+            
+            if onePerpher.name == "MyLamb" {
+                blue.connect(onePerpher)
+            }
+        }    
+    }
+    
+    func connectPerpheralSucess() {
+        print("sussss")
     }
 }
