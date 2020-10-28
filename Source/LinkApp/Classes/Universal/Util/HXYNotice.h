@@ -80,4 +80,13 @@
 //重新登录获取ticketToken
 + (void)addLoginInTicketTokenListener:(id)listener reaction:(SEL)selector;
 + (void)postLoginInTicketToken:(NSString *)ticketToken;
+
+//APP进入后台
++ (void)addAPPEnterBackgroundLister:(id)listener reaction:(SEL)selector;
++ (void)postAPPEnterBackground;
+
+//APP进入前台
++ (void)addAPPEnterForegroundLister:(id)listener reaction:(SEL)selector;
++ (void)postAPPEnterForeground;
+
 @end

@@ -47,6 +47,7 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
     
     self.wsUrl = @"wss://iot.cloud.tencent.com/ws/explorer";        //长连接通信 https://cloud.tencent.com/document/product/1081/40792
     self.h5Url = @"https://iot.cloud.tencent.com/explorer-h5";
+    self.deviceDetailH5URL = @"https://iot.cloud.tencent.com/scf/h5panel";
     self.wxShareType = 0;
     self.action = @"YunApi";
     self.appKey = @"";
