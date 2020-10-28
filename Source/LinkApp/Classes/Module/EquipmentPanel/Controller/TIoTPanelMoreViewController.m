@@ -158,9 +158,6 @@
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
         
         NSString *tipString = NSLocalizedString(@"less20character", @"20字以内");
-//        if (![NSString isNullOrNilWithObject:self.deviceDic[@"DeviceName"]]) {
-//            tipString = self.deviceDic[@"DeviceName"];
-//        }
         
 //        NSString * alias = self.deviceDic[@"AliasName"];
 //        if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {

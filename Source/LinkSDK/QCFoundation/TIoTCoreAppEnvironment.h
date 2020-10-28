@@ -46,6 +46,11 @@ h5
 @property (nonatomic , copy) NSString *h5Url;
 
 /**
+ 设备详情h5链接
+ */
+@property (nonatomic, copy) NSString *deviceDetailH5URL;
+
+/**
  微信分享要的type
  */
 @property (nonatomic , assign) NSInteger wxShareType;
