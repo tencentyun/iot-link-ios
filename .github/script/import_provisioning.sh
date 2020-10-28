@@ -7,6 +7,25 @@
 
 if [ $1 == 'Debug' ]; then
     echo "Debug"
+    
+    
+    
+    #当前时间
+    curTime=$(date +%s)
+    echo "当前时间---$curTime"
+
+    #基准差值
+    baseTime=$(date -j -f "%Y-%m-%d %H:%M:%S" "2020-10-27 00:00:00" +%s)
+    ((timeStamp=$curTime - $baseTime))
+    echo "基准差值---$timeStamp"
+
+    #版本号
+    ((buildTime=$timeStamp / 86400))
+    echo "版本号---$buildTime"
+    
+    sed -i "" "s/LinkAPP_BUILD_VERSION.*/LinkAPP_BUILD_VERSION = $buildTime/g" Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
+
+
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/link_sdk_demo.mobileprovision.asc > .github/script/devsdkdemo.mobileprovision
