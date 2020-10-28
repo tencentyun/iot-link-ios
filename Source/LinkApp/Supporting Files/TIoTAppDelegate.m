@@ -18,6 +18,9 @@
 #import "WxManager.h"
 #import "WRNavigationBar.h"
 #import "Firebase.h"
+#import "UIViewController+GetController.h"
+#import "TIoTWebVC.h"
+#import "TIoTWebVC+TIoTWebVCCategory.h"
 
 @implementation TIoTAppDelegate
 
@@ -86,12 +89,14 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    [self sendEventH5:@"appHide"];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    
+    [self sendEventH5:@"appShow"];
 }
 
 
@@ -127,6 +132,19 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
     return [[WxManager sharedWxManager] handleOpenUniversalLink:userActivity];
+}
+
+#pragma mark - evevt method
+
+- (void)sendEventH5:(NSString *)eventString {
+    
+    //当前h5页面切换前后台 透传事件
+    UIViewController *currentVC = [UIViewController getCurrentViewController];
+    if ([currentVC isKindOfClass:[TIoTWebVC class]]) {
+        TIoTWebVC *webController = (TIoTWebVC *)currentVC;
+        NSString *event = eventString ? :@"";
+        [webController webViewInvokeJavaScriptEvent:event withWeb:webController.webView];
+    }
 }
 
 #pragma mark - navBar

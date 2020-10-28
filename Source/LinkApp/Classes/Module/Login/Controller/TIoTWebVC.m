@@ -7,16 +7,24 @@
 //
 
 #import "TIoTWebVC.h"
-#import <WebKit/WebKit.h>
 #import <QuickLook/QLPreviewController.h>
 #import "TIoTNavigationController.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTEvaluationSharedView.h"
 
+#import "TIoTPanelMoreViewController.h"
+#import "TIoTResponseJSModel.h"
+#import "YYModel.h"
+#import "TIoTWebVC+TIoTWebVCCategory.h"
+
+#import "TIoTDeviceDetailVC.h"
+#import "TIoTDeviceShareVC.h"
+#import "TIoTModifyRoomVC.h"
+
 @interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler>
 
-@property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
+@property (nonatomic, strong) NSDictionary *bridgeMethodDic;
 @end
 
 @implementation TIoTWebVC
@@ -57,13 +65,16 @@
     // addScriptMessageHandler 很容易导致循环引用
     // 控制器 强引用了WKWebView,WKWebView copy(强引用了）configuration， configuration copy （强引用了）userContentController
     // userContentController 强引用了 self （控制器）
-    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"LoginApp"];
-    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"goDetail"];
-    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"onArticleShare"];
+    
+    for (NSString *key in self.bridgeMethodDic.allKeys) {
+        [self.webView.configuration.userContentController addScriptMessageHandler:self name:key];
+    }
     
     if (self.needRefresh) {
         [self refushEvaluationContent];
     }
+    
+    [self webViewInvokeJavaScriptEvent:@"pageShow" withWeb:self.webView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,9 +82,12 @@
     [super viewWillDisappear:animated];
     
     // 因此这里要记得移除handlers
-    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"LoginApp"];
-    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"goDetail"];
-    [self.webView.configuration.userContentController removeScriptMessageHandlerForName:@"onArticleShare"];
+    
+    for (NSString *key in self.bridgeMethodDic.allKeys) {
+        [self.webView.configuration.userContentController removeScriptMessageHandlerForName:key];
+    }
+    [self webViewInvokeJavaScriptEvent:@"pageHide" withWeb:self.webView];
+    
 }
 
 - (void)viewDidLoad {
@@ -227,16 +241,26 @@
 {
 //    message.body  --  Allowed types are NSNumber, NSString, NSDate, NSArray,NSDictionary, and NSNull.
     NSLog(@"body:%@",message.body);
-    if ([message.name isEqualToString:@"LoginApp"]) {
-        [self login];
-    }else if ([message.name isEqualToString:@"onArticleShare"]) {
-        
-        [self showSharedView];
-        
-    }else if ([message.name isEqualToString:@"goDetail"]) {
     
-        [self displayEvaluationDetailWebViewWithURl:message.body[@"url"]];
+    NSString *responseMethodStirng = self.bridgeMethodDic[message.name];
+    if (![NSString isNullOrNilWithObject:responseMethodStirng]) {
+        if (!self) {
+            return;
+        }
+        SEL methodSel = NSSelectorFromString(responseMethodStirng);
+        
+        if ([responseMethodStirng isEqualToString:@"goDetail"]) {
+            [self performSelector:@selector(displayEvaluationDetailWebViewWithURl:) withObject:message.body[@"url"]];
+        }else {
+            IMP imp = [self methodForSelector:methodSel];
+            void (*func)(id, SEL) = (void *)imp;
+            func (self,methodSel);
+        }
     }
+    
+    TIoTResponseJSModel *model = [TIoTResponseJSModel yy_modelWithJSON:message.body];
+    [self webViewInvokeJavaScript:model withWeb:self.webView];
+    
 }
 
 #pragma mark - 显示自定义分享view
@@ -288,4 +312,98 @@
     }];
 }
 
+- (void)goDeviceDetail {
+    TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
+    vc.title = @"设备详情";
+    vc.deviceDic = self.deviceDic;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)goFeedBack {
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+
+        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+        TIoTWebVC *vc = [TIoTWebVC new];
+        NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+        NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@#/pages/User/Feedback/Feedback", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
+        vc.urlPath = url;
+        vc.needJudgeJump = YES;
+        vc.needRefresh = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        [MBProgressHUD dismissInView:self.view];
+
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD dismissInView:self.view];
+    }];
+}
+
+- (void)goDeviceInfo  {
+
+    TIoTDeviceDetailVC *deviceDatailVC = [[TIoTDeviceDetailVC alloc]init];
+    [self.navigationController pushViewController:deviceDatailVC animated:YES];
+}
+
+- (void)goEditDeviceName {
+    TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
+    vc.title = @"设备详情";
+    vc.deviceDic = self.deviceDic;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)goRoomSetting {
+    TIoTModifyRoomVC *vc = [[TIoTModifyRoomVC alloc] init];
+    vc.deviceInfo = self.deviceDic;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)goShareDevice {
+    TIoTDeviceShareVC *vc = [[TIoTDeviceShareVC alloc] init];
+    vc.deviceDic = self.deviceDic;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)goNavBack {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)reloadUnmountDevice {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)shareConfig {
+    
+}
+
+- (void)goFirmwareUpgrade {
+    
+}
+
+#pragma mark - lazy loading
+
+- (NSDictionary *)bridgeMethodDic {
+    if (!_bridgeMethodDic) {
+        
+        SEL sel = @selector(displayEvaluationDetailWebViewWithURl:);
+        NSString *goDetailMethod = NSStringFromSelector(sel);
+        
+        _bridgeMethodDic = @{@"LoginApp":@"login",
+                             @"goDetail":goDetailMethod,
+                             @"onArticleShare":@"showSharedView",
+                             @"goDeviceDetailPage":@"goDeviceDetail",
+                             @"goFeedBackPage":@"goFeedBack",
+                             @"goDeviceInfoPage":@"goDeviceInfo",
+                             @"goEditDeviceNamePage":@"goEditDeviceName",
+                             @"goRoomSettingPage":@"goRoomSetting",
+                             @"goShareDevicePage":@"goShareDevice",
+                             @"navBack":@"goNavBack",
+                             @"reloadAfterUnmount":@"reloadUnmountDevice",
+                             @"setShareConfig":@"shareConfig",
+                             @"goFirmwareUpgradePage":@"goFirmwareUpgrade",
+                             
+        };
+    }
+    return _bridgeMethodDic;
+}
 @end

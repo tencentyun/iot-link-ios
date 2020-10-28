@@ -32,6 +32,8 @@
 #import "YYModel.h"
 
 #import "TIoTCoreDeviceSet.h"
+#import "TIoTWebVC.h"
+#import "TIoTAppEnvironment.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -387,15 +389,17 @@ static NSString *itemId3 = @"i_ooo454";
     [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
         self.userConfigDic = [[NSDictionary alloc]initWithDictionary:responseObject[@"UserSetting"]];
         
-        [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
-            NSArray *data = responseObject[@"Data"];
-            if (data.count > 0) {
-                NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
-                [self loadData:config];
-            }
-        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-            
-        }];
+//        [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
+//            NSArray *data = responseObject[@"Data"];
+//            if (data.count > 0) {
+//                NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+//                [self loadData:config];
+//            }
+//        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//        }];
+        
+        [self loadData:self.configData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
     }];
@@ -405,19 +409,24 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)loadData:(NSDictionary *)dic {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-    
+
     [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
             NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
-            
+
 //            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
-//            TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
-            [self getDeviceData:dic andBaseInfo:DataTemplateDic];
+            TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
+            if ([config.Panel.type isEqualToString:@"h5"]) {
+
+            }else {
+                [self getDeviceData:dic andBaseInfo:DataTemplateDic];
+            }
+
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+
     }];
 }
 
