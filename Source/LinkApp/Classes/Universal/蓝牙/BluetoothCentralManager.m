@@ -1,9 +1,5 @@
 //
 //  BluetoothCentralManager.m
-//  zhipuzi
-//
-//  Created by 智铺子 on 2017/1/3.
-//  Copyright © 2017年 迅享科技. All rights reserved.
 //
 #import "BluetoothCentralManager.h"
 //服务UUID
@@ -54,16 +50,23 @@
 /**
  扫描周周的设备
  */
-- (void)sacnNearPerpherals{
+- (void)scanNearPerpherals{
     WCLog(@"开始扫描四周的设备");
+    [self.deviceList removeAllObjects];
     /**
      1.第一个参数为Services的UUID(外设端的UUID) 不能为nil
      2.第二参数的CBCentralManagerScanOptionAllowDuplicatesKey为已发现的设备是否重复扫描，如果是同一设备会多次回调
      */
 //    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kServiceUUID]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}];
     
-    // 这里已确认蓝牙已打开才开始扫描周围的外设。第一个参数nil就是扫描周围所有的外设。
-    [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @NO}];
+
+    if (self.centralManager.state == CBManagerStatePoweredOn) {
+        //扫描10秒停止扫描
+        [self performSelector:@selector(stopScan) withObject:nil afterDelay:5.0];
+        
+        // 这里已确认蓝牙已打开才开始扫描周围的外设。第一个参数nil就是扫描周围所有的外设。
+        [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+    }
 }
 
 /**
@@ -72,6 +75,14 @@
 - (void)stopScan{
     WCLog(@"停止扫描四周的设备");
     [self.centralManager stopScan];
+}
+
+/// 连接指定的设备
+- (void)connectPeripheral:(CBPeripheral *)peripheral {
+    self.peripheral = peripheral;
+    WCLog(@"----尝试连接设备----\n%@", peripheral);
+    [self.centralManager connectPeripheral:peripheral
+                                   options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey]];
 }
 
 /**
@@ -90,16 +101,14 @@
 - (void)writeDataToBLE:(NSString *)context
 {
     // 发送下行指令(发送一条)
-    NSData *data = [context dataUsingEncoding:NSUTF8StringEncoding];
-    [self.peripheral writeValue:data forCharacteristic:self.characteristic type:CBCharacteristicWriteWithResponse];
+    if (self.characteristic) {
+        NSData *data = [context dataUsingEncoding:NSUTF8StringEncoding];
+        [self.peripheral writeValue:data forCharacteristic:self.characteristic type:CBCharacteristicWriteWithResponse];
+    }
 }
 
--(void)delayMethod
-{
-    [self.centralManager stopScan];
-}
 
-#pragma mark - CBCentralManagerDelegate
+#pragma mark ------------------------扫描发现蓝牙设备 CBCentralManagerDelegate
 /**
  检查App设备蓝牙是否可用
  
@@ -109,7 +118,7 @@
     switch (central.state){
         case CBManagerStatePoweredOn:{
             //蓝牙已打开,开始扫描外设
-            [self sacnNearPerpherals];
+            [self scanNearPerpherals];
         }
             break;
             
@@ -156,8 +165,11 @@
         }
     }
     
-    if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:)]) {
-        [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy];
+    if (self.deviceList.count > 0) {
+        
+        if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:)]) {
+            [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy];
+        }
     }
 
 //    NSArray *serviceUUIDArr = advertisementData[@"kCBAdvDataServiceUUIDs"];
@@ -170,21 +182,14 @@
 //            [self connectPeripheral:peripheral];
 //        }
 //    }
-    
-    //扫描10秒停止扫描
-    [self performSelector:@selector(delayMethod) withObject:nil/*可传任意类型参数*/ afterDelay:10.0];
 }
 
-/// 连接指定的设备
-- (void)connectPeripheral:(CBPeripheral *)peripheral {
-    self.peripheral = peripheral;
-    WCLog(@"----尝试连接设备----\n%@", peripheral);
-    [self.centralManager connectPeripheral:peripheral
-                                   options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey]];
-}
 
 /// 连接外设成功的代理方法
+#pragma mark ------------------------连接成功、失败、终端
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
+    [self stopScan];
+    
     [MBProgressHUD showSuccess:[NSString stringWithFormat:@"%@ %@ %@",NSLocalizedString(@"bluetoothDevice", @"蓝牙设备"),NSLocalizedString(@"connected", @"已连接"),peripheral.name]];
     
     // 设置设备代理
@@ -192,7 +197,6 @@
     //查找外围设备中的所有服务
     [peripheral discoverServices:nil];
     
-    [self.centralManager stopScan];
     
     if ([self.delegate respondsToSelector:@selector(connectPerpheralSucess)]) {
         [self.delegate connectPerpheralSucess];
@@ -210,7 +214,7 @@
 }
 
 
-#pragma mark - CBPeripheralDelegate
+#pragma mark -------------外部蓝牙设备的服务，有了服务才能写数据 CBPeripheralDelegate
 /// 获取外设服务的代理
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     if (error) {
@@ -263,12 +267,13 @@
             // 订阅, 实时接收
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             
+            /*
             // 获取特征值发送数据（用于测试，正式可以注释下面两行代码）
             // 发送下行指令(发送一条)
             NSData *data = [@"蓝牙初始化数据" dataUsingEncoding:NSUTF8StringEncoding];
             // 将指令写入蓝牙
             [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-                
+              */
         }
         
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
