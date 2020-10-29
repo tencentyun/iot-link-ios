@@ -16,6 +16,24 @@
       "revId": "a4a25eeafc8643ed56d83817bc86589bf764ebce",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5a9610e_667398d9",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-29T12:06:20Z",
+      "side": 1,
+      "message": "已打印确认，h5小写",
+      "parentUuid": "6f4de3ea_e07f370a",
+      "revId": "a4a25eeafc8643ed56d83817bc86589bf764ebce",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
