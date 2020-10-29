@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0038da98_bc8f799b",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/TIoTWebVC+TIoTWebVCCategory.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-29T09:55:51Z",
+      "side": 1,
+      "message": "简化方法调用，透传事件和回调两个接口共用一个，在patch3中修改",
+      "parentUuid": "c887bc53_43c49ce7",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dedf9d6_bcd6828b",
         "filename": "Source/LinkApp/Classes/Module/Login/Controller/TIoTWebVC.m",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "83005b36_611accea",
+        "filename": "Source/LinkApp/Classes/Module/Login/Controller/TIoTWebVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-29T09:55:51Z",
+      "side": 1,
+      "message": "确认后，明确返回参数有callbackId时，添加判断才调用callResult，patch3中修改",
+      "parentUuid": "4dedf9d6_bcd6828b",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a11ca179_154a157f",
         "filename": "Source/LinkApp/Supporting Files/TIoTAppDelegate.m",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e801a75_abc4e4c0",
+        "filename": "Source/LinkApp/Supporting Files/TIoTAppDelegate.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-10-29T09:55:51Z",
+      "side": 1,
+      "message": "已在patch3中修改，添加通知，APP切前后台，触发webVC发送透传事件",
+      "parentUuid": "a11ca179_154a157f",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
