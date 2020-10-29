@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "c887bc53_43c49ce7",
+        "filename": "Source/LinkApp/Classes/AppConfig/Category/TIoTWebVC+TIoTWebVCCategory.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-29T06:49:53Z",
+      "side": 1,
+      "message": "callResult和e mitEvent接口写死后，后期再加app调H5事件还得重新复制代码写一份，建议app和H5交互的接口和参数都是由外界传进来。 \n这两个方法可以合并成统一个",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dedf9d6_bcd6828b",
+        "filename": "Source/LinkApp/Classes/Module/Login/Controller/TIoTWebVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-29T06:49:53Z",
+      "side": 1,
+      "message": "H5调App后，此处是否需要App调H5",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a11ca179_154a157f",
         "filename": "Source/LinkApp/Supporting Files/TIoTAppDelegate.m",
         "patchSetId": 2
