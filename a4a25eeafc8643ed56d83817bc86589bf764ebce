@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f4de3ea_e07f370a",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-29T11:44:20Z",
+      "side": 1,
+      "message": "看数据应该是大写H5，建议查看api返回的原始数据",
+      "revId": "a4a25eeafc8643ed56d83817bc86589bf764ebce",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
