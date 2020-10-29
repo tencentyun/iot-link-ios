@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a11ca179_154a157f",
+        "filename": "Source/LinkApp/Supporting Files/TIoTAppDelegate.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-10-29T06:36:06Z",
+      "side": 1,
+      "message": "1.进入前台、后台事件需要放在TIoTWebVC中，监听进入前台后台的通知。 \n2.当前的实现会造成只有某个TIoTWebVC才能执行前台后台，对H5来说这是个通用能力，每个TIoTWebVC都有可能需要前台后台事件",
+      "revId": "5882952cb8aac1fcc26ee3f5519e488bf0904ce9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
