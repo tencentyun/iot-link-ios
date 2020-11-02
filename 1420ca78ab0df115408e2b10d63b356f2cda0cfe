@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7a70ef7_16858b8f",
+        "filename": "Source/LinkApp/Classes/Module/Login/Controller/TIoTWebVC.m",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-02T06:04:25Z",
+      "side": 1,
+      "message": "建议web屏蔽左滑手势，面板中会有手势冲突。self.fd_interactivePopDisabled \u003d YES;",
+      "revId": "1420ca78ab0df115408e2b10d63b356f2cda0cfe",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
