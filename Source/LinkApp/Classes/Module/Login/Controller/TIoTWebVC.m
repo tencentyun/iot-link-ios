@@ -271,13 +271,14 @@
         func(self,methodSel,message);
     }
     
-    if (![NSString isNullOrNilWithObject:message.body]) {
-        if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
-            TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
-            NSString *callbackIDString = model.callbackId ?:@"";
-            [self webViewInvokeJavaScript:@{@"result":@(YES),@"callbackId":callbackIDString} port:@"callResult"];
-        }
-    }
+#warning 需要优化，这块的会调不能写这里。因为会调里面的会有其他参数，这里调过去后就js报错了，放在具体的bridge方法里做会调
+//    if (![NSString isNullOrNilWithObject:message.body]) {
+//        if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
+//            TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
+//            NSString *callbackIDString = model.callbackId ?:@"";
+//            [self webViewInvokeJavaScript:@{@"result":@(YES),@"callbackId":callbackIDString} port:@"callResult"];
+//        }
+//    }
     
     
 }
@@ -413,6 +414,44 @@
     
 }
 
+- (void)openBluetoothWithMessage:(WKScriptMessage *)message {
+    if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
+        TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
+        NSString *callbackIDString = model.callbackId ?:@"";
+        
+        [self webViewInvokeJavaScript:@{@"result":@(YES), @"callbackId":callbackIDString} port:@"callResult"];
+    }
+}
+
+- (void)getBluetoothAdapterState:(WKScriptMessage *)message {
+    
+    if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
+        TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
+        NSString *callbackIDString = model.callbackId ?:@"";
+        
+        NSDictionary *data = @{@"discovering":@(1),@"available":@(1)};
+        [self webViewInvokeJavaScript:@{@"result":@(YES), @"callbackId":callbackIDString, @"data": data} port:@"callResult"];
+    }
+    
+}
+
+
+- (void)startBluetoothDevicesDiscovery:(WKScriptMessage *)message {
+    
+    if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
+        TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
+        NSString *callbackIDString = model.callbackId ?:@"";
+        
+#warning 会传递参数，传入蓝牙接口
+        [self webViewInvokeJavaScript:@{@"result":@(YES), @"callbackId":callbackIDString} port:@"callResult"];
+        
+        BluetoothCentralManager *blue = [BluetoothCentralManager shareBluetooth];
+        blue.delegate = self;
+        [blue scanNearPerpherals];
+    }
+    
+}
+
 #pragma mark - lazy loading
 
 - (NSDictionary *)bridgeMethodDic {
@@ -431,6 +470,9 @@
                              @"reloadAfterUnmount":NSStringFromSelector(@selector(reloadUnmountDeviceWithMessage:)),
                              @"setShareConfig":NSStringFromSelector(@selector(shareConfigWithMessage:)),
                              @"goFirmwareUpgradePage":NSStringFromSelector(@selector(goFirmwareUpgradeWithMessage:)),
+                             @"openBluetoothAdapter":NSStringFromSelector(@selector(openBluetoothWithMessage:)),
+                             @"getBluetoothAdapterState":NSStringFromSelector(@selector(getBluetoothAdapterState:)),
+                             @"startBluetoothDevicesDiscovery":NSStringFromSelector(@selector(startBluetoothDevicesDiscovery:))
                              
         };
     }

@@ -238,6 +238,7 @@
 		EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
+		F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */; };
 		F4833EBC24DD2E100033FAB2 /* TIoTDebugtools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */; };
 		F4833EBE24DD302F0033FAB2 /* TIoTLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */; };
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
@@ -775,6 +776,7 @@
 		EDF93D9723B367A000D477C7 /* TIoTRequestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRequestObject.h; sourceTree = "<group>"; };
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TIoTWebVC+BLE.swift"; sourceTree = "<group>"; };
 		F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDebugtools.swift; sourceTree = "<group>"; };
 		F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLaunchManager.swift; sourceTree = "<group>"; };
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
@@ -1608,6 +1610,7 @@
 				D2A2CD1E234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m */,
 				EDE6D0AC23AB6F4D00087388 /* TIoTWebVC.h */,
 				EDE6D0AD23AB6F4D00087388 /* TIoTWebVC.m */,
+				F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */,
 				ED93D98B23CBFDD000E3FD7D /* TIoTLoginVC.h */,
 				ED93D98C23CBFDD000E3FD7D /* TIoTLoginVC.m */,
 				6D785E6424CFC0F5001169AE /* TIoTMainVC.h */,
@@ -2383,6 +2386,7 @@
 				D2038BAB2332082F0036F6B9 /* TIoTPanelMoreViewController.m in Sources */,
 				ED932E4423BB286000F73F35 /* TIoTEnumItem.m in Sources */,
 				ED6BA5A323C57DD100BE9EC9 /* TIoTFamilyInfoCell.m in Sources */,
+				F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */,
 				ED549E9B23C710EE00325958 /* TIoTTimerCell.m in Sources */,
 				D2614E31234F272100D7D7E7 /* TIoTBindPhoneViewController.m in Sources */,
 				FF67F587247EB7480075C5C1 /* TIoTProductTableViewCell.m in Sources */,
