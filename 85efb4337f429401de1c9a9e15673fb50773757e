@@ -16,6 +16,24 @@
       "revId": "85efb4337f429401de1c9a9e15673fb50773757e",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6600f06_2f0c7e38",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelMoreViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-02T06:17:03Z",
+      "side": 1,
+      "message": "与安卓保持一致，在cell中显示设备名，添加逻辑判断",
+      "parentUuid": "ac5cd630_4c975975",
+      "revId": "85efb4337f429401de1c9a9e15673fb50773757e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
