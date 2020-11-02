@@ -167,6 +167,7 @@
 //        {
 //            tipString = self.deviceDic[@"DeviceName"];
 //        }
+        tipString = [self getDeviceAliasName:tipString];
         
         [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:tipString cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.maxLength = 20;
@@ -199,6 +200,18 @@
     
 }
 
+- (NSString *)getDeviceAliasName:(NSString *)tipString {
+    NSString * alias = self.deviceDic[@"AliasName"];
+    if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
+        tipString = self.deviceDic[@"AliasName"];
+    }
+    else
+    {
+        tipString = self.deviceDic[@"DeviceName"];
+    }
+    return  tipString;
+}
+
 #pragma mark setter or getter
 - (UITableView *)tableView{
     if (_tableView == nil) {
@@ -216,7 +229,10 @@
 - (NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
-        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_name", @"设备名称"),@"value":self.deviceDic[@"AliasName"],@"needArrow":@"1"}]];
+        
+        NSString * tipString = @"";
+        tipString = [self getDeviceAliasName:tipString];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_name", @"设备名称"),@"value":tipString,@"needArrow":@"1"}]];
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_info", @"设备信息"),@"value":@"",@"needArrow":@"1"}]];
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_setting", @"房间设置"),@"value":@"",@"needArrow":@"1"}]];
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_share", @"设备分享"),@"value":@"",@"needArrow":@"1"}]];
