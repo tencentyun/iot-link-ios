@@ -98,6 +98,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //屏蔽左滑收拾，面板中收拾会有冲突
+    self.fd_interactivePopDisabled = YES;
+    
     if (self.requestTicketRefreshURLBlock) {
         self.requestTicketRefreshURLBlock(self);
     }
