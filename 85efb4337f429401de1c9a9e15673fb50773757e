@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac5cd630_4c975975",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelMoreViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-02T03:16:46Z",
+      "side": 1,
+      "message": "建议与android需求保持一致，或与产品沟通是否在cell右侧显示设备名",
+      "revId": "85efb4337f429401de1c9a9e15673fb50773757e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
