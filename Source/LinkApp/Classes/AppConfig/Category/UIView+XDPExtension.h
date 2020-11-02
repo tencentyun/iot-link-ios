@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CAShapeLayer *)xdp_cornerRadius:(CGSize)size location:(UIRectCorner)corner;
 
+- (void)changeViewRectConnerWithView:(UIView *)view withRect:(CGRect )rect roundCorner:(UIRectCorner)corner withRadius:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END

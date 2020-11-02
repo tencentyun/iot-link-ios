@@ -39,6 +39,9 @@
 		6DD4D1482536F4D2005272BE /* TIoTCountdownTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD4D1472536F4D2005272BE /* TIoTCountdownTimer.m */; };
 		6DD4D32125398C9B005272BE /* TIoTEvaluationSharedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD4D32025398C9A005272BE /* TIoTEvaluationSharedView.m */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
+		6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */; };
+		6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */; };
+		6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		6DEEB78025494DFD00247A66 /* TIoTH5CallResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */; };
 		6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB7832549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m */; };
@@ -404,6 +407,12 @@
 		6DD4D31F25398C9A005272BE /* TIoTEvaluationSharedView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTEvaluationSharedView.h; sourceTree = "<group>"; };
 		6DD4D32025398C9A005272BE /* TIoTEvaluationSharedView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTEvaluationSharedView.m; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DE800F7254FE95F0093F925 /* TIoTIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTIntelligentVC.h; sourceTree = "<group>"; };
+		6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTIntelligentVC.m; sourceTree = "<group>"; };
+		6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomSheetView.h; sourceTree = "<group>"; };
+		6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomSheetView.m; sourceTree = "<group>"; };
+		6DE8010725504DE70093F925 /* TIoTAddManualIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAddManualIntelligentVC.h; sourceTree = "<group>"; };
+		6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAddManualIntelligentVC.m; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		6DEC06322487AC0E00902C9F /* UIView+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		6DEEB77E25494DFC00247A66 /* TIoTH5CallResultModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTH5CallResultModel.h; sourceTree = "<group>"; };
@@ -976,6 +985,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		6DE800F6254FE9320093F925 /* Intelligent */ = {
+			isa = PBXGroup;
+			children = (
+				6DE800F7254FE95F0093F925 /* TIoTIntelligentVC.h */,
+				6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */,
+				6DE8010725504DE70093F925 /* TIoTAddManualIntelligentVC.h */,
+				6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */,
+			);
+			path = Intelligent;
+			sourceTree = "<group>";
+		};
 		6DEEB77725494D3200247A66 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -1084,6 +1104,7 @@
 		D231048A232F86380003069D /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				6DE800F6254FE9320093F925 /* Intelligent */,
 				F4D48B822520834C00CE90AC /* Map */,
 				6DBBF7A9252333040018DE39 /* Evaluation */,
 				F4833EB824DD2A280033FAB2 /* Debug */,
@@ -1519,6 +1540,8 @@
 				ED6BA5C223C5DF8500BE9EC9 /* TIoTAlertView.m */,
 				6DD4D1462536F4D2005272BE /* TIoTCountdownTimer.h */,
 				6DD4D1472536F4D2005272BE /* TIoTCountdownTimer.m */,
+				6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */,
+				6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */,
 			);
 			path = AppUIConfig;
 			sourceTree = "<group>";
@@ -2371,6 +2394,7 @@
 				F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */,
 				D2A2CD3A234ECC6D0039EB51 /* TIoTRefreshHeader.m in Sources */,
 				ED8D1F6F242B500300900B80 /* TIoTTipView.m in Sources */,
+				6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */,
 				D2DAC4C623386173006DB67C /* BluetoothCentralManager.m in Sources */,
 				D2A2CD39234ECC6D0039EB51 /* TIoTRefreshFooter.m in Sources */,
 				A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */,
@@ -2402,9 +2426,11 @@
 				ED9C15B023B984DB00CAC848 /* UIImage+Ex.m in Sources */,
 				6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */,
 				D2038B9F2331FD540036F6B9 /* TIoTRegisterViewController.m in Sources */,
+				6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */,
 				D23104D62330678F0003069D /* UIView+XDPGesture.m in Sources */,
 				D23104BE233066810003069D /* KeyChainUntil.m in Sources */,
 				ED6DA51E23C99BBE00FDDC97 /* TIoTPopoverVC.m in Sources */,
+				6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */,
 				6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */,
 				D23104F223306A0E0003069D /* TIoTTabBarViewController.m in Sources */,
 				D2A2CD25234C66790039EB51 /* UIViewController+GetController.m in Sources */,

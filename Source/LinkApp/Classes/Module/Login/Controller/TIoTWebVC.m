@@ -304,7 +304,6 @@
 - (void)loginWithMessage:(WKScriptMessage *)message {
     [[TIoTCoreUserManage shared] clear];
     UIViewController *loginVc = [NSClassFromString(@"TIoTVCLoginAccountVC") new];
-//    UIViewController *loginVc = [NSClassFromString(@"TIoTMainVC") new];
     [loginVc setValue:@(YES) forKeyPath:@"isExpireAt"];
     TIoTNavigationController *vc = [[TIoTNavigationController alloc] initWithRootViewController:loginVc];
     vc.modalPresentationStyle = UIModalPresentationOverFullScreen;
