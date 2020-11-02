@@ -98,6 +98,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //屏蔽左滑手势，面板中手势会有冲突
+    self.fd_interactivePopDisabled = YES;
+    
     if (self.requestTicketRefreshURLBlock) {
         self.requestTicketRefreshURLBlock(self);
     }
