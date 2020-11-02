@@ -32,6 +32,8 @@ typedef void(^requestTicketRefreshURL)(TIoTWebVC *webController);
 
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;//h5自定义面板
 @property (nonatomic, strong,readonly) WKWebView *webView;
+
+- (void)webViewInvokeJavaScript:(NSDictionary *)responseDic port:(NSString *)portString;
 @end
 
 NS_ASSUME_NONNULL_END
