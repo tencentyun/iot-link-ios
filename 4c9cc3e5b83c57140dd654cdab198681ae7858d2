@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1781e936_1a1460b3",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTShareDevicesVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-02T11:33:24Z",
+      "side": 1,
+      "message": "判断不符合本身会走else的，不用加非空判断了吧",
+      "revId": "4c9cc3e5b83c57140dd654cdab198681ae7858d2",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
