@@ -14,6 +14,7 @@
 #import "TIoTWebVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import <WebKit/WebKit.h>
+#import "TIoTIntelligentVC.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
@@ -34,6 +35,11 @@
     //首页
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
     [self addChildVc:homeVC title:NSLocalizedString(@"main_tab_1", @"首页") image:@"equipmentDefaultTabbar" selectedImage:@"equipmentSelectTabbar"];
+    
+    
+    //智能联动
+    TIoTIntelligentVC *intelligent = [[TIoTIntelligentVC alloc]init];
+    [self addChildVc:intelligent title:NSLocalizedString(@"home_intelligent", @"智能") image:@"intelligentDefaultTabbar" selectedImage:@"intelligentSelectTabbar"];
     
     
     __weak typeof(self) weadkSelf= self;

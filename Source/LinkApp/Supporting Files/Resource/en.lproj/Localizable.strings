@@ -701,6 +701,7 @@
 
 //v1.1.0 版本新加
 "home_projuct" = "连连";
+"home_intelligent" = "智能";
 "home_evaluation" = "评测";
 "home_intelligence" = "智能";
 "home_mine" = "我的";
@@ -708,3 +709,9 @@
 "evaluation_copyLink" = "复制链接";
 "evaluation_copyLink_success" = "已复制到剪切板";
 "noWeichat_placeInstall" = "微信未安装，请安装后重试";
+
+"intelligent_noDeviceTip" = "当前暂无智能，点击添加智能";
+"addDeveice_immediately" = "立即添加";
+"current_noManualTask" = "暂无手动任务";
+"addTast" = "添加任务";
+"addManualTask" = "添加手动智能";

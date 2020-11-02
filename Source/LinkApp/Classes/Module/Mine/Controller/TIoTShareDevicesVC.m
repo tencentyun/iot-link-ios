@@ -104,8 +104,7 @@
             NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
             
             TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-            NSString *typeString = configModel.Panel.type ? : @"";
-            if ([typeString isEqualToString:@"h5"]) {
+            if ([configModel.Panel.type isEqualToString:@"h5"]) {
                 
                 //h5自定义面板
                 NSDictionary *deviceDic = [self.dataArr[indexPath.row] copy];
