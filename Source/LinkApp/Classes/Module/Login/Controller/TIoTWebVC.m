@@ -274,15 +274,17 @@
         IMP imp = [self methodForSelector:methodSel];
         void (*func)(id, SEL,id) = (void *)imp;
         func(self,methodSel,message);
+
     }
     
-    if (![NSString isNullOrNilWithObject:message.body]) {
-        if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
-            TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
-            NSString *callbackIDString = model.callbackId ?:@"";
-            [self webViewInvokeJavaScript:@{@"result":@(YES),@"callbackId":callbackIDString} port:@"callResult"];
-        }
-    }
+#warning 需要优化，这块的会调不能写这里。因为会调里面的会有其他参数，这里调过去后就js报错了，放在具体的bridge方法里做会调
+//    if (![NSString isNullOrNilWithObject:message.body]) {
+//        if (![NSString isNullOrNilWithObject:message.body[@"callbackId"]]) {
+//            TIoTH5CallResultModel *model = [TIoTH5CallResultModel yy_modelWithJSON:message.body];
+//            NSString *callbackIDString = model.callbackId ?:@"";
+//            [self webViewInvokeJavaScript:@{@"result":@(YES),@"callbackId":callbackIDString} port:@"callResult"];
+//        }
+//    }
     
     
 }
@@ -436,6 +438,24 @@
                              @"reloadAfterUnmount":NSStringFromSelector(@selector(reloadUnmountDeviceWithMessage:)),
                              @"setShareConfig":NSStringFromSelector(@selector(shareConfigWithMessage:)),
                              @"goFirmwareUpgradePage":NSStringFromSelector(@selector(goFirmwareUpgradeWithMessage:)),
+                             
+                             //蓝牙部分
+                             @"openBluetoothAdapter":NSStringFromSelector(@selector(openBluetoothWithMessageWithMessage:)),
+                             @"getBluetoothAdapterState":NSStringFromSelector(@selector(getBluetoothAdapterStateWithMessage:)),
+                             @"startBluetoothDevicesDiscovery":NSStringFromSelector(@selector(startBluetoothDevicesDiscoveryWithMessage:)),
+                             @"stopBluetoothDevicesDiscovery":NSStringFromSelector(@selector(stopBluetoothDevicesDiscoveryWithMessage:)),
+                             @"getBluetoothDevices":NSStringFromSelector(@selector(getBluetoothDevicesWithMessage:)),
+                             @"getConnectedBluetoothDevices":NSStringFromSelector(@selector(getConnectedBluetoothDevicesWithMessage:)),
+                             @"getBLEDeviceRSSI":NSStringFromSelector(@selector(getBLEDeviceRSSIWithMessage:)),
+                             @"createBLEConnection":NSStringFromSelector(@selector(createBLEConnectionWithMessage:)),
+                             @"closeBLEConnection":NSStringFromSelector(@selector(closeBLEConnectionWithMessage:)),
+                             @"getBLEDeviceServices":NSStringFromSelector(@selector(getBLEDeviceServicesWithMessage:)),
+                             @"getBLEDeviceCharacteristics":NSStringFromSelector(@selector(getBLEDeviceCharacteristicsWithMessage:)),
+                             @"readBLECharacteristicValue":NSStringFromSelector(@selector(readBLECharacteristicValueWithMessage:)),
+                             @"writeBLECharacteristicValue":NSStringFromSelector(@selector(writeBLECharacteristicValueWithMessage:)),
+                             @"notifyBLECharacteristicValueChange":NSStringFromSelector(@selector(notifyBLECharacteristicValueChangeWithMessage:)),
+                             @"registerBluetoothDevice":NSStringFromSelector(@selector(registerBluetoothDeviceWithMessage:)),
+                             @"bindBluetoothDevice":NSStringFromSelector(@selector(bindBluetoothDeviceWithMessage:))
                              
         };
     }
