@@ -18,4 +18,6 @@ typedef NS_ENUM(NSUInteger, XDPButtonLayoutStyle) {
 @interface UIButton (LQRelayout)
 
 - (void)relayoutButton:(XDPButtonLayoutStyle)type ;
+
+- (void)setButtonFormateWithTitlt:(NSString *)titlt titleColorHexString:(NSString *)titleColorString font:(UIFont *)font;
 @end

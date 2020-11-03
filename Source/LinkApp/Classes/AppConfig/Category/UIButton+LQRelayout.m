@@ -45,4 +45,11 @@
             break;
     }
 }
+
+- (void)setButtonFormateWithTitlt:(NSString *)titlt titleColorHexString:(NSString *)titleColorString font:(UIFont *)font {
+    [self setBackgroundColor:[UIColor whiteColor]];
+    [self setTitle:titlt forState:UIControlStateNormal];
+    [self setTitleColor:[UIColor colorWithHexString:titleColorString] forState:UIControlStateNormal];
+    self.titleLabel.font = font;
+}
 @end

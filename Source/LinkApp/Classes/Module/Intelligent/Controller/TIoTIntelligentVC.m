@@ -34,7 +34,12 @@
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top;
+            make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
+        } else {
+            // Fallback on earlier versions
+        }
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
         make.height.mas_equalTo(160);

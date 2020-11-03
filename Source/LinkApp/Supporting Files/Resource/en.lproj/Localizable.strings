@@ -715,3 +715,6 @@
 "current_noManualTask" = "暂无手动任务";
 "addTast" = "添加任务";
 "addManualTask" = "添加手动智能";
+"manualIntelligent_deviceControl" = "设备控制";
+"manualIntelligent_delay" = "延时";
+"execute_Task" = "执行以下任务";
