@@ -10,9 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^ChooseDelayTimerBlock)(void);
+typedef void(^ChooseDeviceBlock)(void);
+
 @interface TIoTCustomSheetView : UIView
-
-
+@property (nonatomic, copy) ChooseDeviceBlock chooseIntelligentDeviceBlock;
+@property (nonatomic, copy) ChooseDelayTimerBlock chooseDelayTimerBlock;
 @end
 
 NS_ASSUME_NONNULL_END
