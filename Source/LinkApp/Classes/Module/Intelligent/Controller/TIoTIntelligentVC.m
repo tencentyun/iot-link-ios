@@ -63,6 +63,7 @@
 
 #pragma mark - event
 - (void)addIntelligentDevice {
+#warning 刷新手动添加智能tableView
     TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
     [self.navigationController pushViewController:addManualTask animated:YES];
 }

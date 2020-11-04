@@ -40,8 +40,8 @@
         kActionBottonHeight = kActionBottonHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
     }
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissView)];
-    [self addGestureRecognizer:tapGesture];
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissView)];
+//    [self addGestureRecognizer:tapGesture];
 
     
     [self addSubview:self.bottomView];
@@ -99,6 +99,14 @@
     [placeHoldDownView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.cancelButton.mas_bottom);
         make.left.right.bottom.equalTo(self.contentView);
+    }];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomView addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.bottomView);
+        make.bottom.equalTo(self.actionBottomView.mas_top);
     }];
 }
 
