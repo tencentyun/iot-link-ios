@@ -21,6 +21,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *customHeaderView;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
+@property (nonatomic, strong) TIoTCustomSheetView *customSheet;
 @end
 
 @implementation TIoTAddManualIntelligentVC
@@ -29,6 +30,10 @@
     [super viewDidAppear:animated];
     
     [self loadTaskList];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 - (void)viewDidLoad {
@@ -121,21 +126,27 @@
 }
 
 - (void)addManualTask {
-    TIoTCustomSheetView *customSheet = [[TIoTCustomSheetView alloc]init];
-    customSheet.chooseIntelligentDeviceBlock = ^{
+    __weak typeof(self)weakSelf = self;
+    self.customSheet.chooseIntelligentDeviceBlock = ^{
         TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
-        [self.navigationController pushViewController:chooseDeviceVC animated:YES];
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
     };
-    customSheet.chooseDelayTimerBlock = ^{
+    self.customSheet.chooseDelayTimerBlock = ^{
         TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
         delayTimeVC.isEditing = NO;
-        [self.navigationController pushViewController:delayTimeVC animated:YES];
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+        [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
     };
     
-    [[UIApplication sharedApplication].delegate.window addSubview:customSheet];
-    [customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo([UIApplication sharedApplication].keyWindow);
-        make.leading.right.bottom.equalTo(self.view);
+    [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
+    [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo([UIApplication sharedApplication].delegate.window);
+        make.leading.right.bottom.equalTo(weakSelf.view);
     }];
 }
 
@@ -239,4 +250,10 @@
     return _nextButtonView;
 }
 
+- (TIoTCustomSheetView *)customSheet {
+    if (!_customSheet) {
+        _customSheet = [[TIoTCustomSheetView alloc]init];
+    }
+    return _customSheet;
+}
 @end
