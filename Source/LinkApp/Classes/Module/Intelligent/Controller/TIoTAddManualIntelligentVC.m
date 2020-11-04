@@ -13,6 +13,7 @@
 #import "TIoTIntelligentCustomCell.h"
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTChooseDelayTimeVC.h"
+#import "TIoTComplementIntelligentVC.h"
 
 @interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property  (nonatomic, strong) UIImageView *noManualTaskImageView;
@@ -244,7 +245,11 @@
         [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
         __weak typeof(self)weakSelf = self;
         _nextButtonView.confirmBlock = ^{
-              
+            if (weakSelf.customSheet) {
+                [weakSelf.customSheet removeFromSuperview];
+            }
+            TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+            [weakSelf.navigationController pushViewController:complementVC animated:YES];
         };
     }
     return _nextButtonView;

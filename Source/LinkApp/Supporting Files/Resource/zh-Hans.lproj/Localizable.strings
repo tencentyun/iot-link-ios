@@ -717,3 +717,8 @@
 "manualIntelligent_deviceControl" = "设备控制";
 "manualIntelligent_delay" = "延时";
 "execute_Task" = "执行以下任务";
+"complement_Intelligent_Message" = "完善智能信息";
+"setting_Intelligent_Image" = "智能图片";
+"setting_Intelligent_Name" = "智能名称";
+"choose_Intelligent_Image" = "选择智能图片";
+"change_Intelligent_Name" = "填写智能名称";
