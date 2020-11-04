@@ -7,6 +7,7 @@
 //
 
 #import "TIoTIntelligentCustomCell.h"
+#import "UILabel+TIoTExtension.h"
 
 @interface TIoTIntelligentCustomCell ()
 @property (nonatomic, strong) UIView *backView;
@@ -70,7 +71,7 @@
     }];
     
     self.taskTitleLabel = [[UILabel alloc]init];
-    [self setLabelFormate:self.taskTitleLabel title:@"titletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor];
+    [self.taskTitleLabel setLabelFormateTitle:@"titletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.backView addSubview:self.taskTitleLabel];
     [self.taskTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.taskTipImageView.mas_right).offset(kSpaceWidth);
@@ -78,7 +79,7 @@
     }];
     
     self.taskSubtitleLabel = [[UILabel alloc]init];
-    [self setLabelFormate:self.taskSubtitleLabel title:@"subtitletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2"];
+    [self.taskSubtitleLabel setLabelFormateTitle:@"subtitletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
     [self.backView addSubview:self.taskSubtitleLabel];
     [self.taskSubtitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.taskTitleLabel.mas_bottom).offset(4);
@@ -101,14 +102,6 @@
         make.width.height.mas_equalTo(24);
         make.centerY.equalTo(self.backView);
     }];
-}
-
-- (void)setLabelFormate:(UILabel *)label title:(NSString *)title font:(UIFont *)font titleColorHexString:(NSString *)titleColorString {
-    label.text = title;
-    label.textColor = [UIColor colorWithHexString:titleColorString];
-    label.font = font;
-    label.textAlignment = NSTextAlignmentLeft;
-    
 }
 
 - (void)setDataDic:(NSDictionary *)dataDic {

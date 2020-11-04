@@ -7,6 +7,8 @@
 //
 
 #import "TIoTChooseIntelligentDeviceVC.h"
+#import "TIoTDeviceSettingVC.h"
+#import "UIButton+LQRelayout.h"
 
 @interface TIoTChooseIntelligentDeviceVC ()
 
@@ -17,6 +19,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupUI];
+    
+}
+
+- (void)setupUI {
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIButton *deviceSetting = [UIButton buttonWithType:UIButtonTypeCustom];
+    deviceSetting.frame = CGRectMake(200, 300, 150, 100);
+    [deviceSetting setButtonFormateWithTitlt:@"设备设置" titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
+    [deviceSetting addTarget:self action:@selector(jumpDeviceSetting) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:deviceSetting];
+}
+
+- (void)jumpDeviceSetting {
+    TIoTDeviceSettingVC *settingVC = [[TIoTDeviceSettingVC alloc]init];
+    [self.navigationController pushViewController:settingVC animated:YES];
 }
 
 /*
