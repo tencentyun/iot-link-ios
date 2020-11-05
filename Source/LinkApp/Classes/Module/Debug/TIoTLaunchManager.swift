@@ -12,6 +12,7 @@ extension UIApplication {
         if appdelegate.isDebug {
             TIoTDebugtools.awake()
             TIoTLogTask.awake()
+            TIoTVercheckTask.awake()
         }
     }()
         
