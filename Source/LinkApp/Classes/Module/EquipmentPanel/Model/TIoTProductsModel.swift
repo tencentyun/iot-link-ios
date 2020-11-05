@@ -68,18 +68,5 @@ class TIoTProductsModel: TIoTBaseModel {
 
 @objcMembers class TIoTDefineModel: TIoTBaseModel {
     var type: String?
-    var mapping: TIoTMappingModel?
-    
-    class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
-        return ["mapping": TIoTMappingModel.classForCoder()]
-    }
-}
-
-@objcMembers class TIoTMappingModel: TIoTBaseModel {
-    var off: String?
-    var on: String?
-    
-    class func modelCustomPropertyMapper() -> [String : Any]? {
-        return ["off" :"0", "on": "1"]
-    }
+    var mapping: Dictionary<String, String>?
 }
