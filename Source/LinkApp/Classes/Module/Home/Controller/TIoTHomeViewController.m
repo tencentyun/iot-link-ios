@@ -104,10 +104,9 @@ static CGFloat weatherHeight = 10;
     [self getFamilyList];
     
     [self registFeedBackRouterController];
-    [self checkNewVersion];
 }
 
-- (void)checkNewVersion {
++ (void)checkNewVersion {
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     appVersion = [NSString matchVersionNum:appVersion];
@@ -129,7 +128,7 @@ static CGFloat weatherHeight = 10;
     
 }
 
-- (BOOL)isTheVersion:(NSString *)theVersion laterThanLocalVersion:(NSString *)localVersion {
++ (BOOL)isTheVersion:(NSString *)theVersion laterThanLocalVersion:(NSString *)localVersion {
     NSArray *localArr = [localVersion componentsSeparatedByString:@"."];
     NSArray *theArr = [theVersion componentsSeparatedByString:@"."];
     for (int i = 0; i<localArr.count; i++) {
@@ -149,11 +148,11 @@ static CGFloat weatherHeight = 10;
     return NO;
 }
 
-- (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
++ (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
     TIoTNewVersionTipView *newVersionView = [[TIoTNewVersionTipView alloc] initWithVersionInfo:versionInfo];
-    [[UIApplication sharedApplication].keyWindow addSubview:newVersionView];
+    [TIoTAPPConfig.iot_window addSubview:newVersionView];
     [newVersionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+        make.edges.equalTo(TIoTAPPConfig.iot_window);
     }];
 }
 

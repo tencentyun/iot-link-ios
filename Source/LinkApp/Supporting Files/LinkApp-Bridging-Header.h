@@ -12,3 +12,4 @@
 #import "TIoTAppConfig.h"
 #import "WxManager.h"
 #import "BluetoothCentralManager.h"
+#import "TIoTHomeViewController.h"
