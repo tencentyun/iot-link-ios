@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f569c7bd_0d6629c0",
+        "filename": "Source/LinkApp/Classes/Module/Debug/TIoTVercheckTask.swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-05T08:48:48Z",
+      "side": 1,
+      "message": "swift中的日志打印是不是可以抽出来一个方法。func MYLog\u003cT\u003e (message: T, fileName: String \u003d #file, funcName: String \u003d #function, lineNum: Int \u003d #line) 下次再使用就不用复制行号文件名方法等这些内容。有时间可以再优化一下。",
+      "revId": "6e748badfa8a9411cbae701002a6ef2dc983711e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0141b5c0_5e70b42f",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-05T08:48:48Z",
+      "side": 1,
+      "message": "这个方法不需要在HomeViewController中使用了，是不是可以拎出去，减少HomeViewController中的代码。或者放到上面的VercheckTask中。有时间可以再优化一下。",
+      "revId": "6e748badfa8a9411cbae701002a6ef2dc983711e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
