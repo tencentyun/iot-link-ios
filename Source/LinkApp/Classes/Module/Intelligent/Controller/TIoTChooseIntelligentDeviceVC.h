@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface TIoTChooseIntelligentDeviceVC : UIViewController
 
+@property (nonatomic, strong) NSString *roomId;
+
 @end
 
 NS_ASSUME_NONNULL_END
