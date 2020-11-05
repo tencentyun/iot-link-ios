@@ -39,6 +39,7 @@
 @synthesize login_Code_Text = _login_Code_Text;
 
 @synthesize FamilyType = _FamilyType;
+@synthesize familyId = _familyId;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -211,6 +212,18 @@
 - (void)setRequestID:(NSString *)requestID {
     _requestID = requestID;
     [[NSUserDefaults standardUserDefaults] setValue:requestID forKey:@"request_ID"];
+}
+
+- (NSString *)familyId {
+    if (!_familyId) {
+        _familyId = [[NSUserDefaults standardUserDefaults] valueForKey:@"familyId"];
+    }
+    return _familyId;
+}
+
+- (void)setFamilyId:(NSString *)familyId {
+    _familyId = familyId;
+    [[NSUserDefaults standardUserDefaults] setValue:familyId forKey:@"familyId"];
 }
 
 //保存accessToken

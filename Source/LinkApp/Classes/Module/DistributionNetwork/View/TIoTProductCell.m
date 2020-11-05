@@ -51,6 +51,12 @@
 - (void)setDic:(NSDictionary *)dic{
     _dic = dic;
     
+    if (![NSString isNullOrNilWithObject:[dic objectForKey:@"AliasName"]]) {
+        self.titleLab.text = dic[@"AliasName"]?:@"";
+    }else {
+        self.titleLab.text = dic[@"DeviceName"]?:@"";
+    }
+    
     if ([dic objectForKey:@"CategoryName"]){
         self.titleLab.text = dic[@"CategoryName"]?:@"";
     }
