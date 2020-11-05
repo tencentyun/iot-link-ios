@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "af6051ba_c42e59f9",
+        "filename": "Source/LinkApp/Classes/Module/Debug/TIoTVercheckTask.swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-05T09:14:09Z",
+      "side": 1,
+      "message": "之后会吧这块放一个统一的地方",
+      "parentUuid": "f569c7bd_0d6629c0",
+      "revId": "6e748badfa8a9411cbae701002a6ef2dc983711e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0141b5c0_5e70b42f",
         "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "6e748badfa8a9411cbae701002a6ef2dc983711e",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1838511_014e8f5b",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-05T09:14:09Z",
+      "side": 1,
+      "message": "检查版本逻辑已挪到TIoTAppUtilOC中",
+      "parentUuid": "0141b5c0_5e70b42f",
+      "revId": "6e748badfa8a9411cbae701002a6ef2dc983711e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
