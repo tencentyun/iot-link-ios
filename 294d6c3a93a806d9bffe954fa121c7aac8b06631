@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "924a602b_e2f2f501",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-06T10:01:32Z",
+      "side": 1,
+      "message": "传递模型指针，操作时修改了并没有保存，但返回前面列表时候有可能会被篡改了。是否有必要实现copy协议，copy一下？",
+      "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "095ff0ea_5e94f308",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-06T10:01:32Z",
+      "side": 1,
+      "message": "这种方法是不是放到个分类或者有基类的时候放到基类里会更好，方便其他控制器也用到这个方法。",
+      "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f2ac7d1_8e2d46c7",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseDelayTimeVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-06T10:01:32Z",
+      "side": 1,
+      "message": "这个timeString要做多语言吗？",
+      "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c665b9c9_788e5929",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTDeviceSettingVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-06T10:01:32Z",
+      "side": 1,
+      "message": "这个方法是不是又出现了一次，如果有个地方专门放这个方法就更好些。",
+      "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
