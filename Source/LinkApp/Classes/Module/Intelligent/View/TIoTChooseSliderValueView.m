@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIView *sliderBackView;
-
+@property (nonatomic, strong) UILabel *viewTitle;
 @property (nonatomic,copy) NSString *type;//数据类型，整形还是浮点
 
 @property (nonatomic, strong) UISlider *slider;
@@ -73,10 +73,10 @@
         make.height.mas_equalTo(kTopViewHeight);
     }];
 
-    UILabel *viewTitle = [[UILabel alloc]init];
-    [viewTitle setLabelFormateTitle:@"亮度test" font:[UIFont wcPfMediumFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
-    [self.topView addSubview:viewTitle];
-    [viewTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.viewTitle= [[UILabel alloc]init];
+    [self.viewTitle setLabelFormateTitle:@"" font:[UIFont wcPfMediumFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+    [self.topView addSubview:self.viewTitle];
+    [self.viewTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.bottom.equalTo(self.topView);
     }];
     
@@ -183,12 +183,11 @@
     return _topView;
 }
 
-/*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     // Drawing code
+    self.viewTitle.text = self.model.name?:@"";
 }
-*/
 
 @end

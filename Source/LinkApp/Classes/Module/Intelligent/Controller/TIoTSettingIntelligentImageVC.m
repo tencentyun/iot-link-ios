@@ -152,10 +152,10 @@
             if (@available(iOS 11.0, *)) {
                 make.bottom.equalTo(self.view.mas_bottom).offset(-[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom);
             }else {
-                make.bottom.equalTo(self.view.mas_bottom);
+                make.bottom.equalTo(self.view.mas_bottom).offset(-20);
             }
         }else {
-            make.bottom.equalTo(self.view.mas_bottom);
+            make.bottom.equalTo(self.view.mas_bottom).offset(-20);
         }
     }];
     

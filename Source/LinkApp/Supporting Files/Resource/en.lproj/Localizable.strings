@@ -724,3 +724,7 @@
 "choose_Intelligent_Image" = "选择智能图片";
 "change_Intelligent_Name" = "填写智能名称";
 "selected_Device" = "选择设备";
+"error_setting_Intelligent_Image" = "请设置智能图片";
+"error_setting_Intelligent_Name" = "请设置智能名称";
+"error_delay_oneminute" = "延时时长至少为一分钟";
+"delay_time" = "XXX小时XXX分钟后"; //智能联动添加延时后 手动添加智能列表中 延时的一类时间显示

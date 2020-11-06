@@ -9,20 +9,17 @@
 #import "TIoTChooseIntelligentDeviceVC.h"
 #import "TIoTCategoryTableViewCell.h"
 #import "TIoTProductCell.h"
-#import "TIoTDiscoverProductView.h"
 
-#import "TIoTHelpCenterViewController.h"
-#import "TIoTWebVC.h"
-#import "TIoTScanlViewController.h"
-#import "TIoTDistributionNetworkViewController.h"
 #import "TIoTNavigationController.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
 
-#import "TIoTConfigHardwareViewController.h"
 #import <YYModel.h>
 #import "FamilyModel.h"
 #import "RoomModel.h"
+#import "TIoTIntelligentProductConfigModel.h"
+
+#import "TIoTDeviceSettingVC.h"
 
 static NSInteger  const itemNumber = 3;
 
@@ -31,7 +28,6 @@ static NSInteger  const itemNumber = 3;
 @property (nonatomic) CGFloat itemWidth;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
-//@property (nonatomic, strong) TIoTDiscoverProductView *discoverView;
 @property (nonatomic, strong) UITableView *categoryTableView;
 @property (nonatomic, strong) UICollectionView *productCollectionView;
 @property (nonatomic, strong) NSMutableArray *categoryArr;
@@ -64,10 +60,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     
     [self setupUI];
     [self getCategoryList];
-//    [self.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
-    
-//    [HXYNotice changeAddDeviceTypeListener:self reaction:@selector(receiveChangeAddDeviceType:)];
-//    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
+
 }
 
 #pragma mark - other
@@ -82,45 +75,6 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    
-//    self.discoverView = [[TIoTDiscoverProductView alloc] init];
-//    WeakObj(self)
-//    self.discoverView.helpAction = ^{
-//        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
-//        [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
-//
-//            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
-//            NSString *ticket = responseObject[@"TokenTicket"]?:@"";
-//            TIoTWebVC *vc = [TIoTWebVC new];
-//            vc.title = NSLocalizedString(@"help_center", @"帮助中心");
-//
-//            NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-//
-//            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
-//            vc.urlPath = url;
-//            vc.needJudgeJump = YES;
-//            [selfWeak.navigationController pushViewController:vc animated:YES];
-//            [MBProgressHUD dismissInView:selfWeak.view];
-//
-//        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//            [MBProgressHUD dismissInView:selfWeak.view];
-//        }];
-//    };
-//    self.discoverView.scanAction = ^{
-//        TIoTScanlViewController *vc = [[TIoTScanlViewController alloc] init];
-//        vc.roomId = selfWeak.roomId;
-//        [selfWeak.navigationController pushViewController:vc animated:YES];
-//    };
-//    self.discoverView.retryAction = ^{
-//        selfWeak.discoverView.status = DiscoverDeviceStatusDiscovering;
-//        [selfWeak.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
-//    };
-//    [self.scrollView addSubview:self.discoverView];
-//    [self.discoverView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.scrollView).offset(10);
-//        make.width.equalTo(self.view);
-//        make.height.mas_equalTo(119.5);
-//    }];
     
     [self.scrollView addSubview:self.categoryTableView];
     [self.categoryTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -150,56 +104,6 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     listHeight = 119.5 + 20 + listHeight > kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight - 30 ? 119.5 + 20 + listHeight : kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight - 30;
     self.scrollView.contentSize = CGSizeMake(kScreenWidth, listHeight);
 }
-
-//- (void)jumpConfigVC:(TIoTConfigHardwareStyle )hardwareStyle{
-//    TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
-//    vc.configurationData = self.configData;
-//    if (hardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-//        vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
-//    } else {
-//        vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
-//    }
-//    vc.roomId = self.roomId;
-//    [self.navigationController pushViewController:vc animated:YES];
-//
-//}
-
-//- (void)receiveChangeAddDeviceType:(NSNotification *)noti{
-//    NSInteger deviceType = [noti.object integerValue];
-//
-//    [self changedConfigTypeWithProducedID:self.selectedProducetedID withDeviceType:deviceType];
-//}
-//
-//- (void)changedConfigTypeWithProducedID:(NSString *)producedID withDeviceType:(NSInteger)type {
-//    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[producedID]} success:^(id responseObject) {
-//
-//        NSArray *data = responseObject[@"Data"];
-//        if (data.count > 0) {
-//            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
-//            self.configData = config;
-//            WCLog(@"AppGetProductsConfig config%@", config);
-//            NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
-//            if (wifiConfTypeList.count > 0) {
-//
-//                [self juegeHardwareStyle:type];
-//                return;
-//            }
-//        }
-//        [self juegeHardwareStyle:type];
-//        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
-//
-//    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//        [self juegeHardwareStyle:type];
-//    }];
-//}
-
-//- (void)juegeHardwareStyle:(TIoTConfigHardwareStyle )style {
-//    if (style == 0) {   //智能
-//        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig];
-//    }else {             //自助
-//        [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];
-//    }
-//}
 
 - (void)popHomeVC {
 //    [self.navigationController popViewControllerAnimated:YES];
@@ -252,31 +156,6 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [MBProgressHUD dismissInView:self.view];
     }];
 }
-
-//- (void)getProductsConfig:(NSString *)productId{
-//    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
-//
-//        NSArray *data = responseObject[@"Data"];
-//        if (data.count > 0) {
-//            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
-//            self.configData = [[NSDictionary alloc]initWithDictionary:config];
-//            WCLog(@"AppGetProductsConfig config%@", config);
-//            NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
-//            if (wifiConfTypeList.count > 0) {
-//                NSString *configType = wifiConfTypeList.firstObject;
-//                if ([configType isEqualToString:@"softap"]) {
-//                    [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];  //自助配网
-//                    return;
-//                }
-//            }
-//        }
-//        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig]; //智能配网
-//        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
-//
-//    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig]; //智能配网
-//    }];
-//}
 
 #pragma mark TableViewDelegate && TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -395,19 +274,9 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-//    if (self.recommendArr.count && indexPath.section == 0) {//推荐的才去看是否需要跳转到soft ap，其他跳转smart config
-//        NSDictionary *dic = self.recommendArr[indexPath.row];
-//        NSString *productId = dic[@"ProductId"]?:@"";
-//        self.selectedProducetedID = productId;
-//        [self getProductsConfig:productId];
-//    } else {
-//        self.selectedProducetedID = @"";
-//        self.configData = nil;
-//        [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig];  //智能配网
-//    }
     NSDictionary *dic = self.productArr[indexPath.row];
     TIoTLog(@"--dic = %@",dic);
-    
+    TIoTIntelligentProductConfigModel *intelligentProjuctModel = [TIoTIntelligentProductConfigModel yy_modelWithJSON:dic];
     NSString *productIDString = self.productArr[indexPath.row][@"ProductId"] ?:@"";
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
@@ -416,11 +285,17 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
-            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
-
+//            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
             TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
-//                        TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-            NSLog(@"---%@",product);
+//            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
+            NSLog(@"--!!!-%@",product);
+            
+            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+            deviceSettingVC.templateModel = product;
+            deviceSettingVC.productModel = intelligentProjuctModel;
+            deviceSettingVC.isEdited = NO;
+            [self.navigationController pushViewController:deviceSettingVC animated:YES];
+            
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 

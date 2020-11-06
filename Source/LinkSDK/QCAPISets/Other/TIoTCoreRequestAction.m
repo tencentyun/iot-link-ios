@@ -115,6 +115,8 @@ NSString *const AppListShareDeviceUsers = @"AppListShareDeviceUsers";//查询设
 NSString *const AppRemoveShareDeviceUser = @"AppRemoveShareDeviceUser";//删除设备的用户
 NSString *const AppRemoveUserShareDevice = @"AppRemoveUserShareDevice";//删除用户的设备
 
+//===============智能联动
+NSString *const AppCreateScene = @"AppCreateScene";//创建场景
 
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心

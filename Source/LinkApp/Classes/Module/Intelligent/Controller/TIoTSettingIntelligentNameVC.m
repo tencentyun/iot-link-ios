@@ -57,7 +57,7 @@
     self.nameTextTield = [[UITextField alloc]init];
     self.nameTextTield.textColor = [UIColor colorWithHexString:@"#6C7078"];
     self.nameTextTield.font = [UIFont wcPfRegularFontOfSize:14];
-    self.nameTextTield.text = NSLocalizedString(@"unset", @"未设置");
+    self.nameTextTield.placeholder = NSLocalizedString(@"unset", @"未设置");
     [nameView addSubview:self.nameTextTield];
     [self.nameTextTield mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.titleLabel.mas_right).offset(28);

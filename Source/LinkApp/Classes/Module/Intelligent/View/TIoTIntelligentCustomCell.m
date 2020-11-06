@@ -8,7 +8,7 @@
 
 #import "TIoTIntelligentCustomCell.h"
 #import "UILabel+TIoTExtension.h"
-
+#import "UIImageView+TIoTWebImageView.h"
 @interface TIoTIntelligentCustomCell ()
 @property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UIImageView *taskTipImageView;
@@ -77,21 +77,22 @@
         make.left.equalTo(self.taskTipImageView.mas_right).offset(kSpaceWidth);
         make.top.equalTo(self.backView.mas_top).offset(18);
     }];
-    
-    self.taskSubtitleLabel = [[UILabel alloc]init];
-    [self.taskSubtitleLabel setLabelFormateTitle:@"subtitletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
-    [self.backView addSubview:self.taskSubtitleLabel];
-    [self.taskSubtitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.taskTitleLabel.mas_bottom).offset(4);
-        make.left.right.equalTo(self.taskTitleLabel);
-    }];
-    
+
     self.arrowsImageView = [[UIImageView alloc]init];
     self.arrowsImageView.image = [UIImage imageNamed:@"mineArrow"];
     [self.backView addSubview:self.arrowsImageView];
     [self.arrowsImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.taskTitleLabel.mas_right).offset(kSpaceWidth);
         make.top.equalTo(self.taskTitleLabel.mas_top);
+    }];
+
+    self.taskSubtitleLabel = [[UILabel alloc]init];
+    [self.taskSubtitleLabel setLabelFormateTitle:@"subtitletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
+    [self.backView addSubview:self.taskSubtitleLabel];
+    [self.taskSubtitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.taskTitleLabel.mas_bottom).offset(4);
+        make.left.equalTo(self.taskTitleLabel.mas_left);
+        make.right.equalTo(self.arrowsImageView.mas_left).offset(-10);
     }];
     
     self.taskDeleteImageView = [[UIImageView alloc]init];
@@ -104,10 +105,28 @@
     }];
 }
 
-- (void)setDataDic:(NSDictionary *)dataDic {
-    _dataDic = dataDic;
+- (void)setModel:(TIoTPropertiesModel *)model {
+    _model = model;
+    self.taskTitleLabel.text = model.name?:@"";
+}
+- (void)setSubTitleString:(NSString *)subTitleString {
+    _subTitleString = subTitleString;
+    NSString *secString = self.model.desc?:@"";
+    NSString *modifiedString = subTitleString ?: @"";
+    self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@",secString,modifiedString];
 }
 
+- (void)setProductModel:(TIoTIntelligentProductConfigModel *)productModel {
+    _productModel = productModel;
+    NSString *urlString = self.productModel.IconUrl?:@"";
+    [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"intelligent_manual"];
+}
+
+- (void)setDelayTimeString:(NSString *)delayTimeString {
+    _delayTimeString = delayTimeString;
+    self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
+    self.taskSubtitleLabel.text = delayTimeString;
+}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

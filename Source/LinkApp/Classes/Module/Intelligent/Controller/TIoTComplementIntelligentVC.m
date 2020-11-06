@@ -11,6 +11,8 @@
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTSettingIntelligentImageVC.h"
 #import "TIoTSettingIntelligentNameVC.h"
+#import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 @interface TIoTComplementIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -101,7 +103,7 @@
     if (!_bottomView) {
         _bottomView = [[TIoTIntelligentBottomActionView alloc]init];
         __weak typeof(self)weakSelf = self;
-            [_bottomView bottomViewType:IntelligentBottomViewTypeDouble withTitleArray:@[NSLocalizedString(@"cancel", @"取消"),NSLocalizedString(@"save", @"保存")]];
+            [_bottomView bottomViewType:IntelligentBottomViewTypeDouble withTitleArray:@[NSLocalizedString(@"cancel", @"取消"),NSLocalizedString(@"finish", @"完成")]];
             
             _bottomView.firstBlock = ^{
                 
@@ -112,6 +114,35 @@
             
             _bottomView.secondBlock = ^{
 #warning 完成场景设置步骤，成功创建完一个场景
+                
+                NSMutableArray *actionArray = [NSMutableArray array];
+//                actionArray addObject:<#(nonnull id)#>
+                
+                
+                NSMutableDictionary *imageDic  = weakSelf.dataArr[0];
+                NSString *imageUrl = imageDic[@"image"];
+                NSMutableDictionary *nameDic = weakSelf.dataArr[1];
+                NSString *nameString = nameDic[@"value"];
+                if ([imageUrl isEqualToString:@""] ) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Image", @"请设置智能图片") icon:@""];
+                }else if ([NSString isNullOrNilWithObject:nameString]){
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Name", @"请设置智能名称") icon:@""];
+                }else {
+                    
+                    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                    
+                    NSDictionary *paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
+                    
+                    [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                        
+                        [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
+                        
+                        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+                        
+                    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                        
+                    }];
+                }
                 
             };
             
