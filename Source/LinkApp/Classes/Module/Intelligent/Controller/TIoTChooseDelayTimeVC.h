@@ -10,8 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^ChangeDelayTimeBlcok)(NSString *timeString);
+typedef void(^AddDelayTimeBlcok)(NSString *timeString);
 
+/**
+ 进入编辑后需调用
+ */
 @protocol TIoTChooseDelayTimeVCDelegate <NSObject>
 
 - (void)changeDelayTimeString:(NSString *)timeString;
@@ -22,7 +25,7 @@ typedef void(^ChangeDelayTimeBlcok)(NSString *timeString);
  */
 @interface TIoTChooseDelayTimeVC : UIViewController
 @property (nonatomic, assign) BOOL isEditing;
-@property (nonatomic, copy) ChangeDelayTimeBlcok changeDelayTimeBlcok;
+@property (nonatomic, copy) AddDelayTimeBlcok addDelayTimeBlcok; //新增延时task的需要实现
 @property (nonatomic, weak)id<TIoTChooseDelayTimeVCDelegate>delegate;
 @end
 
