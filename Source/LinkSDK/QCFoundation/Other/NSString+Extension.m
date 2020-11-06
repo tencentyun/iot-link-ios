@@ -390,4 +390,20 @@
             return temperatureString;
         }
 }
+
+//判断是否全是空格
++ (BOOL)isFullSpaceEmpty:(NSString *)string {
+    if (!string) {
+        return true;
+    } else {
+        NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSString *trimedString = [string stringByTrimmingCharactersInSet:set];
+        if ([trimedString length] == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
 @end

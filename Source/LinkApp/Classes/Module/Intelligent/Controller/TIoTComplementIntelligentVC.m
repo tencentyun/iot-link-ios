@@ -114,35 +114,72 @@
             
             _bottomView.secondBlock = ^{
 #warning 完成场景设置步骤，成功创建完一个场景
-                
+                NSDictionary *paramDic = nil;
                 NSMutableArray *actionArray = [NSMutableArray array];
-//                actionArray addObject:<#(nonnull id)#>
-                
                 
                 NSMutableDictionary *imageDic  = weakSelf.dataArr[0];
                 NSString *imageUrl = imageDic[@"image"];
                 NSMutableDictionary *nameDic = weakSelf.dataArr[1];
                 NSString *nameString = nameDic[@"value"];
-                if ([imageUrl isEqualToString:@""] ) {
-                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Image", @"请设置智能图片") icon:@""];
-                }else if ([NSString isNullOrNilWithObject:nameString]){
-                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Name", @"请设置智能名称") icon:@""];
-                }else {
+                
+                if (self.sceneActioinType == SceneActioinTypeManual) {
+                    for (int i = 0; i < weakSelf.actionArray.count; i++) {
+                        TIoTPropertiesModel *model = weakSelf.actionArray[i];
+                        NSString *valueStr = weakSelf.valueArray[i]? :@"";
+                        NSDictionary *mappingDic = model.define.mapping;
+                        [mappingDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                            if ([obj isEqualToString:valueStr]) {
+                                NSString *keyStr = key;
+                                NSDictionary *dataDic = @{model.id?:@"" : @(keyStr.intValue)};
+                                NSString *dataDicStr = [NSString objectToJson:dataDic];
+                                
+                                NSString *productIDStr = weakSelf.productModel.ProductId ?:@"";
+                                NSString *diviceName = weakSelf.productModel.DeviceName ?:@"";
+                                NSDictionary *tempData =  @{@"ActionType":@(0),@"ProductId":productIDStr,@"DeviceName":diviceName,@"Data":dataDicStr};
+                                [actionArray addObject:tempData];
+                            }
+                        }];
+                    }
                     
-                    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                    paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
                     
-                    NSDictionary *paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
+                }else if (self.sceneActioinType == SceneActioinTypeDelay) {
+//                    weakSelf.delayTimeArray
                     
-                    [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                    for (int i = 0; i<weakSelf.delayTimeArray.count; i++) {
+                        NSString *timeString = weakSelf.delayTimeArray[i];
+                        NSString *hourStr = @"";
+                        NSString *minuteStr = @"";
+                        NSInteger secondNum = 0;
+                        if ([timeString containsString:@"小时"]) {
+                            hourStr = [timeString componentsSeparatedByString:@"小时"].firstObject;
+                            NSString *tempMinStr = [timeString componentsSeparatedByString:@"小时"].lastObject;
+                            minuteStr = [tempMinStr componentsSeparatedByString:@"分钟"].firstObject;
+                            
+                            secondNum = hourStr.intValue * 60 + minuteStr.intValue;
+                        }else {
+                            minuteStr = [timeString componentsSeparatedByString:@"分钟"].firstObject;
+                            secondNum = minuteStr.intValue;
+                        }
                         
-                        [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
-                        
-                        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-                        
-                    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-                        
-                    }];
+                        [actionArray addObject:@{@"ActionType":@(1),@"Date":@(secondNum)}];
+                    }
+                    
+                    paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
                 }
+
+                
+                [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                
+                [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                    
+                    [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
+                    
+                    [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+                    
+                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                    
+                }];
                 
             };
             

@@ -80,10 +80,15 @@
 }
 
 - (void)modifyName {
-    if (self.saveIntelligentNameBlock) {
-        self.saveIntelligentNameBlock(self.nameTextTield.text);
+    if ([NSString isNullOrNilWithObject:self.nameTextTield.text] || [NSString isFullSpaceEmpty:self.nameTextTield.text]) {
+        [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Name", @"请设置智能名称") icon:@""];
+    }else {
+        if (self.saveIntelligentNameBlock) {
+            self.saveIntelligentNameBlock(self.nameTextTield.text);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 /*

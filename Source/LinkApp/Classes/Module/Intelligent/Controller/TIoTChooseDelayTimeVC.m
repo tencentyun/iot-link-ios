@@ -175,15 +175,18 @@
     
     if (self.isEditing == YES) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:)]) {
-            [self.delegate changeDelayTimeString:timeStr];
+            [self.delegate changeDelayTimeString:timeStr?:@""];
         }
         [self.navigationController popViewControllerAnimated:YES];
         
     }else {
-        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-        addManualTask.delayTimeString = timeStr;
-        addManualTask.actionType = IntelligentActioinTypeDelay;
-        [self.navigationController pushViewController:addManualTask animated:YES];
+        if (self.addDelayTimeBlcok) {
+            self.addDelayTimeBlcok(timeStr?:@"");
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        //不用再次创建手动添加列表，返回后添加回调
+        
     }
     
 }
