@@ -127,7 +127,7 @@
             [_bottomView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"confirm", @"确定")]];
             
             _bottomView.confirmBlock = ^{
-                [self judgechoiceTime];
+                [weakSelf judgechoiceTime];
                 
 #warning 返回再刷新列表 （添加一个延时task）
             };
@@ -148,7 +148,8 @@
                 [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
             }else {
                 timeString = [NSString stringWithFormat:@"%@后",self.minuteString];
-                [self addDelayTime:timeString];
+//                [self addDelayTime:timeString];
+                [self addDelayTime:timeString withHour:@"0" withMinuteString:self.minuteString];
              }
         }
     }else {
@@ -157,33 +158,36 @@
                 [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
             }else {
                 timeString = [NSString stringWithFormat:@"%@%@后",self.hourString,self.minuteString];
-                [self addDelayTime:timeString];
+                [self addDelayTime:timeString withHour:self.hourString withMinuteString:self.minuteString];
             }
         }else {
             if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]) {
                 timeString = [NSString stringWithFormat:@"%@后",self.hourString];
-                [self addDelayTime:timeString];
+                [self addDelayTime:timeString withHour:self.hourString withMinuteString:@"0"];
             }else {
                 timeString = [NSString stringWithFormat:@"%@%@后",self.hourString,self.minuteString];
-                [self addDelayTime:timeString];
+                [self addDelayTime:timeString withHour:self.hourString withMinuteString:self.minuteString];
             }
         }
     }
 }
 
-- (void)addDelayTime:(NSString *)timeStr {
+- (void)addDelayTime:(NSString *)timeStr withHour:(NSString *)hourString withMinuteString:(NSString *)min{
     
     if (self.isEditing == YES) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:)]) {
-            [self.delegate changeDelayTimeString:timeStr];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:hour:minuteString:)]) {
+            [self.delegate changeDelayTimeString:timeStr?:@"" hour:hourString?:@"0" minuteString:min?:@"0"];
         }
         [self.navigationController popViewControllerAnimated:YES];
         
     }else {
-        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-        addManualTask.delayTimeString = timeStr;
-        addManualTask.actionType = IntelligentActioinTypeDelay;
-        [self.navigationController pushViewController:addManualTask animated:YES];
+        if (self.addDelayTimeBlcok) {
+            self.addDelayTimeBlcok(timeStr?:@"", hourString?:@"0", min?:@"0");
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        //不用再次创建手动添加列表，返回后添加回调
+        
     }
     
 }

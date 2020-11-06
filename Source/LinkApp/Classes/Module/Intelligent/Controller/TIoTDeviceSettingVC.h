@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface TIoTDeviceSettingVC : UIViewController
 @property (nonatomic, strong) TIoTDataTemplateModel *templateModel;
-@property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
+@property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;  //创建的时候传
+//@property (nonatomic, strong) NSMutableArray <TIoTIntelligentProductConfigModel*>*productModelArray; //保存的时候传递
 @property (nonatomic, assign) BOOL isEdited;
 @property (nonatomic, strong) TIoTPropertiesModel *editedModel;
 @property (nonatomic, copy) NSString *valueString;

@@ -12,7 +12,6 @@
 #import "TIoTChooseIntelligentDeviceVC.h"
 #import "TIoTIntelligentCustomCell.h"
 #import "TIoTIntelligentBottomActionView.h"
-#import "TIoTChooseDelayTimeVC.h"
 #import "TIoTComplementIntelligentVC.h"
 #import "TIoTIntelligentVC.h"
 #import "TIoTDeviceSettingVC.h"
@@ -27,6 +26,7 @@
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger selectedDelayIndex;
+@property (nonatomic, strong) NSMutableArray *delayTimeStringArray;
 @end
 
 @implementation TIoTAddManualIntelligentVC
@@ -121,6 +121,8 @@
                 self.tableView.hidden = YES;
                 self.nextButtonView.hidden = YES;
             }else {
+                self.tableView.hidden = NO;
+                self.nextButtonView.hidden = NO;
                 [self.tableView reloadData];
             }
         }
@@ -245,20 +247,16 @@
 //}
 
 #pragma mark - TIoTChooseDelayTimeVCDelegate
-- (void)changeDelayTimeString:(NSString *)timeString {
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min {
     [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
-    
+    [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
     NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
-    
     
 }
 
 
 #pragma mark - event
-- (void)loadTaskList {
-    
-}
 
 - (id)findViewController:(NSString*)className{
     for (UIViewController *viewController in self.navigationController.viewControllers) {
@@ -284,6 +282,14 @@
         if (weakSelf.customSheet) {
             [weakSelf.customSheet removeFromSuperview];
         }
+
+        delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
+            weakSelf.actionType = IntelligentActioinTypeDelay;
+            [weakSelf.dataArray addObject:timeString];
+            [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
+            [weakSelf loadData];
+        };
+        
         [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
     };
     
@@ -396,7 +402,19 @@
                 [weakSelf.customSheet removeFromSuperview];
             }
             TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-            
+            complementVC.productModel = weakSelf.productModel;
+            complementVC.actionArray = weakSelf.taskArray;
+            complementVC.valueArray = weakSelf.valueArray;
+            if (weakSelf.actionType == IntelligentActioinTypeManual) {
+                complementVC.sceneActioinType = SceneActioinTypeManual;
+            }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
+                complementVC.sceneActioinType = SceneActioinTypeDelay;
+            }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
+                complementVC.sceneActioinType = SceneActioinTypeNotice;
+            }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
+                complementVC.sceneActioinType = SceneActioinTypeTimer;
+            }
+            complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
             [weakSelf.navigationController pushViewController:complementVC animated:YES];
         };
     }
@@ -415,5 +433,12 @@
         _dataArray = [[NSMutableArray alloc]init];
     }
     return _dataArray;
+}
+
+- (NSMutableArray *)delayTimeStringArray {
+    if (!_delayTimeStringArray) {
+        _delayTimeStringArray = [NSMutableArray array];
+    }
+    return _delayTimeStringArray;
 }
 @end

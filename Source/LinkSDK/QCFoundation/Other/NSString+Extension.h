@@ -44,6 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param email 邮箱地址
 + (BOOL)judgeEmailLegal:(NSString *)email;
 
+/**
+ 判断是否全是空格
+ */
++ (BOOL)isFullSpaceEmpty:(NSString *)string;
 
 /**
  手机号格式校验

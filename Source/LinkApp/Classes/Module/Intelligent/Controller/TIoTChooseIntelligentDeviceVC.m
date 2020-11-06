@@ -293,6 +293,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
             deviceSettingVC.templateModel = product;
             deviceSettingVC.productModel = intelligentProjuctModel;
+//            deviceSettingVC.productModelArray = [NSMutableArray arrayWithObject:intelligentProjuctModel];
             deviceSettingVC.isEdited = NO;
             [self.navigationController pushViewController:deviceSettingVC animated:YES];
             

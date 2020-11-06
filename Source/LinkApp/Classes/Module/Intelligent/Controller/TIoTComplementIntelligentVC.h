@@ -10,13 +10,24 @@
 #import "TIoTIntelligentProductConfigModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NS_ENUM(NSInteger, SceneActioinType) {
+    SceneActioinTypeManual,
+    SceneActioinTypeDelay,
+    SceneActioinTypeNotice,
+    SceneActioinTypeTimer,
+};
+
 /**
  完善信息页面
  */
 @interface TIoTComplementIntelligentVC : UIViewController
-//@property (nonatomic, strong) NSMutableArray *actionArray;
-//@property (nonatomic, strong) NSMutableArray *valueArray;
-//@property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
+@property (nonatomic, strong) NSMutableArray <TIoTPropertiesModel*>*actionArray;
+@property (nonatomic, strong) NSMutableArray *valueArray;
+@property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
+//@property (nonatomic, strong) NSMutableArray <TIoTIntelligentProductConfigModel *>*productModelArray;
+@property (nonatomic, assign) SceneActioinType sceneActioinType;
+@property (nonatomic, strong) NSMutableArray *delayTimeArray;
 @end
 
 NS_ASSUME_NONNULL_END

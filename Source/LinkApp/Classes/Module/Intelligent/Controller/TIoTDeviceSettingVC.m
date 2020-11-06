@@ -24,6 +24,7 @@
 
 @property (nonatomic, strong) NSMutableArray *modifiedValueArray;
 @property (nonatomic, strong) NSMutableArray *modifiedModelArray;
+@property (nonatomic, strong) NSMutableArray *productArray;
 @property (nonatomic, strong) NSString *modifiedValue;
 @property (nonatomic, strong) TIoTPropertiesModel *modifiedModel;
 @end
@@ -95,7 +96,7 @@
             weakSelf.modifiedModel = model;
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
             [weakSelf.modifiedModelArray addObject:weakSelf.modifiedModel];
-            
+            [weakSelf.productArray addObject:weakSelf.productModel];
         };
         
         [[UIApplication sharedApplication].delegate.window addSubview:self.clickValueView];
@@ -246,11 +247,17 @@
     return _modifiedModelArray;
 }
 
+- (NSMutableArray *)productArray {
+    if (!_productArray) {
+        _productArray = [NSMutableArray array];
+    }
+    return _productArray;
+}
+
 - (TIoTChooseSliderValueView *)sliderValueView {
     if (!_sliderValueView) {
         _sliderValueView = [[TIoTChooseSliderValueView alloc]init];
     }
     return _sliderValueView;
 }
-
 @end
