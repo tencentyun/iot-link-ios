@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73d55d18_a5fba22c",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTSettingIntelligentImageVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-06T08:50:55Z",
+      "side": 1,
+      "message": "建议可以优化成zzconfig的配置",
+      "revId": "1e8dfa9afa4362eef1b089398fcd27d9560d8552",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
