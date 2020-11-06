@@ -16,6 +16,24 @@
       "revId": "ff10ca9c04ec616ad131f46cb0fcacfe9211d2ca",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14fc2c66_8d6563e5",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTDeviceSettingVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-06T09:19:13Z",
+      "side": 1,
+      "message": "是的，后面提交中已经删除",
+      "parentUuid": "d52b2e31_2b1d7d43",
+      "revId": "ff10ca9c04ec616ad131f46cb0fcacfe9211d2ca",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
