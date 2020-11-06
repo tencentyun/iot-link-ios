@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d52b2e31_2b1d7d43",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTDeviceSettingVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-06T08:47:06Z",
+      "side": 1,
+      "message": "这里是假数据么，这几条一样了",
+      "revId": "ff10ca9c04ec616ad131f46cb0fcacfe9211d2ca",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
