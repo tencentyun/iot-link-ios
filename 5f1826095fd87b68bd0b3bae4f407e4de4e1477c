@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "a81bdf3b_1ea8fe2c",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-06T10:24:15Z",
+      "side": 1,
+      "message": "这里看到了好多个3，这个3是不是可以搞个宏来定义一下，定义一下会更方便阅读，是每行的个数吗？",
+      "revId": "5f1826095fd87b68bd0b3bae4f407e4de4e1477c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ae61563_292ed82a",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
         "patchSetId": 1
