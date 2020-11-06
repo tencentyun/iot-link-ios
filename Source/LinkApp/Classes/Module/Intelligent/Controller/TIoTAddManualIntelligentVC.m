@@ -14,8 +14,10 @@
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTChooseDelayTimeVC.h"
 #import "TIoTComplementIntelligentVC.h"
+#import "TIoTIntelligentVC.h"
+#import "TIoTDeviceSettingVC.h"
 
-@interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTChooseDelayTimeVCDelegate>
 @property  (nonatomic, strong) UIImageView *noManualTaskImageView;
 @property (nonatomic, strong) UILabel *noManualTaskTipLabel;
 @property (nonatomic, strong) UIButton *addManualTaskButton;
@@ -23,19 +25,29 @@
 @property (nonatomic, strong) UIView *customHeaderView;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, assign) NSInteger selectedDelayIndex;
 @end
 
 @implementation TIoTAddManualIntelligentVC
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self loadTaskList];
+- (void)nav_customBack {
+
+    if (self.dataArray.count == 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else {
+        TIoTAddManualIntelligentVC *vc = [self findViewController:NSStringFromClass([TIoTAddManualIntelligentVC class])];
+        if (vc) {
+            // 找到需要返回的控制器的处理方式
+            [self.navigationController popToViewController:vc animated:YES];
+        }else{
+            // 没找到需要返回的控制器的处理方式
+
+        }
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,8 +83,46 @@
         make.left.right.bottom.equalTo(self.view);
         make.height.mas_equalTo(kBottomViewHeight);
     }];
+ 
+    [self loadData];
 }
 
+- (void)loadData {
+
+#warning 不同类型需要继续添加
+    if (self.actionType == IntelligentActioinTypeManual) {
+        if (self.taskArray.count != 0 || self.taskArray != nil) {
+            self.tableView.hidden = NO;
+            self.nextButtonView.hidden = NO;
+            for (TIoTPropertiesModel *model in self.taskArray) {
+                [self.dataArray insertObject:model atIndex:0];
+            }
+            [self.tableView reloadData];
+        }else {
+            if (self.dataArray.count == 0) {
+                self.tableView.hidden = YES;
+                self.nextButtonView.hidden = YES;
+            }else {
+                [self.tableView reloadData];
+            }
+        }
+    }else if (self.actionType == IntelligentActioinTypeDelay){
+        if (![NSString isNullOrNilWithObject:self.delayTimeString]) {
+            self.tableView.hidden = NO;
+            self.nextButtonView.hidden = NO;
+            [self.dataArray addObject:self.delayTimeString];
+            [self.tableView reloadData];
+        }else {
+            if (self.dataArray.count == 0) {
+                self.tableView.hidden = YES;
+                self.nextButtonView.hidden = YES;
+            }else {
+                [self.tableView reloadData];
+            }
+        }
+    }
+    
+}
 
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.noManualTaskImageView];
@@ -106,24 +156,65 @@
 
 #pragma mark - UITableViewDelegate And TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 25;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
+    if (self.actionType == IntelligentActioinTypeManual) {
+        intelligentCell.model = self.dataArray[indexPath.row];
+        intelligentCell.subTitleString = self.valueArray[indexPath.row];
+        intelligentCell.productModel = self.productModel;
+    }else if (self.actionType == IntelligentActioinTypeDelay) {
+        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
+    }
+    
     return intelligentCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
-    chooseDelayTimeVC.isEditing = YES;
-    [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+#warning 后期添加判断类型 暂时先如下处理
+    if (self.actionType == IntelligentActioinTypeManual) {
+        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+        deviceSettingVC.isEdited = YES;
+        deviceSettingVC.editedModel = [self.dataArray[indexPath.row] copy];
+        deviceSettingVC.productModel = self.productModel;
+        deviceSettingVC.valueString = self.valueArray[indexPath.row];
+        [self.navigationController pushViewController:deviceSettingVC animated:YES];
+    }else if (self.actionType == IntelligentActioinTypeDelay) {
+        TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+        chooseDelayTimeVC.isEditing = YES;
+        chooseDelayTimeVC.delegate = self;
+        self.selectedDelayIndex = indexPath.row;
+        [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+    }
+    
 }
+
+#pragma mark - TIoTChooseDelayTimeVCDelegate
+- (void)changeDelayTimeString:(NSString *)timeString {
+    [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
+    
+    NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    
+}
+
 
 #pragma mark - event
 - (void)loadTaskList {
     
+}
+
+- (id)findViewController:(NSString*)className{
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:NSClassFromString(className)]) {
+            return viewController;
+        }
+    }
+    return nil;
 }
 
 - (void)addManualTask {
@@ -249,6 +340,7 @@
                 [weakSelf.customSheet removeFromSuperview];
             }
             TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+            
             [weakSelf.navigationController pushViewController:complementVC animated:YES];
         };
     }
@@ -260,5 +352,12 @@
         _customSheet = [[TIoTCustomSheetView alloc]init];
     }
     return _customSheet;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [[NSMutableArray alloc]init];
+    }
+    return _dataArray;
 }
 @end

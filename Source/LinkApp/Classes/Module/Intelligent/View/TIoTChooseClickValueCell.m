@@ -64,7 +64,7 @@
     }];
     
     self.eventTitle = [[UILabel alloc]init];
-    [self.eventTitle setLabelFormateTitle:@"test111" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentRight];
+    [self.eventTitle setLabelFormateTitle:self.titleString font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentRight];
     [self.backView addSubview:self.eventTitle];
     [self.eventTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.backView.mas_right).offset(-20);
@@ -72,13 +72,6 @@
         make.centerY.equalTo(self.backView);
     }];
 }
-
-//if (isSelect) {
-//    self.choseImageView.image = [UIImage imageNamed:@"g_select"];
-//}
-//else{
-//    self.choseImageView.image = [UIImage imageNamed:@"g_default"];
-//}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -94,6 +87,10 @@
     }
     
     // Configure the view for the selected state
+}
+
+- (void)drawRect:(CGRect)rect {
+    self.eventTitle.text = self.titleString;
 }
 
 @end

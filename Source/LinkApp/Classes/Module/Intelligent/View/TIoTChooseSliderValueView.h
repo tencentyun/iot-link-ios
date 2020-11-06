@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface TIoTChooseSliderValueView : UIView
 @property (nonatomic, copy) NSString *showValue;
+@property (nonatomic, strong) TIoTPropertiesModel *model;
 @end
 
 NS_ASSUME_NONNULL_END
