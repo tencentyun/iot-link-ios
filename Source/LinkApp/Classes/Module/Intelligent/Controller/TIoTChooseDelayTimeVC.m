@@ -8,6 +8,7 @@
 
 #import "TIoTChooseDelayTimeVC.h"
 #import "TIoTIntelligentBottomActionView.h"
+#import "TIoTAddManualIntelligentVC.h"
 
 @interface TIoTChooseDelayTimeVC ()<UIPickerViewDelegate,UIPickerViewDataSource>
 @property (nonatomic, strong) UIPickerView *pickView;
@@ -116,7 +117,8 @@
             };
             
             _bottomView.secondBlock = ^{
-                [weakSelf.navigationController popViewControllerAnimated:YES];
+                
+                [weakSelf judgechoiceTime];
                 
 #warning 返回再刷新列表（更改时间）
             };
@@ -125,7 +127,7 @@
             [_bottomView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"confirm", @"确定")]];
             
             _bottomView.confirmBlock = ^{
-                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [self judgechoiceTime];
                 
 #warning 返回再刷新列表 （添加一个延时task）
             };
@@ -133,5 +135,56 @@
         
     }
     return _bottomView;
+}
+
+- (void)judgechoiceTime {
+    NSString *timeString = @"";
+    
+    if ([NSString isNullOrNilWithObject:self.hourString]) {
+        if ([NSString isNullOrNilWithObject: self.minuteString]) {
+            [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+        }else {
+            if ([self.minuteString isEqualToString:@"0分钟"]) {
+                [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+            }else {
+                timeString = [NSString stringWithFormat:@"%@后",self.minuteString];
+                [self addDelayTime:timeString];
+             }
+        }
+    }else {
+        if ([self.hourString isEqualToString:@"0小时"]) {
+            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]) {
+                [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+            }else {
+                timeString = [NSString stringWithFormat:@"%@%@后",self.hourString,self.minuteString];
+                [self addDelayTime:timeString];
+            }
+        }else {
+            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]) {
+                timeString = [NSString stringWithFormat:@"%@后",self.hourString];
+                [self addDelayTime:timeString];
+            }else {
+                timeString = [NSString stringWithFormat:@"%@%@后",self.hourString,self.minuteString];
+                [self addDelayTime:timeString];
+            }
+        }
+    }
+}
+
+- (void)addDelayTime:(NSString *)timeStr {
+    
+    if (self.isEditing == YES) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:)]) {
+            [self.delegate changeDelayTimeString:timeStr];
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }else {
+        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+        addManualTask.delayTimeString = timeStr;
+        addManualTask.actionType = IntelligentActioinTypeDelay;
+        [self.navigationController pushViewController:addManualTask animated:YES];
+    }
+    
 }
 @end
