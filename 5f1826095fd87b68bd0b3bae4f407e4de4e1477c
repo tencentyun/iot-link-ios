@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ae61563_292ed82a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-06T08:56:14Z",
+      "side": 1,
+      "message": "建议删除大段注释",
+      "revId": "5f1826095fd87b68bd0b3bae4f407e4de4e1477c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
