@@ -192,6 +192,54 @@
     
 }
 
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 删除
+    return UITableViewCellEditingStyleDelete;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+        //只要实现这个方法，就实现了默认滑动删
+        if (editingStyle == UITableViewCellEditingStyleDelete)
+        {
+            // 删除数据
+            [self deleteSelectIndexPath:indexPath];
+        }
+}
+
+//MAEK: 删除按钮文案
+//-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//          return @"删除";
+//}
+
+- (void)deleteSelectIndexPath:(NSIndexPath *)indexPath {
+    [self.dataArray removeObjectAtIndex:indexPath.row];
+    [self.tableView reloadData];
+    if (self.dataArray.count == 0) {
+        self.tableView.hidden = YES;
+        self.nextButtonView.hidden = YES;
+        
+    }
+}
+
+//- (void)_rightBarButtonItemDidClicked:(UIButton *)sender
+//{
+//        sender.selected = !sender.isSelected;
+//        if (sender.isSelected) {
+//
+//            // 这个是fix掉:当你左滑删除的时候，再点击右上角编辑按钮， cell上的删除按钮不会消失掉的bug。且必须放在 设置tableView.editing = YES;的前面。
+//            [self.tableView reloadData];
+//
+//            // 取消
+//            [self.tableView setEditing:YES animated:NO];
+//        }else{
+//            // 编辑
+//            [self.tableView setEditing:NO animated:NO];
+//        }
+//}
+
 #pragma mark - TIoTChooseDelayTimeVCDelegate
 - (void)changeDelayTimeString:(NSString *)timeString {
     [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
@@ -282,6 +330,10 @@
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.rowHeight = 96;
+        _tableView.allowsMultipleSelection = NO;
+        _tableView.allowsSelectionDuringEditing = NO;
+        _tableView.allowsMultipleSelectionDuringEditing = NO;
+//        [_tableView setEditing:YES animated:NO];
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         _tableView.tableHeaderView = self.customHeaderView;
     }
