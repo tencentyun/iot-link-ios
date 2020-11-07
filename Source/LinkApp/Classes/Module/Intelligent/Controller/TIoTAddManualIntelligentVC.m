@@ -36,12 +36,16 @@
     if (self.dataArray.count == 0) {
         [self.navigationController popViewControllerAnimated:YES];
     }else {
-        TIoTAddManualIntelligentVC *vc = [self findViewController:NSStringFromClass([TIoTAddManualIntelligentVC class])];
+        
+        TIoTIntelligentVC *vc = [self findViewController:NSStringFromClass([TIoTIntelligentVC class])];
+        
         if (vc) {
-            // 找到需要返回的控制器的处理方式
+            
             [self.navigationController popToViewController:vc animated:YES];
+            self.navigationController.tabBarController.tabBar.hidden = NO;
         }else{
             // 没找到需要返回的控制器的处理方式
+//            [self.navigationController popViewControllerAnimated:YES];
 
         }
 //        [self.navigationController popToRootViewControllerAnimated:YES];

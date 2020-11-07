@@ -8,11 +8,17 @@
 
 #import "TIoTIntelligentVC.h"
 #import "TIoTAddManualIntelligentVC.h"
+#import "UILabel+TIoTExtension.h"
+#import "TIoTCustomSheetView.h"
+#import "TIoTChooseIntelligentDeviceVC.h"
+#import "TIoTChooseDelayTimeVC.h"
 
 @interface TIoTIntelligentVC ()
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentTipLabel;
 @property (nonatomic, strong) UIButton *addIntelligentButton;
+@property (nonatomic, strong) UIView *navCustomTopView;
+@property (nonatomic, strong) TIoTCustomSheetView *customSheet;
 @end
 
 @implementation TIoTIntelligentVC
@@ -25,9 +31,29 @@
     [self setupUI];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navCustomTopView.hidden = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navCustomTopView.hidden = YES;
+    if (self.customSheet) {
+        [self.customSheet removeFromSuperview];
+    }
+    
+}
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    self.navigationController.tabBarController.tabBar.hidden = YES;
+}
 
 - (void)setupUI {
+    
     [self addEmptyIntelligentDeviceTipView];
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
 }
 
 
@@ -62,6 +88,33 @@
 }
 
 #pragma mark - event
+
+- (void)addClick {
+    self.customSheet = [[TIoTCustomSheetView alloc]init];
+    __weak typeof(self)weakSelf = self;
+    self.customSheet.chooseIntelligentDeviceBlock = ^{
+        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+    };
+    self.customSheet.chooseDelayTimerBlock = ^{
+        TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+        delayTimeVC.isEditing = NO;
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+        [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
+    };
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
+    [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo([UIApplication sharedApplication].delegate.window);
+        make.leading.right.bottom.equalTo(weakSelf.view);
+    }];
+}
+
 - (void)addIntelligentDevice {
 #warning 刷新手动添加智能tableView
     TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
@@ -100,6 +153,40 @@
     }
     return _addIntelligentButton;
 }
+
+- (UIView *)navCustomTopView {
+    if (!_navCustomTopView) {
+        
+        CGFloat kTopHeight = [TIoTUIProxy shareUIProxy].statusHeight;
+        
+        _navCustomTopView = [[UIView alloc]initWithFrame:CGRectMake(0, kTopHeight, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight - [TIoTUIProxy shareUIProxy].statusHeight)];
+        
+        UIButton *addActionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [addActionButton setImage:[UIImage imageNamed:@"addManual_Intelligent"] forState:UIControlStateNormal];
+        [addActionButton addTarget:self action:@selector(addClick) forControlEvents:UIControlEventTouchUpInside];
+        [_navCustomTopView addSubview:addActionButton];
+        [addActionButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.trailing.mas_equalTo(-15*kScreenAllWidthScale);
+            make.centerY.equalTo(_navCustomTopView.mas_centerY);
+            make.width.height.mas_equalTo(22);
+        }];
+        
+        
+        UILabel *titleLab = [[UILabel alloc] init];
+        [titleLab setLabelFormateTitle:NSLocalizedString(@"home_intelligent", @"智能") font:[UIFont wcPfMediumFontOfSize:17] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [_navCustomTopView addSubview:titleLab];
+        [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.centerX.equalTo(_navCustomTopView);
+            make.height.mas_equalTo(kTopHeight);
+            make.top.equalTo(_navCustomTopView.mas_top);
+        }];
+        
+        _navCustomTopView.backgroundColor = [UIColor whiteColor];
+        
+    }
+    return  _navCustomTopView;
+}
+
 /*
 #pragma mark - Navigation
 
