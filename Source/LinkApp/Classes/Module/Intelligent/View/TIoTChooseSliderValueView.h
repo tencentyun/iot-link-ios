@@ -14,12 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model);
+
 /**
  物模型 int 和 float 是slider滑动选择样式
  */
 @interface TIoTChooseSliderValueView : UIView
-@property (nonatomic, copy) NSString *showValue;
 @property (nonatomic, strong) TIoTPropertiesModel *model;
+@property (nonatomic, copy) SliderTaskValueBlock sliderTaskValueBlock;
 @end
 
 NS_ASSUME_NONNULL_END

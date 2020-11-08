@@ -115,10 +115,37 @@
         
     }else if ([self.baseModel.define.type isEqualToString:@"int"] || [self.baseModel.define.type isEqualToString:@"float"]) {
         //滑动
+        
+        __weak typeof(self) weakSelf = self;
+        self.sliderValueView = [[TIoTChooseSliderValueView alloc]init];
+        self.sliderValueView.model = self.baseModel;
+        
+        self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+            NSMutableDictionary *tempDic = weakSelf.dataArr[indexPath.row];
+            [tempDic setValue:valueString?:@"" forKey:@"value"];
+            
+            NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+            weakSelf.modifiedValue = valueString;
+            weakSelf.modifiedModel = model;
+            [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
+            [weakSelf.modifiedModelArray addObject:weakSelf.modifiedModel];
+            [weakSelf.productArray addObject:weakSelf.productModel];
+        };
+
         [[UIApplication sharedApplication].delegate.window addSubview:self.sliderValueView];
         [self.sliderValueView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo([UIApplication sharedApplication].delegate.window);
-            make.bottom.equalTo(self.bottomView.mas_top);
+            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                if (@available(iOS 11.0, *)) {
+                    make.bottom.equalTo(self.view.mas_bottom).offset(-[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom);
+                }else {
+                    make.bottom.equalTo(self.view.mas_bottom);
+                }
+            }else {
+                make.bottom.equalTo(self.view.mas_bottom);
+            }
         }];
     }
     
@@ -162,6 +189,8 @@
             if (weakSelf.sliderValueView) {
                 [weakSelf.sliderValueView removeFromSuperview];
             }
+            
+            [weakSelf.navigationController popViewControllerAnimated:YES];
         };
         
         _bottomView.secondBlock = ^{
@@ -227,9 +256,8 @@
             NSDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":baseModel.name?:@"",@"value":valueSteing,@"needArrow":@"1"}];
             [_dataArr addObject:tempDic];
         }
-        
-        
     }
+    
     return _dataArr;
 }
 
@@ -254,10 +282,10 @@
     return _productArray;
 }
 
-- (TIoTChooseSliderValueView *)sliderValueView {
-    if (!_sliderValueView) {
-        _sliderValueView = [[TIoTChooseSliderValueView alloc]init];
-    }
-    return _sliderValueView;
-}
+//- (TIoTChooseSliderValueView *)sliderValueView {
+//    if (!_sliderValueView) {
+//        _sliderValueView = [[TIoTChooseSliderValueView alloc]init];
+//    }
+//    return _sliderValueView;
+//}
 @end
