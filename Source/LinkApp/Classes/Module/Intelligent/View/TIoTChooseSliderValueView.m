@@ -9,7 +9,7 @@
 #import "TIoTChooseSliderValueView.h"
 #import "UIView+XDPExtension.h"
 #import "UILabel+TIoTExtension.h"
-
+#import "TIoTIntelligentBottomActionView.h"
 
 @implementation TIoTCustomSlider
 
@@ -30,12 +30,17 @@
 @property (nonatomic, strong) UIView *backMaskView;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
 @property (nonatomic, strong) UIView *sliderBackView;
 @property (nonatomic, strong) UILabel *viewTitle;
-@property (nonatomic,copy) NSString *type;//数据类型，整形还是浮点
+//@property (nonatomic,copy) NSString *type;//数据类型，整形还是浮点  用model中type判断
 
 @property (nonatomic, strong) UISlider *slider;
 @property (nonatomic, strong) UILabel *valueLab;
+@property (nonatomic, assign) CGFloat sliderWidth;
+@property (nonatomic, strong) UIButton *reduceButton;
+@property (nonatomic, strong) UIButton *increaseButton;
+@property (nonatomic, assign) NSInteger kvalueLabPadding;
 
 @end
 
@@ -51,8 +56,18 @@
 
 - (void)setupSubViewUI {
     
-    CGFloat kViewHeight = 236;
+    CGFloat kBottomViewHeight = 56;
+    CGFloat kViewHeight = 236 + kBottomViewHeight;
     CGFloat kTopViewHeight = 48;
+    
+    CGFloat kPadding = 30;
+    CGFloat kLeftButtonWithHeight = 28;
+    CGFloat kSliderLeftSpace = 20;
+    
+    CGFloat kSliderWidth = kScreenWidth - kPadding*2 - kLeftButtonWithHeight*2 - kSliderLeftSpace*2;
+    self.sliderWidth = kSliderWidth;
+    
+    self.kvalueLabPadding = kSliderLeftSpace + kLeftButtonWithHeight + kPadding;
     
     [self addSubview:self.backMaskView];
     [self.backMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -97,28 +112,65 @@
         make.top.equalTo(slideLine.mas_bottom);
         make.left.right.bottom.equalTo(self.contentView);
     }];
+
+
+    self.reduceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.reduceButton.layer.cornerRadius = kLeftButtonWithHeight/2;
+    [self.reduceButton setImage:[UIImage imageNamed:@"intelligent_reduce"] forState:UIControlStateNormal];
+    [self.reduceButton setImage:[UIImage imageNamed:@"intelligent_reduce"] forState:UIControlStateHighlighted];
+    [self.reduceButton addTarget:self action:@selector(reduceValue) forControlEvents:UIControlEventTouchUpInside];
+    [self.sliderBackView addSubview:self.reduceButton];
+    [self.reduceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.sliderBackView.mas_left).offset(kPadding);
+        CGFloat kReduceBtnY = (kViewHeight - kBottomViewHeight - kTopViewHeight)/2;
+        make.top.mas_equalTo(kReduceBtnY);
+        make.width.height.mas_equalTo(kLeftButtonWithHeight);
+    }];
+
+    self.increaseButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.increaseButton.layer.cornerRadius = kLeftButtonWithHeight/2;
+    [self.increaseButton setImage:[UIImage imageNamed:@"intelligent_increase"] forState:UIControlStateNormal];
+    [self.increaseButton setImage:[UIImage imageNamed:@"intelligent_increase"] forState:UIControlStateHighlighted];
+    [self.increaseButton addTarget:self action:@selector(increseValue) forControlEvents:UIControlEventTouchUpInside];
+    [self.sliderBackView addSubview:self.increaseButton];
+    [self.increaseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.sliderBackView.mas_right).offset(-kPadding);
+        make.top.equalTo(self.reduceButton.mas_top);
+        make.width.height.equalTo(self.reduceButton);
+    }];
     
     self.valueLab = [[UILabel alloc]init];
     [self.valueLab setLabelFormateTitle:@"0.0" font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
     [self.sliderBackView addSubview:self.valueLab];
     [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.contentView);
-        make.top.equalTo(self.sliderBackView.mas_top).offset(20);
+        make.bottom.equalTo(self.reduceButton.mas_top).offset(-10);
         make.height.mas_equalTo(30);
     }];
     
-    
-    self.slider = [[TIoTCustomSlider alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.valueLab.frame)+ 50, kScreenWidth - 40, 40)];
-    self.slider.minimumValue = 0;// 设置最小值
-    self.slider.maximumValue = 100;// 设置最大值
-    self.slider.value = 0;// 设置初始值
+    self.slider = [[TIoTCustomSlider alloc]init];
+    self.slider.minimumValue = self.model.define.min.intValue?:0;// 设置最小值
+    self.slider.maximumValue = self.model.define.max.intValue?:100;// 设置最大值
+    self.slider.value = self.model.define.start.intValue?:0;// 设置初始值
     self.slider.continuous = YES;// 设置可连续变化
     self.slider.minimumTrackTintColor = kMainColor;//滑轮左边颜色，如果设置了左边的图片就不会显示
     self.slider.maximumTrackTintColor = kRGBColor(236, 236, 236); //滑轮右边颜色，如果设置了右边的图片就不会显示
     //    slider.thumbTintColor = [UIColor redColor];//设置了滑轮的颜色，如果设置了滑轮的样式图片就不会显示
     [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.sliderBackView addSubview:self.slider];
+    [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.reduceButton.mas_right).offset(kSliderLeftSpace);
+        make.right.equalTo(self.increaseButton.mas_left).offset(-kSliderLeftSpace);
+        make.centerY.equalTo(self.reduceButton.mas_centerY).offset(-5);
+        make.width.mas_equalTo(kSliderWidth);
+        make.height.mas_equalTo(40);
+    }];
     
+    [self.contentView addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.contentView);
+        make.bottom.equalTo(self.contentView.mas_bottom);
+        make.height.mas_equalTo(kBottomViewHeight);
+    }];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
@@ -127,26 +179,72 @@
         make.top.left.right.equalTo(self.backMaskView);
         make.bottom.equalTo(self.contentView.mas_top);
     }];
-
     
+    [self sliderValueChanged:self.slider];
 }
 
 #pragma mark - event
 
-- (void)sliderValueChanged:(id)sender{
-    UISlider *slider = (UISlider *)sender;
-    if ([self.type isEqualToString:@"int"]) {
-        self.valueLab.text = [NSString stringWithFormat:@"%.f", slider.value];
+- (void)reduceValue {
+    
+    if ([self.model.define.type isEqualToString:@"int"]) {
+        self.slider.value = round(self.slider.value) - self.model.define.step.intValue;
     }
     else
     {
-        self.valueLab.text = [NSString stringWithFormat:@"%.1f", slider.value];
+        self.slider.value = self.slider.value - self.model.define.step.floatValue;
+
     }
+    [self sliderValueChanged:self.slider];
 }
 
-- (void)setShowValue:(NSString *)showValue
-{
-    _showValue = showValue;
+- (void)increseValue {
+    if ([self.model.define.type isEqualToString:@"int"]) {
+        self.slider.value = round(self.slider.value) + self.model.define.step.intValue;
+    }
+    else
+    {
+        self.slider.value = self.slider.value + self.model.define.step.floatValue;
+    }
+    [self sliderValueChanged:self.slider];
+}
+
+- (void)sliderValueChanged:(id)sender{
+    UISlider *slider = (UISlider *)sender;
+    if ([self.model.define.type isEqualToString:@"int"]) {
+        self.valueLab.text = [NSString stringWithFormat:@"%.f%@", roundf(slider.value) ,self.model.define.unit?:@""];
+    }
+    else
+    {
+        self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", slider.value ,self.model.define.unit?:@""];
+    }
+    
+    CGFloat KValueLabX = 0;
+    
+    KValueLabX = slider.value/(slider.maximumValue - slider.minimumValue)*(self.sliderWidth);
+    CGFloat kValueWidth = CGRectGetWidth(self.valueLab.frame);
+    if (KValueLabX <= self.kvalueLabPadding) {
+        KValueLabX = self.kvalueLabPadding;
+    }else {
+        KValueLabX = KValueLabX;
+    }
+    [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(KValueLabX);
+    }];
+    
+}
+
+- (void)setModel:(TIoTPropertiesModel *)model {
+    _model = model;
+    if ([self.model.define.type isEqualToString:@"int"]) {
+        self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.define.start ,model.define.unit?:@""];
+        self.slider.value = model.define.start.intValue;
+    }
+    else
+    {
+        self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", model.define.start.floatValue ,model.define.unit?:@""];
+        self.slider.value = model.define.start.floatValue;
+    }
 }
 
 - (void)dismissView {
@@ -181,6 +279,39 @@
         _topView.backgroundColor = [UIColor whiteColor];
     }
     return _topView;
+}
+
+- (TIoTIntelligentBottomActionView *)bottomView {
+    if (!_bottomView) {
+        _bottomView = [[TIoTIntelligentBottomActionView alloc]init];
+        __weak typeof(self)weakSelf = self;
+        
+        [_bottomView bottomViewType:IntelligentBottomViewTypeDouble withTitleArray:@[NSLocalizedString(@"cancel", @"取消"),NSLocalizedString(@"save", @"保存")]];
+        
+        _bottomView.firstBlock = ^{
+            
+            [weakSelf dismissView];
+        };
+        
+        _bottomView.secondBlock = ^{
+            if (weakSelf.sliderTaskValueBlock) {
+                NSString *valueString = @"";
+                if ([weakSelf.model.define.type isEqualToString:@"int"]) {
+                    valueString = [NSString stringWithFormat:@"%.f%@", roundf(weakSelf.slider.value) ,weakSelf.model.define.unit?:@""];
+                }
+                else
+                {
+                    valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
+                }
+                
+                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model);
+            }
+            
+            [weakSelf dismissView];
+        };
+        
+    }
+    return _bottomView;
 }
 
 // Only override drawRect: if you perform custom drawing.

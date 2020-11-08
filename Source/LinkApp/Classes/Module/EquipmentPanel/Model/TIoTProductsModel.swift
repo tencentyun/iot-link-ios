@@ -69,4 +69,9 @@ class TIoTProductsModel: TIoTBaseModel {
 @objcMembers class TIoTDefineModel: TIoTBaseModel {
     var type: String?
     var mapping: Dictionary<String, String>?
+    var min : String?
+    var max : String?
+    var start : String?
+    var step : String?
+    var unit : String?
 }
