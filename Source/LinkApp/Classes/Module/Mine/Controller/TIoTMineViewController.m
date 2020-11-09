@@ -50,6 +50,11 @@
     [self modifyUserInfo:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.navigationController.tabBarController.tabBar.hidden = NO;
+}
+
 - (void)dealloc{
     [HXYNotice removeListener:self];
 }
