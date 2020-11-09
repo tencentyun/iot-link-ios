@@ -16,6 +16,24 @@
       "revId": "f58e112f74a878ab4f1cc2d5ceb65affc0facb93",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca48630c_b6c23594",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T09:16:56Z",
+      "side": 1,
+      "message": "在patch4中对两个数组做了同步处理，后期再加刷新的时候，也需要同步处理",
+      "parentUuid": "d24ea7d4_c2fb452f",
+      "revId": "f58e112f74a878ab4f1cc2d5ceb65affc0facb93",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
