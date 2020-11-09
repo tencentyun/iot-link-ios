@@ -40,6 +40,7 @@
 
 @synthesize FamilyType = _FamilyType;
 @synthesize familyId = _familyId;
+@synthesize currentRoomId = _currentRoomId;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -224,6 +225,18 @@
 - (void)setFamilyId:(NSString *)familyId {
     _familyId = familyId;
     [[NSUserDefaults standardUserDefaults] setValue:familyId forKey:@"familyId"];
+}
+
+- (NSString *)currentRoomId {
+    if (!_currentRoomId) {
+        _currentRoomId = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentRoomId"];
+    }
+    return _currentRoomId;
+}
+
+- (void)setCurrentRoomId:(NSString *)currentRoomId {
+    _currentRoomId = currentRoomId;
+    [[NSUserDefaults standardUserDefaults] setValue:currentRoomId forKey:@"currentRoomId"];
 }
 
 //保存accessToken
