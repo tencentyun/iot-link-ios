@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "408c6368_c0ae0995",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-09T09:18:56Z",
+      "side": 1,
+      "message": "这样赋值用的是不可变的数组，与初始化的数据联系不上了",
+      "revId": "6c5cf1a20ab430be975ee105baf2ce10439b4826",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
