@@ -16,6 +16,24 @@
       "revId": "6c5cf1a20ab430be975ee105baf2ce10439b4826",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2b3f634_72087531",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T09:34:55Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "408c6368_c0ae0995",
+      "revId": "6c5cf1a20ab430be975ee105baf2ce10439b4826",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
