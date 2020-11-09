@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab7dec2d_95439af9",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTComplementIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-09T06:45:09Z",
+      "side": 1,
+      "message": "用小时、分钟判断条件会有语言国际化问题么",
+      "revId": "d4d43ee04c34d179ad6715b70346ef4eed9bab71",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
