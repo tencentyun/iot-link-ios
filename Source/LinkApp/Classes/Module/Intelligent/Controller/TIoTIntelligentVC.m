@@ -12,13 +12,18 @@
 #import "TIoTCustomSheetView.h"
 #import "TIoTChooseIntelligentDeviceVC.h"
 #import "TIoTChooseDelayTimeVC.h"
+#import "TIoTIntelligentSceneCell.h"
+#import "TIoTAppEnvironment.h"
 
-@interface TIoTIntelligentVC ()
+@interface TIoTIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentTipLabel;
 @property (nonatomic, strong) UIButton *addIntelligentButton;
 @property (nonatomic, strong) UIView *navCustomTopView;
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation TIoTIntelligentVC
@@ -53,9 +58,39 @@
     
     [self addEmptyIntelligentDeviceTipView];
     
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        } else {
+            // Fallback on earlier versions
+            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
+        }
+    }];
+    
     [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
+    
+    [self loadSceneList];
 }
 
+- (void)loadSceneList {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    
+    NSDictionary *dic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"Offset":@(0),@"Limit":@(999)};
+    
+    [[TIoTRequestObject shared] post:AppGetSceneList Param:dic success:^(id responseObject) {
+        
+        self.dataArray = responseObject[@"SceneList"];
+        [self.tableView reloadData];
+        if (self.dataArray.count == 0) {
+            self.tableView.hidden = YES;
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+    
+}
 
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.emptyImageView];
@@ -85,6 +120,18 @@
         make.height.mas_equalTo(36);
         make.centerX.equalTo(self.view);
     }];
+}
+
+#pragma mark - UITableViewDelegate And TableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TIoTIntelligentSceneCell *sceneCell = [TIoTIntelligentSceneCell cellWithTableView:tableView];
+    sceneCell.dic = self.dataArray[indexPath.row];
+    sceneCell.deviceNum = @"1";
+    return sceneCell;
 }
 
 #pragma mark - event
@@ -187,6 +234,24 @@
     return  _navCustomTopView;
 }
 
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc]init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.rowHeight = 106;
+        _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    }
+    return _tableView;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
 /*
 #pragma mark - Navigation
 
