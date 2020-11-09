@@ -16,6 +16,24 @@
       "revId": "d4d43ee04c34d179ad6715b70346ef4eed9bab71",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aede4f08_9bb493f4",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTComplementIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T07:12:19Z",
+      "side": 1,
+      "message": "已经在patch3中修改，采用”小时：分钟“单独格式传递，避免此种不合理判断",
+      "parentUuid": "ab7dec2d_95439af9",
+      "revId": "d4d43ee04c34d179ad6715b70346ef4eed9bab71",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
