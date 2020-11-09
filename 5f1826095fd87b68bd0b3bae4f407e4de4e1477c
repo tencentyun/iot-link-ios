@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "479ee044_7f6888ef",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T03:08:16Z",
+      "side": 1,
+      "message": "可以的，这里直接复用之前的代码，3是每行显示product个数",
+      "parentUuid": "a81bdf3b_1ea8fe2c",
+      "revId": "5f1826095fd87b68bd0b3bae4f407e4de4e1477c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ae61563_292ed82a",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "5f1826095fd87b68bd0b3bae4f407e4de4e1477c",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d31103c5_b9d7ea1f",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTChooseIntelligentDeviceVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T03:08:16Z",
+      "side": 1,
+      "message": "好的，在后续提交中，已经删除，下次提交会注意",
+      "parentUuid": "7ae61563_292ed82a",
+      "revId": "5f1826095fd87b68bd0b3bae4f407e4de4e1477c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
