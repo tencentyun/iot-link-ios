@@ -18,6 +18,9 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;      //task 操作自定义view
+
+@property (nonatomic, strong) NSString *sceneImageUrl;
+@property (nonatomic, strong) NSString  *sceneNameString;
 @end
 
 @implementation TIoTComplementIntelligentVC
@@ -66,6 +69,7 @@
         settingImageVC.selectedIntelligentImageBlock = ^(NSString * _Nonnull imageUrl) {
             NSMutableDictionary *dic  = self.dataArr[0];
             [dic setValue:imageUrl forKey:@"image"];
+            self.sceneImageUrl = imageUrl;
             
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -77,6 +81,8 @@
         settingNameVC.saveIntelligentNameBlock = ^(NSString * _Nonnull name) {
             NSMutableDictionary *dic  = self.dataArr[1];
             [dic setValue:name forKey:@"value"];
+            self.sceneNameString = name;
+            
             
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -157,18 +163,25 @@
                     paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
                 }
 
-                
-                [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-                
-                [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                if ([NSString isNullOrNilWithObject:self.sceneImageUrl] && [NSString isNullOrNilWithObject:self.sceneNameString]) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Image", @"请设置智能图片") icon:@""];
+                }else if (![NSString isNullOrNilWithObject:self.sceneImageUrl] && [NSString isNullOrNilWithObject:self.sceneNameString]) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Name", @"请设置智能名称") icon:@""];
+                }else if ([NSString isNullOrNilWithObject:self.sceneImageUrl] && ![NSString isNullOrNilWithObject:self.sceneNameString]) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Image", @"请设置智能图片") icon:@""];
+                }else {
+                    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
                     
-                    [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
-                    
-                    [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-                    
-                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-                    
-                }];
+                    [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                        
+                        [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
+                        
+                        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+                        
+                    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                        
+                    }];
+                }
                 
             };
             

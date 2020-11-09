@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 
 @property (nonatomic, strong) NSString *delayTimeString;
 @property (nonatomic, assign) IntelligentActioinType actionType;
+- (void)refreshData;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -10,8 +10,6 @@
 #import "TIoTAddManualIntelligentVC.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTCustomSheetView.h"
-#import "TIoTChooseIntelligentDeviceVC.h"
-#import "TIoTChooseDelayTimeVC.h"
 #import "TIoTIntelligentSceneCell.h"
 #import "TIoTAppEnvironment.h"
 
@@ -39,6 +37,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navCustomTopView.hidden = NO;
+    
+    [self loadSceneList];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,8 +70,6 @@
     }];
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
-    
-    [self loadSceneList];
 }
 
 - (void)loadSceneList {
@@ -99,8 +97,6 @@
             
             [self.deviceNumberArray addObject:[NSString stringWithFormat:@"%lu",(unsigned long)sceneActions.count]];
         }
-        
-//        self.deviceNumberString
         
         [self.tableView reloadData];
         if (self.dataArray.count == 0) {
@@ -158,34 +154,27 @@
 
 - (void)addClick {
     self.customSheet = [[TIoTCustomSheetView alloc]init];
+    [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"intelligent_manual", @"手动智能") secondTitle:NSLocalizedString(@"intelligent_auto", @"自动智能")];
     __weak typeof(self)weakSelf = self;
-    self.customSheet.chooseIntelligentDeviceBlock = ^{
-        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
-        if (weakSelf.customSheet) {
-            [weakSelf.customSheet removeFromSuperview];
-        }
-        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+    self.customSheet.chooseIntelligentFirstBlock = ^{
+        
+        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+        [weakSelf.navigationController pushViewController:addManualTask animated:YES];
+        
     };
-    self.customSheet.chooseDelayTimerBlock = ^{
-        TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
-        delayTimeVC.isEditing = NO;
-        if (weakSelf.customSheet) {
-            [weakSelf.customSheet removeFromSuperview];
-        }
-        [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
+    self.customSheet.chooseIntelligentSecondBlock = ^{
+        //MARK: 跳转自动添加
     };
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
     [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo([UIApplication sharedApplication].delegate.window);
-        make.leading.right.bottom.equalTo(weakSelf.view);
+        make.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
     }];
 }
 
 - (void)addIntelligentDevice {
-#warning 刷新手动添加智能tableView
-    TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-    [self.navigationController pushViewController:addManualTask animated:YES];
+    [self addClick];
 }
 
 #pragma mark - lazy loading
@@ -266,13 +255,12 @@
     return _tableView;
 }
 
-- (NSMutableArray *)dataArray {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
+- (NSMutableArray *)deviceNumberArray {
+    if (!_deviceNumberArray) {
+        _deviceNumberArray = [NSMutableArray array];
     }
-    return _dataArray;
+    return _deviceNumberArray;
 }
-
 /*
 #pragma mark - Navigation
 

@@ -52,6 +52,9 @@
     }
 }
 
+- (void)refreshData {
+    [self loadData];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -269,14 +272,16 @@
 
 - (void)addManualTask {
     __weak typeof(self)weakSelf = self;
-    self.customSheet.chooseIntelligentDeviceBlock = ^{
+    [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制") secondTitle:NSLocalizedString(@"manualIntelligent_delay", @"延时")];
+    
+    self.customSheet.chooseIntelligentFirstBlock = ^{
         TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
         if (weakSelf.customSheet) {
             [weakSelf.customSheet removeFromSuperview];
         }
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
     };
-    self.customSheet.chooseDelayTimerBlock = ^{
+    self.customSheet.chooseIntelligentSecondBlock = ^{
         TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
         delayTimeVC.isEditing = NO;
         if (weakSelf.customSheet) {

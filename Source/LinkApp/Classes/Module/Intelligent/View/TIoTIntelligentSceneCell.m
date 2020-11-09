@@ -48,7 +48,6 @@
     
     self.backImageView = [[UIImageView alloc]init];
     [self.backImageView setImageWithURLStr:@"" placeHolder:@""];
-    self.backgroundView.layer.cornerRadius = 15;
     [self.contentView addSubview:self.backImageView];
     [self.backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView.mas_left).offset(kPadding);
@@ -59,7 +58,6 @@
 
     self.sceneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.sceneButton setImage:[UIImage imageNamed:@"intelligent_manual_switch"] forState:UIControlStateNormal];
-//    [self.sceneButton setImage:[UIImage imageNamed:@"conNavLeft_simple"] forState:UIControlStateNormal];
     [self.backImageView addSubview:self.sceneButton];
     [self.sceneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.backImageView.mas_right).offset(-25);
@@ -98,6 +96,12 @@
     _deviceNum = deviceNum;
     self.sceneDeviceNum.text = [NSString stringWithFormat:@"%@个设备",deviceNum?:@""];
 }
+
+- (void)drawRect:(CGRect)rect {
+    self.backImageView.layer.cornerRadius = 10;
+    self.backImageView.layer.masksToBounds = YES;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
