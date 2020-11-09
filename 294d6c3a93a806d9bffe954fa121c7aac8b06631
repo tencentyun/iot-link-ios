@@ -139,6 +139,24 @@
       "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe18bb77_fe8bb9ac",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTDeviceSettingVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T06:19:25Z",
+      "side": 1,
+      "message": "再后面的提价中已经删除此种多种方式",
+      "parentUuid": "4cd0e5e7_1904f6ba",
+      "revId": "294d6c3a93a806d9bffe954fa121c7aac8b06631",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
