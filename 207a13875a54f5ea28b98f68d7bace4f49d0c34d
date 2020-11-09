@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffac68f1_27de0008",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTChooseSliderValueView.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-09T07:24:39Z",
+      "side": 1,
+      "message": "还有enum类型 bool类型",
+      "revId": "207a13875a54f5ea28b98f68d7bace4f49d0c34d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
