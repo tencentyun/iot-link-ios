@@ -10,12 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^ChooseDelayTimerBlock)(void);
-typedef void(^ChooseDeviceBlock)(void);
+typedef void(^ChooseSecondFunctionBlock)(void);
+typedef void(^ChooseFirstFunctionBlock)(void);
 
 @interface TIoTCustomSheetView : UIView
-@property (nonatomic, copy) ChooseDeviceBlock chooseIntelligentDeviceBlock;
-@property (nonatomic, copy) ChooseDelayTimerBlock chooseDelayTimerBlock;
+@property (nonatomic, copy) ChooseFirstFunctionBlock chooseIntelligentFirstBlock;
+@property (nonatomic, copy) ChooseSecondFunctionBlock chooseIntelligentSecondBlock;
+- (void)sheetViewTopTitleFirstTitle:(NSString *)firstString secondTitle:(NSString *)secondString;
 @end
 
 NS_ASSUME_NONNULL_END

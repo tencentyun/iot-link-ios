@@ -119,15 +119,22 @@
 }
 
 - (void)addDeviceControl {
-    if (self.chooseIntelligentDeviceBlock) {
-        self.chooseIntelligentDeviceBlock();
+    if (self.chooseIntelligentFirstBlock) {
+        self.chooseIntelligentFirstBlock();
     }
 }
 
 - (void)addDelayTask {
-    if (self.chooseDelayTimerBlock) {
-        self.chooseDelayTimerBlock();
+    if (self.chooseIntelligentSecondBlock) {
+        self.chooseIntelligentSecondBlock();
     }
+}
+
+- (void)sheetViewTopTitleFirstTitle:(NSString *)firstString secondTitle:(NSString *)secondString {
+    NSString *firstTitle = firstString ?:@"";
+    NSString *secondTitle = secondString ?:@"";
+    [self.deviceControlButton setTitle:firstTitle forState:UIControlStateNormal];
+    [self.delayButton setTitle:secondTitle forState:UIControlStateNormal];
 }
 
 #pragma mark - lazy load
@@ -158,7 +165,7 @@
 - (UIButton *)deviceControlButton {
     if (!_deviceControlButton) {
         _deviceControlButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deviceControlButton setButtonFormateWithTitlt:NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制") titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
+        [_deviceControlButton setButtonFormateWithTitlt:@"" titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
         [_deviceControlButton addTarget:self action:@selector(addDeviceControl) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deviceControlButton;
@@ -167,7 +174,7 @@
 - (UIButton *)delayButton {
     if (!_delayButton) {
         _delayButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_delayButton setButtonFormateWithTitlt:NSLocalizedString(@"manualIntelligent_delay", @"延时") titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
+        [_delayButton setButtonFormateWithTitlt:@"" titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
         [_delayButton addTarget:self action:@selector(addDelayTask) forControlEvents:UIControlEventTouchUpInside];
     }
     return _delayButton;

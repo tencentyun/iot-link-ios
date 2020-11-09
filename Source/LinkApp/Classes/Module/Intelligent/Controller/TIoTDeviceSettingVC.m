@@ -214,12 +214,26 @@
                 
             }else {
                 
-                TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-                addManualTask.taskArray = weakSelf.modifiedModelArray;
-                addManualTask.valueArray = weakSelf.modifiedValueArray;
-                addManualTask.productModel = weakSelf.productModel;
-                addManualTask.actionType = IntelligentActioinTypeManual;
-                [weakSelf.navigationController pushViewController:addManualTask animated:YES];
+                TIoTAddManualIntelligentVC *vc = [weakSelf findViewController:NSStringFromClass([TIoTAddManualIntelligentVC class])];
+                if (vc) {
+                    // 找到需要返回的控制器的处理方式
+                    vc.taskArray = weakSelf.modifiedModelArray;
+                    vc.valueArray = weakSelf.modifiedValueArray;
+                    vc.productModel = weakSelf.productModel;
+                    vc.actionType = IntelligentActioinTypeManual;
+                    [vc refreshData];
+                    [weakSelf.navigationController popToViewController:vc animated:YES];
+                }else{
+                    // 没找到需要返回的控制器的处理方式
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }
+                
+//                TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+//                addManualTask.taskArray = weakSelf.modifiedModelArray;
+//                addManualTask.valueArray = weakSelf.modifiedValueArray;
+//                addManualTask.productModel = weakSelf.productModel;
+//                addManualTask.actionType = IntelligentActioinTypeManual;
+//                [weakSelf.navigationController pushViewController:addManualTask animated:YES];
             }
             
         };
@@ -282,10 +296,4 @@
     return _productArray;
 }
 
-//- (TIoTChooseSliderValueView *)sliderValueView {
-//    if (!_sliderValueView) {
-//        _sliderValueView = [[TIoTChooseSliderValueView alloc]init];
-//    }
-//    return _sliderValueView;
-//}
 @end
