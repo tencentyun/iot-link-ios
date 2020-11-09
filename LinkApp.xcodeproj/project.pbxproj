@@ -33,6 +33,7 @@
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DBC4FEA25547AA700169D5C /* TIoTIntelligentProductConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC4FE925547AA700169D5C /* TIoTIntelligentProductConfigModel.m */; };
+		6DBC506025587A5A00169D5C /* TIoTIntelligentSceneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC505F25587A5A00169D5C /* TIoTIntelligentSceneCell.m */; };
 		6DC056E824E7E8F400E06CC4 /* TIoTCustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */; };
 		6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */; };
 		6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */; };
@@ -407,6 +408,8 @@
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DBC4FE825547AA700169D5C /* TIoTIntelligentProductConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTIntelligentProductConfigModel.h; sourceTree = "<group>"; };
 		6DBC4FE925547AA700169D5C /* TIoTIntelligentProductConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTIntelligentProductConfigModel.m; sourceTree = "<group>"; };
+		6DBC505E25587A5A00169D5C /* TIoTIntelligentSceneCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTIntelligentSceneCell.h; sourceTree = "<group>"; };
+		6DBC505F25587A5A00169D5C /* TIoTIntelligentSceneCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTIntelligentSceneCell.m; sourceTree = "<group>"; };
 		6DC056E624E7E8F400E06CC4 /* TIoTCustomActionSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomActionSheet.h; sourceTree = "<group>"; };
 		6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomActionSheet.m; sourceTree = "<group>"; };
 		6DC056EC24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseTimeZoneVC.h; sourceTree = "<group>"; };
@@ -1021,6 +1024,8 @@
 				6DC7F7D3255285BC009508EE /* TIoTChooseSliderValueView.m */,
 				6DC7F8DF255326DF009508EE /* TIoTSettingIntelligentCell.h */,
 				6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */,
+				6DBC505E25587A5A00169D5C /* TIoTIntelligentSceneCell.h */,
+				6DBC505F25587A5A00169D5C /* TIoTIntelligentSceneCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2603,6 +2608,7 @@
 				6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */,
 				D2D5DA262362E68600BB0FBE /* TIoTTimeView.m in Sources */,
 				D231049A232F88040003069D /* TIoTHomeViewController.m in Sources */,
+				6DBC506025587A5A00169D5C /* TIoTIntelligentSceneCell.m in Sources */,
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
 				D23104D82330678F0003069D /* UIView+XDPExtension.m in Sources */,
 				A4DC768224D126780079F12C /* TIoTConfigInputView.m in Sources */,
