@@ -199,6 +199,7 @@ static CGFloat weatherHeight = 10;
             self.addBtn.hidden = YES;
             self.addBtn2.hidden = YES;
             
+            [TIoTCoreUserManage shared].currentRoomId = @"";
             
             //房间列表隐藏
             self.tableHeaderView.alpha = 0;
@@ -638,11 +639,13 @@ static CGFloat weatherHeight = 10;
             TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
             if ([configModel.Panel.type isEqualToString:@"h5"]) {
                 
+                self.currentRoomId = [TIoTCoreUserManage shared].currentRoomId?:@"";
+                
                 //h5自定义面板
                 NSDictionary *deviceDic = [self.dataArr[indexPath.row] copy];
                 NSString *deviceID = deviceDic[@"DeviceId"];
                 NSString *familyId = [TIoTCoreUserManage shared].familyId;
-                NSString *roomID = [TIoTCoreUserManage shared].currentRoomId ? : @"0";
+                NSString *roomID = self.currentRoomId ? : @"0";
                 NSString *familyType = [NSString stringWithFormat:@"%ld",(long)[TIoTCoreUserManage shared].FamilyType];
                
                 __weak typeof(self) weadkSelf= self;
@@ -729,6 +732,7 @@ static CGFloat weatherHeight = 10;
     {
         RoomModel *model = self.rooms[index - 1];
         self.currentRoomId = model.RoomId;
+        [TIoTCoreUserManage shared].currentRoomId = model.RoomId;
         [self loadNewData];
     }
 }

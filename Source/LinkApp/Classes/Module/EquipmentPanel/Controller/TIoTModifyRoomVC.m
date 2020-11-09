@@ -76,6 +76,7 @@
     
     [[TIoTRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":self.deviceInfo[@"ProductId"],@"DeviceName":self.deviceInfo[@"DeviceName"],@"FamilyId": self.deviceInfo[@"FamilyId"],@"RoomId":self.currentRoomId} success:^(id responseObject) {
         [MBProgressHUD showSuccess:NSLocalizedString(@"save_success", @"保存成功")];
+        [TIoTCoreUserManage shared].currentRoomId = self.currentRoomId;
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
