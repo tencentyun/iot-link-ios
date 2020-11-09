@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "717aacf3_73e840be",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTSettingIntelligentImageVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T03:04:37Z",
+      "side": 1,
+      "message": "加入优化点，后面集中优化下",
+      "parentUuid": "b1f858d2_5986b7b3",
+      "revId": "1e8dfa9afa4362eef1b089398fcd27d9560d8552",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73d55d18_a5fba22c",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTSettingIntelligentImageVC.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "1e8dfa9afa4362eef1b089398fcd27d9560d8552",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1be8b56_00c59dd7",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTSettingIntelligentImageVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-09T03:04:37Z",
+      "side": 1,
+      "message": "copy代码的，后面可以优化下",
+      "parentUuid": "73d55d18_a5fba22c",
+      "revId": "1e8dfa9afa4362eef1b089398fcd27d9560d8552",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
