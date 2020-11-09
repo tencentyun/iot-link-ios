@@ -23,7 +23,7 @@
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-
+@property (nonatomic, strong) NSMutableArray *deviceNumberArray;
 @end
 
 @implementation TIoTIntelligentVC
@@ -81,7 +81,26 @@
     
     [[TIoTRequestObject shared] post:AppGetSceneList Param:dic success:^(id responseObject) {
         
-        self.dataArray = responseObject[@"SceneList"];
+        self.dataArray = responseObject[@"SceneList"]?:@{};
+        
+        for (int i = 0; i <self.dataArray.count ; i++) {
+            NSDictionary *sceneDic = self.dataArray[i];
+            NSMutableSet *sceneActions = [[NSMutableSet alloc]init];
+            NSArray *actionsArray = sceneDic[@"Actions"]?:@[];
+            for (int i = 0; i < actionsArray.count; i++) {
+                NSDictionary *actionDic = actionsArray[i];
+                if (![NSString isNullOrNilWithObject:actionDic[@"DeviceName"]] && ![NSString isNullOrNilWithObject:actionDic[@"ProductId"]]) {
+                    NSString *uniqueID = [NSString stringWithFormat:@"%@%@",actionDic[@"DeviceName"],actionDic[@"ProductId"]];
+                    [sceneActions addObject:uniqueID];
+                }
+                    
+            }
+            
+            [self.deviceNumberArray addObject:[NSString stringWithFormat:@"%lu",(unsigned long)sceneActions.count]];
+        }
+        
+//        self.deviceNumberString
+        
         [self.tableView reloadData];
         if (self.dataArray.count == 0) {
             self.tableView.hidden = YES;
@@ -130,7 +149,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTIntelligentSceneCell *sceneCell = [TIoTIntelligentSceneCell cellWithTableView:tableView];
     sceneCell.dic = self.dataArray[indexPath.row];
-    sceneCell.deviceNum = @"1";
+    sceneCell.deviceNum = self.deviceNumberArray[indexPath.row];
     return sceneCell;
 }
 
@@ -252,6 +271,14 @@
     }
     return _dataArray;
 }
+
+- (NSMutableArray *)deviceNumberArray {
+    if (!_deviceNumberArray) {
+        _deviceNumberArray = [NSMutableArray array];
+    }
+    return _deviceNumberArray;
+}
+
 /*
 #pragma mark - Navigation
 
