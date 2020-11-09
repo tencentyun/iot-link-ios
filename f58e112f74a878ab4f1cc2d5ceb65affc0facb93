@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d24ea7d4_c2fb452f",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-09T08:52:04Z",
+      "side": 1,
+      "message": "dataArray 和 deviceNumberArray不是一个东西，需要判断数组越界",
+      "revId": "f58e112f74a878ab4f1cc2d5ceb65affc0facb93",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
