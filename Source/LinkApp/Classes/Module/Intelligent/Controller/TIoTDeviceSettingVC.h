@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isEdited;
 @property (nonatomic, strong) TIoTPropertiesModel *editedModel;
 @property (nonatomic, copy) NSString *valueString;
+@property (nonatomic, assign) NSInteger editActionIndex;
+@property (nonatomic, strong) NSMutableArray *actionOriginArray;
+@property (nonatomic, strong) NSMutableArray *valueOriginArray;
 @end
 
 NS_ASSUME_NONNULL_END
