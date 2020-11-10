@@ -127,11 +127,20 @@
                 NSString *imageUrl = imageDic[@"image"];
                 NSMutableDictionary *nameDic = weakSelf.dataArr[1];
                 NSString *nameString = nameDic[@"value"];
-                
-                if (self.sceneActioinType == SceneActioinTypeManual) {
-                    for (int i = 0; i < weakSelf.actionArray.count; i++) {
-                        TIoTPropertiesModel *model = weakSelf.actionArray[i];
-                        NSString *valueStr = weakSelf.valueArray[i]? :@"";
+
+                for (int k = 0; k < self.dataArray.count; k++) {
+                    id object = weakSelf.dataArray[k];
+                    if ([object isKindOfClass:[NSString class]]) {
+                        NSString *timeString = weakSelf.dataArray[k];
+                        NSString *hourStr = [timeString componentsSeparatedByString:@":"].firstObject;
+                        NSString *minuteStr = [timeString componentsSeparatedByString:@":"].lastObject;
+                        NSInteger secondNum = hourStr.intValue*60*60 + minuteStr.intValue*60;
+                        
+                        [actionArray addObject:@{@"ActionType":@(1),@"Date":@(secondNum)}];
+                    }else  {
+                        
+                        TIoTPropertiesModel *model = weakSelf.dataArray[k];
+                        NSString *valueStr = weakSelf.valueArray[k]? :@"";
                         NSDictionary *mappingDic = model.define.mapping;
                         [mappingDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
                             if ([obj isEqualToString:valueStr]) {
@@ -146,22 +155,9 @@
                             }
                         }];
                     }
-                    
-                    paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
-                    
-                }else if (self.sceneActioinType == SceneActioinTypeDelay) {
-                    
-                    for (int i = 0; i<weakSelf.delayTimeArray.count; i++) {
-                        NSString *timeString = weakSelf.delayTimeArray[i];
-                        NSString *hourStr = [timeString componentsSeparatedByString:@":"].firstObject;
-                        NSString *minuteStr = [timeString componentsSeparatedByString:@":"].lastObject;
-                        NSInteger secondNum = hourStr.intValue*60 + minuteStr.intValue;
-                        
-                        [actionArray addObject:@{@"ActionType":@(1),@"Date":@(secondNum)}];
-                    }
-                    
-                    paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
                 }
+                
+                paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
 
                 if ([NSString isNullOrNilWithObject:self.sceneImageUrl] && [NSString isNullOrNilWithObject:self.sceneNameString]) {
                     [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Image", @"请设置智能图片") icon:@""];

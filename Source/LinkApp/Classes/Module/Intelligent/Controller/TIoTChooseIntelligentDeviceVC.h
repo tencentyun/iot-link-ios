@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *roomId;
 
+@property (nonatomic, strong) NSMutableArray *actionOriginArray;
+@property (nonatomic, strong) NSMutableArray *valueOriginArray;
 @end
 
 NS_ASSUME_NONNULL_END

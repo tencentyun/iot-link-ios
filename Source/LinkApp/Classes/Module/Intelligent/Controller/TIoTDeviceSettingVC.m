@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSMutableArray *productArray;
 @property (nonatomic, strong) NSString *modifiedValue;
 @property (nonatomic, strong) TIoTPropertiesModel *modifiedModel;
+
 @end
 
 @implementation TIoTDeviceSettingVC
@@ -94,8 +95,9 @@
             
             weakSelf.modifiedValue = valueString;
             weakSelf.modifiedModel = model;
+            
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
-            [weakSelf.modifiedModelArray addObject:weakSelf.modifiedModel];
+            [weakSelf.modifiedModelArray insertObject:weakSelf.modifiedModel atIndex:0];
             [weakSelf.productArray addObject:weakSelf.productModel];
         };
         
@@ -130,7 +132,7 @@
             weakSelf.modifiedValue = valueString;
             weakSelf.modifiedModel = model;
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
-            [weakSelf.modifiedModelArray addObject:weakSelf.modifiedModel];
+            [weakSelf.modifiedModelArray insertObject:weakSelf.modifiedModel atIndex:0];
             [weakSelf.productArray addObject:weakSelf.productModel];
         };
 
@@ -217,23 +219,30 @@
                 TIoTAddManualIntelligentVC *vc = [weakSelf findViewController:NSStringFromClass([TIoTAddManualIntelligentVC class])];
                 if (vc) {
                     // 找到需要返回的控制器的处理方式
-                    vc.taskArray = weakSelf.modifiedModelArray;
-                    vc.valueArray = weakSelf.modifiedValueArray;
-                    vc.productModel = weakSelf.productModel;
+                    
+                    vc.isEdited = weakSelf.isEdited;
                     vc.actionType = IntelligentActioinTypeManual;
+                    vc.valueStringIndexPath = weakSelf.editActionIndex;
+                    if (weakSelf.isEdited == YES) {
+                        vc.isEdited = weakSelf.isEdited;
+                    }else {
+                        for (int i = 0; i<weakSelf.modifiedModelArray.count; i++) {
+                            [weakSelf.actionOriginArray addObject:weakSelf.modifiedModelArray[i]];
+                        }
+                        for (int j = 0; j<weakSelf.modifiedValueArray.count; j++) {
+                            [weakSelf.valueOriginArray addObject:weakSelf.modifiedValueArray[j]];
+                        }
+                    }
+                    vc.taskArray = weakSelf.actionOriginArray;
+                    vc.valueArray = weakSelf.valueOriginArray;
+                    vc.productModel = weakSelf.productModel;
+                    vc.valueString = weakSelf.modifiedValue;
                     [vc refreshData];
                     [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
                     // 没找到需要返回的控制器的处理方式
                     [weakSelf.navigationController popViewControllerAnimated:YES];
                 }
-                
-//                TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-//                addManualTask.taskArray = weakSelf.modifiedModelArray;
-//                addManualTask.valueArray = weakSelf.modifiedValueArray;
-//                addManualTask.productModel = weakSelf.productModel;
-//                addManualTask.actionType = IntelligentActioinTypeManual;
-//                [weakSelf.navigationController pushViewController:addManualTask animated:YES];
             }
             
         };
@@ -267,7 +276,7 @@
             if (self.isEdited == YES) {
                 valueSteing = self.valueString?:@"";
             }
-            NSDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":baseModel.name?:@"",@"value":valueSteing,@"needArrow":@"1"}];
+            NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":baseModel.name?:@"",@"value":valueSteing,@"needArrow":@"1"}];
             [_dataArr addObject:tempDic];
         }
     }
