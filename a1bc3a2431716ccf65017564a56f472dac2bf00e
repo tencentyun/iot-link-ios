@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fab9ded3_4b235e42",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-10T12:39:42Z",
+      "side": 1,
+      "message": "需要判断数组是否会越界，越界会crash",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "627c9502_cc2ef579",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-10T12:39:42Z",
+      "side": 1,
+      "message": "建议添加类型",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4389c75_11ac83c8",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTComplementIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-10T12:39:42Z",
+      "side": 1,
+      "message": "秒数 \u003d 小时 * 60 * 60  + 分钟 * 60 ，是否计算公式又问题？",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
