@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, SceneActioinType) {
 //@property (nonatomic, strong) NSMutableArray <TIoTIntelligentProductConfigModel *>*productModelArray;
 @property (nonatomic, assign) SceneActioinType sceneActioinType;
 @property (nonatomic, strong) NSMutableArray *delayTimeArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
 NS_ASSUME_NONNULL_END

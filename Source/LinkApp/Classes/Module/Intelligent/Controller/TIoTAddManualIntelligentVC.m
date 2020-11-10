@@ -101,8 +101,14 @@
         if (self.taskArray.count != 0 || self.taskArray != nil) {
             self.tableView.hidden = NO;
             self.nextButtonView.hidden = NO;
-            for (TIoTPropertiesModel *model in self.taskArray) {
-                [self.dataArray insertObject:model atIndex:0];
+            
+            if (self.isEdited == YES) {
+                [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
+            }else {
+//                for (TIoTPropertiesModel *model in self.taskArray) {
+//                    [self.dataArray insertObject:model atIndex:0];
+//                }
+                self.dataArray = self.taskArray;
             }
             [self.tableView reloadData];
         }else {
@@ -117,7 +123,12 @@
         if (![NSString isNullOrNilWithObject:self.delayTimeString]) {
             self.tableView.hidden = NO;
             self.nextButtonView.hidden = NO;
-            [self.dataArray addObject:self.delayTimeString];
+            if (self.isEdited == YES) {
+                [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
+            }else {
+                [self.dataArray addObject:self.delayTimeString];
+            }
+            
             [self.tableView reloadData];
         }else {
             if (self.dataArray.count == 0) {
@@ -170,12 +181,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
-    if (self.actionType == IntelligentActioinTypeManual) {
+//    if (self.actionType == IntelligentActioinTypeManual) {
+//        intelligentCell.model = self.dataArray[indexPath.row];
+//        intelligentCell.subTitleString = self.valueArray[indexPath.row];
+//        intelligentCell.productModel = self.productModel;
+//    }else if (self.actionType == IntelligentActioinTypeDelay) {
+//        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
+//    }
+    id object = self.dataArray[indexPath.row];
+    if ([object isKindOfClass:[NSString class]]) {
+        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
+    }else  {
         intelligentCell.model = self.dataArray[indexPath.row];
         intelligentCell.subTitleString = self.valueArray[indexPath.row];
         intelligentCell.productModel = self.productModel;
-    }else if (self.actionType == IntelligentActioinTypeDelay) {
-        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
     }
     
     return intelligentCell;
@@ -184,20 +203,43 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 #warning 后期添加判断类型 暂时先如下处理
-    if (self.actionType == IntelligentActioinTypeManual) {
-        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
-        deviceSettingVC.isEdited = YES;
-        deviceSettingVC.editedModel = [self.dataArray[indexPath.row] copy];
-        deviceSettingVC.productModel = self.productModel;
-        deviceSettingVC.valueString = self.valueArray[indexPath.row];
-        [self.navigationController pushViewController:deviceSettingVC animated:YES];
-    }else if (self.actionType == IntelligentActioinTypeDelay) {
+//    if (self.actionType == IntelligentActioinTypeManual) {
+//        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+//        deviceSettingVC.isEdited = YES;
+//        deviceSettingVC.editedModel = self.dataArray[indexPath.row];
+//        deviceSettingVC.productModel = self.productModel;
+//        deviceSettingVC.valueString = self.valueArray[indexPath.row];
+//        deviceSettingVC.editActionIndex = indexPath.row;
+//        deviceSettingVC.valueOriginArray = [self.valueArray mutableCopy];
+//        deviceSettingVC.actionOriginArray = [self.dataArray mutableCopy];
+//        [self.navigationController pushViewController:deviceSettingVC animated:YES];
+//    }else if (self.actionType == IntelligentActioinTypeDelay) {
+//        TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+//        chooseDelayTimeVC.isEditing = YES;
+//        chooseDelayTimeVC.delegate = self;
+//        self.selectedDelayIndex = indexPath.row;
+//        [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+//    }
+    
+    id object = self.dataArray[indexPath.row];
+    if ([object isKindOfClass:[NSString class]]) {
         TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
         chooseDelayTimeVC.isEditing = YES;
         chooseDelayTimeVC.delegate = self;
         self.selectedDelayIndex = indexPath.row;
         [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+    }else  {
+        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+        deviceSettingVC.isEdited = YES;
+        deviceSettingVC.editedModel = self.dataArray[indexPath.row];
+        deviceSettingVC.productModel = self.productModel;
+        deviceSettingVC.valueString = self.valueArray[indexPath.row];
+        deviceSettingVC.editActionIndex = indexPath.row;
+        deviceSettingVC.valueOriginArray = [self.valueArray mutableCopy];
+        deviceSettingVC.actionOriginArray = [self.dataArray mutableCopy];
+        [self.navigationController pushViewController:deviceSettingVC animated:YES];
     }
+    
     
 }
 
@@ -256,6 +298,9 @@
     NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
     
+    self.isEdited = YES;
+#warning 刷新
+    
 }
 
 
@@ -278,7 +323,13 @@
         TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
         if (weakSelf.customSheet) {
             [weakSelf.customSheet removeFromSuperview];
+            
         }
+        chooseDeviceVC.actionOriginArray = [weakSelf.dataArray mutableCopy];
+        if (weakSelf.valueArray == nil) {
+            weakSelf.valueArray = [NSMutableArray array];
+        }
+        chooseDeviceVC.valueOriginArray =  [weakSelf.valueArray mutableCopy];
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{
@@ -289,9 +340,13 @@
         }
 
         delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
+            if (weakSelf.valueArray == nil) {
+                weakSelf.valueArray = [NSMutableArray array];
+            }
             weakSelf.actionType = IntelligentActioinTypeDelay;
-            [weakSelf.dataArray addObject:timeString];
+            [weakSelf.dataArray insertObject:timeString atIndex:0];
             [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
+            [weakSelf.valueArray insertObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu] atIndex:0];
             [weakSelf loadData];
         };
         
@@ -420,6 +475,7 @@
                 complementVC.sceneActioinType = SceneActioinTypeTimer;
             }
             complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
+            complementVC.dataArray = weakSelf.dataArray;
             [weakSelf.navigationController pushViewController:complementVC animated:YES];
         };
     }

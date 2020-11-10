@@ -29,6 +29,10 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 
 @property (nonatomic, strong) NSString *delayTimeString;
 @property (nonatomic, assign) IntelligentActioinType actionType;
+@property (nonatomic, assign) NSInteger valueStringIndexPath;
+@property (nonatomic, assign) BOOL isEdited;
+@property (nonatomic, strong) NSString *valueString;
+
 - (void)refreshData;
 @end
 
