@@ -715,8 +715,11 @@
 "current_noManualTask" = "暂无手动任务";
 "addTast" = "添加任务";
 "addManualTask" = "添加手动智能";
+"addAutoTask" = "添加自动智能";
 "manualIntelligent_deviceControl" = "设备控制";
 "manualIntelligent_delay" = "延时";
+"manualIntalligent_choice" = "选择手动";
+"post_notice" = "发送通知";
 "execute_Task" = "执行以下任务";
 "complement_Intelligent_Message" = "完善智能信息";
 "setting_Intelligent_Image" = "智能图片";
@@ -731,3 +734,9 @@
 "intelligent_deviceNumber" = "XX个设备"; //TIoTIntelligentSceneCell中 
 "intelligent_manual" = "手动智能";
 "intelligent_auto" = "自动智能";
+"autoIntelligent_meet_condition" = "满足以下所有条件";
+"autoIntelligeng_addCondition" = "添加条件";
+"autoIntelligeng_task" = "添加任务";
+"auto_effective_time_period" = "生效时间段";
+"auto_deviceStatus_change" = "设备状态发生变化";
+"auto_timer" = "定时";

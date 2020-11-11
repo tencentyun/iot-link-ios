@@ -12,6 +12,7 @@
 #import "TIoTCustomSheetView.h"
 #import "TIoTIntelligentSceneCell.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTAddAutoIntelligentVC.h"
 
 @interface TIoTIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
@@ -164,6 +165,8 @@
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{
         //MARK: 跳转自动添加
+        TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
+        [weakSelf.navigationController pushViewController:addAutoTask animated:YES];
     };
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
