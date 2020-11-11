@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIImageView *arrowsImageView;
 @property (nonatomic, strong) UIImageView *taskDeleteImageView;
 
+@property (nonatomic, strong) UIView    *blankAddView; //自动智能 条件和任务为空显示view
+@property (nonatomic, strong) UILabel *addLabel;
 @end
 
 @implementation TIoTIntelligentCustomCell
@@ -103,6 +105,37 @@
         make.width.height.mas_equalTo(24);
         make.centerY.equalTo(self.backView);
     }];
+    
+    self.blankAddView = [[UIView alloc]init];
+    self.blankAddView.layer.cornerRadius = 8;
+    self.blankAddView.backgroundColor = [UIColor whiteColor];
+    [self.backView addSubview:self.blankAddView];
+    [self.blankAddView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.bottom.right.equalTo(self.backView);
+    }];
+
+    UIImageView *addImage = [[UIImageView alloc]init];
+    addImage.image = [UIImage imageNamed:@"intelligent_add"];
+    [self.blankAddView addSubview:addImage];
+    [addImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(24);
+        make.top.equalTo(self.blankAddView.mas_top).offset(14);
+        make.centerX.equalTo(self.blankAddView.mas_centerX);
+    }];
+
+    self.addLabel = [[UILabel alloc]init];
+    [self.addLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#6C7078" textAlignment:NSTextAlignmentCenter];
+    [self.blankAddView addSubview:self.addLabel];
+    [self.addLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(addImage.mas_centerX);
+        make.top.equalTo(addImage.mas_bottom).offset(5);
+    }];
+
+    self.blankAddView.hidden = YES;
+}
+
+- (void)addContent {
+    
 }
 
 - (void)setModel:(TIoTPropertiesModel *)model {
@@ -127,6 +160,17 @@
     self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
     self.taskSubtitleLabel.text = delayTimeString;
 }
+
+- (void)setBlankAddTipString:(NSString *)blankAddTipString {
+    _blankAddTipString = blankAddTipString;
+    self.addLabel.text = blankAddTipString;
+}
+
+- (void)setIsHideBlankAddView:(BOOL)isHideBlankAddView {
+    _isHideBlankAddView = isHideBlankAddView;
+    self.blankAddView.hidden = isHideBlankAddView;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
