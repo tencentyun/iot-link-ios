@@ -10,6 +10,9 @@
 #import "UIView+XDPExtension.h"
 #import "UIButton+LQRelayout.h"
 
+static CGFloat kInterval = 7;    //底部取消按钮与其他按钮间距
+static CGFloat kItemHeight = 50; //sheet中每一项高度
+
 @interface TIoTCustomSheetView ()
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIView *actionBottomView;
@@ -18,7 +21,9 @@
 @property (nonatomic, strong) UIButton *deviceControlButton;
 @property (nonatomic, strong) UIButton *delayButton;
 @property (nonatomic, strong) UIButton *cancelButton;
-
+@property (nonatomic, strong) UIView *placeHoldDownView; //贴底补齐白色view
+@property (nonatomic, assign) CGFloat kActionBottonHeight;
+@property (nonatomic, strong) NSArray *blcokArray;
 @end
 
 @implementation TIoTCustomSheetView
@@ -33,11 +38,9 @@
 
 - (void)setupSubViews {
     
-    CGFloat kInterval = 15;
-    CGFloat kItemHeight = 50;
-    CGFloat kActionBottonHeight = 175;
+    self.kActionBottonHeight = kInterval + kItemHeight * 3;
     if (@available(iOS 11.0, *))  {
-        kActionBottonHeight = kActionBottonHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+        self.kActionBottonHeight = self.kActionBottonHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
     }
     
 //    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissView)];
@@ -52,15 +55,15 @@
     [self.bottomView addSubview:self.actionBottomView];
     [self.actionBottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.bottom.left.equalTo(self);
-        make.height.mas_equalTo(kActionBottonHeight);
+        make.height.mas_equalTo(self.kActionBottonHeight);
     }];
     
-    [self changeViewRectConnerWithView:self.actionBottomView withRect:CGRectMake(0, 0, kScreenWidth, kActionBottonHeight) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
+    [self changeViewRectConnerWithView:self.actionBottomView withRect:CGRectMake(0, 0, kScreenWidth, self.kActionBottonHeight) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
     
     [self.actionBottomView addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(self.actionBottomView);
-        make.bottom.mas_equalTo(kActionBottonHeight);
+        make.bottom.mas_equalTo(self.kActionBottonHeight);
     }];
     
     [self.contentView addSubview:self.deviceControlButton];
@@ -93,10 +96,10 @@
         make.height.mas_equalTo(kItemHeight);
     }];
     
-    UIView *placeHoldDownView = [[UIView alloc]init];
-    placeHoldDownView.backgroundColor = [UIColor whiteColor];
-    [self.contentView addSubview:placeHoldDownView];
-    [placeHoldDownView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.placeHoldDownView = [[UIView alloc]init];
+    self.placeHoldDownView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:self.placeHoldDownView];
+    [self.placeHoldDownView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.cancelButton.mas_bottom);
         make.left.right.bottom.equalTo(self.contentView);
     }];
@@ -135,6 +138,91 @@
     NSString *secondTitle = secondString ?:@"";
     [self.deviceControlButton setTitle:firstTitle forState:UIControlStateNormal];
     [self.delayButton setTitle:secondTitle forState:UIControlStateNormal];
+}
+
+- (void)sheetViewTopTitleArray:(NSArray <NSString*>*)titleArray withMatchBlocks:(NSArray<ChooseFunctionBlock>*)blockArray {
+    if (!titleArray) {
+        return;
+    }
+    
+    self.blcokArray = [NSArray arrayWithArray:blockArray];
+    
+    self.kActionBottonHeight = kInterval + (kItemHeight+1) * titleArray.count;
+    if (@available(iOS 11.0, *))  {
+        self.kActionBottonHeight = self.kActionBottonHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+    }
+    
+    [self.actionBottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(self.kActionBottonHeight);
+    }];
+    [self changeViewRectConnerWithView:self.actionBottomView withRect:CGRectMake(0, 0, kScreenWidth, self.kActionBottonHeight) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
+    
+    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.kActionBottonHeight);
+    }];
+    
+    for (int i = 0; i<titleArray.count; i++) {
+        
+        NSString *titleString = @"";
+        if (![NSString isNullOrNilWithObject:titleArray[i]]) {
+            titleString = titleArray[i];
+        }
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setButtonFormateWithTitlt:titleString titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:16]];
+        button.tag = 100+i;
+        [button addTarget:self action:@selector(clickFunction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:button];
+        [button mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (i == titleArray.count -1) {
+                make.top.equalTo(self.contentView.mas_top).offset(i*(kItemHeight+1) + kInterval);
+            }else {
+                make.top.equalTo(self.contentView.mas_top).offset(i*(kItemHeight+1));
+            }
+            
+            make.left.right.equalTo(self.contentView);
+            make.height.mas_equalTo(kItemHeight);
+        }];
+        
+        
+        UIView *spliteView = [[UIView alloc]init];
+        spliteView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+        [self.contentView addSubview:spliteView];
+        [spliteView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(button.mas_bottom);
+            make.left.right.equalTo(self.contentView);
+            make.height.mas_equalTo(1);
+        }];
+        
+        if (i == titleArray.count-1) {
+            if (self.delayButton) {
+                self.delayButton.hidden = YES;
+            }
+            if (self.cancelButton) {
+                self.cancelButton.hidden = YES;
+            }
+            if (self.placeHoldDownView) {
+                self.placeHoldDownView.hidden = YES;
+            }
+            
+            UIView *placeHoldDownView = [[UIView alloc]init];
+            placeHoldDownView.backgroundColor = [UIColor whiteColor];
+            [self.contentView addSubview:placeHoldDownView];
+            [placeHoldDownView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(button.mas_bottom);
+                make.left.right.bottom.equalTo(self.contentView);
+            }];
+        }
+    }
+    
+}
+
+- (void)clickFunction:(UIButton *)sender {
+    NSInteger blockIndex = sender.tag -100;
+    ChooseFunctionBlock responseBlock = self.blcokArray[blockIndex];
+    if (responseBlock !=nil) {
+        responseBlock(self);
+    }
 }
 
 #pragma mark - lazy load

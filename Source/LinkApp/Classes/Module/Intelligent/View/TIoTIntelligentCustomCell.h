@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
 
 @property (nonatomic, copy) NSString *delayTimeString;
+
+@property (nonatomic, assign) BOOL isHideBlankAddView; //自动智能cell 是否显示（默认不显示，条件和任务个数为0时显示）
+@property (nonatomic, strong) NSString *blankAddTipString;   //自动智能添加条件和任务文案提示
 @end
 
 NS_ASSUME_NONNULL_END

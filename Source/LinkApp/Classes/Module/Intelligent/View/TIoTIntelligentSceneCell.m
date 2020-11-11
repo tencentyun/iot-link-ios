@@ -44,7 +44,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CGFloat kPadding = 16;
+    CGFloat kPadding = 16; //左右间距
     
     self.backImageView = [[UIImageView alloc]init];
     [self.backImageView setImageWithURLStr:@"" placeHolder:@""];
