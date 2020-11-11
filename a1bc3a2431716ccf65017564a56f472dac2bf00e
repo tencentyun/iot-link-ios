@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fbbbd280_512c0437",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-11T01:14:53Z",
+      "side": 1,
+      "message": "好的，在patch4中添加判断：选择index超过数组个数，不进行替换防止crash",
+      "parentUuid": "fab9ded3_4b235e42",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "627c9502_cc2ef579",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "554b192d_3db86bf9",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddManualIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-11T01:14:53Z",
+      "side": 1,
+      "message": "是的，这里处理方式不太合理，后面再接入其他model类型时候还需要修改代码，不能直接判断model类型，扩展性比较弱，后续会新建action的model数据源，因为包含不同类型",
+      "parentUuid": "627c9502_cc2ef579",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4389c75_11ac83c8",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTComplementIntelligentVC.m",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de502892_36ea2b98",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTComplementIntelligentVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-11T01:14:53Z",
+      "side": 1,
+      "message": "不细心，这里写的是有问题，计算少乘60",
+      "parentUuid": "a4389c75_11ac83c8",
+      "revId": "a1bc3a2431716ccf65017564a56f472dac2bf00e",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
