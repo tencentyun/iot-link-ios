@@ -54,6 +54,10 @@
 		6DD4D1482536F4D2005272BE /* TIoTCountdownTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD4D1472536F4D2005272BE /* TIoTCountdownTimer.m */; };
 		6DD4D32125398C9B005272BE /* TIoTEvaluationSharedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD4D32025398C9A005272BE /* TIoTEvaluationSharedView.m */; };
 		6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4E82E248927830056A162 /* GoogleService-Info.plist */; };
+		6DE47292255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE47291255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m */; };
+		6DE47298255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE47297255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.m */; };
+		6DE4729C255B8541000A96FE /* TIoTAutoIntellignetActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4729B255B8541000A96FE /* TIoTAutoIntellignetActionCell.m */; };
+		6DE472A0255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4729F255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m */; };
 		6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */; };
 		6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */; };
 		6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */; };
@@ -455,6 +459,14 @@
 		6DD4D31F25398C9A005272BE /* TIoTEvaluationSharedView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTEvaluationSharedView.h; sourceTree = "<group>"; };
 		6DD4D32025398C9A005272BE /* TIoTEvaluationSharedView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTEvaluationSharedView.m; sourceTree = "<group>"; };
 		6DD4E82E248927830056A162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DE47290255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAddAutoIntelligentVC.h; sourceTree = "<group>"; };
+		6DE47291255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAddAutoIntelligentVC.m; sourceTree = "<group>"; };
+		6DE47296255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoIntelligentConditionCell.h; sourceTree = "<group>"; };
+		6DE47297255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntelligentConditionCell.m; sourceTree = "<group>"; };
+		6DE4729A255B8541000A96FE /* TIoTAutoIntellignetActionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoIntellignetActionCell.h; sourceTree = "<group>"; };
+		6DE4729B255B8541000A96FE /* TIoTAutoIntellignetActionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntellignetActionCell.m; sourceTree = "<group>"; };
+		6DE4729E255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoIntelligentSectionTitleCell.h; sourceTree = "<group>"; };
+		6DE4729F255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntelligentSectionTitleCell.m; sourceTree = "<group>"; };
 		6DE800F7254FE95F0093F925 /* TIoTIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTIntelligentVC.h; sourceTree = "<group>"; };
 		6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTIntelligentVC.m; sourceTree = "<group>"; };
 		6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomSheetView.h; sourceTree = "<group>"; };
@@ -1028,6 +1040,12 @@
 				6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */,
 				6DBC505E25587A5A00169D5C /* TIoTIntelligentSceneCell.h */,
 				6DBC505F25587A5A00169D5C /* TIoTIntelligentSceneCell.m */,
+				6DE4729E255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.h */,
+				6DE4729F255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m */,
+				6DE47296255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.h */,
+				6DE47297255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.m */,
+				6DE4729A255B8541000A96FE /* TIoTAutoIntellignetActionCell.h */,
+				6DE4729B255B8541000A96FE /* TIoTAutoIntellignetActionCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1039,6 +1057,8 @@
 				6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */,
 				6DE8010725504DE70093F925 /* TIoTAddManualIntelligentVC.h */,
 				6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */,
+				6DE47290255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.h */,
+				6DE47291255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m */,
 				6D70C2D5255132D00069879E /* TIoTChooseIntelligentDeviceVC.h */,
 				6D70C2D6255132D00069879E /* TIoTChooseIntelligentDeviceVC.m */,
 				6D91797B255130A000AEF28C /* TIoTChooseDelayTimeVC.h */,
@@ -2445,6 +2465,7 @@
 				6DC7F7D02552856B009508EE /* TIoTChooseClickValueView.m in Sources */,
 				6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */,
 				ED7B178B23BF0A8B00B61567 /* TIoTNumberView.m in Sources */,
+				6DE47292255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m in Sources */,
 				FF831E0224D1CC9100F797EA /* TIoTWIFITableViewCell.m in Sources */,
 				D2038BA8233204170036F6B9 /* TIoTPanelTableViewCell.m in Sources */,
 				ED7B177E23BED1C900B61567 /* TIoTBoolView.m in Sources */,
@@ -2470,11 +2491,13 @@
 				D2E11EAF2331B98400C388A5 /* TIoTSoftapConnectViewController.m in Sources */,
 				D2038BAB2332082F0036F6B9 /* TIoTPanelMoreViewController.m in Sources */,
 				ED932E4423BB286000F73F35 /* TIoTEnumItem.m in Sources */,
+				6DE472A0255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m in Sources */,
 				ED6BA5A323C57DD100BE9EC9 /* TIoTFamilyInfoCell.m in Sources */,
 				F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */,
 				ED549E9B23C710EE00325958 /* TIoTTimerCell.m in Sources */,
 				6D70C30B2551DCCF0069879E /* TIoTDeviceSettingVC.m in Sources */,
 				D2614E31234F272100D7D7E7 /* TIoTBindPhoneViewController.m in Sources */,
+				6DE47298255B83FC000A96FE /* TIoTAutoIntelligentConditionCell.m in Sources */,
 				FF67F587247EB7480075C5C1 /* TIoTProductTableViewCell.m in Sources */,
 				ED9C49C523B1F487005D537F /* XGPushManage.m in Sources */,
 				D231050F233075D50003069D /* WxManager.m in Sources */,
@@ -2510,6 +2533,7 @@
 				D23104BD233066810003069D /* UUIDUntil.m in Sources */,
 				D20621AF235597DC00142DAC /* TIoTDistributionNetworkViewController.m in Sources */,
 				D2310492232F872F0003069D /* TIoTMineViewController.m in Sources */,
+				6DE4729C255B8541000A96FE /* TIoTAutoIntellignetActionCell.m in Sources */,
 				D2E11EB52331CE1000C388A5 /* TIoTUserInfomationViewController.m in Sources */,
 				D2C7D8172330DA7A00C97A04 /* TIoTConnectViewController.m in Sources */,
 				A4F5B12224D25BD900F83B5F /* TIoTWIFITipViewController.m in Sources */,
