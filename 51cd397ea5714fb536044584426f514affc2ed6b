@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "014f762d_92c72137",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTCustomSheetView.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-12T03:25:24Z",
+      "side": 1,
+      "message": "在patch2中已添加注释",
+      "parentUuid": "9066a0a1_b181d862",
+      "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa7fdac6_71cdf7f3",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b62facf_938c4415",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-12T03:25:24Z",
+      "side": 1,
+      "message": "已经验证可以正常dealloc，后期再添加block的时候，会及时进行dealloc的测试，避免内存泄漏问题",
+      "parentUuid": "aa7fdac6_71cdf7f3",
+      "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
