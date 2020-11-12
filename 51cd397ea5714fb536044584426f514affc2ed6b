@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9066a0a1_b181d862",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTCustomSheetView.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-12T02:12:52Z",
+      "side": 1,
+      "message": "魔法数字需要标注含义",
+      "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa7fdac6_71cdf7f3",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-12T02:12:52Z",
+      "side": 1,
+      "message": "需要验证dealloc是否正常",
+      "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
