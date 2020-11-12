@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "76c899d1_567641b9",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTCustomSheetView.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-12T03:25:57Z",
+      "side": 1,
+      "message": "patch3中已修改",
+      "parentUuid": "014f762d_92c72137",
+      "revId": "51cd397ea5714fb536044584426f514affc2ed6b",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa7fdac6_71cdf7f3",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
         "patchSetId": 2
