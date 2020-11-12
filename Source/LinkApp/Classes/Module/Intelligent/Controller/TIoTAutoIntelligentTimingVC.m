@@ -9,6 +9,7 @@
 #import "TIoTAutoIntelligentTimingVC.h"
 #import "TIoTIntelligentBottomActionView.h"
 #import "UILabel+TIoTExtension.h"
+#import "TIoTAutoSettingRepeatTimingView.h"
 
 @interface TIoTAutoIntelligentTimingVC ()<UIPickerViewDelegate,UIPickerViewDataSource>
 @property (nonatomic, strong) UIPickerView *pickView;
@@ -19,6 +20,10 @@
 @property (nonatomic, strong) UIButton *repeatingTimeButton;
 @property (nonatomic, strong) UILabel *timingLabel;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
+
+@property (nonatomic, assign) NSInteger choiceRepeatTimeNumner; //用户保存pick选择的类型number
+@property (nonatomic, strong) NSString *userSectedDateIDString; //用户选择日期的标识串
+
 @end
 
 @implementation TIoTAutoIntelligentTimingVC
@@ -91,7 +96,25 @@
 }
 
 #pragma mark - event
+/**
+ 设置定时重复时间
+ */
 - (void)setRepeatTiming {
+    
+    TIoTAutoSettingRepeatTimingView *repeatTimingView = [[TIoTAutoSettingRepeatTimingView alloc]init];
+    repeatTimingView.defaultRepeatTimeNum = self.choiceRepeatTimeNumner;
+    repeatTimingView.dateContentString = self.userSectedDateIDString;
+    __weak typeof(self) weakSelf = self;
+    repeatTimingView.settingRepeatTimingBlcok = ^(NSString * _Nullable repeatingString, NSInteger selectedNumber, NSString * _Nullable dateIDString) {
+        weakSelf.timingLabel.text = repeatingString?:@"";
+        weakSelf.choiceRepeatTimeNumner = selectedNumber;
+        weakSelf.userSectedDateIDString = dateIDString;
+    };
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:repeatTimingView];
+    [repeatTimingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo([UIApplication sharedApplication].delegate.window);
+    }];
     
 }
 
