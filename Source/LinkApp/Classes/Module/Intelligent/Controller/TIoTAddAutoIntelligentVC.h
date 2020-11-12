@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/**
+ 自动智能主页面
+ */
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTAddAutoIntelligentVC : UIViewController

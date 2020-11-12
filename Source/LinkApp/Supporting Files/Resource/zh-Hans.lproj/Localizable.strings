@@ -739,3 +739,12 @@
 "auto_effective_time_period" = "生效时间段";
 "auto_deviceStatus_change" = "设备状态发生变化";
 "auto_timer" = "定时";
+"auto_hour" = "时";
+"auto_minute" = "分";
+"autoIntellignt_repeat" = "重复";
+"auto_repeatTiming_once" = "执行一次";
+//"" = "每天"; //之前有 "everyday" = "每天";
+//"" = "工作日"; //之前有 "work_day" = "工作日";
+//"" = "周末"; //之前有 "weekend" = "周末";
+"auto_repeatTiming_custom" = "自定义";
+
