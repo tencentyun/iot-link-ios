@@ -748,3 +748,4 @@
 //"" = "工作日"; //之前有 "work_day" = "工作日";
 //"" = "周末"; //之前有 "weekend" = "周末";
 "auto_repeatTiming_custom" = "自定义";
+"auto_atLeast_oneday" = "请至少选择一天";

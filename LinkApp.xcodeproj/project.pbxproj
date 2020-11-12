@@ -60,6 +60,8 @@
 		6DE472A0255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4729F255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m */; };
 		6DE47318255C508E000A96FE /* TIoTAutoIntelligentTimingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE47317255C508E000A96FE /* TIoTAutoIntelligentTimingVC.m */; };
 		6DE4731D255C64F6000A96FE /* TIoTAutoSettingRepeatTimingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4731C255C64F5000A96FE /* TIoTAutoSettingRepeatTimingView.m */; };
+		6DE47349255D1AEC000A96FE /* TIoTAutoCustomTimingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE47348255D1AEC000A96FE /* TIoTAutoCustomTimingView.m */; };
+		6DE4734D255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4734C255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m */; };
 		6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */; };
 		6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */; };
 		6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */; };
@@ -473,6 +475,10 @@
 		6DE47317255C508E000A96FE /* TIoTAutoIntelligentTimingVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntelligentTimingVC.m; sourceTree = "<group>"; };
 		6DE4731B255C64F5000A96FE /* TIoTAutoSettingRepeatTimingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoSettingRepeatTimingView.h; sourceTree = "<group>"; };
 		6DE4731C255C64F5000A96FE /* TIoTAutoSettingRepeatTimingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoSettingRepeatTimingView.m; sourceTree = "<group>"; };
+		6DE47347255D1AEC000A96FE /* TIoTAutoCustomTimingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoCustomTimingView.h; sourceTree = "<group>"; };
+		6DE47348255D1AEC000A96FE /* TIoTAutoCustomTimingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoCustomTimingView.m; sourceTree = "<group>"; };
+		6DE4734B255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoIntellSettingCustomTimeCell.h; sourceTree = "<group>"; };
+		6DE4734C255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntellSettingCustomTimeCell.m; sourceTree = "<group>"; };
 		6DE800F7254FE95F0093F925 /* TIoTIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTIntelligentVC.h; sourceTree = "<group>"; };
 		6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTIntelligentVC.m; sourceTree = "<group>"; };
 		6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomSheetView.h; sourceTree = "<group>"; };
@@ -1054,6 +1060,10 @@
 				6DE4729B255B8541000A96FE /* TIoTAutoIntellignetActionCell.m */,
 				6DE4731B255C64F5000A96FE /* TIoTAutoSettingRepeatTimingView.h */,
 				6DE4731C255C64F5000A96FE /* TIoTAutoSettingRepeatTimingView.m */,
+				6DE47347255D1AEC000A96FE /* TIoTAutoCustomTimingView.h */,
+				6DE47348255D1AEC000A96FE /* TIoTAutoCustomTimingView.m */,
+				6DE4734B255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.h */,
+				6DE4734C255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2476,6 +2486,7 @@
 				6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */,
 				ED7B178B23BF0A8B00B61567 /* TIoTNumberView.m in Sources */,
 				6DE47292255A9B0F000A96FE /* TIoTAddAutoIntelligentVC.m in Sources */,
+				6DE47349255D1AEC000A96FE /* TIoTAutoCustomTimingView.m in Sources */,
 				FF831E0224D1CC9100F797EA /* TIoTWIFITableViewCell.m in Sources */,
 				D2038BA8233204170036F6B9 /* TIoTPanelTableViewCell.m in Sources */,
 				ED7B177E23BED1C900B61567 /* TIoTBoolView.m in Sources */,
@@ -2588,6 +2599,7 @@
 				6DE47318255C508E000A96FE /* TIoTAutoIntelligentTimingVC.m in Sources */,
 				ED9C15D023B9DCB700CAC848 /* TIoTFamilyInfoVC.m in Sources */,
 				6DE4731D255C64F6000A96FE /* TIoTAutoSettingRepeatTimingView.m in Sources */,
+				6DE4734D255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m in Sources */,
 				ED5767182410AED70070D218 /* ReachabilityManager.m in Sources */,
 				D20621BB23559E5600142DAC /* TYCyclePagerView.m in Sources */,
 				ED729062238E669600175739 /* TIoTUploadObj.m in Sources */,

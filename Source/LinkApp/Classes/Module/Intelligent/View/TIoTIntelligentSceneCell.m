@@ -52,8 +52,8 @@
     [self.backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView.mas_left).offset(kPadding);
         make.right.equalTo(self.contentView.mas_right).offset(-kPadding);
-        make.top.equalTo(self.contentView.mas_top).offset(8);
-        make.bottom.equalTo(self.contentView.mas_bottom).offset(-8);
+        make.top.equalTo(self.contentView.mas_top).offset(4);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-4);
     }];
 
     self.sceneButton = [UIButton buttonWithType:UIButtonTypeCustom];
