@@ -8,7 +8,6 @@
 
 #import "TIoTChooseDelayTimeVC.h"
 #import "TIoTIntelligentBottomActionView.h"
-#import "TIoTAddManualIntelligentVC.h"
 
 @interface TIoTChooseDelayTimeVC ()<UIPickerViewDelegate,UIPickerViewDataSource>
 @property (nonatomic, strong) UIPickerView *pickView;

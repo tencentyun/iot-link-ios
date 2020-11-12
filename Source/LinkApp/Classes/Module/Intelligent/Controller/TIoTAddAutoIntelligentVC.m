@@ -13,6 +13,7 @@
 #import "TIoTIntelligentCustomCell.h"
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTCustomSheetView.h"
+#import "TIoTAutoIntelligentTimingVC.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -20,8 +21,8 @@
 @property (nonatomic, strong) NSMutableArray *conditionArray;
 @property (nonatomic, strong) NSMutableArray *actionArray;
 
-@property (nonatomic, strong) TIoTCustomSheetView *customSheet;  //底部弹框
-@property (nonatomic, strong) TIoTCustomSheetView *customActionSheet;
+@property (nonatomic, strong) TIoTCustomSheetView *customSheet;  //添加条件底部sheet
+@property (nonatomic, strong) TIoTCustomSheetView *customActionSheet; //添加任务底部sheet
 @end
 
 @implementation TIoTAddAutoIntelligentVC
@@ -200,18 +201,26 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.1;
 }
+
 #pragma mark - event
-//添加条件
+/**
+ 添加条件
+ */
 - (void)addConditionEnter {
     self.customSheet = [[TIoTCustomSheetView alloc]init];
     [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"auto_deviceStatus_change", @"设备状态发生变化") secondTitle:NSLocalizedString(@"auto_timer", @"定时")];
     __weak typeof(self)weakSelf = self;
     
     self.customSheet.chooseIntelligentFirstBlock = ^{
-#warning 跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选
+#warning 跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
+        [weakSelf removeBottomCustomConditionSheetView];
+        
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{
-#warning 跳转定时页面
+        //MARK: 跳转定时页面，并移除当前sheet
+        [weakSelf removeBottomCustomConditionSheetView];
+        TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+        [weakSelf.navigationController pushViewController:timingVC animated:YES];
     };
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
@@ -225,20 +234,21 @@
     
     NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),@"post_notice",@"发送通知"];
     
+    __weak typeof(self)weakSelf = self;
     ChooseFunctionBlock deviceControlBlock = ^(TIoTCustomSheetView *view){
-        NSLog(@"one");
+        [weakSelf removeBottomCustomActionSheetView];
     };
     
     ChooseFunctionBlock delayBlock = ^(TIoTCustomSheetView *view){
-        NSLog(@"two");
+        [weakSelf removeBottomCustomActionSheetView];
     };
 
     ChooseFunctionBlock manualBlock = ^(TIoTCustomSheetView *view){
-        NSLog(@"three");
+        [weakSelf removeBottomCustomActionSheetView];
     };
 
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
-        NSLog(@"four");
+        [weakSelf removeBottomCustomActionSheetView];
     };
 
     ChooseFunctionBlock cancelBlock = ^(TIoTCustomSheetView *view){
@@ -254,6 +264,24 @@
         make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
     }];
     
+}
+
+/**
+ 移除当前添加条件sheet
+ */
+- (void)removeBottomCustomConditionSheetView {
+    if (self.customSheet) {
+        [self.customSheet removeFromSuperview];
+    }
+}
+
+/**
+ 移除当前添加任务sheet
+ */
+- (void)removeBottomCustomActionSheetView {
+    if (self.customActionSheet) {
+        [self.customActionSheet removeFromSuperview];
+    }
 }
 
 #pragma mark - lazy loading
