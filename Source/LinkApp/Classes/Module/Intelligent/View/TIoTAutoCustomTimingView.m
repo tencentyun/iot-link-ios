@@ -114,6 +114,14 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
  返回重复选择定时自定义view
  */
 - (void)goBackForward {
+    
+    if (self.autoKeepRecordSelectedBefore) {
+        if (self.autoRepeatType == AutoRepeatTypeEffectTimePeriod) {
+            self.defaultTimeNum = self.defaultTimeNum -1;
+        }
+        self.autoKeepRecordSelectedBefore(self.defaultTimeNum);
+    }
+    
     [self removeFromSuperview];
 }
 
@@ -133,6 +141,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TIoTAutoIntellSettingCustomTimeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kAutoCollectionViewCellID forIndexPath:indexPath];
     cell.itemString = self.customTimeDataArray[indexPath.row];
+    cell.autoRepeatTimeType = AutoRepeatTimeTypeTimerCustom;
     cell.isSelected = NO;
     
     switch (self.selectedRepeatIndexNumber) {
@@ -163,7 +172,6 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
                 if ([self.dateIDArray[indexPath.row] isEqualToString:@"1"]) {
                     cell.isSelected = YES;
                     [self.selectedTimeDataArray replaceObjectAtIndex:indexPath.row withObject:@"1"];
-                    NSLog(@"--!!-%@",self.selectedTimeDataArray);
                 }else {
                     cell.isSelected = NO;
                 }
@@ -214,7 +222,12 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
         [_bottomView bottomViewType:IntelligentBottomViewTypeDouble withTitleArray:@[NSLocalizedString(@"cancel", @"取消"),NSLocalizedString(@"save", @"保存")]];
         
         _bottomView.firstBlock = ^{
-            
+            if (weakSelf.autoKeepRecordSelectedBefore) {
+                if (self.autoRepeatType == AutoRepeatTypeEffectTimePeriod) {
+                    weakSelf.defaultTimeNum = weakSelf.defaultTimeNum -1;
+                }
+                weakSelf.autoKeepRecordSelectedBefore(weakSelf.defaultTimeNum);
+            }
             [weakSelf dismissView];
         };
         
