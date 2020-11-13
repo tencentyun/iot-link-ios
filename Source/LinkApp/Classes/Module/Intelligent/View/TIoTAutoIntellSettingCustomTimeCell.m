@@ -53,4 +53,16 @@
     }
 }
 
+- (void)setSelected:(BOOL)selected {
+    if (self.autoRepeatTimeType == AutoRepeatTimeTypeTimePeriod) {
+        if (selected == YES) {
+            self.weekLabel.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
+            self.weekLabel.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+        }else {
+            self.weekLabel.layer.borderColor = [UIColor colorWithHexString:@"#E7E8EB"].CGColor;
+            self.weekLabel.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+        }
+    }
+}
+
 @end

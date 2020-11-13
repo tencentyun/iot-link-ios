@@ -14,6 +14,7 @@
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTCustomSheetView.h"
 #import "TIoTAutoIntelligentTimingVC.h"
+#import "TIoTAutoEffectTimePriodView.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -148,14 +149,13 @@
         TIoTDeviceDetailTableViewCell *cell = [TIoTDeviceDetailTableViewCell cellWithTableView:tableView];
         cell.isAddTimePriod = YES;
         cell.timePriodNumFont = [UIFont wcPfRegularFontOfSize:14];
-        cell.dic = @{@"title":NSLocalizedString(@"auto_effective_time_period", @"生效时间段"),@"value":@"显示选择时间段",@"needArrow":@"1"};
+        cell.dic = @{@"title":NSLocalizedString(@"auto_effective_time_period", @"生效时间段"),@"value":NSLocalizedString(@"auto_effect_allDay", @"全天"),@"needArrow":@"1"};
         return cell;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        
         if (self.actionArray.count == 0) {
             if (indexPath.row == 1) {
                 [self addConditionEnter];
@@ -172,8 +172,46 @@
         }else {
             
         }
+        
     }else {
         
+        __weak typeof(self)Weakself = self;
+        
+        //MARK:生效时间段view
+        TIoTAutoEffectTimePriodView *timePeriodView = [[TIoTAutoEffectTimePriodView alloc]init];
+        //生成有效时间段，显示在控制器中
+        timePeriodView.generateTimePeriodBlock = ^(NSMutableDictionary * _Nonnull timePeriodDic) {
+            TIoTDeviceDetailTableViewCell *cell = [Weakself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+            NSMutableString *effectTimeStr = [timePeriodDic[@"time"] mutableCopy];
+            if ([NSString isNullOrNilWithObject:effectTimeStr]) {
+                effectTimeStr = [NSMutableString stringWithString:NSLocalizedString(@"auto_effect_allDay", @"全天")];
+            }else {
+                if ([effectTimeStr containsString:@"（"]) {
+                    [effectTimeStr deleteCharactersInRange:NSMakeRange(0, 1)];
+                }
+                
+                if ([effectTimeStr containsString:@"）"]) {
+                    [effectTimeStr deleteCharactersInRange:NSMakeRange(effectTimeStr.length-1, 1)];
+                }
+            }
+            
+            cell.dic = @{@"title":NSLocalizedString(@"auto_effective_time_period", @"生效时间段"),@"value":effectTimeStr,@"needArrow":@"1"};
+            
+        };
+        
+        TIoTDeviceDetailTableViewCell *cell = [Weakself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+        NSString *timeTemp = cell.dic[@"value"];
+        if ([timeTemp containsString:@"-"]) {
+            
+            timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSMutableDictionary dictionaryWithDictionary:@{@"time":timeTemp,@"repeatType":@""}]];
+        }else {
+            timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSMutableDictionary dictionaryWithDictionary:@{@"time":@"00:00-23:59",@"repeatType":@""}]];
+        }
+        
+        [[UIApplication sharedApplication].delegate.window addSubview:timePeriodView];
+        [timePeriodView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+        }];
     }
 }
 
@@ -232,25 +270,27 @@
 //添加任务
 - (void)addActionEnter {
     
-    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),@"post_notice",@"发送通知"];
+    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),NSLocalizedString(@"post_notice", @"发送通知")];
     
     __weak typeof(self)weakSelf = self;
+    
+    //设备控制
     ChooseFunctionBlock deviceControlBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-    
+    //延时
     ChooseFunctionBlock delayBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //选择手动
     ChooseFunctionBlock manualBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //发送通知
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //取消按钮
     ChooseFunctionBlock cancelBlock = ^(TIoTCustomSheetView *view){
         [view removeFromSuperview];
     };
