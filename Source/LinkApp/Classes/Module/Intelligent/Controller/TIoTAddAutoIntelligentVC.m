@@ -14,6 +14,7 @@
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTCustomSheetView.h"
 #import "TIoTAutoIntelligentTimingVC.h"
+#import "TIoTAutoEffectTimePriodView.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -155,7 +156,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        
         if (self.actionArray.count == 0) {
             if (indexPath.row == 1) {
                 [self addConditionEnter];
@@ -172,8 +172,15 @@
         }else {
             
         }
+        
     }else {
         
+        //生效时间段view
+        TIoTAutoEffectTimePriodView *timePriodView = [[TIoTAutoEffectTimePriodView alloc]init];
+        [[UIApplication sharedApplication].delegate.window addSubview:timePriodView];
+        [timePriodView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+        }];
     }
 }
 
@@ -232,25 +239,27 @@
 //添加任务
 - (void)addActionEnter {
     
-    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),@"post_notice",@"发送通知"];
+    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),NSLocalizedString(@"post_notice", @"发送通知")];
     
     __weak typeof(self)weakSelf = self;
+    
+    //设备控制
     ChooseFunctionBlock deviceControlBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-    
+    //延时
     ChooseFunctionBlock delayBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //选择手动
     ChooseFunctionBlock manualBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //发送通知
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
     };
-
+    //取消按钮
     ChooseFunctionBlock cancelBlock = ^(TIoTCustomSheetView *view){
         [view removeFromSuperview];
     };
