@@ -749,3 +749,5 @@
 //"" = "周末"; //之前有 "weekend" = "周末";
 "auto_repeatTiming_custom" = "自定义";
 "auto_atLeast_oneday" = "请至少选择一天";
+"auto_time_priod" = "时间段";
+"auto_repeat_cycle" = "重复周期";

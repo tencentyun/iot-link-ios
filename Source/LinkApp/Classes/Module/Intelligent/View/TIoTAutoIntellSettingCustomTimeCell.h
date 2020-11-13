@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ 自定义时间item
+ */
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTAutoIntellSettingCustomTimeCell : UICollectionViewCell
