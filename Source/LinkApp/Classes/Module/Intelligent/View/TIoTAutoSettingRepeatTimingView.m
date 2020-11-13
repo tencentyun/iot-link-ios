@@ -191,6 +191,13 @@
             
             if (weakSelf.selectedPickCurrentNum == weakSelf.pickDataArray.count - 1) {
                 TIoTAutoCustomTimingView *customTimeView = [[TIoTAutoCustomTimingView alloc]init];
+                customTimeView.defaultTimeNum = weakSelf.defaultRepeatTimeNum;
+                customTimeView.autoRepeatType = AutoRepeatTypeTimer;
+                //不保存自定义重复选项返回，显示选择自定义之前的pick index
+                customTimeView.autoKeepRecordSelectedBefore = ^(NSInteger defaultTimeNum) {
+                    [weakSelf.pickView selectRow:defaultTimeNum inComponent:0 animated:NO];
+                };
+                
                 customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
                     NSLog(@"----%@",dateArray);
                     
@@ -263,8 +270,7 @@
                 }
                 [weakSelf dismissView];
             }
-            
-            
+
         };
         
     }
