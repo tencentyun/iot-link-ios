@@ -40,11 +40,13 @@
     self.titleLab.font = [UIFont wcPfRegularFontOfSize:12];
     self.titleLab.textColor = kRGBColor(68, 68, 68);
     self.titleLab.numberOfLines = 0;
+    self.titleLab.textAlignment = NSTextAlignmentCenter;
     self.titleLab.text = @"客厅灯泡\n(其他）";
     [self.contentView addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.imgView.mas_bottom).offset(6.5);
         make.centerX.equalTo(self.contentView);
+        make.width.equalTo(self.contentView);
     }];
 }
 
