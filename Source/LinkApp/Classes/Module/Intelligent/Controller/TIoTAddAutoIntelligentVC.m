@@ -9,12 +9,13 @@
 #import "TIoTAddAutoIntelligentVC.h"
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTAutoIntelligentSectionTitleCell.h"
-#import "TIoTAutoIntelligentConditionCell.h"
 #import "TIoTIntelligentCustomCell.h"
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTCustomSheetView.h"
 #import "TIoTAutoIntelligentTimingVC.h"
 #import "TIoTAutoEffectTimePriodView.h"
+#import "TIoTAutoConditionsView.h"
+#import "TIoTAutoAddManualIntelliListVC.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -100,7 +101,7 @@
             }else {
                 cell.isHideAddConditionButton = NO;
                 cell.autoInteAddConditionBlock = ^{
-//MARK: 弹出添加条件sheet
+                    //MARK: 弹出添加条件sheet
                     [self addConditionEnter];
                 };
             }
@@ -157,7 +158,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         if (self.actionArray.count == 0) {
-            if (indexPath.row == 1) {
+            if (indexPath.row == 0) {
+                //MARK:弹出选择条件的view
+                TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
+                choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent) {
+                    TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                    cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                };
+                [self.view addSubview:choiceConditionView];
+                [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.bottom.equalTo(self.view);
+                    make.top.equalTo(self.tableView.mas_top);
+                }];
+            }else if (indexPath.row == 1) {
                 [self addConditionEnter];
             }
         }else {
@@ -251,7 +264,7 @@
 //添加任务
 - (void)addActionEnter {
     
-    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),NSLocalizedString(@"post_notice", @"发送通知")];
+    NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),NSLocalizedString(@"post_notice", @"发送通知"),NSLocalizedString(@"cancel", @"取消")];
     
     __weak typeof(self)weakSelf = self;
     
@@ -266,6 +279,9 @@
     //选择手动
     ChooseFunctionBlock manualBlock = ^(TIoTCustomSheetView *view){
         [weakSelf removeBottomCustomActionSheetView];
+        
+        TIoTAutoAddManualIntelliListVC *addManualIntellVC = [[TIoTAutoAddManualIntelliListVC alloc]init];
+        [self.navigationController pushViewController:addManualIntellVC animated:YES];
     };
     //发送通知
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
@@ -342,9 +358,14 @@
         [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
         __weak typeof(self)weakSelf = self;
         _nextButtonView.confirmBlock = ^{
+            
+            if (self.conditionArray.count == 0 || self.actionArray.count == 0) {
+                [MBProgressHUD showMessage:NSLocalizedString(@"error_add_condition_action", @"请添加任务和条件") icon:@""];
+            }else {
 #warning 跳转前需要先移除弹框
-            if (weakSelf.customSheet) {
-                [weakSelf.customSheet removeFromSuperview];
+                if (weakSelf.customSheet) {
+                    [weakSelf.customSheet removeFromSuperview];
+                }
             }
         };
     }
