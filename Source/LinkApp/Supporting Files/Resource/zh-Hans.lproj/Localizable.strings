@@ -752,3 +752,8 @@
 "auto_repeat_cycle" = "重复周期";
 "auto_allDay" = "全天（24小时）";
 "auto_effect_allDay" = "全天";
+"error_add_condition_action" = "请添加任务和条件";
+"auto_anyCondition" = "满足以下任一条件";
+"auto_choice_manual_intelligent" = "选择手动智能";
+"auto_all_selected" = "全选";
+"auto_all_cancel_selected" = "取消全选";
