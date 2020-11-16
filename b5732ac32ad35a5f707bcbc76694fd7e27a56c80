@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e969d61_051670ee",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoCustomTimePeriodView.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-16T03:27:44Z",
+      "side": 1,
+      "message": "建议与UI无关的逻辑处理，不放置在drawRect中；或者有必要放在此处时，请给出说明",
+      "revId": "b5732ac32ad35a5f707bcbc76694fd7e27a56c80",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67aa8ce4_b8a0a353",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-16T03:27:44Z",
+      "side": 1,
+      "message": "有时间建议优化该方法，长度接近100行不利于维护",
+      "revId": "b5732ac32ad35a5f707bcbc76694fd7e27a56c80",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
