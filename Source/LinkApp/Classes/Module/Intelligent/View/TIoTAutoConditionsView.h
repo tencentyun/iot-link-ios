@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^AutoChooseConditionBlock)(NSString *conditionContent);
+typedef void(^AutoChooseConditionBlock)(NSString *conditionContent, NSInteger number);
 
 @interface TIoTAutoConditionsView : UIView
 @property (nonatomic, copy) AutoChooseConditionBlock chooseConditionBlock;

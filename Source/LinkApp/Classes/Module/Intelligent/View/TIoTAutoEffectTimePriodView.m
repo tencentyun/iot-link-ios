@@ -39,6 +39,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
 @property (nonatomic, assign) NSInteger repeatTimePeriodNum;//记录选择重复时间段block返回后的index
 
 @property (nonatomic, assign) CGFloat kHeight;
+@property (nonatomic, strong) NSString *defaultChoiceDayIDString;
 @end
 
 @implementation TIoTAutoEffectTimePriodView
@@ -274,6 +275,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     }];
     
     self.defaultRepeatTimeNum = 0;
+    self.defaultChoiceDayIDString = @"1111111";
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -288,7 +290,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     _effectTimeDic = effectTimeDic;
     NSString *customTime = @"";
     if (effectTimeDic == nil) {
-        self.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:@{@"time":@"00:00-23:59",@"repeatType":@""}];
+        self.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:@{@"time":@"00:00-23:59",@"repeatType":@"0"}];
         return;
     }else {
         customTime = effectTimeDic[@"time"]?:@"";
@@ -456,6 +458,9 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                             [dateString appendString:dateArray[i]];
                         }
 
+                //MARK:选择重复周期，赋值给当前字符保存
+                weakSelf.defaultChoiceDayIDString = [dateString copy];
+                
                         if ([dateString isEqualToString:@"1000001"]) {
                             indexNum = 2; //周末
                             weakSelf.repeatTimePeriodNum = indexNum;
@@ -526,9 +531,18 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
         _bottomView.secondBlock = ^{
 //MARK:保存选择选值回调
             if (weakSelf.generateTimePeriodBlock) {
-                [weakSelf.effectTimeDic setValue:weakSelf.customTimeValueLabel.text forKey:@"time"];
                 
-                weakSelf.generateTimePeriodBlock(weakSelf.effectTimeDic);
+                if (weakSelf.effectTimeDic == nil) {
+                    weakSelf.effectTimeDic = [NSMutableDictionary new];
+                }
+                if ([weakSelf.customTimeValueLabel.text isEqualToString:@"（）"]) {
+                    [weakSelf.effectTimeDic setValue:@"00:00-23:59" forKey:@"time"];
+                }else {
+                    [weakSelf.effectTimeDic setValue:weakSelf.customTimeValueLabel.text forKey:@"time"];
+                }
+                
+                
+                weakSelf.generateTimePeriodBlock(weakSelf.effectTimeDic,weakSelf.defaultChoiceDayIDString);
             }
             [weakSelf dismissView];
         };

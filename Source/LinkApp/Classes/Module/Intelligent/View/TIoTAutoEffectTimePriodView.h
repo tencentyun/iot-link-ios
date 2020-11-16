@@ -12,7 +12,7 @@
  生效时间段自定义view
  */
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^AutoGenerateTimePeriodBlock)(NSMutableDictionary *timePeriodDic);
+typedef void(^AutoGenerateTimePeriodBlock)(NSMutableDictionary *timePeriodDic,NSString *dayIDString);
 
 typedef NS_ENUM(NSInteger, AutoEffectPeriodRepetaType) {
 //    AutoEffectPeriodRepetaTypeOnce,

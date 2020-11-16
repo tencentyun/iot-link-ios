@@ -29,6 +29,9 @@ typedef NS_ENUM(NSInteger, SceneActioinType) {
 @property (nonatomic, assign) SceneActioinType sceneActioinType;
 @property (nonatomic, strong) NSMutableArray *delayTimeArray;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic, assign) BOOL isAuto;
+@property (nonatomic, strong) NSMutableDictionary *autoParamDic; //自动场景
 @end
 
 NS_ASSUME_NONNULL_END
