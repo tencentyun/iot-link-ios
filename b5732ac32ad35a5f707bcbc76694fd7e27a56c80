@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2a635953_6696550a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoCustomTimePeriodView.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-16T06:33:07Z",
+      "side": 1,
+      "message": "已经在patch8中修改，放入设置属性方法中，并修改了所涉及到逻辑。",
+      "parentUuid": "7e969d61_051670ee",
+      "revId": "b5732ac32ad35a5f707bcbc76694fd7e27a56c80",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67aa8ce4_b8a0a353",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "b5732ac32ad35a5f707bcbc76694fd7e27a56c80",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fa678d4_0e074d5a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-16T06:33:07Z",
+      "side": 1,
+      "message": "好的，开发完后会拆分不同方法中",
+      "parentUuid": "67aa8ce4_b8a0a353",
+      "revId": "b5732ac32ad35a5f707bcbc76694fd7e27a56c80",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
