@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTAutoIntelligentModel.h" //model
 
 /**
  自动智能中定时控制器
  */
 NS_ASSUME_NONNULL_BEGIN
+typedef void(^AutoIntelAddTimerBlock)(TIoTAutoIntelligentModel *timerModel);
 
 @interface TIoTAutoIntelligentTimingVC : UIViewController
-
+@property (nonatomic, copy) AutoIntelAddTimerBlock autoIntelAddTimerBlock;
 @end
 
 NS_ASSUME_NONNULL_END

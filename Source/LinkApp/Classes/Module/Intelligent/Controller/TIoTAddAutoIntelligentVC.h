@@ -7,12 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+
+@class TIoTAutoIntelligentModel;
 /**
  自动智能主页面
  */
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTAddAutoIntelligentVC : UIViewController
+
+@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoDeviceStatusArray;
+
+/**
+ 刷新当前条件、任务section
+ */
+- (void)refreshAutoIntelligentList;
 
 @end
 
