@@ -10,6 +10,7 @@ if [ $1 == 'Debug' ]; then
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.p12.asc > .github/script/apple_dev.p12
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/opensource.mobileprovision.asc > .github/script/dev.mobileprovision
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/link_sdk_demo.mobileprovision.asc > .github/script/devsdkdemo.mobileprovision
+    gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/link_sdk_demo_appdelegate.m.asc > Source/LinkSDKDemo/AppDelegate.m
 elif [ $1 == 'ReleaseBeta' ]; then
     echo "ReleaseBeta"
     gpg --quiet -d --passphrase "$PROVISIONING_PASSWORD" --batch .github/script/apple_dev_beta.p12.asc > .github/script/apple_dev.p12
