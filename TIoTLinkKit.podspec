@@ -1,10 +1,3 @@
-#
-# Be sure to run `pod lib lint QIotLinkKit.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
-#
 
 Pod::Spec.new do |s|
   s.name             = 'TIoTLinkKit'
@@ -22,6 +15,18 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files  = 'Source/LinkSDK/**/*.{h,m,c}'
-  s.dependency 'MBProgressHUD', '1.1.0'
+  s.default_subspec = 'CoreBase'
+  
+  s.subspec 'CoreBase' do |ss|
+    ss.source_files  = 'Source/LinkSDK/QCAPISets/**/*.{h,m,c}', 'Source/LinkSDK/QCDeviceCenter/**/*.{h,m,c}', 'Source/LinkSDK/QCFoundation/**/*.{h,m,c}'
+    ss.dependency 'MBProgressHUD', '1.1.0'
+  end
+  
+  #实时音视频，引入则开启
+  s.subspec 'TRTC' do |ss|
+    ss.source_files = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
+    ss.dependency 'TXLiteAVSDK_TRTC'#, '7.9.9565'
+    ss.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
+  end
+
 end

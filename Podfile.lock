@@ -119,13 +119,18 @@ PODS:
   - SocketRocket (0.5.1)
   - Tencent-MapSDK (4.3.9)
   - TIoTLinkKit (1.0.0):
+    - TIoTLinkKit/CoreBase (= 1.0.0)
+  - TIoTLinkKit/CoreBase (1.0.0):
     - MBProgressHUD (= 1.1.0)
+  - TIoTLinkKit/TRTC (1.0.0):
+    - TXLiteAVSDK_TRTC
   - TIoTThridSDK (1.0.1):
     - TIoTThridSDK/TPNS-iOS (= 1.0.1)
     - TIoTThridSDK/WechatOpenSDK_NoPay (= 1.0.1)
   - TIoTThridSDK/TPNS-iOS (1.0.1)
   - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.1)
   - TrueTime (5.0.3)
+  - TXLiteAVSDK_TRTC (7.8.9519)
   - TZImagePickerController (3.2.1)
   - YYModel (1.0.4)
 
@@ -145,6 +150,7 @@ DEPENDENCIES:
   - SocketRocket (= 0.5.1)
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
+  - TIoTLinkKit/TRTC (from `./`)
   - TIoTThridSDK (= 1.0.1)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
@@ -184,6 +190,7 @@ SPEC REPOS:
     - Tencent-MapSDK
     - TIoTThridSDK
     - TrueTime
+    - TXLiteAVSDK_TRTC
     - TZImagePickerController
     - YYModel
 
@@ -222,12 +229,13 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 3e202ccc07f80374a81c6ba3f9a1fd14f76efc5a
+  TIoTLinkKit: 46606a97cd71e3bd8cad5956ab9818806f8e1f9e
   TIoTThridSDK: 8b03ec0aa12cb318ff874692b244e6ba54880547
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
+  TXLiteAVSDK_TRTC: c127880c4dbe844bdc7575a655be8042ce96024a
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 8d21e88079c92b212fed5bfa7cd537e362f895ac
+PODFILE CHECKSUM: 95e3eef6a3c0ce86b8021f417e86772a40cc9fdd
 
 COCOAPODS: 1.9.3
