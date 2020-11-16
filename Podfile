@@ -29,6 +29,7 @@ end
 target 'LinkSDKDemo' do
   
   pod 'TIoTLinkKit', :path => './'
+  pod 'TIoTLinkKit/TRTC', :path => './'
   
   pod 'Masonry', '1.1.0'
   pod 'SDWebImage', '4.4.2'
@@ -38,4 +39,6 @@ target 'LinkSDKDemo' do
   pod 'Firebase/Performance', '6.31.1'
 end
 
-
+pre_install do |installer|
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
