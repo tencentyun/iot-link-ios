@@ -16,6 +16,8 @@
 #import "TIoTAutoEffectTimePriodView.h"
 #import "TIoTAutoConditionsView.h"
 #import "TIoTAutoAddManualIntelliListVC.h"
+#import "TIoTAutoIntelligentModel.h" //model
+#import "TIoTChooseIntelligentDeviceVC.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -113,6 +115,7 @@
             TIoTIntelligentCustomCell *cell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
             if (self.conditionArray.count > 0) {
                 cell.isHideBlankAddView = YES;
+                cell.autoIntellModel = self.conditionArray[indexPath.row - 1];
             }else {
                 cell.isHideBlankAddView = NO;
                 cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_addCondition", @"添加条件");
@@ -171,6 +174,7 @@
                     make.top.equalTo(self.tableView.mas_top);
                 }];
             }else if (indexPath.row == 1) {
+                //MARK:弹出添加条件sheet
                 [self addConditionEnter];
             }
         }else {
@@ -236,7 +240,7 @@
 
 #pragma mark - event
 /**
- 添加条件
+ 添加条件入口
  */
 - (void)addConditionEnter {
     self.customSheet = [[TIoTCustomSheetView alloc]init];
@@ -244,7 +248,17 @@
     __weak typeof(self)weakSelf = self;
     
     self.customSheet.chooseIntelligentFirstBlock = ^{
-#warning 跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
+        //跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
+        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
+        chooseDeviceVC.enterType = DeviceChoiceEnterTypeAuto;
+//        chooseDeviceVC.actionOriginArray = [weakSelf.dataArray mutableCopy];
+//        if (weakSelf.valueArray == nil) {
+//            weakSelf.valueArray = [NSMutableArray array];
+//        }
+//        chooseDeviceVC.valueOriginArray =  [weakSelf.valueArray mutableCopy];
+        
+        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+        
         [weakSelf removeBottomCustomConditionSheetView];
         
     };
@@ -252,6 +266,10 @@
         //MARK: 跳转定时页面，并移除当前sheet
         [weakSelf removeBottomCustomConditionSheetView];
         TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+        timingVC.autoIntelAddTimerBlock = ^(TIoTAutoIntelligentModel * _Nonnull timerModel) {
+            [weakSelf.conditionArray addObject:timerModel];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        };
         [weakSelf.navigationController pushViewController:timingVC animated:YES];
     };
     

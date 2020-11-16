@@ -171,6 +171,29 @@
     self.blankAddView.hidden = isHideBlankAddView;
 }
 
+- (void)setAutoIntellModel:(TIoTAutoIntelligentModel *)autoIntellModel {
+    _autoIntellModel = autoIntellModel;
+    //（ 0 设备状态变化 1 定时 2 设备控制，3 延时，4 选择手动，5 发送通知）
+    if ([autoIntellModel.type isEqualToString:@"0"]) {
+        
+    }else if ([autoIntellModel.type isEqualToString:@"1"]) {
+        self.taskTitleLabel.text = NSLocalizedString(@"auto_timer", @"定时");
+        NSString *timePointStr = autoIntellModel.Timer.TimePoint?:@"";
+        NSString *timeKindStr = autoIntellModel.Timer.timerKindSring?:@"";
+        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@,%@",timePointStr,timeKindStr];
+        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_timing"];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"2"]) {
+        
+    }else if ([autoIntellModel.type isEqualToString:@"3"]) {
+        
+    }else if ([autoIntellModel.type isEqualToString:@"4"]) {
+        
+    }else if ([autoIntellModel.type isEqualToString:@"5"]) {
+        
+    }
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

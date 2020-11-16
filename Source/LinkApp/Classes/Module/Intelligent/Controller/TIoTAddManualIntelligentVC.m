@@ -310,6 +310,7 @@
             weakSelf.valueArray = [NSMutableArray array];
         }
         chooseDeviceVC.valueOriginArray =  [weakSelf.valueArray mutableCopy];
+        chooseDeviceVC.enterType = DeviceChoiceEnterTypeManual;
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{

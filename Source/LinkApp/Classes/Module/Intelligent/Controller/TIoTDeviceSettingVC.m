@@ -264,11 +264,11 @@
         }
         
         self.modelArray = [propertiesArray mutableCopy];
-        for (TIoTPropertiesModel *baseModel in propertiesArray) {
-            if ([baseModel.mode isEqualToString:@"r"] || [baseModel.define.type isEqualToString:@"string"] || [baseModel.required isEqualToString:@"1"] ||([NSString isNullOrNilWithObject:baseModel.mode] || [NSString isNullOrNilWithObject:baseModel.required] || [NSString isNullOrNilWithObject:baseModel.define.type])) {
-                [self.modelArray removeObject:baseModel];
-            }
-        }
+//        for (TIoTPropertiesModel *baseModel in propertiesArray) {
+//            if ([baseModel.mode isEqualToString:@"r"] || [baseModel.define.type isEqualToString:@"string"] || [baseModel.required isEqualToString:@"1"] ||([NSString isNullOrNilWithObject:baseModel.mode] || [NSString isNullOrNilWithObject:baseModel.required] || [NSString isNullOrNilWithObject:baseModel.define.type])) {
+//                [self.modelArray removeObject:baseModel];
+//            }
+//        }
         
         for (TIoTPropertiesModel *baseModel in self.modelArray) {
             
