@@ -37,6 +37,9 @@
 
 - (void)setupUI {
     
+    self.userSectedDateIDString = @"0000000"; //默认选择执行一次 00000000
+    self.choiceRepeatTimeNumner = 0;
+    
     self.title = NSLocalizedString(@"auto_timer", @"定时");
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
@@ -101,6 +104,7 @@
  */
 - (void)setRepeatTiming {
     
+    //MARK:选择重复类型view
     TIoTAutoSettingRepeatTimingView *repeatTimingView = [[TIoTAutoSettingRepeatTimingView alloc]init];
     repeatTimingView.defaultRepeatTimeNum = self.choiceRepeatTimeNumner;
     repeatTimingView.dateContentString = self.userSectedDateIDString;
@@ -161,11 +165,21 @@
     if (!_pickDataArray) {
         NSMutableArray *hourArray = [[NSMutableArray alloc]init];
         for (int i = 0; i< 24; i++) {
-            [hourArray addObject:[NSString stringWithFormat:@"%d%@",i,NSLocalizedString(@"auto_hour", @"时")]];
+            if (i<10) {
+                [hourArray addObject:[NSString stringWithFormat:@"0%d%@",i,NSLocalizedString(@"auto_hour", @"时")]];
+            }else {
+                [hourArray addObject:[NSString stringWithFormat:@"%d%@",i,NSLocalizedString(@"auto_hour", @"时")]];
+            }
+            
         }
         NSMutableArray *minuteArray = [[NSMutableArray alloc]init];
         for (int j = 0; j< 60; j++) {
-            [minuteArray addObject:[NSString stringWithFormat:@"%d%@",j,NSLocalizedString(@"auto_minute", @"分")]];
+            if (j<10) {
+                [minuteArray addObject:[NSString stringWithFormat:@"0%d%@",j,NSLocalizedString(@"auto_minute", @"分")]];
+            }else {
+                [minuteArray addObject:[NSString stringWithFormat:@"%d%@",j,NSLocalizedString(@"auto_minute", @"分")]];
+            }
+            
         }
         _pickDataArray = @[hourArray,minuteArray];
     }
@@ -184,13 +198,77 @@
         
         _bottomView.secondBlock = ^{
 #warning 返回再刷新列表（更改时间）
-//            [weakSelf judgechoiceTime];
+            [weakSelf judgechoiceTime];
             
         };
 
         
     }
     return _bottomView;
+}
+
+- (void)judgechoiceTime {
+    NSString *timeString = @"";
+    
+    if ([NSString isNullOrNilWithObject:self.hourString]) {
+        if ([NSString isNullOrNilWithObject: self.minuteString]) {
+            [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+        }else {
+            if ([self.minuteString isEqualToString:self.pickDataArray[1][0]]) { //0分
+                [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+            }else {
+                NSMutableString *tempStr = [NSMutableString stringWithString:self.minuteString];
+                [tempStr deleteCharactersInRange:NSMakeRange(tempStr.length -1, 1)];
+                timeString = [NSString stringWithFormat:@"00:%@",tempStr];
+                [self addDelayTimeString:timeString];
+             }
+        }
+    }else {
+        if ([self.hourString isEqualToString:self.pickDataArray[0][0]]) { //0时
+            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:self.pickDataArray[1][0]]) {
+                [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
+            }else {
+                NSMutableString *tempHourStr = [NSMutableString stringWithString:self.hourString];
+                [tempHourStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                NSMutableString *tempMinutStr = [NSMutableString stringWithString:self.minuteString];
+                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                
+                timeString = [NSString stringWithFormat:@"%@:%@",tempHourStr,tempMinutStr];
+                [self addDelayTimeString:timeString];
+            }
+        }else {
+            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:self.pickDataArray[1][0]]) {
+                NSMutableString *tempHourStr = [NSMutableString stringWithString:self.hourString];
+                [tempHourStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                
+                timeString = [NSString stringWithFormat:@"%@:00",tempHourStr];
+                [self addDelayTimeString:timeString];
+            }else {
+                NSMutableString *tempHourStr = [NSMutableString stringWithString:self.hourString];
+                [tempHourStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                NSMutableString *tempMinutStr = [NSMutableString stringWithString:self.minuteString];
+                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                
+                timeString = [NSString stringWithFormat:@"%@:%@",tempHourStr,tempMinutStr];
+                [self addDelayTimeString:timeString];
+            }
+        }
+    }
+}
+
+- (void)addDelayTimeString:(NSString *)timeString {
+    //组件定时model，回传控制器添加数组中，并刷新
+    NSString *timeTamp = [NSString getNowTimeString];
+    NSString *timeStr = self.userSectedDateIDString ?:@"";
+    NSString *timeKindStr = self.timingLabel.text?:@"";
+    
+    NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr};
+    NSDictionary *timerDic = @{@"CondId":timeTamp,@"CondType":@(1),@"Timer":timerSelectDic,@"type":@"1"};
+    TIoTAutoIntelligentModel *timerModel = [TIoTAutoIntelligentModel yy_modelWithJSON:timerDic];
+    if (self.autoIntelAddTimerBlock) {
+        self.autoIntelAddTimerBlock(timerModel);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /*

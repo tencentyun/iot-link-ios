@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *deviceNumberArray;
+
+@property (nonatomic, strong) NSDictionary *sceneParamDic;
 @end
 
 @implementation TIoTIntelligentVC
@@ -77,6 +79,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     NSDictionary *dic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"Offset":@(0),@"Limit":@(999)};
+    self.sceneParamDic = [NSDictionary dictionaryWithDictionary:dic];
     
     [[TIoTRequestObject shared] post:AppGetSceneList Param:dic success:^(id responseObject) {
         
@@ -166,6 +169,7 @@
     self.customSheet.chooseIntelligentSecondBlock = ^{
         //MARK: 跳转自动添加
         TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
+        addAutoTask.paramDic = weakSelf.sceneParamDic;
         [weakSelf.navigationController pushViewController:addAutoTask animated:YES];
     };
     

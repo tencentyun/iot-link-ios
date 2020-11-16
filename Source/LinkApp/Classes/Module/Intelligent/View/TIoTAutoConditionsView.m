@@ -128,7 +128,7 @@
         self.anyConditionImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"procolDefault"]];
         
         if (self.chooseConditionBlock) {
-            self.chooseConditionBlock(self.allConditionLabel.text);
+            self.chooseConditionBlock(self.allConditionLabel.text,0);
         }
         [self dismissView];
     }else if (button == self.anyConditionButton) {
@@ -136,7 +136,7 @@
         self.anyConditionImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"procolSelect"]];
         
         if (self.chooseConditionBlock) {
-            self.chooseConditionBlock(self.self.anyConditionLabel.text);
+            self.chooseConditionBlock(self.self.anyConditionLabel.text,1);
         }
         [self dismissView];
     }

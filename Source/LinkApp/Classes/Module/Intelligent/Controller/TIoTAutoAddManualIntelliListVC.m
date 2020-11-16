@@ -11,6 +11,7 @@
 #import "TIoTIntelligentBottomActionView.h"
 #import "UILabel+TIoTExtension.h"
 #import "UIButton+LQRelayout.h"
+#import "TIoTAutoIntelligentModel.h"
 
 @interface TIoTAutoAddManualIntelliListVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -19,6 +20,8 @@
 @property (nonatomic, strong) UIButton *selectedAllButton;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
 @property (nonatomic, assign) BOOL isFullSelected;
+
+@property (nonatomic, strong) NSMutableArray *choicedArray;
 @end
 
 @implementation TIoTAutoAddManualIntelliListVC
@@ -29,6 +32,8 @@
     
     self.isFullSelected = NO;
     [self setUISubviews];
+    
+    [self loadData];
 }
 
 - (void)setUISubviews {
@@ -56,7 +61,62 @@
         }
     }];
     
+}
+
+- (void)loadData {
     
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    
+    [[TIoTRequestObject shared] post:AppGetSceneList Param:self.paramDic success:^(id responseObject) {
+        
+        NSMutableArray *sceneArray = [NSMutableArray arrayWithArray:responseObject[@"SceneList"]?:@[]];
+        
+        for (int i = 0; i <sceneArray.count ; i++) {
+            NSDictionary *sceneDic = sceneArray[i];
+            
+            NSArray *actionsArray = sceneDic[@"Actions"]?:@[];
+            NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
+            
+            for (int j = 0; j < actionsArray.count; j++) {
+                NSDictionary *actionDic = actionsArray[j];
+                if (actionDic[@"ActionType"] != nil) {
+                    [tempDic setValue:@(2) forKey:@"ActionType"];
+                }
+                if (actionDic[@"DeviceName"] != nil) {
+                    [tempDic setValue:actionDic[@"DeviceName"] forKey:@"ProductId"];
+                }
+                if (actionDic[@"ProductId"] != nil) {
+                    [tempDic setValue:actionDic[@"ProductId"] forKey:@"ProductId"];
+                }
+                if (actionDic[@"Data"] != nil) {
+                    [tempDic setValue:sceneDic[@"SceneId"] forKey:@"Data"];
+                }
+                if ( actionDic[@"AliasName"] != nil) {
+                    [tempDic setValue:actionDic[@"AliasName"] forKey:@"AliasName"];
+                }
+                if (actionDic[@"IconUrl"] != nil) {
+                    [tempDic setValue:actionDic[@"IconUrl"] forKey:@"IconUrl"];
+                }
+                
+            }
+            
+            if (sceneDic[@"SceneName"] != nil) {
+                [tempDic setValue:sceneDic[@"SceneName"] forKey:@"sceneName"];
+            }
+            
+            [tempDic setValue:@"4" forKey:@"type"];
+            
+            TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:tempDic];
+            
+            [self.dataArray addObject:model];
+            
+        }
+        
+        [self.tableView reloadData];
+
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 
 #pragma mark - UITableViewDataDelegate UITableViewDelegate
@@ -66,7 +126,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTAutoAddManualIntellListCell *cell = [TIoTAutoAddManualIntellListCell cellWithTableView:tableView];
-    cell.manualNameString = self.dataArray[indexPath.row];
+    TIoTAutoIntelligentModel *model = self.dataArray[indexPath.row];
+    cell.manualNameString = model.sceneName;
     return cell;
 }
 
@@ -74,8 +135,20 @@
     TIoTAutoAddManualIntellListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.isChoosed == YES) {
         cell.isChoosed = NO;
+        if (self.choicedArray.count != 0 ) {
+            [self.choicedArray removeObject:self.dataArray[indexPath.row]];
+        }
+        
     }else {
         cell.isChoosed = YES;
+        if (self.choicedArray.count != 0) {
+            if (![self.choicedArray containsObject:self.dataArray[indexPath.row]]) {
+                [self.choicedArray addObject:self.dataArray[indexPath.row]];
+            }
+        }else {
+            [self.choicedArray addObject:self.dataArray[indexPath.row]];
+        }
+        
     }
     
 }
@@ -86,8 +159,6 @@
 
 #pragma mark - event
 - (void)chooseAll:(UIButton *)button {
-    
-    NSLog(@"--!!--!!!%ld",button.state);
       
     if (self.isFullSelected == NO) {
         for (int i = 0; i<self.dataArray.count; i++) {
@@ -96,6 +167,10 @@
         }
         //取消全选
         [self.selectedAllButton setTitle:NSLocalizedString(@"auto_all_cancel_selected", @"取消全选") forState:UIControlStateNormal];
+        
+        if (self.choicedArray.count != 0) {
+            [self.choicedArray removeAllObjects];
+        }
     }else {
         for (int i = 0; i<self.dataArray.count; i++) {
             TIoTAutoAddManualIntellListCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -103,10 +178,15 @@
         }
         //全选
         [self.selectedAllButton setTitle:NSLocalizedString(@"auto_all_selected", @"全选") forState:UIControlStateNormal];
+        
+        if (self.choicedArray.count != 0) {
+            [self.choicedArray removeAllObjects];
+        }else {
+            self.choicedArray = [self.dataArray mutableCopy];
+        }
+        
     }
     self.isFullSelected = !self.isFullSelected;
-    
-
 
 }
 
@@ -157,9 +237,16 @@
 
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
-        _dataArray = [NSMutableArray arrayWithArray:@[@"test1",@"test2",@"test3",@"test4"]];
+        _dataArray = [NSMutableArray array];
     }
     return _dataArray;
+}
+
+- (NSMutableArray *)choicedArray {
+    if (!_choicedArray) {
+        _choicedArray = [NSMutableArray array];
+    }
+    return _choicedArray;
 }
 
 - (TIoTIntelligentBottomActionView *)bottomView {
@@ -173,8 +260,17 @@
         };
         
         _bottomView.secondBlock = ^{
-#warning 确定所选后 返回
-//            [weakSelf judgechoiceTime];
+//MARK:确定所选后 返回
+            if (weakSelf.addManualSceneBlock) {
+                if (weakSelf.choicedArray.count != 0) {
+                    weakSelf.addManualSceneBlock(weakSelf.choicedArray);
+                }else {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }
+                
+            }
+            
+            [weakSelf.navigationController popViewControllerAnimated:YES];
             
         };
         
