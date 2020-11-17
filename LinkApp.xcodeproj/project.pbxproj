@@ -281,6 +281,8 @@
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
 		F4D48B872520834C00CE90AC /* TIoTBaseMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */; };
 		F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B842520834C00CE90AC /* TIoTMapViewController.m */; };
+		F4DB259E2563B050006C45CD /* RTCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB259D2563B050006C45CD /* RTCViewController.swift */; };
+		F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4DB29892563CE1F006C45CD /* RTC.storyboard */; };
 		F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D52C24935BD3005D3396 /* AppDelegate.m */; };
 		F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53424935BD3005D3396 /* Main.storyboard */; };
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
@@ -884,6 +886,9 @@
 		F4D48B852520834C00CE90AC /* TIoTBaseMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTBaseMapViewController.h; sourceTree = "<group>"; };
 		F4D48B862520834C00CE90AC /* TIoTMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTMapViewController.h; sourceTree = "<group>"; };
 		F4DAB24724A3551F00F1B270 /* LinkAppCommon.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkAppCommon.xcconfig; sourceTree = "<group>"; };
+		F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkSDKDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		F4DB259D2563B050006C45CD /* RTCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCViewController.swift; sourceTree = "<group>"; };
+		F4DB29892563CE1F006C45CD /* RTC.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RTC.storyboard; sourceTree = "<group>"; };
 		F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D52B24935BD3005D3396 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4F3D52C24935BD3005D3396 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -2007,6 +2012,15 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		F4DB24572563A94E006C45CD /* TRTC */ = {
+			isa = PBXGroup;
+			children = (
+				F4DB29892563CE1F006C45CD /* RTC.storyboard */,
+				F4DB259D2563B050006C45CD /* RTCViewController.swift */,
+			);
+			path = TRTC;
+			sourceTree = "<group>";
+		};
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
 			isa = PBXGroup;
 			children = (
@@ -2019,6 +2033,7 @@
 				F4F3D53724935BD3005D3396 /* Assets.xcassets */,
 				F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */,
 				F4F3D53C24935BD3005D3396 /* Info.plist */,
+				F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */,
 				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
 				F4F3D53D24935BD3005D3396 /* main.m */,
 			);
@@ -2037,6 +2052,7 @@
 		F4F3D73524938EBD005D3396 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				F4DB24572563A94E006C45CD /* TRTC */,
 				F4F3D73624938EBD005D3396 /* Model */,
 				F4F3D73924938EBD005D3396 /* View */,
 				F4F3D74E24938EBD005D3396 /* Controllers */,
@@ -2265,6 +2281,7 @@
 					};
 					F4F3D52824935BD3005D3396 = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1210;
 					};
 				};
 			};
@@ -2359,6 +2376,7 @@
 				6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */,
 				F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */,
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
+				F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */,
 				F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */,
 				F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */,
 				6DCC3D43251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib in Resources */,
@@ -2739,6 +2757,7 @@
 			files = (
 				F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
+				F4DB259E2563B050006C45CD /* RTCViewController.swift in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
 				F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */,
 				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
@@ -3212,6 +3231,7 @@
 			baseConfigurationReference = 68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -3232,6 +3252,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -3241,6 +3264,7 @@
 			baseConfigurationReference = 0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -3260,6 +3284,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

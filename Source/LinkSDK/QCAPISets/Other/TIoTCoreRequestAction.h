@@ -129,6 +129,11 @@ FOUNDATION_EXPORT NSString *const AppCreateScene;//创建手动场景
 FOUNDATION_EXPORT NSString *const AppGetSceneList;//获取场景列表
 FOUNDATION_EXPORT NSString *const AppCreateAutomation;//创建自动智能场景
 
+//MARK: TRTC
+FOUNDATION_EXPORT NSString *const AppIotRTCInviteDevice;//1.手机请求设备通话
+FOUNDATION_EXPORT NSString *const AppIotRTCCallDevice;//5. 手机请求加入房间参数
+FOUNDATION_EXPORT NSString *const AppIotRTCLeavelRoom;//9. 手机离开房间通知
+
 //===============h5
 FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心
 FOUNDATION_EXPORT NSString *const H5Evaluation;//评测

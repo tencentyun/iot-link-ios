@@ -24,9 +24,21 @@ Pod::Spec.new do |s|
   
   #实时音视频，引入则开启
   s.subspec 'TRTC' do |ss|
-    ss.source_files = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
+    ss.source_files  = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
+    ss.ios.framework = ['AVFoundation', 'Accelerate']
+    ss.library = 'c++', 'resolv'
+    
     ss.dependency 'TXLiteAVSDK_TRTC'#, '7.9.9565'
-    ss.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
+    ss.dependency 'YYModel'
+    ss.dependency 'TXIMSDK_iOS', '4.9.1'
+    ss.pod_target_xcconfig = {
+      'VALID_ARCHS'              => 'x86_64 armv7 arm64',
+      'HEADER_SEARCH_PATHS'      => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC.framework/Headers/',
+      'FRAMEWORK_SEARCH_PATHS'   => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
+      'LIBRARY_SEARCH_PATHS'     => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
+      'OTHER_LDFLAGS'            => '$(inherited) -undefined dynamic_lookup -ObjC',
+      'ENABLE_BITCODE'           => 'NO'
+    }
   end
 
 end
