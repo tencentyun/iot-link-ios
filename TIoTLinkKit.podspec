@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   
   #实时音视频，引入则开启
   s.subspec 'TRTC' do |ss|
-    ss.source_files = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
+    ss.source_files  = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
     ss.dependency 'TXLiteAVSDK_TRTC'#, '7.9.9565'
     ss.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
   end
