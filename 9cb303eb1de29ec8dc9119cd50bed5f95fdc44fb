@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e41f8c5a_d6b04fca",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAutoAddManualIntelliListVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-17T02:21:41Z",
+      "side": 1,
+      "message": "测试数据需删除",
+      "revId": "9cb303eb1de29ec8dc9119cd50bed5f95fdc44fb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
