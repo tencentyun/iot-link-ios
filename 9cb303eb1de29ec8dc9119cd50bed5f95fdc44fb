@@ -16,6 +16,24 @@
       "revId": "9cb303eb1de29ec8dc9119cd50bed5f95fdc44fb",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34318e5_7babaa3f",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAutoAddManualIntelliListVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-17T06:22:54Z",
+      "side": 1,
+      "message": "好的，已在patch3中删除",
+      "parentUuid": "e41f8c5a_d6b04fca",
+      "revId": "9cb303eb1de29ec8dc9119cd50bed5f95fdc44fb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
