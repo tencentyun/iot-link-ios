@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTAddAutoIntelligentVC : UIViewController
 
-@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoDeviceStatusArray;
+@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoDeviceStatusArray; //在setting创建完后返回的
 
 @property (nonatomic, strong) NSDictionary *paramDic; //从智能主页传入场景参数
 

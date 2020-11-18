@@ -31,10 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *IconUrl;
 
 @property (nonatomic, copy) NSString *sceneName; //本地添加 场景名称
-@property (nonatomic, copy) NSString *delayTime; //本地添加 延时时间
+@property (nonatomic, copy) NSString *delayTime; //本地添加 延时时间 加汉字
+@property (nonatomic, copy) NSString *delayTimeFormat; //本地添加 延时时间 00:00
+@property (nonatomic, assign) NSInteger isSwitchTuron; //本地添加 通知开关 1 开 0 关
 
 //生效时间段
-@property (nonatomic, copy) NSString *EffectiveBeginTime; //# 【两个新增参数，用来表示开始和结束时间】
+@property (nonatomic, copy) NSString *EffectiveBeginTime; //# 【两个新增参数，用来表示开始和结束时间
 @property (nonatomic, copy) NSString *EffectiveEndTime;
 @property (nonatomic, copy) NSString *EffectiveDays; // # 由0和1组成的7位数字，0表示不执行，1表示执行，第1位为周日，依次表示周一至周六
 @end
@@ -63,7 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AutoIntelliConditionTimerProperty : NSObject
 @property (nonatomic, copy) NSString *Days; // 由0和1组成的7位数字，0表示不执行，1表示执行，第1位为周日，依次表示周一至周六
 @property (nonatomic, copy) NSString *TimePoint; // 触发时间，24小时制，比如"14:00"
-@property (nonatomic, copy) NSString *timerKindSring;  //本地自行构建 
+@property (nonatomic, copy) NSString *timerKindSring;  //本地自行构建
+@property (nonatomic, assign) NSInteger choiceRepeatTimeNumner;//本地自建  定时中-重复类型
 @end
 
 
