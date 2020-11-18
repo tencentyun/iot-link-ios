@@ -14,7 +14,7 @@
 #import "TIoTAppEnvironment.h"
 #import "TIoTAddAutoIntelligentVC.h"
 
-@interface TIoTIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTIntelligentSceneCellDelegate>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentTipLabel;
 @property (nonatomic, strong) UIButton *addIntelligentButton;
@@ -23,8 +23,11 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *deviceNumberArray;
+@property (nonatomic, strong) NSMutableArray *autoSceneArray;
+@property (nonatomic, strong) UIView *customSectionHeaderView;
 
 @property (nonatomic, strong) NSDictionary *sceneParamDic;
+@property (nonatomic, strong) NSArray *sectionTitleArray;
 @end
 
 @implementation TIoTIntelligentVC
@@ -73,7 +76,14 @@
     }];
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
-}
+  
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+} 
 
 - (void)loadSceneList {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
@@ -103,9 +113,21 @@
         }
         
         [self.tableView reloadData];
-        if (self.dataArray.count == 0) {
-            self.tableView.hidden = YES;
-        }
+        
+        [[TIoTRequestObject shared] post:AppGetAutomationList Param:dic success:^(id responseObject) {
+            
+            self.autoSceneArray = [NSMutableArray arrayWithArray:responseObject[@"List"]?:@[]];
+            
+            [self.tableView reloadData];
+            
+            if (self.dataArray.count == 0 && self.autoSceneArray.count == 0) {
+                self.tableView.hidden = YES;
+            }
+            
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            
+        }];
+        
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
@@ -143,15 +165,175 @@
 }
 
 #pragma mark - UITableViewDelegate And TableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    if (section == 0) {
+        return self.dataArray.count;
+    }else {
+        return self.autoSceneArray.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTIntelligentSceneCell *sceneCell = [TIoTIntelligentSceneCell cellWithTableView:tableView];
-    sceneCell.dic = self.dataArray[indexPath.row];
-    sceneCell.deviceNum = self.deviceNumberArray[indexPath.row];
-    return sceneCell;
+    if (indexPath.section == 0) {
+        TIoTIntelligentSceneCell *sceneCell = [TIoTIntelligentSceneCell cellWithTableView:tableView];
+        sceneCell.dic = self.dataArray[indexPath.row];
+        sceneCell.delegate = self;
+        sceneCell.deviceNum = self.deviceNumberArray[indexPath.row];
+        sceneCell.sceneType = IntelligentSceneTypeManual;
+        return sceneCell;
+    }else {
+        TIoTIntelligentSceneCell *sceneCell = [TIoTIntelligentSceneCell cellWithTableView:tableView];
+        sceneCell.dic = self.autoSceneArray[indexPath.row];
+        sceneCell.deviceNum = @"";
+        sceneCell.delegate = self;
+        sceneCell.sceneType = IntelligentSceneTypeAuto;
+        return sceneCell;
+    }
+    
+    
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
+    headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+
+    UILabel *sectionTitle = [[UILabel alloc]init];
+    [sectionTitle setLabelFormateTitle:self.sectionTitleArray[section] font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#6C7078" textAlignment:NSTextAlignmentLeft];
+    [headerSectionView addSubview:sectionTitle];
+    [sectionTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(headerSectionView.mas_left).offset(16);
+        make.centerY.equalTo(headerSectionView.mas_centerY);
+    }];
+
+    return headerSectionView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 50;
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 删除
+    return UITableViewCellEditingStyleDelete;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+        //只要实现这个方法，就实现了默认滑动删
+        if (editingStyle == UITableViewCellEditingStyleDelete)
+        {
+            // 删除数据
+            [self deleteSelectIndexPath:indexPath];
+        }
+}
+
+- (void)deleteSelectIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        
+        NSDictionary *manualSceneDic = self.dataArray[indexPath.row];
+        NSString *sceneId = manualSceneDic[@"SceneId"]?:@"";
+        [self requestDeleteManualScene:sceneId];
+        [self.dataArray removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+        
+    }else {
+        
+        NSDictionary *autoSceneDic = self.autoSceneArray[indexPath.row];
+        NSString *sceneID = autoSceneDic[@"AutomationId"]?:@"";
+        [self requestDeleteAutoScene:sceneID];
+        [self.autoSceneArray removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+    }
+    
+}
+
+#pragma mark - 删除/执行 场景方法
+/**
+ 手动智能场景删除
+ */
+- (void)requestDeleteManualScene:(NSString *)sceneID {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    NSString *sceneIDString = sceneID?:@"";
+    NSDictionary *paramDic = @{@"SceneId":sceneIDString};
+    [[TIoTRequestObject shared] post:AppDeleteScene Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"delete_success", @"删除成功") icon:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+/**
+ 自动智能场景删除
+ */
+- (void)requestDeleteAutoScene:(NSString *)sceneID {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    NSString *sceneIDString = sceneID?:@"";
+    NSDictionary *paramDic = @{@"AutomationId":sceneIDString};
+    [[TIoTRequestObject shared] post:AppDeleteAutomation Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"delete_success", @"删除成功") icon:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+/**
+ 手动智能场景执行
+ */
+- (void)requestRunManualScene:(NSString *)sceneID {
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    NSString *sceneIDString = sceneID?:@"";
+    NSDictionary *paramDic = @{@"SceneId":sceneIDString};
+    [[TIoTRequestObject shared] post:AppRunScene Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+        [MBProgressHUD showMessage:NSLocalizedString(@"execute_Manual_success", @"执行手动智能成功") icon:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+/**
+ 自动智能场景执行
+ */
+- (void)requestModifyAutoScene:(NSString *)scnenID status:(NSInteger)statusNum tipString:(NSString *)tipString{
+    NSString *sceneIDString = scnenID?:@"";
+    NSInteger sceneStauts = statusNum;
+    NSDictionary *paramDic = @{@"AutomationId":sceneIDString,@"Status":@(sceneStauts)};
+    
+    [[TIoTRequestObject shared] post:AppModifyAutomationStatus Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+        [MBProgressHUD showMessage:tipString?:@"" icon:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+    
+}
+
+#pragma mark - 场景cell代理
+- (void)changeSwitchStatus:(UISwitch *)switchControl withAutoScendData:(NSDictionary *)autoSceneDic {
+    
+    NSString *sceneIDStr = autoSceneDic[@"AutomationId"]?:@"";
+    NSNumber *sceneStatus = autoSceneDic[@"Status"];
+    NSInteger statusNum = 0;
+    if (sceneStatus.intValue) {
+        statusNum = sceneStatus.intValue;
+    }
+    
+    if ([switchControl isOn]) {
+        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"open_auto_success", @"开启自动智能成功")];
+    }else {
+        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"close_auto_success", @"关闭自动智能成功")];
+    }
+}
+
+- (void)runManualSceneWithSceneID:(NSString *)sceneID {
+    
+    [self requestRunManualScene:sceneID];
 }
 
 #pragma mark - event
@@ -252,11 +434,14 @@
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]init];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.rowHeight = 106;
+        _tableView.allowsMultipleSelection = NO;
+        _tableView.allowsSelectionDuringEditing = NO;
+        _tableView.allowsMultipleSelectionDuringEditing = NO;
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     }
     return _tableView;
@@ -267,6 +452,20 @@
         _deviceNumberArray = [NSMutableArray array];
     }
     return _deviceNumberArray;
+}
+
+- (NSMutableArray *)autoSceneArray {
+    if (!_autoSceneArray) {
+        _autoSceneArray = [NSMutableArray array];
+    }
+    return _autoSceneArray;
+}
+
+- (NSArray *)sectionTitleArray {
+    if (!_sectionTitleArray) {
+        _sectionTitleArray = @[NSLocalizedString(@"manual_scene", @"手动"),NSLocalizedString(@"auto_scene", @"自动")];
+    }
+    return _sectionTitleArray;
 }
 /*
 #pragma mark - Navigation

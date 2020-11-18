@@ -118,7 +118,12 @@ NSString *const AppRemoveUserShareDevice = @"AppRemoveUserShareDevice";//删除�
 //===============智能联动
 NSString *const AppCreateScene = @"AppCreateScene";//创建手动场景
 NSString *const AppGetSceneList = @"AppGetSceneList";//获取场景列表
+NSString *const AppGetAutomationList = @"AppGetAutomationList";//获取自动智能场景列表
 NSString *const AppCreateAutomation = @"AppCreateAutomation";//创建自动智能场景
+NSString *const AppDeleteScene = @"AppDeleteScene";//删除手动场景
+NSString *const AppDeleteAutomation = @"AppDeleteAutomation";//删除自动场景
+NSString *const AppRunScene = @"AppRunScene";//手动智能场景执行
+NSString *const AppModifyAutomationStatus = @"AppModifyAutomationStatus";//自动智能更改状态
 
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心

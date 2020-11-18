@@ -320,7 +320,7 @@
                     valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
                 }
                 
-                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model);
+                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%.1f",weakSelf.slider.value]);
             }
             
             [weakSelf dismissView];
