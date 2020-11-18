@@ -65,6 +65,7 @@ static NSString *registDeviceReqID = @"5001";
     }
     
     NSDictionary *dic = @{@"Platform":@"iOS",
+                          @"Agent":@"iOS",
                           @"RequestId":[[NSUUID UUID] UUIDString],
                           @"action":@"YunApi",
                           @"AppKey":[TIoTCoreServices shared].appKey,
@@ -108,6 +109,7 @@ static NSString *registDeviceReqID = @"5001";
     
     NSMutableDictionary *actionParams = [NSMutableDictionary dictionaryWithDictionary:paramDic];
     [actionParams setObject:dic[@"iOS"] forKey:@"Platform"];
+    [actionParams setObject:dic[@"iOS"] forKey:@"Agent"];
     [actionParams setObject:dic[@"RequestId"] forKey:@"RequestId"];
     if ([TIoTCoreUserManage shared].accessToken.length > 0) {
         [actionParams setObject:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TIoTIntelligentProductConfigModel.h"
+#import "TIoTAutoIntelligentModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +32,8 @@ typedef NS_ENUM(NSInteger, IntelligentEnterType) {
 @property (nonatomic, strong) NSMutableArray *valueOriginArray;
 
 @property (nonatomic, assign) IntelligentEnterType enterType; //
-@property (nonatomic, assign) BOOL isAutoActionType;    //自动智能任务入口 yes 任务入口（包含在自动智能enterType里，no conditionr入口）
+@property (nonatomic, assign) BOOL isAutoActionType;    //自动智能任务入口 (包含在自动智能enterType里 yes 任务入口，no 条件入口）
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -316,6 +316,7 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     NSDictionary *dic = @{@"Platform":[TIoTCoreAppEnvironment shareEnvironment].platform,
+                          @"Agent":[TIoTCoreAppEnvironment shareEnvironment].platform,
                           @"RequestId":[[NSUUID UUID] UUIDString],
                           @"action":[TIoTCoreAppEnvironment shareEnvironment].action,
                           @"AppKey":[TIoTCoreAppEnvironment shareEnvironment].appKey,

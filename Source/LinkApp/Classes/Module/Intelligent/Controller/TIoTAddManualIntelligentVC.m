@@ -15,6 +15,13 @@
 #import "TIoTComplementIntelligentVC.h"
 #import "TIoTIntelligentVC.h"
 #import "TIoTDeviceSettingVC.h"
+#import "UILabel+TIoTExtension.h"
+
+#import "TIoTSettingIntelligentCell.h"
+#import "TIoTSettingIntelligentImageVC.h"
+#import "TIoTSettingIntelligentNameVC.h"
+#import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 @interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTChooseDelayTimeVCDelegate>
 @property  (nonatomic, strong) UIImageView *noManualTaskImageView;
@@ -27,6 +34,12 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger selectedDelayIndex;
 @property (nonatomic, strong) NSMutableArray *delayTimeStringArray;
+
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UITableView *complementTableView;
+@property (nonatomic, strong) NSMutableArray *dataArr;
+@property (nonatomic, strong) NSString *sceneImageUrl;
+@property (nonatomic, strong) NSString  *sceneNameString;
 @end
 
 @implementation TIoTAddManualIntelligentVC
@@ -61,14 +74,90 @@
     // Do any additional setup after loading the view.
     
     [self setupUI];
+    
+    if (self.isSceneDetail == YES) {
+        [self loadManualSceneList];
+        self.nextButtonView.hidden = NO;
+    }
+}
+
+//MARK:传入的手动场景（智能主页传入）
+- (void)loadManualSceneList {
+
+    [self.dataArray removeAllObjects];
+    [self.dataArr removeAllObjects];
+    
+    NSMutableArray *manualSceneArray = [NSMutableArray arrayWithArray:self.sceneManualDic[@"Actions"]?:@[]];
+    for (int i = 0; i<manualSceneArray.count; i++) {
+
+        NSDictionary *tempDic = [NSDictionary dictionaryWithDictionary:manualSceneArray[i]];
+        NSNumber *actionTypeNum = tempDic[@"ActionType"]?:0;
+        
+        if ( actionTypeNum.intValue == 0) { //设备
+            TIoTPropertiesModel *model = [TIoTPropertiesModel yy_modelWithJSON:tempDic];
+            [self.dataArray addObject:model];
+        }else if (actionTypeNum.intValue == 1){ //延时
+            NSNumber *timeSecond = tempDic[@"Data"]?:0;
+            NSInteger hourNum = timeSecond.intValue / (60*60);
+            NSInteger minutNum = (timeSecond.intValue % (60*60))/60;
+            
+            NSString *timestr = @"";
+            if (hourNum == 0) {
+                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+            }
+            if (minutNum == 0) {
+                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+            }
+            
+            [self.dataArray addObject:timestr];
+        }
+    }
+    
+    if (self.dataArray.count == 0) {
+        self.tableView.hidden = YES;
+    }else {
+        self.tableView.hidden = NO;
+    }
+    
+    self.sceneImageUrl = self.sceneManualDic[@"SceneIcon"]?:@"";
+    self.sceneNameString = self.sceneManualDic[@"SceneName"]?:@"";
+    [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Image", @"智能图片"),@"value":NSLocalizedString(@"unset", @"未设置"),@"image":self.sceneImageUrl,@"needArrow":@"1"}]];
+    [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Name", @"智能名称"),@"value":self.sceneNameString,@"needArrow":@"1"}]];
+    
+    [self.tableView reloadData];
 }
 
 - (void)setupUI {
-
-    self.title = NSLocalizedString(@"addManualTask", @"添加手动智能");
+    
+    if (self.isSceneDetail == YES) {
+        self.title = NSLocalizedString(@"intelligent_manual", @"手动智能");
+    }else {
+        self.title = NSLocalizedString(@"addManualTask", @"添加手动智能");
+    }
+    
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self addEmptyIntelligentDeviceTipView];
+    
+    CGFloat KItemHeight = 48;
+    
+    CGFloat kTopSpace = KItemHeight *2 +15; //tableview 距离导航栏高度
+    [self.view addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(100);
+        if (@available (iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        }else {
+            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
+        }
+    }];
+    
+    [self.topView addSubview:self.complementTableView];
+    [self.complementTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.topView);
+    }];
+    
     
     CGFloat kBottomViewHeight = 90;
     
@@ -76,7 +165,13 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            
+            if (self.isSceneDetail == YES) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopSpace);
+            }else {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            }
+            
         } else {
             // Fallback on earlier versions
             make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
@@ -178,49 +273,98 @@
     }];
 }
 
+#pragma mark - 顶部view 方法 选择场景图片 或 设置名称
+- (void)chooseIntelImage {
+    
+}
+
+- (void)chooseIntelName {
+    
+}
+
 #pragma mark - UITableViewDelegate And TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    if (tableView == self.tableView) {
+        return self.dataArray.count;
+    }else {
+        return self.dataArr.count;
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
-    id object = self.dataArray[indexPath.row];
-    if ([object isKindOfClass:[NSString class]]) {
-        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
-    }else  {
-        intelligentCell.model = self.dataArray[indexPath.row];
-        intelligentCell.subTitleString = self.valueArray[indexPath.row];
-        intelligentCell.productModel = self.productModel;
+    
+    if (tableView == self.tableView) {
+        TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
+        id object = self.dataArray[indexPath.row];
+        if ([object isKindOfClass:[NSString class]]) {
+            intelligentCell.delayTimeString = self.dataArray[indexPath.row];
+        }else  {
+            intelligentCell.model = self.dataArray[indexPath.row];
+            intelligentCell.subTitleString = self.valueArray[indexPath.row];
+            intelligentCell.productModel = self.productModel;
+        }
+        return intelligentCell;
+    }else {
+        TIoTSettingIntelligentCell *cell = [TIoTSettingIntelligentCell cellWithTableView:tableView];
+        cell.dic = [self dataArr][indexPath.row];
+        return cell;
     }
     
-    return intelligentCell;
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 #warning 后期添加判断类型 暂时先如下处理
     
-    id object = self.dataArray[indexPath.row];
-    if ([object isKindOfClass:[NSString class]]) {
-        TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
-        chooseDelayTimeVC.isEditing = YES;
-        chooseDelayTimeVC.delegate = self;
-        self.selectedDelayIndex = indexPath.row;
-        [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
-    }else  {
-        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
-        deviceSettingVC.isEdited = YES;
-        deviceSettingVC.editedModel = self.dataArray[indexPath.row];
-        deviceSettingVC.productModel = self.productModel;
-        deviceSettingVC.valueString = self.valueArray[indexPath.row];
-        deviceSettingVC.editActionIndex = indexPath.row;
-        deviceSettingVC.valueOriginArray = [self.valueArray mutableCopy];
-        deviceSettingVC.actionOriginArray = [self.dataArray mutableCopy];
-        [self.navigationController pushViewController:deviceSettingVC animated:YES];
+    if (tableView == self.tableView) {
+        id object = self.dataArray[indexPath.row];
+        if ([object isKindOfClass:[NSString class]]) {
+            TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+            chooseDelayTimeVC.isEditing = YES;
+            chooseDelayTimeVC.delegate = self;
+            self.selectedDelayIndex = indexPath.row;
+            [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+        }else  {
+            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+            deviceSettingVC.isEdited = YES;
+            deviceSettingVC.editedModel = self.dataArray[indexPath.row];
+            deviceSettingVC.productModel = self.productModel;
+            deviceSettingVC.valueString = self.valueArray[indexPath.row];
+            deviceSettingVC.editActionIndex = indexPath.row;
+            deviceSettingVC.valueOriginArray = [self.valueArray mutableCopy];
+            deviceSettingVC.actionOriginArray = [self.dataArray mutableCopy];
+            [self.navigationController pushViewController:deviceSettingVC animated:YES];
+        }
+    }else {
+        if (indexPath.row == 0) {
+            TIoTSettingIntelligentImageVC *settingImageVC = [[TIoTSettingIntelligentImageVC alloc]init];
+            settingImageVC.selectedIntelligentImageBlock = ^(NSString * _Nonnull imageUrl) {
+                NSMutableDictionary *dic  = self.dataArr[0];
+                [dic setValue:imageUrl forKey:@"image"];
+                self.sceneImageUrl = imageUrl;
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [self.complementTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            };
+            [self.navigationController pushViewController:settingImageVC animated:YES];
+            
+        }else if (indexPath.row == 1) {
+            TIoTSettingIntelligentNameVC *settingNameVC = [[TIoTSettingIntelligentNameVC alloc]init];
+            settingNameVC.saveIntelligentNameBlock = ^(NSString * _Nonnull name) {
+                NSMutableDictionary *dic  = self.dataArr[1];
+                [dic setValue:name forKey:@"value"];
+                self.sceneNameString = name;
+                
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+                [self.complementTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            };
+            [self.navigationController pushViewController:settingNameVC animated:YES];
+        }
+        
     }
-    
-    
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -272,7 +416,7 @@
 //}
 
 #pragma mark - TIoTChooseDelayTimeVCDelegate
-- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min {
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
     [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
     [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
     NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
@@ -436,29 +580,46 @@
     if (!_nextButtonView) {
         _nextButtonView = [[TIoTIntelligentBottomActionView alloc]init];
         _nextButtonView.backgroundColor = [UIColor whiteColor];
-        [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
-        __weak typeof(self)weakSelf = self;
-        _nextButtonView.confirmBlock = ^{
-            if (weakSelf.customSheet) {
-                [weakSelf.customSheet removeFromSuperview];
-            }
-            TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-            complementVC.productModel = weakSelf.productModel;
-            complementVC.actionArray = weakSelf.taskArray;
-            complementVC.valueArray = weakSelf.valueArray;
-            if (weakSelf.actionType == IntelligentActioinTypeManual) {
-                complementVC.sceneActioinType = SceneActioinTypeManual;
-            }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
-                complementVC.sceneActioinType = SceneActioinTypeDelay;
-            }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
-                complementVC.sceneActioinType = SceneActioinTypeNotice;
-            }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
-                complementVC.sceneActioinType = SceneActioinTypeTimer;
-            }
-            complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
-            complementVC.dataArray = weakSelf.dataArray;
-            [weakSelf.navigationController pushViewController:complementVC animated:YES];
-        };
+        
+        if (self.isSceneDetail == YES) {
+            [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"save", @"保存")]];
+            //MARK:请求修改手动场景接口
+            [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+            
+            NSDictionary *paramDic = @{@"Actions":self.sceneManualDic[@"Actions"],@"SceneId":self.sceneManualDic[@"SceneId"],@"SceneName":self.sceneNameString,@"SceneIcon":self.sceneImageUrl};
+            [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
+                [MBProgressHUD dismissInView:self.view];
+                [self.navigationController popViewControllerAnimated:YES];
+            } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                
+            }];
+            
+        }else {
+            [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
+            __weak typeof(self)weakSelf = self;
+            _nextButtonView.confirmBlock = ^{
+                if (weakSelf.customSheet) {
+                    [weakSelf.customSheet removeFromSuperview];
+                }
+                TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+                complementVC.productModel = weakSelf.productModel;
+                complementVC.actionArray = weakSelf.taskArray;
+                complementVC.valueArray = weakSelf.valueArray;
+                if (weakSelf.actionType == IntelligentActioinTypeManual) {
+                    complementVC.sceneActioinType = SceneActioinTypeManual;
+                }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
+                    complementVC.sceneActioinType = SceneActioinTypeDelay;
+                }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
+                    complementVC.sceneActioinType = SceneActioinTypeNotice;
+                }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
+                    complementVC.sceneActioinType = SceneActioinTypeTimer;
+                }
+                complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
+                complementVC.dataArray = weakSelf.dataArray;
+                [weakSelf.navigationController pushViewController:complementVC animated:YES];
+            };
+        }
+        
     }
     return _nextButtonView;
 }
@@ -483,4 +644,33 @@
     }
     return _delayTimeStringArray;
 }
+
+- (UIView *)topView {
+    if (!_topView) {
+        _topView = [[UIView alloc]init];
+        _topView.backgroundColor = [UIColor whiteColor];
+    }
+    return _topView;;
+}
+
+- (UITableView *)complementTableView {
+    if (!_complementTableView) {
+        _complementTableView = [[UITableView alloc]init];
+        _complementTableView.delegate = self;
+        _complementTableView.dataSource = self;
+        _complementTableView.backgroundColor = [UIColor whiteColor];
+        _complementTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _complementTableView.rowHeight = 48;
+    }
+    return _complementTableView;
+}
+
+
+- (NSMutableArray *)dataArr{
+    if (!_dataArr) {
+        _dataArr = [NSMutableArray array];
+    }
+    return _dataArr;
+}
+
 @end
