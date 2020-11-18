@@ -12,6 +12,8 @@
 #import "TIoTAddManualIntelligentVC.h"
 #import "TIoTChooseClickValueView.h"
 #import "TIoTChooseSliderValueView.h"
+#import "TIoTAddAutoIntelligentVC.h"
+#import "TIoTAutoIntelligentModel.h"
 
 @interface TIoTDeviceSettingVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -27,6 +29,8 @@
 @property (nonatomic, strong) NSMutableArray *productArray;
 @property (nonatomic, strong) NSString *modifiedValue;
 @property (nonatomic, strong) TIoTPropertiesModel *modifiedModel;
+
+@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoIntelModelArray;          //自动智能进入后重组的model数组
 
 @end
 
@@ -99,6 +103,33 @@
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
             [weakSelf.modifiedModelArray insertObject:weakSelf.modifiedModel atIndex:0];
             [weakSelf.productArray addObject:weakSelf.productModel];
+            
+// MARK: 从自动智能-添加条件-设备状态变化入口进入
+            if (weakSelf.enterType == IntelligentEnterTypeAuto) {
+                
+                NSString *timeTamp = [NSString getNowTimeString];
+                NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
+                                                      @"DeviceName":weakSelf.productModel.DeviceName,
+                                                      @"AliasName":weakSelf.productModel.AliasName,
+                                                      @"IconUrl":weakSelf.productModel.IconUrl,
+                                                      @"PropertyId":weakSelf.baseModel.id,
+                                                      @"Op":@"eq",
+                                                      @"Value":@(1),
+                                                      @"conditionTitle":weakSelf.baseModel.name,
+                                                      @"conditionContentString":valueString};
+                NSString *type = @"0";
+                if (self.isAutoActionType == YES) {
+                    type = @"2";
+                }
+                
+                NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
+                                                @"CondType":@(0),
+                                                @"Property":autoDeviceSelectDic,
+                                                @"type":type};
+                TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                
+                [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+            }
         };
         
         [[UIApplication sharedApplication].delegate.window addSubview:self.clickValueView];
@@ -210,8 +241,15 @@
                     // 找到需要返回的控制器的处理方式
                     [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
-                    // 没找到需要返回的控制器的处理方式
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                    
+                    //MARK:从自动智能入口进入，为空则返回
+                    TIoTAddAutoIntelligentVC * addAutoVC = [weakSelf findViewController:NSStringFromClass([TIoTAddAutoIntelligentVC class])];
+                    if (addAutoVC) {
+                        [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
+                    }else {
+                        // 没找到需要返回的控制器的处理方式
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    }
                 }
                 
             }else {
@@ -240,8 +278,18 @@
                     [vc refreshData];
                     [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
-                    // 没找到需要返回的控制器的处理方式
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                    
+                    //MARK:从自动智能入口进入，将选择好的condition数据返回
+                    TIoTAddAutoIntelligentVC * addAutoVC = [weakSelf findViewController:NSStringFromClass([TIoTAddAutoIntelligentVC class])];
+                    if (addAutoVC) {
+                        addAutoVC.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+                        [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType];
+                        [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
+                    }else {
+                        // 没找到需要返回的控制器的处理方式
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    }
+                    
                 }
             }
             
@@ -264,11 +312,11 @@
         }
         
         self.modelArray = [propertiesArray mutableCopy];
-        for (TIoTPropertiesModel *baseModel in propertiesArray) {
-            if ([baseModel.mode isEqualToString:@"r"] || [baseModel.define.type isEqualToString:@"string"] || [baseModel.required isEqualToString:@"1"] ||([NSString isNullOrNilWithObject:baseModel.mode] || [NSString isNullOrNilWithObject:baseModel.required] || [NSString isNullOrNilWithObject:baseModel.define.type])) {
-                [self.modelArray removeObject:baseModel];
-            }
-        }
+//        for (TIoTPropertiesModel *baseModel in propertiesArray) {
+//            if ([baseModel.mode isEqualToString:@"r"] || [baseModel.define.type isEqualToString:@"string"] || [baseModel.required isEqualToString:@"1"] ||([NSString isNullOrNilWithObject:baseModel.mode] || [NSString isNullOrNilWithObject:baseModel.required] || [NSString isNullOrNilWithObject:baseModel.define.type])) {
+//                [self.modelArray removeObject:baseModel];
+//            }
+//        }
         
         for (TIoTPropertiesModel *baseModel in self.modelArray) {
             
@@ -303,6 +351,13 @@
         _productArray = [NSMutableArray array];
     }
     return _productArray;
+}
+
+- (NSMutableArray *)autoIntelModelArray {
+    if (!_autoIntelModelArray) {
+        _autoIntelModelArray = [NSMutableArray array];
+    }
+    return _autoIntelModelArray;
 }
 
 @end

@@ -125,8 +125,9 @@ FOUNDATION_EXPORT NSString *const AppRemoveShareDeviceUser;//删除设备的用�
 FOUNDATION_EXPORT NSString *const AppRemoveUserShareDevice;//删除用户的设备
 
 //MARK: 智能联动
-FOUNDATION_EXPORT NSString *const AppCreateScene;//创建场景
+FOUNDATION_EXPORT NSString *const AppCreateScene;//创建手动场景
 FOUNDATION_EXPORT NSString *const AppGetSceneList;//获取场景列表
+FOUNDATION_EXPORT NSString *const AppCreateAutomation;//创建自动智能场景
 
 //===============h5
 FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心
