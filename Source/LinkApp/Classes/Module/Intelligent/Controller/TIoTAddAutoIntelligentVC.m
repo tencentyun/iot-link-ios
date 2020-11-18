@@ -16,6 +16,11 @@
 #import "TIoTAutoEffectTimePriodView.h"
 #import "TIoTAutoConditionsView.h"
 #import "TIoTAutoAddManualIntelliListVC.h"
+#import "TIoTAutoIntelligentModel.h" //model
+#import "TIoTChooseIntelligentDeviceVC.h"
+#import "TIoTAutoNoticeVC.h"
+#import "TIoTComplementIntelligentVC.h"
+#import "TIoTChooseDelayTimeVC.h"
 
 @interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
@@ -25,6 +30,11 @@
 
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;  //添加条件底部sheet
 @property (nonatomic, strong) TIoTCustomSheetView *customActionSheet; //添加任务底部sheet
+
+@property (nonatomic, assign) NSInteger selectedConditonNum;
+@property (nonatomic, strong) NSString *effectDayIDString;  //重复周期对应天 ID
+@property (nonatomic, strong) NSString *effectBeginTimeString; //有效时间段起始时间
+@property (nonatomic, strong) NSString *effectEndTimeString; //有效时间段结束时间
 @end
 
 @implementation TIoTAddAutoIntelligentVC
@@ -34,6 +44,11 @@
     // Do any additional setup after loading the view.
     
     [self setupUI];
+    
+    self.selectedConditonNum = 0;
+    self.effectDayIDString = @"1111111";
+    self.effectBeginTimeString = @"00:00";
+    self.effectEndTimeString = @"23:59";
 }
 
 - (void)setupUI {
@@ -113,6 +128,7 @@
             TIoTIntelligentCustomCell *cell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
             if (self.conditionArray.count > 0) {
                 cell.isHideBlankAddView = YES;
+                cell.autoIntellModel = self.conditionArray[indexPath.row - 1];
             }else {
                 cell.isHideBlankAddView = NO;
                 cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_addCondition", @"添加条件");
@@ -140,6 +156,7 @@
             TIoTIntelligentCustomCell *cell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
             if (self.actionArray.count > 0) {
                 cell.isHideBlankAddView = YES;
+                cell.autoIntellModel = self.actionArray[indexPath.row - 1];
             }else {
                 cell.isHideBlankAddView = NO;
                 cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_task", @"添加任务");
@@ -157,13 +174,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        if (self.actionArray.count == 0) {
+        if (self.conditionArray.count == 0) {
             if (indexPath.row == 0) {
                 //MARK:弹出选择条件的view
                 TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
-                choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent) {
+                choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent, NSInteger number) {
                     TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
                     cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                    self.selectedConditonNum = number;
                 };
                 [self.view addSubview:choiceConditionView];
                 [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -171,10 +189,24 @@
                     make.top.equalTo(self.tableView.mas_top);
                 }];
             }else if (indexPath.row == 1) {
+                //MARK:弹出添加条件sheet
                 [self addConditionEnter];
             }
         }else {
-#warning 进入对应条件编辑页面
+//MARK: 进入对应条件编辑页面(条件 type 0 设备状态、1 定时)
+            TIoTAutoIntelligentModel *autoModel = self.conditionArray[indexPath.row - 1];
+            if ([autoModel.type isEqualToString:@"0"]) {
+                NSLog(@"00");
+            }else if ([autoModel.type isEqualToString:@"1"])  {
+                NSLog(@"11");
+                TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+                timingVC.autoIntelAddTimerBlock = ^(TIoTAutoIntelligentModel * _Nonnull timerModel) {
+//                    [weakSelf.conditionArray addObject:timerModel];
+//                    [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                };
+                [self.navigationController pushViewController:timingVC animated:YES];
+            }
+            
         }
         
     }else if (indexPath.section == 1) {
@@ -183,7 +215,17 @@
                 [self addActionEnter];
             }
         }else {
-            
+//MARK: 进入对应条件编辑页面(任务 type 2 设备控制，3 延时，4 选择手动，5 发送通知)
+            TIoTAutoIntelligentModel *autoModel = self.actionArray[indexPath.row - 1];
+            if ([autoModel.type isEqualToString:@"2"]) {
+                NSLog(@"222");
+            }else if ([autoModel.type isEqualToString:@"3"])  {
+                NSLog(@"33");
+            }else if ([autoModel.type isEqualToString:@"4"]) {
+                NSLog(@"44");
+            }else if ([autoModel.type isEqualToString:@"5"]) {
+                NSLog(@"55");
+            }
         }
         
     }else {
@@ -193,34 +235,20 @@
         //MARK:生效时间段view
         TIoTAutoEffectTimePriodView *timePeriodView = [[TIoTAutoEffectTimePriodView alloc]init];
         //生成有效时间段，显示在控制器中
-        timePeriodView.generateTimePeriodBlock = ^(NSMutableDictionary * _Nonnull timePeriodDic) {
+        timePeriodView.generateTimePeriodBlock = ^(NSMutableDictionary * _Nonnull timePeriodDic, NSString * _Nonnull dayIDString) {
             TIoTDeviceDetailTableViewCell *cell = [Weakself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-            NSMutableString *effectTimeStr = [timePeriodDic[@"time"] mutableCopy];
+            NSString *effectTimeStr = timePeriodDic[@"time"]?:@"";
             if ([NSString isNullOrNilWithObject:effectTimeStr]) {
-                effectTimeStr = [NSMutableString stringWithString:NSLocalizedString(@"auto_effect_allDay", @"全天")];
-            }else {
-                if ([effectTimeStr containsString:@"（"]) {
-                    [effectTimeStr deleteCharactersInRange:NSMakeRange(0, 1)];
-                }
-                
-                if ([effectTimeStr containsString:@"）"]) {
-                    [effectTimeStr deleteCharactersInRange:NSMakeRange(effectTimeStr.length-1, 1)];
-                }
+                effectTimeStr = NSLocalizedString(@"auto_effect_allDay", @"全天");
             }
-            
             cell.dic = @{@"title":NSLocalizedString(@"auto_effective_time_period", @"生效时间段"),@"value":effectTimeStr,@"needArrow":@"1"};
             
-        };
-        
-        TIoTDeviceDetailTableViewCell *cell = [Weakself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-        NSString *timeTemp = cell.dic[@"value"];
-        if ([timeTemp containsString:@"-"]) {
+            NSArray *timeArray = [effectTimeStr componentsSeparatedByString:@"-"];
+            self.effectDayIDString = dayIDString;
+            self.effectBeginTimeString = timeArray.firstObject?:@"";
+            self.effectEndTimeString = timeArray.lastObject?:@"";
             
-            timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSMutableDictionary dictionaryWithDictionary:@{@"time":timeTemp,@"repeatType":@""}]];
-        }else {
-            timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSMutableDictionary dictionaryWithDictionary:@{@"time":@"00:00-23:59",@"repeatType":@""}]];
-        }
-        
+        };
         [[UIApplication sharedApplication].delegate.window addSubview:timePeriodView];
         [timePeriodView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo([UIApplication sharedApplication].delegate.window);
@@ -254,16 +282,44 @@
 }
 
 #pragma mark - event
-/**
- 添加条件
- */
+
+//MARK:添加设备状态条件（model数组）后，刷新list
+- (void)refreshAutoIntelligentList:(BOOL)isAction {
+    
+    if (isAction == YES) {//任务
+        if (self.autoDeviceStatusArray.count != 0) {
+            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                [self.actionArray addObject:model];
+            }
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }else { //条件
+        if (self.autoDeviceStatusArray.count != 0) {
+            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                [self.conditionArray addObject:model];
+            }
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+    
+    
+    
+}
+
+
+//MARK: 添加条件入口
 - (void)addConditionEnter {
     self.customSheet = [[TIoTCustomSheetView alloc]init];
     [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"auto_deviceStatus_change", @"设备状态发生变化") secondTitle:NSLocalizedString(@"auto_timer", @"定时")];
     __weak typeof(self)weakSelf = self;
     
     self.customSheet.chooseIntelligentFirstBlock = ^{
-#warning 跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
+        //MARK:跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
+        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
+        chooseDeviceVC.enterType = DeviceChoiceEnterTypeAuto;
+        
+        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+        
         [weakSelf removeBottomCustomConditionSheetView];
         
     };
@@ -271,6 +327,10 @@
         //MARK: 跳转定时页面，并移除当前sheet
         [weakSelf removeBottomCustomConditionSheetView];
         TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+        timingVC.autoIntelAddTimerBlock = ^(TIoTAutoIntelligentModel * _Nonnull timerModel) {
+            [weakSelf.conditionArray addObject:timerModel];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        };
         [weakSelf.navigationController pushViewController:timingVC animated:YES];
     };
     
@@ -280,7 +340,8 @@
     }];
 }
 
-//添加任务
+
+//MARK: 添加任务入口
 - (void)addActionEnter {
     
     NSArray *actionTitleArray = @[NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制"),NSLocalizedString(@"manualIntelligent_delay", @"延时"),NSLocalizedString(@"manualIntalligent_choice", @"选择手动"),NSLocalizedString(@"post_notice", @"发送通知"),NSLocalizedString(@"cancel", @"取消")];
@@ -289,10 +350,50 @@
     
     //设备控制
     ChooseFunctionBlock deviceControlBlock = ^(TIoTCustomSheetView *view){
+        
+        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
+//        if (weakSelf.customSheet) {
+//            [weakSelf.customSheet removeFromSuperview];
+//
+//        }
+//        chooseDeviceVC.actionOriginArray = [weakSelf.dataArray mutableCopy];
+//        if (weakSelf.valueArray == nil) {
+//            weakSelf.valueArray = [NSMutableArray array];
+//        }
+//        chooseDeviceVC.valueOriginArray =  [weakSelf.valueArray mutableCopy];
+        
+        chooseDeviceVC.enterType = DeviceChoiceEnterTypeAuto;
+        chooseDeviceVC.deviceAutoChoiceEnterActionType = YES;
+        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+        
         [weakSelf removeBottomCustomActionSheetView];
     };
     //延时
     ChooseFunctionBlock delayBlock = ^(TIoTCustomSheetView *view){
+        TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+        delayTimeVC.isEditing = NO;
+
+        delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
+            
+            NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            int hourNumber =[[hourStr stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
+            
+            NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            int minutNumber =[[minu stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
+            NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
+            
+            NSMutableDictionary *delayTineDic = [NSMutableDictionary dictionary];
+            [delayTineDic setValue:timeStr forKey:@"Data"];
+            [delayTineDic setValue:@(1) forKey:@"ActionType"];
+            [delayTineDic setValue:@"3" forKey:@"type"];
+            [delayTineDic setValue:timeString forKey:@"delayTime"];
+            TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
+            [weakSelf.actionArray addObject:model];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+
+        };
+        
+        [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
         [weakSelf removeBottomCustomActionSheetView];
     };
     //选择手动
@@ -300,10 +401,26 @@
         [weakSelf removeBottomCustomActionSheetView];
         
         TIoTAutoAddManualIntelliListVC *addManualIntellVC = [[TIoTAutoAddManualIntelliListVC alloc]init];
-        [self.navigationController pushViewController:addManualIntellVC animated:YES];
+        addManualIntellVC.paramDic = weakSelf.paramDic;
+        addManualIntellVC.addManualSceneBlock = ^(NSArray<TIoTAutoIntelligentModel *> *manualSceneArray) {
+            
+            for (TIoTAutoIntelligentModel *model in manualSceneArray) {
+                [weakSelf.actionArray addObject:model];
+            }
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        };
+        [weakSelf.navigationController pushViewController:addManualIntellVC animated:YES];
     };
     //发送通知
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
+        TIoTAutoNoticeVC *noticeVC = [[TIoTAutoNoticeVC alloc]init];
+        noticeVC.addNoticeBlock = ^(NSArray<TIoTAutoIntelligentModel *> *noticeArray) {
+            for (TIoTAutoIntelligentModel *model in noticeArray) {
+                [weakSelf.actionArray addObject:model];
+            }
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        };
+        [weakSelf.navigationController pushViewController:noticeVC animated:YES];
         [weakSelf removeBottomCustomActionSheetView];
     };
     //取消按钮
@@ -322,18 +439,17 @@
     
 }
 
-/**
- 移除当前添加条件sheet
- */
+
+//MARK: 移除当前添加条件sheet
+
 - (void)removeBottomCustomConditionSheetView {
     if (self.customSheet) {
         [self.customSheet removeFromSuperview];
     }
 }
 
-/**
- 移除当前添加任务sheet
- */
+//MARK: 移除当前添加任务sheet
+ 
 - (void)removeBottomCustomActionSheetView {
     if (self.customActionSheet) {
         [self.customActionSheet removeFromSuperview];
@@ -381,7 +497,23 @@
             if (self.conditionArray.count == 0 || self.actionArray.count == 0) {
                 [MBProgressHUD showMessage:NSLocalizedString(@"error_add_condition_action", @"请添加任务和条件") icon:@""];
             }else {
-#warning 跳转前需要先移除弹框
+                //MARK:组装好条件、任务、生效时间段 的请求参数 model，跳转到完善页面，添加场景背景URL和名称
+                
+                NSMutableDictionary *autoDic = [NSMutableDictionary new];
+                [autoDic setValue:@(1) forKey:@"Status"];
+                [autoDic setValue:@(weakSelf.selectedConditonNum) forKey:@"MatchType"];
+                [autoDic setValue:[weakSelf.conditionArray yy_modelToJSONObject] forKey:@"Conditions"];
+                [autoDic setValue:[weakSelf.actionArray yy_modelToJSONObject] forKey:@"Actions"];
+                [autoDic setValue:weakSelf.paramDic[@"FamilyId"] forKey:@"FamilyId"];
+                
+                [autoDic setValue:weakSelf.effectDayIDString?:@"" forKey:@"EffectiveDays"];
+                [autoDic setValue:weakSelf.effectBeginTimeString?:@"" forKey:@"EffectiveBeginTime"];
+                [autoDic setValue:weakSelf.effectEndTimeString?:@"" forKey:@"EffectiveEndTime"];
+                
+                TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+                complementVC.autoParamDic = autoDic;
+                complementVC.isAuto = YES;
+                [weakSelf.navigationController pushViewController:complementVC animated:YES];
                 if (weakSelf.customSheet) {
                     [weakSelf.customSheet removeFromSuperview];
                 }

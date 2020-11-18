@@ -12,7 +12,7 @@
  生效时间段自定义view
  */
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^AutoGenerateTimePeriodBlock)(NSMutableDictionary *timePeriodDic);
+typedef void(^AutoGenerateTimePeriodBlock)(NSMutableDictionary *timePeriodDic,NSString *dayIDString);
 
 typedef NS_ENUM(NSInteger, AutoEffectPeriodRepetaType) {
 //    AutoEffectPeriodRepetaTypeOnce,
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, AutoEffectPeriodRepetaType) {
 
 @interface TIoTAutoEffectTimePriodView : UIView
 @property (nonatomic, assign) NSInteger defaultRepeatTimeNum;
-@property (nonatomic, strong) NSMutableDictionary *effectTimeDic; //生效时间，时间周期 @{@"time":@"",@"repeatType":@""}
+@property (nonatomic, strong) NSMutableDictionary *effectTimeDic; //生效时间，时间周期 @{@"customTime":@"",@"repeatType":@""}
 @property (nonatomic, copy) AutoGenerateTimePeriodBlock generateTimePeriodBlock;
 @end
 

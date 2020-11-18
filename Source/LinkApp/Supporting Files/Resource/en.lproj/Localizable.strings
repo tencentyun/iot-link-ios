@@ -759,3 +759,8 @@
 "auto_choice_manual_intelligent" = "选择手动智能";
 "auto_all_selected" = "全选";
 "auto_all_cancel_selected" = "取消全选";
+"auto_equal" = "等于";
+"auto_choice_notice" = "选择通知类型";
+"auto_manual_choice" = "手动选择";
+"auto_notice_center" = "消息中心";
+"auto_atleast_choice_notice_type" = "至少选择一种通知类型";

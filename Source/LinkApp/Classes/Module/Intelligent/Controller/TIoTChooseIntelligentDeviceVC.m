@@ -290,19 +290,109 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
             NSLog(@"--!!!-%@",product);
             
-            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
-            deviceSettingVC.templateModel = product;
-            deviceSettingVC.productModel = intelligentProjuctModel;
-            deviceSettingVC.actionOriginArray = self.actionOriginArray;
-            deviceSettingVC.valueOriginArray = self.valueOriginArray;
-            deviceSettingVC.isEdited = NO;
-            [self.navigationController pushViewController:deviceSettingVC animated:YES];
+            //MARK:需要根据AppGetProductsConfig接口筛选哪些是条件 哪些是action，这个是手动自动都需要按照这个字段判断
+            
+            [self getProductConfigWith:productIDString template:product intelligentProjuctModel:intelligentProjuctModel];
+            
+//            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+//            deviceSettingVC.templateModel = product;
+//            deviceSettingVC.productModel = intelligentProjuctModel;
+//            deviceSettingVC.actionOriginArray = self.actionOriginArray;
+//            deviceSettingVC.valueOriginArray = self.valueOriginArray;
+//            deviceSettingVC.isEdited = NO;
+//            [self.navigationController pushViewController:deviceSettingVC animated:YES];
             
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
     }];
    
+}
+
+- (void)getProductConfigWith:(NSString *)selectedProductId template:(TIoTDataTemplateModel *)product intelligentProjuctModel:(TIoTIntelligentProductConfigModel *)intelligentProjuctModel{
+    
+    NSString *productId = selectedProductId?:@"";
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+        
+        NSMutableDictionary *productDic = [NSMutableDictionary dictionaryWithDictionary:[product yy_modelToJSONObject]];
+        
+        NSArray *propertiesArray = [NSArray arrayWithArray:productDic[@"properties"]?:@[]];
+        
+        NSMutableArray *projuctArray = productDic[@"properties"]?:@[];
+        
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = [[NSDictionary alloc]initWithDictionary:config];
+            
+            NSDictionary *AppAutomationDic = self.configData[@"AppAutomation"]?:@{};
+            
+            TIoTDataTemplateModel *newProduct = nil;
+            
+            if (self.enterType == DeviceChoiceEnterTypeManual) {
+                //MARK:筛选手动智能显示的模板属性properties设置
+                NSArray *actionsArray = AppAutomationDic[@"actions"]?:@[];
+                
+                //筛选设备模板所要显示属性
+                projuctArray = [self filterActionOrConditionProductArray:projuctArray propertiesArray:propertiesArray withFilterArray:actionsArray];
+                
+                newProduct = [TIoTDataTemplateModel yy_modelWithJSON:productDic];
+            }else if (self.enterType == DeviceChoiceEnterTypeAuto) {
+                //MARK:筛选自动智能显示模板属性设置
+                
+                if (self.deviceAutoChoiceEnterActionType == YES) { //action
+                    NSArray *actionsArray = AppAutomationDic[@"actions"]?:@[];
+                
+                    //筛选设备模板所要显示属性
+                    projuctArray = [self filterActionOrConditionProductArray:projuctArray propertiesArray:propertiesArray withFilterArray:actionsArray];
+                    
+                }else { //condition
+                    NSArray *conditionsArray = AppAutomationDic[@"conditions"]?:@[];
+                    
+                    //筛选设备模板所要显示属性
+                    projuctArray =  [self filterActionOrConditionProductArray:projuctArray propertiesArray:propertiesArray withFilterArray:conditionsArray];
+                }
+                
+                newProduct = [TIoTDataTemplateModel yy_modelWithJSON:productDic];
+            }
+            
+            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+            deviceSettingVC.templateModel = newProduct;
+            deviceSettingVC.productModel = intelligentProjuctModel;
+            deviceSettingVC.actionOriginArray = self.actionOriginArray;
+            deviceSettingVC.valueOriginArray = self.valueOriginArray;
+            deviceSettingVC.isEdited = NO;
+            if (self.enterType == DeviceChoiceEnterTypeManual) {
+                deviceSettingVC.enterType = IntelligentEnterTypeManual;
+            }else  if (self.enterType == DeviceChoiceEnterTypeAuto){
+                deviceSettingVC.enterType = IntelligentEnterTypeAuto;
+            }
+            deviceSettingVC.isAutoActionType = self.deviceAutoChoiceEnterActionType;
+            [self.navigationController pushViewController:deviceSettingVC animated:YES];
+            
+        }
+        
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+//MARK:筛选设备模板所要显示属性
+-(NSMutableArray *)filterActionOrConditionProductArray:(NSMutableArray *)projuctArray propertiesArray:(NSArray *)propertiesArray withFilterArray:(NSArray *)filterArray{
+    
+    
+    for (int j = 0; j < propertiesArray.count; j++) {
+        NSDictionary *tempProduct = propertiesArray[j];
+        if (tempProduct != nil) {
+            NSString *idString = tempProduct[@"id"]?:@"";
+            if (![filterArray containsObject:idString]) {
+                [projuctArray removeObject:tempProduct];
+            }
+        }
+    }
+    return projuctArray;
+    
 }
 
 #pragma mark setter or getter
