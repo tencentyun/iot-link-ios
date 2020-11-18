@@ -13,6 +13,7 @@
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"Timer":[AutoIntelliConditionTimerProperty class],
              @"Property":[AutoIntelliConditionDeviceProperty class],
+             @"propertyModel":[TIoTPropertiesModel class],
     };
 }
 

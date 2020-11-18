@@ -220,7 +220,6 @@
         [self.navigationController pushViewController:deviceSettingVC animated:YES];
     }
     
-    
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -272,7 +271,7 @@
 //}
 
 #pragma mark - TIoTChooseDelayTimeVCDelegate
-- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min {
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
     [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
     [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
     NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];

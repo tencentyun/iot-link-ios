@@ -21,8 +21,9 @@
 #import "TIoTAutoNoticeVC.h"
 #import "TIoTComplementIntelligentVC.h"
 #import "TIoTChooseDelayTimeVC.h"
+#import "TIoTDeviceSettingVC.h"
 
-@interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTAddAutoIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTChooseDelayTimeVCDelegate>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView * nextButtonView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *conditionArray;
@@ -196,13 +197,29 @@
 //MARK: 进入对应条件编辑页面(条件 type 0 设备状态、1 定时)
             TIoTAutoIntelligentModel *autoModel = self.conditionArray[indexPath.row - 1];
             if ([autoModel.type isEqualToString:@"0"]) {
-                NSLog(@"00");
+                
+                TIoTDeviceSettingVC *editSettingVC = [[TIoTDeviceSettingVC alloc]init];
+                editSettingVC.isEdited = YES;
+                editSettingVC.isAutoActionType = NO;
+                editSettingVC.enterType = IntelligentEnterTypeAuto;
+                editSettingVC.editedModel = autoModel.propertyModel;
+                editSettingVC.editActionIndex = indexPath.row - 1;
+                editSettingVC.productModel = self.productModel;
+                editSettingVC.valueString = autoModel.Property.conditionContentString;
+                
+                [self.navigationController pushViewController:editSettingVC animated:YES];
+                
             }else if ([autoModel.type isEqualToString:@"1"])  {
-                NSLog(@"11");
+                
+                __weak typeof(self)weakSelf = self;
                 TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+                timingVC.isEdit = YES;
+                timingVC.editModel = autoModel;
                 timingVC.autoIntelAddTimerBlock = ^(TIoTAutoIntelligentModel * _Nonnull timerModel) {
-//                    [weakSelf.conditionArray addObject:timerModel];
-//                    [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                    
+                    [weakSelf.conditionArray replaceObjectAtIndex:indexPath.row - 1 withObject:timerModel];
+                    [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                    
                 };
                 [self.navigationController pushViewController:timingVC animated:YES];
             }
@@ -218,13 +235,57 @@
 //MARK: 进入对应条件编辑页面(任务 type 2 设备控制，3 延时，4 选择手动，5 发送通知)
             TIoTAutoIntelligentModel *autoModel = self.actionArray[indexPath.row - 1];
             if ([autoModel.type isEqualToString:@"2"]) {
-                NSLog(@"222");
+                
+                TIoTDeviceSettingVC *editSettingVC = [[TIoTDeviceSettingVC alloc]init];
+                editSettingVC.isEdited = YES;
+                editSettingVC.isAutoActionType = YES;
+                editSettingVC.enterType = IntelligentEnterTypeAuto;
+                editSettingVC.editedModel = autoModel.propertyModel;
+                editSettingVC.editActionIndex = indexPath.row - 1;
+                editSettingVC.productModel = self.productModel;
+                editSettingVC.valueString = autoModel.Property.conditionContentString;
+                
+                [self.navigationController pushViewController:editSettingVC animated:YES];
             }else if ([autoModel.type isEqualToString:@"3"])  {
-                NSLog(@"33");
+                
+                TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+                delayTimeVC.isEditing = YES;
+                delayTimeVC.delegate = self;
+                delayTimeVC.autoDelayDateString = autoModel.delayTimeFormat;
+                delayTimeVC.autoEditedDelayIndex = indexPath.row - 1;
+                [self.navigationController pushViewController:delayTimeVC animated:YES];
+                
             }else if ([autoModel.type isEqualToString:@"4"]) {
-                NSLog(@"44");
+
+                __weak typeof(self)weakSelf = self;
+                TIoTAutoAddManualIntelliListVC *addManualIntellVC = [[TIoTAutoAddManualIntelliListVC alloc]init];
+                addManualIntellVC.paramDic = weakSelf.paramDic;
+                addManualIntellVC.isEdit = YES;
+                addManualIntellVC.updateManualSceneBlock = ^(TIoTAutoIntelligentModel * _Nullable changedModel, NSInteger index) {
+                    
+                    [weakSelf.actionArray replaceObjectAtIndex:index withObject:changedModel];
+                    [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+
+                };
+                addManualIntellVC.editModel = autoModel;//在智能列表所选的
+                addManualIntellVC.editIndex = indexPath.row - 1;  //在智能列表中的index;
+
+                [self.navigationController pushViewController:addManualIntellVC animated:YES];
+                
             }else if ([autoModel.type isEqualToString:@"5"]) {
-                NSLog(@"55");
+                __weak typeof(self)weakSelf = self;
+                TIoTAutoNoticeVC *noticeVC = [[TIoTAutoNoticeVC alloc]init];
+                noticeVC.isEdit = YES;
+                noticeVC.editModel = autoModel;
+                noticeVC.deleteNoticeBlcok = ^(NSMutableArray<TIoTAutoIntelligentModel *> * _Nullable noticeArray) {
+                    if (noticeArray.count == 0) {
+                        [weakSelf.actionArray removeObjectAtIndex:indexPath.row - 1];
+                        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                };
+                [self.navigationController pushViewController:noticeVC animated:YES];
+                
+                
             }
         }
         
@@ -281,24 +342,64 @@
     return 0.1;
 }
 
+#pragma mark - 定时编辑完回调代理
+//MARK:编辑完定时后，刷新任务列表
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
+    
+    NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    int hourNumber =[[hourString stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
+    
+    NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    int minutNumber =[[min stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
+    NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
+    
+    NSMutableDictionary *delayTineDic = [NSMutableDictionary dictionary];
+    [delayTineDic setValue:timeStr forKey:@"Data"];
+    [delayTineDic setValue:@(1) forKey:@"ActionType"];
+    [delayTineDic setValue:@"3" forKey:@"type"];
+    [delayTineDic setValue:timeString forKey:@"delayTime"];
+    [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
+    TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
+    [self.actionArray replaceObjectAtIndex:autoDelayIndex withObject:model];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
 #pragma mark - event
 
 //MARK:添加设备状态条件（model数组）后，刷新list
-- (void)refreshAutoIntelligentList:(BOOL)isAction {
+- (void)refreshAutoIntelligentList:(BOOL)isAction modifyModel:(TIoTAutoIntelligentModel *)modifiedModel originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit{
     
     if (isAction == YES) {//任务
-        if (self.autoDeviceStatusArray.count != 0) {
-            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
-                [self.actionArray addObject:model];
+    
+        if (isEdit == YES) {
+            if (modifiedModel != nil) {
+                [self.actionArray replaceObjectAtIndex:indexrow withObject:modifiedModel];
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
             }
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+
+        }else {
+            if (self.autoDeviceStatusArray.count != 0) {
+                for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                    [self.actionArray addObject:model];
+                }
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+            }
         }
     }else { //条件
-        if (self.autoDeviceStatusArray.count != 0) {
-            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
-                [self.conditionArray addObject:model];
+        
+        if (isEdit == YES) {
+            if (modifiedModel != nil) {
+                [self.conditionArray replaceObjectAtIndex:indexrow withObject:modifiedModel];
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
             }
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        }else {
+            if (self.autoDeviceStatusArray.count != 0) {
+                for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                    [self.conditionArray addObject:model];
+                }
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+            }
         }
     }
     
@@ -387,6 +488,7 @@
             [delayTineDic setValue:@(1) forKey:@"ActionType"];
             [delayTineDic setValue:@"3" forKey:@"type"];
             [delayTineDic setValue:timeString forKey:@"delayTime"];
+            [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
             TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
             [weakSelf.actionArray addObject:model];
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];

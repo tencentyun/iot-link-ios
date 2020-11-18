@@ -17,7 +17,7 @@ typedef void(^AddDelayTimeBlcok)(NSString *timeString,NSString *hourStr,NSString
  */
 @protocol TIoTChooseDelayTimeVCDelegate <NSObject>
 
-- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min;
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex;
 
 @end
 /**
@@ -27,6 +27,8 @@ typedef void(^AddDelayTimeBlcok)(NSString *timeString,NSString *hourStr,NSString
 @property (nonatomic, assign) BOOL isEditing;
 @property (nonatomic, copy) AddDelayTimeBlcok addDelayTimeBlcok; //新增延时task的需要实现
 @property (nonatomic, weak)id<TIoTChooseDelayTimeVCDelegate>delegate;
+@property (nonatomic, copy) NSString *autoDelayDateString; //自动智能-编辑时候传入
+@property (nonatomic, assign) NSInteger autoEditedDelayIndex; //在自动智能-定时action数据中index
 @end
 
 NS_ASSUME_NONNULL_END
