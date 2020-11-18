@@ -73,7 +73,7 @@
     }];
     
     self.taskTitleLabel = [[UILabel alloc]init];
-    [self.taskTitleLabel setLabelFormateTitle:@"titletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.taskTitleLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.backView addSubview:self.taskTitleLabel];
     [self.taskTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.taskTipImageView.mas_right).offset(kSpaceWidth);
@@ -89,12 +89,12 @@
     }];
 
     self.taskSubtitleLabel = [[UILabel alloc]init];
-    [self.taskSubtitleLabel setLabelFormateTitle:@"subtitletest" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
+    [self.taskSubtitleLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
     [self.backView addSubview:self.taskSubtitleLabel];
     [self.taskSubtitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.taskTitleLabel.mas_bottom).offset(4);
         make.left.equalTo(self.taskTitleLabel.mas_left);
-        make.right.equalTo(self.arrowsImageView.mas_left).offset(-10);
+        make.right.equalTo(self.backView.mas_right).offset(-30);
     }];
     
     self.taskDeleteImageView = [[UIImageView alloc]init];
@@ -169,6 +169,64 @@
 - (void)setIsHideBlankAddView:(BOOL)isHideBlankAddView {
     _isHideBlankAddView = isHideBlankAddView;
     self.blankAddView.hidden = isHideBlankAddView;
+}
+
+- (void)setAutoIntellModel:(TIoTAutoIntelligentModel *)autoIntellModel {
+    _autoIntellModel = autoIntellModel;
+    //（ 0 设备状态变化 1 定时 2 设备控制，3 延时，4 选择手动，5 发送通知）
+    if ([autoIntellModel.type isEqualToString:@"0"]) {
+        
+        NSString *nameStr = autoIntellModel.Property.conditionTitle?:@"";
+        NSString *opStr = autoIntellModel.Property.Op?:@"";
+        NSString *op = @"";
+        if ([opStr isEqualToString:@"eq"]) {
+            op = NSLocalizedString(@"auto_equal", @"等于");
+        }
+        self.taskTitleLabel.text = nameStr;
+        NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
+        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
+        NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
+        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@""];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"1"]) {
+        self.taskTitleLabel.text = NSLocalizedString(@"auto_timer", @"定时");
+        NSString *timePointStr = autoIntellModel.Timer.TimePoint?:@"";
+        NSString *timeKindStr = autoIntellModel.Timer.timerKindSring?:@"";
+        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@,%@",timePointStr,timeKindStr];
+        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_timing"];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"2"]) {
+//        self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
+//        self.taskSubtitleLabel.text = autoIntellModel.delayTime?:@"";
+//        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_delay"];
+        
+        NSString *nameStr = autoIntellModel.Property.conditionTitle?:@"";
+        NSString *opStr = autoIntellModel.Property.Op?:@"";
+        NSString *op = @"";
+        if ([opStr isEqualToString:@"eq"]) {
+            op = NSLocalizedString(@"auto_equal", @"等于");
+        }
+        self.taskTitleLabel.text = nameStr;
+        NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
+        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
+        NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
+        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@""];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"3"]) {
+        self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
+        self.taskSubtitleLabel.text = autoIntellModel.delayTime?:@"";
+        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_delay"];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"4"]) {
+        self.taskTitleLabel.text = NSLocalizedString(@"auto_manual_choice", @"手动选择");
+        self.taskSubtitleLabel.text = autoIntellModel.sceneName?:@"";
+        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_manual"];
+        
+    }else if ([autoIntellModel.type isEqualToString:@"5"]) {
+        self.taskTitleLabel.text = NSLocalizedString(@"post_notice", @"发送通知");
+        self.taskSubtitleLabel.text = autoIntellModel.Data;
+        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_notification"];
+    }
 }
 
 - (void)awakeFromNib {
