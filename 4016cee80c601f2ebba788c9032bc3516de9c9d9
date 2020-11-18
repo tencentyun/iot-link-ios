@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a6b8d0a_64d4d7b3",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-18T09:15:10Z",
+      "side": 1,
+      "message": "建议之后的逻辑拆分，将关联的逻辑放在同一个changeID，",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca8921e4_ec211f39",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-18T09:15:10Z",
+      "side": 1,
+      "message": "tableview建议判断section总数量是否大于NSIndexSet",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4404cfcd_67194db6",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-18T09:15:10Z",
+      "side": 1,
+      "message": "yymodel处理之后，是否会返回nil，nil插入字典中",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d74fc41_64a595d4",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAutoAddManualIntelliListVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-18T09:15:10Z",
+      "side": 1,
+      "message": "for里面为何不直接用yymode解析成model，还需要再转一次key",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d472b927_d30e4c2a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-18T09:15:10Z",
+      "side": 1,
+      "message": "这里是汉字括号还是英文括号,格式不对",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
