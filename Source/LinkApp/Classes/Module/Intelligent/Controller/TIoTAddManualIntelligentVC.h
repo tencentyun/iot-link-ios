@@ -33,6 +33,9 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 @property (nonatomic, assign) BOOL isEdited;
 @property (nonatomic, strong) NSString *valueString;
 
+@property (nonatomic, assign) BOOL isSceneDetail;   //场景详情编辑页面，yes 从智能主页进入 no 普通入口进入
+@property (nonatomic, copy) NSDictionary *sceneManualDic; //选中的手动场景
+
 - (void)refreshData;
 @end
 
