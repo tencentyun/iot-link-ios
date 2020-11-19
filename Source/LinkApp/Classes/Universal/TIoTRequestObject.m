@@ -58,6 +58,7 @@ failure:(FailureResponseBlock)failure
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].studioBaseUrlForLogined,urlStr, TIoTAPPConfig.GlobalDebugUin]];
             [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
             [accessParam setValue:@"iOS" forKey:@"Platform"];
+            [accessParam setValue:@"iOS" forKey:@"Agent"];
         }else {
             //OEM
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi,urlStr]];

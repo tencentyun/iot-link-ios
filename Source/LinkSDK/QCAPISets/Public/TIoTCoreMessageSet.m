@@ -67,7 +67,7 @@
         return;
     }
     
-    NSDictionary *param = @{@"Token":token,@"Platform":@"ios"};
+    NSDictionary *param = @{@"Token":token,@"Platform":@"ios",@"Agent":@"ios"};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppBindXgToken params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
@@ -84,7 +84,7 @@
         return;
     }
     
-    NSDictionary *param = @{@"Token":token,@"Platform":@"ios"};
+    NSDictionary *param = @{@"Token":token,@"Platform":@"ios",@"Agent":@"ios"};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppUnBindXgToken params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
