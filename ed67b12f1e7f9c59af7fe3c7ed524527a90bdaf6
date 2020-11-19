@@ -16,6 +16,74 @@
       "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f9e7df_99204114",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-19T06:22:27Z",
+      "side": 1,
+      "message": "建议api返回的数据，作为model处理，对key做筛选会增加工作量且没必要",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4666e136_e63c861b",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-19T06:22:27Z",
+      "side": 1,
+      "message": "建议提交到github上的代码，大段的注释删除",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae91f814_ba507c67",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-19T06:22:27Z",
+      "side": 1,
+      "message": "建议删除无用代码",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4dabb76_897896c3",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoNoticeCell.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-19T06:22:27Z",
+      "side": 1,
+      "message": "理论上用不到drawRect方法",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
