@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6106e48_f2bcf2d5",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-19T06:08:44Z",
+      "side": 1,
+      "message": "建议，commit message加上智能场景首页列表与分组，这个不属于编辑",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
