@@ -16,9 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 
-@property (nonatomic, strong) TIoTPropertiesModel *model;
+@property (nonatomic, strong) TIoTAutoIntelligentModel *model;
 @property (nonatomic, strong) NSString *subTitleString;
-@property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
 
 @property (nonatomic, copy) NSString *delayTimeString;
 

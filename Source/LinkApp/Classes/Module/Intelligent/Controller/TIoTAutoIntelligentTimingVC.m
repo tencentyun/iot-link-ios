@@ -96,6 +96,29 @@
         make.right.equalTo(arrowImage.mas_left).offset(-8);
         make.centerY.equalTo(self.repeatingTimeButton.mas_centerY);
     }];
+    
+    self.userSectedDateIDString = self.editModel.Timer.Days?:@"0000000";
+    self.timingLabel.text = self.editModel.Timer.timerKindSring?:NSLocalizedString(@"auto_repeatTiming_once", @"执行一次");
+    self.choiceRepeatTimeNumner = self.editModel.Timer.choiceRepeatTimeNumner;
+    NSInteger hour = [[self.editModel.Timer.TimePoint componentsSeparatedByString:@":"].firstObject intValue];
+    NSInteger minut = [[self.editModel.Timer.TimePoint componentsSeparatedByString:@":"].lastObject intValue];
+    [self.pickView selectRow:hour inComponent:0 animated:NO];
+    [self.pickView selectRow:minut inComponent:1 animated:NO];
+
+    self.hourString = [NSString stringWithFormat:@"%ld%@",(long)hour,NSLocalizedString(@"auto_hour", @"时")];
+    self.minuteString = [NSString stringWithFormat:@"%ld%@",(long)minut,NSLocalizedString(@"auto_minute", @"分")];
+    if (hour<10) {
+        self.hourString = [NSString stringWithFormat:@"%0ld%@",(long)hour,NSLocalizedString(@"auto_hour", @"时")];
+        if (hour == 0) {
+            self.hourString = [NSString stringWithFormat:@"%00%@",NSLocalizedString(@"auto_hour", @"时")];
+        }
+    }
+    if (minut<10) {
+        self.minuteString = [NSString stringWithFormat:@"0%ld%@",(long)minut,NSLocalizedString(@"auto_minute", @"分")];
+        if (minut == 0) {
+            self.minuteString = [NSString stringWithFormat:@"%00%@",NSLocalizedString(@"auto_minute", @"分")];
+        }
+    }
 }
 
 #pragma mark - event
@@ -146,6 +169,7 @@
     }else if (component == 1){
         self.minuteString = itemArray[row];
     }
+    NSLog(@"%@--%@",self.hourString,self.minuteString);
 }
 
 #pragma mark - lazy loading
@@ -231,7 +255,7 @@
                 NSMutableString *tempHourStr = [NSMutableString stringWithString:self.hourString];
                 [tempHourStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
                 NSMutableString *tempMinutStr = [NSMutableString stringWithString:self.minuteString];
-                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempMinutStr.length -1, 1)];
                 
                 timeString = [NSString stringWithFormat:@"%@:%@",tempHourStr,tempMinutStr];
                 [self addDelayTimeString:timeString];
@@ -247,7 +271,7 @@
                 NSMutableString *tempHourStr = [NSMutableString stringWithString:self.hourString];
                 [tempHourStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
                 NSMutableString *tempMinutStr = [NSMutableString stringWithString:self.minuteString];
-                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempHourStr.length -1, 1)];
+                [tempMinutStr deleteCharactersInRange:NSMakeRange(tempMinutStr.length -1, 1)];
                 
                 timeString = [NSString stringWithFormat:@"%@:%@",tempHourStr,tempMinutStr];
                 [self addDelayTimeString:timeString];
@@ -262,12 +286,26 @@
     NSString *timeStr = self.userSectedDateIDString ?:@"";
     NSString *timeKindStr = self.timingLabel.text?:@"";
     
-    NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr};
-    NSDictionary *timerDic = @{@"CondId":timeTamp,@"CondType":@(1),@"Timer":timerSelectDic,@"type":@"1"};
-    TIoTAutoIntelligentModel *timerModel = [TIoTAutoIntelligentModel yy_modelWithJSON:timerDic];
-    if (self.autoIntelAddTimerBlock) {
-        self.autoIntelAddTimerBlock(timerModel);
+    if (self.isEdit == YES) {
+        self.editModel.Timer.Days = timeStr;
+        self.editModel.Timer.TimePoint = timeString;
+        self.editModel.Timer.timerKindSring = timeKindStr;
+        self.editModel.Timer.choiceRepeatTimeNumner = self.choiceRepeatTimeNumner;
+        
+        if (self.autoIntelAddTimerBlock) {
+            self.autoIntelAddTimerBlock(self.editModel);
+        }
+    }else {
+        
+        
+        NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr,@"choiceRepeatTimeNumner":@(self.choiceRepeatTimeNumner)};
+        NSDictionary *timerDic = @{@"CondId":timeTamp,@"CondType":@(1),@"Timer":timerSelectDic,@"type":@"1"};
+        TIoTAutoIntelligentModel *timerModel = [TIoTAutoIntelligentModel yy_modelWithJSON:timerDic];
+        if (self.autoIntelAddTimerBlock) {
+            self.autoIntelAddTimerBlock(timerModel);
+        }
     }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

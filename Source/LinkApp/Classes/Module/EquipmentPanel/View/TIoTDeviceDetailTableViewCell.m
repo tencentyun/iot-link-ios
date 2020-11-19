@@ -73,9 +73,10 @@
         self.valueLab = [[UILabel alloc] init];
         self.valueLab.textColor = kRGBColor(136, 136, 136);
         self.valueLab.font = [UIFont wcPfRegularFontOfSize:16];
+        self.valueLab.textAlignment = NSTextAlignmentRight;
         [self.backContentView addSubview:self.valueLab];
         [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
+            make.right.equalTo(self.arrowImageView.mas_left);
             make.centerY.equalTo(self.backContentView);
             make.left.equalTo(self.titleLab.mas_right).offset(10).priority(750);
         }];
@@ -92,7 +93,7 @@
     if ([dic[@"needArrow"] isEqualToString:@"1"]) {
         self.arrowImageView.hidden = NO;
         [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
+            make.right.equalTo(self.arrowImageView.mas_left).offset(5);
         }];
     }
     else{

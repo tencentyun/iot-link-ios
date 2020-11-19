@@ -138,21 +138,17 @@
     
 }
 
-- (void)setModel:(TIoTPropertiesModel *)model {
+- (void)setModel:(TIoTAutoIntelligentModel *)model {
     _model = model;
-    self.taskTitleLabel.text = model.name?:@"";
+    self.taskTitleLabel.text = model.DeviceName?:@"";
+    NSString *urlString = model.IconUrl?:@"";
+    [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"new_add_product_placeholder"];
 }
 - (void)setSubTitleString:(NSString *)subTitleString {
     _subTitleString = subTitleString;
-    NSString *secString = self.model.desc?:@"";
+    NSString *secString = self.model.propertName?:@"";
     NSString *modifiedString = subTitleString ?: @"";
     self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@",secString,modifiedString];
-}
-
-- (void)setProductModel:(TIoTIntelligentProductConfigModel *)productModel {
-    _productModel = productModel;
-    NSString *urlString = self.productModel.IconUrl?:@"";
-    [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"intelligent_manual"];
 }
 
 - (void)setDelayTimeString:(NSString *)delayTimeString {
@@ -179,14 +175,24 @@
         NSString *nameStr = autoIntellModel.Property.conditionTitle?:@"";
         NSString *opStr = autoIntellModel.Property.Op?:@"";
         NSString *op = @"";
-        if ([opStr isEqualToString:@"eq"]) {
+        if ([opStr isEqualToString:@"eq"]) { //条件操作符  eq 等于  ne 不等于  gt 大于  lt 小于  ge 大等于  le 小等于
             op = NSLocalizedString(@"auto_equal", @"等于");
+        }else if ([opStr isEqualToString:@"ne"]) {
+            op = NSLocalizedString(@"auto_ne", @"不等于");
+        }else if ([opStr isEqualToString:@"gt"]) {
+            op = NSLocalizedString(@"auto_gt", @"大于");
+        }else if ([opStr isEqualToString:@"lt"]) {
+            op = NSLocalizedString(@"auto_lt", @"小于");
+        }else if ([opStr isEqualToString:@"ge"]) {
+            op = NSLocalizedString(@"auto_ge", @"大等于");
+        }else if ([opStr isEqualToString:@"le"]) {
+            op = NSLocalizedString(@"auto_le", @"小等于");
         }
-        self.taskTitleLabel.text = nameStr;
+        self.taskTitleLabel.text = autoIntellModel.Property.DeviceName?:@"";
         NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
         self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
         NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
-        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@""];
+        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"new_add_product_placeholder"];
         
     }else if ([autoIntellModel.type isEqualToString:@"1"]) {
         self.taskTitleLabel.text = NSLocalizedString(@"auto_timer", @"定时");
@@ -196,21 +202,14 @@
         self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_timing"];
         
     }else if ([autoIntellModel.type isEqualToString:@"2"]) {
-//        self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
-//        self.taskSubtitleLabel.text = autoIntellModel.delayTime?:@"";
-//        self.taskTipImageView.image = [UIImage imageNamed:@"intelligent_delay"];
         
-        NSString *nameStr = autoIntellModel.Property.conditionTitle?:@"";
-        NSString *opStr = autoIntellModel.Property.Op?:@"";
+        NSString *nameStr = autoIntellModel.propertName?:@"";
         NSString *op = @"";
-        if ([opStr isEqualToString:@"eq"]) {
-            op = NSLocalizedString(@"auto_equal", @"等于");
-        }
-        self.taskTitleLabel.text = nameStr;
-        NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
+        self.taskTitleLabel.text = autoIntellModel.DeviceName?:@"";;
+        NSString *contentStr = autoIntellModel.dataValueString?:@"";
         self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
-        NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
-        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@""];
+        NSString *urlString = autoIntellModel.IconUrl?:@"";
+        [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"new_add_product_placeholder"];
         
     }else if ([autoIntellModel.type isEqualToString:@"3"]) {
         self.taskTitleLabel.text = NSLocalizedString(@"manualIntelligent_delay", @"延时");
