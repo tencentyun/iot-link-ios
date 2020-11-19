@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model);
+typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model,NSString *numberStr);
 
 /**
  物模型 int 和 float 是slider滑动选择样式
