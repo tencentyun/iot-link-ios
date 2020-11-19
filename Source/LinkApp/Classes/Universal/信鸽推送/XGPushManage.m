@@ -57,7 +57,7 @@
 - (void)stopPushService{
     [XGPush.defaultManager stopXGNotification];
     
-    [[TIoTRequestObject shared] post:@"AppUnBindXgToken" Param:@{@"Token":self.deviceToken?:@"",@"Platform":@"ios"} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:@"AppUnBindXgToken" Param:@{@"Token":self.deviceToken?:@"",@"Platform":@"ios",@"Agent":@"ios"} success:^(id responseObject) {
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -71,7 +71,7 @@
 {
     if (self.deviceToken && [TIoTCoreUserManage shared].accessToken) {
         
-        [[TIoTRequestObject shared] post:@"AppBindXgToken" Param:@{@"Token":self.deviceToken,@"Platform":@"ios"} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:@"AppBindXgToken" Param:@{@"Token":self.deviceToken,@"Platform":@"ios",@"Agent":@"ios"} success:^(id responseObject) {
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             

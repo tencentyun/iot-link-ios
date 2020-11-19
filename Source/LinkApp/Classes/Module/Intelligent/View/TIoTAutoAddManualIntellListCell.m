@@ -83,6 +83,13 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
+    if (self.isEditType == YES) {
+        if (selected) {
+            self.selectedTipImage.image = [UIImage imageNamed:@"procolSelect"];
+        }else {
+            self.selectedTipImage.image = [UIImage imageNamed:@"procolDefault"];
+        }
+    }
 }
 
 @end

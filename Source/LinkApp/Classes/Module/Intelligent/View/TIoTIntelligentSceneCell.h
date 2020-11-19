@@ -9,11 +9,24 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef NS_ENUM(NSInteger, IntelligentSceneType) {
+    IntelligentSceneTypeManual,
+    IntelligentSceneTypeAuto,
+};
+
+@protocol TIoTIntelligentSceneCellDelegate <NSObject>
+
+- (void)runManualSceneWithSceneID:(NSString *)sceneID;
+- (void)changeSwitchStatus:(UISwitch *)switchControl withAutoScendData:(NSDictionary *)autoSceneDic;
+
+@end
 
 @interface TIoTIntelligentSceneCell : UITableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, strong) NSDictionary *dic;
 @property (nonatomic, strong) NSString *deviceNum;
+@property (nonatomic, assign) IntelligentSceneType sceneType;
+@property (nonatomic, weak)id<TIoTIntelligentSceneCellDelegate>delegate;
 @end
 
 NS_ASSUME_NONNULL_END

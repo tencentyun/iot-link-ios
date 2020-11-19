@@ -108,6 +108,7 @@ failure:(FailureResponseBlock)failure
         [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
         [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
         [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
+        [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Agent"];
         
     }else {
         accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
