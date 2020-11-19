@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22b1c89a_df1ea4d7",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-19T02:43:08Z",
+      "side": 1,
+      "message": "好的，这里和编辑模块有关联，后面注意一下",
+      "parentUuid": "9a6b8d0a_64d4d7b3",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca8921e4_ec211f39",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d309bc56_4404f51a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-19T02:43:08Z",
+      "side": 1,
+      "message": "好的，这里后面优化时候改正下，写死是因为section只有3个，添加自动场景的内容有限",
+      "parentUuid": "ca8921e4_ec211f39",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3baef39f_df5a2267",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-19T02:43:08Z",
+      "side": 1,
+      "message": "在patch2中添加非空判断",
+      "parentUuid": "4404cfcd_67194db6",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d74fc41_64a595d4",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAutoAddManualIntelliListVC.m",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "c322d759_2d4b5f76",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAutoAddManualIntelliListVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-19T02:43:08Z",
+      "side": 1,
+      "message": "这里维护的是本地的一个model，获取的字段内容和接口中不一致，后期会重新整理本地映射接口数据结构",
+      "parentUuid": "4d74fc41_64a595d4",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d472b927_d30e4c2a",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
         "patchSetId": 1
@@ -84,6 +156,24 @@
       "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da19a227_7d725d57",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoEffectTimePriodView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-19T02:43:08Z",
+      "side": 1,
+      "message": "对照小程序是中文括号",
+      "parentUuid": "d472b927_d30e4c2a",
+      "revId": "4016cee80c601f2ebba788c9032bc3516de9c9d9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
