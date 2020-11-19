@@ -136,7 +136,6 @@
             _bottomView.secondBlock = ^{
 #warning 完成场景设置步骤，成功创建完一个场景
                 
-
                 if (self.isAuto == YES) {
                     
                     [weakSelf.autoParamDic setValue:weakSelf.sceneNameString forKey:@"Name"];

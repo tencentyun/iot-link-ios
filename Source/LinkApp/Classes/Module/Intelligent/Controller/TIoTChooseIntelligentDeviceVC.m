@@ -294,14 +294,6 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             
             [self getProductConfigWith:productIDString template:product intelligentProjuctModel:intelligentProjuctModel];
             
-//            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
-//            deviceSettingVC.templateModel = product;
-//            deviceSettingVC.productModel = intelligentProjuctModel;
-//            deviceSettingVC.actionOriginArray = self.actionOriginArray;
-//            deviceSettingVC.valueOriginArray = self.valueOriginArray;
-//            deviceSettingVC.isEdited = NO;
-//            [self.navigationController pushViewController:deviceSettingVC animated:YES];
-            
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 

@@ -102,34 +102,79 @@
             
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
             [weakSelf.modifiedModelArray insertObject:weakSelf.modifiedModel atIndex:0];
-            [weakSelf.productArray addObject:weakSelf.productModel];
+            [weakSelf.productArray addObject:weakSelf.productModel?:@{}];
             
 // MARK: 从自动智能-添加条件-设备状态变化入口进入
-            if (weakSelf.enterType == IntelligentEnterTypeAuto) {
+            
+                NSString *keyString = @"0";
+                NSDictionary *mappingDic = model.define.mapping;
+                if (mappingDic) {
+                    for (int i= 0; i<mappingDic.allKeys.count; i++) {
+                        NSString *tempValueString = [mappingDic objectForKey:mappingDic.allKeys[i]];
+                        if ([valueString isEqualToString:tempValueString]) {
+                            keyString = mappingDic.allKeys[i];
+                        }
+                    }
+                }
+            
                 
-                NSString *timeTamp = [NSString getNowTimeString];
-                NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
-                                                      @"DeviceName":weakSelf.productModel.DeviceName,
-                                                      @"AliasName":weakSelf.productModel.AliasName,
-                                                      @"IconUrl":weakSelf.productModel.IconUrl,
-                                                      @"PropertyId":weakSelf.baseModel.id,
-                                                      @"Op":@"eq",
-                                                      @"Value":@(1),
-                                                      @"conditionTitle":weakSelf.baseModel.name,
-                                                      @"conditionContentString":valueString};
-                NSString *type = @"0";
-                if (self.isAutoActionType == YES) {
-                    type = @"2";
+                if (self.isEdited == YES) {
+                    
+                    if (self.isAutoActionType == NO) {
+                        weakSelf.model.Property.conditionContentString = valueString;
+                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:keyString.intValue];
+                    }else {
+                        weakSelf.model.dataValueString = valueString;
+                        NSMutableDictionary *dataTempDic = [NSMutableDictionary dictionaryWithDictionary:[weakSelf.model yy_modelToJSONObject]];
+                        NSMutableString *dataString = [NSMutableString stringWithString:weakSelf.model.Data];
+                        NSDictionary *dataDic = [NSString jsonToObject:dataString];
+                        NSString *valueOrginString = dataDic.allValues[0]; //只有一个键值对
+                        
+                        NSString *valueCurrentStrin = weakSelf.dataArr[indexPath.row][@"value"];
+                        
+                        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:weakSelf.model.propertyModel.define.mapping];
+                        NSString *keyString = @"";
+                        for (int i = 0; i<dic.allKeys.count; i++) {
+                            if ([dic[dic.allKeys[i]] isEqual:valueCurrentStrin]) {
+                                keyString = dic.allKeys[i];
+                            }
+                        }
+
+                        [dataDic setValue:keyString forKey:dataDic.allKeys[0]];
+                        NSString *jsonStrin = [NSString objectToJson:dataDic];
+                        [dataTempDic setValue:jsonStrin forKey:@"Data"];
+                        weakSelf.model = [TIoTAutoIntelligentModel yy_modelWithJSON:dataTempDic];
+                        
+                    }
+                    if (weakSelf.autoIntelModelArray.count != 0) {
+                        [weakSelf.autoIntelModelArray removeAllObjects];
+                    }
+                    [weakSelf.autoIntelModelArray addObject:weakSelf.model];
+                }else {
+                    NSString *timeTamp = [NSString getNowTimeString];
+                    NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
+                                                          @"DeviceName":weakSelf.productModel.DeviceName,
+                                                          @"AliasName":weakSelf.productModel.AliasName,
+                                                          @"IconUrl":weakSelf.productModel.IconUrl,
+                                                          @"PropertyId":weakSelf.baseModel.id,
+                                                          @"Op":@"eq",
+                                                          @"Value":[NSNumber numberWithFloat:keyString.intValue],
+                                                          @"conditionTitle":weakSelf.baseModel.name,
+                                                          @"conditionContentString":valueString};
+                    NSString *type = @"0";
+                    if (self.isAutoActionType == YES) {
+                        type = @"2";
+                    }
+                    
+                    NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
+                                                    @"CondType":@(0),
+                                                    @"Property":autoDeviceSelectDic,
+                                                    @"type":type,
+                                                    @"propertyModel":model};
+                    TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                    [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
                 }
                 
-                NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
-                                                @"CondType":@(0),
-                                                @"Property":autoDeviceSelectDic,
-                                                @"type":type};
-                TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
-                
-                [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
-            }
         };
         
         [[UIApplication sharedApplication].delegate.window addSubview:self.clickValueView];
@@ -153,7 +198,8 @@
         self.sliderValueView = [[TIoTChooseSliderValueView alloc]init];
         self.sliderValueView.model = self.baseModel;
         
-        self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+        self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr) {
+            
             NSMutableDictionary *tempDic = weakSelf.dataArr[indexPath.row];
             [tempDic setValue:valueString?:@"" forKey:@"value"];
             
@@ -164,7 +210,48 @@
             weakSelf.modifiedModel = model;
             [weakSelf.modifiedValueArray addObject:weakSelf.modifiedValue];
             [weakSelf.modifiedModelArray insertObject:weakSelf.modifiedModel atIndex:0];
-            [weakSelf.productArray addObject:weakSelf.productModel];
+            [weakSelf.productArray addObject:weakSelf.productModel?:@{}];
+            
+            // MARK: 从自动智能-添加条件-设备状态变化入口进入
+                
+                if (self.isEdited == YES) {
+                    weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
+                    
+                    if (self.isAutoActionType == NO) {
+                        weakSelf.model.Property.conditionContentString = valueString;
+                    }else {
+                        weakSelf.model.dataValueString = valueString;
+                    }
+                    if (weakSelf.autoIntelModelArray.count != 0) {
+                        [weakSelf.autoIntelModelArray removeAllObjects];
+                    }
+                    [weakSelf.autoIntelModelArray addObject:weakSelf.model];
+                }else {
+                    NSString *timeTamp = [NSString getNowTimeString];
+                    NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
+                                                          @"DeviceName":weakSelf.productModel.DeviceName,
+                                                          @"AliasName":weakSelf.productModel.AliasName,
+                                                          @"IconUrl":weakSelf.productModel.IconUrl,
+                                                          @"PropertyId":weakSelf.baseModel.id,
+                                                          @"Op":@"eq",
+                                                          @"Value":[NSNumber numberWithFloat:numberStr.floatValue],
+                                                          @"conditionTitle":weakSelf.baseModel.name,
+                                                          @"conditionContentString":valueString};
+                    NSString *type = @"0";
+                    if (self.isAutoActionType == YES) {
+                        type = @"2";
+                    }
+                    
+                    NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
+                                                    @"CondType":@(0),
+                                                    @"Property":autoDeviceSelectDic,
+                                                    @"type":type,
+                                                    @"propertyModel":model};
+                    TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                    
+                    [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                }
+            
         };
 
         [[UIApplication sharedApplication].delegate.window addSubview:self.sliderValueView];
@@ -275,7 +362,10 @@
                     vc.valueArray = weakSelf.valueOriginArray;
                     vc.productModel = weakSelf.productModel;
                     vc.valueString = weakSelf.modifiedValue;
-                    [vc refreshData];
+                    
+                    vc.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+                    [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+                    
                     [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
                     
@@ -283,7 +373,12 @@
                     TIoTAddAutoIntelligentVC * addAutoVC = [weakSelf findViewController:NSStringFromClass([TIoTAddAutoIntelligentVC class])];
                     if (addAutoVC) {
                         addAutoVC.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
-                        [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType];
+                        addAutoVC.productModel = weakSelf.productModel;
+//                        addAutoVC.actionOriginArray = weakSelf.actionOriginArray;
+//                        addAutoVC.valueOriginArray = weakSelf.valueOriginArray;
+                        
+                        //autoIntelModelArray 每次编辑只有一项，所以数组中始终有且仅有一个TIoTPropertiesModel
+                        [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType modifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
                         [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
                     }else {
                         // 没找到需要返回的控制器的处理方式
@@ -327,6 +422,8 @@
             NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":baseModel.name?:@"",@"value":valueSteing,@"needArrow":@"1"}];
             [_dataArr addObject:tempDic];
         }
+        
+        
     }
     
     return _dataArr;

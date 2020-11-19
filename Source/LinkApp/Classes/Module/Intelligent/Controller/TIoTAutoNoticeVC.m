@@ -59,6 +59,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTAutoNoticeCell *cell = [TIoTAutoNoticeCell cellWithTableView:tableView];
     cell.delegate = self;
+    if (self.isEdit == YES) {
+        cell.isOn = self.editModel.isSwitchTuron;
+    }
     return cell;
 }
 
@@ -68,21 +71,34 @@
 - (void)switchChange:(UISwitch *_Nullable)senderSwitch {
     if ([senderSwitch isOn]) {
         NSLog(@"turn on");
-        NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
-        [tempDic setValue:@(3) forKey:@"ActionType"];
-        [tempDic setValue:NSLocalizedString(@"auto_notice_center", @"消息中心") forKey:@"Data"];
-        [tempDic setValue:@"5" forKey:@"type"];
-        TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:tempDic];
-        if (self.choiceNoticeArray.count != 0) {
-            if (![self.choiceNoticeArray containsObject:model]) {
-                [self.choiceNoticeArray addObject:model];
+        
+        if (self.isEdit == YES) {
+            self.editModel.isSwitchTuron = 1;
+            if (self.choiceNoticeArray.count != 0) {
+                [self.choiceNoticeArray replaceObjectAtIndex:0 withObject: self.editModel];
+            }else {
+                [self.choiceNoticeArray addObject:self.editModel];
             }
         }else {
-            [self.choiceNoticeArray addObject:model];
+            NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
+            [tempDic setValue:@(3) forKey:@"ActionType"];
+            [tempDic setValue:NSLocalizedString(@"auto_notice_center", @"消息中心") forKey:@"Data"];
+            [tempDic setValue:@"5" forKey:@"type"];
+            [tempDic setValue:@(1) forKey:@"isSwitchTuron"];
+            TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:tempDic];
+            if (self.choiceNoticeArray.count != 0) {
+                if (![self.choiceNoticeArray containsObject:model]) {
+                    [self.choiceNoticeArray addObject:model];
+                }
+            }else {
+                [self.choiceNoticeArray addObject:model];
+            }
         }
+        
         
     }else {
         NSLog(@"turn off");
+        
         if (self.choiceNoticeArray.count != 0) {
             [self.choiceNoticeArray removeAllObjects];
         }
@@ -123,13 +139,20 @@
         _bottomView.secondBlock = ^{
 #warning 确定所选后 返回
 
-            if (weakSelf.choiceNoticeArray.count == 0) {
-                [MBProgressHUD showMessage:NSLocalizedString(@"auto_atleast_choice_notice_type", @"至少选择一种通知类型") icon:@""];
-            }else {
-                if (weakSelf.addNoticeBlock) {
-                    weakSelf.addNoticeBlock(weakSelf.choiceNoticeArray);
+            if (self.isEdit == YES) {
+                if (weakSelf.deleteNoticeBlcok) {
+                    weakSelf.deleteNoticeBlcok(weakSelf.choiceNoticeArray);
                 }
                 [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else {
+                if (weakSelf.choiceNoticeArray.count == 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"auto_atleast_choice_notice_type", @"至少选择一种通知类型") icon:@""];
+                }else {
+                    if (weakSelf.addNoticeBlock) {
+                        weakSelf.addNoticeBlock(weakSelf.choiceNoticeArray);
+                    }
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }
             }
             
             
