@@ -48,6 +48,20 @@
         make.left.right.bottom.equalTo(self.view);
         make.height.mas_equalTo(kBottomHeight);
     }];
+    
+    if (![NSString isNullOrNilWithObject:self.autoDelayDateString]) {
+        NSInteger hourStr = [[self.autoDelayDateString componentsSeparatedByString:@":"].firstObject intValue];
+        NSInteger minutStr = [[self.autoDelayDateString componentsSeparatedByString:@":"].lastObject intValue];
+        
+        [self.pickView selectRow:hourStr inComponent:0 animated:NO];
+        [self.pickView selectRow:minutStr inComponent:1 animated:NO];
+    }
+    
+    NSString *hourStr = [self.autoDelayDateString componentsSeparatedByString:@":"].firstObject;
+    NSString *minuteStr = [self.autoDelayDateString componentsSeparatedByString:@":"].lastObject;
+    
+    self.hourString = [NSString stringWithFormat:@"%d%@",hourStr.intValue,NSLocalizedString(@"unit_h", @"小时")];
+    self.minuteString = [NSString stringWithFormat:@"%d%@",minuteStr.intValue,NSLocalizedString(@"unit_m", @"分钟")];
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -143,7 +157,7 @@
         if ([NSString isNullOrNilWithObject: self.minuteString]) {
             [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
         }else {
-            if ([self.minuteString isEqualToString:@"0分钟"]) {
+            if ([self.minuteString isEqualToString:@"0分钟"]||[self.minuteString isEqualToString:@"00分钟"]) {
                 [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
             }else {
                 timeString = [NSString stringWithFormat:@"%@后",self.minuteString];
@@ -152,15 +166,15 @@
              }
         }
     }else {
-        if ([self.hourString isEqualToString:@"0小时"]) {
+        if ([self.hourString isEqualToString:@"0小时"]||[self.hourString isEqualToString:@"00小时"]) {
             if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]) {
                 [MBProgressHUD showMessage:NSLocalizedString(@"error_delay_oneminute", @"延时时长至少为一分钟") icon:@""];
             }else {
-                timeString = [NSString stringWithFormat:@"%@%@后",self.hourString,self.minuteString];
+                timeString = [NSString stringWithFormat:@"%@后",self.minuteString];
                 [self addDelayTime:timeString withHour:self.hourString withMinuteString:self.minuteString];
             }
         }else {
-            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]) {
+            if ([NSString isNullOrNilWithObject:self.minuteString] || [self.minuteString isEqualToString:@"0分钟"]||[self.minuteString isEqualToString:@"00分钟"]) {
                 timeString = [NSString stringWithFormat:@"%@后",self.hourString];
                 [self addDelayTime:timeString withHour:self.hourString withMinuteString:@"0"];
             }else {
@@ -174,8 +188,8 @@
 - (void)addDelayTime:(NSString *)timeStr withHour:(NSString *)hourString withMinuteString:(NSString *)min{
     
     if (self.isEditing == YES) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:hour:minuteString:)]) {
-            [self.delegate changeDelayTimeString:timeStr?:@"" hour:hourString?:@"0" minuteString:min?:@"0"];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:hour:minuteString:withAutoDelayIndex:)]) {
+            [self.delegate changeDelayTimeString:timeStr?:@"" hour:hourString?:@"0" minuteString:min?:@"0" withAutoDelayIndex:self.autoEditedDelayIndex];
         }
         [self.navigationController popViewControllerAnimated:YES];
         

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TIoTIntelligentProductConfigModel.h"
-
+#import "TIoTAutoIntelligentModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, IntelligentActioinType) {
@@ -33,7 +33,13 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 @property (nonatomic, assign) BOOL isEdited;
 @property (nonatomic, strong) NSString *valueString;
 
-- (void)refreshData;
+@property (nonatomic, assign) BOOL isSceneDetail;   //场景详情编辑页面，yes 从智能主页进入 no 普通入口进入
+@property (nonatomic, copy) NSDictionary *sceneManualDic; //选中的手动场景
+@property (nonatomic, strong) NSDictionary *paramDic; //从智能主页传入场景参数
+
+@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoDeviceStatusArray; //在setting创建完后返回的
+- (void)refreshIntelligentManualModifyModel:(TIoTAutoIntelligentModel *)modifiedModel originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit;
+
 @end
 
 NS_ASSUME_NONNULL_END

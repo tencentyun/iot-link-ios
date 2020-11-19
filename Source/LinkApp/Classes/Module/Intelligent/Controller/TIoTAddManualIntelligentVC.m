@@ -15,6 +15,13 @@
 #import "TIoTComplementIntelligentVC.h"
 #import "TIoTIntelligentVC.h"
 #import "TIoTDeviceSettingVC.h"
+#import "UILabel+TIoTExtension.h"
+
+#import "TIoTSettingIntelligentCell.h"
+#import "TIoTSettingIntelligentImageVC.h"
+#import "TIoTSettingIntelligentNameVC.h"
+#import "TIoTAppEnvironment.h"
+#import "TIoTAppConfig.h"
 
 @interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTChooseDelayTimeVCDelegate>
 @property  (nonatomic, strong) UIImageView *noManualTaskImageView;
@@ -27,6 +34,14 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger selectedDelayIndex;
 @property (nonatomic, strong) NSMutableArray *delayTimeStringArray;
+
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UITableView *complementTableView;
+@property (nonatomic, strong) NSMutableArray *dataArr;
+@property (nonatomic, strong) NSString *sceneImageUrl;
+@property (nonatomic, strong) NSString  *sceneNameString;
+
+@property (nonatomic, strong) NSMutableArray *manualSceneArray;
 @end
 
 @implementation TIoTAddManualIntelligentVC
@@ -52,7 +67,24 @@
     }
 }
 
-- (void)refreshData {
+
+- (void)refreshIntelligentManualModifyModel:(TIoTAutoIntelligentModel *)modifiedModel originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit {
+    
+    if (isEdit == YES) {
+        if (modifiedModel != nil) {
+            [self.dataArray replaceObjectAtIndex:indexrow withObject:modifiedModel];
+            [self.tableView reloadData];
+        }
+        
+    }else {
+        if (self.autoDeviceStatusArray.count != 0) {
+            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                [self.dataArray addObject:model];
+            }
+            [self.tableView reloadData];
+        }
+    }
+    
     [self loadData];
 }
 
@@ -61,26 +93,157 @@
     // Do any additional setup after loading the view.
     
     [self setupUI];
+    
+    if (self.isSceneDetail == YES) {
+        [self loadManualSceneList];
+        self.nextButtonView.hidden = NO;
+    }
+}
+
+//MARK:传入的手动场景（智能主页传入）
+- (void)loadManualSceneList {
+
+    [self.dataArray removeAllObjects];
+    [self.dataArr removeAllObjects];
+    
+    self.manualSceneArray = [NSMutableArray arrayWithArray:self.sceneManualDic[@"Actions"]?:@[]];
+    for (int i = 0; i<self.manualSceneArray.count; i++) {
+
+        NSDictionary *tempDic = [NSDictionary dictionaryWithDictionary:self.manualSceneArray[i]];
+        NSNumber *actionTypeNum = tempDic[@"ActionType"]?:0;
+
+        TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:tempDic];
+        
+        if ( actionTypeNum.intValue == 0) { //设备
+            
+            NSString *productIDString = model.ProductId?:@"";
+            
+            NSString * dataString= model.Data;
+            NSDictionary *dataDic = [NSString jsonToObject:dataString];
+            NSString *keyString = dataDic.allKeys[0]; //只有一个键值对
+            NSNumber *number = dataDic[keyString];
+            
+            [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[productIDString]} success:^(id responseObject) {
+                
+                NSArray *tmpArr = responseObject[@"Products"];
+                if (tmpArr.count > 0) {
+                    NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
+        //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+                    TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+        //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
+                    NSLog(@"--!!!-%@",product);
+                    
+                    for (int i = 0; i <product.properties.count; i++) {
+                        TIoTPropertiesModel *propertieModel = product.properties[i];
+                        if ([propertieModel.id isEqualToString:keyString]) {
+                            
+                            
+                            NSString *valueString = @"";
+                            if ([propertieModel.define.type isEqualToString:@"enum"] || [propertieModel.define.type isEqualToString:@"bool"]) {
+                                
+                                NSString *keyString = [NSString stringWithFormat:@"%d",number.intValue];
+                                valueString = [propertieModel.define.mapping objectForKey:keyString];
+                            }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
+                                
+                                if ([propertieModel.define.type isEqualToString:@"int"]) {
+                                    valueString = [NSString stringWithFormat:@"%d%@",number.intValue,propertieModel.define.unit];
+                                }else if ([propertieModel.define.type isEqualToString:@"float"]) {
+                                    valueString = [NSString stringWithFormat:@"%.1f%@",number.floatValue,propertieModel.define.unit];
+                                }
+                                 
+                            }
+                            
+                            model.propertName = propertieModel.name;
+                            model.dataValueString = valueString;
+                            model.propertyModel = propertieModel;
+                        
+                            [self.dataArray addObject:model];
+                            [self.tableView reloadData];
+                        }
+                        
+                    }
+                }
+            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+            }];
+            
+        }else if (actionTypeNum.intValue == 1){ //延时
+           
+            NSNumber *timeSecond = tempDic[@"Data"]?:0;
+            NSInteger hourNum = timeSecond.intValue / (60*60);
+            NSInteger minutNum = (timeSecond.intValue % (60*60))/60;
+
+            NSString *timestr = @"";
+            if (hourNum == 0) {
+                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+            }
+            if (minutNum == 0) {
+                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+            }
+            model.delayTime = timestr;
+            [self.dataArray addObject:model];
+
+        }
+        
+    }
+    
+    
+    if (self.dataArray.count == 0) {
+        self.tableView.hidden = YES;
+    }else {
+        self.tableView.hidden = NO;
+    }
+    
+    self.sceneImageUrl = self.sceneManualDic[@"SceneIcon"]?:@"";
+    self.sceneNameString = self.sceneManualDic[@"SceneName"]?:NSLocalizedString(@"unset", @"未设置");
+    [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Image", @"智能图片"),@"value":NSLocalizedString(@"unset", @"未设置"),@"image":self.sceneImageUrl,@"needArrow":@"1"}]];
+    [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Name", @"智能名称"),@"value":self.sceneNameString,@"needArrow":@"1"}]];
+    
+    [self.tableView reloadData];
 }
 
 - (void)setupUI {
-
-    self.title = NSLocalizedString(@"addManualTask", @"添加手动智能");
+    
+    if (self.isSceneDetail == YES) {
+        self.title = NSLocalizedString(@"intelligent_manual", @"手动智能");
+    }else {
+        self.title = NSLocalizedString(@"addManualTask", @"添加手动智能");
+    }
+    
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self addEmptyIntelligentDeviceTipView];
+    
+    CGFloat KItemHeight = 48;
+    
+    CGFloat kTopSpace  = 15; //tableview 距离导航栏高度
+    [self.view addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(KItemHeight *2);
+        if (@available (iOS 11.0, *)) {
+            if (self.isSceneDetail == YES) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopSpace);
+            }else {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            }
+        }else {
+            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale + kTopSpace);
+        }
+    }];
+    
+    [self.topView addSubview:self.complementTableView];
+    [self.complementTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.topView);
+    }];
+    
     
     CGFloat kBottomViewHeight = 90;
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-        } else {
-            // Fallback on earlier versions
-            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
-        }
+        make.top.equalTo(self.topView.mas_bottom);
         make.bottom.equalTo(self.view.mas_bottom).offset(-kBottomViewHeight);
     }];
     
@@ -178,49 +341,126 @@
     }];
 }
 
+#pragma mark - event
+
+- (NSString *)getFormatTimeWithSecond:(NSInteger)timeValue {
+    NSInteger hourNum = timeValue / (60*60);
+    NSInteger minutNum = (timeValue % (60*60))/60;
+    
+    NSString *timestr = @"";
+    if (hourNum == 0) {
+        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+    }
+    if (minutNum == 0) {
+        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+    }
+    
+    NSString *timeFormatStr = @"";
+    if (hourNum<10) {
+        if (minutNum<10) {
+            timeFormatStr = [NSString stringWithFormat:@"0%ld:0%ld",(long)hourNum,(long)minutNum];
+        }else {
+            timeFormatStr = [NSString stringWithFormat:@"0%ld:%ld",(long)hourNum,(long)minutNum];
+        }
+    }else {
+        if (minutNum<10) {
+            timeFormatStr = [NSString stringWithFormat:@"%ld:0%ld",(long)hourNum,(long)minutNum];
+        }else {
+            timeFormatStr = [NSString stringWithFormat:@"%ld:%ld",(long)hourNum,(long)minutNum];
+        }
+    }
+    return timeFormatStr;
+}
+
 #pragma mark - UITableViewDelegate And TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    if (tableView == self.tableView) {
+        return self.dataArray.count;
+    }else {
+        return self.dataArr.count;
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
-    id object = self.dataArray[indexPath.row];
-    if ([object isKindOfClass:[NSString class]]) {
-        intelligentCell.delayTimeString = self.dataArray[indexPath.row];
-    }else  {
-        intelligentCell.model = self.dataArray[indexPath.row];
-        intelligentCell.subTitleString = self.valueArray[indexPath.row];
-        intelligentCell.productModel = self.productModel;
+    
+    if (tableView == self.tableView) {
+        TIoTIntelligentCustomCell *intelligentCell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
+        TIoTAutoIntelligentModel *model = self.dataArray[indexPath.row];
+        
+        if (model.ActionType == 1) {
+            intelligentCell.delayTimeString = model.delayTime;
+        }else  {
+            intelligentCell.model = model;
+            
+            intelligentCell.subTitleString = model.dataValueString;
+        }
+        return intelligentCell;
+    }else {
+        TIoTSettingIntelligentCell *cell = [TIoTSettingIntelligentCell cellWithTableView:tableView];
+        cell.dic = [self dataArr][indexPath.row];
+        return cell;
     }
     
-    return intelligentCell;
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 #warning 后期添加判断类型 暂时先如下处理
+    TIoTAutoIntelligentModel *model = self.dataArray[indexPath.row];
     
-    id object = self.dataArray[indexPath.row];
-    if ([object isKindOfClass:[NSString class]]) {
-        TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
-        chooseDelayTimeVC.isEditing = YES;
-        chooseDelayTimeVC.delegate = self;
-        self.selectedDelayIndex = indexPath.row;
-        [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
-    }else  {
-        TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
-        deviceSettingVC.isEdited = YES;
-        deviceSettingVC.editedModel = self.dataArray[indexPath.row];
-        deviceSettingVC.productModel = self.productModel;
-        deviceSettingVC.valueString = self.valueArray[indexPath.row];
-        deviceSettingVC.editActionIndex = indexPath.row;
-        deviceSettingVC.valueOriginArray = [self.valueArray mutableCopy];
-        deviceSettingVC.actionOriginArray = [self.dataArray mutableCopy];
-        [self.navigationController pushViewController:deviceSettingVC animated:YES];
+    if (tableView == self.tableView) {
+        
+        if (model.ActionType == 1) {
+            TIoTChooseDelayTimeVC *chooseDelayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+            chooseDelayTimeVC.isEditing = YES;
+            chooseDelayTimeVC.delegate = self;
+            NSString *timeStrinf =  [self getFormatTimeWithSecond:model.Data.intValue];
+            chooseDelayTimeVC.autoDelayDateString = timeStrinf;
+            self.selectedDelayIndex = indexPath.row;
+            [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
+            
+        }else  {
+            TIoTDeviceSettingVC *deviceSettingVC = [[TIoTDeviceSettingVC alloc]init];
+            deviceSettingVC.isEdited = YES;
+            deviceSettingVC.enterType = IntelligentEnterTypeManual;
+            deviceSettingVC.editedModel = model.propertyModel;
+            deviceSettingVC.isAutoActionType = YES;
+            deviceSettingVC.valueString = model.dataValueString?:@"";
+            deviceSettingVC.editActionIndex = indexPath.row;
+            deviceSettingVC.model = model;
+            [self.navigationController pushViewController:deviceSettingVC animated:YES];
+            
+        }
+    }else {
+        if (indexPath.row == 0) {
+            TIoTSettingIntelligentImageVC *settingImageVC = [[TIoTSettingIntelligentImageVC alloc]init];
+            settingImageVC.selectedIntelligentImageBlock = ^(NSString * _Nonnull imageUrl) {
+                NSMutableDictionary *dic  = self.dataArr[0];
+                [dic setValue:imageUrl forKey:@"image"];
+                self.sceneImageUrl = imageUrl;
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [self.complementTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            };
+            [self.navigationController pushViewController:settingImageVC animated:YES];
+            
+        }else if (indexPath.row == 1) {
+            TIoTSettingIntelligentNameVC *settingNameVC = [[TIoTSettingIntelligentNameVC alloc]init];
+            settingNameVC.saveIntelligentNameBlock = ^(NSString * _Nonnull name) {
+                NSMutableDictionary *dic  = self.dataArr[1];
+                [dic setValue:name forKey:@"value"];
+                self.sceneNameString = name;
+                
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+                [self.complementTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            };
+            [self.navigationController pushViewController:settingNameVC animated:YES];
+        }
+        
     }
-    
-    
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -272,14 +512,25 @@
 //}
 
 #pragma mark - TIoTChooseDelayTimeVCDelegate
-- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min {
+- (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
     [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
-    [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
+    if (self.isSceneDetail == NO) {
+        [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
+    }
+    
+    NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    int hourNumber =[[hourString stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
+    
+    NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    int minutNumber =[[min stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
+    NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
+    
+    NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:self.manualSceneArray[self.selectedDelayIndex]];
+    NSString *secondTimeString = timeStr?:@"0";
+    [tempDic setValue:secondTimeString forKey:@"Data"];
+    [self.manualSceneArray replaceObjectAtIndex:self.selectedDelayIndex withObject:tempDic];
     NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
-    
-    self.isEdited = YES;
-#warning 刷新
     
 }
 
@@ -436,29 +687,59 @@
     if (!_nextButtonView) {
         _nextButtonView = [[TIoTIntelligentBottomActionView alloc]init];
         _nextButtonView.backgroundColor = [UIColor whiteColor];
-        [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
-        __weak typeof(self)weakSelf = self;
-        _nextButtonView.confirmBlock = ^{
-            if (weakSelf.customSheet) {
-                [weakSelf.customSheet removeFromSuperview];
-            }
-            TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-            complementVC.productModel = weakSelf.productModel;
-            complementVC.actionArray = weakSelf.taskArray;
-            complementVC.valueArray = weakSelf.valueArray;
-            if (weakSelf.actionType == IntelligentActioinTypeManual) {
-                complementVC.sceneActioinType = SceneActioinTypeManual;
-            }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
-                complementVC.sceneActioinType = SceneActioinTypeDelay;
-            }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
-                complementVC.sceneActioinType = SceneActioinTypeNotice;
-            }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
-                complementVC.sceneActioinType = SceneActioinTypeTimer;
-            }
-            complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
-            complementVC.dataArray = weakSelf.dataArray;
-            [weakSelf.navigationController pushViewController:complementVC animated:YES];
-        };
+        
+        if (self.isSceneDetail == YES) {
+            [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"save", @"保存")]];
+            
+            __weak typeof(self)weakSelf = self;
+            
+            _nextButtonView.confirmBlock = ^{
+                
+                NSMutableArray *actionArray = [NSMutableArray array];
+                for (TIoTAutoIntelligentModel *model in weakSelf.dataArray) {
+                    [actionArray addObject:[model yy_modelToJSONObject]];
+                }
+                
+                //MARK:请求修改手动场景接口
+                [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                
+                NSDictionary *paramDic = @{@"Actions":actionArray,@"SceneId":weakSelf.sceneManualDic[@"SceneId"],@"SceneName":weakSelf.sceneNameString,@"SceneIcon":weakSelf.sceneImageUrl};
+                [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
+                    [MBProgressHUD dismissInView:weakSelf.view];
+                    [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                    
+                }];
+            };
+            
+            
+        }else {
+            [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
+            __weak typeof(self)weakSelf = self;
+            _nextButtonView.confirmBlock = ^{
+                if (weakSelf.customSheet) {
+                    [weakSelf.customSheet removeFromSuperview];
+                }
+                TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+                complementVC.productModel = weakSelf.productModel;
+                complementVC.actionArray = weakSelf.taskArray;
+                complementVC.valueArray = weakSelf.valueArray;
+                if (weakSelf.actionType == IntelligentActioinTypeManual) {
+                    complementVC.sceneActioinType = SceneActioinTypeManual;
+                }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
+                    complementVC.sceneActioinType = SceneActioinTypeDelay;
+                }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
+                    complementVC.sceneActioinType = SceneActioinTypeNotice;
+                }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
+                    complementVC.sceneActioinType = SceneActioinTypeTimer;
+                }
+                complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
+                complementVC.dataArray = weakSelf.dataArray;
+                [weakSelf.navigationController pushViewController:complementVC animated:YES];
+            };
+        }
+        
     }
     return _nextButtonView;
 }
@@ -482,5 +763,33 @@
         _delayTimeStringArray = [NSMutableArray array];
     }
     return _delayTimeStringArray;
+}
+
+- (UIView *)topView {
+    if (!_topView) {
+        _topView = [[UIView alloc]init];
+        _topView.backgroundColor = [UIColor whiteColor];
+    }
+    return _topView;;
+}
+
+- (UITableView *)complementTableView {
+    if (!_complementTableView) {
+        _complementTableView = [[UITableView alloc]init];
+        _complementTableView.delegate = self;
+        _complementTableView.dataSource = self;
+        _complementTableView.backgroundColor = [UIColor whiteColor];
+        _complementTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _complementTableView.rowHeight = 48;
+    }
+    return _complementTableView;
+}
+
+
+- (NSMutableArray *)dataArr{
+    if (!_dataArr) {
+        _dataArr = [NSMutableArray array];
+    }
+    return _dataArr;
 }
 @end
