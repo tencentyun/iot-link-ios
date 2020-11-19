@@ -66,6 +66,14 @@
     
 }
 
+- (void)drawRect:(CGRect)rect {
+    if (self.isOn == YES) {
+        [self.noticeSwitch setOn:YES];
+    }else {
+        [self.noticeSwitch setOn:NO];
+    }
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

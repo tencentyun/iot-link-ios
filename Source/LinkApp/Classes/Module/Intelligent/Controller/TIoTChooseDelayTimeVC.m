@@ -48,6 +48,15 @@
         make.left.right.bottom.equalTo(self.view);
         make.height.mas_equalTo(kBottomHeight);
     }];
+    
+    if (![NSString isNullOrNilWithObject:self.autoDelayDateString]) {
+        NSInteger hourStr = [[self.autoDelayDateString componentsSeparatedByString:@":"].firstObject intValue];
+        NSInteger minutStr = [[self.autoDelayDateString componentsSeparatedByString:@":"].lastObject intValue];
+        
+        [self.pickView selectRow:hourStr inComponent:0 animated:NO];
+        [self.pickView selectRow:minutStr inComponent:1 animated:NO];
+    }
+    
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -174,8 +183,8 @@
 - (void)addDelayTime:(NSString *)timeStr withHour:(NSString *)hourString withMinuteString:(NSString *)min{
     
     if (self.isEditing == YES) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:hour:minuteString:)]) {
-            [self.delegate changeDelayTimeString:timeStr?:@"" hour:hourString?:@"0" minuteString:min?:@"0"];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(changeDelayTimeString:hour:minuteString:withAutoDelayIndex:)]) {
+            [self.delegate changeDelayTimeString:timeStr?:@"" hour:hourString?:@"0" minuteString:min?:@"0" withAutoDelayIndex:self.autoEditedDelayIndex];
         }
         [self.navigationController popViewControllerAnimated:YES];
         
