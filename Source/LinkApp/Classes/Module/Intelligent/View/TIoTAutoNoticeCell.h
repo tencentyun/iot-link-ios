@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTAutoNoticeCell : UITableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, weak) id<TIoTAutoNoticeCellDelegate>delegate;
+@property (nonatomic, assign) BOOL isOn;
 @end
 
 NS_ASSUME_NONNULL_END

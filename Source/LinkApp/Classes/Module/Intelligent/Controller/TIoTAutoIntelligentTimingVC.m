@@ -96,6 +96,14 @@
         make.right.equalTo(arrowImage.mas_left).offset(-8);
         make.centerY.equalTo(self.repeatingTimeButton.mas_centerY);
     }];
+    
+    self.userSectedDateIDString = self.editModel.Timer.Days?:@"0000000";
+    self.timingLabel.text = self.editModel.Timer.timerKindSring?:NSLocalizedString(@"auto_repeatTiming_once", @"执行一次");
+    self.choiceRepeatTimeNumner = self.editModel.Timer.choiceRepeatTimeNumner;
+    NSInteger hour = [[self.editModel.Timer.TimePoint componentsSeparatedByString:@":"].firstObject intValue];
+    NSInteger minut = [[self.editModel.Timer.TimePoint componentsSeparatedByString:@":"].lastObject intValue];
+    [self.pickView selectRow:hour inComponent:0 animated:NO];
+    [self.pickView selectRow:minut inComponent:1 animated:NO];
 }
 
 #pragma mark - event
@@ -262,7 +270,7 @@
     NSString *timeStr = self.userSectedDateIDString ?:@"";
     NSString *timeKindStr = self.timingLabel.text?:@"";
     
-    NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr};
+    NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr,@"choiceRepeatTimeNumner":@(self.choiceRepeatTimeNumner)};
     NSDictionary *timerDic = @{@"CondId":timeTamp,@"CondType":@(1),@"Timer":timerSelectDic,@"type":@"1"};
     TIoTAutoIntelligentModel *timerModel = [TIoTAutoIntelligentModel yy_modelWithJSON:timerDic];
     if (self.autoIntelAddTimerBlock) {
