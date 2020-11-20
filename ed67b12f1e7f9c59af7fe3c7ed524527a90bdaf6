@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "66442753_66e52fd2",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-20T03:48:12Z",
+      "side": 1,
+      "message": "好的，这里是拆分的不够明确，导致change 夸功能",
+      "parentUuid": "b6106e48_f2bcf2d5",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53f9e7df_99204114",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86265a5e_e11c13c9",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-20T03:48:12Z",
+      "side": 1,
+      "message": "好的，目前已经在patch5中修改，均已采用model对应数据处理",
+      "parentUuid": "53f9e7df_99204114",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "cf4b92eb_8f806a44",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-20T03:48:12Z",
+      "side": 1,
+      "message": "好的，已经在patch5中删除，并已经检查自动/手动智能功能中是否还有类似废弃代码",
+      "parentUuid": "4666e136_e63c861b",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae91f814_ba507c67",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "42814db0_2c25ca94",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-20T03:48:12Z",
+      "side": 1,
+      "message": "已经在patch6中删除",
+      "parentUuid": "ae91f814_ba507c67",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4dabb76_897896c3",
         "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoNoticeCell.m",
         "patchSetId": 4
@@ -84,6 +156,24 @@
       "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6e3837_d46d61a2",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/View/TIoTAutoNoticeCell.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-11-20T03:48:12Z",
+      "side": 1,
+      "message": "是的，用法有误，已经在patch6中修改",
+      "parentUuid": "a4dabb76_897896c3",
+      "revId": "ed67b12f1e7f9c59af7fe3c7ed524527a90bdaf6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
