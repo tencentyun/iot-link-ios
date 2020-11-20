@@ -12,6 +12,8 @@
 #import "ControlDeviceVC.h"
 
 #import "TIoTCoreFoundation.h"
+#import "TRTCCalling.h"
+#import "GenerateTestUserSig.h"
 
 
 static NSString *cellID = @"DODO";
@@ -47,17 +49,79 @@ static NSString *cellID = @"DODO";
     
 }
 
+- (UIViewController *)topViewController {
+    UIViewController *resultVC;
+    resultVC = [self _topViewController:[[UIApplication sharedApplication].keyWindow rootViewController]];
+    while (resultVC.presentedViewController) {
+        resultVC = [self _topViewController:resultVC.presentedViewController];
+    }
+    return resultVC;
+}
+
+- (UIViewController *)_topViewController:(UIViewController *)vc {
+    if ([vc isKindOfClass:[UINavigationController class]]) {
+        return [self _topViewController:[(UINavigationController *)vc topViewController]];
+    } else if ([vc isKindOfClass:[UITabBarController class]]) {
+        return [self _topViewController:[(UITabBarController *)vc selectedViewController]];
+    } else {
+        return vc;
+    }
+    return nil;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"RTC" bundle:nil];
-        RTCViewController *rtcVC = [storyboard instantiateViewControllerWithIdentifier:@"RTCViewController"];
-        rtcVC.roomId = @"1256732";
-        NSString *userid = [NSString stringWithFormat:@"%f",CACurrentMediaTime() * 1000];
-        rtcVC.userId = userid;
-        rtcVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:rtcVC animated:YES];
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"RTC" bundle:nil];
+//        RTCViewController *rtcVC = [storyboard instantiateViewControllerWithIdentifier:@"RTCViewController"];
+//        rtcVC.roomId = @"1256732";
+//        NSString *userid = [NSString stringWithFormat:@"%f",CACurrentMediaTime() * 1000];
+//        rtcVC.userId = userid;
+//        rtcVC.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:rtcVC animated:YES];
+
+        NSString *userid = @"458123";
+        NSString *userSig = [GenerateTestUserSig genTestUserSig:userid];
+        
+        [[TRTCCalling shareInstance] login:SDKAppID user:userid userSig:userSig roomID:@"88888888" success:^{
+            NSLog(@"succ--");
+        } failed:^(int code, NSString * _Nonnull des) {
+            NSLog(@"error--%@",des);
+        }];
+#warning audio example
+        TRTCCallingAuidoViewController *callVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:@"222"];
+        callVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[self topViewController] presentViewController:callVC animated:NO completion:^{
+            [[TRTCCalling shareInstance] groupCall:@[@"222"] type:CallType_Audio groupID:nil];
+
+
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+                [callVC OCEnterUserWithUserID:@"456123"];
+            });
+
+
+        }];
+        
+        
+#warning video example
+        
+//        TRTCCallingVideoViewController *callVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:@"222"];
+//        callVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//        [[self topViewController] presentViewController:callVC animated:NO completion:^{
+//            [[TRTCCalling shareInstance] groupCall:@[@"222"] type:CallType_Video groupID:nil];
+//
+//
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//
+//                [callVC OCEnterUserWithUserID:@"456123"];
+//            });
+//
+//
+//        }];
+        
+        
     });
 }
 

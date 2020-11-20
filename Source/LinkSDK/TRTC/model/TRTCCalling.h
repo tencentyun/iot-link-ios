@@ -10,14 +10,13 @@
 #import "TRTCCloud.h"
 #import "TRTCCallingDelegate.h"
 
-@import ImSDK;
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^CallingActionCallback)(void);
 typedef void(^ErrorCallback)(int code, NSString *des);
 
-@interface TRTCCalling : NSObject<TRTCCloudDelegate,V2TIMSignalingListener>
+@interface TRTCCalling : NSObject<TRTCCloudDelegate>
 
 /// IM APNS推送ID
 @property (nonatomic, assign) int imBusinessID;
@@ -40,9 +39,10 @@ typedef void(^ErrorCallback)(int code, NSString *des);
 - (void)login:(UInt32)sdkAppID
          user:(NSString *)userID
       userSig:(NSString *)userSig
+       roomID:(NSString *)roomID
       success:(CallingActionCallback)success
        failed:(ErrorCallback)failed
-NS_SWIFT_NAME(login(sdkAppID:user:userSig:success:failed:));
+NS_SWIFT_NAME(login(sdkAppID:user:roomID:userSig:success:failed:));
 
 
 /// 登出接口

@@ -15,6 +15,7 @@
 @property(nonatomic, assign)int mSDKAppID;
 @property(nonatomic, strong)NSString *mUserID;
 @property(nonatomic, strong)NSString *mUserSig;
+@property(nonatomic, strong)NSString *mRoomID;
 
 @property(nonatomic,assign) BOOL isMicMute;
 @property(nonatomic,assign) BOOL isHandsFreeOn;
@@ -56,65 +57,21 @@
     self.delegate = delegate;
 }
 
-- (void)login:(UInt32)sdkAppID user:(NSString *)userID userSig:(NSString *)userSig success:(CallingActionCallback)success failed:(ErrorCallback)failed {
+- (void)login:(UInt32)sdkAppID user:(NSString *)userID userSig:(NSString *)userSig roomID:(NSString *)roomID success:(CallingActionCallback)success failed:(ErrorCallback)failed {
     self.mSDKAppID = sdkAppID;
     self.mUserID = userID;
     self.mUserSig = userSig;
-    [[V2TIMManager sharedInstance] initSDK:sdkAppID config:nil listener:nil];
+    self.mRoomID = roomID;
+    
     [self addSignalListener];
-    if ([[[V2TIMManager sharedInstance] getLoginUser] isEqualToString:userID]) {
-        if (success) {
-            success();
-        }
-        // 设置APNS
-        [self setupAPNS];
-        return;
-    }
     
     NSAssert(userID.length > 0 || userSig.length > 0, @"用户名或用户签名设置有误");
-    TIMLoginParam *loginParam = [[TIMLoginParam alloc] init];
-    loginParam.identifier = userID;
-    loginParam.userSig = userSig;
-    @weakify(self)
-    [[V2TIMManager sharedInstance] login:userID userSig:userSig succ:^{
-        @strongify(self)
-        if (!self) {
-            return;
-        }
-        if (success) {
-            success();
-        }
-        [self setupAPNS];
-    } fail:^(int code, NSString *desc) {
-        @strongify(self)
-        if (!self) {
-            return;
-        }
-        if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-            [self.delegate onError:code msg:desc];
-        }
-        if (failed) {
-            failed(code, desc);
-        }
-    }];
 }
 
 - (void)logout:(CallingActionCallback)success failed:(ErrorCallback)failed {
     self.mUserSig = nil;
     self.mSDKAppID = 0;
     [self removeSignalListener];
-    [[V2TIMManager sharedInstance] logout:^{
-        if (success) {
-            success();
-        }
-    } fail:^(int code, NSString *desc) {
-        if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-            [self.delegate onError:code msg:desc];
-        }
-        if (failed) {
-            failed(code, desc);
-        }
-    }];
 }
 
 - (void)call:(NSString *)userID type:(CallType)type {
@@ -130,7 +87,7 @@
         self.curLastModel.inviter = [TRTCCallingUtils loginUser];
         self.curLastModel.action = CallAction_Call;
         self.curLastModel.calltype = type;
-        self.curRoomID = [TRTCCallingUtils generateRoomID];
+        self.curRoomID = 88888888;//[TRTCCallingUtils generateRoomID];
         self.curGroupID = groupID;
         self.curType = type;
         self.isOnCalling = YES;
@@ -300,14 +257,6 @@
 }
 
 - (void)setupAPNS {
-    V2TIMAPNSConfig *config = [[V2TIMAPNSConfig alloc] init];
-    config.businessID = self.imBusinessID;
-    config.token = self.deviceToken;
-    [[V2TIMManager sharedInstance] setAPNS:config succ:^{
-        TRTCLog(@"-----> 上传 token 成功");
-    } fail:^(int code, NSString *desc) {
-        TRTCLog(@"-----> 上传 token 失败");
-    }];
 }
 
 - (void)startRemoteView:(NSString *)userID view:(UIView *)view {

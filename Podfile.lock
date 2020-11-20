@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.9.1)
   - FDFullscreenPopGesture (1.1)
   - Firebase/Analytics (6.31.1):
     - Firebase/Core
@@ -100,22 +101,39 @@ PODS:
   - KeychainAccess (4.2.0)
   - lottie-ios (3.1.8)
   - Masonry (1.1.0)
+  - Material (3.1.8):
+    - Material/Core (= 3.1.8)
+  - Material/Core (3.1.8):
+    - Motion (~> 3.1.1)
   - MBProgressHUD (1.1.0)
   - MGJRouter (0.10.0)
   - MJRefresh (3.2.0)
+  - Motion (3.1.3):
+    - Motion/Core (= 3.1.3)
+  - Motion/Core (3.1.3)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
   - PromisesObjC (1.2.11)
   - Protobuf (3.13.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
+  - RxCocoa (5.1.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.1.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.1)
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
+  - SnapKit (5.0.1)
   - SocketRocket (0.5.1)
   - Tencent-MapSDK (4.3.9)
   - TIoTLinkKit (1.0.0):
@@ -123,7 +141,6 @@ PODS:
   - TIoTLinkKit/CoreBase (1.0.0):
     - MBProgressHUD (= 1.1.0)
   - TIoTLinkKit/TRTC (1.0.0):
-    - TXIMSDK_iOS (= 4.9.1)
     - TXLiteAVSDK_TRTC
     - YYModel
   - TIoTThridSDK (1.0.1):
@@ -131,13 +148,14 @@ PODS:
     - TIoTThridSDK/WechatOpenSDK_NoPay (= 1.0.1)
   - TIoTThridSDK/TPNS-iOS (1.0.1)
   - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.1)
+  - Toast-Swift (5.0.1)
   - TrueTime (5.0.3)
-  - TXIMSDK_iOS (4.9.1)
   - TXLiteAVSDK_TRTC (7.8.9519)
   - TZImagePickerController (3.2.1)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - Alamofire (= 4.9.1)
   - FDFullscreenPopGesture (= 1.1)
   - Firebase/Analytics (= 6.31.1)
   - Firebase/Crashlytics (= 6.31.1)
@@ -146,21 +164,28 @@ DEPENDENCIES:
   - KeychainAccess (= 4.2.0)
   - lottie-ios (= 3.1.8)
   - Masonry (= 1.1.0)
+  - Material (= 3.1.8)
   - MGJRouter (= 0.10.0)
   - MJRefresh (= 3.2.0)
+  - NVActivityIndicatorView (= 5.1.1)
   - QCloudCOSXML/Transfer (= 5.5.2)
+  - RxCocoa (= 5.1.1)
+  - RxSwift (= 5.1.1)
   - SDWebImage (= 4.4.2)
+  - SnapKit (= 5.0.1)
   - SocketRocket (= 0.5.1)
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/TRTC (from `./`)
   - TIoTThridSDK (= 1.0.1)
+  - Toast-Swift (= 5.0.1)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
   - YYModel (= 1.0.4)
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - FDFullscreenPopGesture
     - Firebase
     - FirebaseABTesting
@@ -180,20 +205,27 @@ SPEC REPOS:
     - KeychainAccess
     - lottie-ios
     - Masonry
+    - Material
     - MBProgressHUD
     - MGJRouter
     - MJRefresh
+    - Motion
     - nanopb
+    - NVActivityIndicatorView
     - PromisesObjC
     - Protobuf
     - QCloudCore
     - QCloudCOSXML
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SDWebImage
+    - SnapKit
     - SocketRocket
     - Tencent-MapSDK
     - TIoTThridSDK
+    - Toast-Swift
     - TrueTime
-    - TXIMSDK_iOS
     - TXLiteAVSDK_TRTC
     - TZImagePickerController
     - YYModel
@@ -203,6 +235,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   Firebase: 658370fa0181826a74b7cfca8d68c5856ca749ae
   FirebaseABTesting: 8a9d8df3acc2b43f4a22014ddf9f601bca6af699
@@ -222,25 +255,32 @@ SPEC CHECKSUMS:
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  Material: a2a3f400a3b549d53ef89e56c58c4535b29db387
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MGJRouter: 15d94541eb2cc81eff7d577337288feb7ae9575f
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
+  Motion: cf1e060e489f6661126374d5c60dbd2ed991605c
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: da50f0357bb47e71b707cff02ea6dee8cc1d565f
+  TIoTLinkKit: 4737e21adeec85036c077aabd9e94386a061eda7
   TIoTThridSDK: 8b03ec0aa12cb318ff874692b244e6ba54880547
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
-  TXIMSDK_iOS: 587e25fa8b42c9f228bb9065084270fa6990190f
   TXLiteAVSDK_TRTC: c127880c4dbe844bdc7575a655be8042ce96024a
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 2f352446f73d6dcb38dcc97c7432294200728390
+PODFILE CHECKSUM: 8cb8de6d9bde6154c4bf40a575cf8dc021efe854
 
 COCOAPODS: 1.9.3
