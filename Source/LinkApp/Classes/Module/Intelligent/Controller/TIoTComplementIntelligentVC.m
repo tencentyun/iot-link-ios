@@ -157,50 +157,15 @@
                     
                 }else {
                     
-                    NSDictionary *paramDic = nil;
-                    NSMutableArray *actionArray = [NSMutableArray array];
+                    [weakSelf.manualParamDic setValue:weakSelf.sceneNameString forKey:@"SceneName"];
+                    [weakSelf.manualParamDic setValue:weakSelf.sceneImageUrl forKey:@"SceneIcon"];
+                    [weakSelf.manualParamDic setValue:[TIoTCoreUserManage shared].familyId forKey:@"FamilyId"];
                     
-                    NSMutableDictionary *imageDic  = weakSelf.dataArr[0];
-                    NSString *imageUrl = imageDic[@"image"]?:@"";
-                    NSMutableDictionary *nameDic = weakSelf.dataArr[1];
-                    NSString *nameString = nameDic[@"value"]?:@"";
-                    
-                    for (int k = 0; k < self.dataArray.count; k++) {
-                        id object = weakSelf.dataArray[k];
-                        if ([object isKindOfClass:[NSString class]]) {
-                            NSString *timeString = weakSelf.dataArray[k];
-                            NSString *hourStr = [timeString componentsSeparatedByString:@":"].firstObject;
-                            NSString *minuteStr = [timeString componentsSeparatedByString:@":"].lastObject;
-                            NSInteger secondNum = hourStr.intValue*60*60 + minuteStr.intValue*60;
-                            
-                            [actionArray addObject:@{@"ActionType":@(1),@"Date":@(secondNum)}];
-                        }else  {
-                            
-                            TIoTPropertiesModel *model = weakSelf.dataArray[k];
-                            NSString *valueStr = weakSelf.valueArray[k]? :@"";
-                            NSDictionary *mappingDic = model.define.mapping;
-                            [mappingDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                                if ([obj isEqualToString:valueStr]) {
-                                    NSString *keyStr = key;
-                                    NSDictionary *dataDic = @{model.id?:@"" : @(keyStr.intValue)};
-                                    NSString *dataDicStr = [NSString objectToJson:dataDic];
-                                    
-                                    NSString *productIDStr = weakSelf.productModel.ProductId ?:@"";
-                                    NSString *diviceName = weakSelf.productModel.DeviceName ?:@"";
-                                    NSDictionary *tempData =  @{@"ActionType":@(0),@"ProductId":productIDStr,@"DeviceName":diviceName,@"Data":dataDicStr};
-                                    [actionArray addObject:tempData];
-                                }
-                            }];
-                        }
-                    }
-                    
-                    paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"SceneName":nameString,@"SceneIcon":imageUrl,@"Actions":actionArray};
-
                     if ([weakSelf judgeSatisfyScene]) {
                         
                         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
                         
-                        [[TIoTRequestObject shared] post:AppCreateScene Param:paramDic success:^(id responseObject) {
+                        [[TIoTRequestObject shared] post:AppCreateScene Param:weakSelf.manualParamDic success:^(id responseObject) {
                             
                             [MBProgressHUD showMessage:NSLocalizedString(@"add_sucess", @"添加成功") icon:@""];
                             
@@ -210,6 +175,8 @@
                             
                         }];
                     }
+                    
+                    
                 
                 }
                 

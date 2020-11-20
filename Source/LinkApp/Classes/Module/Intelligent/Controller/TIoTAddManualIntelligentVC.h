@@ -25,7 +25,6 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 @property (nonatomic, strong) NSMutableArray <TIoTPropertiesModel*>*taskArray;
 @property (nonatomic, strong) NSMutableArray <NSString *>*valueArray;
 @property (nonatomic, strong) TIoTIntelligentProductConfigModel *productModel;
-//@property (nonatomic, strong) NSMutableArray <TIoTIntelligentProductConfigModel *>*productModelArray;
 
 @property (nonatomic, strong) NSString *delayTimeString;
 @property (nonatomic, assign) IntelligentActioinType actionType;

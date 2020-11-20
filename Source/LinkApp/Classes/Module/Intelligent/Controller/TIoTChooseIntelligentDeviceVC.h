@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, DeviceChoiceEnterType) {
 @property (nonatomic, strong) NSMutableArray *actionOriginArray;
 @property (nonatomic, strong) NSMutableArray *valueOriginArray;
 @property (nonatomic, assign) DeviceChoiceEnterType enterType;
-@property (nonatomic, assign) BOOL deviceAutoChoiceEnterActionType;//自动智能中的任务(action)为YES,条件(condition)为NO;
+@property (nonatomic, assign) BOOL deviceAutoChoiceEnterActionType;//自动智能中的任务(action)为YES,条件(condition)为NO; 手动也设置为yes   
 @end
 
 NS_ASSUME_NONNULL_END

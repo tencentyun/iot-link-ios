@@ -108,6 +108,7 @@
             
             if (sceneDic[@"SceneName"] != nil) {
                 [tempDic setValue:sceneDic[@"SceneName"] forKey:@"sceneName"];
+                [tempDic setValue:sceneDic[@"SceneName"] forKey:@"DeviceName"]; //不能这样处理，投机做法，暂时这样
             }
             
             [tempDic setValue:@"4" forKey:@"type"];
