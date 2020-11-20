@@ -79,7 +79,7 @@
                                     @"SdkAppId": trtcParams.SdkAppId,
                                     @"UserId": trtcParams.UserId,
                                     @"UserSig": trtcParams.UserSig,
-                                    @"RoomId": trtcParams.RoomId}
+                                    @"RoomId": trtcParams.StrRoomId}
                             };
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppIotRTCLeavelRoom params:param useToken:YES];

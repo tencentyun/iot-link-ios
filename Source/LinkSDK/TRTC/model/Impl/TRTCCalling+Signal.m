@@ -12,11 +12,9 @@
 @implementation TRTCCalling (Signal)
 
 - (void)addSignalListener {
-    [[V2TIMManager sharedInstance] addSignalingListener:self];
 }
 
 - (void)removeSignalListener {
-    [[V2TIMManager sharedInstance] removeSignalingListener:self];
 }
 
 - (NSString *)invite:(NSString *)receiver action:(CallAction)action model:(CallModel *)model {
@@ -41,31 +39,9 @@
             NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
             if (isGroup) {
                 @weakify(self)
-                callID = [[V2TIMManager sharedInstance] inviteInGroup:realModel.groupid inviteeList:realModel.invitedList data:data timeout:SIGNALING_EXTRA_KEY_TIME_OUT succ:^{
-                    @strongify(self)
-                    // 发起 Apns 推送,群组的邀请，需要单独对每个被邀请人发起推送
-                    for (NSString *invitee in realModel.invitedList) {
-                        [self sendAPNsForCall:invitee inviteeList:realModel.invitedList callID:self.callID  groupid:realModel.groupid roomid:realModel.roomid];
-                    }
-                } fail:^(int code, NSString *desc) {
-                    @strongify(self)
-                    if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                        [self.delegate onError:code msg:desc];
-                    };
-                }];
                 self.callID = callID;
             } else {
                 @weakify(self)
-                callID = [[V2TIMManager sharedInstance] invite:realModel.invitedList.firstObject data:data timeout:SIGNALING_EXTRA_KEY_TIME_OUT succ:^{
-                    @strongify(self)
-                    // 发起 Apns 推送
-                    [self sendAPNsForCall:realModel.invitedList.firstObject inviteeList:realModel.invitedList callID:self.callID groupid:realModel.groupid roomid:realModel.roomid];
-                } fail:^(int code, NSString *desc) {
-                    @strongify(self)
-                    if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                        [self.delegate onError:code msg:desc];
-                    };
-                }];
                 self.callID = callID;
             }
         }
@@ -74,22 +50,12 @@
     case CallAction_Accept:
         {
             NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
-            [[V2TIMManager sharedInstance] accept:realModel.callid data:data succ:nil fail:^(int code, NSString *desc) {
-                if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                    [self.delegate onError:code msg:desc];
-                };
-            }];
         }
             break;
         
     case CallAction_Reject:
         {
             NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
-            [[V2TIMManager sharedInstance] reject:realModel.callid data:data succ:nil fail:^(int code, NSString *desc) {
-                if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                    [self.delegate onError:code msg:desc];
-                };
-            }];
         }
             break;
         
@@ -97,22 +63,12 @@
         {
             param[SIGNALING_EXTRA_KEY_LINE_BUSY] = SIGNALING_EXTRA_KEY_LINE_BUSY;
             NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
-            [[V2TIMManager sharedInstance] reject:realModel.callid data:data succ:nil fail:^(int code, NSString *desc) {
-                if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                    [self.delegate onError:code msg:desc];
-                };
-            }];
         }
             break;
         
     case CallAction_Cancel:
         {
             NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
-            [[V2TIMManager sharedInstance] cancel:realModel.callid data:data succ:nil fail:^(int code, NSString *desc) {
-                if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                    [self.delegate onError:code msg:desc];
-                };
-            }];
         }
             break;
         
@@ -123,21 +79,13 @@
                 NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
                 // 这里发结束事件的时候，inviteeList 已经为 nil 了，可以伪造一个被邀请用户，把结束的信令发到群里展示。
                 // timeout 这里传 0，结束的事件不需要做超时检测
-                callID = [[V2TIMManager sharedInstance] inviteInGroup:realModel.groupid inviteeList:@[@"inviteeList"] data:data timeout:0 succ:nil fail:^(int code, NSString *desc) {
-                    if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                        [self.delegate onError:code msg:desc];
-                    };
-                }];
+                
             } else {
                 if (self.startCallTS > 0) {
                     NSDate *now = [NSDate date];
                     param[SIGNALING_EXTRA_KEY_CALL_END] = @((UInt64)[now timeIntervalSince1970] - self.startCallTS);
                     NSString *data = [TRTCCallingUtils dictionary2JsonStr:param];
-                    callID = [[V2TIMManager sharedInstance] invite:receiver data:data timeout:0 succ:nil fail:^(int code, NSString *desc) {
-                        if ([self canDelegateRespondMethod:@selector(onError:msg:)]) {
-                            [self.delegate onError:code msg:desc];
-                        };
-                    }];
+                
                 }
                 self.startCallTS = 0;
             }
@@ -170,7 +118,7 @@
         groupid = @"";
     }
     //{"entity":{"version":1,"content":"{\"action\":1,\"call_type\":2,\"room_id\":804544637,\"call_id\":\"144115224095613335-1595234230-3304653590\",\"timeout\":30,\"version\":4,\"invited_list\":[\"2019\"],\"group_id\":\"@TGS#1PWYXLTGA\"}","sendTime":1595234231,"sender":"10457","chatType":2,"action":2}}
-    NSDictionary *contentParam = @{@"action":@(SignalingActionType_Invite),
+    NSDictionary *contentParam = @{@"action":@(1),//SignalingActionType_Invite),
                                    @"call_id":callID,
                                    @"call_type":@(self.curType),
                                    @"invited_list":inviteeList,
@@ -185,22 +133,9 @@
                                   @"sender" : [TRTCCallingUtils loginUser],
                                   @"version" : @(APNs_Version)};       // 推送版本
     NSDictionary *extParam = @{@"entity" : entityParam};
-    V2TIMOfflinePushInfo *info = [[V2TIMOfflinePushInfo alloc] init];
-    info.desc = @"您有一个通话请求";
-    info.ext = [TRTCCallingUtils dictionary2JsonStr:extParam];
-    V2TIMMessage *msg = [[V2TIMManager sharedInstance] createCustomMessage:[TRTCCallingUtils dictionary2JsonData:@{@"version" : @(Version) , @"businessID" : @"av_call"}]];
-    // 针对每个被邀请成员单独邀请
-    [[V2TIMManager sharedInstance] sendMessage:msg receiver:receiver groupID:nil priority:V2TIM_PRIORITY_HIGH onlineUserOnly:YES offlinePushInfo:info progress:nil succ:nil fail:nil];
 }
 
-- (void)onReceiveGroupCallAPNs:(V2TIMSignalingInfo *)signalingInfo {
-    if (signalingInfo.inviteID.length > 0 && signalingInfo.inviter.length > 0 && signalingInfo.inviteeList.count > 0 && signalingInfo.groupID.length > 0) {
-        [[V2TIMManager sharedInstance] addInvitedSignaling:signalingInfo succ:^{
-            [self onReceiveNewInvitation:signalingInfo.inviteID inviter:signalingInfo.inviter groupID:signalingInfo.groupID inviteeList:signalingInfo.inviteeList data:signalingInfo.data];
-        } fail:^(int code, NSString *desc) {
-            NSLog(@"onReceiveAPNsForGroupCall failed,code:%d desc:%@",code,desc);
-        }];
-    }
+- (void)onReceiveGroupCallAPNs {
 }
 
 #pragma mark V2TIMSignalingListener

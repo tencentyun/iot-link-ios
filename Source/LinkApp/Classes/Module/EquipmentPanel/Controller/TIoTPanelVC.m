@@ -34,6 +34,8 @@
 #import "TIoTCoreDeviceSet.h"
 #import "TIoTWebVC.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTCoreUtil.h"
+#import "TIOTTRTCModel.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;

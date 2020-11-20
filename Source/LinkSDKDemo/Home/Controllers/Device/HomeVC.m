@@ -12,7 +12,9 @@
 #import "ControlDeviceVC.h"
 
 #import "TIoTCoreFoundation.h"
-
+#import "TRTCCalling.h"
+#import "GenerateTestUserSig.h"
+#import "TIoTCoreUtil.h"
 
 static NSString *cellID = @"DODO";
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate>
@@ -49,16 +51,6 @@ static NSString *cellID = @"DODO";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"RTC" bundle:nil];
-        RTCViewController *rtcVC = [storyboard instantiateViewControllerWithIdentifier:@"RTCViewController"];
-        rtcVC.roomId = @"1256732";
-        NSString *userid = [NSString stringWithFormat:@"%f",CACurrentMediaTime() * 1000];
-        rtcVC.userId = userid;
-        rtcVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:rtcVC animated:YES];
-    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {

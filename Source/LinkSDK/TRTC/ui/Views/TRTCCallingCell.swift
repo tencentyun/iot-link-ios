@@ -9,6 +9,7 @@
 import Foundation
 import SnapKit
 import NVActivityIndicatorView
+import SDWebImage
 
 class CallingSelectUserTableViewCell: UITableViewCell {
     private var isViewReady = false
@@ -67,12 +68,12 @@ class CallingSelectUserTableViewCell: UITableViewCell {
         self.buttonAction = nil
     }
     
-    func config(model: UserModel, selected: Bool = false, action: (() -> Void)? = nil) {
+    func config(model: String, selected: Bool = false, action: (() -> Void)? = nil) {
         backgroundColor = .clear
-        userImg.sd_setImage(with: URL(string: model.avatar), completed: nil)
+//        userImg.sd_setImage(with: URL(string: model.avatar), completed: nil)
         userImg.layer.masksToBounds = true
         userImg.layer.cornerRadius = 25
-        nameLabel.text = model.name
+//        nameLabel.text = model.name
         buttonAction = action
     }
     
@@ -192,20 +193,20 @@ class VideoCallUserCell: UICollectionViewCell {
     func configModel(model: CallingUserModel) {
         let noModel = model.userId.count == 0
         if !noModel {
-            if userModel.userId != V2TIMManager.sharedInstance()?.getLoginUser() ?? "" {
-                if let render = TRTCCallingVideoViewController.getRenderView(userId: userModel.userId) {
-                    if render.superview != self {
-                        render.removeFromSuperview()
-                        DispatchQueue.main.async {
-                            render.frame = self.bounds
-                        }
-                        addSubview(render)
-                        render.userModel = userModel
+            
+            if let render = TRTCCallingVideoViewController.getRenderView(userId: userModel.userId) {
+                if render.superview != self {
+                    render.removeFromSuperview()
+                    DispatchQueue.main.async {
+                        render.frame = self.bounds
                     }
-                } else {
-                    print("error")
+                    addSubview(render)
+                    render.userModel = userModel
                 }
+            } else {
+                print("error")
             }
+            
         }
     }
 }

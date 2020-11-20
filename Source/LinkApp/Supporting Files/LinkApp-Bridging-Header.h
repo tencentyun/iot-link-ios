@@ -13,3 +13,7 @@
 #import "WxManager.h"
 #import "BluetoothCentralManager.h"
 #import "TIoTAppUtilOC.h"
+
+//TRTC
+#import "TRTCCalling.h"
+#import "GenerateTestUserSig.h"
