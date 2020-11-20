@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTCoreUtil : NSObject
 
 + (NSDictionary *)getWifiSsid;
+
++ (UIViewController *)topViewController;
 @end
 
 NS_ASSUME_NONNULL_END

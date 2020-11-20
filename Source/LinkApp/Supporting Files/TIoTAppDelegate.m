@@ -21,6 +21,7 @@
 #import "UIViewController+GetController.h"
 #import "TIoTWebVC.h"
 #import "TIoTWebVC+TIoTWebVCCategory.h"
+#import <UserNotifications/UserNotifications.h>
 
 @implementation TIoTAppDelegate
 
@@ -77,7 +78,21 @@
     [self setNavBarAppearence];
     // 4.显示窗口
     [self.window makeKeyAndVisible];
+    
+    // 5.清除通知
+    NSDictionary* dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (dictionary != nil) {
+        NSLog(@"Launched from push notification: %@", dictionary);
+        [self clearNotifications];
+    }
     return YES;
+}
+
+- (void) clearNotifications {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+//    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UNUserNotificationCenter currentNotificationCenter] removeAllPendingNotificationRequests];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

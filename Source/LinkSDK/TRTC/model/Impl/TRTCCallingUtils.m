@@ -26,24 +26,16 @@
 }
 
 + (NSString *)loginUser {
-    return [[V2TIMManager sharedInstance] getLoginUser];
+    return @"IM_User";
 }
 
 + (void)getCallUserModel:(NSString *)userID finished:(void(^)(CallUserModel *))finished {
-    [[V2TIMManager sharedInstance] getUsersInfo:@[userID] succ:^(NSArray<V2TIMUserFullInfo *> *infoList) {
-        V2TIMUserFullInfo *info = infoList.firstObject;
-        if (info) {
+    
             CallUserModel *model = [[CallUserModel alloc] init];
-            model.name = info.nickName;
-            model.avatar = info.faceURL;
-            model.userId = info.userID;
+            model.name = @"info.nickName";
+            model.avatar = @"info.faceURL";
+            model.userId = @"info.userID";
             finished(model);
-        } else {
-            finished(nil);
-        }
-    } fail:^(int code, NSString *desc) {
-        finished(nil);
-    }];
 }
 
 + (NSString *)dictionary2JsonStr:(NSDictionary *)dict {

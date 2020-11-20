@@ -10,6 +10,18 @@
 #import "SGQRCode.h"
 #import "TIoTConfigHardwareViewController.h"
 
+@interface QRBlueObject : NSObject
+@property (nonatomic, strong)NSString *productId;
+@property (nonatomic, strong)NSString *deviceName;
+@property (nonatomic, strong)NSString *connId;
+@property (nonatomic, strong)NSString *deviceTimestamp;
+@property (nonatomic, strong)NSString *signMethod;
+@property (nonatomic, strong)NSString *signature;
+@end
+
+@implementation QRBlueObject
+@end
+
 @interface TIoTScanlViewController (){
     SGQRCodeObtain *obtain;
 }
@@ -89,6 +101,24 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [MBProgressHUD dismissInView:self.view];
             
+            
+            //设备扫码配网（手表设备）
+            if ([result containsString:@"hmac"]) {
+                NSArray<NSString *> *qrBlueObjs = [result componentsSeparatedByString:@";"];
+                if (qrBlueObjs.count > 5) {
+                    
+                    QRBlueObject *qr = [QRBlueObject new];
+                    qr.productId     = qrBlueObjs.firstObject;
+                    qr.deviceName    = qrBlueObjs[1];
+                    qr.connId        = qrBlueObjs[2];
+                    qr.deviceTimestamp = qrBlueObjs[3];
+                    qr.signMethod    = qrBlueObjs[4];
+                    qr.signature     = qrBlueObjs[5];
+                    
+                    [self QRCodeBindDevice:qr];
+                    return;
+                }
+            }
             NSString *signature = @"";//result;
             NSString *productId = @"";//productId
             NSDictionary *param = [NSString jsonToObject:result];
@@ -138,6 +168,28 @@
             
         });
     }
+}
+
+#pragma mark - 蓝牙配网
+- (void)QRCodeBindDevice:(QRBlueObject *)qrData{
+    
+    [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":qrData.productId,
+                                                                      @"DeviceName":qrData.deviceName,
+                                                                      @"DeviceTimestamp":qrData.deviceTimestamp,
+                                                                      @"ConnId":qrData.connId,
+                                                                      @"Signature":qrData.signature,
+                                                                      @"SignMethod":qrData.signMethod,
+                                                                      @"BindType":@"bluetooth_sign",
+                                                                      @"FamilyId":[TIoTCoreUserManage shared].familyId,
+                                                                      @"RoomId":[TIoTCoreUserManage shared].currentRoomId,
+    } success:^(id responseObject) {
+        
+        [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD showError:dic[@"error_message"]];
+    }];
 }
 
 #pragma mark - 配网请求流程

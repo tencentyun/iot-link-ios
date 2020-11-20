@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 import Toast_Swift
 
 @objc public enum AudioiCallingState : Int32, Codable {
@@ -30,7 +31,7 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     let handsfree = UIButton()
     let mute = UIButton()
     let disposebag = DisposeBag()
-    let curSponsor: CallingUserModel?
+    var curSponsor: CallingUserModel?
     var callingTime: UInt32 = 0
     var codeTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .userInteractive))
     let callTimeLabel = UILabel()
@@ -46,12 +47,11 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     var OnInviteePanelList: [CallingUserModel] {
         get {
             return inviteeList.filter {
-                let isCurrent = $0.userId == V2TIMManager.sharedInstance()?.getLoginUser() ?? ""
                 var isSponor = false
                 if let sponor = curSponsor {
                     isSponor = $0.userId == sponor.userId
                 }
-                return !isCurrent && !isSponor
+                return !isSponor
             }
         }
     }
@@ -102,6 +102,30 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
         super.init(nibName: nil, bundle: nil)
     }
     
+    @objc init(ocUserID: String? = nil) {
+        curSponsor = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
+                                      name: ocUserID ?? "0",
+                                      userId: ocUserID ?? "0",
+                                      isEnter: false,
+                                      isVideoAvaliable: false,
+                                      volume: 0.0)
+        
+        if let _ = ocUserID {
+            curState = .onInvitee
+        } else {
+            curSponsor = nil
+            curState = .dailing
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        curSponsor = nil
+        curState = .dailing
+//        super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -137,6 +161,14 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
         super.viewDidLoad()
         UIApplication.shared.isIdleTimerDisabled = true
         setupUI()
+        
+        let list:[CallingUserModel] = [CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
+                                                        name: "0",
+                                                        userId: "0",
+                                                        isEnter: false,
+                                                        isVideoAvaliable: false,
+                                                        volume: 0.0)];
+        self.resetWithUserList(users: list, isInit: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -220,14 +252,7 @@ extension TRTCCallingAuidoViewController {
                 guard let self = self else {return}
                 TRTCCalling.shareInstance().accept()
                 var curUser = CallingUserModel()
-                if let name = ProfileManager.shared.curUserModel?.name,
-                    let avatar = ProfileManager.shared.curUserModel?.avatar,
-                    let userId = ProfileManager.shared.curUserModel?.userId {
-                    curUser.name = name
-                    curUser.avatarUrl = avatar
-                    curUser.userId = userId
-                    curUser.isEnter = true
-                }
+                
                 self.enterUser(user: curUser)
                 self.curState = .calling
                 self.accept.isHidden = true
@@ -330,6 +355,8 @@ extension TRTCCallingAuidoViewController {
             mute.alpha = 0.0
             handsfree.alpha = 0.0
             callTimeLabel.alpha = 0.0
+            
+            accept.isHidden = true
         }
         
         let shouldHideOnInviteePanel = (OnInviteePanelList.count == 0 || (self.curState != .onInvitee))
@@ -412,14 +439,7 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
             userList = [sponsor]
         } else {
             var curUser = CallingUserModel()
-            if let name = ProfileManager.shared.curUserModel?.name,
-                let avatar = ProfileManager.shared.curUserModel?.avatar,
-                let userId = ProfileManager.shared.curUserModel?.userId {
-                curUser.name = name
-                curUser.avatarUrl = avatar
-                curUser.userId = userId
-                curUser.isEnter = true
-            }
+            
             userList = [curUser]
         }
     }
@@ -460,6 +480,15 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
         return 0
     }
     
+    @objc func OCEnterUser(userID: String) {
+        let user = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
+                                    name: userID,
+                                    userId: userID,
+                                    isEnter: false,
+                                    isVideoAvaliable: false,
+                                    volume: 0.0)
+        self.enterUser(user: user)
+    }
     func enterUser(user: CallingUserModel) {
         curState = .calling
         updateUser(user: user, animated: true)

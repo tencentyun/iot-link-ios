@@ -28,9 +28,10 @@ Pod::Spec.new do |s|
     ss.ios.framework = ['AVFoundation', 'Accelerate']
     ss.library = 'c++', 'resolv'
     
-    ss.dependency 'TXLiteAVSDK_TRTC'#, '7.9.9565'
+    ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
     ss.dependency 'YYModel'
-    ss.dependency 'TXIMSDK_iOS', '4.9.1'
+    ss.dependency 'TIoTLinkKit/CoreBase'
+    
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'              => 'x86_64 armv7 arm64',
       'HEADER_SEARCH_PATHS'      => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC.framework/Headers/',
