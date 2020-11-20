@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "TRTCCallingModel.h"
-@import ImSDK;
 
 NS_ASSUME_NONNULL_BEGIN
 

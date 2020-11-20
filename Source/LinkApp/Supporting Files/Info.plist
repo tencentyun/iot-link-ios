@@ -53,7 +53,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>用户获取WIFI信息</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>用户与设备语音</string>
+	<string>获取麦克风权限用于音视频通话</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>获取相册权限用于识别本地二维码</string>
 	<key>UIBackgroundModes</key>

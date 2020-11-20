@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     
     ss.dependency 'TXLiteAVSDK_TRTC'#, '7.9.9565'
     ss.dependency 'YYModel'
-    ss.dependency 'TXIMSDK_iOS', '4.9.1'
+#    ss.dependency 'TXIMSDK_iOS', '4.9.1'
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'              => 'x86_64 armv7 arm64',
       'HEADER_SEARCH_PATHS'      => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC.framework/Headers/',

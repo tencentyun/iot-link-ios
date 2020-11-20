@@ -20,7 +20,7 @@
 - (NSString *)invite:(NSString *)receiver action:(CallAction)action model:(CallModel *)model;
 
 ///收到通话邀请推送通知
-- (void)onReceiveGroupCallAPNs:(V2TIMSignalingInfo *)signalingInfo;
+- (void)onReceiveGroupCallAPNs;
 
 ///检查是否满足自动挂断逻辑
 - (void)checkAutoHangUp;

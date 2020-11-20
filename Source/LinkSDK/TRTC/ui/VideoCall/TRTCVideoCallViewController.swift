@@ -155,6 +155,13 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
         super.init(nibName: nil, bundle: nil)
     }
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        curSponsor = nil
+        curState = .dailing
+//        super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -192,6 +199,15 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
         super.viewDidLoad()
         UIApplication.shared.isIdleTimerDisabled = true
         setupUI()
+        
+        
+        let list:[CallingUserModel] = [CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
+                                                        name: "222",
+                                                        userId: "222",
+                                                        isEnter: false,
+                                                        isVideoAvaliable: false,
+                                                        volume: 0.0)];
+        self.resetWithUserList(users: list, isInit: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -237,10 +253,6 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     
     func resetWithUserList(users: [CallingUserModel], isInit: Bool = false) {
         resetUserList()
-        let usersFilter = users.filter {
-            $0.userId != V2TIMManager.sharedInstance()?.getLoginUser() ?? ""
-        }
-        userList.append(contentsOf: usersFilter)
         if !isInit {
            reloadData()
         }
@@ -253,15 +265,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
             userList = [sp]
         } else {
             var curUser = CallingUserModel()
-            if let name = ProfileManager.shared.curUserModel?.name,
-                let avatar = ProfileManager.shared.curUserModel?.avatar,
-                let userId = ProfileManager.shared.curUserModel?.userId {
-                curUser.name = name
-                curUser.avatarUrl = avatar
-                curUser.userId = userId
-                curUser.isVideoAvaliable = true
-                curUser.isEnter = true
-            }
+            
             userList = [curUser]
         }
     }
@@ -279,12 +283,12 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
         if (indexPath.row < avaliableList.count) {
             let user = avaliableList[indexPath.row]
             cell.userModel = user
-            if user.userId == V2TIMManager.sharedInstance()?.getLoginUser() ?? ""{
+
                 localPreView.removeFromSuperview()
                 cell.addSubview(localPreView)
                 cell.sendSubviewToBack(localPreView)
                 localPreView.frame = CGRect(x: 0, y: 0, width: cell.bounds.width, height: cell.bounds.height)
-            }
+            
         } else {
             cell.userModel = CallingUserModel()
         }
@@ -320,8 +324,17 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     
     /// enterUser回调 每个用户进来只能调用一次
     /// - Parameter user: 用户信息
+    
+    @objc func OCEnterUser(userID: String) {
+        let user = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
+                                    name: "456123",
+                                    userId: "456123",
+                                    isEnter: false,
+                                    isVideoAvaliable: false,
+                                    volume: 0.0)
+        self.enterUser(user: user)
+    }
     func enterUser(user: CallingUserModel) {
-        if user.userId != V2TIMManager.sharedInstance()?.getLoginUser() ?? "" {
             let renderView = VideoCallingRenderView()
             renderView.userModel = user
             TRTCCalling.shareInstance().startRemoteView(userId: user.userId, view: renderView)
@@ -331,7 +344,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
             renderView.addGestureRecognizer(tap)
             pan.require(toFail: tap)
             renderView.addGestureRecognizer(pan)
-        }
+
         curState = .calling
         updateUser(user: user, animated: true)
     }
@@ -453,27 +466,6 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
                 }
             }
             
-            let userFirst = avaliableList.filter {
-                $0.userId != V2TIMManager.sharedInstance()?.getLoginUser() ?? ""
-            }.first
-            
-            if let user = userFirst {
-                if let firstRender = TRTCCallingVideoViewController.getRenderView(userId: user.userId) {
-                    firstRender.userModel = user
-                    if firstRender.superview != view {
-                        let preFrame = view.convert(localPreView.frame, to: localPreView.superview)
-                        view.insertSubview(firstRender, belowSubview: localPreView)
-                        firstRender.frame = preFrame
-                        UIView.animate(withDuration: 0.1) {
-                            firstRender.frame = self.view.bounds
-                        }
-                    } else {
-                        firstRender.frame = self.view.bounds
-                    }
-                } else {
-                    print("error")
-                }
-            }
             
         } else { //用户退出只剩下自己（userleave引起的）
             if collectionCount == 1 {
@@ -588,15 +580,7 @@ extension TRTCCallingVideoViewController {
                 guard let self = self else {return}
                 TRTCCalling.shareInstance().accept()
                 var curUser = CallingUserModel()
-                if let name = ProfileManager.shared.curUserModel?.name,
-                    let avatar = ProfileManager.shared.curUserModel?.avatar,
-                    let userId = ProfileManager.shared.curUserModel?.userId {
-                    curUser.name = name
-                    curUser.avatarUrl = avatar
-                    curUser.userId = userId
-                    curUser.isEnter = true
-                    curUser.isVideoAvaliable = true
-                }
+                
                 self.enterUser(user: curUser)
                 self.curState = .calling
                 self.accept.isHidden = true
@@ -751,22 +735,17 @@ extension TRTCCallingVideoViewController {
         
         if tap.view == localPreView {
             if localPreView.frame.size.width == kSmallVideoViewWidth {
-                let userFirst = avaliableList.filter {
-                    $0.userId != V2TIMManager.sharedInstance()?.getLoginUser() ?? ""
-                }.first
                 
-                if let user = userFirst {
-                    if let firstRender = TRTCCallingVideoViewController.getRenderView(userId: user.userId) {
-                        UIView.animate(withDuration: 0.3, animations: { [weak firstRender, weak self] in
-                            guard let `self` = self else { return }
-                            self.localPreView.frame = self.view.frame
-                            firstRender?.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
-                                                        y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
-                        }) { [weak self] (result) in
-                            guard let `self` = self else { return }
-                            firstRender.removeFromSuperview()
-                            self.view.insertSubview(firstRender, aboveSubview: self.localPreView)
-                        }
+                if let firstRender = TRTCCallingVideoViewController.getRenderView(userId: "user.userId") {
+                    UIView.animate(withDuration: 0.3, animations: { [weak firstRender, weak self] in
+                        guard let `self` = self else { return }
+                        self.localPreView.frame = self.view.frame
+                        firstRender?.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+                                                    y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
+                    }) { [weak self] (result) in
+                        guard let `self` = self else { return }
+                        firstRender.removeFromSuperview()
+                        self.view.insertSubview(firstRender, aboveSubview: self.localPreView)
                     }
                 }
                 
