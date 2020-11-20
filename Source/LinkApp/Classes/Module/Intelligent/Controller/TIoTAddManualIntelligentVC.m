@@ -77,15 +77,13 @@
         }
         
     }else {
-        if (self.autoDeviceStatusArray.count != 0) {
-            for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
-                [self.dataArray addObject:model];
-            }
-            [self.tableView reloadData];
-        }
+        [self.dataArray addObject:modifiedModel];
+        
+        [self.tableView reloadData];
+        self.tableView.hidden = NO;
+        self.nextButtonView.hidden = NO;
     }
     
-    [self loadData];
 }
 
 - (void)viewDidLoad {
@@ -243,6 +241,22 @@
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
+        
+        if (self.isSceneDetail == YES) {
+            make.top.equalTo(self.topView.mas_bottom);
+        }else {
+            if (self.dataArray.count == 0) {
+                if (@available (iOS 11.0, *)) {
+                    make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+                }else {
+                    make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale + kTopSpace);
+                }
+            }else {
+                make.top.equalTo(self.topView.mas_bottom);
+            }
+        }
+        
+        
         make.top.equalTo(self.topView.mas_bottom);
         make.bottom.equalTo(self.view.mas_bottom).offset(-kBottomViewHeight);
     }];
@@ -254,7 +268,20 @@
         make.height.mas_equalTo(kBottomViewHeight);
     }];
  
-    [self loadData];
+
+    if (self.isSceneDetail == YES) {
+        self.topView.hidden = NO;
+    }else {
+        if (self.dataArray.count == 0) {
+            self.tableView.hidden = YES;
+            self.nextButtonView.hidden = YES;
+            self.topView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+            self.nextButtonView.hidden = NO;
+            self.topView.hidden = NO;
+        }
+    }
 }
 
 - (void)loadData {
@@ -419,6 +446,7 @@
             NSString *timeStrinf =  [self getFormatTimeWithSecond:model.Data.intValue];
             chooseDelayTimeVC.autoDelayDateString = timeStrinf;
             self.selectedDelayIndex = indexPath.row;
+            chooseDelayTimeVC.autoEditedDelayIndex = indexPath.row;
             [self.navigationController pushViewController:chooseDelayTimeVC animated:YES];
             
         }else  {
@@ -513,10 +541,6 @@
 
 #pragma mark - TIoTChooseDelayTimeVCDelegate
 - (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
-    [self.dataArray replaceObjectAtIndex:self.selectedDelayIndex withObject:timeString];
-    if (self.isSceneDetail == NO) {
-        [self.delayTimeStringArray replaceObjectAtIndex:self.selectedDelayIndex withObject:[NSString stringWithFormat:@"%@:%@",hourString,min]];
-    }
     
     NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     int hourNumber =[[hourString stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
@@ -525,12 +549,13 @@
     int minutNumber =[[min stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
     NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
     
-    NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:self.manualSceneArray[self.selectedDelayIndex]];
-    NSString *secondTimeString = timeStr?:@"0";
-    [tempDic setValue:secondTimeString forKey:@"Data"];
-    [self.manualSceneArray replaceObjectAtIndex:self.selectedDelayIndex withObject:tempDic];
-    NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:self.selectedDelayIndex inSection:0];
-    [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
+    TIoTAutoIntelligentModel *model = self.dataArray[autoDelayIndex];
+    model.Data = timeStr;
+    model.delayTime = timeString;
+    model.delayTimeFormat = [NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber];
+    
+    [self.dataArray replaceObjectAtIndex:autoDelayIndex withObject:model];
+    [self.tableView reloadData];
     
 }
 
@@ -560,8 +585,8 @@
         if (weakSelf.valueArray == nil) {
             weakSelf.valueArray = [NSMutableArray array];
         }
-        chooseDeviceVC.valueOriginArray =  [weakSelf.valueArray mutableCopy];
         chooseDeviceVC.enterType = DeviceChoiceEnterTypeManual;
+        chooseDeviceVC.deviceAutoChoiceEnterActionType = YES;
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{
@@ -576,10 +601,33 @@
                 weakSelf.valueArray = [NSMutableArray array];
             }
             weakSelf.actionType = IntelligentActioinTypeDelay;
-            [weakSelf.dataArray insertObject:timeString atIndex:0];
+            
+            NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            int hourNumber =[[hourStr stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
+            
+            NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            int minutNumber =[[minu stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
+            NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
+            
+            NSMutableDictionary *delayTineDic = [NSMutableDictionary dictionary];
+            [delayTineDic setValue:timeStr forKey:@"Data"];
+            [delayTineDic setValue:@(1) forKey:@"ActionType"];
+            [delayTineDic setValue:timeString forKey:@"delayTime"];
+            [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
+            TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
+            if (self.dataArray.count == 0) {
+                [weakSelf.dataArray addObject:model];
+            }else {
+                [weakSelf.dataArray insertObject:model atIndex:0];
+            }
+            weakSelf.tableView.hidden = NO;
+            weakSelf.nextButtonView.hidden = NO;
+            [weakSelf.tableView reloadData];
+            
+
             [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
             [weakSelf.valueArray insertObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu] atIndex:0];
-            [weakSelf loadData];
+
         };
         
         [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
@@ -721,22 +769,15 @@
                 if (weakSelf.customSheet) {
                     [weakSelf.customSheet removeFromSuperview];
                 }
+                
+                NSMutableDictionary *manualDic = [NSMutableDictionary new];
+                [manualDic setValue:[weakSelf.dataArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
+                
                 TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-                complementVC.productModel = weakSelf.productModel;
-                complementVC.actionArray = weakSelf.taskArray;
-                complementVC.valueArray = weakSelf.valueArray;
-                if (weakSelf.actionType == IntelligentActioinTypeManual) {
-                    complementVC.sceneActioinType = SceneActioinTypeManual;
-                }else if (weakSelf.actionType == IntelligentActioinTypeDelay) {
-                    complementVC.sceneActioinType = SceneActioinTypeDelay;
-                }else if (weakSelf.actionType == IntelligentActioinTypeNotice) {
-                    complementVC.sceneActioinType = SceneActioinTypeNotice;
-                }else if (weakSelf.actionType == IntelligentActioinTypeTimer) {
-                    complementVC.sceneActioinType = SceneActioinTypeTimer;
-                }
-                complementVC.delayTimeArray = weakSelf.delayTimeStringArray;
-                complementVC.dataArray = weakSelf.dataArray;
+                complementVC.manualParamDic = manualDic;
+                complementVC.isAuto = NO;
                 [weakSelf.navigationController pushViewController:complementVC animated:YES];
+
             };
         }
         

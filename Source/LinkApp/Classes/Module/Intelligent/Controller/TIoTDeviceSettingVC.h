@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, IntelligentEnterType) {
 @property (nonatomic, strong) NSMutableArray *valueOriginArray;
 
 @property (nonatomic, assign) IntelligentEnterType enterType; //
-@property (nonatomic, assign) BOOL isAutoActionType;    //自动智能任务入口 (包含在自动智能enterType里 yes 任务入口，no 条件入口）
+@property (nonatomic, assign) BOOL isAutoActionType;    //自动智能任务入口 (包含在自动智能enterType里 yes 任务入口，no 条件入口） 主动创建的也要设置为NO
 @property (nonatomic, strong) TIoTAutoIntelligentModel *model; //智能主页传入的model，编辑时候必须用model更新数据再回传
 @end
 

@@ -325,7 +325,17 @@
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(self.topView.mas_bottom);
+        if (self.isSceneDetail == YES) {
+            
+            make.top.equalTo(self.topView.mas_bottom);
+        }else {
+            if (@available (iOS 11.0, *)) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopSpace);
+            }else {
+                make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale + kTopSpace);
+            }
+        }
+        
         make.bottom.equalTo(self.view.mas_bottom).offset(-kBottomViewHeight);
     }];
 
@@ -687,6 +697,51 @@
     return 0.1;
 }
 
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 删除
+    return UITableViewCellEditingStyleDelete;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+        //只要实现这个方法，就实现了默认滑动删
+        if (editingStyle == UITableViewCellEditingStyleDelete)
+        {
+            // 删除数据
+            [self deleteSelectIndexPath:indexPath];
+        }
+}
+
+- (void)deleteSelectIndexPath:(NSIndexPath *)indexPath {
+//    [self.dataArray removeObjectAtIndex:indexPath.row];
+//    [self.tableView reloadData];
+//    if (self.dataArray.count == 0) {
+//        self.tableView.hidden = YES;
+//        self.nextButtonView.hidden = YES;
+//
+//    }
+    
+    if (indexPath.section == 0) {
+        [self.conditionArray removeObjectAtIndex:indexPath.row - 1];
+        if (self.conditionArray.count == 0) {
+            TIoTIntelligentCustomCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            cell.isHideBlankAddView = NO;
+            cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_addCondition", @"添加条件");
+        }
+    }else {
+        [self.actionArray removeObjectAtIndex:indexPath.row - 1];
+        if (self.actionArray.count == 0) {
+            TIoTIntelligentCustomCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            cell.isHideBlankAddView = NO;
+            cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_addCondition", @"添加条件");
+        }
+    }
+    
+    [self.tableView reloadData];
+}
+
 #pragma mark - 定时编辑完回调代理
 //MARK:编辑完定时后，刷新任务列表
 - (void)changeDelayTimeString:(NSString *)timeString hour:(NSString *)hourString minuteString:(NSString *)min withAutoDelayIndex:(NSInteger)autoDelayIndex{
@@ -723,12 +778,11 @@
                 }
                 
             }else {
-                if (self.autoDeviceStatusArray.count != 0) {
-                    for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
-                        [self.actionArray addObject:model];
-                    }
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+
+                for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                    [self.actionArray addObject:model];
                 }
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
             }
         }else { //条件
             
@@ -738,12 +792,10 @@
                     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
                 }
             }else {
-                if (self.autoDeviceStatusArray.count != 0) {
-                    for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
-                        [self.conditionArray addObject:model];
-                    }
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                for (TIoTAutoIntelligentModel *model in self.autoDeviceStatusArray) {
+                    [self.conditionArray addObject:model];
                 }
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
             }
         }
 }
@@ -899,12 +951,15 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.sectionFooterHeight = 0.1;
         _tableView.sectionHeaderHeight = 0.1;
+        _tableView.allowsMultipleSelection = NO;
+        _tableView.allowsSelectionDuringEditing = NO;
+        _tableView.allowsMultipleSelectionDuringEditing = NO;
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     }
     return _tableView;
 }
 
-#pragma mark - lazy loading
+
 - (NSMutableArray *)conditionArray {
     if (!_conditionArray) {
         _conditionArray = [NSMutableArray array];
@@ -965,8 +1020,15 @@
                 }else {
                     //MARK:组装好条件、任务、生效时间段 的请求参数 model，跳转到完善页面，添加场景背景URL和名称
                     
+                    NSInteger statusInt = 0;
+                    for (TIoTAutoIntelligentModel *model in weakSelf.actionArray) {
+                        if (model.ActionType == 4) {
+                            statusInt = 1;
+                        }
+                    }
+                    
                     NSMutableDictionary *autoDic = [NSMutableDictionary new];
-                    [autoDic setValue:@(1) forKey:@"Status"];
+                    [autoDic setValue:@(statusInt) forKey:@"Status"];
                     [autoDic setValue:@(weakSelf.selectedConditonNum) forKey:@"MatchType"];
                     [autoDic setValue:[weakSelf.conditionArray yy_modelToJSONObject]?:@"" forKey:@"Conditions"];
                     [autoDic setValue:[weakSelf.actionArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];

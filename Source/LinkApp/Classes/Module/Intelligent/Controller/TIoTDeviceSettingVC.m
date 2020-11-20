@@ -124,11 +124,11 @@
                         weakSelf.model.Property.conditionContentString = valueString;
                         weakSelf.model.Property.Value = [NSNumber numberWithFloat:keyString.intValue];
                     }else {
+                        //修改json Data 的内容
                         weakSelf.model.dataValueString = valueString;
                         NSMutableDictionary *dataTempDic = [NSMutableDictionary dictionaryWithDictionary:[weakSelf.model yy_modelToJSONObject]];
                         NSMutableString *dataString = [NSMutableString stringWithString:weakSelf.model.Data];
                         NSDictionary *dataDic = [NSString jsonToObject:dataString];
-                        NSString *valueOrginString = dataDic.allValues[0]; //只有一个键值对
                         
                         NSString *valueCurrentStrin = weakSelf.dataArr[indexPath.row][@"value"];
                         
@@ -151,28 +151,90 @@
                     }
                     [weakSelf.autoIntelModelArray addObject:weakSelf.model];
                 }else {
-                    NSString *timeTamp = [NSString getNowTimeString];
-                    NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
-                                                          @"DeviceName":weakSelf.productModel.DeviceName,
-                                                          @"AliasName":weakSelf.productModel.AliasName,
-                                                          @"IconUrl":weakSelf.productModel.IconUrl,
-                                                          @"PropertyId":weakSelf.baseModel.id,
-                                                          @"Op":@"eq",
-                                                          @"Value":[NSNumber numberWithFloat:keyString.intValue],
-                                                          @"conditionTitle":weakSelf.baseModel.name,
-                                                          @"conditionContentString":valueString};
-                    NSString *type = @"0";
-                    if (self.isAutoActionType == YES) {
-                        type = @"2";
-                    }
                     
-                    NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
-                                                    @"CondType":@(0),
-                                                    @"Property":autoDeviceSelectDic,
-                                                    @"type":type,
-                                                    @"propertyModel":model};
-                    TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
-                    [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                    if (self.enterType == IntelligentEnterTypeManual) {
+                        //MARK:action 手动的按action
+                        
+                        //创建 "Data":"{"":""}" 
+                        NSString *mappKeyString = @"0";
+                        NSString *idKeyString = weakSelf.baseModel.id?:@"";
+                        for (int i = 0; i<weakSelf.self.baseModel.define.mapping.allValues.count; i++) {
+                            if ([valueString isEqualToString:weakSelf.baseModel.define.mapping.allValues[i]]) {
+                                mappKeyString = self.baseModel.define.mapping.allKeys[i];
+                            }
+                        }
+
+                        NSDictionary *dataDic = @{idKeyString:mappKeyString};
+                        NSString *dataString = [NSString objectToJson:dataDic];
+                        
+                        NSDictionary *deviceDic = @{@"ActionType":@(0),
+                                                    @"ProductId":weakSelf.productModel.ProductId,
+                                                    @"DeviceName":weakSelf.productModel.DeviceName,
+                                                    @"AliasName":weakSelf.productModel.AliasName,
+                                                    @"IconUrl":weakSelf.productModel.IconUrl,
+                                                    @"Data":dataString?:@"",
+                                                    @"propertyModel":model,
+                        };
+                        
+                        
+                        TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];
+                        deviceModel.propertName = weakSelf.baseModel.name;
+                        deviceModel.dataValueString =valueString;
+                        [weakSelf.autoIntelModelArray addObject:deviceModel];
+                        
+                    }else if (self.enterType == IntelligentEnterTypeAuto) {
+                        //MARK:自动
+                        
+                        //MARK:action and condition 判断
+                        if (self.isAutoActionType == YES) {
+                            
+                            NSString *mappKeyString = @"0";
+                            NSString *idKeyString = weakSelf.baseModel.id?:@"";
+                            for (int i = 0; i<weakSelf.self.baseModel.define.mapping.allValues.count; i++) {
+                                if ([valueString isEqualToString:weakSelf.baseModel.define.mapping.allValues[i]]) {
+                                    mappKeyString = self.baseModel.define.mapping.allKeys[i];
+                                }
+                            }
+                            
+                            NSDictionary *dataDic = @{idKeyString:mappKeyString};
+                            NSString *dataString = [NSString objectToJson:dataDic];
+                            
+                            NSDictionary *autoDeviceDic = @{@"ActionType":@(0),
+                                                            @"ProductId":weakSelf.productModel.ProductId,
+                                                            @"DeviceName":weakSelf.productModel.DeviceName,
+                                                            @"AliasName":weakSelf.productModel.AliasName,
+                                                            @"IconUrl":weakSelf.productModel.IconUrl,
+                                                            @"Data":dataString?:@"",
+                                                            @"type":@(2),
+                                                            @"propertyModel":model,
+                            };
+                            TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                            autoDeviceModel.propertName = weakSelf.baseModel.name;
+                            autoDeviceModel.dataValueString =valueString;
+                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            
+                        }else {
+                            NSString *timeTamp = [NSString getNowTimeString];
+                            NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
+                                                                  @"DeviceName":weakSelf.productModel.DeviceName,
+                                                                  @"AliasName":weakSelf.productModel.AliasName,
+                                                                  @"IconUrl":weakSelf.productModel.IconUrl,
+                                                                  @"PropertyId":weakSelf.baseModel.id,
+                                                                  @"Op":@"eq",
+                                                                  @"Value":[NSNumber numberWithFloat:keyString.intValue],
+                                                                  @"conditionTitle":weakSelf.baseModel.name,
+                                                                  @"conditionContentString":valueString};
+                            
+                            NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
+                                                            @"CondType":@(0),
+                                                            @"Property":autoDeviceSelectDic,
+                                                            @"type":@(0),
+                                                            @"propertyModel":model};
+                            TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                        }
+
+                    }
                 }
                 
         };
@@ -215,7 +277,11 @@
             // MARK: 从自动智能-添加条件-设备状态变化入口进入
                 
                 if (self.isEdited == YES) {
-                    weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
+                    if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
+                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.intValue];
+                    }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
+                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
+                    }
                     
                     if (self.isAutoActionType == NO) {
                         weakSelf.model.Property.conditionContentString = valueString;
@@ -227,29 +293,84 @@
                     }
                     [weakSelf.autoIntelModelArray addObject:weakSelf.model];
                 }else {
-                    NSString *timeTamp = [NSString getNowTimeString];
-                    NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
-                                                          @"DeviceName":weakSelf.productModel.DeviceName,
-                                                          @"AliasName":weakSelf.productModel.AliasName,
-                                                          @"IconUrl":weakSelf.productModel.IconUrl,
-                                                          @"PropertyId":weakSelf.baseModel.id,
-                                                          @"Op":@"eq",
-                                                          @"Value":[NSNumber numberWithFloat:numberStr.floatValue],
-                                                          @"conditionTitle":weakSelf.baseModel.name,
-                                                          @"conditionContentString":valueString};
-                    NSString *type = @"0";
-                    if (self.isAutoActionType == YES) {
-                        type = @"2";
+                    
+                    if (self.enterType == IntelligentEnterTypeManual) {
+                        //MARK:手动的按action
+                        NSString *idKeyString = weakSelf.baseModel.id?:@"";
+                        NSDictionary *dataDic = [NSDictionary dictionary];
+                        if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
+                            dataDic = @{idKeyString:@(numberStr.intValue)};
+                        }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
+                            dataDic = @{idKeyString:@(numberStr.floatValue)};
+                        }
+                        NSString *dataJsonString = [NSString objectToJson:dataDic];
+                        
+                        NSDictionary *deviceDic = @{@"ActionType":@(0),
+                                                    @"ProductId":weakSelf.productModel.ProductId,
+                                                    @"DeviceName":weakSelf.productModel.DeviceName,
+                                                    @"AliasName":weakSelf.productModel.AliasName,
+                                                    @"IconUrl":weakSelf.productModel.IconUrl,
+                                                    @"Data":dataJsonString?:@""};
+                        
+                        
+                        TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];
+                        [weakSelf.autoIntelModelArray addObject:deviceModel];
+                        
+                    }else if (self.enterType == IntelligentEnterTypeAuto) {
+                        //MARK:自动
+                        
+                        if (self.isAutoActionType == YES) {
+                            
+                            NSString *mappKeyString = @"0";
+                            NSString *idKeyString = weakSelf.baseModel.id?:@"";
+                            for (int i = 0; i<weakSelf.self.baseModel.define.mapping.allValues.count; i++) {
+                                if ([valueString isEqualToString:weakSelf.baseModel.define.mapping.allValues[i]]) {
+                                    mappKeyString = self.baseModel.define.mapping.allKeys[i];
+                                }
+                            }
+
+                            NSDictionary *dataDic = @{idKeyString:mappKeyString};
+                            NSString *dataString = [NSString objectToJson:dataDic];
+
+                            NSDictionary *autoDeviceDic = @{@"ActionType":@(0),
+                                                            @"ProductId":weakSelf.productModel.ProductId,
+                                                            @"DeviceName":weakSelf.productModel.DeviceName,
+                                                            @"AliasName":weakSelf.productModel.AliasName,
+                                                            @"IconUrl":weakSelf.productModel.IconUrl,
+                                                            @"Data":dataString?:@"",
+                                                            @"type":@(2),
+                                                            @"propertyModel":model,
+                            };
+                            TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                            autoDeviceModel.propertName = weakSelf.baseModel.name;
+                            autoDeviceModel.dataValueString =valueString;
+                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            
+                        }else{
+                            NSString *timeTamp = [NSString getNowTimeString];
+                            NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
+                                                                  @"DeviceName":weakSelf.productModel.DeviceName,
+                                                                  @"AliasName":weakSelf.productModel.AliasName,
+                                                                  @"IconUrl":weakSelf.productModel.IconUrl,
+                                                                  @"PropertyId":weakSelf.baseModel.id,
+                                                                  @"Op":@"eq",
+                                                                  @"Value":[NSNumber numberWithFloat:numberStr.floatValue],
+                                                                  @"conditionTitle":weakSelf.baseModel.name,
+                                                                  @"conditionContentString":valueString};
+                            
+                            NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
+                                                            @"CondType":@(0),
+                                                            @"Property":autoDeviceSelectDic,
+                                                            @"type":@(0),
+                                                            @"propertyModel":model};
+                            TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
+                            
+                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                        }
+                        
+                        
                     }
-                    
-                    NSDictionary *autoDeviceDic = @{@"CondId":timeTamp,
-                                                    @"CondType":@(0),
-                                                    @"Property":autoDeviceSelectDic,
-                                                    @"type":type,
-                                                    @"propertyModel":model};
-                    TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
-                    
-                    [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+
                 }
             
         };
@@ -320,7 +441,7 @@
             if (weakSelf.sliderValueView) {
                 [weakSelf.sliderValueView removeFromSuperview];
             }
-#warning 保存然后刷新手动添加智能tableView
+#warning 保存然后刷新添加智能tableView
             if ([NSString isNullOrNilWithObject:weakSelf.modifiedValue] || [NSString isNullOrNilWithObject:weakSelf.modifiedModel]) {
                 
                 TIoTAddManualIntelligentVC *vc = [weakSelf findViewController:NSStringFromClass([TIoTAddManualIntelligentVC class])];

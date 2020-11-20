@@ -45,6 +45,7 @@
     self.navCustomTopView.hidden = NO;
     
     [self loadSceneList];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -77,12 +78,6 @@
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
   
-    if (@available(iOS 11.0, *)) {
-        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
 } 
 
 - (void)loadSceneList {
@@ -138,7 +133,7 @@
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
-            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top;
+            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+10;
             make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
         } else {
             // Fallback on earlier versions
@@ -216,14 +211,10 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
     headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-
-    UILabel *sectionTitle = [[UILabel alloc]init];
+    
+    UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 50)];
     [sectionTitle setLabelFormateTitle:self.sectionTitleArray[section] font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#6C7078" textAlignment:NSTextAlignmentLeft];
     [headerSectionView addSubview:sectionTitle];
-    [sectionTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(headerSectionView.mas_left).offset(16);
-        make.centerY.equalTo(headerSectionView.mas_centerY);
-    }];
 
     return headerSectionView;
 }

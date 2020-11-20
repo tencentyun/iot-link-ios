@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, SceneActioinType) {
 
 @property (nonatomic, assign) BOOL isAuto;
 @property (nonatomic, strong) NSMutableDictionary *autoParamDic; //自动场景
+@property (nonatomic, strong) NSMutableDictionary *manualParamDic; //手动场景
 @end
 
 NS_ASSUME_NONNULL_END
