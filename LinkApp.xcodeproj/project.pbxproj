@@ -283,6 +283,24 @@
 		F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B842520834C00CE90AC /* TIoTMapViewController.m */; };
 		F4DB259E2563B050006C45CD /* RTCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB259D2563B050006C45CD /* RTCViewController.swift */; };
 		F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4DB29892563CE1F006C45CD /* RTC.storyboard */; };
+		F4DB306625676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */; };
+		F4DB306725676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */; };
+		F4DB306825676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */; };
+		F4DB306925676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */; };
+		F4DB306A25676DF7006C45CD /* TRTCCallingContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306125676DF7006C45CD /* TRTCCallingContactViewController.swift */; };
+		F4DB306B25676DF7006C45CD /* TRTCCallingContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306125676DF7006C45CD /* TRTCCallingContactViewController.swift */; };
+		F4DB306C25676DF7006C45CD /* TRTCCallingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306325676DF7006C45CD /* TRTCCallingCell.swift */; };
+		F4DB306D25676DF7006C45CD /* TRTCCallingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306325676DF7006C45CD /* TRTCCallingCell.swift */; };
+		F4DB306E25676DF7006C45CD /* CallUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306425676DF7006C45CD /* CallUserModel.swift */; };
+		F4DB306F25676DF7006C45CD /* CallUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306425676DF7006C45CD /* CallUserModel.swift */; };
+		F4DB307025676DF7006C45CD /* TRTCCalling.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4DB306525676DF7006C45CD /* TRTCCalling.xcassets */; };
+		F4DB307125676DF7006C45CD /* TRTCCalling.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4DB306525676DF7006C45CD /* TRTCCalling.xcassets */; };
+		F4DB318C256771E3006C45CD /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB318B256771E3006C45CD /* CommonUtils.swift */; };
+		F4DB318D256771E3006C45CD /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB318B256771E3006C45CD /* CommonUtils.swift */; };
+		F4DB319025677213006C45CD /* ProfileManager_Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB318F25677213006C45CD /* ProfileManager_Mock.swift */; };
+		F4DB319125677213006C45CD /* ProfileManager_Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB318F25677213006C45CD /* ProfileManager_Mock.swift */; };
+		F4DB3230256788E5006C45CD /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB322F256788E5006C45CD /* AppUtils.swift */; };
+		F4DB3231256788E5006C45CD /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB322F256788E5006C45CD /* AppUtils.swift */; };
 		F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F3D52C24935BD3005D3396 /* AppDelegate.m */; };
 		F4F3D53624935BD3005D3396 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53424935BD3005D3396 /* Main.storyboard */; };
 		F4F3D53824935BD3005D3396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F3D53724935BD3005D3396 /* Assets.xcassets */; };
@@ -889,6 +907,15 @@
 		F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkSDKDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4DB259D2563B050006C45CD /* RTCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCViewController.swift; sourceTree = "<group>"; };
 		F4DB29892563CE1F006C45CD /* RTC.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RTC.storyboard; sourceTree = "<group>"; };
+		F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCVideoCallViewController.swift; sourceTree = "<group>"; };
+		F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCAudioCallViewController.swift; sourceTree = "<group>"; };
+		F4DB306125676DF7006C45CD /* TRTCCallingContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCCallingContactViewController.swift; sourceTree = "<group>"; };
+		F4DB306325676DF7006C45CD /* TRTCCallingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCCallingCell.swift; sourceTree = "<group>"; };
+		F4DB306425676DF7006C45CD /* CallUserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallUserModel.swift; sourceTree = "<group>"; };
+		F4DB306525676DF7006C45CD /* TRTCCalling.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TRTCCalling.xcassets; sourceTree = "<group>"; };
+		F4DB318B256771E3006C45CD /* CommonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
+		F4DB318F25677213006C45CD /* ProfileManager_Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileManager_Mock.swift; sourceTree = "<group>"; };
+		F4DB322F256788E5006C45CD /* AppUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
 		F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D52B24935BD3005D3396 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4F3D52C24935BD3005D3396 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -2017,8 +2044,50 @@
 			children = (
 				F4DB29892563CE1F006C45CD /* RTC.storyboard */,
 				F4DB259D2563B050006C45CD /* RTCViewController.swift */,
+				F4DB305C25676DF7006C45CD /* ui */,
 			);
 			path = TRTC;
+			sourceTree = "<group>";
+		};
+		F4DB305C25676DF7006C45CD /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				F4DB305D25676DF7006C45CD /* VideoCall */,
+				F4DB305F25676DF7006C45CD /* AudioCall */,
+				F4DB306125676DF7006C45CD /* TRTCCallingContactViewController.swift */,
+				F4DB322F256788E5006C45CD /* AppUtils.swift */,
+				F4DB318B256771E3006C45CD /* CommonUtils.swift */,
+				F4DB318F25677213006C45CD /* ProfileManager_Mock.swift */,
+				F4DB306225676DF7006C45CD /* Views */,
+				F4DB306525676DF7006C45CD /* TRTCCalling.xcassets */,
+			);
+			name = ui;
+			path = Source/LinkSDK/TRTC/ui;
+			sourceTree = SOURCE_ROOT;
+		};
+		F4DB305D25676DF7006C45CD /* VideoCall */ = {
+			isa = PBXGroup;
+			children = (
+				F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */,
+			);
+			path = VideoCall;
+			sourceTree = "<group>";
+		};
+		F4DB305F25676DF7006C45CD /* AudioCall */ = {
+			isa = PBXGroup;
+			children = (
+				F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */,
+			);
+			path = AudioCall;
+			sourceTree = "<group>";
+		};
+		F4DB306225676DF7006C45CD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F4DB306325676DF7006C45CD /* TRTCCallingCell.swift */,
+				F4DB306425676DF7006C45CD /* CallUserModel.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
@@ -2333,6 +2402,7 @@
 				ED78229E241B70FA00919FF6 /* TIoTMessageText2Cell.xib in Resources */,
 				ED9C15B523B998DB00CAC848 /* TIoTAddTimerVC.xib in Resources */,
 				ED9C15BA23B9AB3800CAC848 /* TIoTDeviceShareVC.xib in Resources */,
+				F4DB307025676DF7006C45CD /* TRTCCalling.xcassets in Resources */,
 				6DCC3D5B251BB8BE004FC023 /* TIoTAddFamilyVC.xib in Resources */,
 				6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */,
 				6DCC3D53251BB89F004FC023 /* TIoTAddRoomVC.xib in Resources */,
@@ -2374,6 +2444,7 @@
 				F4F3D7CE24938EBE005D3396 /* ControlDeviceVC.xib in Resources */,
 				F4F3D7B624938EBE005D3396 /* InviteVC.xib in Resources */,
 				6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */,
+				F4DB307125676DF7006C45CD /* TRTCCalling.xcassets in Resources */,
 				F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */,
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
 				F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */,
@@ -2567,11 +2638,14 @@
 				6DC7F8DD2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m in Sources */,
 				D2B29EE6235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m in Sources */,
 				D2E11EB22331C4FA00C388A5 /* TIoTMineTableViewCell.m in Sources */,
+				F4DB306C25676DF7006C45CD /* TRTCCallingCell.swift in Sources */,
 				D2E11EAF2331B98400C388A5 /* TIoTSoftapConnectViewController.m in Sources */,
 				D2038BAB2332082F0036F6B9 /* TIoTPanelMoreViewController.m in Sources */,
 				6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */,
 				ED932E4423BB286000F73F35 /* TIoTEnumItem.m in Sources */,
 				6DE472A0255B92D8000A96FE /* TIoTAutoIntelligentSectionTitleCell.m in Sources */,
+				F4DB306A25676DF7006C45CD /* TRTCCallingContactViewController.swift in Sources */,
+				F4DB306825676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */,
 				ED6BA5A323C57DD100BE9EC9 /* TIoTFamilyInfoCell.m in Sources */,
 				F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */,
 				6DA086422564F8CA00938CF4 /* TIoTAutoNoticeCell.m in Sources */,
@@ -2591,6 +2665,7 @@
 				D2DAC4C623386173006DB67C /* BluetoothCentralManager.m in Sources */,
 				6DC7F8D92552E394009508EE /* TIoTSettingIntelligentImageVC.m in Sources */,
 				D2A2CD39234ECC6D0039EB51 /* TIoTRefreshFooter.m in Sources */,
+				F4DB306E25676DF7006C45CD /* CallUserModel.swift in Sources */,
 				A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */,
 				D2E11EB82331CF4900C388A5 /* TIoTUserInfomationTableViewCell.m in Sources */,
 				D2E976B8233D969A00182443 /* TIoTWebSocketManage.m in Sources */,
@@ -2638,6 +2713,7 @@
 				6D91797D255130A000AEF28C /* TIoTChooseDelayTimeVC.m in Sources */,
 				A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */,
 				D2A2CD33234EBBE50039EB51 /* TIoTModifyNikeNameViewController.m in Sources */,
+				F4DB319025677213006C45CD /* ProfileManager_Mock.swift in Sources */,
 				D2C7D80B2330CA6500C97A04 /* SGQRCodeScanView.m in Sources */,
 				6D982C9124D31A5E0080C961 /* TIoTBindAccountView.m in Sources */,
 				D2310513233077D40003069D /* TIoTAppEnvironment.m in Sources */,
@@ -2673,6 +2749,7 @@
 				D20621BA23559E5600142DAC /* TYPageControl.m in Sources */,
 				ED782291241B2E7E00919FF6 /* TIoTInvitationVC.m in Sources */,
 				F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */,
+				F4DB306625676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */,
 				ED800C9B240CACF20045A268 /* TIoTMessageChildVC.m in Sources */,
 				ED69BE8B237ABAC90023F5FC /* TIoTTextVC.m in Sources */,
 				F4B39F602541767200C0DD6E /* TIoTProductsConfigModel.swift in Sources */,
@@ -2705,6 +2782,7 @@
 				ED6BA5C323C5DF8500BE9EC9 /* TIoTAlertView.m in Sources */,
 				A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */,
 				D210C7DA2341D7EB00A53B08 /* XWCountryCodeController.m in Sources */,
+				F4DB3230256788E5006C45CD /* AppUtils.swift in Sources */,
 				D210C7D22340A25800A53B08 /* UIImageView+TIoTWebImageView.m in Sources */,
 				6DC7F7DA2552974B009508EE /* TIoTChooseClickValueCell.m in Sources */,
 				A43FCE66247E464900A7CEF3 /* TIoTCategoryTableViewCell.m in Sources */,
@@ -2729,6 +2807,7 @@
 				F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */,
 				D2038BCC233319440036F6B9 /* HXYNotice.m in Sources */,
 				D2A2CD29234DBDC00039EB51 /* TIoTQCloudCOSXMLManage.m in Sources */,
+				F4DB318C256771E3006C45CD /* CommonUtils.swift in Sources */,
 				ED6BA5BA23C5C10C00BE9EC9 /* TIoTRoomInfoVC.m in Sources */,
 				6D982C9424D33FF40080C961 /* TIoTModifyAccountVC.m in Sources */,
 				ED9494452372B2F200797037 /* TIoTMessageTextCell.m in Sources */,
@@ -2761,6 +2840,7 @@
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
 				F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */,
 				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
+				F4DB318D256771E3006C45CD /* CommonUtils.swift in Sources */,
 				F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */,
@@ -2773,22 +2853,29 @@
 				F4F3D7B724938EBE005D3396 /* TIoTCoreFamiliesVC.m in Sources */,
 				F4F3D7C924938EBE005D3396 /* UsersOfDeviceVC.m in Sources */,
 				F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */,
+				F4DB306F25676DF7006C45CD /* CallUserModel.swift in Sources */,
 				F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */,
 				F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */,
 				F4F3D7C724938EBE005D3396 /* ControlDeviceVC.m in Sources */,
+				F4DB306B25676DF7006C45CD /* TRTCCallingContactViewController.swift in Sources */,
 				F4F3D7CF24938EBE005D3396 /* TIoTCoreTimerListVC.m in Sources */,
 				F4F3D7BB24938EBE005D3396 /* TIoTCoreMemberInfoVC.m in Sources */,
 				F4F3D7AC24938EBE005D3396 /* TIoTCoreAlertView.m in Sources */,
 				F4F3D53E24935BD3005D3396 /* main.m in Sources */,
 				F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */,
+				F4DB306925676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */,
+				F4DB306725676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */,
 				F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */,
 				F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */,
+				F4DB3231256788E5006C45CD /* AppUtils.swift in Sources */,
 				F4F3D7D024938EBE005D3396 /* LoginVC.m in Sources */,
 				F4F3D7AB24938EBE005D3396 /* TIoTCoreFamilyInfoCell.m in Sources */,
 				F4F3D7CC24938EBE005D3396 /* TIoTCoreAddTimerVC.m in Sources */,
 				F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */,
+				F4DB319125677213006C45CD /* ProfileManager_Mock.swift in Sources */,
 				F4F3D7C824938EBE005D3396 /* TIoTCoreRepeatVC.m in Sources */,
 				F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */,
+				F4DB306D25676DF7006C45CD /* TRTCCallingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

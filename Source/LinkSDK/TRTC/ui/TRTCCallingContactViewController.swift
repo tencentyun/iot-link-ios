@@ -97,7 +97,7 @@ class TRTCCallingContactViewController: UIViewController, TRTCCallingDelegate {
         let label = UILabel.init(frame: .zero)
         label.text = "\(String.yourUserNameText):\(ProfileManager.shared.curUserModel?.phone ?? "")"
         label.font = UIFont.systemFont(ofSize: 16.0)
-        label.textColor = UIColor.init(0xEBF4FF)
+        label.textColor = UIColor(hex: "#EBF4FF") //UIColor.init(0xEBF4FF)
         label.textAlignment = .left
         return label
     }()
