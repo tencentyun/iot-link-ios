@@ -43,7 +43,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navCustomTopView.hidden = NO;
-    
+    self.navigationController.tabBarController.tabBar.hidden = NO;
     [self loadSceneList];
     
 }
@@ -186,6 +186,7 @@
         sceneCell.deviceNum = @"";
         sceneCell.delegate = self;
         sceneCell.sceneType = IntelligentSceneTypeAuto;
+        sceneCell.switchIndex = indexPath.row;
         return sceneCell;
     }
 
@@ -307,7 +308,7 @@
 /**
  自动智能场景执行
  */
-- (void)requestModifyAutoScene:(NSString *)scnenID status:(NSInteger)statusNum tipString:(NSString *)tipString{
+- (void)requestModifyAutoScene:(NSString *)scnenID status:(NSInteger)statusNum tipString:(NSString *)tipString indexNum:(NSInteger )index {
     NSString *sceneIDString = scnenID?:@"";
     NSInteger sceneStauts = statusNum;
     NSDictionary *paramDic = @{@"AutomationId":sceneIDString,@"Status":@(sceneStauts)};
@@ -315,6 +316,14 @@
     [[TIoTRequestObject shared] post:AppModifyAutomationStatus Param:paramDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
         [MBProgressHUD showMessage:tipString?:@"" icon:@""];
+        NSMutableDictionary *dic = [self.autoSceneArray[index] mutableCopy];
+        if ([dic[@"Status"] isEqual: @(1)]) {
+            [dic setValue:@(0) forKey:@"Status"];
+        }else if ([dic[@"Status"] isEqual:@(0)]) {
+            [dic setValue:@(1) forKey:@"Status"];
+        }
+        [self.autoSceneArray replaceObjectAtIndex:index withObject:dic];
+        
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
@@ -322,19 +331,21 @@
 }
 
 #pragma mark - 场景cell代理
-- (void)changeSwitchStatus:(UISwitch *)switchControl withAutoScendData:(NSDictionary *)autoSceneDic {
+- (void)changeSwitchStatus:(UISwitch *)switchControl withAutoScendData:(NSDictionary *)autoSceneDic withIndexNum:(NSInteger)indexNum {
     
     NSString *sceneIDStr = autoSceneDic[@"AutomationId"]?:@"";
     NSNumber *sceneStatus = autoSceneDic[@"Status"];
     NSInteger statusNum = 0;
-    if (sceneStatus.intValue) {
-        statusNum = sceneStatus.intValue;
+    if (sceneStatus.intValue == 1) {
+        statusNum = 0;
+    }else if (sceneStatus.intValue == 0) {
+        statusNum = 1;
     }
     
     if ([switchControl isOn]) {
-        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"open_auto_success", @"开启自动智能成功")];
+        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"open_auto_success", @"开启自动智能成功") indexNum:indexNum];
     }else {
-        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"close_auto_success", @"关闭自动智能成功")];
+        [self requestModifyAutoScene:sceneIDStr status:statusNum tipString:NSLocalizedString(@"close_auto_success", @"关闭自动智能成功") indexNum:indexNum];
     }
 }
 

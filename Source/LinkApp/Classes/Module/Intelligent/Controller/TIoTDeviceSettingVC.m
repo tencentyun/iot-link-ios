@@ -314,6 +314,8 @@
                         
                         
                         TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];
+                        deviceModel.propertName = weakSelf.baseModel.name;
+                        deviceModel.dataValueString =valueString;
                         [weakSelf.autoIntelModelArray addObject:deviceModel];
                         
                     }else if (self.enterType == IntelligentEnterTypeAuto) {
