@@ -149,8 +149,8 @@
 }
 
 - (void)switchChange:(UISwitch*)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(changeSwitchStatus:withAutoScendData:)]) {
-        [self.delegate changeSwitchStatus:sender withAutoScendData:self.dic];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(changeSwitchStatus:withAutoScendData:withIndexNum:)]) {
+        [self.delegate changeSwitchStatus:sender withAutoScendData:self.dic withIndexNum:self.switchIndex];
     }
 }
 

@@ -440,6 +440,10 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 [weakSelf didselectedCollection:weakSelf.collection indexPath:[NSIndexPath indexPathForItem:defaultTimeNum inSection:0]];
                 
                 weakSelf.hidden = NO;
+                
+                [weakSelf.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.height.mas_offset(self.kHeight);
+                }];
             };
             
             customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
