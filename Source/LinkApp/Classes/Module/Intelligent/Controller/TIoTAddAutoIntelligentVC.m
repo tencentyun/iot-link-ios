@@ -326,16 +326,15 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         if (self.isSceneDetail == YES) {
-            
             make.top.equalTo(self.topView.mas_bottom);
         }else {
+            self.topView.hidden = YES;
             if (@available (iOS 11.0, *)) {
                 make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopSpace);
             }else {
                 make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale + kTopSpace);
             }
         }
-        
         make.bottom.equalTo(self.view.mas_bottom).offset(-kBottomViewHeight);
     }];
 
@@ -409,6 +408,16 @@
                 if (self.conditionArray.count > 0) {
                     cell.isHideBlankAddView = YES;
                     cell.autoIntellModel = self.conditionArray[indexPath.row - 1];
+                    __weak typeof(self)Weakself = self;
+                    cell.deleteIntelligentItemBlock = ^{
+                        [Weakself.conditionArray removeObjectAtIndex:indexPath.row - 1];
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                        if (Weakself.conditionArray.count == 0) {
+//                            Weakself.tableView.hidden = YES;
+//                            Weakself.nextButtonView.hidden = YES;
+                        }
+                    };
+                    
                 }else {
                     cell.isHideBlankAddView = NO;
                     cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_addCondition", @"添加条件");
@@ -437,6 +446,15 @@
                 if (self.actionArray.count > 0) {
                     cell.isHideBlankAddView = YES;
                     cell.autoIntellModel = self.actionArray[indexPath.row - 1];
+                    __weak typeof(self)Weakself = self;
+                    cell.deleteIntelligentItemBlock = ^{
+                        [Weakself.actionArray removeObjectAtIndex:indexPath.row - 1];
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+                        if (Weakself.conditionArray.count == 0) {
+//                            Weakself.tableView.hidden = YES;
+//                            Weakself.nextButtonView.hidden = YES;
+                        }
+                    };
                 }else {
                     cell.isHideBlankAddView = NO;
                     cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_task", @"添加任务");
@@ -696,7 +714,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.1;
 }
-
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
