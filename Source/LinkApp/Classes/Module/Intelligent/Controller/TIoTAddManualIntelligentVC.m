@@ -422,6 +422,16 @@
             
             intelligentCell.subTitleString = model.dataValueString;
         }
+        
+        __weak typeof(self)Weakself = self;
+        intelligentCell.deleteIntelligentItemBlock = ^{
+            [Weakself.dataArray removeObjectAtIndex:indexPath.row];
+            [Weakself.tableView reloadData];
+            if (Weakself.dataArray.count == 0) {
+                Weakself.tableView.hidden = YES;
+                Weakself.nextButtonView.hidden = YES;
+            }
+        };
         return intelligentCell;
     }else {
         TIoTSettingIntelligentCell *cell = [TIoTSettingIntelligentCell cellWithTableView:tableView];

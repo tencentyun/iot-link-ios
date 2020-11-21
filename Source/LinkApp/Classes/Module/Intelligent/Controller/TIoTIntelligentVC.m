@@ -43,7 +43,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navCustomTopView.hidden = NO;
-    
+    self.navigationController.tabBarController.tabBar.hidden = NO;
     [self loadSceneList];
     
 }
