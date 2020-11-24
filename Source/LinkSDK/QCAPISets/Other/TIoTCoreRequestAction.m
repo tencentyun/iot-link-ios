@@ -127,6 +127,7 @@ NSString *const AppModifyAutomationStatus = @"AppModifyAutomationStatus";//自�
 NSString *const AppModifyScene = @"AppModifyScene";//修改手动智能场景
 NSString *const AppModifyAutomation = @"AppModifyAutomation";//修改自动智能场景
 NSString *const AppDescribeAutomation = @"AppDescribeAutomation";//获取自动智能场景详情
+NSString *const AppGetSceneAndAutomationLogs = @"AppGetSceneAndAutomationLogs";//智能联动执行日志
 
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心
