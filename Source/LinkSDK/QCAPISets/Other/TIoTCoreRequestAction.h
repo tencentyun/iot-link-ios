@@ -136,7 +136,7 @@ FOUNDATION_EXPORT NSString *const AppModifyAutomationStatus;//自动智能更改
 FOUNDATION_EXPORT NSString *const AppModifyScene;//修改手动智能场景
 FOUNDATION_EXPORT NSString *const AppModifyAutomation;//修改自动智能场景
 FOUNDATION_EXPORT NSString *const AppDescribeAutomation;//获取自动智能场景详情
-
+FOUNDATION_EXPORT NSString *const AppGetSceneAndAutomationLogs;//智能联动执行日志
 
 //MARK: TRTC
 FOUNDATION_EXPORT NSString *const AppIotRTCInviteDevice;//1.手机请求设备通话

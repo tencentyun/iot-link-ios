@@ -13,7 +13,7 @@
 #import "TIoTIntelligentCustomCell.h"
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTComplementIntelligentVC.h"
-#import "TIoTIntelligentVC.h"
+#import "TIoTIntelligentHomeVC.h"
 #import "TIoTDeviceSettingVC.h"
 #import "UILabel+TIoTExtension.h"
 
@@ -52,7 +52,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }else {
         
-        TIoTIntelligentVC *vc = [self findViewController:NSStringFromClass([TIoTIntelligentVC class])];
+        TIoTIntelligentHomeVC *vc = [self findViewController:NSStringFromClass([TIoTIntelligentHomeVC class])];
         
         if (vc) {
             
