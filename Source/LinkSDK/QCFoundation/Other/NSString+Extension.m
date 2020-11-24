@@ -54,6 +54,28 @@
     return locationTimeString;
 }
 
++ (NSString *)getTimeToStr:(NSString *)timeStr withFormat:(NSString *)formatString withTimeZone:(NSString *)timeZone{
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    
+    if (timeZone == nil) {
+        timeZone = @"Asia/Shanghai";
+    }
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:timeZone];
+    
+    NSDate *dateFormatted = [dateFormatter dateFromString:timeStr];
+    // 这里设置自己想要的格式 @"yyyy-MM-dd HH:mm:ss"
+    if (formatString == nil) {
+        formatString = @"yyyy-MM-dd HH:mm:ss";
+    }
+    [dateFormatter setDateFormat:formatString];
+    
+    NSString *locationTimeString=[dateFormatter stringFromDate:dateFormatted];
+    return locationTimeString;
+}
+
 + (NSString *)convertTimestampToTime:(id)timestamp byDateFormat:(NSString *)format {
 
     long long time=[timestamp longLongValue];
