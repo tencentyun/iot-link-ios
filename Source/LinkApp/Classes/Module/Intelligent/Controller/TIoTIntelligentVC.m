@@ -58,10 +58,13 @@
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.navigationController.tabBarController.tabBar.hidden = YES;
+//    self.navigationController.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)setupUI {
+    
+    
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self addEmptyIntelligentDeviceTipView];
     
@@ -76,7 +79,7 @@
         }
     }];
     
-    [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
+//    [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
   
 } 
 
@@ -197,6 +200,7 @@
         TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
         addManualTask.isSceneDetail = YES;
         addManualTask.sceneManualDic = self.dataArray[indexPath.row];
+        self.navigationController.tabBarController.tabBar.hidden = YES;
         [self.navigationController pushViewController:addManualTask animated:YES];
     }else if (indexPath.section == 1) {
         //MARK:跳转自动详情
@@ -204,6 +208,7 @@
         addAutoTask.paramDic = self.sceneParamDic;
         addAutoTask.isSceneDetail = YES;
         addAutoTask.autoSceneInfoDic = self.autoSceneArray[indexPath.row];
+        self.navigationController.tabBarController.tabBar.hidden = YES;
         [self.navigationController pushViewController:addAutoTask animated:YES];
     }
 }
@@ -352,6 +357,7 @@
     self.customSheet.chooseIntelligentFirstBlock = ^{
         //MARK: 跳转手动智能
         TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+        weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
         [weakSelf.navigationController pushViewController:addManualTask animated:YES];
         
     };
@@ -359,6 +365,7 @@
         //MARK: 跳转自动智能
         TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
         addAutoTask.paramDic = weakSelf.sceneParamDic;
+        weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
         [weakSelf.navigationController pushViewController:addAutoTask animated:YES];
     };
     

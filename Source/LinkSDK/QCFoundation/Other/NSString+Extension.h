@@ -75,6 +75,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///获取UTC格式时间
 + (NSString *)getNowUTCTimeString;
 
+/// UTC格式转固定标准字符串
++ (NSString *)getTimeToStr:(NSString *)timeStr withFormat:(NSString *)formatString withTimeZone:(NSString *)timeZone;
 
 ///base64编码
 + (NSString *)base64Encode:(id)object;
