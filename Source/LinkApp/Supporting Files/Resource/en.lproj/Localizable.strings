@@ -776,3 +776,6 @@
 "open_auto_success" = "开启自动智能成功";
 "delay_time_later" = "后";
 "modify_intelligent_success"= "修改智能成功";
+"mine_intelligent" = "我的智能";
+"mine_intelligent_log" = "智能日志";
+"current_no_log" = "当前暂无日志";

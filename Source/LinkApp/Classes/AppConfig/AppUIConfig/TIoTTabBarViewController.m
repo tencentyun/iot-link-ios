@@ -14,7 +14,7 @@
 #import "TIoTWebVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import <WebKit/WebKit.h>
-#import "TIoTIntelligentVC.h"
+#import "TIoTIntelligentHomeVC.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
@@ -38,7 +38,7 @@
     
     
     //智能联动
-    TIoTIntelligentVC *intelligent = [[TIoTIntelligentVC alloc]init];
+    TIoTIntelligentHomeVC *intelligent = [[TIoTIntelligentHomeVC alloc]init];
     [self addChildVc:intelligent title:NSLocalizedString(@"home_intelligent", @"智能") image:@"intelligentDefaultTabbar" selectedImage:@"intelligentSelectTabbar"];
     
     
