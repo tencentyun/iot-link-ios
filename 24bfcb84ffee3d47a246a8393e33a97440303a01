@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "47f2ed1e_b978969a",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-25T04:48:17Z",
+      "side": 1,
+      "message": "改文件暂时未使用到，后面的change会对改文件删除或精简逻辑",
+      "parentUuid": "d0968c99_04c00254",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "101a5ffe_e0b42602",
         "filename": "Source/LinkSDKDemo/Home/Controllers/Device/HomeVC.m",
         "patchSetId": 3
@@ -98,6 +116,24 @@
       "writtenOn": "2020-11-25T04:27:46Z",
       "side": 1,
       "message": "这种暂时性的测试数据最好可以打个warning，提醒开发完成替换成联调得到的数据。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af387e5_a60c43be",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/HomeVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-25T04:48:17Z",
+      "side": 1,
+      "message": "好的，下一个changeid，此处已经废弃，并会最终移除调试逻辑",
+      "parentUuid": "101a5ffe_e0b42602",
       "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
