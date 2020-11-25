@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d18a6e28_90e419dc",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "这里的注释只有3个，下面的枚举有4个。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d03f7a4_fda6a3ce",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "1呼叫中-------\u003e上面的注释写的 1 表示设备准备进入通话状态 是不是可以统一叫法。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a01a748_e8de203a",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "这里的判断id和name，下面failure只提示id为空。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7375abb2_fca2c152",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "这种创建NSDictionary的方式很容易crash，一定要确保传进来的参数不为nil",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0968c99_04c00254",
+        "filename": "Source/LinkSDK/TRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "这个方法没看明白是做什么的。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "101a5ffe_e0b42602",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/HomeVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:27:46Z",
+      "side": 1,
+      "message": "这种暂时性的测试数据最好可以打个warning，提醒开发完成替换成联调得到的数据。",
+      "revId": "24bfcb84ffee3d47a246a8393e33a97440303a01",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
