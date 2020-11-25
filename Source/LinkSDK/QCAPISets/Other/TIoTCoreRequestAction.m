@@ -133,7 +133,6 @@ NSString *const AppGetSceneAndAutomationLogs = @"AppGetSceneAndAutomationLogs";/
 //MARK: TRTC
 NSString *const AppIotRTCInviteDevice = @"App::IotRTC::InviteDevice";//1.手机请求设备通话
 NSString *const AppIotRTCCallDevice = @"App::IotRTC::CallDevice";//5. 手机请求加入房间参数
-NSString *const AppIotRTCLeavelRoom = @"App::IotRTC::LeavelRoom";//9. 手机离开房间通知
 
 //===============h5
 NSString *const H5HelpCenter = @"help-center";//帮助中心
