@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTIntelligentVC : UIViewController
 
+-(void)loadSceneList;
+
 @end
 
 NS_ASSUME_NONNULL_END

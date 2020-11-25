@@ -277,21 +277,43 @@
             // MARK: 从自动智能-添加条件-设备状态变化入口进入
                 
                 if (self.isEdited == YES) {
-                    if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
-                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.intValue];
-                    }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
-                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
-                    }
                     
                     if (self.isAutoActionType == NO) {
+                        
                         weakSelf.model.Property.conditionContentString = valueString;
+                        
+                        if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
+                            weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.intValue];
+                        }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
+                            weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
+                        }
+                        
                     }else {
+                        //修改json Data 的内容
                         weakSelf.model.dataValueString = valueString;
+                        NSMutableDictionary *dataTempDic = [NSMutableDictionary dictionaryWithDictionary:[weakSelf.model yy_modelToJSONObject]];
+                        NSMutableString *dataString = [NSMutableString stringWithString:weakSelf.model.Data];
+                        NSDictionary *dataDic = [NSString jsonToObject:dataString];
+                        
+                        NSNumber *sliderValue = dataDic.allValues[0];
+                        if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
+                            NSString *value = [valueString stringByReplacingOccurrencesOfString:weakSelf.baseModel.define.unit withString:@""];
+                            sliderValue = [NSNumber numberWithFloat:value.intValue];
+                        }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
+                            sliderValue = [NSNumber numberWithFloat:numberStr.floatValue];
+                        }
+
+                        [dataDic setValue:sliderValue forKey:dataDic.allKeys[0]];
+                        NSString *jsonStrin = [NSString objectToJson:dataDic];
+                        [dataTempDic setValue:jsonStrin forKey:@"Data"];
+                        weakSelf.model = [TIoTAutoIntelligentModel yy_modelWithJSON:dataTempDic];
+                        
                     }
                     if (weakSelf.autoIntelModelArray.count != 0) {
                         [weakSelf.autoIntelModelArray removeAllObjects];
                     }
                     [weakSelf.autoIntelModelArray addObject:weakSelf.model];
+                    
                 }else {
                     
                     if (self.enterType == IntelligentEnterTypeManual) {
@@ -299,7 +321,8 @@
                         NSString *idKeyString = weakSelf.baseModel.id?:@"";
                         NSDictionary *dataDic = [NSDictionary dictionary];
                         if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
-                            dataDic = @{idKeyString:@(numberStr.intValue)};
+                            NSString *value = [valueString stringByReplacingOccurrencesOfString:weakSelf.baseModel.define.unit withString:@""];
+                            dataDic = @{idKeyString:@(value.intValue)};
                         }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
                             dataDic = @{idKeyString:@(numberStr.floatValue)};
                         }
@@ -310,7 +333,8 @@
                                                     @"DeviceName":weakSelf.productModel.DeviceName,
                                                     @"AliasName":weakSelf.productModel.AliasName,
                                                     @"IconUrl":weakSelf.productModel.IconUrl,
-                                                    @"Data":dataJsonString?:@""};
+                                                    @"Data":dataJsonString?:@"",
+                                                    @"propertyModel":model,};
                         
                         
                         TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];

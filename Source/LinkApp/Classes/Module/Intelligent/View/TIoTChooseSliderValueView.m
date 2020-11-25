@@ -315,7 +315,7 @@
                 if ([weakSelf.model.define.type isEqualToString:@"int"]) {
                     valueString = [NSString stringWithFormat:@"%.f%@", roundf(weakSelf.slider.value) ,weakSelf.model.define.unit?:@""];
                 }
-                else
+                else if ([weakSelf.model.define.type isEqualToString:@"float"])
                 {
                     valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
                 }
