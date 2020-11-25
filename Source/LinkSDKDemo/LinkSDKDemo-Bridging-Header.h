@@ -3,4 +3,3 @@
 //
 
 #import "TRTCCalling.h"
-#import "GenerateTestUserSig.h"

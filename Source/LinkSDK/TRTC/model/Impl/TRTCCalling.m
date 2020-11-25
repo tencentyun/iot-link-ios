@@ -228,7 +228,8 @@
     param.sdkAppId = self.mSDKAppID;
     param.userId = self.mUserID;
     param.userSig = self.mUserSig;
-    param.roomId = self.curRoomID;
+    param.roomId = 0;//self.curRoomID;
+    param.strRoomId = self.mRoomID;
     
     TRTCVideoEncParam *videoEncParam = [[TRTCVideoEncParam alloc] init];
     videoEncParam.videoResolution = TRTCVideoResolution_960_540;

@@ -141,7 +141,6 @@ FOUNDATION_EXPORT NSString *const AppDescribeAutomation;//获取自动智能场�
 //MARK: TRTC
 FOUNDATION_EXPORT NSString *const AppIotRTCInviteDevice;//1.手机请求设备通话
 FOUNDATION_EXPORT NSString *const AppIotRTCCallDevice;//5. 手机请求加入房间参数
-FOUNDATION_EXPORT NSString *const AppIotRTCLeavelRoom;//9. 手机离开房间通知
 
 //===============h5
 FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心

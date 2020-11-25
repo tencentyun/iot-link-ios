@@ -273,6 +273,7 @@
 		F4833EBE24DD302F0033FAB2 /* TIoTLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */; };
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
 		F4833EC724E29BC20033FAB2 /* TIoTLogTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */; };
+		F484CE7E256E4A420051AF60 /* TIoTTRTCUIManage.m in Sources */ = {isa = PBXBuildFile; fileRef = F484CE7D256E4A420051AF60 /* TIoTTRTCUIManage.m */; };
 		F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */; };
 		F4AD73122553D5A6003267FC /* TIoTVercheckTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */; };
 		F4AD73162553F797003267FC /* TIoTAppUtilOC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73152553F797003267FC /* TIoTAppUtilOC.m */; };
@@ -281,8 +282,6 @@
 		F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5DE1024A0B7FE0098F18B /* TIoTAppConfig.m */; };
 		F4D48B872520834C00CE90AC /* TIoTBaseMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B832520834C00CE90AC /* TIoTBaseMapViewController.m */; };
 		F4D48B882520834C00CE90AC /* TIoTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D48B842520834C00CE90AC /* TIoTMapViewController.m */; };
-		F4DB259E2563B050006C45CD /* RTCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB259D2563B050006C45CD /* RTCViewController.swift */; };
-		F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4DB29892563CE1F006C45CD /* RTC.storyboard */; };
 		F4DB306625676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */; };
 		F4DB306725676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */; };
 		F4DB306825676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */; };
@@ -886,6 +885,8 @@
 		F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLaunchManager.swift; sourceTree = "<group>"; };
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
 		F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLogTask.swift; sourceTree = "<group>"; };
+		F484CE7C256E4A420051AF60 /* TIoTTRTCUIManage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTRTCUIManage.h; sourceTree = "<group>"; };
+		F484CE7D256E4A420051AF60 /* TIoTTRTCUIManage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTRTCUIManage.m; sourceTree = "<group>"; };
 		F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAppUtil.swift; sourceTree = "<group>"; };
 		F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTVercheckTask.swift; sourceTree = "<group>"; };
 		F4AD73142553F797003267FC /* TIoTAppUtilOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppUtilOC.h; sourceTree = "<group>"; };
@@ -901,8 +902,6 @@
 		F4D48B862520834C00CE90AC /* TIoTMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTMapViewController.h; sourceTree = "<group>"; };
 		F4DAB24724A3551F00F1B270 /* LinkAppCommon.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LinkAppCommon.xcconfig; sourceTree = "<group>"; };
 		F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkSDKDemo-Bridging-Header.h"; sourceTree = "<group>"; };
-		F4DB259D2563B050006C45CD /* RTCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCViewController.swift; sourceTree = "<group>"; };
-		F4DB29892563CE1F006C45CD /* RTC.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RTC.storyboard; sourceTree = "<group>"; };
 		F4DB305E25676DF7006C45CD /* TRTCVideoCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCVideoCallViewController.swift; sourceTree = "<group>"; };
 		F4DB306025676DF7006C45CD /* TRTCAudioCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCAudioCallViewController.swift; sourceTree = "<group>"; };
 		F4DB306325676DF7006C45CD /* TRTCCallingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRTCCallingCell.swift; sourceTree = "<group>"; };
@@ -1918,6 +1917,8 @@
 			children = (
 				D2E976B6233D969A00182443 /* TIoTWebSocketManage.h */,
 				D2E976B7233D969A00182443 /* TIoTWebSocketManage.m */,
+				F484CE7C256E4A420051AF60 /* TIoTTRTCUIManage.h */,
+				F484CE7D256E4A420051AF60 /* TIoTTRTCUIManage.m */,
 			);
 			path = WebSocket;
 			sourceTree = "<group>";
@@ -2036,8 +2037,6 @@
 		F4DB24572563A94E006C45CD /* TRTC */ = {
 			isa = PBXGroup;
 			children = (
-				F4DB29892563CE1F006C45CD /* RTC.storyboard */,
-				F4DB259D2563B050006C45CD /* RTCViewController.swift */,
 				F4DB305C25676DF7006C45CD /* ui */,
 			);
 			path = TRTC;
@@ -2439,7 +2438,6 @@
 				F4DB307125676DF7006C45CD /* TRTCCalling.xcassets in Resources */,
 				F4F3D7C424938EBE005D3396 /* UserInfoVC.xib in Resources */,
 				F4F3D53B24935BD3005D3396 /* LaunchScreen.storyboard in Resources */,
-				F4DB298A2563CE1F006C45CD /* RTC.storyboard in Resources */,
 				F4F3D7AF24938EBE005D3396 /* FeedbackVC.xib in Resources */,
 				F4F3D7A424938EBE005D3396 /* TIoTCoreTimerListCell.xib in Resources */,
 				6DCC3D43251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib in Resources */,
@@ -2597,6 +2595,7 @@
 				A4DC767F24D1227A0079F12C /* TIoTTargetWIFIViewController.m in Sources */,
 				D2038B952331DBCD0036F6B9 /* TIoTFeedBackViewController.m in Sources */,
 				D2B29EE0235FE4B80086BDFA /* TIoTSlideView.m in Sources */,
+				F484CE7E256E4A420051AF60 /* TIoTTRTCUIManage.m in Sources */,
 				6D70C2D7255132D00069879E /* TIoTChooseIntelligentDeviceVC.m in Sources */,
 				ED7B178123BEDB5900B61567 /* TIoTPanelHeaderView.m in Sources */,
 				6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */,
@@ -2826,7 +2825,6 @@
 			files = (
 				F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
-				F4DB259E2563B050006C45CD /* RTCViewController.swift in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
 				F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */,
 				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
