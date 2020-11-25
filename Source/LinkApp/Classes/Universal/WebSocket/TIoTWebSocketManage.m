@@ -15,6 +15,9 @@
 #import "ReachabilityManager.h"
 #import "TIoTCoreSocketCover.h"
 #import "TIoTCoreDeviceSet.h"
+#import "TIOTTRTCModel.h"
+#import "TIoTTRTCSessionManager.h"
+#import "TIoTTRTCUIManage.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -60,10 +63,9 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)instanceSocketManager {
     
-    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
-//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
+//    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
+    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
     [TIoTCoreSocketManager shared].delegate = self;
-                          
 }
 
 - (void)registerNetworkNotifications{
@@ -164,6 +166,19 @@ static NSString *heartBeatReqID = @"5002";
 //监听到的设备上报信息
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
+    
+    //检测是否TRTC设备，是否在呼叫中
+    NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
+    
+    TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+    if ([model.params.video_call_status isEqualToString:@"1"]) {
+        //TRTC设备需要通话，开始通话
+        [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
+        [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+            
+            [MBProgressHUD showError:reason];
+        }];
+    }
 }
 
 - (void)handleReceivedMessage:(id)message{
