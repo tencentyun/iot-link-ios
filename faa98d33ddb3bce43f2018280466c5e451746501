@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bd69840_a3b8371b",
+        "filename": "Source/LinkSDK/TRTC/model/Impl/TRTCCalling.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-25T04:34:49Z",
+      "side": 1,
+      "message": "最好打个warning，开发完的时候方便检查别漏掉，感觉这个测试假数据merge到master不太美观。",
+      "revId": "faa98d33ddb3bce43f2018280466c5e451746501",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
