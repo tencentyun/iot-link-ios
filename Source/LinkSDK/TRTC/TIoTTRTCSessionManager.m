@@ -11,9 +11,11 @@
 #import "TIoTCoreSocketCover.h"
 #import "TIoTCoreRequestAction.h"
 #import "YYModel.h"
-#import "TRTCCloud.h"
+#import "TRTCCalling.h"
 
-@implementation TIoTTRTCSessionManager
+@implementation TIoTTRTCSessionManager {
+    TIOTtrtcPayloadParamModel *_deviceParam;
+}
 
 + (instancetype)sharedManager {
     static TIoTTRTCSessionManager *_sharedManager = nil;
@@ -44,22 +46,25 @@
     }];
 }
 
-- (void)preEnterRoom:(NSString *)DeviceId deviceName:(NSString *)DeviceName failure:(FRHandler)failure {
+- (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
     _state = TIoTTRTCSessionType_pre;
+    _deviceParam = deviceParam;
     
-    if (DeviceId == nil || DeviceName == nil) {
+    if (deviceParam.userid == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
     
-    NSDictionary *param = @{@"DeviceId":DeviceId,@"DeviceName":DeviceName};
+    //开始准备进房间，通话中状态
+    NSDictionary *param = @{@"DeviceId":deviceParam.userid};
+//    NSDictionary *tmpDic = @{@"ProductId":self.productId, @"DeviceName":self.deviceName};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppIotRTCCallDevice params:param useToken:YES];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
 //        success(responseObject);
         NSDictionary *tempDic = responseObject[@"TRTCParams"];
         TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
-        [self enterRoom:model];
+        [self configRoom:model];
         
         self->_state = TIoTTRTCSessionType_calling;
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
@@ -67,35 +72,25 @@
     }];
 }
 
-- (void)leaveRoomRoom:(NSString *)DeviceId deviceName:(NSString *)DeviceName productId:(NSString *)ProductId trtcParams:(TIOTTRTCModel *)trtcParams success:(SRHandler)success failure:(FRHandler)failure {
-    _state = TIoTTRTCSessionType_end;
-    
-    if (DeviceId == nil || DeviceName == nil) {
-        failure(@"DeviceId参数为空",nil,@{});
-        return;
-    }
-    
-    NSDictionary *param = @{@"DeviceId":DeviceId,@"DeviceName":DeviceName,@"ProductId":ProductId, @"TRTCParams": @{
-                                    @"SdkAppId": trtcParams.SdkAppId,
-                                    @"UserId": trtcParams.UserId,
-                                    @"UserSig": trtcParams.UserSig,
-                                    @"RoomId": trtcParams.StrRoomId}
-                            };
-    
-    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppIotRTCLeavelRoom params:param useToken:YES];
-    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
-        success(responseObject);
-    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
-        failure(reason,error,dic);
-    }];
-}
-
 
 //MARK ########TRTCCloud
+- (void)configRoom:(TIOTTRTCModel *)model {
+    
+    //初始化trtc
+    [[TRTCCalling shareInstance] login:model.SdkAppId.intValue user:model.UserId userSig:model.UserSig roomID:model.StrRoomId];
+    
+    //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
+    if ([self.uidelegate respondsToSelector:@selector(isActiveCalling:)]) {
+        if ([self.uidelegate isActiveCalling:_deviceParam.userid]) {
+    
+            [self enterRoom:model];
+        }
+    }
+}
+
 - (void)enterRoom:(TIOTTRTCModel *)model {
-    TRTCCloud * cloud;// = [[TRTCCloud alloc] ini]
-//    [TRTCCloud sharedInstance];
-//    [TRTCCloud sharedInstance].delegate = self;
+    //进房间,如果是主叫直接进房间，如果是被叫等待UI确认后进房间
+    [[TRTCCalling shareInstance] groupCall:@[model.UserId] type:CallType_Video groupID:nil];
 }
 
 @end

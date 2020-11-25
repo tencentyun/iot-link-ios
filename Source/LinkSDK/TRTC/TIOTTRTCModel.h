@@ -16,4 +16,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *StrRoomId;
 @end
 
+
+@interface TIOTtrtcPayloadParamModel : NSObject
+@property (nonatomic, strong) NSString *video_call_status;
+@property (nonatomic, strong) NSString *userid;
+@end
+
+@interface TIOTtrtcPayloadModel : NSObject
+@property (nonatomic, strong) NSString *method;
+@property (nonatomic, strong) NSString *clientToken;
+@property (nonatomic, strong) NSString *timestamp;
+@property (nonatomic, strong) TIOTtrtcPayloadParamModel *params;
+@end
 NS_ASSUME_NONNULL_END
