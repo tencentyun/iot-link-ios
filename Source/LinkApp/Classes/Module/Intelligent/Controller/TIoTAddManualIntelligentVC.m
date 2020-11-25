@@ -157,6 +157,12 @@
                         
                             [self.dataArray addObject:model];
                             [self.tableView reloadData];
+                            
+                            if (self.dataArray.count == 0) {
+                                self.tableView.hidden = YES;
+                            }else {
+                                self.tableView.hidden = NO;
+                            }
                         }
                         
                     }
@@ -186,11 +192,11 @@
     }
     
     
-    if (self.dataArray.count == 0) {
-        self.tableView.hidden = YES;
-    }else {
-        self.tableView.hidden = NO;
-    }
+//    if (self.dataArray.count == 0) {
+//        self.tableView.hidden = YES;
+//    }else {
+//        self.tableView.hidden = NO;
+//    }
     
     self.sceneImageUrl = self.sceneManualDic[@"SceneIcon"]?:@"";
     self.sceneNameString = self.sceneManualDic[@"SceneName"]?:NSLocalizedString(@"unset", @"未设置");

@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSArray *childControllers;
 @property (nonatomic, strong) UIView *navCustomTopView;
 @property (nonatomic, strong) TIoTCustomSheetView *customSheet;
+@property (nonatomic, strong) TIoTIntelligentVC *intelligentVC;
 @end
 
 @implementation TIoTIntelligentHomeVC
@@ -35,6 +36,7 @@
     [super viewWillAppear:animated];
     self.navCustomTopView.hidden = NO;
     self.navigationController.tabBarController.tabBar.hidden = NO;
+    [self.intelligentVC loadSceneList];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -155,13 +157,13 @@
 - (NSArray *)childControllers {
     if (!_childControllers) {
         
-        TIoTIntelligentVC *intelligentVC = [[TIoTIntelligentVC alloc]init];
+        self.intelligentVC = [[TIoTIntelligentVC alloc]init];
         TIoTIntelligentLogVC *intelligentVCLogVC = [[TIoTIntelligentLogVC alloc]init];
         
-        intelligentVC.title = NSLocalizedString(@"mine_intelligent", @"我的智能");
+        self.intelligentVC.title = NSLocalizedString(@"mine_intelligent", @"我的智能");
         intelligentVCLogVC.title = NSLocalizedString(@"mine_intelligent_log", @"智能日志");
         
-        _childControllers = @[intelligentVC,intelligentVCLogVC];
+        _childControllers = @[self.intelligentVC,intelligentVCLogVC];
     }
     return _childControllers;
 }
