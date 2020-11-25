@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9f3c0b8_1445d66a",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Model/TIoTIntelligentLogModel.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-25T12:29:20Z",
+      "side": 1,
+      "message": "有一个的话，逗号应该是不用",
+      "revId": "95e93beb2b226c2381cdb6f696268f98ed38037d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
