@@ -22,13 +22,20 @@ typedef enum : NSUInteger {
     TIoTTRTCSessionType_end
 } TIoTTRTCSessionType;
 
+@protocol TIoTTRTCSessionUIDelegate <NSObject>
+//呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
+- (BOOL)isActiveCalling:(NSString *)deviceUserID;
+@end
+
 @interface TIoTTRTCSessionManager : NSObject
 @property (nonatomic, readonly) TIoTTRTCSessionType state; //呼叫状态； 1 呼叫中
+@property (nonatomic, weak) id<TIoTTRTCSessionUIDelegate> uidelegate;
 
 + (instancetype)sharedManager ;
 - (void)callDevice:(NSString *)DeviceId deviceName:(NSString *)DeviceName productId:(NSString *)ProductId success:(SRHandler)success failure:(FRHandler)failure ;
-- (void)preEnterRoom:(NSString *)DeviceId deviceName:(NSString *)DeviceName failure:(FRHandler)failure;
-- (void)leaveRoomRoom:(NSString *)DeviceId deviceName:(NSString *)DeviceName productId:(NSString *)ProductId trtcParams:(TIOTTRTCModel *)trtcParams success:(SRHandler)success failure:(FRHandler)failure;
+- (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure;
+- (void)configRoom:(TIOTTRTCModel *)model ;
+- (void)enterRoom:(TIOTTRTCModel *)model;
 @end
 
 NS_ASSUME_NONNULL_END

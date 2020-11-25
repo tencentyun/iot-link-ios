@@ -13,7 +13,6 @@
 
 #import "TIoTCoreFoundation.h"
 #import "TRTCCalling.h"
-#import "GenerateTestUserSig.h"
 #import "TIoTCoreUtil.h"
 
 static NSString *cellID = @"DODO";

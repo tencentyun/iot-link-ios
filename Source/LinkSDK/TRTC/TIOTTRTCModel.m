@@ -10,3 +10,14 @@
 @implementation TIOTTRTCModel
 
 @end
+
+@implementation TIOTtrtcPayloadParamModel
+
+@end
+
+@implementation TIOTtrtcPayloadModel
+
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{@"params":[TIOTtrtcPayloadParamModel class]};
+}
+@end
