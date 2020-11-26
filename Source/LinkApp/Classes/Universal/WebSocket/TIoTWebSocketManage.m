@@ -63,9 +63,12 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)instanceSocketManager {
     
-//    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
-    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
+    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
+//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
     [TIoTCoreSocketManager shared].delegate = self;
+    
+    //TRTC UI Delegate
+    [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
 }
 
 - (void)registerNetworkNotifications{
@@ -173,7 +176,7 @@ static NSString *heartBeatReqID = @"5002";
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     if ([model.params.video_call_status isEqualToString:@"1"]) {
         //TRTC设备需要通话，开始通话
-        [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
+        
         [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
             
             [MBProgressHUD showError:reason];

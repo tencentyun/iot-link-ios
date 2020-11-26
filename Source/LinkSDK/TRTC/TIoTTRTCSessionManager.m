@@ -15,6 +15,7 @@
 
 @implementation TIoTTRTCSessionManager {
     TIOTtrtcPayloadParamModel *_deviceParam;
+    TIOTTRTCModel *_trtcModel;
 }
 
 + (instancetype)sharedManager {
@@ -75,6 +76,7 @@
 
 //MARK ########TRTCCloud
 - (void)configRoom:(TIOTTRTCModel *)model {
+    _trtcModel = model;
     
     //初始化trtc
     [[TRTCCalling shareInstance] login:model.SdkAppId.intValue user:model.UserId userSig:model.UserSig roomID:model.StrRoomId];
@@ -83,14 +85,18 @@
     if ([self.uidelegate respondsToSelector:@selector(isActiveCalling:)]) {
         if ([self.uidelegate isActiveCalling:_deviceParam.userid]) {
     
-            [self enterRoom:model];
+            [self enterRoom];
         }
     }
 }
 
-- (void)enterRoom:(TIOTTRTCModel *)model {
+- (void)enterRoom {
     //进房间,如果是主叫直接进房间，如果是被叫等待UI确认后进房间
-    [[TRTCCalling shareInstance] groupCall:@[model.UserId] type:CallType_Video groupID:nil];
+    CallType _calltype = CallType_Audio;
+    if (_deviceParam.video_call_status.intValue == 1) {
+        _calltype = CallType_Video;
+    }
+    [[TRTCCalling shareInstance] groupCall:@[_trtcModel.UserId] type:_calltype groupID:nil];
 }
 
 @end

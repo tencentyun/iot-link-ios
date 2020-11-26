@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIOTtrtcPayloadParamModel : NSObject
 @property (nonatomic, strong) NSString *video_call_status;
+@property (nonatomic, strong) NSString *audio_call_status;
 @property (nonatomic, strong) NSString *userid;
 @end
 
