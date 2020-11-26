@@ -237,7 +237,6 @@
             [self.navigationController pushViewController:addManualTask animated:YES];
         }
         
-        
     }else if (indexPath.section == 1) {
         //MARK:跳转自动详情
         TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
