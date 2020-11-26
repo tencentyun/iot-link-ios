@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "798d7123_9c3bf7cc",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTWebSocketManage.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-26T21:14:43Z",
+      "side": 1,
+      "message": "确认一下这里的params是否还会返回audio_call_status，这里的call_status应该对应了物模型的参数，物模型中是有video_call_status和audio_call_status两个视频和音频的物模型属性的。",
+      "revId": "a0b51d76c2df8cfc609dcec1c4019378953b5714",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ef969b2_60eaaea9",
+        "filename": "Source/LinkSDK/TRTC/TIOTTRTCModel.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-26T21:14:43Z",
+      "side": 1,
+      "message": "同上，需要确认一下，调一下音频通话看看参数是否有问题。",
+      "revId": "a0b51d76c2df8cfc609dcec1c4019378953b5714",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
