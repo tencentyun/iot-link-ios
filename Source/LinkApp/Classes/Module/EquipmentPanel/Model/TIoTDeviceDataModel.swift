@@ -18,12 +18,21 @@ class TIoTDeviceDataModel: TIoTBaseModel {
     var light_switch: TIoTDeviceValueModel?
     var name: TIoTDeviceValueModel?
     
+    //TRTC设备的属性
+    var audio_call_status: TIoTDeviceValueModel?
+    var video_call_status: TIoTDeviceValueModel?
+    var userid: TIoTDeviceValueModel?
+    
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
         return ["brightness": TIoTDeviceValueModel.classForCoder(),
                 "color": TIoTDeviceValueModel.classForCoder(),
                 "switch_on": TIoTDeviceValueModel.classForCoder(),
                 "light_switch": TIoTDeviceValueModel.classForCoder(),
-                "name": TIoTDeviceValueModel.classForCoder()]
+                "name": TIoTDeviceValueModel.classForCoder(),
+                
+                "audio_call_status": TIoTDeviceValueModel.classForCoder(),
+                "video_call_status": TIoTDeviceValueModel.classForCoder(),
+                "userid": TIoTDeviceValueModel.classForCoder()]
     }
     
     class func modelCustomPropertyMapper() -> [String : Any]? {

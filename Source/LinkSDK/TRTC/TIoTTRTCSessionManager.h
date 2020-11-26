@@ -35,7 +35,7 @@ typedef enum : NSUInteger {
 - (void)callDevice:(NSString *)DeviceId deviceName:(NSString *)DeviceName productId:(NSString *)ProductId success:(SRHandler)success failure:(FRHandler)failure ;
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure;
 - (void)configRoom:(TIOTTRTCModel *)model ;
-- (void)enterRoom:(TIOTTRTCModel *)model;
+- (void)enterRoom;
 @end
 
 NS_ASSUME_NONNULL_END
