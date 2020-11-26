@@ -45,7 +45,7 @@
     [super viewWillAppear:animated];
     self.navCustomTopView.hidden = NO;
     self.navigationController.tabBarController.tabBar.hidden = NO;
-//    [self loadSceneList];
+    [self loadSceneList];
     
 }
 
