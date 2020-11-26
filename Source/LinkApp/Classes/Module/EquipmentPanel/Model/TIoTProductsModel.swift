@@ -64,6 +64,7 @@ class TIoTProductsModel: TIoTBaseModel {
 @objcMembers class TIoTUIModel: TIoTBaseModel {
     var type: String?
     var icon: String?
+    var visible: String?
 }
 
 @objcMembers class TIoTDefineModel: TIoTBaseModel {
