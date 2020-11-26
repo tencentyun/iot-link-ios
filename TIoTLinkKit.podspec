@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     ss.dependency 'TIoTLinkKit/CoreBase'
     
     ss.pod_target_xcconfig = {
-      'VALID_ARCHS'              => 'x86_64 armv7 arm64',
+#      'VALID_ARCHS'              => 'x86_64 armv7 arm64',
       'HEADER_SEARCH_PATHS'      => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC.framework/Headers/',
       'FRAMEWORK_SEARCH_PATHS'   => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
       'LIBRARY_SEARCH_PATHS'     => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
