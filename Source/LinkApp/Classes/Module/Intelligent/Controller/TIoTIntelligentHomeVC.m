@@ -78,7 +78,7 @@
     config.cm_underlineWidth = 80;
     config.cm_selectedColor = kFontColor;
     config.cm_font = [UIFont systemFontOfSize:16];
-    config.cm_slideGestureEnable = YES;
+    config.cm_slideGestureEnable = NO;
     config.cm_contentMode = CMPageTitleContentMode_Center;
     config.cm_titleMargin = 0.0;
     config.cm_minTitleMargin = 0.0;

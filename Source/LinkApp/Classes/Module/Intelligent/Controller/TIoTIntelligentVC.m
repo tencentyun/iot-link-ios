@@ -372,6 +372,9 @@
         weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
         [weakSelf.navigationController pushViewController:addManualTask animated:YES];
         
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
     };
     self.customSheet.chooseIntelligentSecondBlock = ^{
         //MARK: 跳转自动智能
@@ -379,6 +382,10 @@
         addAutoTask.paramDic = weakSelf.sceneParamDic;
         weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
         [weakSelf.navigationController pushViewController:addAutoTask animated:YES];
+        
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
     };
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
