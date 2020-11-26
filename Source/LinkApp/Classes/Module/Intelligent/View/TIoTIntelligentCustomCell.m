@@ -141,7 +141,13 @@
 
 - (void)setModel:(TIoTAutoIntelligentModel *)model {
     _model = model;
-    self.taskTitleLabel.text = model.DeviceName?:@"";
+    NSString *aliasName = model.AliasName?:@"";
+    if (![NSString isNullOrNilWithObject:aliasName]) {
+        self.taskTitleLabel.text = aliasName;
+    }else {
+        self.taskTitleLabel.text = model.DeviceName?:@"";
+    }
+    
     NSString *urlString = model.IconUrl?:@"";
     [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"new_add_product_placeholder"];
 }
@@ -189,7 +195,13 @@
         }else if ([opStr isEqualToString:@"le"]) {
             op = NSLocalizedString(@"auto_le", @"小等于");
         }
-        self.taskTitleLabel.text = autoIntellModel.Property.DeviceName?:@"";
+        
+        if (![NSString isNullOrNilWithObject:autoIntellModel.Property.AliasName]) {
+            self.taskTitleLabel.text = autoIntellModel.Property.AliasName;
+        }else {
+            self.taskTitleLabel.text = autoIntellModel.Property.DeviceName?:@"";
+        }
+        
         NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
         self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
         NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
@@ -206,7 +218,12 @@
         
         NSString *nameStr = autoIntellModel.propertName?:@"";
         NSString *op = @"";
-        self.taskTitleLabel.text = autoIntellModel.DeviceName?:@"";;
+        if (![NSString isNullOrNilWithObject:autoIntellModel.AliasName]) {
+            self.taskTitleLabel.text = autoIntellModel.AliasName;
+        }else {
+            self.taskTitleLabel.text = autoIntellModel.DeviceName?:@"";
+        }
+        
         NSString *contentStr = autoIntellModel.dataValueString?:@"";
         self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
         NSString *urlString = autoIntellModel.IconUrl?:@"";

@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, IntelligentActioinType) {
 @property (nonatomic, strong) NSDictionary *paramDic; //从智能主页传入场景参数
 
 @property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoDeviceStatusArray; //在setting创建完后返回的
-- (void)refreshIntelligentManualModifyModel:(TIoTAutoIntelligentModel *)modifiedModel originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit;
+- (void)refreshIntelligentManualModifyModel:(NSArray<TIoTAutoIntelligentModel*> *)modifiedModelArray originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit;
 
 @end
 

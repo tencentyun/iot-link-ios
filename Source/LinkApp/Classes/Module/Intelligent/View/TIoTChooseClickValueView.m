@@ -77,7 +77,8 @@
     [self.contentView addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(slideLine.mas_bottom).offset(20);
-        make.left.bottom.right.equalTo(self.contentView);
+        make.left.right.equalTo(self.contentView);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-kBottomViewHeight);
     }];
     
     [self.contentView addSubview:self.bottomView];
@@ -121,7 +122,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-        self.value = self.model.define.mapping.allValues[indexPath.row]?:@"";
+        self.value = self.dataArr[indexPath.row]?:@"";
 }
 
 #pragma mark - lazy loading
@@ -165,7 +166,15 @@
 - (NSMutableArray *)dataArr{
     if (_dataArr == nil) {
         _dataArr = [NSMutableArray array];
-        _dataArr = [self.model.define.mapping.allValues mutableCopy] ?:@[];
+        NSArray *keyResult = [self.model.define.mapping.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            return [obj1 compare:obj2];
+        }];
+        for (int i = 0; i<keyResult.count; i++) {
+            NSString *keyString = keyResult[i];
+            NSString *valueString = self.model.define.mapping[keyString]?:@"";
+            [_dataArr addObject:valueString];
+        }
+        
     }
     return _dataArr;
 }

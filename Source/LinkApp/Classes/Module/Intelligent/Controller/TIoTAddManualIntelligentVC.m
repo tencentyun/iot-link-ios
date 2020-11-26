@@ -68,17 +68,19 @@
 }
 
 
-- (void)refreshIntelligentManualModifyModel:(TIoTAutoIntelligentModel *)modifiedModel originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit {
+- (void)refreshIntelligentManualModifyModel:(NSArray<TIoTAutoIntelligentModel*> *)modifiedModelArray originIndex:(NSInteger)indexrow isEdit:(BOOL )isEdit {
     
     if (isEdit == YES) {
+        TIoTAutoIntelligentModel * modifiedModel = modifiedModelArray[0];
         if (modifiedModel != nil) {
             [self.dataArray replaceObjectAtIndex:indexrow withObject:modifiedModel];
             [self.tableView reloadData];
         }
         
     }else {
-        [self.dataArray addObject:modifiedModel];
-        
+        for (TIoTAutoIntelligentModel * modifiedModel in modifiedModelArray) {
+            [self.dataArray addObject:modifiedModel];
+        }
         [self.tableView reloadData];
         self.tableView.hidden = NO;
         self.nextButtonView.hidden = NO;

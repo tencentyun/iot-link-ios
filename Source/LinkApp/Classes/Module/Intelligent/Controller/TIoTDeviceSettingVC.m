@@ -511,7 +511,7 @@
                     vc.valueString = weakSelf.modifiedValue;
                     
                     vc.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
-                    [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+                    [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
                     
                     [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
