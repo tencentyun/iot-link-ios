@@ -121,6 +121,8 @@
             
             if (self.dataArray.count == 0 && self.autoSceneArray.count == 0) {
                 self.tableView.hidden = YES;
+            }else {
+                self.tableView.hidden = NO;
             }
             
         } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
@@ -277,6 +279,13 @@
     [[TIoTRequestObject shared] post:AppDeleteScene Param:paramDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
         [MBProgressHUD showMessage:NSLocalizedString(@"delete_success", @"删除成功") icon:@""];
+        
+        if (self.dataArray.count == 0 && self.autoSceneArray.count == 0) {
+            self.tableView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+        }
+        
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
@@ -291,6 +300,13 @@
     [[TIoTRequestObject shared] post:AppDeleteAutomation Param:paramDic success:^(id responseObject) {
         [MBProgressHUD dismissInView:self.view];
         [MBProgressHUD showMessage:NSLocalizedString(@"delete_success", @"删除成功") icon:@""];
+        
+        if (self.dataArray.count == 0 && self.autoSceneArray.count == 0) {
+            self.tableView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+        }
+        
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
