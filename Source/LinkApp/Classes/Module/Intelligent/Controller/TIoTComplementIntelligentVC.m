@@ -78,6 +78,7 @@
         
     }else if (indexPath.row == 1) {
         TIoTSettingIntelligentNameVC *settingNameVC = [[TIoTSettingIntelligentNameVC alloc]init];
+        settingNameVC.defaultSceneString = self.sceneNameString;
         settingNameVC.saveIntelligentNameBlock = ^(NSString * _Nonnull name) {
             NSMutableDictionary *dic  = self.dataArr[1];
             [dic setValue:name forKey:@"value"];

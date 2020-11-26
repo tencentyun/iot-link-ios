@@ -791,3 +791,5 @@
 "December" = "12月";
 "noDevice_resetAction" = "当前智能设备丢失，请重新设置动作";
 "intelligent_lose_efficacy" = "智能失效";
+"sceneName_overLenght" = "名称不能超过20个字符";
+"please_input_sceneName"= "请输入智能名称";

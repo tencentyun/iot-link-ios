@@ -57,7 +57,10 @@
     self.nameTextTield = [[UITextField alloc]init];
     self.nameTextTield.textColor = [UIColor colorWithHexString:@"#6C7078"];
     self.nameTextTield.font = [UIFont wcPfRegularFontOfSize:14];
-    self.nameTextTield.placeholder = NSLocalizedString(@"unset", @"未设置");
+    self.nameTextTield.placeholder = NSLocalizedString(@"please_input_sceneName", @"请输入智能名称");
+    if (![NSString isNullOrNilWithObject:self.defaultSceneString]) {
+        self.nameTextTield.text = self.defaultSceneString;
+    }
     [nameView addSubview:self.nameTextTield];
     [self.nameTextTield mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.titleLabel.mas_right).offset(28);
@@ -86,10 +89,15 @@
     if ([NSString isNullOrNilWithObject:self.nameTextTield.text] || [NSString isFullSpaceEmpty:self.nameTextTield.text]) {
         [MBProgressHUD showMessage:NSLocalizedString(@"error_setting_Intelligent_Name", @"请设置智能名称") icon:@""];
     }else {
-        if (self.saveIntelligentNameBlock) {
-            self.saveIntelligentNameBlock(self.nameTextTield.text);
+        
+        if (self.nameTextTield.text.length >20) {
+            [MBProgressHUD showError:NSLocalizedString(@"sceneName_overLenght", @"名称不能超过20个字符")];
+        }else {
+            if (self.saveIntelligentNameBlock) {
+                self.saveIntelligentNameBlock(self.nameTextTield.text);
+            }
+            [self.navigationController popViewControllerAnimated:YES];
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }
     
 }
