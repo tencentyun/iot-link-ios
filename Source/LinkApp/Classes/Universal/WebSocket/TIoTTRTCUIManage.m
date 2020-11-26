@@ -31,31 +31,7 @@
     return _sharedManager;
 }
 
-#pragma mark -TIoTTRTCSessionUIDelegate
-//呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
-
-- (BOOL)isActiveCalling:(NSString *)deviceUserID {
-    UIViewController *topVC = [TIoTCoreUtil topViewController];
-    if (_callAudioVC == topVC || _callVideoVC == topVC) {
-        
-        _callAudioVC = nil;
-        _callVideoVC = nil;
-        return  YES;
-    }
-    
-    
-#warning audio example
-    _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
-    _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
-    [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{
-        
-        
-    }];
-    
-    return NO;
-}
-
-
+//该方法为5步骤，有三个方面会汇总到次，信鸽、websocket、轮训
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
     _deviceParam = deviceParam;
     
@@ -81,4 +57,110 @@
 
 }
 
+
+
+//---------------------TRTC设备轮训状态与注册物模型----------------------------
+- (void)repeatDeviceData:(NSArray *)devices {
+    
+    NSArray *productIDs = [devices valueForKey:@"ProductId"];
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":productIDs} success:^(id responseObject) {
+        NSArray *data = responseObject[@"Data"];
+        
+        for (NSDictionary *configPanel in data) {
+                        
+            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:configPanel[@"Config"]];
+            
+            if ([configModel.Global.trtc intValue] == 1) {
+                
+                //是trtc设备,注册socket和检测trtc设备的状态
+                [self getTRTCDeviceData:configModel.profile.ProductId devices:devices];
+            }
+        }
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+
+}
+
+
+- (void)getTRTCDeviceData:(NSString *)productID devices:(NSArray *)devices {
+    
+    NSArray<TIoTDevicedListDataModel *> *devicelist = [NSArray yy_modelWithJSON:devices];
+    for (TIoTDevicedListDataModel * device in devicelist) {
+
+        if ([device.ProductId isEqualToString:productID]) {
+            //通过产品ID筛选出设备Device，开始拉取Device的TRTC状态
+            
+            //1.是trtc设备,注册socket通知
+            [HXYNotice postHeartBeat:@[device.DeviceId]];
+            [HXYNotice addActivePushPost:@[device.DeviceId]];
+            
+            //2.是trtc设备,查看trtc状态是否为呼叫中1
+            [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"DeviceId":device.DeviceId} success:^(id responseObject) {
+                NSString *tmpStr = (NSString *)responseObject[@"Data"];
+                TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
+                
+                
+                if ([product.video_call_status.Value isEqualToString:@"1"] || [product.audio_call_status.Value isEqualToString:@"1"]) {
+                    
+                    TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
+                    payloadParam.userid = product.userid.Value;
+                    payloadParam.video_call_status = product.video_call_status.Value;
+                    payloadParam.audio_call_status = product.audio_call_status.Value;
+                    
+                    [self preEnterRoom:payloadParam failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                        NSLog(@"error--%@",error);
+                    }];
+                }
+                
+                
+            } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+                
+            }];
+            
+        }
+    }
+    
+}
+//---------------------TRTC设备轮训状态与注册物模型----------------------------
+
+
+
+
+
+
+#pragma mark -TIoTTRTCSessionUIDelegate
+//呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
+
+- (BOOL)isActiveCalling:(NSString *)deviceUserID {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        return  YES;
+    }
+    
+    
+#warning audio example
+    if (_deviceParam.audio_call_status.intValue == 1) { //audio
+        
+        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:deviceUserID];
+        _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{
+
+        }];
+
+    }else if (_deviceParam.video_call_status.intValue == 1) { //video
+        
+        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:deviceUserID];
+        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
+            
+            
+            
+        }];
+    }
+    
+    return NO;
+}
 @end

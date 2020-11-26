@@ -56,6 +56,9 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var IconUrl: String?
     var IconUrlGrid: String?
     var ChipPackage: String?
+    
+    var customizeControl: String?
+    var trtc: String?
 }
 
 @objcMembers class TIoTDeviceInfoModel: TIoTBaseModel {
@@ -147,4 +150,23 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var bgImg: String?
     var message: String?
     var btnText: String?
+}
+
+
+
+
+
+@objcMembers class TIoTDevicedListDataModel: TIoTBaseModel {
+    var AliasName: String?
+    var CreateTime: String?
+    var DeviceId: String?
+    var DeviceName: String?
+    var DeviceType: String?
+    var FamilyId: String?
+    var IconUrl: String?
+    var IconUrlGrid: String?
+    var ProductId: String?
+    var RoomId: String?
+    var UpdateTime: String?
+    var UserID: String?
 }

@@ -30,6 +30,7 @@
 #import "MGJRouter.h"
 
 #import "Firebase.h"
+#import "TIoTTRTCUIManage.h"
 
 static CGFloat weatherHeight = 10;
 
@@ -459,6 +460,9 @@ static CGFloat weatherHeight = 10;
         }
         
         [self updateDeviceStatus];
+        
+        //轮训设备状态，查看trtc设备是否要呼叫我
+        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
