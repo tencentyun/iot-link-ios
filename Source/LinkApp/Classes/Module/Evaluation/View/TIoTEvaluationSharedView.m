@@ -246,9 +246,13 @@
     if ([WxManager isWXAppInstalled]) {
         __weak __typeof(self)weakSelf = self;
         dispatch_async(dispatch_queue_create(0, 0), ^{
-            UIImage *thumbImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:weakSelf.sharedFriendDic[@"articleImg"]]]];
+            UIImage *thumbImage = [UIImage imageNamed:@"AppIcon"];
+            if (![NSString isNullOrNilWithObject:self.shareImage]) {
+                thumbImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:weakSelf.shareImage]]];
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[WxManager sharedWxManager] shareMiniProgramToWXSceneSessionWithTitle:weakSelf.sharedFriendDic[@"articleTitle"] description:nil path:weakSelf.sharedPathString webpageUrl:weakSelf.sharedURLString userName:@"gh_2aa6447f2b7c" thumbImage:thumbImage thumbImageUrl:nil complete:^(id obj, NSError *error) {
+                [[WxManager sharedWxManager] shareMiniProgramToWXSceneSessionWithTitle:weakSelf.sharedFriendDic[@"articleTitle"]?:@"" description:nil path:weakSelf.sharedPathString webpageUrl:weakSelf.wechatSharedURLString userName:@"gh_2aa6447f2b7c" thumbImage:thumbImage thumbImageUrl:nil complete:^(id obj, NSError *error) {
                     TIoTLog(@"-!!--%@",error);
                 }];
             });
@@ -261,7 +265,7 @@
 - (void)copyLink {
     
     UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
-    pastboard.string = self.sharedURLString;
+    pastboard.string = self.webShareURLString;
     
     [MBProgressHUD showSuccess:NSLocalizedString(@"evaluation_copyLink_success", @"已复制到剪切板")];
     

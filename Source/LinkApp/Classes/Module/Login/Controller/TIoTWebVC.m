@@ -292,19 +292,26 @@
 #pragma mark - 显示自定义分享view
 - (void)showSharedViewWithMessage:(WKScriptMessage *)message {
     TIoTLog(@"弹框");
-    TIoTEvaluationSharedView * shareView = [[TIoTEvaluationSharedView alloc]init];
-    shareView.sharedFriendDic = self.sharedMessageDic;
-    shareView.sharedPathString = self.sharedPathString;
-    shareView.sharedURLString = self.sharedURLString;
-    [self.view addSubview:shareView];
-    [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-        }else {
-            make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
-        }
-        make.leading.right.bottom.equalTo(self.view);
-    }];
+    if (message.body == nil || [message.body isEqual:[NSNull null]] || [message.body isKindOfClass:[NSNull class]]) {
+        
+    }else {
+        TIoTEvaluationSharedView * shareView = [[TIoTEvaluationSharedView alloc]init];
+        shareView.sharedFriendDic = self.sharedMessageDic;
+        shareView.sharedPathString = message.body[@"wechatPagePath"]?:@"";
+        shareView.webShareURLString = message.body[@"webShareUrl"]?:@"";
+        shareView.wechatSharedURLString = message.body[@"wechatShareUrl"]?:@"";
+        shareView.shareImage = message.body[@"shareImg"]?:@"";;
+        [self.view addSubview:shareView];
+        [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (@available(iOS 11.0, *)) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            }else {
+                make.top.equalTo(self.view.mas_top).offset(64 * kScreenAllHeightScale);
+            }
+            make.leading.right.bottom.equalTo(self.view);
+        }];
+    }
+    
 }
 
 #pragma mark - 响应H5调用原生，JSBridge方法响应
