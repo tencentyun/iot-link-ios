@@ -200,12 +200,43 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        //MARK:跳转手动详情
-        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-        addManualTask.isSceneDetail = YES;
-        addManualTask.sceneManualDic = self.dataArray[indexPath.row];
-        self.navigationController.tabBarController.tabBar.hidden = YES;
-        [self.navigationController pushViewController:addManualTask animated:YES];
+        
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.dataArray[indexPath.row]];
+        NSArray *actionsTemp = [NSArray arrayWithArray:dic[@"Actions"]?:@[]];
+        
+        if ([dic[@"Flag"] isEqual:@(1)]) { //设备异常 删除全部设备action
+            NSMutableArray *actionsArray = [NSMutableArray arrayWithArray:dic[@"Actions"]?:@[]] ;
+            for (int i = 0; i < actionsTemp.count; i++) {
+                NSDictionary *dic = actionsTemp[i];
+                if ([dic[@"ActionType"] isEqual:@(0)]) {
+                    [actionsArray removeObject:dic];
+                }
+                
+            }
+            [dic setValue:actionsArray forKey:@"Actions"];
+            
+            TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+            [alertView alertWithTitle:NSLocalizedString(@"intelligent_lose_efficacy", @"智能失效") message:NSLocalizedString(@"noDevice_resetAction", @"当前智能设备丢失，请重新设置动作") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
+            alertView.doneAction = ^(NSString * _Nonnull text) {
+                //MARK:跳转手动详情
+                TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+                addManualTask.isSceneDetail = YES;
+                addManualTask.sceneManualDic = dic;
+                self.navigationController.tabBarController.tabBar.hidden = YES;
+                [self.navigationController pushViewController:addManualTask animated:YES];
+            };
+            [alertView showInView:[UIApplication sharedApplication].delegate.window];
+            
+        }else {
+            //MARK:跳转手动详情
+            TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+            addManualTask.isSceneDetail = YES;
+            addManualTask.sceneManualDic = self.dataArray[indexPath.row];
+            self.navigationController.tabBarController.tabBar.hidden = YES;
+            [self.navigationController pushViewController:addManualTask animated:YES];
+        }
+        
+        
     }else if (indexPath.section == 1) {
         //MARK:跳转自动详情
         TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];

@@ -789,3 +789,5 @@
 "October" = "10月";
 "November" = "11月";
 "December" = "12月";
+"noDevice_resetAction" = "当前智能设备丢失，请重新设置动作";
+"intelligent_lose_efficacy" = "智能失效";
