@@ -48,7 +48,3 @@ target 'LinkSDKDemo' do
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/TRTC', :path => './'
 end
-
-pre_install do |installer|
-  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
-end

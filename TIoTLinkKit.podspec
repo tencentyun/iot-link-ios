@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => "v#{s.version}" }
 
   s.ios.deployment_target = '8.0'
+  s.static_framework = true
 
   s.default_subspec = 'CoreBase'
   
@@ -25,21 +26,9 @@ Pod::Spec.new do |s|
   #实时音视频，引入则开启
   s.subspec 'TRTC' do |ss|
     ss.source_files  = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
-    ss.ios.framework = ['AVFoundation', 'Accelerate']
-    ss.library = 'c++', 'resolv'
-    
     ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
     ss.dependency 'YYModel'
     ss.dependency 'TIoTLinkKit/CoreBase'
-    
-    ss.pod_target_xcconfig = {
-#      'VALID_ARCHS'              => 'x86_64 armv7 arm64',
-      'HEADER_SEARCH_PATHS'      => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC.framework/Headers/',
-      'FRAMEWORK_SEARCH_PATHS'   => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
-      'LIBRARY_SEARCH_PATHS'     => '$(inherited) $(PODS_ROOT)/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC/TXLiteAVSDK_TRTC',
-      'OTHER_LDFLAGS'            => '$(inherited) -undefined dynamic_lookup -ObjC',
-      'ENABLE_BITCODE'           => 'NO'
-    }
   end
 
 end
