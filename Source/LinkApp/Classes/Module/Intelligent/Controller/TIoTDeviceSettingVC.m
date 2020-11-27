@@ -31,7 +31,7 @@
 @property (nonatomic, strong) TIoTPropertiesModel *modifiedModel;
 
 @property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*autoIntelModelArray;          //自动智能进入后重组的model数组
-
+@property (nonatomic, strong) NSMutableArray <TIoTAutoIntelligentModel *>*inteliModelTempArray;         //保存用户在添加完action和condition后，没保存之前的数组
 @end
 
 @implementation TIoTDeviceSettingVC
@@ -180,7 +180,9 @@
                         TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];
                         deviceModel.propertName = weakSelf.baseModel.name;
                         deviceModel.dataValueString =valueString;
-                        [weakSelf.autoIntelModelArray addObject:deviceModel];
+                        
+                        [weakSelf.inteliModelTempArray addObject:deviceModel];
+//                        [weakSelf.autoIntelModelArray addObject:deviceModel];
                         
                     }else if (self.enterType == IntelligentEnterTypeAuto) {
                         //MARK:自动
@@ -211,8 +213,8 @@
                             TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
                             autoDeviceModel.propertName = weakSelf.baseModel.name;
                             autoDeviceModel.dataValueString =valueString;
-                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
-                            
+//                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            [weakSelf.inteliModelTempArray addObject:autoDeviceModel];
                         }else {
                             NSString *timeTamp = [NSString getNowTimeString];
                             NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
@@ -231,7 +233,8 @@
                                                             @"type":@(0),
                                                             @"propertyModel":model};
                             TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
-                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+//                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            [weakSelf.inteliModelTempArray addObject:autoDeviceModel];
                         }
 
                     }
@@ -340,8 +343,8 @@
                         TIoTAutoIntelligentModel *deviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:deviceDic];
                         deviceModel.propertName = weakSelf.baseModel.name;
                         deviceModel.dataValueString =valueString;
-                        [weakSelf.autoIntelModelArray addObject:deviceModel];
-                        
+//                        [weakSelf.autoIntelModelArray addObject:deviceModel];
+                        [weakSelf.inteliModelTempArray addObject:deviceModel];
                     }else if (self.enterType == IntelligentEnterTypeAuto) {
                         //MARK:自动
                         
@@ -370,8 +373,8 @@
                             TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
                             autoDeviceModel.propertName = weakSelf.baseModel.name;
                             autoDeviceModel.dataValueString =valueString;
-                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
-                            
+//                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            [weakSelf.inteliModelTempArray addObject:autoDeviceModel];
                         }else{
                             NSString *timeTamp = [NSString getNowTimeString];
                             NSDictionary *autoDeviceSelectDic = @{@"ProductId":weakSelf.productModel.ProductId,
@@ -391,7 +394,8 @@
                                                             @"propertyModel":model};
                             TIoTAutoIntelligentModel *autoDeviceModel = [TIoTAutoIntelligentModel yy_modelWithJSON:autoDeviceDic];
                             
-                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+//                            [weakSelf.autoIntelModelArray addObject:autoDeviceModel];
+                            [weakSelf.inteliModelTempArray addObject:autoDeviceModel];
                         }
                         
                         
@@ -509,22 +513,61 @@
                     vc.valueArray = weakSelf.valueOriginArray;
                     vc.productModel = weakSelf.productModel;
                     vc.valueString = weakSelf.modifiedValue;
+
+//                    vc.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+//                    [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+//
                     
-                    vc.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
-                    [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+                    if (weakSelf.actionArrayCount + weakSelf.inteliModelTempArray.count <=20) { //判断不超过限制时，再添加用户创建的设备condition 和 action
+                        
+                        [weakSelf.autoIntelModelArray addObjectsFromArray:weakSelf.inteliModelTempArray];
+                        vc.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+                        [vc refreshIntelligentManualModifyModel:weakSelf.autoIntelModelArray originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+                        
+                        [weakSelf.navigationController popToViewController:vc animated:YES];
+                    }else {
+                        if (weakSelf.isAutoActionType == NO) {
+                            [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个条件") icon:@""];
+                        }else if (weakSelf.isAutoActionType == YES) {
+                            [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                        }
+                    }
                     
-                    [weakSelf.navigationController popToViewController:vc animated:YES];
                 }else{
                     
                     //MARK:从自动智能入口进入，将选择好的condition数据返回
                     TIoTAddAutoIntelligentVC * addAutoVC = [weakSelf findViewController:NSStringFromClass([TIoTAddAutoIntelligentVC class])];
                     if (addAutoVC) {
-                        addAutoVC.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+                        
                         addAutoVC.productModel = weakSelf.productModel;
                         
-                        //autoIntelModelArray 每次编辑只有一项，所以数组中始终有且仅有一个TIoTPropertiesModel
-                        [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType modifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
-                        [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
+                        NSInteger number = 0;
+                        
+                        if (self.isAutoActionType == YES) {
+                            number = self.actionArrayCount;
+                        }else {
+                            number = self.conditionArrayCount;
+                        }
+                        
+                        if (number + weakSelf.inteliModelTempArray.count <=20) { //判断不超过限制时，再添加用户创建的设备condition 和 action
+                            
+                            [weakSelf.autoIntelModelArray addObjectsFromArray:weakSelf.inteliModelTempArray];
+                            addAutoVC.autoDeviceStatusArray = weakSelf.autoIntelModelArray;
+                            //autoIntelModelArray 每次编辑只有一项，所以数组中始终有且仅有一个TIoTPropertiesModel
+                            [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType modifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+                            [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
+                            
+                        }else {
+                            if (weakSelf.isAutoActionType == NO) {
+                                [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个条件") icon:@""];
+                            }else if (weakSelf.isAutoActionType == YES) {
+                                [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                            }
+                        }
+                        
+//                        //autoIntelModelArray 每次编辑只有一项，所以数组中始终有且仅有一个TIoTPropertiesModel
+//                        [addAutoVC refreshAutoIntelligentList:weakSelf.isAutoActionType modifyModel:weakSelf.autoIntelModelArray[0] originIndex:weakSelf.editActionIndex isEdit:weakSelf.isEdited];
+//                        [weakSelf.navigationController popToViewController:addAutoVC animated:YES];
                     }else {
                         // 没找到需要返回的控制器的处理方式
                         [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -602,4 +645,10 @@
     return _autoIntelModelArray;
 }
 
+- (NSMutableArray *)inteliModelTempArray {
+    if (!_inteliModelTempArray) {
+        _inteliModelTempArray = [NSMutableArray array];
+    }
+    return _inteliModelTempArray;
+}
 @end

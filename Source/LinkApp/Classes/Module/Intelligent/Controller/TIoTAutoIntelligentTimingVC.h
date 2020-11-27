@@ -22,6 +22,8 @@ typedef void(^AutoUpdateTimerBlock)(TIoTAutoIntelligentModel *modifiedTimerModel
 @property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, strong) TIoTAutoIntelligentModel *editModel; //进入编辑时候，传入的定时模型
 @property (nonatomic, copy) AutoUpdateTimerBlock updateTimerBlock; //修改完返回block
+
+@property (nonatomic, assign) NSInteger count; //自动智能，条件个数
 @end
 
 NS_ASSUME_NONNULL_END

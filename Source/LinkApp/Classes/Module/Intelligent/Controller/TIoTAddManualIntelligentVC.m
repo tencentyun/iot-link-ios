@@ -590,72 +590,78 @@
 }
 
 - (void)addManualTask {
-    __weak typeof(self)weakSelf = self;
-    [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制") secondTitle:NSLocalizedString(@"manualIntelligent_delay", @"延时")];
     
-    self.customSheet.chooseIntelligentFirstBlock = ^{
-        TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
-        if (weakSelf.customSheet) {
-            [weakSelf.customSheet removeFromSuperview];
-            
-        }
-        chooseDeviceVC.actionOriginArray = [weakSelf.dataArray mutableCopy];
-        if (weakSelf.valueArray == nil) {
-            weakSelf.valueArray = [NSMutableArray array];
-        }
-        chooseDeviceVC.enterType = DeviceChoiceEnterTypeManual;
-        chooseDeviceVC.deviceAutoChoiceEnterActionType = YES;
-        [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
-    };
-    self.customSheet.chooseIntelligentSecondBlock = ^{
-        TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
-        delayTimeVC.isEditing = NO;
-        if (weakSelf.customSheet) {
-            [weakSelf.customSheet removeFromSuperview];
-        }
-
-        delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
+    if (self.dataArray.count >= 20) {
+        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+    }else {
+        __weak typeof(self)weakSelf = self;
+        [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"manualIntelligent_deviceControl", @"设备控制") secondTitle:NSLocalizedString(@"manualIntelligent_delay", @"延时")];
+        
+        self.customSheet.chooseIntelligentFirstBlock = ^{
+            TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
+            if (weakSelf.customSheet) {
+                [weakSelf.customSheet removeFromSuperview];
+                
+            }
+            chooseDeviceVC.actionOriginArray = [weakSelf.dataArray mutableCopy];
             if (weakSelf.valueArray == nil) {
                 weakSelf.valueArray = [NSMutableArray array];
             }
-            weakSelf.actionType = IntelligentActioinTypeDelay;
-            
-            NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-            int hourNumber =[[hourStr stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
-            
-            NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-            int minutNumber =[[minu stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
-            NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
-            
-            NSMutableDictionary *delayTineDic = [NSMutableDictionary dictionary];
-            [delayTineDic setValue:timeStr forKey:@"Data"];
-            [delayTineDic setValue:@(1) forKey:@"ActionType"];
-            [delayTineDic setValue:timeString forKey:@"delayTime"];
-            [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
-            TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
-            if (self.dataArray.count == 0) {
-                [weakSelf.dataArray addObject:model];
-            }else {
-                [weakSelf.dataArray insertObject:model atIndex:0];
+            chooseDeviceVC.enterType = DeviceChoiceEnterTypeManual;
+            chooseDeviceVC.deviceAutoChoiceEnterActionType = YES;
+            chooseDeviceVC.actionCount = weakSelf.dataArray.count;
+            [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
+        };
+        self.customSheet.chooseIntelligentSecondBlock = ^{
+            TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
+            delayTimeVC.isEditing = NO;
+            if (weakSelf.customSheet) {
+                [weakSelf.customSheet removeFromSuperview];
             }
-            weakSelf.tableView.hidden = NO;
-            weakSelf.nextButtonView.hidden = NO;
-            [weakSelf.tableView reloadData];
+
+            delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
+                if (weakSelf.valueArray == nil) {
+                    weakSelf.valueArray = [NSMutableArray array];
+                }
+                weakSelf.actionType = IntelligentActioinTypeDelay;
+                
+                NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+                int hourNumber =[[hourStr stringByTrimmingCharactersInSet:hourCharacterSet] intValue];
+                
+                NSCharacterSet* minutCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+                int minutNumber =[[minu stringByTrimmingCharactersInSet:minutCharacterSet] intValue];
+                NSString *timeStr = [NSString stringWithFormat:@"%d",hourNumber*60*60 + minutNumber*60];
+                
+                NSMutableDictionary *delayTineDic = [NSMutableDictionary dictionary];
+                [delayTineDic setValue:timeStr forKey:@"Data"];
+                [delayTineDic setValue:@(1) forKey:@"ActionType"];
+                [delayTineDic setValue:timeString forKey:@"delayTime"];
+                [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
+                TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
+                if (self.dataArray.count == 0) {
+                    [weakSelf.dataArray addObject:model];
+                }else {
+                    [weakSelf.dataArray insertObject:model atIndex:0];
+                }
+                weakSelf.tableView.hidden = NO;
+                weakSelf.nextButtonView.hidden = NO;
+                [weakSelf.tableView reloadData];
+                
+
+                [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
+                [weakSelf.valueArray insertObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu] atIndex:0];
+
+            };
             
-
-            [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
-            [weakSelf.valueArray insertObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu] atIndex:0];
-
+            [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
         };
         
-        [weakSelf.navigationController pushViewController:delayTimeVC animated:YES];
-    };
-    
-    [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
-    [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo([UIApplication sharedApplication].delegate.window);
-        make.leading.right.bottom.equalTo(weakSelf.view);
-    }];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
+        [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo([UIApplication sharedApplication].delegate.window);
+            make.leading.right.bottom.equalTo(weakSelf.view);
+        }];
+    }
 }
 
 #pragma mark - lazy loading

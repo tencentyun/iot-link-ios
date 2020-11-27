@@ -301,9 +301,15 @@
         NSDictionary *timerSelectDic = @{@"Days":timeStr,@"TimePoint":timeString,@"timerKindSring":timeKindStr,@"choiceRepeatTimeNumner":@(self.choiceRepeatTimeNumner)};
         NSDictionary *timerDic = @{@"CondId":timeTamp,@"CondType":@(1),@"Timer":timerSelectDic,@"type":@"1"};
         TIoTAutoIntelligentModel *timerModel = [TIoTAutoIntelligentModel yy_modelWithJSON:timerDic];
-        if (self.autoIntelAddTimerBlock) {
-            self.autoIntelAddTimerBlock(timerModel);
+        
+        if (self.count+1 <=20) {
+            [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个条件") icon:@""];
+        }else {
+            if (self.autoIntelAddTimerBlock) {
+                self.autoIntelAddTimerBlock(timerModel);
+            }
         }
+        
     }
     
     [self.navigationController popViewControllerAnimated:YES];

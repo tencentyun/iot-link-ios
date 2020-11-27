@@ -444,17 +444,39 @@ static NSInteger  const limit = 10;
                 
                 TIoTAutoIntelligentSectionTitleCell *cell = [TIoTAutoIntelligentSectionTitleCell cellWithTableView:tableView];
                 cell.autoIntelligentItemType = AutoIntelligentItemTypeConditoin;
+                cell.conditionTitleString = NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                cell.autoChooseConditionBlock = ^{
+                    //MARK:弹出选择条件的view
+                    TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
+                    choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent, NSInteger number) {
+                        TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                        cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                        self.selectedConditonNum = number;
+                    };
+                    [self.view addSubview:choiceConditionView];
+                    [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.left.right.bottom.equalTo(self.view);
+                        make.top.equalTo(self.tableView.mas_top);
+                    }];
+                };
+                
                 if (self.conditionArray.count == 0) {
                     cell.isHideAddConditionButton = YES;
                     
                 }else {
                     cell.isHideAddConditionButton = NO;
-                    cell.autoInteAddConditionBlock = ^{
+                    
+                }
+                cell.autoInteAddConditionBlock = ^{
+                    if (self.conditionArray.count >= 20) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个条件") icon:@""];
+                    }else {
                         //MARK: 弹出添加条件sheet
                         [self addConditionEnter];
-                    };
-                }
-                cell.conditionTitleString = NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                    }
+                    
+                };
+                cell.choiceConditionImage.hidden = NO;
                 
                 return cell;
                 
@@ -489,12 +511,17 @@ static NSInteger  const limit = 10;
                     cell.isHideAddConditionButton = YES;
                 }else {
                     cell.isHideAddConditionButton = NO;
-                    cell.autoInteAddTaskBlock = ^{
-    #warning 弹出添加任务sheet
-                        [self addActionEnter];
-                    };
+                    
                 }
-                cell.isHideChoiceConditionButton = YES;
+                cell.autoInteAddTaskBlock = ^{
+                    if (self.actionArray.count >= 20) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                    }else {
+                        //MARK: 弹出添加任务sheet
+                        [self addActionEnter];
+                    }
+                };
+                cell.choiceConditionImage.hidden = YES;
                 return cell;
             }else {
                 TIoTIntelligentCustomCell *cell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
@@ -540,18 +567,7 @@ static NSInteger  const limit = 10;
         if (indexPath.section == 0) {
             if (self.conditionArray.count == 0) {
                 if (indexPath.row == 0) {
-                    //MARK:弹出选择条件的view
-                    TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
-                    choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent, NSInteger number) {
-                        TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-                        cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
-                        self.selectedConditonNum = number;
-                    };
-                    [self.view addSubview:choiceConditionView];
-                    [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.left.right.bottom.equalTo(self.view);
-                        make.top.equalTo(self.tableView.mas_top);
-                    }];
+                    
                 }else if (indexPath.row == 1) {
                     //MARK:弹出添加条件sheet
                     [self addConditionEnter];
@@ -559,7 +575,6 @@ static NSInteger  const limit = 10;
             }else {
     //MARK: 进入对应条件编辑页面(条件 type 0 设备状态、1 定时)
                 if (indexPath.row == 0) {
-                    [self addConditionEnter];
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.conditionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"0"]) {
@@ -602,7 +617,7 @@ static NSInteger  const limit = 10;
             }else {
     //MARK: 进入对应条件编辑页面(任务 type 2 设备控制，3 延时，4 选择手动，5 发送通知)
                 if (indexPath.row == 0) {
-                    [self addActionEnter];
+                    
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.actionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"2"]) {
@@ -876,7 +891,8 @@ static NSInteger  const limit = 10;
         //MARK:跳转到设备列表，再点击设备的时候跳转到设置页面 注意选择设备时候，需要筛选;跳转定时页面，并移除当前sheet
         TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];
         chooseDeviceVC.enterType = DeviceChoiceEnterTypeAuto;
-        
+        chooseDeviceVC.deviceAutoChoiceEnterActionType = NO;
+        chooseDeviceVC.conditionCount = weakSelf.conditionArray.count;
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
         
         [weakSelf removeBottomCustomConditionSheetView];
@@ -886,6 +902,7 @@ static NSInteger  const limit = 10;
         //MARK: 跳转定时页面，并移除当前sheet
         [weakSelf removeBottomCustomConditionSheetView];
         TIoTAutoIntelligentTimingVC *timingVC = [[TIoTAutoIntelligentTimingVC alloc]init];
+        timingVC.count = weakSelf.conditionArray.count;
         timingVC.autoIntelAddTimerBlock = ^(TIoTAutoIntelligentModel * _Nonnull timerModel) {
             [weakSelf.conditionArray addObject:timerModel];
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -913,6 +930,7 @@ static NSInteger  const limit = 10;
         TIoTChooseIntelligentDeviceVC *chooseDeviceVC = [[TIoTChooseIntelligentDeviceVC alloc]init];        
         chooseDeviceVC.enterType = DeviceChoiceEnterTypeAuto;
         chooseDeviceVC.deviceAutoChoiceEnterActionType = YES;
+        chooseDeviceVC.actionCount = weakSelf.actionArray.count;
         [weakSelf.navigationController pushViewController:chooseDeviceVC animated:YES];
         
         [weakSelf removeBottomCustomActionSheetView];
@@ -921,7 +939,6 @@ static NSInteger  const limit = 10;
     ChooseFunctionBlock delayBlock = ^(TIoTCustomSheetView *view){
         TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
         delayTimeVC.isEditing = NO;
-
         delayTimeVC.addDelayTimeBlcok = ^(NSString * _Nonnull timeString, NSString * _Nonnull hourStr, NSString * _Nonnull minu) {
             
             NSCharacterSet* hourCharacterSet =[[NSCharacterSet decimalDigitCharacterSet] invertedSet];
@@ -952,6 +969,7 @@ static NSInteger  const limit = 10;
         
         TIoTAutoAddManualIntelliListVC *addManualIntellVC = [[TIoTAutoAddManualIntelliListVC alloc]init];
         addManualIntellVC.paramDic = weakSelf.paramDic;
+        addManualIntellVC.count = weakSelf.actionArray.count;
         addManualIntellVC.addManualSceneBlock = ^(NSArray<TIoTAutoIntelligentModel *> *manualSceneArray) {
             
             for (TIoTAutoIntelligentModel *model in manualSceneArray) {
@@ -964,6 +982,7 @@ static NSInteger  const limit = 10;
     //发送通知
     ChooseFunctionBlock noticeBlock = ^(TIoTCustomSheetView *view){
         TIoTAutoNoticeVC *noticeVC = [[TIoTAutoNoticeVC alloc]init];
+        noticeVC.count = weakSelf.actionArray.count;
         noticeVC.addNoticeBlock = ^(NSArray<TIoTAutoIntelligentModel *> *noticeArray) {
             for (TIoTAutoIntelligentModel *model in noticeArray) {
                 [weakSelf.actionArray addObject:model];

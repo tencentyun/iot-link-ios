@@ -148,10 +148,15 @@
                 if (weakSelf.choiceNoticeArray.count == 0) {
                     [MBProgressHUD showMessage:NSLocalizedString(@"auto_atleast_choice_notice_type", @"至少选择一种通知类型") icon:@""];
                 }else {
-                    if (weakSelf.addNoticeBlock) {
-                        weakSelf.addNoticeBlock(weakSelf.choiceNoticeArray);
+                    
+                    if (self.count +1 > 20) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                    }else {
+                        if (weakSelf.addNoticeBlock) {
+                            weakSelf.addNoticeBlock(weakSelf.choiceNoticeArray);
+                        }
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
                     }
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
                 }
             }
             

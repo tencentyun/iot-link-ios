@@ -359,6 +359,8 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             }else  if (self.enterType == DeviceChoiceEnterTypeAuto){
                 deviceSettingVC.enterType = IntelligentEnterTypeAuto;
             }
+            deviceSettingVC.actionArrayCount = self.actionCount;
+            deviceSettingVC.conditionArrayCount = self.conditionCount;
             deviceSettingVC.isAutoActionType = self.deviceAutoChoiceEnterActionType;
             [self.navigationController pushViewController:deviceSettingVC animated:YES];
             
