@@ -86,7 +86,7 @@
 
 - (void)getTRTCDeviceData:(NSString *)productID devices:(NSArray *)devices {
     
-    NSArray<TIoTDevicedListDataModel *> *devicelist = [NSArray yy_modelWithJSON:devices];
+    NSArray<TIoTDevicedListDataModel *> *devicelist = [NSArray yy_modelArrayWithClass:TIoTDevicedListDataModel.class json:devices];
     for (TIoTDevicedListDataModel * device in devicelist) {
 
         if ([device.ProductId isEqualToString:productID]) {
@@ -105,7 +105,7 @@
                 if ([product.video_call_status.Value isEqualToString:@"1"] || [product.audio_call_status.Value isEqualToString:@"1"]) {
                     
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
-                    payloadParam.userid = product.userid.Value;
+                    payloadParam.userid = product.userid ? product.userid.Value:device.DeviceId;
                     payloadParam.video_call_status = product.video_call_status.Value;
                     payloadParam.audio_call_status = product.audio_call_status.Value;
                     

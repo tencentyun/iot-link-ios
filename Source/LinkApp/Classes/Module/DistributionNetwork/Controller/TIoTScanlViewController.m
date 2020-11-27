@@ -175,7 +175,7 @@
     
     [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:@{@"ProductId":qrData.productId,
                                                                       @"DeviceName":qrData.deviceName,
-                                                                      @"DeviceTimestamp":qrData.deviceTimestamp,
+                                                                      @"DeviceTimestamp":@([qrData.deviceTimestamp integerValue]),
                                                                       @"ConnId":qrData.connId,
                                                                       @"Signature":qrData.signature,
                                                                       @"SignMethod":qrData.signMethod,

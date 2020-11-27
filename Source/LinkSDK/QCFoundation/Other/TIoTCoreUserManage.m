@@ -231,7 +231,10 @@
     if (!_currentRoomId) {
         _currentRoomId = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentRoomId"];
     }
-    return _currentRoomId;
+    if (_currentRoomId.length > 0) {
+        return _currentRoomId;
+    }
+    return @"0";
 }
 
 - (void)setCurrentRoomId:(NSString *)currentRoomId {

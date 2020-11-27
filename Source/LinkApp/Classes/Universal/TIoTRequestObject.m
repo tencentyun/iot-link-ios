@@ -59,6 +59,8 @@ failure:(FailureResponseBlock)failure
             [accessParam setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"] forKey:@"AppID"];
             [accessParam setValue:@"iOS" forKey:@"Platform"];
             [accessParam setValue:@"iOS" forKey:@"Agent"];
+//            NSNumber *timstamp = [NSNumber numberWithInteger:[[NSDate date]timeIntervalSince1970]];
+//            [accessParam setValue:timstamp forKey:@"Timestamp"];
         }else {
             //OEM
             url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi,urlStr]];
