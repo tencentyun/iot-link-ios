@@ -793,3 +793,5 @@
 "December" = "12月";
 "noDevice_resetAction" = "当前智能设备丢失，请重新设置动作";
 "intelligent_lose_efficacy" = "智能失效";
+"maximum_twenty_action" = "最多添加20个任务";
+"maximum_twenty_action" = "最多添加20个条件";
