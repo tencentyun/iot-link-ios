@@ -444,17 +444,39 @@ static NSInteger  const limit = 10;
                 
                 TIoTAutoIntelligentSectionTitleCell *cell = [TIoTAutoIntelligentSectionTitleCell cellWithTableView:tableView];
                 cell.autoIntelligentItemType = AutoIntelligentItemTypeConditoin;
+                cell.conditionTitleString = NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                cell.autoChooseConditionBlock = ^{
+                    //MARK:弹出选择条件的view
+                    TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
+                    choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent, NSInteger number) {
+                        TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                        cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                        self.selectedConditonNum = number;
+                    };
+                    [self.view addSubview:choiceConditionView];
+                    [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.left.right.bottom.equalTo(self.view);
+                        make.top.equalTo(self.tableView.mas_top);
+                    }];
+                };
+                
                 if (self.conditionArray.count == 0) {
                     cell.isHideAddConditionButton = YES;
                     
                 }else {
                     cell.isHideAddConditionButton = NO;
-                    cell.autoInteAddConditionBlock = ^{
+                    
+                }
+                cell.autoInteAddConditionBlock = ^{
+                    if (self.conditionArray.count > 20) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个条件") icon:@""];
+                    }else {
                         //MARK: 弹出添加条件sheet
                         [self addConditionEnter];
-                    };
-                }
-                cell.conditionTitleString = NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
+                    }
+                    
+                };
+                
                 
                 return cell;
                 
@@ -489,12 +511,17 @@ static NSInteger  const limit = 10;
                     cell.isHideAddConditionButton = YES;
                 }else {
                     cell.isHideAddConditionButton = NO;
-                    cell.autoInteAddTaskBlock = ^{
-    #warning 弹出添加任务sheet
-                        [self addActionEnter];
-                    };
+                    
                 }
-                cell.isHideChoiceConditionButton = YES;
+                cell.autoInteAddTaskBlock = ^{
+                    if (self.actionArray.count > 20) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                    }else {
+                        //MARK: 弹出添加任务sheet
+                        [self addActionEnter];
+                    }
+                };
+//                cell.isHideChoiceConditionButton = YES;
                 return cell;
             }else {
                 TIoTIntelligentCustomCell *cell = [TIoTIntelligentCustomCell cellWithTableView:tableView];
@@ -540,18 +567,7 @@ static NSInteger  const limit = 10;
         if (indexPath.section == 0) {
             if (self.conditionArray.count == 0) {
                 if (indexPath.row == 0) {
-                    //MARK:弹出选择条件的view
-                    TIoTAutoConditionsView *choiceConditionView = [[TIoTAutoConditionsView alloc]init];
-                    choiceConditionView.chooseConditionBlock = ^(NSString * _Nonnull conditionContent, NSInteger number) {
-                        TIoTAutoIntelligentSectionTitleCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-                        cell.conditionTitleString = conditionContent?:NSLocalizedString(@"autoIntelligent_meet_condition", @"满足以下所有条件");
-                        self.selectedConditonNum = number;
-                    };
-                    [self.view addSubview:choiceConditionView];
-                    [choiceConditionView mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.left.right.bottom.equalTo(self.view);
-                        make.top.equalTo(self.tableView.mas_top);
-                    }];
+                    
                 }else if (indexPath.row == 1) {
                     //MARK:弹出添加条件sheet
                     [self addConditionEnter];
@@ -559,7 +575,6 @@ static NSInteger  const limit = 10;
             }else {
     //MARK: 进入对应条件编辑页面(条件 type 0 设备状态、1 定时)
                 if (indexPath.row == 0) {
-                    [self addConditionEnter];
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.conditionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"0"]) {
@@ -602,7 +617,7 @@ static NSInteger  const limit = 10;
             }else {
     //MARK: 进入对应条件编辑页面(任务 type 2 设备控制，3 延时，4 选择手动，5 发送通知)
                 if (indexPath.row == 0) {
-                    [self addActionEnter];
+                    
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.actionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"2"]) {

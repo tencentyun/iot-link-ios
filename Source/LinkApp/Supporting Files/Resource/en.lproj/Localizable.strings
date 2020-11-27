@@ -795,3 +795,5 @@
 "intelligent_lose_efficacy" = "智能失效";
 "sceneName_overLenght" = "名称不能超过20个字符";
 "please_input_sceneName"= "请输入智能名称";
+"maximum_twenty_action" = "最多添加20个任务";
+"maximum_twenty_action" = "最多添加20个条件";

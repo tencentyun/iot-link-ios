@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^AutoInteAddConditionBlock)(void);
 typedef void(^AutoInteAddTaskBlock)(void);
+typedef void(^AutoInteChooseCondition)(void);
 
 typedef NS_ENUM(NSInteger,AutoIntelligentItemType) {
     AutoIntelligentItemTypeConditoin,
@@ -21,8 +22,8 @@ typedef NS_ENUM(NSInteger,AutoIntelligentItemType) {
 @interface TIoTAutoIntelligentSectionTitleCell : UITableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, strong) NSString *conditionTitleString;
-@property (nonatomic, assign) BOOL isHideChoiceConditionButton;
 @property (nonatomic, assign) BOOL isHideAddConditionButton;
+@property (nonatomic, copy) AutoInteChooseCondition autoChooseConditionBlock; //选择条件
 @property (nonatomic, assign) AutoIntelligentItemType autoIntelligentItemType;   //条件、任务类型，需要设置
 @property (nonatomic, copy) AutoInteAddConditionBlock autoInteAddConditionBlock; //添加条件入口view
 @property (nonatomic, copy) AutoInteAddTaskBlock autoInteAddTaskBlock;          //添加任务入口view
