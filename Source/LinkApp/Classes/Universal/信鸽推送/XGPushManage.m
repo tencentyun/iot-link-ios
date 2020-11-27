@@ -13,6 +13,8 @@
 #import "MGJRouter.h"
 #import "TIoTFeedBackViewController.h"
 #import "TIoTAppConfig.h"
+#import "TIOTTRTCModel.h"
+#import "TIoTTRTCUIManage.h"
 
 @interface XGPushManage ()<XGPushDelegate,UNUserNotificationCenterDelegate>
 
@@ -131,6 +133,28 @@
     } else if ([notification isKindOfClass:[UNNotification class]]) {
                 NSLog(@"xg info :%@", ((UNNotification *)notification).request.content.userInfo);
         completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
+        
+        //信鸽过来，查看设备是否要呼叫 检测是否TRTC设备，是否在呼叫中
+         
+        NSDictionary *userInfo = ((UNNotification *)notification).request.content.userInfo;
+        NSString *custom_content = userInfo[@"custom_content"];
+        
+        TIOTtrtcPayloadParamModel *params = [TIOTtrtcPayloadParamModel yy_modelWithJSON:custom_content];
+        if (params.audio_call_status.intValue == 1 || params.video_call_status.intValue == 1) {//TRTC设备需要通话，开始通话,防止不是trtc设备的通知
+            
+            [[TIoTTRTCUIManage sharedManager] preEnterRoom:params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                
+                [MBProgressHUD showError:reason];
+            }];
+        }
+            
+        
+//        NSDictionary *custom_content_dic = [NSString base64Decode:custom_content];
+//        TIOTtrtcPayloadParamModel *params = [TIOTtrtcPayloadParamModel new];
+//        params.video_call_status = custom_content_dic[@"video_call_status"];
+//        params.audio_call_status = custom_content_dic[@"audio_call_status"];
+//        params.userid = custom_content_dic[@"userid"];
+
     }
 }
 

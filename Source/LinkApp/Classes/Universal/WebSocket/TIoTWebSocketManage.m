@@ -174,14 +174,11 @@ static NSString *heartBeatReqID = @"5002";
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
     
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
-    if ([model.params.video_call_status isEqualToString:@"1"]) {
         //TRTC设备需要通话，开始通话
+    [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
-        [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-            
-            [MBProgressHUD showError:reason];
-        }];
-    }
+        [MBProgressHUD showError:reason];
+    }];
 }
 
 - (void)handleReceivedMessage:(id)message{

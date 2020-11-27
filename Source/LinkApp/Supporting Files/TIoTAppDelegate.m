@@ -79,12 +79,6 @@
     // 4.显示窗口
     [self.window makeKeyAndVisible];
     
-    // 5.清除通知
-    NSDictionary* dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (dictionary != nil) {
-        NSLog(@"Launched from push notification: %@", dictionary);
-        [self clearNotifications];
-    }
     return YES;
 }
 
@@ -118,7 +112,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
+    // 5.清除通知
+    [self clearNotifications];
 }
 
 
