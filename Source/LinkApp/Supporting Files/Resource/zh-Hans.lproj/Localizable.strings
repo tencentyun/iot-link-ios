@@ -794,3 +794,5 @@
 "sceneName_overLenght" = "名称不能超过20个字符";
 "please_input_sceneName"= "请输入智能名称";
 "intelligent_noManualIntelliTip" = "暂无手动智能，请先添加";
+"maximum_twenty_action" = "最多添加20个任务";
+"maximum_twenty_condition" = "最多添加20个条件";

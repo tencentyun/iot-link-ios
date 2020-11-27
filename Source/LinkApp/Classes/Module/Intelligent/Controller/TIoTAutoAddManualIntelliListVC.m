@@ -351,17 +351,18 @@
                     }
                 }
             }else {
-                if (weakSelf.addManualSceneBlock) {
-                    if (weakSelf.choicedArray.count != 0) {
-                        weakSelf.addManualSceneBlock(weakSelf.choicedArray);
-                    }else {
+                
+                if (self.count + weakSelf.choicedArray.count > 20) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"maximum_twenty_action", @"最多添加20个任务") icon:@""];
+                }else {
+                    if (weakSelf.addManualSceneBlock) {
+                        if (weakSelf.choicedArray.count != 0) {
+                            weakSelf.addManualSceneBlock(weakSelf.choicedArray);   
+                        }
                         [weakSelf.navigationController popViewControllerAnimated:YES];
                     }
-                    
                 }
             }
-            
-            [weakSelf.navigationController popViewControllerAnimated:YES];
             
         };
         

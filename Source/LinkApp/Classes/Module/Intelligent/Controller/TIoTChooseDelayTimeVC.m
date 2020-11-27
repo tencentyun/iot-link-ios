@@ -194,6 +194,7 @@
         [self.navigationController popViewControllerAnimated:YES];
         
     }else {
+        //延时智能添加一个，所以不用在里面判断
         if (self.addDelayTimeBlcok) {
             self.addDelayTimeBlcok(timeStr?:@"", hourString?:@"0", min?:@"0");
         }
