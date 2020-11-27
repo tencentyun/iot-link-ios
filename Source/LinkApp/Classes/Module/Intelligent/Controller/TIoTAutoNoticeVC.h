@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, copy) AutoDeleteNoticeBlcok deleteNoticeBlcok;
 @property (nonatomic, strong) TIoTAutoIntelligentModel *editModel;
+
+@property (nonatomic, assign) NSInteger count; //action 个数
 @end
 
 NS_ASSUME_NONNULL_END

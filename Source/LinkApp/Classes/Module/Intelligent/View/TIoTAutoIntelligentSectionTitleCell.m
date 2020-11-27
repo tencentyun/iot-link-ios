@@ -11,8 +11,8 @@
 
 @interface TIoTAutoIntelligentSectionTitleCell ()
 @property (nonatomic, strong) UILabel *conditionTitleLabel;
-@property (nonatomic, strong) UIButton *choiceConditionButton;
 @property (nonatomic, strong) UIButton *addConditionButton;
+@property (nonatomic, strong) UIImageView *addConditionImage;
 @end
 
 @implementation TIoTAutoIntelligentSectionTitleCell
@@ -51,24 +51,39 @@
         make.height.mas_equalTo(22);
     }];
     
-    self.choiceConditionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.choiceConditionButton setImage:[UIImage imageNamed:@"downArrow"] forState:UIControlStateNormal];
-    [self.contentView addSubview:self.choiceConditionButton];
-    [self.choiceConditionButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.choiceConditionImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"downArrow"]];
+    [self.contentView addSubview:self.choiceConditionImage];
+    [self.choiceConditionImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.conditionTitleLabel.mas_right).offset(10);
         make.height.width.mas_equalTo(20);
         make.centerY.equalTo(self.conditionTitleLabel.mas_centerY);
     }];
     
     self.addConditionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.addConditionButton setImage:[UIImage imageNamed:@"addManual_Intelligent"] forState:UIControlStateNormal];
     [self.addConditionButton addTarget:self
                                 action:@selector(addAutoItem) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.addConditionButton];
     [self.addConditionButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(40);
+        make.top.bottom.equalTo(self.contentView);
+        make.right.equalTo(self.contentView.mas_right);
+    }];
+    
+    self.addConditionImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"addManual_Intelligent"]];
+    [self.contentView addSubview:self.addConditionImage];
+    [self.addConditionImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(22);
         make.centerY.equalTo(self.conditionTitleLabel.mas_centerY);
         make.right.equalTo(self.contentView.mas_right).offset(-kPaddingWidth);
+    }];
+    
+    UIButton *choiceConditionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [choiceConditionButton addTarget:self action:@selector(chooseCondition) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:choiceConditionButton];
+    [choiceConditionButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView.mas_left);
+        make.top.bottom.equalTo(self.contentView);
+        make.right.equalTo(self.addConditionButton.mas_left).offset(-10);
     }];
     
 }
@@ -78,14 +93,16 @@
     self.conditionTitleLabel.text = conditionTitleString;
 }
 
-- (void)setIsHideChoiceConditionButton:(BOOL)isHideChoiceConditionButton {
-    _isHideChoiceConditionButton = isHideChoiceConditionButton;
-    self.choiceConditionButton.hidden = isHideChoiceConditionButton;
+- (void)chooseCondition {
+    if (self.autoChooseConditionBlock) {
+        self.autoChooseConditionBlock();
+    }
 }
 
 - (void)setIsHideAddConditionButton:(BOOL)isHideAddConditionButton {
     _isHideAddConditionButton = isHideAddConditionButton;
     self.addConditionButton.hidden = isHideAddConditionButton;
+    self.self.addConditionImage.hidden = isHideAddConditionButton;
 }
 
 - (void)setAutoIntelligentItemType:(AutoIntelligentItemType)autoIntelligentItemType {
