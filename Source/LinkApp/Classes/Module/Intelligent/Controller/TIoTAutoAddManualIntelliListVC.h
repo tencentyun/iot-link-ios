@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) AutoUpdateManualSceneBlock updateManualSceneBlock; //编辑时候实现
 @property (nonatomic, strong) TIoTAutoIntelligentModel *editModel;//在智能列表所选的
 @property (nonatomic, assign) NSInteger editIndex;  //在智能列表中的index;
+
+@property (nonatomic, assign) NSInteger count; //action 个数
 @end
 
 NS_ASSUME_NONNULL_END
