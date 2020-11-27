@@ -15,7 +15,6 @@
 @property (nonatomic, strong) UILabel   *taskTitleLabel;
 @property (nonatomic, strong) UILabel   *taskSubtitleLabel;
 @property (nonatomic, strong) UIImageView *arrowsImageView;
-@property (nonatomic, strong) UIButton *taskDeleteButton;
 
 @property (nonatomic, strong) UIView    *blankAddView; //自动智能 条件和任务为空显示view
 @property (nonatomic, strong) UILabel *addLabel;
@@ -95,16 +94,6 @@
         make.top.equalTo(self.taskTitleLabel.mas_bottom).offset(4);
         make.left.equalTo(self.taskTitleLabel.mas_left);
         make.right.equalTo(self.backView.mas_right).offset(-30);
-    }];
-    
-    self.taskDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.taskDeleteButton addTarget:self action:@selector(deleteItem) forControlEvents:UIControlEventTouchUpInside];
-    [self.taskDeleteButton setImage:[UIImage imageNamed:@"task_delete"] forState:UIControlStateNormal];
-    [self.backView addSubview:self.taskDeleteButton];
-    [self.taskDeleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.backView.mas_right).offset(-kPaddingWidth);
-        make.width.height.mas_equalTo(24);
-        make.centerY.equalTo(self.backView);
     }];
     
     self.blankAddView = [[UIView alloc]init];
@@ -246,11 +235,6 @@
     }
 }
 
-- (void)deleteItem {
-    if (self.deleteIntelligentItemBlock) {
-        self.deleteIntelligentItemBlock();
-    }
-}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

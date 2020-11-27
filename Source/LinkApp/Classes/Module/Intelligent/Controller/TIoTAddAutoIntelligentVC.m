@@ -485,15 +485,6 @@ static NSInteger  const limit = 10;
                 if (self.conditionArray.count > 0) {
                     cell.isHideBlankAddView = YES;
                     cell.autoIntellModel = self.conditionArray[indexPath.row - 1];
-                    __weak typeof(self)Weakself = self;
-                    cell.deleteIntelligentItemBlock = ^{
-                        [Weakself.conditionArray removeObjectAtIndex:indexPath.row - 1];
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-                        if (Weakself.conditionArray.count == 0) {
-//                            Weakself.tableView.hidden = YES;
-//                            Weakself.nextButtonView.hidden = YES;
-                        }
-                    };
                     
                 }else {
                     cell.isHideBlankAddView = NO;
@@ -528,15 +519,6 @@ static NSInteger  const limit = 10;
                 if (self.actionArray.count > 0) {
                     cell.isHideBlankAddView = YES;
                     cell.autoIntellModel = self.actionArray[indexPath.row - 1];
-                    __weak typeof(self)Weakself = self;
-                    cell.deleteIntelligentItemBlock = ^{
-                        [Weakself.actionArray removeObjectAtIndex:indexPath.row - 1];
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-                        if (Weakself.conditionArray.count == 0) {
-//                            Weakself.tableView.hidden = YES;
-//                            Weakself.nextButtonView.hidden = YES;
-                        }
-                    };
                 }else {
                     cell.isHideBlankAddView = NO;
                     cell.blankAddTipString = NSLocalizedString(@"autoIntelligeng_task", @"添加任务");
