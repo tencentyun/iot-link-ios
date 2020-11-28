@@ -47,7 +47,7 @@
     [self.contentView addSubview:self.conditionTitleLabel];
     [self.conditionTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView.mas_left).offset(kPaddingWidth);
-        make.bottom.equalTo(self.contentView.mas_bottom);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-5);
         make.height.mas_equalTo(22);
     }];
     

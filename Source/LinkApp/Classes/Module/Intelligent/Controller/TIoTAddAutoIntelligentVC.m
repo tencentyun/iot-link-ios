@@ -736,7 +736,7 @@ static NSInteger  const limit = 10;
     
     if (tableView == self.tableView) {
         CGFloat kFirstRowHeight = 38;
-        CGFloat kRowHeight = 96;
+        CGFloat kRowHeight = 88;
         CGFloat kTimeSegmentHeight = 64;
         
         if (indexPath.section == 2) {

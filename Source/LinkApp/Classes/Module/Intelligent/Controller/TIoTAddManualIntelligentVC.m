@@ -688,7 +688,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.rowHeight = 96;
+        _tableView.rowHeight = 88;
         _tableView.allowsMultipleSelection = NO;
         _tableView.allowsSelectionDuringEditing = NO;
         _tableView.allowsMultipleSelectionDuringEditing = NO;
@@ -701,7 +701,7 @@
 
 - (UIView *)customHeaderView {
     if (!_customHeaderView) {
-        CGFloat kHeaderViewHeight = 40;
+        CGFloat kHeaderViewHeight = 45;
         _customHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kHeaderViewHeight)];
         _customHeaderView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         
@@ -721,7 +721,7 @@
         [headerContentView addSubview:headerTitle];
         [headerTitle mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(headerContentView.mas_left).offset(kPadding);
-            make.centerY.equalTo(headerContentView);
+            make.bottom.equalTo(headerContentView.mas_bottom).offset(-5);
         }];
         
         CGFloat kAddImageWidthAndHeight = 22;
@@ -734,7 +734,7 @@
             make.height.mas_equalTo(kAddImageWidthAndHeight);
             make.width.mas_equalTo(kAddImageWidthAndHeight);
             make.right.equalTo(headerContentView.mas_right).offset(-kPadding);
-            make.centerY.equalTo(headerContentView);
+            make.centerY.equalTo(headerTitle.mas_centerY);
         }];
     }
     return _customHeaderView;

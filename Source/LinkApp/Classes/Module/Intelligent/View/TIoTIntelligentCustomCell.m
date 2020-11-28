@@ -45,7 +45,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CGFloat kIntervalHeight = 8;
+    CGFloat kIntervalHeight = 4;
     CGFloat kPaddingWidth = 16;
     CGFloat kTaskImageWidthHeight = 48;
     CGFloat kSpaceWidth = 14;
