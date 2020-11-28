@@ -502,7 +502,7 @@ static NSInteger  const limit = 10;
             TIoTDeviceDetailTableViewCell *cell = [TIoTDeviceDetailTableViewCell cellWithTableView:tableView];
             cell.isAddTimePriod = YES;
             cell.timePriodNumFont = [UIFont wcPfRegularFontOfSize:14];
-            NSString *timeText = [NSString stringWithFormat:@"（%@-%@）",self.effectBeginTimeString,self.effectEndTimeString];
+            NSString *timeText = [NSString stringWithFormat:@"%@-%@",self.effectBeginTimeString,self.effectEndTimeString];
             if ([self.effectBeginTimeString isEqualToString:@"00:00"]&&[self.effectEndTimeString isEqualToString:@"23:59"]) {
                 timeText = NSLocalizedString(@"auto_effect_allDay", @"全天");
             }
@@ -661,10 +661,16 @@ static NSInteger  const limit = 10;
                 }
                 cell.dic = @{@"title":NSLocalizedString(@"auto_effective_time_period", @"生效时间段"),@"value":effectTimeStr,@"needArrow":@"1"};
                 
-                NSArray *timeArray = [effectTimeStr componentsSeparatedByString:@"-"];
+                if ([effectTimeStr containsString:@"-"]) {
+                    NSArray *timeArray= [effectTimeStr componentsSeparatedByString:@"-"];
+                    self.effectBeginTimeString = timeArray.firstObject?:@"";
+                    self.effectEndTimeString = timeArray.lastObject?:@"";
+                }else {
+                    self.effectBeginTimeString = @"";
+                    self.effectEndTimeString = @"";
+                }
                 self.effectDayIDString = dayIDString;
-                self.effectBeginTimeString = timeArray.firstObject?:@"";
-                self.effectEndTimeString = timeArray.lastObject?:@"";
+                
                 
             };
             
@@ -682,7 +688,10 @@ static NSInteger  const limit = 10;
                 indexRepeatNum = 3;
                 //自定义
             }
-            NSString *timeStr = [NSString stringWithFormat:@"%@-%@",self.effectBeginTimeString,self.effectEndTimeString];
+            NSString *timeStr = @"";
+            if (![NSString isNullOrNilWithObject:self.effectBeginTimeString] && ![NSString isNullOrNilWithObject:self.effectEndTimeString]) {
+                timeStr = [NSString stringWithFormat:@"%@-%@",self.effectBeginTimeString,self.effectEndTimeString];
+            }
             NSString *repeatTypeStr = [NSString stringWithFormat:@"%ld",(long)indexRepeatNum];
             timePeriodView.defaultRepeatTimeNum = indexRepeatNum;
             timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary: @{@"customTime":timeStr,@"repeatType":repeatTypeStr}];

@@ -38,11 +38,11 @@
     
     CGFloat kTopViewHeight = 50;
     CGFloat kPickViewHeight = 272; //pickview 高度
-    CGFloat kBottomViewHeight = 50;//底部view高度
+    CGFloat kBottomViewHeight = 56;//底部view高度
     CGFloat KIntervalHeight = 8;
     CGFloat KItemHeight = 50;
     
-    CGFloat kHeight = kTopViewHeight + kPickViewHeight + KItemHeight + KIntervalHeight;
+    CGFloat kHeight = kTopViewHeight + kPickViewHeight + KItemHeight + KIntervalHeight+ kBottomViewHeight;
     if (@available (iOS 11.0, *)) {
         kHeight = kHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
         kBottomViewHeight = kBottomViewHeight + [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
@@ -60,7 +60,7 @@
     [self changeViewRectConnerWithView:self.contentView withRect:CGRectMake(0, 0, kScreenWidth, kHeight) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
     [self.backMaskView addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.backMaskView);
+        make.left.right.top.equalTo(self.backMaskView);
         make.height.mas_equalTo(kHeight);
     }];
     
@@ -112,7 +112,8 @@
     self.bottomBackView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:self.bottomBackView];
     [self.bottomBackView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.equalTo(self.contentView);
+        make.left.right.equalTo(self.contentView);
+        make.top.equalTo(self.pickView.mas_bottom).offset(KIntervalHeight);
         make.height.mas_equalTo(kBottomViewHeight);
     }];
     

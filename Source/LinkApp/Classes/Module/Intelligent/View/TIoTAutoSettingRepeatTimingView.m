@@ -37,7 +37,7 @@
 - (void)setupUISubViews {
      
     
-    CGFloat kBottomViewHeight = 50;//底部view高度
+    CGFloat kBottomViewHeight = 56;//底部view高度
     CGFloat kPickViewHeight = 260;//pickview高度
     CGFloat kHeight = kPickViewHeight + kBottomViewHeight;  //总高度
     if (@available (iOS 11.0, *)) {

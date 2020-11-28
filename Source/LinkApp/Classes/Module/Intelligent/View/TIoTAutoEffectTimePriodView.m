@@ -60,7 +60,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     CGFloat kIntervalHeight = 8; //间隔高度
     CGFloat kRepeatViewHeight = 135; //重复周期选择view高度
     CGFloat kMiddleHeight = KItemHeight + kRepeatViewHeight + kSplitLineHeight; //中间view高度
-    CGFloat kBottomViewHeight = 50;//底部view高度
+    CGFloat kBottomViewHeight = 56;//底部view高度
     self.kHeight = kTopViewHeight + kMiddleHeight + kBottomViewHeight + 2*kIntervalHeight; //总高度
     
     CGFloat KPaddingLeft = 24; //icon 左边距
@@ -158,7 +158,8 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     }];
 
     self.allDayIconImage = [[UIImageView alloc]init];
-    self.allDayIconImage.image =[UIImage imageNamed:@"procolSelect"];
+    self.allDayIconImage.layer.cornerRadius = kIconWidthHeight/2;
+    self.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
     [self.allDayButton addSubview:self.allDayIconImage];
     [self.allDayIconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.allDayButton.mas_right).offset(-KPaddingRight);
@@ -205,7 +206,8 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     }];
     
     self.customIconImage = [[UIImageView alloc]init];
-    self.customIconImage.image =[UIImage imageNamed:@"procolDefault"];
+    self.customIconImage.layer.cornerRadius = kIconWidthHeight/2;
+    self.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
     [self.customTimePriodButton addSubview:self.customIconImage];
     [self.customIconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.customTimePriodButton.mas_right).offset(-KPaddingRight);
@@ -293,23 +295,33 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
         self.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary:@{@"time":@"00:00-23:59",@"repeatType":@"0"}];
         return;
     }else {
-        customTime = effectTimeDic[@"time"]?:@"";
-        self.customTimeValueLabel.text = [NSString stringWithFormat:@"（%@）",customTime];
+        
+        if (![NSString isNullOrNilWithObject:effectTimeDic[@"time"]]) {
+            customTime = effectTimeDic[@"time"];
+        }else if (![NSString isNullOrNilWithObject:effectTimeDic[@"customTime"]]) {
+            customTime = effectTimeDic[@"customTime"];
+            if ([customTime isEqualToString:@"00:00-23:59"]) {
+                customTime = @"";
+            }else {
+                customTime = [NSString stringWithFormat:@"（%@）",customTime];
+            }
+        }
+        self.customTimeValueLabel.text = [NSString stringWithFormat:@"%@",customTime];
     }
 }
 
 - (void)selectedTimePeriod:(UIButton *)button {
     if (button == self.allDayButton) {
-        self.allDayIconImage.image =[UIImage imageNamed:@"procolSelect"];
-        self.customIconImage.image =[UIImage imageNamed:@"procolDefault"];
+        self.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+        self.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
     }else if (button == self.customTimePriodButton) {
-        self.allDayIconImage.image =[UIImage imageNamed:@"procolDefault"];
-        self.customIconImage.image =[UIImage imageNamed:@"procolSelect"];
+        self.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+        self.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
         
         
         CGFloat kTopViewHeight = 50;
         CGFloat kPickViewHeight = 272;
-        CGFloat kBottomViewHeight = 50;//底部view高度
+        CGFloat kBottomViewHeight = 56;//底部view高度
         CGFloat KIntervalHeight = 8;
         CGFloat kHeight = kTopViewHeight + kPickViewHeight + kBottomViewHeight + KIntervalHeight;
         if (@available (iOS 11.0, *)) {
@@ -347,11 +359,11 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 WeakSelf.customTimeValueLabel.text = @"";
             }
             if (![NSString isNullOrNilWithObject:WeakSelf.customTimeValueLabel.text]) {
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"procolDefault"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"procolSelect"];
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
             }else {
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"procolSelect"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"procolDefault"];
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
             }
             
         };
@@ -364,11 +376,11 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
             
             if ([timeString isEqualToString:@"00:00-23:59"]) {
                 WeakSelf.customTimeValueLabel.text = @"";
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"procolSelect"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"procolDefault"];
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
             }else {
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"procolDefault"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"procolSelect"];
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
                 NSString *timeTempStr = timeString?:@"";
                 WeakSelf.customTimeValueLabel.text = [NSString stringWithFormat:@"（%@）",timeTempStr];
             }
@@ -456,7 +468,6 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 //MARK: 选择自定义时间段后，返回刷新当前view数据
                         NSInteger indexNum = 3;
                         NSMutableString *dateString = [[NSMutableString alloc]init];
-                        NSMutableString *repeatContentString = [[NSMutableString alloc]init];
 
                         for (int i = 0;i < dateArray.count; i++) {
                             [dateString appendString:dateArray[i]];
@@ -539,9 +550,23 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 if (weakSelf.effectTimeDic == nil) {
                     weakSelf.effectTimeDic = [NSMutableDictionary new];
                 }
-                if ([weakSelf.customTimeValueLabel.text isEqualToString:@"（）"]) {
-                    [weakSelf.effectTimeDic setValue:@"00:00-23:59" forKey:@"time"];
+                NSLog(@"---%@",weakSelf.customTimeValueLabel.text);
+                if ([weakSelf.customTimeValueLabel.text isEqualToString:@"00:00-23:59"]) {
+                
+                    [weakSelf.effectTimeDic setValue:@"" forKey:@"time"];
                 }else {
+                    
+                    NSMutableString *customStr = [NSMutableString stringWithString:weakSelf.customTimeValueLabel.text];
+                    if (![NSString isNullOrNilWithObject:weakSelf.customTimeValueLabel.text]) {
+                        if ([customStr containsString:@"（"]) {
+                            [customStr deleteCharactersInRange:NSMakeRange(0, 1)];
+                        }
+                        
+                        if ([customStr containsString:@"）"]) {
+                            [customStr deleteCharactersInRange:NSMakeRange(customStr.length-1, 1)];
+                        }
+                    }
+                    weakSelf.customTimeValueLabel.text = customStr;
                     [weakSelf.effectTimeDic setValue:weakSelf.customTimeValueLabel.text forKey:@"time"];
                 }
                 

@@ -55,7 +55,7 @@
     }];
     
     self.choiceImageView = [[UIImageView alloc]init];
-    self.choiceImageView.image = [UIImage imageNamed:@"g_default"];
+    self.choiceImageView.image = [UIImage imageNamed:@"single_unseleccted"];
     [self.backView addSubview:self.choiceImageView];
     [self.choiceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kImageHeithWidth);
@@ -81,9 +81,9 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     if (selected) {
-        self.choiceImageView.image = [UIImage imageNamed:@"g_select"];
+        self.choiceImageView.image = [UIImage imageNamed:@"single_seleccted"];
     }else {
-        self.choiceImageView.image = [UIImage imageNamed:@"g_default"];
+        self.choiceImageView.image = [UIImage imageNamed:@"single_unseleccted"];
     }
     
     // Configure the view for the selected state

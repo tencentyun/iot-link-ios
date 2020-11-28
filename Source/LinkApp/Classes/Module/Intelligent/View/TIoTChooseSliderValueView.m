@@ -152,7 +152,7 @@
     self.slider.maximumValue = self.model.define.max.intValue?:100;// 设置最大值
     self.slider.value = self.model.define.start.intValue?:0;// 设置初始值
     self.slider.continuous = YES;// 设置可连续变化
-    self.slider.minimumTrackTintColor = kMainColor;//滑轮左边颜色，如果设置了左边的图片就不会显示
+    self.slider.minimumTrackTintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];//滑轮左边颜色，如果设置了左边的图片就不会显示
     self.slider.maximumTrackTintColor = kRGBColor(236, 236, 236); //滑轮右边颜色，如果设置了右边的图片就不会显示
     //    slider.thumbTintColor = [UIColor redColor];//设置了滑轮的颜色，如果设置了滑轮的样式图片就不会显示
     [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];

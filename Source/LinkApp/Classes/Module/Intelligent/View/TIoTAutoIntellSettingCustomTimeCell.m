@@ -25,7 +25,7 @@
 
 - (void)setupItemUI {
     self.weekLabel = [[UILabel alloc]init];
-    self.weekLabel.layer.cornerRadius = 23;
+    self.weekLabel.layer.cornerRadius = 17;
     self.weekLabel.layer.borderWidth = 1;
     self.weekLabel.layer.borderColor = [UIColor colorWithHexString:@"#E7E8EB"].CGColor;
 //    [self.weekLabel setButtonFormateWithTitlt:@"asdf" titleColorHexString:kTemperatureHexColor font:[UIFont wcPfRegularFontOfSize:14]];

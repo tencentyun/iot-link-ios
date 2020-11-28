@@ -43,11 +43,11 @@
     CGFloat kPaddingLeft = 15;
     
     self.selectedTipImage = [[UIImageView alloc]init];
-    self.selectedTipImage.image = [UIImage imageNamed:@"procolDefault"];
+    self.selectedTipImage.image = [UIImage imageNamed:@""];
     [self.contentView addSubview:self.selectedTipImage];
     [self.selectedTipImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.contentView.mas_right).offset(-kPaddingLeft);
-        make.width.height.mas_equalTo(20);
+        make.width.height.mas_equalTo(27);
         make.centerY.equalTo(self.contentView.mas_centerY);
     }];
     
@@ -69,9 +69,9 @@
 - (void)setIsChoosed:(BOOL)isChoosed {
     _isChoosed = isChoosed;
     if (isChoosed) {
-        self.selectedTipImage.image = [UIImage imageNamed:@"procolSelect"];
+        self.selectedTipImage.image = [UIImage imageNamed:@"new_distri_selected"];
     }else {
-        self.selectedTipImage.image = [UIImage imageNamed:@"procolDefault"];
+        self.selectedTipImage.image = [UIImage imageNamed:@""];
     }
 }
 
@@ -85,9 +85,9 @@
     // Configure the view for the selected state
     if (self.isEditType == YES) {
         if (selected) {
-            self.selectedTipImage.image = [UIImage imageNamed:@"procolSelect"];
+            self.selectedTipImage.image = [UIImage imageNamed:@"new_distri_selected"];
         }else {
-            self.selectedTipImage.image = [UIImage imageNamed:@"procolDefault"];
+            self.selectedTipImage.image = [UIImage imageNamed:@""];
         }
     }
 }

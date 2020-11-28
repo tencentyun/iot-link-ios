@@ -119,18 +119,18 @@
         _navCustomTopView = [[UIView alloc]initWithFrame:CGRectMake(0, kTopHeight, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight - [TIoTUIProxy shareUIProxy].statusHeight)];
         
         UIButton *addActionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [addActionButton setImage:[UIImage imageNamed:@"addManual_Intelligent"] forState:UIControlStateNormal];
+        [addActionButton setImage:[UIImage imageNamed:@"homeAdd"] forState:UIControlStateNormal];
         [addActionButton addTarget:self action:@selector(addClick) forControlEvents:UIControlEventTouchUpInside];
         [_navCustomTopView addSubview:addActionButton];
         [addActionButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.trailing.mas_equalTo(-15*kScreenAllWidthScale);
             make.centerY.equalTo(_navCustomTopView.mas_centerY);
-            make.width.height.mas_equalTo(22);
+            make.width.height.mas_equalTo(24);
         }];
         
         
         UILabel *titleLab = [[UILabel alloc] init];
-        [titleLab setLabelFormateTitle:NSLocalizedString(@"home_intelligent", @"智能") font:[UIFont wcPfMediumFontOfSize:17] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [titleLab setLabelFormateTitle:NSLocalizedString(@"home_intelligent", @"智能") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
         [_navCustomTopView addSubview:titleLab];
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.centerX.equalTo(_navCustomTopView);
