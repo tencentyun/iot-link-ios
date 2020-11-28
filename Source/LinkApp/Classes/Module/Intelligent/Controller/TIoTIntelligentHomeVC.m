@@ -123,7 +123,7 @@
         [addActionButton addTarget:self action:@selector(addClick) forControlEvents:UIControlEventTouchUpInside];
         [_navCustomTopView addSubview:addActionButton];
         [addActionButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.trailing.mas_equalTo(-15*kScreenAllWidthScale);
+            make.trailing.mas_equalTo(-13*kScreenAllWidthScale);
             make.centerY.equalTo(_navCustomTopView.mas_centerY);
             make.width.height.mas_equalTo(24);
         }];

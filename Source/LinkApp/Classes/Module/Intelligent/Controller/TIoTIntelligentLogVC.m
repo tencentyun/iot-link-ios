@@ -201,6 +201,12 @@ static NSUInteger limit = 10; //每次请求数据个数限制
         
         [self.tableView reloadData];
         
+        if (self.sectionDataArray.count == 0) {
+            self.tableView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+        }
+        
         NSLog(@"----%@",self.sectionDataArray);
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
