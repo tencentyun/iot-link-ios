@@ -91,8 +91,18 @@
         self.clickValueView.model = self.baseModel;
         
         self.clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+            
+            if ([NSString isNullOrNilWithObject:valueString]) {
+                NSString *valueTempStr = weakSelf.dataArr[indexPath.row][@"value"];
+                if ([valueTempStr isEqualToString:NSLocalizedString(@"unset", @"未设置")]) {
+                    valueString = NSLocalizedString(@"unset", @"未设置");
+                }else {
+                    valueString = valueTempStr;
+                }
+            }
+            
             NSMutableDictionary *tempDic = weakSelf.dataArr[indexPath.row];
-            [tempDic setValue:valueString?:@"" forKey:@"value"];
+            [tempDic setValue:valueString forKey:@"value"];
             
             NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
             [weakSelf.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -261,9 +271,17 @@
         self.sliderValueView.model = self.baseModel;
         
         self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr) {
+            if ([NSString isNullOrNilWithObject:valueString]) {
+                NSString *valueTempStr = weakSelf.dataArr[indexPath.row][@"value"];
+                if ([valueTempStr isEqualToString:NSLocalizedString(@"unset", @"未设置")]) {
+                    valueString = NSLocalizedString(@"unset", @"未设置");
+                }else {
+                    valueString = valueTempStr;
+                }
+            }
             
             NSMutableDictionary *tempDic = weakSelf.dataArr[indexPath.row];
-            [tempDic setValue:valueString?:@"" forKey:@"value"];
+            [tempDic setValue:valueString forKey:@"value"];
             
             NSIndexPath *selectedPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
             [weakSelf.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
