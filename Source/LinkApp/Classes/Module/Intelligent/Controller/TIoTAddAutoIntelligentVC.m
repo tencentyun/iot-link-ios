@@ -99,7 +99,7 @@ static NSInteger  const limit = 10;
         [self.allDeviceArray removeAllObjects];
         
         //获取所有添加列表
-        [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":@"",@"Offset":@(0),@"Limit":@(1000)} success:^(id responseObject) {
+        [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":@"",@"Offset":@(0),@"Limit":@(10000)} success:^(id responseObject) {
             NSArray *devicePageList = [NSArray arrayWithArray:responseObject[@"DeviceList"]];
             self.offset += devicePageList.count;
             [self.allDeviceArray addObjectsFromArray:devicePageList];
@@ -1038,7 +1038,7 @@ static NSInteger  const limit = 10;
             [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"save", @"保存")]];
             __weak typeof(self)weakSelf = self;
             _nextButtonView.confirmBlock = ^{
-                //MARK:请求修改手动场景接口
+                //MARK:请求修改自动场景接口
                 [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
                 
                 NSMutableArray *actionArray = [NSMutableArray array];
@@ -1076,15 +1076,8 @@ static NSInteger  const limit = 10;
                 }else {
                     //MARK:组装好条件、任务、生效时间段 的请求参数 model，跳转到完善页面，添加场景背景URL和名称
                     
-                    NSInteger statusInt = 0;
-                    for (TIoTAutoIntelligentModel *model in weakSelf.actionArray) {
-                        if (model.ActionType == 4) {
-                            statusInt = 1;
-                        }
-                    }
-                    
                     NSMutableDictionary *autoDic = [NSMutableDictionary new];
-                    [autoDic setValue:@(statusInt) forKey:@"Status"];
+                    [autoDic setValue:@(1) forKey:@"Status"];
                     [autoDic setValue:@(weakSelf.selectedConditonNum) forKey:@"MatchType"];
                     [autoDic setValue:[weakSelf.conditionArray yy_modelToJSONObject]?:@"" forKey:@"Conditions"];
                     [autoDic setValue:[weakSelf.actionArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
