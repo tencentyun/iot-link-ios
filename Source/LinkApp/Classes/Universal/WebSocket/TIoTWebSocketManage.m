@@ -63,8 +63,8 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)instanceSocketManager {
     
-    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
-//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
+//    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
+    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
     [TIoTCoreSocketManager shared].delegate = self;
     
     //TRTC UI Delegate
@@ -174,11 +174,14 @@ static NSString *heartBeatReqID = @"5002";
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
     
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
-        //TRTC设备需要通话，开始通话
-    [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        
-        [MBProgressHUD showError:reason];
-    }];
+    model.params.userid = deviceInfo[@"DeviceId"];
+    if (model.params.audio_call_status.intValue == 1 || model.params.video_call_status.intValue == 1) {
+        //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
+        [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+            
+            [MBProgressHUD showError:reason];
+        }];
+    }
 }
 
 - (void)handleReceivedMessage:(id)message{

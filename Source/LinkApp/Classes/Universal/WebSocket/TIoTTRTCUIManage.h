@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTTRTCUIManage: NSObject <TIoTTRTCSessionUIDelegate>
 + (instancetype)sharedManager ;
 
+//面板中主动呼叫设备 0 audio； 1video
+- (void)callDeviceFromPanel: (int)audioORvideo;
+
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure ;
 
 //轮训设备状态，查看trtc设备是否要呼叫我

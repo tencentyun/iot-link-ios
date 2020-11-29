@@ -25,6 +25,12 @@ typedef enum : NSUInteger {
 @protocol TIoTTRTCSessionUIDelegate <NSObject>
 //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
 - (BOOL)isActiveCalling:(NSString *)deviceUserID;
+
+//远端流进房间了，需要展示
+- (void)showRemoteUser:(NSString *)remoteUserID;
+
+//远程挂断，退出房间
+- (void)exitRoom:(NSString *)remoteUserID;
 @end
 
 @interface TIoTTRTCSessionManager : NSObject
