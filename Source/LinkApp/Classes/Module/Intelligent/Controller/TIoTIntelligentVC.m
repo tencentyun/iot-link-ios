@@ -139,7 +139,8 @@
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
-            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+10;
+            CGFloat kSpaceHeight = 100; //距离中心偏移量
+            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+kSpaceHeight;
             make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
         } else {
             // Fallback on earlier versions
