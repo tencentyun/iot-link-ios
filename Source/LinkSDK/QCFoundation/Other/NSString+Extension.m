@@ -198,6 +198,38 @@
     return @{};
 }
 
++ (NSData *)decodeAsData:(NSString *)string {
+    if (!string) {
+        return nil;
+    }
+    
+    int needPadding = string.length % 4;
+    if (needPadding > 0) {
+        needPadding = 4 - needPadding;
+        string = [string stringByPaddingToLength:string.length+needPadding withString:@"=" startingAtIndex:0];
+    }
+    
+    return [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
+}
+
++ (NSData *)decodeBase64String:(NSString *)base64Str {
+    
+    NSData *data = [self decodeAsData:base64Str];
+    return data;
+//    if (!data) {
+//        return nil;
+//    }
+//    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+//base64解码，上面的方法不是单纯的base64解码
++ (NSString *)decodeBase64ToString:(NSString *)base64Str {
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:base64Str options:NSDataBase64DecodingIgnoreUnknownCharacters];
+//    NSString *base64Str = [data base64EncodedStringWithOptions:0];
+    NSString *base64DecodeStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return base64DecodeStr;
+}
+
 + (BOOL)judgePassWordLegal:(NSString*)pwd{
 
     BOOL result = false;
@@ -427,5 +459,74 @@
         }
     }
 
+}
+
+// 十六进制转换为普通字符串的。
++ (NSString *)stringFromHexString:(NSString *)hexString { //
+    
+    char *myBuffer = (char *)malloc((int)[hexString length] / 2 + 1);
+    bzero(myBuffer, [hexString length] / 2 + 1);
+    for (int i = 0; i < [hexString length] - 1; i += 2) {
+        unsigned int anInt;
+        NSString * hexCharStr = [hexString substringWithRange:NSMakeRange(i, 2)];
+        NSScanner * scanner = [[NSScanner alloc] initWithString:hexCharStr];
+        [scanner scanHexInt:&anInt];
+        myBuffer[i / 2] = (char)anInt;
+    }
+    NSString *unicodeString = [NSString stringWithCString:myBuffer encoding:4];
+    NSLog(@"------字符串=======%@",unicodeString);
+    return unicodeString;
+    
+    
+}
+
+//普通字符串转换为十六进制的。
+
++ (NSString *)hexStringFromString:(NSString *)string{
+    if (string == nil) {
+        return @"";
+    }
+    
+    NSData *myD = [string dataUsingEncoding:NSUTF8StringEncoding];
+    Byte *bytes = (Byte *)[myD bytes];
+    //下面是Byte 转换为16进制。
+    NSString *hexStr=@"";
+    for(int i=0;i<[myD length];i++)
+    
+    {
+        NSString *newHexStr = [NSString stringWithFormat:@"%x",bytes[i]&0xff];///16进制数
+        
+        if([newHexStr length]==1)
+            
+            hexStr = [NSString stringWithFormat:@"%@0%@",hexStr,newHexStr];
+        
+        else
+            
+            hexStr = [NSString stringWithFormat:@"%@%@",hexStr,newHexStr];
+    }
+    return hexStr;
+}
+
++ (NSString *)hexStringFromData:(NSData *)data {
+    if (data == nil) {
+        return @"";
+    }
+    Byte *bytes = (Byte *)[data bytes];
+    //下面是Byte 转换为16进制。
+    NSString *hexStr=@"";
+    for(int i=0;i<[data length];i++)
+    
+    {
+        NSString *newHexStr = [NSString stringWithFormat:@"%x",bytes[i]&0xff];///16进制数
+        
+        if([newHexStr length]==1)
+            
+            hexStr = [NSString stringWithFormat:@"%@0%@",hexStr,newHexStr];
+        
+        else
+            
+            hexStr = [NSString stringWithFormat:@"%@%@",hexStr,newHexStr];
+    }
+    return hexStr;
 }
 @end

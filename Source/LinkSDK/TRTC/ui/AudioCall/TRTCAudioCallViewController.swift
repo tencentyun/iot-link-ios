@@ -232,6 +232,11 @@ extension TRTCCallingAuidoViewController {
         accept.isHidden = (curSponsor == nil)
     }
     
+    @objc func remoteDismiss() {
+        TRTCCalling.shareInstance().hangup()
+       self.disMiss()
+    }
+    
     func setupControls() {
         if hangup.superview == nil {
             hangup.setImage(UIImage(named: "ic_hangup"), for: .normal)

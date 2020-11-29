@@ -261,11 +261,13 @@
 }
 
 - (void)startRemoteView:(NSString *)userID view:(UIView *)view {
-    [[TRTCCloud sharedInstance] startRemoteView:userID view:view];
+    [[TRTCCloud sharedInstance] startRemoteView:userID streamType:TRTCVideoStreamTypeBig view:view];
+//    [[TRTCCloud sharedInstance] startRemoteView:userID view:view];
 }
 
 - (void)stopRemoteView:(NSString *)userID {
-    [[TRTCCloud sharedInstance] stopRemoteView:userID];
+    [[TRTCCloud sharedInstance] stopRemoteView:userID streamType:TRTCVideoStreamTypeBig];
+//    [[TRTCCloud sharedInstance] stopRemoteView:userID];
 }
 
 - (void)openCamera:(BOOL)frontCamera view:(UIView *)view {

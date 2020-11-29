@@ -171,6 +171,12 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         return blue
     }()
     
+    lazy var audio: TRTCCallingVideoViewController = {
+        let vc = TRTCCallingVideoViewController(ocUserID: "124")
+        vc.modalPresentationStyle = .fullScreen
+        return vc
+    }()
+    
     @objc func jumpControl() {
 //        swipeAnimationView.play()
         
@@ -186,7 +192,15 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
 */
         
         
-        blue.scanNearPerpherals()
+//        blue.scanNearPerpherals()
+        
+//        audio.resetWithUserList(users: invitedList, isInit: true)
+//        audio.OCEnterUser(userID: "123")
+        
+        
+                
+        TIoTAPPConfig.iot_topController.present(audio, animated: false, completion: nil)
+        
 /*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in

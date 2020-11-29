@@ -13,6 +13,9 @@
 #import "YYModel.h"
 #import "TRTCCalling.h"
 
+@interface TIoTTRTCSessionManager()<TRTCCallingDelegate>
+@end
+
 @implementation TIoTTRTCSessionManager {
     TIOTtrtcPayloadParamModel *_deviceParam;
     TIOTTRTCModel *_trtcModel;
@@ -28,6 +31,14 @@
     return _sharedManager;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [[TRTCCalling shareInstance] addDelegate:self];
+    }
+    return self;
+}
 
 - (void)callDevice:(NSString *)DeviceId deviceName:(NSString *)DeviceName productId:(NSString *)ProductId success:(SRHandler)success failure:(FRHandler)failure {
     _state = TIoTTRTCSessionType_free;
@@ -92,6 +103,7 @@
 
 - (void)enterRoom {
     //进房间,如果是主叫直接进房间，如果是被叫等待UI确认后进房间
+
     CallType _calltype = CallType_Audio;
     if (_deviceParam.video_call_status.intValue == 1) {
         _calltype = CallType_Video;
@@ -99,4 +111,20 @@
     [[TRTCCalling shareInstance] groupCall:@[_trtcModel.UserId] type:_calltype groupID:nil];
 }
 
+
+#pragma mark -
+
+- (void)onUserEnter:(NSString *)uid {
+    //远端流给起来
+    if ([self.uidelegate respondsToSelector:@selector(showRemoteUser:)]) {
+        [self.uidelegate showRemoteUser:uid];
+    }
+}
+   
+/// 离开通话回调 | user leave room callback
+-(void)onUserLeave:(NSString *)uid {
+    if ([self.uidelegate respondsToSelector:@selector(exitRoom:)]) {
+        [self.uidelegate exitRoom:uid];
+    }
+}
 @end

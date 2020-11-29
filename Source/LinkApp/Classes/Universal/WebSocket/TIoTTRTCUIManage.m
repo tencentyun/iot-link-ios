@@ -61,9 +61,16 @@
 
 //---------------------TRTC设备轮训状态与注册物模型----------------------------
 - (void)repeatDeviceData:(NSArray *)devices {
+//    NSMutableArray *onlineDevices = [NSMutableArray array];
     
+//    for (NSDictionary *oneDevice in devices) {
+//        if ([oneDevice[@"Online"] intValue] == 1) {
+//            [onlineDevices addObject:oneDevice];
+//        }
+//    }
     NSArray *productIDs = [devices valueForKey:@"ProductId"];
-    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":productIDs} success:^(id responseObject) {
+    NSSet *productIDSet = [NSSet setWithArray:productIDs];//去chong
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
         NSArray *data = responseObject[@"Data"];
         
         for (NSDictionary *configPanel in data) {
@@ -96,6 +103,9 @@
             [HXYNotice postHeartBeat:@[device.DeviceId]];
             [HXYNotice addActivePushPost:@[device.DeviceId]];
             
+            if (device.Online.intValue != 1) {
+                continue;
+            }
             //2.是trtc设备,查看trtc状态是否为呼叫中1
             [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"DeviceId":device.DeviceId} success:^(id responseObject) {
                 NSString *tmpStr = (NSString *)responseObject[@"Data"];
@@ -105,7 +115,11 @@
                 if ([product.video_call_status.Value isEqualToString:@"1"] || [product.audio_call_status.Value isEqualToString:@"1"]) {
                     
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
-                    payloadParam.userid = product.userid ? product.userid.Value:device.DeviceId;
+                    if (product.userid.Value.length > 0) {
+                        payloadParam.userid = product.userid ? product.userid.Value:device.DeviceId;
+                    }else {
+                        payloadParam.userid = device.DeviceId;
+                    }
                     payloadParam.video_call_status = product.video_call_status.Value;
                     payloadParam.audio_call_status = product.audio_call_status.Value;
                     
@@ -128,7 +142,25 @@
 
 
 
+- (void)callDeviceFromPanel: (int)audioORvideo {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        return;
+    }
 
+    if (audioORvideo == 0) { //audio
+        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
+        _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
+        
+    }else if (audioORvideo == 1) { //video
+        
+        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:nil];
+        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
+    }
+}
 
 #pragma mark -TIoTTRTCSessionUIDelegate
 //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
@@ -141,13 +173,12 @@
     }
     
     
-#warning audio example
     if (_deviceParam.audio_call_status.intValue == 1) { //audio
         
         _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:deviceUserID];
         _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{
-
+            [[TIoTTRTCSessionManager sharedManager] enterRoom];
         }];
 
     }else if (_deviceParam.video_call_status.intValue == 1) { //video
@@ -155,12 +186,28 @@
         _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:deviceUserID];
         _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
-            
-            
-            
+            [[TIoTTRTCSessionManager sharedManager] enterRoom];
         }];
     }
     
     return NO;
+}
+
+- (void)showRemoteUser:(NSString *)remoteUserID {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        [_callAudioVC OCEnterUserWithUserID:remoteUserID];
+    }else {
+        [_callVideoVC OCEnterUserWithUserID:remoteUserID];
+    }
+}
+
+- (void)exitRoom:(NSString *)remoteUserID {
+    [_callAudioVC remoteDismiss];
+    [_callVideoVC remoteDismiss];
+    
+    _callAudioVC = nil;
+    _callVideoVC = nil;
 }
 @end
