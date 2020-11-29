@@ -113,7 +113,10 @@
                     qr.connId        = qrBlueObjs[2];
                     qr.deviceTimestamp = qrBlueObjs[3];
                     qr.signMethod    = qrBlueObjs[4];
-                    qr.signature     = qrBlueObjs[5];
+                    
+                    NSData *signatureBase64Decode = [NSString decodeBase64String:qrBlueObjs[5]];
+                    NSString *signature = [NSString hexStringFromData:signatureBase64Decode];
+                    qr.signature     = signature;
                     
                     [self QRCodeBindDevice:qr];
                     return;

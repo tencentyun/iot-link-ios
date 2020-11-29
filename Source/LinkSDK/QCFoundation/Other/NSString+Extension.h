@@ -84,6 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///base64解码
 + (id)base64Decode:(NSString *)base64;
 
+//base64解码，上面的方法不是单纯的base64解码
++ (NSData *)decodeBase64String:(NSString *)base64Str;
++ (NSString *)decodeBase64ToString:(NSString *)base64Str;
 
 /// HmacSha1->base64
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
@@ -108,6 +111,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 模糊匹配摄氏温度和华氏温度转换方法 (模糊匹配 以F: 华氏  C: 摄氏）
 + (NSString *)judepTemperatureWithUserConfig:(NSString *)configString templeUnit:(NSString *)unitString;
+
+// 十六进制转换为普通字符串的。
++ (NSString *)stringFromHexString:(NSString *)hexString;
+
+//普通字符串转换为十六进制的。
++ (NSString *)hexStringFromString:(NSString *)string;
++ (NSString *)hexStringFromData:(NSData *)data;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -36,6 +36,7 @@
 #import "TIoTAppEnvironment.h"
 #import "TIoTCoreUtil.h"
 #import "TIOTTRTCModel.h"
+#import "TIoTTRTCUIManage.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -461,6 +462,30 @@ static NSString *itemId3 = @"i_ooo454";
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+    
+    //主动呼叫，开始拨打
+    int audioORvideo = 0;//audio
+    BOOL isTRTCDevice = NO;
+    for (NSString *prototype in deviceReport.allKeys) {
+        
+        NSString *protoValue = deviceReport[prototype];
+        if ([prototype isEqualToString:@"video_call_status"] || [prototype isEqualToString:@"audio_call_status"]) {
+         
+            if (protoValue.intValue == 1) {
+                isTRTCDevice = YES;
+                
+                if ([prototype isEqualToString:@"audio_call_status"]) {
+                    audioORvideo = 0;
+                }else {
+                    audioORvideo = 1;
+                }
+                break;
+            }
+        }
+    }
+    if (isTRTCDevice) {
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo];
+    }
 }
 
 //收到上报

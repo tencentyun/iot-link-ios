@@ -118,6 +118,13 @@ static CGFloat weatherHeight = 10;
     [HXYNotice addUpdateDeviceListListener:self reaction:@selector(updateDevice:)];
     [HXYNotice addUpdateFamilyListListener:self reaction:@selector(getFamilyList)];
 
+    //进入前台需要轮训下trtc状态，防止漏接现象
+    [HXYNotice addAPPEnterForegroundLister:self reaction:@selector(appEnterForeground)];
+}
+
+- (void)appEnterForeground {
+    //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
+    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -461,9 +468,6 @@ static CGFloat weatherHeight = 10;
         
         [self updateDeviceStatus];
         
-        //轮训设备状态，查看trtc设备是否要呼叫我
-        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
-        
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -520,6 +524,11 @@ static CGFloat weatherHeight = 10;
             [self.dataArr removeAllObjects];
             [self.dataArr addObjectsFromArray:tmpArr];
             [self refreshUI];
+            
+            
+            //轮训设备状态，查看trtc设备是否要呼叫我
+            [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+            
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
