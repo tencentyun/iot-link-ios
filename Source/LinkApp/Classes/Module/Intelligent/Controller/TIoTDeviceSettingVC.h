@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, IntelligentEnterType) {
 @property (nonatomic, strong) TIoTAutoIntelligentModel *model; //智能主页传入的model，编辑时候必须用model更新数据再回传
 @property (nonatomic, assign) NSInteger actionArrayCount; //现有action数组个数
 @property (nonatomic, assign) NSInteger conditionArrayCount; //现有condition数组个数
+
+@property (nonatomic, strong) NSString *titleString; //编辑情况下，显示别名或设备名
 @end
 
 NS_ASSUME_NONNULL_END

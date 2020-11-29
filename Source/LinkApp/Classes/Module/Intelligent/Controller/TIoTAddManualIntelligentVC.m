@@ -471,6 +471,13 @@
             deviceSettingVC.valueString = model.dataValueString?:@"";
             deviceSettingVC.editActionIndex = indexPath.row;
             deviceSettingVC.model = model;
+            if (![NSString isNullOrNilWithObject:model.AliasName]) {
+                deviceSettingVC.titleString = model.AliasName;
+            }else {
+                if (![NSString isNullOrNilWithObject:model.DeviceName]) {
+                    deviceSettingVC.titleString = model.DeviceName;
+                }
+            }
             [self.navigationController pushViewController:deviceSettingVC animated:YES];
             
         }

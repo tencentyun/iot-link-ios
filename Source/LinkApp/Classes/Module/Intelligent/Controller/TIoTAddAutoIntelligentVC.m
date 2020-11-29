@@ -602,6 +602,13 @@ static NSInteger  const limit = 10;
                         editSettingVC.editActionIndex = indexPath.row - 1;
                         editSettingVC.valueString = autoModel.Property.conditionContentString?:@"";
                         editSettingVC.model = autoModel;
+                        if (![NSString isNullOrNilWithObject:autoModel.AliasName]) {
+                            editSettingVC.titleString = autoModel.AliasName;
+                        }else {
+                            if (![NSString isNullOrNilWithObject:autoModel.DeviceName]) {
+                                editSettingVC.titleString = autoModel.DeviceName;
+                            }
+                        }
                         [self.navigationController pushViewController:editSettingVC animated:YES];
                         
                     }else if ([autoModel.type isEqualToString:@"1"])  {
@@ -645,6 +652,13 @@ static NSInteger  const limit = 10;
                         editSettingVC.editActionIndex = indexPath.row - 1;
                         editSettingVC.valueString = autoModel.dataValueString?:@"";
                         editSettingVC.model = autoModel;
+                        if (![NSString isNullOrNilWithObject:autoModel.AliasName]) {
+                            editSettingVC.titleString = autoModel.AliasName;
+                        }else {
+                            if (![NSString isNullOrNilWithObject:autoModel.DeviceName]) {
+                                editSettingVC.titleString = autoModel.DeviceName;
+                            }
+                        }
                         [self.navigationController pushViewController:editSettingVC animated:YES];
                         
                     }else if ([autoModel.type isEqualToString:@"3"])  {

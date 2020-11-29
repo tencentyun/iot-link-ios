@@ -45,11 +45,8 @@
 
 - (void)setupUI {
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-    if (![NSString isNullOrNilWithObject:self.productModel.AliasName]) {
-        self.title = self.productModel.AliasName;
-    }else {
-        self.title = self.productModel.DeviceName;
-    }
+    
+    self.title = self.titleString?:@"";
     
     CGFloat kBottomViewHeight = 90;
     
