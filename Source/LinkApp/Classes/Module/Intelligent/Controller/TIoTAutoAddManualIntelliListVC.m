@@ -13,6 +13,8 @@
 #import "UIButton+LQRelayout.h"
 
 @interface TIoTAutoAddManualIntelliListVC ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic, strong) UIImageView *emptyImageView;
+@property (nonatomic, strong) UILabel *noManualIntelTipLabel;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) UIView *headerView;
@@ -41,6 +43,8 @@
     self.title = NSLocalizedString(@"auto_choice_manual_intelligent", @"选择手动智能");
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
+    [self addEmptyNomanualIntelliSceneTipView];
+    
     CGFloat KTopPadding = 16;
     
     CGFloat kBottomHeight = 90;
@@ -59,6 +63,29 @@
         }else {
             make.top.equalTo(self.view.mas_bottom).offset(64*kScreenAllHeightScale + KTopPadding);
         }
+    }];
+    
+}
+
+- (void)addEmptyNomanualIntelliSceneTipView {
+    [self.view addSubview:self.emptyImageView];
+    [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+10;
+            make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
+        } else {
+            // Fallback on earlier versions
+        }
+        make.left.equalTo(self.view).offset(60);
+        make.right.equalTo(self.view).offset(-60);
+        make.height.mas_equalTo(160);
+    }];
+    
+    [self.view addSubview:self.noManualIntelTipLabel];
+    [self.noManualIntelTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.emptyImageView.mas_bottom).offset(16);
+        make.left.right.equalTo(self.view);
+        make.centerX.equalTo(self.view);
     }];
     
 }
@@ -117,6 +144,14 @@
             
             [self.dataArray addObject:model];
             
+        }
+
+        if (self.dataArray.count == 0) {
+            self.tableView.hidden = YES;
+            self.bottomView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+            self.bottomView.hidden = NO;
         }
         
         [self.tableView reloadData];
@@ -214,6 +249,24 @@
 }
 
 #pragma mark - lazy loading
+
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        _emptyImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_placeHold"]];
+    }
+    return _emptyImageView;
+}
+
+- (UILabel *)noManualIntelTipLabel {
+    if (!_noManualIntelTipLabel) {
+        _noManualIntelTipLabel = [[UILabel alloc]init];
+        _noManualIntelTipLabel.text = NSLocalizedString(@"intelligent_noManualIntelliTip", @"暂无手动智能，请先添加");
+        _noManualIntelTipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _noManualIntelTipLabel.textColor= [UIColor colorWithHexString:@"#6C7078"];
+        _noManualIntelTipLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _noManualIntelTipLabel;
+}
 
 - (UITableView *)tableView {
     if (!_tableView) {

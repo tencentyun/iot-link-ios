@@ -795,3 +795,4 @@
 "intelligent_lose_efficacy" = "智能失效";
 "sceneName_overLenght" = "名称不能超过20个字符";
 "please_input_sceneName"= "请输入智能名称";
+"intelligent_noManualIntelliTip" = "暂无手动智能，请先添加";
