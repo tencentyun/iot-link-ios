@@ -47,7 +47,8 @@
     [self.contentView addSubview:self.selectedTipImage];
     [self.selectedTipImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.contentView.mas_right).offset(-kPaddingLeft);
-        make.width.height.mas_equalTo(27);
+        make.width.mas_equalTo(19);
+        make.height.mas_equalTo(13);
         make.centerY.equalTo(self.contentView.mas_centerY);
     }];
     
@@ -69,7 +70,7 @@
 - (void)setIsChoosed:(BOOL)isChoosed {
     _isChoosed = isChoosed;
     if (isChoosed) {
-        self.selectedTipImage.image = [UIImage imageNamed:@"new_distri_selected"];
+        self.selectedTipImage.image = [UIImage imageNamed:@"click_tick"];
     }else {
         self.selectedTipImage.image = [UIImage imageNamed:@""];
     }
@@ -85,7 +86,7 @@
     // Configure the view for the selected state
     if (self.isEditType == YES) {
         if (selected) {
-            self.selectedTipImage.image = [UIImage imageNamed:@"new_distri_selected"];
+            self.selectedTipImage.image = [UIImage imageNamed:@"click_tick"];
         }else {
             self.selectedTipImage.image = [UIImage imageNamed:@""];
         }
