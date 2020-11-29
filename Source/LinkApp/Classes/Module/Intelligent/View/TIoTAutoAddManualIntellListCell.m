@@ -47,8 +47,7 @@
     [self.contentView addSubview:self.selectedTipImage];
     [self.selectedTipImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.contentView.mas_right).offset(-kPaddingLeft);
-        make.width.mas_equalTo(19);
-        make.height.mas_equalTo(13);
+        make.width.height.mas_equalTo(22);
         make.centerY.equalTo(self.contentView.mas_centerY);
     }];
     
