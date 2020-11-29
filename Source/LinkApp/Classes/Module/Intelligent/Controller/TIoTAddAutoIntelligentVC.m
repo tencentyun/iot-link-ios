@@ -101,7 +101,7 @@ static NSInteger  const limit = 10;
         //获取所有添加列表
         [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":@"",@"Offset":@(0),@"Limit":@(10000)} success:^(id responseObject) {
             NSArray *devicePageList = [NSArray arrayWithArray:responseObject[@"DeviceList"]];
-            self.offset += devicePageList.count;
+//            self.offset += devicePageList.count;
             [self.allDeviceArray addObjectsFromArray:devicePageList];
            
             NSMutableArray *condTempArray = [NSMutableArray arrayWithArray:self.sceneDataDic[@"Conditions"]?:@[]]; //condition 操作数组
@@ -110,29 +110,61 @@ static NSInteger  const limit = 10;
             NSArray *condArray = [NSArray arrayWithArray:self.sceneDataDic[@"Conditions"]?:@[]]; //保存原始condition 数组
             NSArray *actiArray = [NSArray arrayWithArray:self.sceneDataDic[@"Actions"]?:@[]]; //保存原始action 数组
             
-            NSMutableArray *deviceProductIDArray = [NSMutableArray array]; //保存设备列表中所有productid
+            NSMutableSet *productCondiSet = [NSMutableSet new]; //设备列表所有productid 集合 (condition所需)
+            NSMutableSet *productActionSet = [NSMutableSet new]; //设备列表所有productid 集合 (action所需)
             
+//MARK:筛选condition设备（对于用户已经移除的设备进行删除）
             for (int i = 0; i<self.allDeviceArray.count; i++) {
                 NSDictionary *dic = self.allDeviceArray[i];
-                [deviceProductIDArray addObject:dic[@"ProductId"]];
+                [productCondiSet addObject:dic[@"ProductId"]];
+                [productActionSet addObject:dic[@"ProductId"]];
             }
             
-            //去除condition 中删除的设备
+            NSMutableArray *condiDArray = [NSMutableArray array]; //condition场景中productID数组
+            NSMutableSet *condProductIDSet = [NSMutableSet new]; //保存condition场景中productiD集合
+            
             for (int j = 0; j<condArray.count; j++) {
                 NSDictionary *condDic = condArray[j];
                 if ([condDic[@"CondType"] intValue] == 0) {
-                    if (![deviceProductIDArray containsObject:condDic[@"ProductId"]]) {
+                    [condiDArray addObject:condDic[@"Property"][@"ProductId"]?:@""];
+                    [condProductIDSet addObject:condDic[@"Property"][@"ProductId"]?:@""];
+                }
+                
+            }
+            
+            //从设备列表中筛选现在可用的交集（场景中可用的设备）
+            [productCondiSet intersectSet:condProductIDSet];
+            
+            //去除condition 中删除的设备
+            for (int i = 0; i<condArray.count; i++) {
+                NSDictionary *condDic = condArray[i];
+                if ([condDic[@"CondType"] intValue] == 0) {
+                    if (![productCondiSet containsObject:condDic[@"Property"][@"ProductId"]?:@""]) {
                         [condTempArray removeObject:condDic];
                     }
                 }
-
             }
+
+//MARK:筛选action设备（对于用户已经移除的设备进行删除）
+            NSMutableArray *actionIDArray = [NSMutableArray array]; //action场景中productiD数组
+            NSMutableSet *actionProjectIDSets = [NSMutableSet new]; //保存actioin场景中productiD集合
+            
+            for (int j =0; j<actiArray.count; j++) {
+                NSDictionary *actiDic = actiArray[j];
+                if ([actiDic[@"ActionType"] intValue] == 0) {
+                    [actionIDArray addObject:actiDic[@"ProductId"]?:@""];
+                    [actionProjectIDSets addObject:actiDic[@"ProductId"]?:@""];
+                }
+            }
+            
+            //从设备列表中筛选现在可用的交集（场景中可用的设备）
+            [productActionSet intersectSet:actionProjectIDSets];
             
             //去除action 中删除的设备
             for (int k = 0; k<actiArray.count; k++) {
                 NSDictionary *actiDic = actiArray[k];
                 if ([actiDic[@"ActionType"] intValue] == 0) {
-                    if (![deviceProductIDArray containsObject:actiDic[@"ProductId"]]) {
+                    if (![productActionSet containsObject:actiDic[@"ProductId"]?:@""]) {
                         [actiTempArray removeObject:actiDic];
                     }
                 }

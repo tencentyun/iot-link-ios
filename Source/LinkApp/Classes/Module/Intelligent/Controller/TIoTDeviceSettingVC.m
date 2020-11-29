@@ -373,23 +373,22 @@
                         
                         if (self.isAutoActionType == YES) {
                             
-                            NSString *mappKeyString = @"0";
                             NSString *idKeyString = weakSelf.baseModel.id?:@"";
-                            for (int i = 0; i<weakSelf.self.baseModel.define.mapping.allValues.count; i++) {
-                                if ([valueString isEqualToString:weakSelf.baseModel.define.mapping.allValues[i]]) {
-                                    mappKeyString = self.baseModel.define.mapping.allKeys[i];
-                                }
+                            NSDictionary *dataDic = [NSDictionary dictionary];
+                            if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
+                                NSString *value = [valueString stringByReplacingOccurrencesOfString:weakSelf.baseModel.define.unit withString:@""];
+                                dataDic = @{idKeyString:@(value.intValue)};
+                            }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
+                                dataDic = @{idKeyString:@(numberStr.floatValue)};
                             }
-
-                            NSDictionary *dataDic = @{idKeyString:mappKeyString};
-                            NSString *dataString = [NSString objectToJson:dataDic];
-
+                            NSString *dataJsonString = [NSString objectToJson:dataDic];
+                            
                             NSDictionary *autoDeviceDic = @{@"ActionType":@(0),
                                                             @"ProductId":weakSelf.productModel.ProductId,
                                                             @"DeviceName":weakSelf.productModel.DeviceName,
                                                             @"AliasName":weakSelf.productModel.AliasName,
                                                             @"IconUrl":weakSelf.productModel.IconUrl,
-                                                            @"Data":dataString?:@"",
+                                                            @"Data":dataJsonString?:@"",
                                                             @"type":@(2),
                                                             @"propertyModel":model,
                             };
