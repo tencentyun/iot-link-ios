@@ -362,6 +362,13 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
             deviceSettingVC.actionArrayCount = self.actionCount;
             deviceSettingVC.conditionArrayCount = self.conditionCount;
             deviceSettingVC.isAutoActionType = self.deviceAutoChoiceEnterActionType;
+            if (![NSString isNullOrNilWithObject:intelligentProjuctModel.AliasName]) {
+                deviceSettingVC.titleString = intelligentProjuctModel.AliasName;
+            }else {
+                if (![NSString isNullOrNilWithObject:intelligentProjuctModel.DeviceName]) {
+                    deviceSettingVC.titleString = intelligentProjuctModel.DeviceName;
+                }
+            }
             [self.navigationController pushViewController:deviceSettingVC animated:YES];
             
         }

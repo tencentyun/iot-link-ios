@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, IntelligentSceneType) {
 
 @protocol TIoTIntelligentSceneCellDelegate <NSObject>
 
-- (void)runManualSceneWithSceneID:(NSString *)sceneID;
+- (void)runManualSceneWithSceneID:(NSString *)sceneID withDic:(NSDictionary *)dataArraySelectDic;
 - (void)changeSwitchStatus:(UISwitch *)switchControl withAutoScendData:(NSDictionary *)autoSceneDic withIndexNum:(NSInteger)indexNum;
 
 @end

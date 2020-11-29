@@ -796,3 +796,5 @@
 "intelligent_noManualIntelliTip" = "暂无手动智能，请先添加";
 "maximum_twenty_action" = "最多添加20个任务";
 "maximum_twenty_condition" = "最多添加20个条件";
+"please_add_action" = "请添加任务";
+"no_intelligent_device" = "该设备暂无功能可作为智能任务，试试其他设备吧";

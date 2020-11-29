@@ -16,6 +16,8 @@
 #import "TIoTAutoIntelligentModel.h"
 
 @interface TIoTDeviceSettingVC ()<UITableViewDelegate,UITableViewDataSource>
+@property  (nonatomic, strong) UIImageView *emptyImageView;
+@property (nonatomic, strong) UILabel *noIntelliSettingTipLabel;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;      //task 操作自定义view
@@ -48,6 +50,8 @@
     
     self.title = self.titleString?:@"";
     
+    [self addEmptyIntelligentSettingTipView];
+    
     CGFloat kBottomViewHeight = 90;
     
     [self.view addSubview: self.tableView];
@@ -62,6 +66,35 @@
         make.height.mas_equalTo(kBottomViewHeight);
     }];
     
+}
+
+- (void)addEmptyIntelligentSettingTipView {
+    
+    CGFloat kPadding = 60;
+    
+    [self.view addSubview:self.emptyImageView];
+    [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            CGFloat kSpaceHeight = 100; //距离中心偏移量
+            if (![TIoTUIProxy shareUIProxy].iPhoneX) {
+                kSpaceHeight = 0;
+            }
+            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+kSpaceHeight;
+            make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
+        } else {
+            // Fallback on earlier versions
+        }
+        make.left.equalTo(self.view).offset(kPadding);
+        make.right.equalTo(self.view).offset(-kPadding);
+        make.height.mas_equalTo(160);
+    }];
+    
+    [self.view addSubview:self.noIntelliSettingTipLabel];
+    [self.noIntelliSettingTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.emptyImageView.mas_bottom).offset(16);
+        make.left.right.equalTo(self.emptyImageView);
+        make.centerX.equalTo(self.view);
+    }];
 }
 
 #pragma mark - UITableViewDelegate And UITableViewDataSource
@@ -507,6 +540,26 @@
 }
 
 #pragma mark - lazy loading
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        _emptyImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_noTask"]];
+    }
+    return _emptyImageView;
+}
+
+
+- (UILabel *)noIntelliSettingTipLabel {
+    if (!_noIntelliSettingTipLabel) {
+        _noIntelliSettingTipLabel = [[UILabel alloc]init];
+        _noIntelliSettingTipLabel.text = NSLocalizedString(@"no_intelligent_device", @"该设备暂无功能可作为智能任务，试试其他设备吧");
+        _noIntelliSettingTipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _noIntelliSettingTipLabel.textColor= [UIColor colorWithHexString:@"#6C7078"];
+        _noIntelliSettingTipLabel.textAlignment = NSTextAlignmentCenter;
+        _noIntelliSettingTipLabel.numberOfLines = 0;
+    }
+    return _noIntelliSettingTipLabel;
+}
+
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc]init];
@@ -683,6 +736,14 @@
             }
             NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":baseModel.name?:@"",@"value":valueSteing,@"needArrow":@"1"}];
             [_dataArr addObject:tempDic];
+        }
+        
+        if (_dataArr.count == 0) {
+            self.tableView.hidden = YES;
+            self.bottomView.hidden = YES;
+        }else {
+            self.tableView.hidden = NO;
+            self.bottomView.hidden = NO;
         }
         
         

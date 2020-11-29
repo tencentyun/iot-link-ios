@@ -155,9 +155,9 @@
 }
 
 - (void)runManualScene {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(runManualSceneWithSceneID:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(runManualSceneWithSceneID:withDic:)]) {
         NSString *sceneID =self.dic[@"SceneId"]?:@"";
-        [self.delegate runManualSceneWithSceneID:sceneID];
+        [self.delegate runManualSceneWithSceneID:sceneID withDic:self.dic];
     }
 }
 

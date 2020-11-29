@@ -28,6 +28,8 @@
 
 @property (nonatomic, strong) NSDictionary *sceneParamDic;
 @property (nonatomic, strong) NSArray *sectionTitleArray;
+
+@property (nonatomic, strong) UIView *backMaskView; //alertView 背景遮罩
 @end
 
 @implementation TIoTIntelligentVC
@@ -203,7 +205,7 @@
             //手动智能
             return [self createManaulTableView:tableView ForIndexPath:indexPath];
         }else {
-            //智能
+            //自动智能
             return [self createAutoTableView:tableView ForIndexPath:indexPath];
         }
         
@@ -277,17 +279,8 @@
         }
         [dic setValue:actionsArray forKey:@"Actions"];
         
-        TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-        [alertView alertWithTitle:NSLocalizedString(@"intelligent_lose_efficacy", @"智能失效") message:NSLocalizedString(@"noDevice_resetAction", @"当前智能设备丢失，请重新设置动作") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
-        alertView.doneAction = ^(NSString * _Nonnull text) {
-            //MARK:跳转手动详情
-            TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-            addManualTask.isSceneDetail = YES;
-            addManualTask.sceneManualDic = dic;
-            self.navigationController.tabBarController.tabBar.hidden = YES;
-            [self.navigationController pushViewController:addManualTask animated:YES];
-        };
-        [alertView showInView:[UIApplication sharedApplication].delegate.window];
+        //弹框提示
+        [self showNoDeviceAlertViewWithDictionary:dic];
         
     }else {
         //MARK:跳转手动详情
@@ -297,6 +290,33 @@
         self.navigationController.tabBarController.tabBar.hidden = YES;
         [self.navigationController pushViewController:addManualTask animated:YES];
     }
+}
+
+//设备缺失时候，弹框
+- (void)showNoDeviceAlertViewWithDictionary:(NSDictionary *)dic {
+    __weak typeof(self) Weakself = self;
+    TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    [alertView showSingleConfrimButton];
+    [alertView alertWithTitle:NSLocalizedString(@"intelligent_lose_efficacy", @"智能失效") message:NSLocalizedString(@"noDevice_resetAction", @"当前智能设备丢失，请重新设置动作") cancleTitlt:@"" doneTitle:NSLocalizedString(@"confirm", @"确定")];
+    alertView.doneAction = ^(NSString * _Nonnull text) {
+        //MARK:跳转手动详情
+        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+        addManualTask.isSceneDetail = YES;
+        addManualTask.sceneManualDic = dic;
+        Weakself.navigationController.tabBarController.tabBar.hidden = YES;
+        [Weakself.navigationController pushViewController:addManualTask animated:YES];
+    };
+    
+    self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+    [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+    [alertView showInView:self.backMaskView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+    [self.backMaskView addGestureRecognizer:tap];
+}
+
+- (void)hideAlertView {
+    [self.backMaskView removeFromSuperview];
 }
 
 - (void)didselectedAutoCellForIndexPath:(NSIndexPath *)indexPath {
@@ -489,9 +509,31 @@
     }
 }
 
-- (void)runManualSceneWithSceneID:(NSString *)sceneID {
+- (void)runManualSceneWithSceneID:(NSString *)sceneID withDic:(NSDictionary *)dataArraySelectDic {
     
-    [self requestRunManualScene:sceneID];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:dataArraySelectDic];
+    NSArray *actionsTemp = [NSArray arrayWithArray:dic[@"Actions"]?:@[]];
+    
+    if ([dic[@"Flag"] isEqual:@(1)]) { //手动添加： 设备异常  删除全部设备action 和 定时action
+        NSMutableArray *actionsArray = [NSMutableArray arrayWithArray:dic[@"Actions"]?:@[]] ;
+        for (int i = 0; i < actionsTemp.count; i++) {
+            NSDictionary *dic = actionsTemp[i];
+//                if ([dic[@"ActionType"] isEqual:@(0)]) {
+//
+//                }
+            [actionsArray removeObject:dic];
+            
+        }
+        [dic setValue:actionsArray forKey:@"Actions"];
+        
+        //弹框提示
+        [self showNoDeviceAlertViewWithDictionary:dic];
+        
+    }else {
+        //执行手动
+        [self requestRunManualScene:sceneID];
+    }
+    
 }
 
 #pragma mark - event

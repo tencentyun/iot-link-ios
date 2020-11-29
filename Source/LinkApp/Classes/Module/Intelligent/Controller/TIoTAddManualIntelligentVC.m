@@ -292,59 +292,59 @@
     }
 }
 
-- (void)loadData {
-
-#warning 不同类型需要继续添加
-    if (self.actionType == IntelligentActioinTypeManual) {
-        if (self.taskArray.count != 0 || self.taskArray != nil) {
-            self.tableView.hidden = NO;
-            self.nextButtonView.hidden = NO;
-            
-            if (self.isEdited == YES) {
-                if (self.valueStringIndexPath < self.valueArray.count) {
-                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
-                }
-            }else {
-//                for (TIoTPropertiesModel *model in self.taskArray) {
-//                    [self.dataArray insertObject:model atIndex:0];
+//- (void)loadData {
+//
+//#warning 不同类型需要继续添加
+//    if (self.actionType == IntelligentActioinTypeManual) {
+//        if (self.taskArray.count != 0 || self.taskArray != nil) {
+//            self.tableView.hidden = NO;
+//            self.nextButtonView.hidden = NO;
+//
+//            if (self.isEdited == YES) {
+//                if (self.valueStringIndexPath < self.valueArray.count) {
+//                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
 //                }
-                self.dataArray = self.taskArray;
-            }
-            [self.tableView reloadData];
-        }else {
-            if (self.dataArray.count == 0) {
-                self.tableView.hidden = YES;
-                self.nextButtonView.hidden = YES;
-            }else {
-                [self.tableView reloadData];
-            }
-        }
-    }else if (self.actionType == IntelligentActioinTypeDelay){
-        if (![NSString isNullOrNilWithObject:self.delayTimeString]) {
-            self.tableView.hidden = NO;
-            self.nextButtonView.hidden = NO;
-            if (self.isEdited == YES) {
-                if (self.valueStringIndexPath < self.valueArray.count) {
-                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
-                }
-            }else {
-                [self.dataArray addObject:self.delayTimeString];
-            }
-            
-            [self.tableView reloadData];
-        }else {
-            if (self.dataArray.count == 0) {
-                self.tableView.hidden = YES;
-                self.nextButtonView.hidden = YES;
-            }else {
-                self.tableView.hidden = NO;
-                self.nextButtonView.hidden = NO;
-                [self.tableView reloadData];
-            }
-        }
-    }
-    
-}
+//            }else {
+////                for (TIoTPropertiesModel *model in self.taskArray) {
+////                    [self.dataArray insertObject:model atIndex:0];
+////                }
+//                self.dataArray = self.taskArray;
+//            }
+//            [self.tableView reloadData];
+//        }else {
+//            if (self.dataArray.count == 0) {
+//                self.tableView.hidden = YES;
+//                self.nextButtonView.hidden = YES;
+//            }else {
+//                [self.tableView reloadData];
+//            }
+//        }
+//    }else if (self.actionType == IntelligentActioinTypeDelay){
+//        if (![NSString isNullOrNilWithObject:self.delayTimeString]) {
+//            self.tableView.hidden = NO;
+//            self.nextButtonView.hidden = NO;
+//            if (self.isEdited == YES) {
+//                if (self.valueStringIndexPath < self.valueArray.count) {
+//                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
+//                }
+//            }else {
+//                [self.dataArray addObject:self.delayTimeString];
+//            }
+//
+//            [self.tableView reloadData];
+//        }else {
+//            if (self.dataArray.count == 0) {
+//                self.tableView.hidden = YES;
+//                self.nextButtonView.hidden = YES;
+//            }else {
+//                self.tableView.hidden = NO;
+//                self.nextButtonView.hidden = NO;
+//                [self.tableView reloadData];
+//            }
+//        }
+//    }
+//
+//}
 
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.noManualTaskImageView];
@@ -691,7 +691,7 @@
         _addManualTaskButton.layer.borderWidth = 1;
         _addManualTaskButton.layer.borderColor = [UIColor colorWithHexString:@"#0066FF"].CGColor;
         _addManualTaskButton.layer.cornerRadius = 18;
-        [_addManualTaskButton setTitle:NSLocalizedString(@"addTast", @"添加任务") forState:UIControlStateNormal];
+        [_addManualTaskButton setTitle:NSLocalizedString(@"addDeveice_immediately", @"立即添加") forState:UIControlStateNormal];
         [_addManualTaskButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _addManualTaskButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_addManualTaskButton addTarget:self action:@selector(addManualTask) forControlEvents:UIControlEventTouchUpInside];
@@ -769,22 +769,27 @@
             
             _nextButtonView.confirmBlock = ^{
                 
-                NSMutableArray *actionArray = [NSMutableArray array];
-                for (TIoTAutoIntelligentModel *model in weakSelf.dataArray) {
-                    [actionArray addObject:[model yy_modelToJSONObject]];
-                }
-                
-                //MARK:请求修改手动场景接口
-                [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-                
-                NSDictionary *paramDic = @{@"Actions":actionArray,@"SceneId":weakSelf.sceneManualDic[@"SceneId"],@"SceneName":weakSelf.sceneNameString,@"SceneIcon":weakSelf.sceneImageUrl};
-                [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
-                    [MBProgressHUD dismissInView:weakSelf.view];
-                    [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                if (self.dataArray.count == 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"please_add_action", @"请添加任务") icon:@""];
+                }else {
                     
-                }];
+                    NSMutableArray *actionArray = [NSMutableArray array];
+                    for (TIoTAutoIntelligentModel *model in weakSelf.dataArray) {
+                        [actionArray addObject:[model yy_modelToJSONObject]];
+                    }
+                    
+                    //MARK:请求修改手动场景接口
+                    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                    
+                    NSDictionary *paramDic = @{@"Actions":actionArray,@"SceneId":weakSelf.sceneManualDic[@"SceneId"],@"SceneName":weakSelf.sceneNameString,@"SceneIcon":weakSelf.sceneImageUrl};
+                    [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
+                        [MBProgressHUD dismissInView:weakSelf.view];
+                        [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                        
+                    }];
+                }
             };
             
             
