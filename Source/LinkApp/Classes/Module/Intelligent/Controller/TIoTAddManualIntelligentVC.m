@@ -351,6 +351,9 @@
     [self.noManualTaskImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
             CGFloat kSpaceHeight = 100; //距离中心偏移量
+            if (![TIoTUIProxy shareUIProxy].iPhoneX) {
+                kSpaceHeight = 0;
+            }
             CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+kSpaceHeight;
             make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
         } else {
