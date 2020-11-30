@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, AutoEffectPeriodRepetaType) {
 
 @interface TIoTAutoEffectTimePriodView : UIView
 @property (nonatomic, assign) NSInteger defaultRepeatTimeNum;
+@property (nonatomic, strong) NSString *dayIDString; //用户保存生效时间段view回传给控制器的dayIDString,再进入时间段再传入
 @property (nonatomic, strong) NSMutableDictionary *effectTimeDic; //生效时间，时间周期 @{@"customTime":@"",@"repeatType":@""}
 @property (nonatomic, copy) AutoGenerateTimePeriodBlock generateTimePeriodBlock;
 @end

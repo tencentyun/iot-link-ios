@@ -40,7 +40,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     CGFloat kTopViewHeight = 50; //顶部高度
     CGFloat kCollectionHeight = 200;//collection高度
     CGFloat kIntervalHeight = 10; //底部view距离cellectionview间距
-    CGFloat kBottomViewHeight = 50;//底部view高度
+    CGFloat kBottomViewHeight = 56;//底部view高度
     CGFloat kHeight = kCollectionHeight + kBottomViewHeight;  //总高度
     if (@available (iOS 11.0, *)) {
         kHeight = kHeight +[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;

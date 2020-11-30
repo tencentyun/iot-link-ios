@@ -35,8 +35,9 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
 
 @property (nonatomic, assign) NSInteger timerSettedNum;//记录pick所选重复定时类型（和控制器显示的同步）
-@property (nonatomic, strong) NSArray *timerSettedIDArray; //用户选择的自定义数组（星期标识数组）
+@property (nonatomic, strong) NSMutableArray *timerSettedIDArray; //用户选择的自定义数组（星期标识数组）
 @property (nonatomic, assign) NSInteger repeatTimePeriodNum;//记录选择重复时间段block返回后的index
+@property (nonatomic, strong) TIoTAutoCustomTimingView *customTimeView;
 
 @property (nonatomic, assign) CGFloat kHeight;
 @property (nonatomic, strong) NSString *defaultChoiceDayIDString;
@@ -265,7 +266,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     [self.bottomBackView addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.bottomBackView);
-        make.height.mas_equalTo(KItemHeight);
+        make.height.mas_equalTo(kBottomViewHeight);
     }];
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -282,9 +283,30 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
 
 - (void)drawRect:(CGRect)rect {
     
-    [self didselectedCollection:self.collection indexPath:[NSIndexPath indexPathForItem:self.defaultRepeatTimeNum inSection:0]];
+    self.timerSettedNum = self.defaultRepeatTimeNum +1;
+    if (self.defaultRepeatTimeNum != 3) {
+        [self didselectedCollection:self.collection indexPath:[NSIndexPath indexPathForItem:self.defaultRepeatTimeNum inSection:0]];
+        
+    }
+    
 }
 
+- (void)setDayIDString:(NSString *)dayIDString {
+    _dayIDString = dayIDString;
+    
+    self.defaultChoiceDayIDString = dayIDString;
+    
+    [self.timerSettedIDArray removeAllObjects];
+    
+    if (![NSString isNullOrNilWithObject:dayIDString]) {
+        for(int i =0; i < [dayIDString length]; i++) {
+            NSString *temp = nil;
+            temp = [dayIDString substringWithRange:NSMakeRange(i,1)];
+            [self.timerSettedIDArray addObject:temp];
+        }
+    }
+    
+}
 
 #pragma mark - event
 
@@ -307,16 +329,20 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
             }
         }
         self.customTimeValueLabel.text = [NSString stringWithFormat:@"%@",customTime];
+        if (![customTime isEqualToString:@""]) {
+            self.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+            self.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+        }
     }
 }
 
 - (void)selectedTimePeriod:(UIButton *)button {
     if (button == self.allDayButton) {
-        self.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
-        self.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
-    }else if (button == self.customTimePriodButton) {
         self.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
         self.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+    }else if (button == self.customTimePriodButton) {
+        self.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+        self.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
         
         
         CGFloat kTopViewHeight = 50;
@@ -359,11 +385,11 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 WeakSelf.customTimeValueLabel.text = @"";
             }
             if (![NSString isNullOrNilWithObject:WeakSelf.customTimeValueLabel.text]) {
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
-            }else {
                 WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
                 WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+            }else {
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
             }
             
         };
@@ -376,11 +402,11 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
             
             if ([timeString isEqualToString:@"00:00-23:59"]) {
                 WeakSelf.customTimeValueLabel.text = @"";
-                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
-                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
-            }else {
                 WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
                 WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+            }else {
+                WeakSelf.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
+                WeakSelf.customIconImage.image =[UIImage imageNamed:@"single_seleccted"];
                 NSString *timeTempStr = timeString?:@"";
                 WeakSelf.customTimeValueLabel.text = [NSString stringWithFormat:@"（%@）",timeTempStr];
             }
@@ -424,7 +450,11 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     TIoTAutoIntellSettingCustomTimeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kAutoRepeatPeriodViewCellID forIndexPath:indexPath];
     cell.itemString = self.timePeriodArray[indexPath.row];
     cell.autoRepeatTimeType = AutoRepeatTimeTypeTimePeriod;
-    
+    if (self.defaultRepeatTimeNum == 3) {
+        if (self.defaultRepeatTimeNum == indexPath.row) {
+            cell.isSelected = YES;
+        }
+    }
     return cell;
 }
 
@@ -433,9 +463,13 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     cell.selected = YES;
     if (indexPath.row != self.timePeriodArray.count - 1) {
         self.timerSettedNum = indexPath.row + 1;
+        
+        TIoTAutoIntellSettingCustomTimeCell *cell = (TIoTAutoIntellSettingCustomTimeCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
+        cell.isSelected = NO;
+        
     }else if (indexPath.row == self.timePeriodArray.count - 1) {
         
-            CGFloat kBottomViewHeight = 50;//底部view高度
+            CGFloat kBottomViewHeight = 56;//底部view高度
             CGFloat kPickViewHeight = 260;//collection高度
             CGFloat kRepeatViewHeight = kPickViewHeight + kBottomViewHeight;  //自定义周期view高度
             if (@available (iOS 11.0, *)) {
@@ -444,34 +478,35 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
             
             __weak typeof(self)weakSelf = self;
             self.defaultRepeatTimeNum = self.timerSettedNum;
-            TIoTAutoCustomTimingView *customTimeView = [[TIoTAutoCustomTimingView alloc]init];
-            customTimeView.defaultTimeNum = self.defaultRepeatTimeNum;
-            customTimeView.autoRepeatType = AutoRepeatTypeEffectTimePeriod;
+            self.customTimeView = [[TIoTAutoCustomTimingView alloc]init];
+            self.customTimeView.defaultTimeNum = self.defaultRepeatTimeNum;
+            self.customTimeView.autoRepeatType = AutoRepeatTypeEffectTimePeriod;
             
-            customTimeView.autoKeepRecordSelectedBefore = ^(NSInteger defaultTimeNum) {
+            self.customTimeView.autoKeepRecordSelectedBefore = ^(NSInteger defaultTimeNum) {
                 [weakSelf didselectedCollection:weakSelf.collection indexPath:[NSIndexPath indexPathForItem:defaultTimeNum inSection:0]];
                 
                 weakSelf.hidden = NO;
+                weakSelf.customTimeView.hidden = YES;
                 
                 [weakSelf.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_offset(self.kHeight);
+                    make.height.mas_offset(weakSelf.kHeight);
                 }];
             };
             
-            customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
+            self.customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
                 NSLog(@"----%@",dateArray);
-
+                weakSelf.timerSettedIDArray = [dateArray mutableCopy];
                 [weakSelf.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_offset(self.kHeight);
+                    make.height.mas_offset(weakSelf.kHeight);
                 }];
                 
                 //MARK: 选择自定义时间段后，返回刷新当前view数据
-                        NSInteger indexNum = 3;
-                        NSMutableString *dateString = [[NSMutableString alloc]init];
-
-                        for (int i = 0;i < dateArray.count; i++) {
-                            [dateString appendString:dateArray[i]];
-                        }
+                NSInteger indexNum = 3;
+                NSMutableString *dateString = [[NSMutableString alloc]init];
+                
+                for (int i = 0;i < dateArray.count; i++) {
+                    [dateString appendString:dateArray[i]];
+                }
 
                 //MARK:选择重复周期，赋值给当前字符保存
                 weakSelf.defaultChoiceDayIDString = [dateString copy];
@@ -509,13 +544,13 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
 
                         }
 
-    //                    [weakSelf dismissView];
+//                        [weakSelf dismissView];
             };
         
-            customTimeView.selectedRepeatIndexNumber = weakSelf.timerSettedNum;
-    //        customTimeView.dateIDArray = weakSelf.timerSettedIDArray;
-            [weakSelf.contentView addSubview:customTimeView];
-            [customTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
+            self.customTimeView.selectedRepeatIndexNumber = weakSelf.timerSettedNum;
+            self.customTimeView.dateIDArray = weakSelf.timerSettedIDArray;
+            [weakSelf.contentView addSubview:self.customTimeView];
+            [self.customTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.bottom.equalTo(weakSelf.contentView);
                 make.height.mas_equalTo(kRepeatViewHeight);
             }];
@@ -555,20 +590,37 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 
                     [weakSelf.effectTimeDic setValue:@"" forKey:@"time"];
                 }else {
-                    
-                    NSMutableString *customStr = [NSMutableString stringWithString:weakSelf.customTimeValueLabel.text];
-                    if (![NSString isNullOrNilWithObject:weakSelf.customTimeValueLabel.text]) {
-                        if ([customStr containsString:@"（"]) {
-                            [customStr deleteCharactersInRange:NSMakeRange(0, 1)];
+                    if ([weakSelf.allDayIconImage.image isEqual:[UIImage imageNamed:@"single_seleccted"]]) {
+                        [weakSelf.effectTimeDic setValue:@"" forKey:@"time"];
+                    }else {
+                        NSMutableString *customStr = [NSMutableString stringWithString:weakSelf.customTimeValueLabel.text];
+                        if (![NSString isNullOrNilWithObject:weakSelf.customTimeValueLabel.text]) {
+                            if ([customStr containsString:@"（"]) {
+                                [customStr deleteCharactersInRange:NSMakeRange(0, 1)];
+                            }
+                            
+                            if ([customStr containsString:@"）"]) {
+                                [customStr deleteCharactersInRange:NSMakeRange(customStr.length-1, 1)];
+                            }
                         }
-                        
-                        if ([customStr containsString:@"）"]) {
-                            [customStr deleteCharactersInRange:NSMakeRange(customStr.length-1, 1)];
-                        }
+                        weakSelf.customTimeValueLabel.text = customStr;
+                        [weakSelf.effectTimeDic setValue:weakSelf.customTimeValueLabel.text forKey:@"time"];
                     }
-                    weakSelf.customTimeValueLabel.text = customStr;
-                    [weakSelf.effectTimeDic setValue:weakSelf.customTimeValueLabel.text forKey:@"time"];
+                    
                 }
+
+                            if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"1111111"]) { //每天
+//                                weakSelf.defaultChoiceDayIDString = @"1111111";
+                                [weakSelf.effectTimeDic setValue:@"0" forKey:@"repeatType"];
+                            }else if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"0111110"]) { //工作日
+//                                weakSelf.defaultChoiceDayIDString = @"0111110";
+                                [weakSelf.effectTimeDic setValue:@"1" forKey:@"repeatType"];
+                            }else if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"1000001"]) { //周末
+//                                weakSelf.defaultChoiceDayIDString = @"10000001";
+                                [weakSelf.effectTimeDic setValue:@"2" forKey:@"repeatType"];
+                            }else {
+                                [weakSelf.effectTimeDic setValue:@"3" forKey:@"repeatType"];
+                            }
                 
                 
                 weakSelf.generateTimePeriodBlock(weakSelf.effectTimeDic,weakSelf.defaultChoiceDayIDString);
@@ -607,6 +659,13 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                                                             NSLocalizedString(@"auto_repeatTiming_custom", @"自定义")]];
     }
     return _timePeriodArray;
+}
+
+- (NSMutableArray *)timerSettedIDArray {
+    if (!_timerSettedIDArray) {
+        _timerSettedIDArray = [NSMutableArray array];
+    }
+    return _timerSettedIDArray;
 }
 
 /*

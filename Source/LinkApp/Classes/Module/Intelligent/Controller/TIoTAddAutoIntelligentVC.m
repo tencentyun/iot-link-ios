@@ -755,6 +755,7 @@ static NSInteger  const limit = 10;
             }
             NSString *repeatTypeStr = [NSString stringWithFormat:@"%ld",(long)indexRepeatNum];
             timePeriodView.defaultRepeatTimeNum = indexRepeatNum;
+            timePeriodView.dayIDString = self.effectDayIDString;
             timePeriodView.effectTimeDic = [NSMutableDictionary dictionaryWithDictionary: @{@"customTime":timeStr,@"repeatType":repeatTypeStr}];
             [[UIApplication sharedApplication].delegate.window addSubview:timePeriodView];
             [timePeriodView mas_makeConstraints:^(MASConstraintMaker *make) {
