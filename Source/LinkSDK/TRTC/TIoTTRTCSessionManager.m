@@ -59,13 +59,13 @@
 }
 
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
-    _state = TIoTTRTCSessionType_pre;
-    _deviceParam = deviceParam;
-    
     if (deviceParam.userid == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
+    
+    _state = TIoTTRTCSessionType_pre;
+    _deviceParam = deviceParam;
     
     //开始准备进房间，通话中状态
     NSDictionary *param = @{@"DeviceId":deviceParam.userid};

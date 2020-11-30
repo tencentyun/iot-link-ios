@@ -464,20 +464,20 @@ static NSString *itemId3 = @"i_ooo454";
     }];
     
     //主动呼叫，开始拨打
-    int audioORvideo = 0;//audio
+    TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
     BOOL isTRTCDevice = NO;
     for (NSString *prototype in deviceReport.allKeys) {
         
         NSString *protoValue = deviceReport[prototype];
-        if ([prototype isEqualToString:@"video_call_status"] || [prototype isEqualToString:@"audio_call_status"]) {
+        if ([prototype isEqualToString:TIoTTRTCaudio_call_status] || [prototype isEqualToString:TIoTTRTCvideo_call_status]) {
          
             if (protoValue.intValue == 1) {
                 isTRTCDevice = YES;
                 
-                if ([prototype isEqualToString:@"audio_call_status"]) {
-                    audioORvideo = 0;
+                if ([prototype isEqualToString:TIoTTRTCaudio_call_status]) {
+                    audioORvideo = TIoTTRTCSessionCallType_audio;
                 }else {
-                    audioORvideo = 1;
+                    audioORvideo = TIoTTRTCSessionCallType_video;
                 }
                 break;
             }
