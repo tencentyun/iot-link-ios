@@ -1127,32 +1127,46 @@ static NSInteger  const limit = 10;
             [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"save", @"保存")]];
             __weak typeof(self)weakSelf = self;
             _nextButtonView.confirmBlock = ^{
-                //MARK:请求修改自动场景接口
-                [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-                
-                NSMutableArray *actionArray = [NSMutableArray array];
-                for (TIoTAutoIntelligentModel *model in weakSelf.actionArray) {
-                    [actionArray addObject:[model yy_modelToJSONObject]];
+
+                if (self.conditionArray.count == 0 && self.actionArray.count != 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"please_add_condition", @"请添加条件") icon:@""];
+                }else if (self.conditionArray.count != 0 && self.actionArray.count == 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"please_add_action", @"请添加任务") icon:@""];
+                }else if (self.conditionArray.count == 0 && self.actionArray.count == 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"error_add_condition_action", @"请添加任务和条件") icon:@""];
+                }else {
+                    TIoTAutoIntelligentModel *model = weakSelf.actionArray.lastObject;
+                    if (model.ActionType == 1) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"donot_setDelay_atLeast", @"延时不能设置为最后一个任务") icon:@""];
+                    }else {
+                        //MARK:请求修改自动场景接口
+                        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                        
+                        NSMutableArray *actionArray = [NSMutableArray array];
+                        for (TIoTAutoIntelligentModel *model in weakSelf.actionArray) {
+                            [actionArray addObject:[model yy_modelToJSONObject]];
+                        }
+                        NSMutableArray *conditionArray = [NSMutableArray array];
+                        for (TIoTAutoIntelligentModel *model in weakSelf.conditionArray) {
+                            [conditionArray addObject:[model yy_modelToJSONObject]];
+                        }
+                        
+                        NSDictionary *paramDic = @{@"Actions":actionArray,
+                                                   @"Conditions":conditionArray,
+                                                   @"AutomationId":weakSelf.autoSceneInfoDic[@"AutomationId"]?:@"",
+                                                   @"Icon":weakSelf.sceneImageUrl?:@"",
+                                                   @"Name":weakSelf.sceneNameString?:@"",
+                                                   @"Status":weakSelf.autoSceneInfoDic[@"Status"]?:@"",
+                                                   @"MatchType":@(weakSelf.selectedConditonNum)};
+                        [[TIoTRequestObject shared] post:AppModifyAutomation Param:paramDic success:^(id responseObject) {
+                            [MBProgressHUD dismissInView:weakSelf.view];
+                            [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
+                            [weakSelf.navigationController popViewControllerAnimated:YES];
+                        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                            
+                        }];
+                    }
                 }
-                NSMutableArray *conditionArray = [NSMutableArray array];
-                for (TIoTAutoIntelligentModel *model in weakSelf.conditionArray) {
-                    [conditionArray addObject:[model yy_modelToJSONObject]];
-                }
-                
-                NSDictionary *paramDic = @{@"Actions":actionArray,
-                                           @"Conditions":conditionArray,
-                                           @"AutomationId":weakSelf.autoSceneInfoDic[@"AutomationId"]?:@"",
-                                           @"Icon":weakSelf.sceneImageUrl?:@"",
-                                           @"Name":weakSelf.sceneNameString?:@"",
-                                           @"Status":weakSelf.autoSceneInfoDic[@"Status"]?:@"",
-                                           @"MatchType":@(weakSelf.selectedConditonNum)};
-                [[TIoTRequestObject shared] post:AppModifyAutomation Param:paramDic success:^(id responseObject) {
-                    [MBProgressHUD dismissInView:weakSelf.view];
-                    [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-                    
-                }];
             };
             
         }else {
@@ -1160,28 +1174,38 @@ static NSInteger  const limit = 10;
             __weak typeof(self)weakSelf = self;
             _nextButtonView.confirmBlock = ^{
                 
-                if (self.conditionArray.count == 0 || self.actionArray.count == 0) {
+                if (self.conditionArray.count == 0 && self.actionArray.count != 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"please_add_condition", @"请添加条件") icon:@""];
+                }else if (self.conditionArray.count != 0 && self.actionArray.count == 0) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"please_add_action", @"请添加任务") icon:@""];
+                }else if (self.conditionArray.count == 0 && self.actionArray.count == 0) {
                     [MBProgressHUD showMessage:NSLocalizedString(@"error_add_condition_action", @"请添加任务和条件") icon:@""];
                 }else {
-                    //MARK:组装好条件、任务、生效时间段 的请求参数 model，跳转到完善页面，添加场景背景URL和名称
                     
-                    NSMutableDictionary *autoDic = [NSMutableDictionary new];
-                    [autoDic setValue:@(1) forKey:@"Status"];
-                    [autoDic setValue:@(weakSelf.selectedConditonNum) forKey:@"MatchType"];
-                    [autoDic setValue:[weakSelf.conditionArray yy_modelToJSONObject]?:@"" forKey:@"Conditions"];
-                    [autoDic setValue:[weakSelf.actionArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
-                    [autoDic setValue:weakSelf.paramDic[@"FamilyId"]?:@"" forKey:@"FamilyId"];
-                    
-                    [autoDic setValue:weakSelf.effectDayIDString?:@"" forKey:@"EffectiveDays"];
-                    [autoDic setValue:weakSelf.effectBeginTimeString?:@"" forKey:@"EffectiveBeginTime"];
-                    [autoDic setValue:weakSelf.effectEndTimeString?:@"" forKey:@"EffectiveEndTime"];
-                    
-                    TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-                    complementVC.autoParamDic = autoDic;
-                    complementVC.isAuto = YES;
-                    [weakSelf.navigationController pushViewController:complementVC animated:YES];
-                    if (weakSelf.customSheet) {
-                        [weakSelf.customSheet removeFromSuperview];
+                    TIoTAutoIntelligentModel *model = weakSelf.actionArray.lastObject;
+                    if (model.ActionType == 1) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"donot_setDelay_atLeast", @"延时不能设置为最后一个任务") icon:@""];
+                    }else  {
+                        //MARK:组装好条件、任务、生效时间段 的请求参数 model，跳转到完善页面，添加场景背景URL和名称
+                        
+                        NSMutableDictionary *autoDic = [NSMutableDictionary new];
+                        [autoDic setValue:@(1) forKey:@"Status"];
+                        [autoDic setValue:@(weakSelf.selectedConditonNum) forKey:@"MatchType"];
+                        [autoDic setValue:[weakSelf.conditionArray yy_modelToJSONObject]?:@"" forKey:@"Conditions"];
+                        [autoDic setValue:[weakSelf.actionArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
+                        [autoDic setValue:weakSelf.paramDic[@"FamilyId"]?:@"" forKey:@"FamilyId"];
+                        
+                        [autoDic setValue:weakSelf.effectDayIDString?:@"" forKey:@"EffectiveDays"];
+                        [autoDic setValue:weakSelf.effectBeginTimeString?:@"" forKey:@"EffectiveBeginTime"];
+                        [autoDic setValue:weakSelf.effectEndTimeString?:@"" forKey:@"EffectiveEndTime"];
+                        
+                        TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+                        complementVC.autoParamDic = autoDic;
+                        complementVC.isAuto = YES;
+                        [weakSelf.navigationController pushViewController:complementVC animated:YES];
+                        if (weakSelf.customSheet) {
+                            [weakSelf.customSheet removeFromSuperview];
+                        }
                     }
                 }
             };

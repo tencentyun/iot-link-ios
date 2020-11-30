@@ -797,4 +797,6 @@
 "maximum_twenty_action" = "最多添加20个任务";
 "maximum_twenty_condition" = "最多添加20个条件";
 "please_add_action" = "请添加任务";
+"please_add_condition" = "请添加条件";
 "no_intelligent_device" = "该设备暂无功能可作为智能任务，试试其他设备吧";
+"donot_setDelay_atLeast" = "延时不能设置为最后一个任务";

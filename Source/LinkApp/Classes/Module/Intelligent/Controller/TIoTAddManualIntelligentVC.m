@@ -602,18 +602,14 @@
                 [delayTineDic setValue:timeString forKey:@"delayTime"];
                 [delayTineDic setValue:[NSString stringWithFormat:@"%d:%d",hourNumber,minutNumber] forKey:@"delayTimeFormat"];
                 TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:delayTineDic];
-                if (self.dataArray.count == 0) {
-                    [weakSelf.dataArray addObject:model];
-                }else {
-                    [weakSelf.dataArray insertObject:model atIndex:0];
-                }
+                [weakSelf.dataArray addObject:model];
                 weakSelf.tableView.hidden = NO;
                 weakSelf.nextButtonView.hidden = NO;
                 [weakSelf.tableView reloadData];
                 
 
                 [weakSelf.delayTimeStringArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
-                [weakSelf.valueArray insertObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu] atIndex:0];
+                [weakSelf.valueArray addObject:[NSString stringWithFormat:@"%@:%@",hourStr,minu]];
 
             };
             
@@ -734,23 +730,27 @@
                 if (self.dataArray.count == 0) {
                     [MBProgressHUD showMessage:NSLocalizedString(@"please_add_action", @"请添加任务") icon:@""];
                 }else {
-                    
-                    NSMutableArray *actionArray = [NSMutableArray array];
-                    for (TIoTAutoIntelligentModel *model in weakSelf.dataArray) {
-                        [actionArray addObject:[model yy_modelToJSONObject]];
-                    }
-                    
-                    //MARK:请求修改手动场景接口
-                    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
-                    
-                    NSDictionary *paramDic = @{@"Actions":actionArray,@"SceneId":weakSelf.sceneManualDic[@"SceneId"],@"SceneName":weakSelf.sceneNameString,@"SceneIcon":weakSelf.sceneImageUrl};
-                    [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
-                        [MBProgressHUD dismissInView:weakSelf.view];
-                        [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
-                        [weakSelf.navigationController popViewControllerAnimated:YES];
-                    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                    TIoTAutoIntelligentModel *model = weakSelf.dataArray.lastObject;
+                    if (model.ActionType == 1) {
+                        [MBProgressHUD showMessage:NSLocalizedString(@"donot_setDelay_atLeast", @"延时不能设置为最后一个任务") icon:@""];
+                    }else {
+                        NSMutableArray *actionArray = [NSMutableArray array];
+                        for (TIoTAutoIntelligentModel *model in weakSelf.dataArray) {
+                            [actionArray addObject:[model yy_modelToJSONObject]];
+                        }
                         
-                    }];
+                        //MARK:请求修改手动场景接口
+                        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+                        
+                        NSDictionary *paramDic = @{@"Actions":actionArray,@"SceneId":weakSelf.sceneManualDic[@"SceneId"],@"SceneName":weakSelf.sceneNameString,@"SceneIcon":weakSelf.sceneImageUrl};
+                        [[TIoTRequestObject shared] post:AppModifyScene Param:paramDic success:^(id responseObject) {
+                            [MBProgressHUD dismissInView:weakSelf.view];
+                            [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
+                            [weakSelf.navigationController popViewControllerAnimated:YES];
+                        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                            
+                        }];
+                    }
                 }
             };
             
@@ -759,17 +759,23 @@
             [_nextButtonView bottomViewType:IntelligentBottomViewTypeSingle withTitleArray:@[NSLocalizedString(@"next", @"下一步")]];
             __weak typeof(self)weakSelf = self;
             _nextButtonView.confirmBlock = ^{
-                if (weakSelf.customSheet) {
-                    [weakSelf.customSheet removeFromSuperview];
+                
+                TIoTAutoIntelligentModel *model = weakSelf.dataArray.lastObject;
+                if (model.ActionType == 1) {
+                    [MBProgressHUD showMessage:NSLocalizedString(@"donot_setDelay_atLeast", @"延时不能设置为最后一个任务") icon:@""];
+                }else {
+                    if (weakSelf.customSheet) {
+                        [weakSelf.customSheet removeFromSuperview];
+                    }
+                    
+                    NSMutableDictionary *manualDic = [NSMutableDictionary new];
+                    [manualDic setValue:[weakSelf.dataArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
+                    
+                    TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
+                    complementVC.manualParamDic = manualDic;
+                    complementVC.isAuto = NO;
+                    [weakSelf.navigationController pushViewController:complementVC animated:YES];
                 }
-                
-                NSMutableDictionary *manualDic = [NSMutableDictionary new];
-                [manualDic setValue:[weakSelf.dataArray yy_modelToJSONObject]?:@"" forKey:@"Actions"];
-                
-                TIoTComplementIntelligentVC *complementVC = [[TIoTComplementIntelligentVC alloc]init];
-                complementVC.manualParamDic = manualDic;
-                complementVC.isAuto = NO;
-                [weakSelf.navigationController pushViewController:complementVC animated:YES];
 
             };
         }
