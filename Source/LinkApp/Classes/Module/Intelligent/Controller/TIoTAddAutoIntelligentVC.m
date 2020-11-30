@@ -173,15 +173,16 @@ static NSInteger  const limit = 10;
     //MARK:条件
     //        NSArray *conditionTempArray = self.sceneDataDic[@"Conditions"]?:@[];
             NSArray *conditionTempArray = [condTempArray copy];
+            
             for (int j = 0;j<conditionTempArray.count;j++) {
-                
                 NSDictionary *dic = [NSDictionary dictionaryWithDictionary:conditionTempArray[j]];
                 TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:dic];
-
                 model.type = [NSString stringWithFormat:@"%ld",(long)model.CondType];
-
+                [self.conditionArray addObject:model];
+            }
+            
+            for (TIoTAutoIntelligentModel *model in self.conditionArray) {
                 NSString *productIDString = model.Property.ProductId?:@"";
-
                 if (model.CondType == 0) {
                     //MARK:设备状态
                     
@@ -217,17 +218,34 @@ static NSInteger  const limit = 10;
                                     model.Property.conditionContentString = valueString;
                                     model.propertyModel = propertieModel;
                                 
-                                    [self.conditionArray addObject:model];
-                                    [self.complementTableView reloadData];
-                                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+//                                    [self.conditionArray addObject:model];
                                 }
                                 
                             }
+                            
+                            if (self.conditionArray.count == conditionTempArray.count) {
+                                //按返回顺序排序
+//                                NSMutableArray *softTempArray = [NSMutableArray array];
+//                                for (int i = 0; i< conditionTempArray.count; i++) {
+//                                    NSDictionary *tempDic = conditionTempArray[i];
+//                                    for (int j = 0; j< self.conditionArray.count; j++) {
+//                                        TIoTAutoIntelligentModel *conditionModel = self.conditionArray[j];
+//                                        if ([tempDic[@"CondId"] isEqualToString:conditionModel.CondId]) {
+//                                            [softTempArray insertObject:conditionModel atIndex:0];
+//                                        }
+//                                    }
+//                                }
+//
+//                                self.conditionArray = [[[softTempArray reverseObjectEnumerator] allObjects] mutableCopy];
+                                
+                                [self.complementTableView reloadData];
+                                [self.tableView reloadData];
+                            }
+                            
                         }
                     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
                     }];
-                    
                 }else if ([model.type isEqualToString:@"1"]){
                     //MARK:定时
                     if ([model.Timer.Days isEqualToString:@"0000000"]) {
@@ -247,16 +265,120 @@ static NSInteger  const limit = 10;
                         model.Timer.choiceRepeatTimeNumner = 4;
                     }
                          
-                    [self.conditionArray addObject:model];
+//                    [self.conditionArray addObject:model];
                 }
+                
             }
+            
+//            for (int j = 0;j<conditionTempArray.count;j++) {
+//
+//                NSDictionary *dic = [NSDictionary dictionaryWithDictionary:conditionTempArray[j]];
+//                TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:dic];
+//
+//                model.type = [NSString stringWithFormat:@"%ld",(long)model.CondType];
+//
+//                NSString *productIDString = model.Property.ProductId?:@"";
+//
+//                if (model.CondType == 0) {
+//                    //MARK:设备状态
+//
+//                    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[productIDString]} success:^(id responseObject) {
+//
+//                        NSArray *tmpArr = responseObject[@"Products"];
+//                        if (tmpArr.count > 0) {
+//                            NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
+//                //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+//                            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+//                //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
+//                            NSLog(@"--!!!-%@",product);
+//
+//                            for (int i = 0; i <product.properties.count; i++) {
+//                                TIoTPropertiesModel *propertieModel = product.properties[i];
+//                                if ([propertieModel.id isEqualToString:model.Property.PropertyId]) {
+//
+//                                    NSString *valueString = @"";
+//                                    if ([propertieModel.define.type isEqualToString:@"enum"] || [propertieModel.define.type isEqualToString:@"bool"]) {
+//                                        NSString *keyString = [NSString stringWithFormat:@"%d",model.Property.Value.intValue];
+//                                        valueString = [propertieModel.define.mapping objectForKey:keyString];
+//                                    }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
+//
+//                                        if ([propertieModel.define.type isEqualToString:@"int"]) {
+//                                            valueString = [NSString stringWithFormat:@"%d%@",model.Property.Value.intValue,propertieModel.define.unit];
+//                                        }else if ([propertieModel.define.type isEqualToString:@"float"]) {
+//                                            valueString = [NSString stringWithFormat:@"%.1f%@",model.Property.Value.floatValue,propertieModel.define.unit];
+//                                        }
+//
+//                                    }
+//
+//                                    model.Property.conditionTitle = propertieModel.name;
+//                                    model.Property.conditionContentString = valueString;
+//                                    model.propertyModel = propertieModel;
+//
+//                                    [self.conditionArray addObject:model];
+//                                }
+//
+//                            }
+//
+//                            if (self.conditionArray.count == conditionTempArray.count) {
+//                                //按返回顺序排序
+//                                NSMutableArray *softTempArray = [NSMutableArray array];
+//                                for (int i = 0; i< conditionTempArray.count; i++) {
+//                                    NSDictionary *tempDic = conditionTempArray[i];
+//                                    for (int j = 0; j< self.conditionArray.count; j++) {
+//                                        TIoTAutoIntelligentModel *conditionModel = self.conditionArray[j];
+//                                        if ([tempDic[@"CondId"] isEqualToString:conditionModel.CondId]) {
+//                                            [softTempArray insertObject:conditionModel atIndex:0];
+//                                        }
+//                                    }
+//                                }
+//
+//                                self.conditionArray = [[[softTempArray reverseObjectEnumerator] allObjects] mutableCopy];
+//
+//                                [self.complementTableView reloadData];
+//                                [self.tableView reloadData];
+//                            }
+//
+//                        }
+//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//                    }];
+//
+//                }else if ([model.type isEqualToString:@"1"]){
+//                    //MARK:定时
+//                    if ([model.Timer.Days isEqualToString:@"0000000"]) {
+//                        model.Timer.timerKindSring = NSLocalizedString(@"auto_repeatTiming_once", @"执行一次");
+//                        model.Timer.choiceRepeatTimeNumner = 0;
+//                    }else if ([model.Timer.Days isEqualToString:@"1111111"]) {
+//                        model.Timer.timerKindSring = NSLocalizedString(@"everyday", @"每天");
+//                        model.Timer.choiceRepeatTimeNumner = 1;
+//                    }else if ([model.Timer.Days isEqualToString:@"0111110"]) {
+//                        model.Timer.timerKindSring = NSLocalizedString(@"work_day", @"工作日");
+//                        model.Timer.choiceRepeatTimeNumner = 2;
+//                    }else if ([model.Timer.Days isEqualToString:@"1000001"]) {
+//                        model.Timer.timerKindSring = NSLocalizedString(@"weekend", @"周末");
+//                        model.Timer.choiceRepeatTimeNumner = 3;
+//                    }else {
+//                        model.Timer.timerKindSring = NSLocalizedString(@"auto_repeatTiming_custom", @"自定义");
+//                        model.Timer.choiceRepeatTimeNumner = 4;
+//                    }
+//
+//                    [self.conditionArray addObject:model];
+//                }
+//            }
             
     //MARK:任务
     //        NSArray *actionTempArray = self.sceneDataDic[@"Actions"]?:@[];
+            //先按顺序添加全部数据
             NSArray *actionTempArray = [actiTempArray copy];
             for (NSDictionary *dic in actionTempArray) {
                 TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:dic];
                 model.type = [NSString stringWithFormat:@"%ld",model.ActionType+2];
+                [self.actionArray addObject:model];
+            }
+            
+            //根据筛选结果设置每个model对应数据
+            for (TIoTAutoIntelligentModel *model in self.actionArray) {
+                //MARK:设备动作
                 NSString *productIDString = model.ProductId?:@"";
                 
                 NSString * dataString= model.Data;
@@ -264,7 +386,6 @@ static NSInteger  const limit = 10;
                 NSString *keyString = dataDic.allKeys[0]; //只有一个键值对
                 NSNumber *number = dataDic[keyString];
                 if (model.ActionType == 0) {
-                    //MARK:设备动作
                     [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[productIDString]} success:^(id responseObject) {
                         
                         NSArray *tmpArr = responseObject[@"Products"];
@@ -299,18 +420,21 @@ static NSInteger  const limit = 10;
                                     model.dataValueString = valueString;
                                     model.propertyModel = propertieModel;
                                 
-                                    [self.actionArray addObject:model];
-                                    
-                                    [self.complementTableView reloadData];
-                                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+//                                    [self.actionArray addObject:model];
                                 }
                                 
                             }
+                            
+                            if (self.actionArray.count == actionTempArray.count) {
+
+                                [self.complementTableView reloadData];
+                                [self.tableView reloadData];
+                            }
+                            
                         }
                     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
                     }];
-                    
                     
                 }else if (model.ActionType == 1) {
                     //MARK:延时
@@ -321,10 +445,18 @@ static NSInteger  const limit = 10;
                     
                     NSString *timestr = @"";
                     if (hourNum == 0) {
-                        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
-                    }
-                    if (minutNum == 0) {
-                        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+                        
+                        if (minutNum == 0) {
+                        }else {
+                            timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+                        }
+                        
+                    }else {
+                        if (minutNum == 0) {
+                            timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+                        }else {
+                            timestr = [NSString stringWithFormat:@"%ld%@%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+                        }
                     }
                     
                     NSString *timeFormatStr = @"";
@@ -345,19 +477,144 @@ static NSInteger  const limit = 10;
                     model.delayTime = timestr ;   //本地添加 延时时间 加汉字
                     model.delayTimeFormat = timeFormatStr; //本地添加 延时时间 00:00
                     
-                    [self.actionArray addObject:model];
+//                    [self.actionArray addObject:model];
                 }else if (model.ActionType == 2) {
                     //MARK:场景
                     model.sceneName = model.DeviceName; //本地添加 场景名称
-                    [self.actionArray addObject:model];
+//                    [self.actionArray addObject:model];
                 }else if (model.ActionType == 3) {
                     //MARK:通知
                     NSNumber *number = self.sceneDataDic[@"Status"];
                     model.isSwitchTuron = number.intValue; //本地添加 通知开关 1 开 0 关
-                    [self.actionArray addObject:model];
+//                    [self.actionArray addObject:model];
                 }
                 
             }
+            
+            
+//            for (NSDictionary *dic in actionTempArray) {
+//                TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:dic];
+//                model.type = [NSString stringWithFormat:@"%ld",model.ActionType+2];
+//                NSString *productIDString = model.ProductId?:@"";
+//
+//                NSString * dataString= model.Data;
+//                NSDictionary *dataDic = [NSString jsonToObject:dataString];
+//                NSString *keyString = dataDic.allKeys[0]; //只有一个键值对
+//                NSNumber *number = dataDic[keyString];
+//                if (model.ActionType == 0) {
+//                    //MARK:设备动作
+//                    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[productIDString]} success:^(id responseObject) {
+//
+//                        NSArray *tmpArr = responseObject[@"Products"];
+//                        if (tmpArr.count > 0) {
+//                            NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
+//                //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+//                            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+//                //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
+//                            NSLog(@"--!!!-%@",product);
+//
+//                            for (int i = 0; i <product.properties.count; i++) {
+//                                TIoTPropertiesModel *propertieModel = product.properties[i];
+//                                if ([propertieModel.id isEqualToString:keyString]) {
+//
+//
+//                                    NSString *valueString = @"";
+//                                    if ([propertieModel.define.type isEqualToString:@"enum"] || [propertieModel.define.type isEqualToString:@"bool"]) {
+//
+//                                        NSString *keyString = [NSString stringWithFormat:@"%d",number.intValue];
+//                                        valueString = [propertieModel.define.mapping objectForKey:keyString];
+//                                    }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
+//
+//                                        if ([propertieModel.define.type isEqualToString:@"int"]) {
+//                                            valueString = [NSString stringWithFormat:@"%d%@",number.intValue,propertieModel.define.unit];
+//                                        }else if ([propertieModel.define.type isEqualToString:@"float"]) {
+//                                            valueString = [NSString stringWithFormat:@"%.1f%@",number.floatValue,propertieModel.define.unit];
+//                                        }
+//
+//                                    }
+//
+//                                    model.propertName = propertieModel.name;
+//                                    model.dataValueString = valueString;
+//                                    model.propertyModel = propertieModel;
+//
+//                                    [self.actionArray addObject:model];
+//
+//                                }
+//
+//                            }
+//
+//                            if (self.actionArray.count == actionTempArray.count) {
+////                                //按服务器返回顺序排序
+////                                NSMutableArray *softTempArray = [NSMutableArray array];
+////                                for (int i = 0; i< actionTempArray.count; i++) {
+////                                    NSDictionary *tempDic = actionTempArray[i];
+////                                    for (int j = 0; j< self.actionArray.count; j++) {
+////                                        TIoTAutoIntelligentModel *conditionModel = self.actionArray[j];
+////
+//////                                        if ([tempDic[@"CondId"] isEqualToString:conditionModel.CondId]) {
+//////                                            [softTempArray insertObject:conditionModel atIndex:0];
+//////                                        }
+////                                    }
+////                                }
+////
+////                                self.actionArray = [[[softTempArray reverseObjectEnumerator] allObjects] mutableCopy];
+//
+//                                [self.complementTableView reloadData];
+//                                [self.tableView reloadData];
+//                            }
+//
+//                        }
+//                    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//
+//                    }];
+//
+//
+//                }else if (model.ActionType == 1) {
+//                    //MARK:延时
+//                    //时间data为整数
+//
+//                    NSInteger hourNum = model.Data.intValue / (60*60);
+//                    NSInteger minutNum = (model.Data.intValue % (60*60))/60;
+//
+//                    NSString *timestr = @"";
+//                    if (hourNum == 0) {
+//                        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+//                    }
+//                    if (minutNum == 0) {
+//                        timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+//                    }
+//
+//                    NSString *timeFormatStr = @"";
+//                    if (hourNum<10) {
+//                        if (minutNum<10) {
+//                            timeFormatStr = [NSString stringWithFormat:@"0%ld:0%ld",(long)hourNum,(long)minutNum];
+//                        }else {
+//                            timeFormatStr = [NSString stringWithFormat:@"0%ld:%ld",(long)hourNum,(long)minutNum];
+//                        }
+//                    }else {
+//                        if (minutNum<10) {
+//                            timeFormatStr = [NSString stringWithFormat:@"%ld:0%ld",(long)hourNum,(long)minutNum];
+//                        }else {
+//                            timeFormatStr = [NSString stringWithFormat:@"%ld:%ld",(long)hourNum,(long)minutNum];
+//                        }
+//                    }
+//
+//                    model.delayTime = timestr ;   //本地添加 延时时间 加汉字
+//                    model.delayTimeFormat = timeFormatStr; //本地添加 延时时间 00:00
+//
+//                    [self.actionArray addObject:model];
+//                }else if (model.ActionType == 2) {
+//                    //MARK:场景
+//                    model.sceneName = model.DeviceName; //本地添加 场景名称
+//                    [self.actionArray addObject:model];
+//                }else if (model.ActionType == 3) {
+//                    //MARK:通知
+//                    NSNumber *number = self.sceneDataDic[@"Status"];
+//                    model.isSwitchTuron = number.intValue; //本地添加 通知开关 1 开 0 关
+//                    [self.actionArray addObject:model];
+//                }
+//
+//            }
             
             [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Image", @"智能图片"),@"value":NSLocalizedString(@"unset", @"未设置"),@"image":self.sceneImageUrl,@"needArrow":@"1"}]];
             [self.dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"setting_Intelligent_Name", @"智能名称"),@"value":self.sceneNameString,@"needArrow":@"1"}]];
