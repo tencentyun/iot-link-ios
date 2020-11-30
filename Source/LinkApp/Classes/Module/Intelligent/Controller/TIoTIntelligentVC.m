@@ -290,7 +290,7 @@
 //设备缺失时候，弹框
 - (void)showNoDeviceAlertViewWithDictionary:(NSDictionary *)dic {
     __weak typeof(self) Weakself = self;
-    TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+    TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:[UIImage imageNamed:@""]];
     [alertView showSingleConfrimButton];
     [alertView alertWithTitle:NSLocalizedString(@"intelligent_lose_efficacy", @"智能失效") message:NSLocalizedString(@"noDevice_resetAction", @"当前智能设备丢失，请重新设置动作") cancleTitlt:@"" doneTitle:NSLocalizedString(@"confirm", @"确定")];
     alertView.doneAction = ^(NSString * _Nonnull text) {
