@@ -283,7 +283,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
 
 - (void)drawRect:(CGRect)rect {
     
-    self.timerSettedNum = self.defaultRepeatTimeNum +1;
+    self.timerSettedNum = self.defaultRepeatTimeNum ;
     if (self.defaultRepeatTimeNum != 3) {
         [self didselectedCollection:self.collection indexPath:[NSIndexPath indexPathForItem:self.defaultRepeatTimeNum inSection:0]];
         
@@ -462,7 +462,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
     TIoTAutoIntellSettingCustomTimeCell *cell = (TIoTAutoIntellSettingCustomTimeCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.selected = YES;
     if (indexPath.row != self.timePeriodArray.count - 1) {
-        self.timerSettedNum = indexPath.row + 1;
+        self.timerSettedNum = indexPath.row;
         
         TIoTAutoIntellSettingCustomTimeCell *cell = (TIoTAutoIntellSettingCustomTimeCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
         cell.isSelected = NO;
@@ -533,21 +533,19 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                             
                         }else {
                             //自定义
-                            if (weakSelf.defaultRepeatTimeNum != weakSelf.repeatTimePeriodNum) {
-                                
-                            }else {
-                                indexNum = 3;
-                                weakSelf.repeatTimePeriodNum = indexNum;
-                                weakSelf.timerSettedNum = indexNum;
-                                [weakSelf didselectedCollection:weakSelf.collection indexPath:[NSIndexPath indexPathForItem:indexNum inSection:0]];
-                            }
+                            indexNum = 3;
+                            weakSelf.repeatTimePeriodNum = indexNum;
+                            weakSelf.timerSettedNum = indexNum;
+                            
+                            TIoTAutoIntellSettingCustomTimeCell *cell = (TIoTAutoIntellSettingCustomTimeCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
+                            cell.isSelected = YES;
 
                         }
 
 //                        [weakSelf dismissView];
             };
         
-            self.customTimeView.selectedRepeatIndexNumber = weakSelf.timerSettedNum;
+            self.customTimeView.selectedRepeatIndexNumber = weakSelf.timerSettedNum +1;
             self.customTimeView.dateIDArray = weakSelf.timerSettedIDArray;
             [weakSelf.contentView addSubview:self.customTimeView];
             [self.customTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -609,16 +607,16 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                     
                 }
 
-                            if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"1111111"]) { //每天
-//                                weakSelf.defaultChoiceDayIDString = @"1111111";
+                            if (weakSelf.timerSettedNum == 0) { //每天
+                                weakSelf.defaultChoiceDayIDString = @"1111111";
                                 [weakSelf.effectTimeDic setValue:@"0" forKey:@"repeatType"];
-                            }else if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"0111110"]) { //工作日
-//                                weakSelf.defaultChoiceDayIDString = @"0111110";
+                            }else if (weakSelf.timerSettedNum == 1) { //工作日
+                                weakSelf.defaultChoiceDayIDString = @"0111110";
                                 [weakSelf.effectTimeDic setValue:@"1" forKey:@"repeatType"];
-                            }else if ([weakSelf.defaultChoiceDayIDString isEqualToString:@"1000001"]) { //周末
-//                                weakSelf.defaultChoiceDayIDString = @"10000001";
+                            }else if (weakSelf.timerSettedNum == 2) { //周末
+                                weakSelf.defaultChoiceDayIDString = @"1000001";
                                 [weakSelf.effectTimeDic setValue:@"2" forKey:@"repeatType"];
-                            }else {
+                            }else if (weakSelf.timerSettedNum == 3){
                                 [weakSelf.effectTimeDic setValue:@"3" forKey:@"repeatType"];
                             }
                 

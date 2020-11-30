@@ -307,20 +307,11 @@
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        CGFloat kSpaceHeight = 100; //距离中心偏移量
-        if (@available(iOS 11.0, *)) {
-            
-            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-                kSpaceHeight = 150;
-            }
-            make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
-        } else {
-            // Fallback on earlier versions
-            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-                kSpaceHeight = 150;
-            }
-            make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
+        CGFloat kSpaceHeight = 55; //距离中心偏移量
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            kSpaceHeight = 100;
         }
+        make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
         make.height.mas_equalTo(160);
