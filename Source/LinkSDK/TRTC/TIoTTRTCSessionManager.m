@@ -59,13 +59,13 @@
 }
 
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
-    _state = TIoTTRTCSessionType_pre;
-    _deviceParam = deviceParam;
-    
     if (deviceParam.userid == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
+    
+    _state = TIoTTRTCSessionType_pre;
+    _deviceParam = deviceParam;
     
     //开始准备进房间，通话中状态
     NSDictionary *param = @{@"DeviceId":deviceParam.userid};
@@ -91,14 +91,6 @@
     
     //初始化trtc
     [[TRTCCalling shareInstance] login:model.SdkAppId.intValue user:model.UserId userSig:model.UserSig roomID:model.StrRoomId];
-    
-    //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
-    if ([self.uidelegate respondsToSelector:@selector(isActiveCalling:)]) {
-        if ([self.uidelegate isActiveCalling:_deviceParam.userid]) {
-    
-            [self enterRoom];
-        }
-    }
 }
 
 - (void)enterRoom {

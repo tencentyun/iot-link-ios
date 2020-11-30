@@ -525,14 +525,20 @@ static CGFloat weatherHeight = 10;
             [self.dataArr addObjectsFromArray:tmpArr];
             [self refreshUI];
             
-            
-            //轮训设备状态，查看trtc设备是否要呼叫我
-            [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
-            
+            //轮训设备状态，查看trtc设备是否要呼叫我,只执行一次，防止过度刷新
+            [self onceFrushTRTCDevice];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
     }
+}
+
+- (void)onceFrushTRTCDevice {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        //轮训设备状态，查看trtc设备是否要呼叫我
+        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+    });
 }
 
 - (void)createFamily

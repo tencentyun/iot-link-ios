@@ -171,11 +171,13 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         return blue
     }()
     
-    lazy var audio: TRTCCallingVideoViewController = {
-        let vc = TRTCCallingVideoViewController(ocUserID: "124")
-        vc.modalPresentationStyle = .fullScreen
-        return vc
-    }()
+//    lazy var audio: TRTCCallingAuidoViewController = {
+//        let vc = TRTCCallingAuidoViewController(ocUserID: "124")
+//    lazy var audio: TRTCCallingVideoViewController = {
+//        let vc = TRTCCallingVideoViewController(ocUserID: nil)
+//        vc.modalPresentationStyle = .fullScreen
+//        return vc
+//    }()
     
     @objc func jumpControl() {
 //        swipeAnimationView.play()
@@ -198,9 +200,15 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
 //        audio.OCEnterUser(userID: "123")
         
         
-                
-        TIoTAPPConfig.iot_topController.present(audio, animated: false, completion: nil)
+        let vc = TRTCCallingVideoViewController(ocUserID: "me")
+//        let vc = TRTCCallingAuidoViewController(ocUserID: "me")
+        vc.modalPresentationStyle = .fullScreen
         
+        TIoTAPPConfig.iot_topController.present(vc, animated: false, completion: nil)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+3, execute: {
+//            vc.OCEnterUser(userID: "friend")
+        })
 /*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in

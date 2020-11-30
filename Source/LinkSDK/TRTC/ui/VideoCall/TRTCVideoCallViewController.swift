@@ -88,6 +88,12 @@ class VideoCallingRenderView: UIView {
     }
 }
 
+@objc protocol TRTCCallingViewDelegate {
+
+    @objc func didAcceptJoinRoom()
+}
+
+
 class TRTCCallingVideoViewController: UIViewController, CallingViewControllerResponder {
     lazy var userList: [CallingUserModel] = []
     
@@ -102,6 +108,9 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
             }
         }
     }
+    
+    @objc weak var actionDelegate: TRTCCallingViewDelegate?
+    
     var dismissBlock: (()->Void)? = nil
     
     // 麦克风和听筒状态记录
@@ -118,7 +127,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     var codeTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .userInteractive))
     let callTimeLabel = UILabel()
     let localPreView = VideoCallingRenderView.init()
-    static var renderViews: [VideoCallingRenderView] = []
+    static var renderViews:VideoCallingRenderView? = VideoCallingRenderView.init()
     
     var curState: VideoCallingState {
         didSet {
@@ -157,7 +166,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     
     @objc init(ocUserID: String? = nil) {
         curSponsor = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
-                                      name: ocUserID ?? "0",
+                                      name: "Device",
                                       userId: ocUserID ?? "0",
                                       isEnter: false,
                                       isVideoAvaliable: false,
@@ -185,7 +194,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     
     deinit {
         TRTCCalling.shareInstance().closeCamara()
-        TRTCCallingVideoViewController.renderViews = []
+//        TRTCCallingVideoViewController.renderViews = nil
         UIApplication.shared.isIdleTimerDisabled = false
         debugPrint("deinit \(self)")
     }
@@ -252,16 +261,14 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
             if let dis = self.dismissBlock {
                 dis()
             }
+            
+            TRTCCalling.shareInstance().closeCamara()
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
     
     static func getRenderView(userId: String) -> VideoCallingRenderView? {
-        for renderView in renderViews {
-            if  renderView.userModel.userId == userId {
-                return renderView
-            }
-        }
-        return nil
+        return renderViews;
     }
 }
 
@@ -289,22 +296,25 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     
     //MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionCount == 2 {
-            return 0
+        if curState == .calling {
+            return 1
         }
-        return collectionCount
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCallUserCell", for: indexPath) as! VideoCallUserCell
         if (indexPath.row < avaliableList.count) {
-            let user = avaliableList[indexPath.row]
+            var user = avaliableList[indexPath.row]
+            if curState == .calling {
+                user.isEnter = true
+            }
             cell.userModel = user
 
-                localPreView.removeFromSuperview()
-                cell.addSubview(localPreView)
-                cell.sendSubviewToBack(localPreView)
-                localPreView.frame = CGRect(x: 0, y: 0, width: cell.bounds.width, height: cell.bounds.height)
+//                localPreView.removeFromSuperview()
+//                cell.addSubview(localPreView)
+//                cell.sendSubviewToBack(localPreView)
+//                localPreView.frame = CGRect(x: 0, y: 0, width: cell.bounds.width, height: cell.bounds.height)
             
         } else {
             cell.userModel = CallingUserModel()
@@ -344,7 +354,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     
     @objc func OCEnterUser(userID: String) {
         let user = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
-                                    name: userID,
+                                    name: "Device",
                                     userId: userID,
                                     isEnter: true,
                                     isVideoAvaliable: true,
@@ -352,15 +362,11 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
         self.enterUser(user: user)
     }
     func enterUser(user: CallingUserModel) {
-            let renderView = VideoCallingRenderView()
+
+        if let renderView = TRTCCallingVideoViewController.renderViews {
             renderView.userModel = user
             TRTCCalling.shareInstance().startRemoteView(userId: user.userId, view: renderView)
-            TRTCCallingVideoViewController.renderViews.append(renderView)
-            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(tap:)))
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(pan:)))
-            renderView.addGestureRecognizer(tap)
-            pan.require(toFail: tap)
-            renderView.addGestureRecognizer(pan)
+        }
 
         curState = .calling
         updateUser(user: user, animated: true)
@@ -368,9 +374,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     
     func leaveUser(user: CallingUserModel) {
         TRTCCalling.shareInstance().stopRemoteView(userId: user.userId)
-        TRTCCallingVideoViewController.renderViews = TRTCCallingVideoViewController.renderViews.filter {
-            $0.userModel.userId != user.userId
-        }
+        
         if let index = userList.firstIndex(where: { (model) -> Bool in
             model.userId == user.userId
         }) {
@@ -468,33 +472,39 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
             }
         }
         
-        if collectionCount == 2 {
-            if localPreView.superview != view { // 从9宫格变回来
-                setLocalViewInVCView(frame: CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
-                                                   y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0), shouldTap: true)
-            } else { //进来了一个人
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    if self.collectionCount == 2 {
-                        if self.localPreView.bounds.size.width != kSmallVideoViewWidth {
-                            setLocalViewInVCView(frame: CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
-                            y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0), shouldTap: true)
-                        }
-                    }
-                }
+        if curState == .calling || curState == .dailing{
+//            if localPreView.superview != view { // 从9宫格变回来
+//                setLocalViewInVCView(frame: CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+//                                                   y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0), shouldTap: true)
+//            } else { //进来了一个人
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                    if self.collectionCount == 2 {
+//                        if self.localPreView.bounds.size.width != kSmallVideoViewWidth {
+//                            setLocalViewInVCView(frame: CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+//                            y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0), shouldTap: true)
+//                        }
+//                    }
+//                }
+//            }
+            
+            if let otherRenderView = TRTCCallingVideoViewController.renderViews {
+                otherRenderView.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+                                               y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
+                view.insertSubview(otherRenderView, aboveSubview: localPreView)
             }
             
             
         } else { //用户退出只剩下自己（userleave引起的）
-            if collectionCount == 1 {
-                setLocalViewInVCView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-            }
+//            if collectionCount == 1 {
+                setLocalViewInVCView(frame: UIScreen.main.bounds)
+//            }
         }
     }
 }
 
 extension TRTCCallingVideoViewController {
     func setupUI() {
-        TRTCCallingVideoViewController.renderViews = []
+        
         ToastManager.shared.position = .bottom
         view.backgroundColor = .appBackGround
         var topPadding: CGFloat = 0
@@ -511,13 +521,9 @@ extension TRTCCallingVideoViewController {
         }
         view.addSubview(localPreView)
         localPreView.backgroundColor = .appBackGround
-        localPreView.frame = UIApplication.shared.keyWindow?.bounds ?? CGRect.zero
+        localPreView.frame = UIScreen.main.bounds
         localPreView.isUserInteractionEnabled = false
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(tap:)))
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(pan:)))
-        localPreView.addGestureRecognizer(tap)
-        pan.require(toFail: tap)
-        localPreView.addGestureRecognizer(pan)
+
         userCollectionView.isHidden = true
         
         setupSponsorPanel(topPadding: topPadding)
@@ -600,12 +606,18 @@ extension TRTCCallingVideoViewController {
             view.addSubview(accept)
             accept.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
-                TRTCCalling.shareInstance().accept()
+//                TRTCCalling.shareInstance().accept()
                 var curUser = CallingUserModel()
                 
                 self.enterUser(user: curUser)
                 self.curState = .calling
                 self.accept.isHidden = true
+
+                if let delegate = self.actionDelegate {
+                    delegate.didAcceptJoinRoom()
+                }
+//                TIoTTRTCSessionManager.shared().enterRoom()
+                
                 }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
         }
         
@@ -750,71 +762,5 @@ extension TRTCCallingVideoViewController {
         }
         // 启动时间源
         codeTimer.resume()
-    }
-    
-    @objc func handleTapGesture(tap: UIPanGestureRecognizer) {
-        if collectionCount != 2 {
-            return
-        }
-        
-        if tap.view == localPreView {
-            if localPreView.frame.size.width == kSmallVideoViewWidth {
-                
-                if let firstRender = TRTCCallingVideoViewController.getRenderView(userId: "user.userId") {
-                    UIView.animate(withDuration: 0.3, animations: { [weak firstRender, weak self] in
-                        guard let `self` = self else { return }
-                        self.localPreView.frame = self.view.frame
-                        firstRender?.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
-                                                    y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
-                    }) { [weak self] (result) in
-                        guard let `self` = self else { return }
-                        firstRender.removeFromSuperview()
-                        self.view.insertSubview(firstRender, aboveSubview: self.localPreView)
-                    }
-                }
-                
-            }
-        } else {
-            if let smallView = tap.view {
-                if smallView.frame.size.width == kSmallVideoViewWidth {
-                    UIView.animate(withDuration: 0.3, animations: { [weak smallView ,weak self] in
-                        guard let self = self else {return}
-                        smallView?.frame = self.view.frame
-                        self.localPreView.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
-                                                         y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
-                        
-                    }) { [weak self] (result) in
-                        guard let `self` = self else { return }
-                        smallView.removeFromSuperview()
-                        self.view.insertSubview(smallView, belowSubview: self.localPreView)
-                    }
-                }
-            }
-        }
-    }
-    
-    @objc func handlePanGesture(pan: UIPanGestureRecognizer) {
-        if let smallView = pan.view {
-            if smallView.frame.size.width == kSmallVideoViewWidth {
-                if (pan.state == .changed) {
-                    let translation = pan.translation(in: view)
-                    let newCenterX = translation.x + (smallView.center.x)
-                    let newCenterY = translation.y + (smallView.center.y)
-                    if ( newCenterX < (smallView.bounds.width) / 2) ||
-                        ( newCenterX > view.bounds.size.width - (smallView.bounds.width) / 2)  {
-                        return
-                    }
-                    if ( newCenterY < (smallView.bounds.height) / 2) ||
-                        (newCenterY > view.bounds.size.height - (smallView.bounds.height) / 2)  {
-                        return
-                    }
-                    
-                    UIView.animate(withDuration: 0.1) {
-                        smallView.center = CGPoint(x: newCenterX, y: newCenterY)
-                    }
-                    pan.setTranslation(.zero, in: view)
-                }
-            }
-        }
     }
 }

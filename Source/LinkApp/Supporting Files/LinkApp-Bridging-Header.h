@@ -16,3 +16,4 @@
 
 //TRTC
 #import "TRTCCalling.h"
+#import "TIoTTRTCSessionManager.h"
