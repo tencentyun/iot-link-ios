@@ -107,15 +107,17 @@
     [self.dataArr removeAllObjects];
     
     self.manualSceneArray = [NSMutableArray arrayWithArray:self.sceneManualDic[@"Actions"]?:@[]];
+    
     for (int i = 0; i<self.manualSceneArray.count; i++) {
-
         NSDictionary *tempDic = [NSDictionary dictionaryWithDictionary:self.manualSceneArray[i]];
-        NSNumber *actionTypeNum = tempDic[@"ActionType"]?:0;
+//        NSNumber *actionTypeNum = tempDic[@"ActionType"]?:0;
 
         TIoTAutoIntelligentModel *model = [TIoTAutoIntelligentModel yy_modelWithJSON:tempDic];
-        
-        if ( actionTypeNum.intValue == 0) { //设备
-            
+        [self.dataArray addObject:model];
+    }
+    
+    for (TIoTAutoIntelligentModel *model in self.dataArray) {
+        if (model.ActionType == 0) { //设备
             NSString *productIDString = model.ProductId?:@"";
             
             NSString * dataString= model.Data;
@@ -157,42 +159,52 @@
                             model.dataValueString = valueString;
                             model.propertyModel = propertieModel;
                         
-                            [self.dataArray addObject:model];
-                            [self.tableView reloadData];
+//                            [self.dataArray addObject:model];
                             
-                            if (self.dataArray.count == 0) {
-                                self.tableView.hidden = YES;
-                            }else {
-                                self.tableView.hidden = NO;
-                            }
                         }
                         
+                    }
+                    
+                    if (self.dataArray.count == self.manualSceneArray.count) {
+                        [self.tableView reloadData];
+                        
+                        if (self.dataArray.count == 0) {
+                            self.tableView.hidden = YES;
+                        }else {
+                            self.tableView.hidden = NO;
+                        }
                     }
                 }
             } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
             }];
+        }else if (model.ActionType == 1){ //延时
             
-        }else if (actionTypeNum.intValue == 1){ //延时
-           
-            NSNumber *timeSecond = tempDic[@"Data"]?:0;
+            NSNumber *timeSecond = [NSNumber numberWithInt:model.Data.intValue];
             NSInteger hourNum = timeSecond.intValue / (60*60);
             NSInteger minutNum = (timeSecond.intValue % (60*60))/60;
 
             NSString *timestr = @"";
             if (hourNum == 0) {
-                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+                
+                if (minutNum == 0) {
+                }else {
+                    timestr = [NSString stringWithFormat:@"%ld%@%@",(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+                }
+                
+            }else {
+                if (minutNum == 0) {
+                    timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
+                }else {
+                    timestr = [NSString stringWithFormat:@"%ld%@%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),(long)minutNum,NSLocalizedString(@"unit_m", @"分钟"),NSLocalizedString(@"delay_time_later", @"后")];
+                }
             }
-            if (minutNum == 0) {
-                timestr = [NSString stringWithFormat:@"%ld%@%@",(long)hourNum,NSLocalizedString(@"unit_h", @"小时"),NSLocalizedString(@"delay_time_later", @"后")];
-            }
+            
             model.delayTime = timestr;
-            [self.dataArray addObject:model];
+//            [self.dataArray addObject:model];
 
         }
-        
     }
-    
     
     if (self.dataArray.count == 0) {
         self.tableView.hidden = YES;
@@ -291,60 +303,6 @@
         }
     }
 }
-
-//- (void)loadData {
-//
-//#warning 不同类型需要继续添加
-//    if (self.actionType == IntelligentActioinTypeManual) {
-//        if (self.taskArray.count != 0 || self.taskArray != nil) {
-//            self.tableView.hidden = NO;
-//            self.nextButtonView.hidden = NO;
-//
-//            if (self.isEdited == YES) {
-//                if (self.valueStringIndexPath < self.valueArray.count) {
-//                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
-//                }
-//            }else {
-////                for (TIoTPropertiesModel *model in self.taskArray) {
-////                    [self.dataArray insertObject:model atIndex:0];
-////                }
-//                self.dataArray = self.taskArray;
-//            }
-//            [self.tableView reloadData];
-//        }else {
-//            if (self.dataArray.count == 0) {
-//                self.tableView.hidden = YES;
-//                self.nextButtonView.hidden = YES;
-//            }else {
-//                [self.tableView reloadData];
-//            }
-//        }
-//    }else if (self.actionType == IntelligentActioinTypeDelay){
-//        if (![NSString isNullOrNilWithObject:self.delayTimeString]) {
-//            self.tableView.hidden = NO;
-//            self.nextButtonView.hidden = NO;
-//            if (self.isEdited == YES) {
-//                if (self.valueStringIndexPath < self.valueArray.count) {
-//                    [self.valueArray replaceObjectAtIndex:self.valueStringIndexPath withObject:self.valueString?:@""];
-//                }
-//            }else {
-//                [self.dataArray addObject:self.delayTimeString];
-//            }
-//
-//            [self.tableView reloadData];
-//        }else {
-//            if (self.dataArray.count == 0) {
-//                self.tableView.hidden = YES;
-//                self.nextButtonView.hidden = YES;
-//            }else {
-//                self.tableView.hidden = NO;
-//                self.nextButtonView.hidden = NO;
-//                [self.tableView reloadData];
-//            }
-//        }
-//    }
-//
-//}
 
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.noManualTaskImageView];
