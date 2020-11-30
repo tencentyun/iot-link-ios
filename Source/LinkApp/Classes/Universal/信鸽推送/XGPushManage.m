@@ -136,7 +136,7 @@
         
         //信鸽过来，查看设备是否要呼叫 检测是否TRTC设备，是否在呼叫中
          
-        NSDictionary *userInfo = ((UNNotification *)notification).request.content.userInfo;
+        /*NSDictionary *userInfo = ((UNNotification *)notification).request.content.userInfo;
         NSString *custom_content = userInfo[@"custom"];
         
         TIOTtrtcPayloadParamModel *params = [TIOTtrtcPayloadParamModel yy_modelWithJSON:custom_content];
@@ -146,7 +146,7 @@
                 
                 [MBProgressHUD showError:reason];
             }];
-        }
+        }*/
             
     }
 }
