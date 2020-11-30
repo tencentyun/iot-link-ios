@@ -24,7 +24,7 @@
 #import "TIoTAppConfig.h"
 
 @interface TIoTAddManualIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTChooseDelayTimeVCDelegate>
-@property  (nonatomic, strong) UIImageView *noManualTaskImageView;
+@property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noManualTaskTipLabel;
 @property (nonatomic, strong) UIButton *addManualTaskButton;
 @property (nonatomic, strong) UITableView *tableView;
@@ -305,17 +305,21 @@
 }
 
 - (void)addEmptyIntelligentDeviceTipView {
-    [self.view addSubview:self.noManualTaskImageView];
-    [self.noManualTaskImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.emptyImageView];
+    [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        CGFloat kSpaceHeight = 100; //距离中心偏移量
         if (@available(iOS 11.0, *)) {
-            CGFloat kSpaceHeight = 100; //距离中心偏移量
-            if (![TIoTUIProxy shareUIProxy].iPhoneX) {
-                kSpaceHeight = 0;
+            
+            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                kSpaceHeight = 150;
             }
-            CGFloat kHeight = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top+kSpaceHeight;
-            make.centerY.equalTo(self.view.mas_centerY).offset(-kHeight);
+            make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         } else {
             // Fallback on earlier versions
+            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                kSpaceHeight = 150;
+            }
+            make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         }
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
@@ -324,7 +328,7 @@
     
     [self.view addSubview:self.noManualTaskTipLabel];
     [self.noManualTaskTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.noManualTaskImageView.mas_bottom).offset(16);
+        make.top.equalTo(self.emptyImageView.mas_bottom).offset(16);
         make.left.right.equalTo(self.view);
         make.centerX.equalTo(self.view);
     }];
@@ -625,11 +629,11 @@
 }
 
 #pragma mark - lazy loading
-- (UIImageView *)noManualTaskImageView {
-    if (!_noManualTaskImageView) {
-        _noManualTaskImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_noTask"]];
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        _emptyImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_noTask"]];
     }
-    return _noManualTaskImageView;
+    return _emptyImageView;
 }
 
 - (UILabel *)noManualTaskTipLabel {
