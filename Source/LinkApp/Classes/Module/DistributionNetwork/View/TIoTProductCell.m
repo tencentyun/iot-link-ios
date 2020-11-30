@@ -32,7 +32,8 @@
     self.imgView.image = [UIImage imageNamed:@"new_add_product_placeholder"];
     [self addSubview:_imgView];
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(65 * kScreenAllWidthScale);
+        make.height.mas_equalTo(74 * kScreenAllWidthScale);
+        make.left.right.equalTo(self.contentView);
         make.top.centerX.equalTo(self.contentView);
     }];
     
