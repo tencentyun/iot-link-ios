@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65d9a4c6_dc0bb3c9",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-30T05:11:17Z",
+      "side": 1,
+      "message": "int不易读，enum好一点也方便扩展。audio_call_status这种硬编码也可以统一管理下。",
+      "revId": "41f1a9e3ed01aaccfeb581d2d51b7d1c517e4013",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f737d07_0e0670ac",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-11-30T05:11:17Z",
+      "side": 1,
+      "message": "这里是不需要了吗",
+      "revId": "41f1a9e3ed01aaccfeb581d2d51b7d1c517e4013",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
