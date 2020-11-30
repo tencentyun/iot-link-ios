@@ -198,6 +198,8 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
             if let dis = self.dismissBlock {
                 dis()
             }
+            TRTCCalling.shareInstance().hangup()
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
 }

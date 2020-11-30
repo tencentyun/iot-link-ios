@@ -262,6 +262,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
                 dis()
             }
             
+            TRTCCalling.shareInstance().hangup()
             TRTCCalling.shareInstance().closeCamara()
             UIApplication.shared.isIdleTimerDisabled = false
         }
