@@ -256,11 +256,16 @@ extension TRTCCallingAuidoViewController {
             accept.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
                 TRTCCalling.shareInstance().accept()
-                var curUser = CallingUserModel()
                 
+                var curUser = CallingUserModel()
+                curUser.isEnter = true
                 self.enterUser(user: curUser)
+                
                 self.curState = .calling
                 self.accept.isHidden = true
+                
+                TIoTTRTCSessionManager.shared().enterRoom()
+                
                 }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
         }
         
@@ -457,7 +462,10 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioCallUserCell", for: indexPath) as! AudioCallUserCell
         if (indexPath.row < userList.count) {
-            let user = userList[indexPath.row]
+            var user = userList[indexPath.row]
+            if curState == .calling {
+                user.isEnter = true
+            }
             cell.userModel = user
         } else {
             cell.userModel = CallingUserModel()
@@ -489,7 +497,7 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
         let user = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
                                     name: userID,
                                     userId: userID,
-                                    isEnter: false,
+                                    isEnter: true,
                                     isVideoAvaliable: false,
                                     volume: 0.0)
         self.enterUser(user: user)
