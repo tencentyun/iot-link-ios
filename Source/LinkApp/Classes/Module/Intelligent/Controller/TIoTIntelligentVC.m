@@ -67,12 +67,17 @@
 - (void)setupUI {
     
     
+    
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self addEmptyIntelligentDeviceTipView];
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+//        make.left.top.right.equalTo(self.view);
+//        make.bottom.mas_equalTo(0);
+        
         make.left.right.bottom.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
