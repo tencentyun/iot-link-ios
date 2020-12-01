@@ -625,11 +625,11 @@ static NSInteger  const limit = 10;
                         editSettingVC.editActionIndex = indexPath.row - 1;
                         editSettingVC.valueString = autoModel.Property.conditionContentString?:@"";
                         editSettingVC.model = autoModel;
-                        if (![NSString isNullOrNilWithObject:autoModel.AliasName]) {
-                            editSettingVC.titleString = autoModel.AliasName;
+                        if (![NSString isNullOrNilWithObject:autoModel.Property.AliasName]) {
+                            editSettingVC.titleString = autoModel.Property.AliasName;
                         }else {
-                            if (![NSString isNullOrNilWithObject:autoModel.DeviceName]) {
-                                editSettingVC.titleString = autoModel.DeviceName;
+                            if (![NSString isNullOrNilWithObject:autoModel.Property.DeviceName]) {
+                                editSettingVC.titleString = autoModel.Property.DeviceName;
                             }
                         }
                         [self.navigationController pushViewController:editSettingVC animated:YES];
