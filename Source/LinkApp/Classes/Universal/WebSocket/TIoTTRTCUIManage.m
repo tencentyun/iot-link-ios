@@ -11,8 +11,8 @@
 #import "TIoTTRTCSessionManager.h"
 
 
-NSString *const TIoTTRTCaudio_call_status = @"audio_call_status";
-NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
+NSString *const TIoTTRTCaudio_call_status = @"_sys_audio_call_status";
+NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
 
 
 @interface TIoTTRTCUIManage ()<TRTCCallingViewDelegate> {
@@ -38,7 +38,7 @@ NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
 
 //该方法为5步骤，有三个方面会汇总到次，信鸽、websocket、轮训
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
-    if (deviceParam.userid == nil) {
+    if (deviceParam._sys_userid == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
@@ -46,7 +46,7 @@ NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
     _deviceParam = deviceParam;
     
     //1.先启动UI，再根据UI选择决定是否走calldevice逻辑
-    [self isActiveCalling:deviceParam.userid];
+    [self isActiveCalling:deviceParam._sys_userid];
 }
 
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
@@ -54,7 +54,7 @@ NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
     //2.根据UI决定是否进入房间
     
     //开始准备进房间，通话中状态
-    NSDictionary *param = @{@"DeviceId":_deviceParam.userid};
+    NSDictionary *param = @{@"DeviceId":_deviceParam._sys_userid};
     
     [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
         
@@ -116,16 +116,16 @@ NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
                 TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
                 
                 
-                if ([product.video_call_status.Value isEqualToString:@"1"] || [product.audio_call_status.Value isEqualToString:@"1"]) {
+                if ([product._sys_video_call_status.Value isEqualToString:@"1"] || [product._sys_audio_call_status.Value isEqualToString:@"1"]) {
                     
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
-                    if (product.userid.Value.length > 0) {
-                        payloadParam.userid = product.userid ? product.userid.Value:device.DeviceId;
+                    if (product._sys_userid.Value.length > 0) {
+                        payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
                     }else {
-                        payloadParam.userid = device.DeviceId;
+                        payloadParam._sys_userid = device.DeviceId;
                     }
-                    payloadParam.video_call_status = product.video_call_status.Value;
-                    payloadParam.audio_call_status = product.audio_call_status.Value;
+                    payloadParam._sys_video_call_status = product._sys_video_call_status.Value;
+                    payloadParam._sys_audio_call_status = product._sys_audio_call_status.Value;
                     
                     [self preEnterRoom:payloadParam failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                         NSLog(@"error--%@",error);
@@ -179,16 +179,16 @@ NSString *const TIoTTRTCvideo_call_status = @"video_call_status";
     
     
     //被呼叫了，点击接听后才进房间吧
-    if (_deviceParam.audio_call_status.intValue == 1) { //audio
+    if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
         
-        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:_deviceParam.userid];
+        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
         _callAudioVC.actionDelegate = self;
         _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
 
-    }else if (_deviceParam.video_call_status.intValue == 1) { //video
+    }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
         
-        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam.userid];
+        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
         _callVideoVC.actionDelegate = self;
         _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{

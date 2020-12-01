@@ -59,7 +59,7 @@
 }
 
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
-    if (deviceParam.userid == nil) {
+    if (deviceParam._sys_userid == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
@@ -68,7 +68,7 @@
     _deviceParam = deviceParam;
     
     //开始准备进房间，通话中状态
-    NSDictionary *param = @{@"DeviceId":deviceParam.userid};
+    NSDictionary *param = @{@"DeviceId":deviceParam._sys_userid};
 //    NSDictionary *tmpDic = @{@"ProductId":self.productId, @"DeviceName":self.deviceName};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppIotRTCCallDevice params:param useToken:YES];
@@ -97,7 +97,7 @@
     //进房间,如果是主叫直接进房间，如果是被叫等待UI确认后进房间
 
     CallType _calltype = CallType_Audio;
-    if (_deviceParam.video_call_status.intValue == 1) {
+    if (_deviceParam._sys_video_call_status.intValue == 1) {
         _calltype = CallType_Video;
     }
     [[TRTCCalling shareInstance] groupCall:@[_trtcModel.UserId] type:_calltype groupID:nil];
