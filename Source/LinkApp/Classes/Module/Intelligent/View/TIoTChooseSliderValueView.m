@@ -48,6 +48,7 @@
 @property (nonatomic, strong) UIButton *lesserButton;//小于
 
 @property (nonatomic, strong) NSString *compareValueString;
+@property (nonatomic, assign) CGFloat kReduceBtnY; //slider减号y高度
 @end
 
 @implementation TIoTChooseSliderValueView
@@ -74,6 +75,8 @@
     
     CGFloat kCompareBtnWidht = 45;
     CGFloat kCompareBtnHeight = 28;
+    
+    self.kReduceBtnY = (kViewHeight - kBottomViewHeight - kTopViewHeight)/2;
     
     CGFloat kSliderWidth = kScreenWidth - kPadding*2 - kLeftButtonWithHeight*2 - kSliderLeftSpace*2;
     self.sliderWidth = kSliderWidth;
@@ -133,8 +136,7 @@
     [self.sliderBackView addSubview:self.reduceButton];
     [self.reduceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.sliderBackView.mas_left).offset(kPadding);
-        CGFloat kReduceBtnY = (kViewHeight - kBottomViewHeight - kTopViewHeight)/2+20;
-        make.top.mas_equalTo(kReduceBtnY);
+        make.top.mas_equalTo(self.kReduceBtnY+20);
         make.width.height.mas_equalTo(kLeftButtonWithHeight);
     }];
 
@@ -420,6 +422,9 @@
         self.equalButton.hidden = NO;
         self.greaterButton.hidden = NO;
         self.lesserButton.hidden = NO;
+        [self.reduceButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.kReduceBtnY+20);
+        }];
         NSString *opStr = self.conditionModel.Property.Op?:@"";
         if ([opStr isEqualToString:@"eq"]) { //条件操作符  eq 等于  ne 不等于  gt 大于  lt 小于  ge 大等于  le 小等于
             [self clickCompareButton:self.equalButton];
@@ -441,6 +446,10 @@
         self.equalButton.hidden = YES;
         self.greaterButton.hidden = YES;
         self.lesserButton.hidden = YES;
+        
+        [self.reduceButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.kReduceBtnY);
+        }];
     }
 }
 

@@ -145,7 +145,7 @@
 - (void)addEmptyIntelligentDeviceTipView {
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        CGFloat kSpaceHeight = 100; //距离中心偏移量
+        CGFloat kSpaceHeight = 70; //距离中心偏移量
         if ([TIoTUIProxy shareUIProxy].iPhoneX) {
             kSpaceHeight = 150;
         }
