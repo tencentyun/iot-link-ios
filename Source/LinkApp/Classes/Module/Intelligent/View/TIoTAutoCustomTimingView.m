@@ -117,7 +117,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     
     if (self.autoKeepRecordSelectedBefore) {
         if (self.autoRepeatType == AutoRepeatTypeEffectTimePeriod) {
-            self.defaultTimeNum = self.defaultTimeNum -1;
+            self.defaultTimeNum = self.defaultTimeNum;
         }
         self.autoKeepRecordSelectedBefore(self.defaultTimeNum);
     }
@@ -224,7 +224,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
         _bottomView.firstBlock = ^{
             if (weakSelf.autoKeepRecordSelectedBefore) {
                 if (self.autoRepeatType == AutoRepeatTypeEffectTimePeriod) {
-                    weakSelf.defaultTimeNum = weakSelf.defaultTimeNum -1;
+                    weakSelf.defaultTimeNum = weakSelf.defaultTimeNum;
                 }
                 weakSelf.autoKeepRecordSelectedBefore(weakSelf.defaultTimeNum);
             }
