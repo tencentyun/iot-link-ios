@@ -174,8 +174,11 @@ static NSString *heartBeatReqID = @"5002";
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
     
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
-//    model.params.userid = deviceInfo[@"DeviceId"];
-    if (model.params.audio_call_status.intValue == 1 || model.params.video_call_status.intValue == 1) {
+    if (model.params._sys_userid.length < 1) {
+        model.params._sys_userid = deviceInfo[@"DeviceId"];
+    }
+
+    if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
         //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
         [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
             
