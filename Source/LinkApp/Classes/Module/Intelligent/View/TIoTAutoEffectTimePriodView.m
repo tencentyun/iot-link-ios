@@ -341,7 +341,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
         self.allDayIconImage.image =[UIImage imageNamed:@"single_seleccted"];
         self.customIconImage.image =[UIImage imageNamed:@"single_unseleccted"];
         self.customTimeValueLabel.text = @"";
-        
+        [self.effectTimeDic setValue:@"00:00-23:59" forKey:@"customTime"];
         
     }else if (button == self.customTimePriodButton) {
         self.allDayIconImage.image =[UIImage imageNamed:@"single_unseleccted"];

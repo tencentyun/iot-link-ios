@@ -750,8 +750,8 @@ static NSInteger  const limit = 10;
                     self.effectBeginTimeString = timeArray.firstObject?:@"";
                     self.effectEndTimeString = timeArray.lastObject?:@"";
                 }else {
-                    self.effectBeginTimeString = @"";
-                    self.effectEndTimeString = @"";
+                    self.effectBeginTimeString = @"00:00";
+                    self.effectEndTimeString = @"23:59";
                 }
                 self.effectDayIDString = dayIDString;
                 
@@ -1157,7 +1157,10 @@ static NSInteger  const limit = 10;
                                                    @"Icon":weakSelf.sceneImageUrl?:@"",
                                                    @"Name":weakSelf.sceneNameString?:@"",
                                                    @"Status":weakSelf.autoSceneInfoDic[@"Status"]?:@"",
-                                                   @"MatchType":@(weakSelf.selectedConditonNum)};
+                                                   @"MatchType":@(weakSelf.selectedConditonNum),
+                                                   @"EffectiveDays":weakSelf.effectDayIDString,
+                                                   @"EffectiveBeginTime":weakSelf.effectBeginTimeString,
+                                                   @"EffectiveEndTime":weakSelf.effectEndTimeString,};
                         [[TIoTRequestObject shared] post:AppModifyAutomation Param:paramDic success:^(id responseObject) {
                             [MBProgressHUD dismissInView:weakSelf.view];
                             [MBProgressHUD showMessage:NSLocalizedString(@"modify_intelligent_success", @"修改智能成功") icon:@""];
