@@ -265,7 +265,13 @@ static NSUInteger limit = 10; //每次请求数据个数限制
         }
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
-        make.height.mas_equalTo(160);
+        make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.height.mas_equalTo(190);
+        }else {
+            make.height.mas_equalTo(160);
+        }
+
     }];
     
     [self.view addSubview:self.noIntelligentLogTipLabel];

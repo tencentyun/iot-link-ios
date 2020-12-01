@@ -147,7 +147,12 @@
         make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
-        make.height.mas_equalTo(160);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.height.mas_equalTo(190);
+        }else {
+            make.height.mas_equalTo(160);
+        }
+        
     }];
     
     [self.view addSubview:self.noIntelligentTipLabel];

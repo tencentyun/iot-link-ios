@@ -70,11 +70,19 @@
 - (void)addEmptyNomanualIntelliSceneTipView {
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        CGFloat kSpaceHeight = 100; //距离中心偏移量
+        CGFloat kSpaceHeight = 55; //距离中心偏移量
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            kSpaceHeight = 0;
+        }
         make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         make.left.equalTo(self.view).offset(60);
         make.right.equalTo(self.view).offset(-60);
-        make.height.mas_equalTo(160);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.height.mas_equalTo(190);
+        }else {
+            make.height.mas_equalTo(160);
+        }
+
     }];
     
     [self.view addSubview:self.noManualIntelTipLabel];
