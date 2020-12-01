@@ -309,7 +309,7 @@
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         CGFloat kSpaceHeight = 55; //距离中心偏移量
         if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-            kSpaceHeight = 0;
+            kSpaceHeight = 80;
         }
         make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
         make.left.equalTo(self.view).offset(60);

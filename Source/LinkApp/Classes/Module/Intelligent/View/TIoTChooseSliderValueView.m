@@ -416,7 +416,10 @@
     // Drawing code
     self.viewTitle.text = self.model.name?:@"";
     
-    if (self.isEdited == YES && self.isActionType == NO) {
+    if (self.isAutoIntellignet == 1 && self.isActionType == NO) {
+        self.equalButton.hidden = NO;
+        self.greaterButton.hidden = NO;
+        self.lesserButton.hidden = NO;
         NSString *opStr = self.conditionModel.Property.Op?:@"";
         if ([opStr isEqualToString:@"eq"]) { //条件操作符  eq 等于  ne 不等于  gt 大于  lt 小于  ge 大等于  le 小等于
             [self clickCompareButton:self.equalButton];
@@ -434,6 +437,10 @@
         }else if ([opStr isEqualToString:@"le"]) {
 
         }
+    }else {
+        self.equalButton.hidden = YES;
+        self.greaterButton.hidden = YES;
+        self.lesserButton.hidden = YES;
     }
 }
 

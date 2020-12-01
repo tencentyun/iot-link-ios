@@ -307,7 +307,7 @@
         self.sliderValueView = [[TIoTChooseSliderValueView alloc]init];
         self.sliderValueView.model = self.baseModel;
         self.sliderValueView.conditionModel = self.model;
-        self.sliderValueView.isEdited = self.isEdited;
+        self.sliderValueView.isAutoIntellignet = self.enterType;
         self.sliderValueView.isActionType = self.isAutoActionType;
         
         self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr, NSString * _Nonnull compareValue) {

@@ -24,7 +24,7 @@ typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *m
 @property (nonatomic, strong) TIoTPropertiesModel *model;
 @property (nonatomic, copy) SliderTaskValueBlock sliderTaskValueBlock;
 
-@property (nonatomic, assign) BOOL isEdited; //编辑
+@property (nonatomic, assign) NSInteger isAutoIntellignet;; //自动智能 0 手动 1自动
 @property (nonatomic, assign) BOOL isActionType; // no condition yes action
 @property (nonatomic, strong) TIoTAutoIntelligentModel *conditionModel; //编辑传入的model
 @end
