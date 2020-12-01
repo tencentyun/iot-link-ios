@@ -57,16 +57,16 @@
     
     [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
     
-    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     
     self.fd_interactivePopDisabled = YES;
+    self.fd_prefersNavigationBarHidden = YES;
     
     [self.view addSubview:self.pageView];
     [self.pageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.mas_equalTo(0);
+        make.leading.trailing.mas_equalTo(0);
         make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight);
-        make.height.mas_equalTo(kScreenHeight - [TIoTUIProxy shareUIProxy].navigationBarHeight);
-        
+        make.bottom.mas_equalTo(0);
     }];
     
     CMPageTitleConfig *config = [CMPageTitleConfig defaultConfig];

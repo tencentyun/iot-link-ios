@@ -97,6 +97,12 @@ static NSUInteger limit = 10; //每次请求数据个数限制
 
 - (void)setupViewsUI {
     
+//    if (@available(iOS 11.0, *)) {
+//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//    }else {
+//        self.automaticallyAdjustsScrollViewInsets = NO;
+//    }
+    
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self addEmptyIntelligentLogTipView];
