@@ -159,7 +159,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 - (void)receiveChangeAddDeviceType:(NSNotification *)noti{
     NSInteger deviceType = [noti.object integerValue];
     
-    [self changedConfigTypeWithProducedID:self.selectedProducetedID withDeviceType:deviceType];
+    [self changedConfigTypeWithProducedID:self.selectedProducetedID?:@"" withDeviceType:deviceType];
 }
 
 - (void)changedConfigTypeWithProducedID:(NSString *)producedID withDeviceType:(NSInteger)type {
