@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTAutoIntelligentModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model,NSString *numberStr);
+typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model,NSString *numberStr,NSString *compareValue);
 
 /**
  物模型 int 和 float 是slider滑动选择样式
@@ -22,6 +23,10 @@ typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *m
 @interface TIoTChooseSliderValueView : UIView
 @property (nonatomic, strong) TIoTPropertiesModel *model;
 @property (nonatomic, copy) SliderTaskValueBlock sliderTaskValueBlock;
+
+@property (nonatomic, assign) BOOL isEdited; //编辑
+@property (nonatomic, assign) BOOL isActionType; // no condition yes action
+@property (nonatomic, strong) TIoTAutoIntelligentModel *conditionModel; //编辑传入的model
 @end
 
 NS_ASSUME_NONNULL_END

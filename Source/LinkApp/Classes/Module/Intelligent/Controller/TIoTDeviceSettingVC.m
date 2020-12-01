@@ -301,8 +301,11 @@
         __weak typeof(self) weakSelf = self;
         self.sliderValueView = [[TIoTChooseSliderValueView alloc]init];
         self.sliderValueView.model = self.baseModel;
+        self.sliderValueView.conditionModel = self.model;
+        self.sliderValueView.isEdited = self.isEdited;
+        self.sliderValueView.isActionType = self.isAutoActionType;
         
-        self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr) {
+        self.sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr, NSString * _Nonnull compareValue) {
             if ([NSString isNullOrNilWithObject:valueString]) {
                 NSString *valueTempStr = weakSelf.dataArr[indexPath.row][@"value"];
                 if ([valueTempStr isEqualToString:NSLocalizedString(@"unset", @"未设置")]) {
@@ -331,7 +334,7 @@
                     if (self.isAutoActionType == NO) {
                         
                         weakSelf.model.Property.conditionContentString = valueString;
-                        
+                        weakSelf.model.Property.Op = compareValue;
                         if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
                             weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.intValue];
                         }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
@@ -431,7 +434,7 @@
                                                                   @"AliasName":weakSelf.productModel.AliasName,
                                                                   @"IconUrl":weakSelf.productModel.IconUrl,
                                                                   @"PropertyId":weakSelf.baseModel.id,
-                                                                  @"Op":@"eq",
+                                                                  @"Op":compareValue,
                                                                   @"Value":[NSNumber numberWithFloat:numberStr.floatValue],
                                                                   @"conditionTitle":weakSelf.baseModel.name,
                                                                   @"conditionContentString":valueString};

@@ -10,6 +10,7 @@
 #import "UIView+XDPExtension.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTIntelligentBottomActionView.h"
+#import "UIButton+LQRelayout.h"
 
 @implementation TIoTCustomSlider
 
@@ -42,6 +43,11 @@
 @property (nonatomic, strong) UIButton *increaseButton;
 @property (nonatomic, assign) NSInteger kvalueLabPadding;
 
+@property (nonatomic, strong) UIButton *greaterButton;//大于
+@property (nonatomic, strong) UIButton *equalButton;//等于
+@property (nonatomic, strong) UIButton *lesserButton;//小于
+
+@property (nonatomic, strong) NSString *compareValueString;
 @end
 
 @implementation TIoTChooseSliderValueView
@@ -56,6 +62,8 @@
 
 - (void)setupSubViewUI {
     
+    self.compareValueString = @"gt";
+    
     CGFloat kBottomViewHeight = 56;
     CGFloat kViewHeight = 236 + kBottomViewHeight;
     CGFloat kTopViewHeight = 48;
@@ -63,6 +71,9 @@
     CGFloat kPadding = 30;
     CGFloat kLeftButtonWithHeight = 28;
     CGFloat kSliderLeftSpace = 20;
+    
+    CGFloat kCompareBtnWidht = 45;
+    CGFloat kCompareBtnHeight = 28;
     
     CGFloat kSliderWidth = kScreenWidth - kPadding*2 - kLeftButtonWithHeight*2 - kSliderLeftSpace*2;
     self.sliderWidth = kSliderWidth;
@@ -122,7 +133,7 @@
     [self.sliderBackView addSubview:self.reduceButton];
     [self.reduceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.sliderBackView.mas_left).offset(kPadding);
-        CGFloat kReduceBtnY = (kViewHeight - kBottomViewHeight - kTopViewHeight)/2;
+        CGFloat kReduceBtnY = (kViewHeight - kBottomViewHeight - kTopViewHeight)/2+20;
         make.top.mas_equalTo(kReduceBtnY);
         make.width.height.mas_equalTo(kLeftButtonWithHeight);
     }];
@@ -164,7 +175,43 @@
         make.width.mas_equalTo(kSliderWidth);
         make.height.mas_equalTo(40);
     }];
+
+    self.greaterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.greaterButton.layer.cornerRadius = 13;
+    [self.greaterButton setButtonFormateWithTitlt:NSLocalizedString(@"auto_gt", @"大于") titleColorHexString:kTemperatureHexColor font:[UIFont wcPfRegularFontOfSize:16]];
+    [self.greaterButton addTarget:self action:@selector(clickCompareButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sliderBackView addSubview:self.greaterButton];
+    [self.greaterButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.slider.mas_left).offset(-4);
+        make.top.equalTo(self.sliderBackView.mas_top).offset(30);
+        make.width.mas_equalTo(kCompareBtnWidht);
+        make.height.mas_equalTo(kCompareBtnHeight);
+    }];
     
+    self.equalButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.equalButton.layer.cornerRadius = 13;
+    [self.equalButton setButtonFormateWithTitlt:NSLocalizedString(@"auto_equal", @"等于") titleColorHexString:kTemperatureHexColor font:[UIFont wcPfRegularFontOfSize:16]];
+    [self.equalButton addTarget:self action:@selector(clickCompareButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sliderBackView addSubview:self.equalButton];
+    [self.equalButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(kCompareBtnWidht);
+        make.height.mas_equalTo(kCompareBtnHeight);
+        make.top.equalTo(self.greaterButton.mas_top);
+        make.centerX.equalTo(self.sliderBackView.mas_centerX);
+    }];
+    
+    self.lesserButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.lesserButton.layer.cornerRadius = 13;
+    [self.lesserButton setButtonFormateWithTitlt:NSLocalizedString(@"auto_lt", @"auto_lt") titleColorHexString:kTemperatureHexColor font:[UIFont wcPfRegularFontOfSize:16]];
+    [self.lesserButton addTarget:self action:@selector(clickCompareButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sliderBackView addSubview:self.lesserButton];
+    [self.lesserButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(kCompareBtnWidht);
+        make.height.mas_equalTo(kCompareBtnHeight);
+        make.top.equalTo(self.greaterButton.mas_top);
+        make.right.equalTo(self.slider.mas_right).offset(4);
+    }];
+
     [self.contentView addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.contentView);
@@ -180,9 +227,42 @@
         make.bottom.equalTo(self.contentView.mas_top);
     }];
     
+    [self clickCompareButton:self.greaterButton];
+    
 }
 
 #pragma mark - event
+
+- (void)clickCompareButton:(UIButton *)sender {
+    if (sender == self.greaterButton) {
+        self.compareValueString = @"gt";
+        [self.greaterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.greaterButton setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
+        
+        [self.equalButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.equalButton setBackgroundColor:[UIColor whiteColor]];
+        [self.lesserButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.lesserButton setBackgroundColor:[UIColor whiteColor]];
+    }else if (sender == self.equalButton) {
+        self.compareValueString = @"eq";
+        [self.equalButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.equalButton setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
+        
+        [self.greaterButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.greaterButton setBackgroundColor:[UIColor whiteColor]];
+        [self.lesserButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.lesserButton setBackgroundColor:[UIColor whiteColor]];
+    }else if (sender == self.lesserButton) {
+        self.compareValueString = @"lt";
+        [self.lesserButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.lesserButton setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
+        
+        [self.greaterButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.greaterButton setBackgroundColor:[UIColor whiteColor]];
+        [self.equalButton setTitleColor:[UIColor colorWithHexString:kTemperatureHexColor] forState:UIControlStateNormal];
+        [self.equalButton setBackgroundColor:[UIColor whiteColor]];
+    }
+}
 
 - (void)reduceValue {
     
@@ -320,7 +400,7 @@
                     valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
                 }
                 
-                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%.1f",weakSelf.slider.value]);
+                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%.1f",weakSelf.slider.value],weakSelf.compareValueString);
             }
             
             [weakSelf dismissView];
@@ -335,6 +415,26 @@
 - (void)drawRect:(CGRect)rect {
     // Drawing code
     self.viewTitle.text = self.model.name?:@"";
+    
+    if (self.isEdited == YES && self.isActionType == NO) {
+        NSString *opStr = self.conditionModel.Property.Op?:@"";
+        if ([opStr isEqualToString:@"eq"]) { //条件操作符  eq 等于  ne 不等于  gt 大于  lt 小于  ge 大等于  le 小等于
+            [self clickCompareButton:self.equalButton];
+            
+        }else if ([opStr isEqualToString:@"ne"]) {
+
+        }else if ([opStr isEqualToString:@"gt"]) {
+            [self clickCompareButton:self.greaterButton];
+            
+        }else if ([opStr isEqualToString:@"lt"]) {
+            [self clickCompareButton:self.lesserButton];
+            
+        }else if ([opStr isEqualToString:@"ge"]) {
+
+        }else if ([opStr isEqualToString:@"le"]) {
+
+        }
+    }
 }
 
 @end

@@ -192,7 +192,7 @@
         }
         
         NSString *contentStr = autoIntellModel.Property.conditionContentString?:@"";
-        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@:%@%@",nameStr,op,contentStr];
+        self.taskSubtitleLabel.text = [NSString stringWithFormat:@"%@: %@ %@",nameStr,op,contentStr];
         NSString *urlString = autoIntellModel.Property.IconUrl?:@"";
         [self.taskTipImageView setImageWithURLStr:urlString placeHolder:@"new_add_product_placeholder"];
         
