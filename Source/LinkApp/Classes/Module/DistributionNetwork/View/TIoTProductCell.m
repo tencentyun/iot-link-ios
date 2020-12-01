@@ -30,6 +30,7 @@
     
     self.imgView = [[UIImageView alloc] init];
     self.imgView.image = [UIImage imageNamed:@"new_add_product_placeholder"];
+    self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:_imgView];
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(68 * kScreenAllWidthScale);
