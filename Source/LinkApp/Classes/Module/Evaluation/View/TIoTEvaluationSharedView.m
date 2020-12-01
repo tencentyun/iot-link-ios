@@ -255,6 +255,8 @@
                 [[WxManager sharedWxManager] shareMiniProgramToWXSceneSessionWithTitle:weakSelf.sharedFriendDic[@"articleTitle"]?:@"" description:nil path:weakSelf.sharedPathString webpageUrl:weakSelf.wechatSharedURLString userName:@"gh_2aa6447f2b7c" thumbImage:thumbImage thumbImageUrl:nil complete:^(id obj, NSError *error) {
                     TIoTLog(@"-!!--%@",error);
                 }];
+                
+                [weakSelf dismissView];
             });
         });
     }else {
@@ -268,6 +270,8 @@
     pastboard.string = self.webShareURLString;
     
     [MBProgressHUD showSuccess:NSLocalizedString(@"evaluation_copyLink_success", @"已复制到剪切板")];
+
+    [self dismissView];
     
 }
 

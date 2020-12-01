@@ -25,6 +25,7 @@
 @property (nonatomic, strong,readwrite) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) NSDictionary *bridgeMethodDic;
+@property (nonatomic, strong) TIoTEvaluationSharedView * shareView;
 @end
 
 @implementation TIoTWebVC
@@ -295,14 +296,14 @@
     if (message.body == nil || [message.body isEqual:[NSNull null]] || [message.body isKindOfClass:[NSNull class]]) {
         
     }else {
-        TIoTEvaluationSharedView * shareView = [[TIoTEvaluationSharedView alloc]init];
-        shareView.sharedFriendDic = self.sharedMessageDic;
-        shareView.sharedPathString = message.body[@"wechatPagePath"]?:@"";
-        shareView.webShareURLString = message.body[@"webShareUrl"]?:@"";
-        shareView.wechatSharedURLString = message.body[@"wechatShareUrl"]?:@"";
-        shareView.shareImage = message.body[@"shareImg"]?:@"";;
-        [self.view addSubview:shareView];
-        [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+        self.shareView = [[TIoTEvaluationSharedView alloc]init];
+        self.shareView.sharedFriendDic = self.sharedMessageDic;
+        self.shareView.sharedPathString = message.body[@"wechatPagePath"]?:@"";
+        self.shareView.webShareURLString = message.body[@"webShareUrl"]?:@"";
+        self.shareView.wechatSharedURLString = message.body[@"wechatShareUrl"]?:@"";
+        self.shareView.shareImage = message.body[@"shareImg"]?:@"";;
+        [self.view addSubview:self.shareView];
+        [self.shareView mas_makeConstraints:^(MASConstraintMaker *make) {
             if (@available(iOS 11.0, *)) {
                 make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
             }else {
