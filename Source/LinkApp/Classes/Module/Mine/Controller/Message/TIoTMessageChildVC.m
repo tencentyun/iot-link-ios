@@ -191,6 +191,11 @@ static NSUInteger limit = 20;
             [self.navigationController popViewControllerAnimated:YES];
         };
         return cell;
+    }else if (msgType == 302 || msgType == 303) {
+        TIoTMessageTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cell1 forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell setMsgData:msgDic];
+        return cell;
     }
     else if (msgType >= 300)
     {
