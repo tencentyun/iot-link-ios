@@ -77,6 +77,7 @@
         NSDictionary *tempDic = responseObject[@"TRTCParams"];
         TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
         [self configRoom:model];
+        [self enterRoom];
         
         self->_state = TIoTTRTCSessionType_calling;
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {

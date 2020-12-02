@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#define SDKGlobalDebugUin @"1234567890"
 /**
  请求失败响应
  */

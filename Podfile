@@ -15,6 +15,7 @@ end
 def common_all_pods
   pod 'Masonry', '1.1.0'
   pod 'SDWebImage', '4.4.2'
+  pod 'YYModel', '1.0.4'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
   pod 'Firebase/Analytics', '6.31.1'
   pod 'Firebase/Crashlytics', '6.31.1'
@@ -31,7 +32,6 @@ target 'LinkApp' do
   pod 'IQKeyboardManager', '6.1.1'
   pod 'FDFullscreenPopGesture', '1.1'
   pod 'SocketRocket', '0.5.1'
-  pod 'YYModel', '1.0.4'
   pod 'TZImagePickerController', '3.2.1'
   pod 'MGJRouter', '0.10.0'
   pod 'TrueTime','5.0.3'
