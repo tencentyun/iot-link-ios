@@ -273,6 +273,7 @@
 		EDF126FE23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF126FD23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m */; };
 		EDF1270223BDC51A00FB1638 /* TIoTPanelVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */; };
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
+		F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4027792257775D70004E20F /* TIoTNetConfigViewController.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
 		F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */; };
 		F4833EBC24DD2E100033FAB2 /* TIoTDebugtools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */; };
@@ -897,6 +898,8 @@
 		EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPanelVC.m; sourceTree = "<group>"; };
 		EDF93D9723B367A000D477C7 /* TIoTRequestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTRequestObject.h; sourceTree = "<group>"; };
 		EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTRequestObject.m; sourceTree = "<group>"; };
+		F4027791257775D70004E20F /* TIoTNetConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNetConfigViewController.h; sourceTree = "<group>"; };
+		F4027792257775D70004E20F /* TIoTNetConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNetConfigViewController.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TIoTWebVC+BLE.swift"; sourceTree = "<group>"; };
 		F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDebugtools.swift; sourceTree = "<group>"; };
@@ -2263,6 +2266,8 @@
 				F4F3D77924938EBD005D3396 /* TIoTCoreRepeatVC.m */,
 				F4F3D78624938EBD005D3396 /* WifiInfoVC.h */,
 				F4F3D77B24938EBD005D3396 /* WifiInfoVC.m */,
+				F4027791257775D70004E20F /* TIoTNetConfigViewController.h */,
+				F4027792257775D70004E20F /* TIoTNetConfigViewController.m */,
 				F4F3D78524938EBD005D3396 /* HomeVC.h */,
 				F4F3D77C24938EBD005D3396 /* HomeVC.m */,
 				F4F3D77D24938EBD005D3396 /* TIoTCoreTimerListVC.h */,
@@ -2887,6 +2892,7 @@
 				F4F3D53E24935BD3005D3396 /* main.m in Sources */,
 				F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */,
 				F4DB306925676DF7006C45CD /* TRTCAudioCallViewController.swift in Sources */,
+				F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */,
 				F4DB306725676DF7006C45CD /* TRTCVideoCallViewController.swift in Sources */,
 				F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */,
 				F4F3D7B024938EBE005D3396 /* TIoTCoreAddFamilyVC.m in Sources */,

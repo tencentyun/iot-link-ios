@@ -33,6 +33,7 @@
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
+//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi,urlStr, SDKGlobalDebugUin]];
     NSURL *url  = [NSURL URLWithString:[TIoTCoreAppEnvironment shareEnvironment].oemTokenApi];
         
     [self postRequestWithAction:urlStr url:url isWithoutToken:NO param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
@@ -45,8 +46,8 @@ failure:(FailureResponseBlock)failure
 - (void)postWithoutToken:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure
 {
-    
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];    
+//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr, SDKGlobalDebugUin]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[TIoTCoreAppEnvironment shareEnvironment].oemAppApi,urlStr]];
     [self postRequestWithAction:urlStr url:url isWithoutToken:YES param:param urlAndBodySetting:^NSURL *(NSMutableDictionary *accessParam, NSURL *requestUrl) {
         TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
         if(environment.appSecret.length > 0 && ![NSString matchSinogram:environment.appSecret]) {

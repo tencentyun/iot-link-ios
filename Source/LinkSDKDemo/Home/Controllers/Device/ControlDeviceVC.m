@@ -12,8 +12,12 @@
 #import "TIoTCoreAlertView.h"
 
 #import "TIoTCoreTimerListVC.h"
+#import "TIoTTRTCSessionManager.h"
+#import "TIoTCoreSocketCover.h"
+#import <YYModel/YYModel.h>
+#import "TIoTCoreUtil.h"
 
-@interface ControlDeviceVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface ControlDeviceVC ()<UITableViewDelegate,UITableViewDataSource, TIoTTRTCSessionUIDelegate, TRTCCallingViewDelegate>
 
 @property (nonatomic,strong) DeviceInfo *ci;
 @property (weak, nonatomic) IBOutlet UILabel *theme;
@@ -25,13 +29,25 @@
 
 @end
 
-@implementation ControlDeviceVC
+@implementation ControlDeviceVC{
+    TRTCCallingAuidoViewController *_callAudioVC;
+    TRTCCallingVideoViewController *_callVideoVC;
+    //socket payload
+    TIOTtrtcPayloadParamModel *_deviceParam;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [TIoTCoreSocketManager shared].delegate = self;
+    [TIoTCoreSocketManager shared].delegate = [TIoTCoreSocketCover shared];
+    //TRTC UI Delegate
+    [TIoTTRTCSessionManager sharedManager].uidelegate = self;
+
+    [[TIoTCoreDeviceSet shared] activePushWithDeviceIds:@[self.deviceInfo[@"DeviceId"]] complete:^(BOOL success, id data) {
+        
+    }];
+    
     [TIoTCoreDeviceSet shared].deviceChange = ^(NSDictionary *changeInfo) {
         if ([self.deviceInfo[@"DeviceId"] isEqualToString:changeInfo[@"DeviceId"]]) {
             [self receiveData:changeInfo];
@@ -236,7 +252,88 @@
     
     [self zipData:deviceChange];
     [self.tableView reloadData];
+    
+    
+    //检测是否TRTC设备，是否在呼叫中
+    NSDictionary *payloadDic = [NSString base64Decode:deviceChange[@"Payload"]];
+    TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+    if (model.params._sys_userid.length < 1) {
+        model.params._sys_userid = deviceChange[@"DeviceId"];
+    }
+
+    if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
+        _deviceParam = model.params;
+        
+        [self isActiveCalling:_deviceParam._sys_userid];
+    }
 }
 
+//主动呼叫的UI逻辑
+- (BOOL)isActiveCalling:(NSString *)deviceUserID {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动,直接进房间
+        [self didAcceptJoinRoom];
+        return  YES;
+    }
+    
+    
+    //被呼叫了，点击接听后才进房间吧
+    if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
+        
+        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+        _callAudioVC.actionDelegate = self;
+        _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
+
+    }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
+        
+        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+        _callVideoVC.actionDelegate = self;
+        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
+//            [[TIoTTRTCSessionManager sharedManager] enterRoom];
+        }];
+    }
+    
+    return NO;
+}
+
+
+#pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
+- (void)didAcceptJoinRoom {
+    //2.根据UI决定是否进入房间
+    
+    //开始准备进房间，通话中状态
+//    NSDictionary *param = @{@"DeviceId":_deviceParam._sys_userid};
+    
+    //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
+    [[TIoTTRTCSessionManager sharedManager] preEnterRoom:_deviceParam failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        
+        [MBProgressHUD showError:reason];
+    }];
+}
+
+
+#pragma mark -TIoTTRTCSessionUIDelegate
+//呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
+
+- (void)showRemoteUser:(NSString *)remoteUserID {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        [_callAudioVC OCEnterUserWithUserID:remoteUserID];
+    }else {
+        [_callVideoVC OCEnterUserWithUserID:remoteUserID];
+    }
+}
+
+- (void)exitRoom:(NSString *)remoteUserID {
+    [_callAudioVC remoteDismiss];
+    [_callVideoVC remoteDismiss];
+    
+    _callAudioVC = nil;
+    _callVideoVC = nil;
+}
 
 @end

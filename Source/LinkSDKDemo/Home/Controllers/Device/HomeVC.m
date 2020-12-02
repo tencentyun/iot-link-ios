@@ -14,6 +14,8 @@
 #import "TIoTCoreFoundation.h"
 #import "TRTCCalling.h"
 #import "TIoTCoreUtil.h"
+#import "TIoTCoreRequestObject.h"
+#import "TIoTCoreAppEnvironment.h"
 
 static NSString *cellID = @"DODO";
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate>
@@ -39,7 +41,8 @@ static NSString *cellID = @"DODO";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,SDKGlobalDebugUin];
+
     
     self.title = NSLocalizedString(@"main_tab_1", @"首页");
     [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
