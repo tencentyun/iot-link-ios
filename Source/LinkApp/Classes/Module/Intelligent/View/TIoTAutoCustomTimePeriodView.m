@@ -136,9 +136,9 @@
     _previousSelectedTime = previousSelectedTime;
 
     //对于传入的时间字符串需要拆解，按内容显示
-    if (![NSString isNullOrNilWithObject:self.previousSelectedTime]) {
-        if ([self.previousSelectedTime containsString:@"-"]) {
-            NSArray *previousArray = [self.previousSelectedTime componentsSeparatedByString:@"-"];
+    if (![NSString isNullOrNilWithObject:previousSelectedTime]) {
+        if ([previousSelectedTime containsString:@"-"]) {
+            NSArray *previousArray = [previousSelectedTime componentsSeparatedByString:@"-"];
             if ([previousArray.firstObject containsString:@":"]) {
                 NSArray *fromArray = [previousArray.firstObject componentsSeparatedByString:@":"];
                 NSString *fromHour = fromArray.firstObject;
@@ -173,7 +173,11 @@
         [self.pickView selectRow:toMInutArray.count - 1 inComponent:4 animated:NO];
     }
 
-    self.choiceTimePeriod = [NSString stringWithFormat:@"00:00-23:59"];
+    if ([NSString isNullOrNilWithObject:previousSelectedTime]) {
+        self.choiceTimePeriod = [NSString stringWithFormat:@"00:00-23:59"];
+    }else {
+        self.choiceTimePeriod = previousSelectedTime;
+    }
 }
 
 #pragma mark - event
@@ -230,6 +234,31 @@
     NSString *line = @"-";
     NSInteger toHour = toHourArray.count - 1;
     NSInteger toMinut = toMInutArray.count - 1;
+    
+    if (![NSString isNullOrNilWithObject:self.choiceTimePeriod]) {
+        if ([self.choiceTimePeriod containsString:@"-"]) {
+            NSArray *previousArray = [self.choiceTimePeriod componentsSeparatedByString:@"-"];
+            if ([previousArray.firstObject containsString:@":"]) {
+                NSArray *fromArray = [previousArray.firstObject componentsSeparatedByString:@":"];
+                NSString *fromHourString = fromArray.firstObject;
+                NSString *fromMinutString = fromArray.lastObject;
+
+                fromHour = fromHourString.intValue;
+                fromMinut = fromMinutString.intValue;
+            }
+
+            if ([previousArray.lastObject containsString:@":"]) {
+                NSArray *toArray = [previousArray.lastObject componentsSeparatedByString:@":"];
+                NSString *toHourString = toArray.firstObject;
+                NSString *toMinutStirng = toArray.lastObject;
+                
+                toHour = toHourString.intValue;
+                toMinut = toMinutStirng.intValue;
+            }
+        }
+    }
+    
+    
     if (component == 0) {
         fromHour = row;
     }else if (component == 1){
