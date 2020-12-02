@@ -259,7 +259,7 @@ extension TRTCCallingAuidoViewController {
             view.addSubview(accept)
             accept.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
-                TRTCCalling.shareInstance().accept()
+//                TRTCCalling.shareInstance().accept()
                 
                 var curUser = CallingUserModel()
                 curUser.isEnter = true
