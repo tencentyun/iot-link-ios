@@ -203,6 +203,7 @@
     vc.configHardwareStyle = _configHardwareStyle;
     vc.currentDistributionToken = self.networkToken;
     vc.roomId = self.roomId;
+    vc.configConnentData = self.configurationData;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -211,7 +212,7 @@
 - (void)setConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle {
     _configHardwareStyle = configHardwareStyle;
     switch (configHardwareStyle) {
-        case TIoTConfigHardwareStyleSoftAP:
+        case TIoTConfigHardwareStyleSoftAP: 
         {
             
             NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
