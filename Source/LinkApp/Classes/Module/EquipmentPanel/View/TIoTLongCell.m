@@ -80,6 +80,16 @@
 //            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]];
             NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"]]?:@"";
             self.content.text = define[@"mapping"][key];
+            
+            //trtc特殊判断逻辑
+            NSString *infoid = info[@"id"];
+            if ([infoid isEqualToString:TIoTTRTCaudio_call_status] || [infoid isEqualToString:TIoTTRTCvideo_call_status]) {
+                self.content.hidden = YES;
+                self.rightImg.hidden = YES;
+                self.swich.hidden = YES;
+                return;
+            }
+            
         }
         else if ([define[@"type"] isEqualToString:@"int"] || [define[@"type"] isEqualToString:@"float"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_light"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

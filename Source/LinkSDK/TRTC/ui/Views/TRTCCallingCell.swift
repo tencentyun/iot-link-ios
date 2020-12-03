@@ -167,18 +167,18 @@ class AudioCallUserCell: UICollectionViewCell {
     }
     
     func configModel(model: CallingUserModel) {
-        cellImgView.sd_setImage(with: URL(string: model.avatarUrl), completed: nil)
-        cellUserLabel.text = userModel.name
-        let noModel = model.userId.count == 0
-        dimBk.isHidden = userModel.isEnter || noModel
-        loading.isHidden = userModel.isEnter || noModel
-        if userModel.isEnter || noModel {
-            loading.stopAnimating()
-        } else {
-            loading.startAnimating()
-        }
-        cellUserLabel.isHidden = noModel
-        cellVoiceImageView.isHidden = model.volume < 0.05
+//        cellImgView.sd_setImage(with: URL(string: model.avatarUrl), completed: nil)
+//        cellUserLabel.text = userModel.name
+//        let noModel = model.userId.count == 0
+//        dimBk.isHidden = userModel.isEnter || noModel
+//        loading.isHidden = userModel.isEnter || noModel
+//        if userModel.isEnter || noModel {
+//            loading.stopAnimating()
+//        } else {
+//            loading.startAnimating()
+//        }
+//        cellUserLabel.isHidden = noModel
+//        cellVoiceImageView.isHidden = model.volume < 0.05
     }
 }
 

@@ -129,6 +129,8 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     let localPreView = VideoCallingRenderView.init()
     static var renderViews:VideoCallingRenderView? = VideoCallingRenderView.init()
     
+    @objc var deviceName: String = "Device"
+    
     var curState: VideoCallingState {
         didSet {
             if oldValue != curState {
@@ -166,7 +168,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     
     @objc init(ocUserID: String? = nil) {
         curSponsor = CallingUserModel(avatarUrl: "https://imgcache.qq.com/qcloud/public/static//avatar1_100.20191230.png",
-                                      name: "Device",
+                                      name: self.deviceName,
                                       userId: ocUserID ?? "0",
                                       isEnter: false,
                                       isVideoAvaliable: false,
@@ -367,6 +369,10 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
         if let renderView = TRTCCallingVideoViewController.renderViews {
             renderView.userModel = user
             TRTCCalling.shareInstance().startRemoteView(userId: user.userId, view: renderView)
+            
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(tap:)))
+            renderView.addGestureRecognizer(tap)
         }
 
         curState = .calling
@@ -523,7 +529,9 @@ extension TRTCCallingVideoViewController {
         view.addSubview(localPreView)
         localPreView.backgroundColor = .appBackGround
         localPreView.frame = UIScreen.main.bounds
-        localPreView.isUserInteractionEnabled = false
+        localPreView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(tap:)))
+        localPreView.addGestureRecognizer(tap)
 
         userCollectionView.isHidden = true
         
@@ -548,19 +556,20 @@ extension TRTCCallingVideoViewController {
             let userImage = UIImageView()
             sponsorPanel.addSubview(userImage)
             userImage.snp.makeConstraints { (make) in
-                make.trailing.equalTo(sponsorPanel).offset(-18)
+//                make.trailing.equalTo(sponsorPanel).offset(-18)
+                make.trailing.equalTo(sponsorPanel).offset(30)
                 make.top.equalTo(sponsorPanel)
                 make.width.equalTo(60)
                 make.height.equalTo(60)
             }
-            userImage.sd_setImage(with: URL(string: sponsor.avatarUrl), completed: nil)
+//            userImage.sd_setImage(with: URL(string: sponsor.avatarUrl), completed: nil)
             
             //发起者名字
             let userName = UILabel()
             userName.textAlignment = .right
-            userName.font = UIFont.boldSystemFont(ofSize: 30)
+            userName.font = UIFont.boldSystemFont(ofSize: 20)
             userName.textColor = .white
-            userName.text = sponsor.name
+            userName.text = self.deviceName//sponsor.name
             sponsorPanel.addSubview(userName)
             userName.snp.makeConstraints { (make) in
                 make.trailing.equalTo(userImage.snp.leading).offset(-6)
@@ -763,5 +772,44 @@ extension TRTCCallingVideoViewController {
         }
         // 启动时间源
         codeTimer.resume()
+    }
+    
+    
+    
+    @objc func handleTapGesture(tap: UIPanGestureRecognizer) {
+        
+        if tap.view == localPreView {
+            if localPreView.frame.size.width == kSmallVideoViewWidth {
+                
+                if let firstRender = TRTCCallingVideoViewController.renderViews {
+                    UIView.animate(withDuration: 0.3, animations: { [weak firstRender, weak self] in
+                        guard let `self` = self else { return }
+                        self.localPreView.frame = self.view.frame
+                        firstRender?.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+                                                    y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
+                    }) { [weak self] (result) in
+                        guard let `self` = self else { return }
+                        firstRender.removeFromSuperview()
+                        self.view.insertSubview(firstRender, aboveSubview: self.localPreView)
+                    }
+                }
+            }
+        } else {
+            if let smallView = tap.view {
+                if smallView.frame.size.width == kSmallVideoViewWidth {
+                    UIView.animate(withDuration: 0.3, animations: { [weak smallView ,weak self] in
+                        guard let self = self else {return}
+                        smallView?.frame = self.view.frame
+                        self.localPreView.frame = CGRect(x: self.view.frame.size.width - kSmallVideoViewWidth - 18,
+                                                         y: 20, width: kSmallVideoViewWidth, height: kSmallVideoViewWidth / 9.0 * 16.0)
+                        
+                    }) { [weak self] (result) in
+                        guard let `self` = self else { return }
+                        smallView.removeFromSuperview()
+                        self.view.insertSubview(smallView, belowSubview: self.localPreView)
+                    }
+                }
+            }
+        }
     }
 }

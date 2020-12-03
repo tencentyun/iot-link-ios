@@ -174,6 +174,7 @@ static NSString *heartBeatReqID = @"5002";
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
     
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+    model.params.deviceName = deviceInfo[@"DeviceId"];
     if (model.params._sys_userid.length < 1) {
         model.params._sys_userid = deviceInfo[@"DeviceId"];
     }

@@ -36,6 +36,18 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     var codeTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .userInteractive))
     let callTimeLabel = UILabel()
     
+    @objc var deviceName: String = "Device"
+
+    lazy var tipLabel: UILabel = {
+        let label = UILabel(frame: CGRect(origin: CGPoint.zero, size: UIScreen.main.bounds.size ))
+        label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.textColor = .white
+        label.textAlignment = .center
+        self.view.addSubview(label)
+        return label
+    }()
+    
     @objc weak var actionDelegate: TRTCCallingViewDelegate?
 
     var curState: AudioiCallingState {
@@ -339,6 +351,8 @@ extension TRTCCallingAuidoViewController {
                 make.width.equalTo(80)
                 make.height.equalTo(80)
             }
+            
+            tipLabel.text = "等待接听中…"
             break
         case .onInvitee:
             hangup.snp.remakeConstraints { (make) in
@@ -354,6 +368,8 @@ extension TRTCCallingAuidoViewController {
                 make.width.equalTo(80)
                 make.height.equalTo(80)
             }
+            
+            tipLabel.text = "\(deviceName)\n邀请您语音通话"
             break
         case .calling:
             hangup.snp.remakeConstraints { (make) in
@@ -363,6 +379,8 @@ extension TRTCCallingAuidoViewController {
                 make.height.equalTo(60)
             }
             startGCDTimer()
+            
+            tipLabel.text = "正在通话中…"
             break
         }
         

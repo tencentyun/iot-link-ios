@@ -452,10 +452,22 @@ static NSString *itemId3 = @"i_ooo454";
 
 //下发数据
 - (void)reportDeviceData:(NSDictionary *)deviceReport{
+    
+    NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
+    NSString *userId = [TIoTCoreUserManage shared].userId;
+    if (userId) {
+        [trtcReport setValue:userId forKey:@"userid"];
+    }
+    NSString *username = [TIoTCoreUserManage shared].nickName;
+    if (username) {
+        [trtcReport setValue:username forKey:@"username"];
+    }
+    
     NSDictionary *tmpDic = @{
                                 @"ProductId":self.productId,
                                 @"DeviceName":self.deviceName,
-                                @"Data":[NSString objectToJson:deviceReport],
+//                                @"Data":[NSString objectToJson:deviceReport],
+                                @"Data":[NSString objectToJson:trtcReport]
                             };
     
     [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
@@ -669,6 +681,13 @@ static NSString *itemId3 = @"i_ooo454";
             
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"enum"]){
+            
+            //trtc特殊判断逻辑
+            NSString *key = dic[@"id"];
+            if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
+                [self reportDeviceData:@{key: @1}];
+                return;
+            }
             
             TIoTChoseValueView *choseView = [[TIoTChoseValueView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
             choseView.dic = dic;

@@ -106,6 +106,30 @@
         }
         
         [self.properties addObjectsFromArray:propertiesForUI];
+    }else {
+        
+        //默认面板
+        
+        NSMutableArray *propertiesForUI = [NSMutableArray array];
+        NSArray *propertiesForInfo = baseInfo[@"properties"];
+        
+        for (NSDictionary* protovalue in propertiesForInfo) {
+            
+            NSMutableDictionary *proper = [NSMutableDictionary dictionary];
+            
+            NSString *protoid = protovalue[@"id"];
+            [proper setValue:deviceInfo[protoid] forKey:@"status"];
+            
+            [proper setValue:protovalue[@"name"] forKey:@"name"];
+            [proper setValue:protovalue[@"desc"] forKey:@"desc"];
+            [proper setValue:protovalue[@"define"] forKey:@"define"];
+            
+            [propertiesForUI addObject:proper];
+        }
+        
+        
+        [self.allProperties addObjectsFromArray:propertiesForUI];
+        [self.properties addObjectsFromArray:propertiesForUI];
     }
 }
 

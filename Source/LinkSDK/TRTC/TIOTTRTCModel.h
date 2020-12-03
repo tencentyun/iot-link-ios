@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *_sys_video_call_status;
 @property (nonatomic, strong) NSString *_sys_audio_call_status;
 @property (nonatomic, strong) NSString *_sys_userid;
+@property (nonatomic, strong) NSString *deviceName;//UI展示的名字
 @end
 
 @interface TIOTtrtcPayloadModel : NSObject

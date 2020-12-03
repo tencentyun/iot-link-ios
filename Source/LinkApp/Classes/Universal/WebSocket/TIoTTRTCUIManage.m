@@ -16,6 +16,8 @@
     
     //socket payload
     TIOTtrtcPayloadParamModel *_deviceParam;
+    
+    BOOL _isActiveCall;
 }
 @end
 
@@ -66,7 +68,11 @@
 
 //---------------------TRTC设备轮训状态与注册物模型----------------------------
 - (void)repeatDeviceData:(NSArray *)devices {
-
+    //1.是trtc设备,注册socket通知
+    NSArray *devIds = [devices valueForKey:@"DeviceId"];
+    [HXYNotice postHeartBeat:devIds];
+    [HXYNotice addActivePushPost:devIds];
+    
     NSArray *productIDs = [devices valueForKey:@"ProductId"];
     NSSet *productIDSet = [NSSet setWithArray:productIDs];//去chong
     [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
@@ -98,9 +104,9 @@
         if ([device.ProductId isEqualToString:productID]) {
             //通过产品ID筛选出设备Device，开始拉取Device的TRTC状态
             
-            //1.是trtc设备,注册socket通知
-            [HXYNotice postHeartBeat:@[device.DeviceId]];
-            [HXYNotice addActivePushPost:@[device.DeviceId]];
+            //1.是trtc设备,注册socket通知,提前了注册时机了，要不然接口太多失败了就不知道啥原因
+//            [HXYNotice postHeartBeat:@[device.DeviceId]];
+//            [HXYNotice addActivePushPost:@[device.DeviceId]];
             
             if (device.Online.intValue != 1) {
                 continue;
@@ -121,6 +127,7 @@
                     }
                     payloadParam._sys_video_call_status = product._sys_video_call_status.Value;
                     payloadParam._sys_audio_call_status = product._sys_audio_call_status.Value;
+                    payloadParam.deviceName = device.DeviceName;
                     
                     [self preEnterRoom:payloadParam failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                         NSLog(@"error--%@",error);
@@ -142,6 +149,8 @@
 
 
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo {
+    _isActiveCall = YES; //表示主动呼叫
+    
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC || _callVideoVC == topVC) {
         //正在主动呼叫中，或呼叫UI已启动
@@ -168,15 +177,19 @@
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC || _callVideoVC == topVC) {
         //正在主动呼叫中，或呼叫UI已启动,直接进房间
-        [self didAcceptJoinRoom];
+        
+        if (_isActiveCall) { //如果是被动呼叫的话，不能自动进入房间
+            [self didAcceptJoinRoom];
+        }
         return  YES;
     }
     
-    
+    _isActiveCall = NO;//表示被呼叫
     //被呼叫了，点击接听后才进房间吧
     if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
         
         _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+        _callAudioVC.deviceName = _deviceParam.deviceName;
         _callAudioVC.actionDelegate = self;
         _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
@@ -184,6 +197,7 @@
     }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
         
         _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+        _callVideoVC.deviceName = _deviceParam.deviceName;
         _callVideoVC.actionDelegate = self;
         _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
