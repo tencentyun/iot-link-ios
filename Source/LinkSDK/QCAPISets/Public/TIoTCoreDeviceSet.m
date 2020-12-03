@@ -136,6 +136,18 @@
             [propertiesForUI addObject:proper];
         }
         
+        // 如果是第一次初始化，取第一个不为struct类型的属性为大按钮
+        if (propertiesForUI.count > 0) {
+            NSMutableDictionary *proper = propertiesForUI[0];
+            NSString *protoid = proper[@"id"];
+            if ([protoid containsString:@"_call_status"]) {
+                return;
+            }
+            
+            [proper setValue:@{@"icon": @"create", @"type": @"btn-big", @"visible": @1} forKey:@"ui"];
+            self.bigProp = proper;
+            [propertiesForUI removeObject:proper];
+        }        
         
         [self.allProperties addObjectsFromArray:propertiesForUI];
         [self.properties addObjectsFromArray:propertiesForUI];
