@@ -161,7 +161,7 @@
         TIoTIntelligentLogVC *intelligentVCLogVC = [[TIoTIntelligentLogVC alloc]init];
         
         self.intelligentVC.title = NSLocalizedString(@"mine_intelligent", @"我的智能");
-        intelligentVCLogVC.title = NSLocalizedString(@"mine_intelligent_log", @"智能日志");
+        intelligentVCLogVC.title = NSLocalizedString(@"mine_intelligent_log", @"执行日志");
         
         _childControllers = @[self.intelligentVC,intelligentVCLogVC];
     }
