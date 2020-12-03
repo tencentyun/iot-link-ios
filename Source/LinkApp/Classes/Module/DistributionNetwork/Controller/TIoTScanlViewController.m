@@ -155,11 +155,13 @@
                     [self bindDevice:signature];
                 } else {
                     if ([page isEqualToString:@"softap"]) {
-                        [self.navigationController popViewControllerAnimated:YES];
-                        [HXYNotice postChangeAddDeviceType:1];
+//                        [self.navigationController popViewControllerAnimated:YES];
+//                        [HXYNotice postChangeAddDeviceType:1];
+                        [self getProductsConfig:productId];
                     } else if ([page isEqualToString:@"smartconfig"]) {
-                        [self.navigationController popViewControllerAnimated:YES];
-                        [HXYNotice postChangeAddDeviceType:0];
+//                        [self.navigationController popViewControllerAnimated:YES];
+//                        [HXYNotice postChangeAddDeviceType:0];
+                        [self getProductsConfig:productId];
                     } else if ([page isEqualToString:@"adddevice"] && ![NSString isNullOrNilWithObject:productId]){ //设备批量生产的二维码扫描
                         [self getProductsConfig:productId];
                     }else {//未知page

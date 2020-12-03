@@ -315,12 +315,14 @@
             vc.currentDistributionToken = self.currentDistributionToken;
             vc.wifiInfo = [self.wifiInfo copy];
             vc.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
+            vc.configdata = self.configConnentData;
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
             vc.wifiInfo = [self.softApWifiInfo copy];
             vc.roomId = self.roomId;
             vc.configHardwareStyle = self.configHardwareStyle;
+            vc.connectGuideData = self.configConnentData;
             [self.navigationController pushViewController:vc animated:YES];
         }
     } else {
@@ -328,6 +330,7 @@
         vc.wifiInfo = [self.wifiInfo copy];
         vc.roomId = self.roomId;
         vc.configHardwareStyle = self.configHardwareStyle;
+        vc.connectGuideData = self.configConnentData;
         [self.navigationController pushViewController:vc animated:YES];
     }
     

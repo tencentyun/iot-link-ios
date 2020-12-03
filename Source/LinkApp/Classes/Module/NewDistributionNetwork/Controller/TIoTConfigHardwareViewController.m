@@ -197,12 +197,39 @@
 
 #pragma mark eventResponse
 
+- (void)nav_customBack {
+     //配网失败，切换配网方式时候，再新的配网流程中，用来判断返回首页还是上个页面
+    if (self.isDistributeNetFailure == YES) {
+        // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
+        UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
+        if (vc) {
+            // 找到需要返回的控制器的处理方式
+            [self.navigationController popToViewController:vc animated:YES];
+        }else{
+            // 没找到需要返回的控制器的处理方式
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (id)findViewController:(NSString*)className{
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:NSClassFromString(className)]) {
+            return viewController;
+        }
+    }
+    return nil;
+}
+
 - (void)nextClick:(UIButton *)sender {
     TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
     vc.step = 2;
     vc.configHardwareStyle = _configHardwareStyle;
     vc.currentDistributionToken = self.networkToken;
     vc.roomId = self.roomId;
+    vc.configConnentData = self.configurationData;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -211,7 +238,7 @@
 - (void)setConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle {
     _configHardwareStyle = configHardwareStyle;
     switch (configHardwareStyle) {
-        case TIoTConfigHardwareStyleSoftAP:
+        case TIoTConfigHardwareStyleSoftAP: 
         {
             
             NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
