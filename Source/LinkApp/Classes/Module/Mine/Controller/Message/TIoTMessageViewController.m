@@ -55,6 +55,7 @@
     config.cm_titleMargin = 0.0;
     config.cm_minTitleMargin = 0.0;
     self.pageView.cm_config = config;
+    self.pageView.titleView.scrollEnabled = NO;
     
 }
 

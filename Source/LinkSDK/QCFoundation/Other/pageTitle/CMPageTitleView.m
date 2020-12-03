@@ -11,14 +11,14 @@
 
 
 #import "CMPageTitleView.h"
-#import "CMPageTitleContentView.h"
+//#import "CMPageTitleContentView.h"
 #import "CMPageContentView.h"
 #import "CMPageTitleViewMacro.h"
 #import <objc/runtime.h>
 
 @interface CMPageTitleView() <CMPageTitleContentViewDelegate,CMPageContentViewDelegate>
 
-@property (nonatomic,weak) CMPageTitleContentView *titleView;
+
 
 @property (nonatomic,weak) CMPageContentView *contentView;
 

@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CMPageTitleConfig.h"
+#import "CMPageTitleContentView.h"
 
 @protocol CMPageTitleViewDelegate <NSObject>
 
@@ -54,7 +55,7 @@
  */
 @property (nonatomic,strong) CMPageTitleConfig *cm_config;
 
-
+@property (nonatomic,weak) CMPageTitleContentView *titleView; //目的是为了判断让不让titleview滚动
 /**重载配置*/
 - (void)cm_reloadConfig;
 
