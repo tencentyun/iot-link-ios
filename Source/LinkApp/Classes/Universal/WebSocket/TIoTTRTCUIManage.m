@@ -10,11 +10,6 @@
 #import "TIoTCoreUtil.h"
 #import "TIoTTRTCSessionManager.h"
 
-
-NSString *const TIoTTRTCaudio_call_status = @"_sys_audio_call_status";
-NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
-
-
 @interface TIoTTRTCUIManage ()<TRTCCallingViewDelegate> {
     TRTCCallingAuidoViewController *_callAudioVC;
     TRTCCallingVideoViewController *_callVideoVC;

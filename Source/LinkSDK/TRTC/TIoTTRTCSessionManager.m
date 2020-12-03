@@ -13,6 +13,9 @@
 #import "YYModel.h"
 #import "TRTCCalling.h"
 
+NSString *const TIoTTRTCaudio_call_status = @"_sys_audio_call_status";
+NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
+
 @interface TIoTTRTCSessionManager()<TRTCCallingDelegate>
 @end
 

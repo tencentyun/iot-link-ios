@@ -11,14 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString *const TIoTTRTCaudio_call_status;
-FOUNDATION_EXPORT NSString *const TIoTTRTCvideo_call_status;
-
-typedef enum : NSUInteger {
-    TIoTTRTCSessionCallType_audio,
-    TIoTTRTCSessionCallType_video
-} TIoTTRTCSessionCallType;
-
 @interface TIoTTRTCUIManage: NSObject <TIoTTRTCSessionUIDelegate>
 + (instancetype)sharedManager ;
 

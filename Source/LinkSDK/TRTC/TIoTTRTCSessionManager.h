@@ -22,6 +22,16 @@ typedef enum : NSUInteger {
     TIoTTRTCSessionType_end
 } TIoTTRTCSessionType;
 
+
+FOUNDATION_EXPORT NSString *const TIoTTRTCaudio_call_status;
+FOUNDATION_EXPORT NSString *const TIoTTRTCvideo_call_status;
+
+typedef enum : NSUInteger {
+    TIoTTRTCSessionCallType_audio,
+    TIoTTRTCSessionCallType_video
+} TIoTTRTCSessionCallType;
+
+
 @protocol TIoTTRTCSessionUIDelegate <NSObject>
 //远端流进房间了，需要展示
 - (void)showRemoteUser:(NSString *)remoteUserID;

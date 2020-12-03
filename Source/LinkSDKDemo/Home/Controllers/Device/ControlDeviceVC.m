@@ -118,9 +118,31 @@
     self.timing.text = self.ci.timingProject ? NSLocalizedString(@"display", @"显示")  : NSLocalizedString(@"no_display", @"不显示");
     
     [self.tableView reloadData];
+    
+    
+    //这是trtc设备
+    BOOL isTRTC = NO;
+    for (NSDictionary *prototo in self.ci.zipData) {
+        NSString *syskey = prototo[@"id"];
+        if ([syskey isEqualToString:@"_sys_video_call_status"] || [syskey isEqualToString:@"_sys_audio_call_status"] ) {
+            isTRTC = YES;
+            break;
+        }
+    }
+    
+    if (isTRTC) {
+        UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"TRTC打电话"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(handleTestAction)];
+        self.navigationItem.rightBarButtonItem = testItem;
+    }
 }
 
-
+- (void)handleTestAction {
+    [self callDeviceFromPanel:TIoTTRTCSessionCallType_video];
+    [self sendControlData:@{@"_sys_video_call_status":@1}];
+}
 #pragma mark - tableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -268,7 +290,31 @@
     }
 }
 
-//主动呼叫的UI逻辑
+
+- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        return;
+    }
+
+    if (audioORvideo == TIoTTRTCSessionCallType_audio) { //audio
+        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
+        _callAudioVC.actionDelegate = self;
+        _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
+        
+    }else if (audioORvideo == TIoTTRTCSessionCallType_video) { //video
+        
+        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:nil];
+        _callVideoVC.actionDelegate = self;
+        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
+    }
+}
+
+
+//被动呼叫的UI逻辑
 - (BOOL)isActiveCalling:(NSString *)deviceUserID {
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC || _callVideoVC == topVC) {
