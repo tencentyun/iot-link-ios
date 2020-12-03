@@ -109,20 +109,29 @@
     }else {
         
         //默认面板
+        self.navBar = @{@"visible":@0};
+        self.timingProject = false;
         
         NSMutableArray *propertiesForUI = [NSMutableArray array];
         NSArray *propertiesForInfo = baseInfo[@"properties"];
         
         for (NSDictionary* protovalue in propertiesForInfo) {
+            NSString *btn_type = protovalue[@"define"][@"type"];
             
+            if (!([btn_type isEqualToString:@"enum"] || [btn_type isEqualToString:@"int"] || [btn_type isEqualToString:@"float"] || [btn_type isEqualToString:@"bool"])) {
+                continue;
+            }
             NSMutableDictionary *proper = [NSMutableDictionary dictionary];
             
             NSString *protoid = protovalue[@"id"];
             [proper setValue:deviceInfo[protoid] forKey:@"status"];
             
+            [proper setValue:protoid forKey:@"id"];
             [proper setValue:protovalue[@"name"] forKey:@"name"];
             [proper setValue:protovalue[@"desc"] forKey:@"desc"];
             [proper setValue:protovalue[@"define"] forKey:@"define"];
+            
+            [proper setValue:@{@"icon": @"create", @"type": @"btn-col-1", @"visible": @1} forKey:@"ui"];
             
             [propertiesForUI addObject:proper];
         }
