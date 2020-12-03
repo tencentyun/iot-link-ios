@@ -15,6 +15,7 @@
 
 @property (nonatomic,strong) UIButton *connectB;//连接按钮
 @property (nonatomic,strong) UIButton *nextB;//下一步按钮
+@property (nonatomic, strong) UILabel *WiFiNameLabel;
 
 @end
 
@@ -68,19 +69,42 @@
         make.top.equalTo(tipLab.mas_bottom).offset(30);
     }];
     
-    
+    CGFloat kImageScale = 0.866667; //高/宽
+    CGFloat kPadding = 30;
     UIImageView *tipImageView = [[UIImageView alloc] initWithImage:[UIImage imageWithColor:[UIColor redColor]]];
     [tipImageView setImage:[UIImage imageNamed:@"wifieg"]];
-    tipImageView.contentMode = UIViewContentModeCenter;
+//    tipImageView.contentMode = UIViewContentModeCenter;
     [scroll addSubview:tipImageView];
     [tipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(tip1.mas_bottom).offset(20);
         make.centerX.equalTo(scroll);
-        make.left.equalTo(scroll).offset(30).priorityLow();
-        make.right.equalTo(scroll).offset(-30).priorityLow();
+        make.left.equalTo(scroll.mas_left).offset(kPadding);
+        make.right.equalTo(scroll.mas_right).offset(-kPadding);
+        make.height.mas_equalTo(tipImageView.mas_width).multipliedBy(kImageScale);
 //        make.height.mas_equalTo(200);
     }];
     
+    CGFloat kWiFiNameHeithtScale =  0.5;//0.487179;//380/780   WiFi 距离顶部高度比例
+    CGFloat kWiFiNameWidthtScale = 0.1;//90/900  WiFi 距离左边距比例
+    CGFloat kWiFiNameHeitht = 0.0769230;//60/780 WiFi 高度比例
+    CGFloat kWiFiNameWidth = 0.6666;//200/900; WiFi 宽度比例
+    CGFloat kImageViewWidth = kScreenWidth - kPadding*2;  //imageview 宽度
+    CGFloat kImageViewheight = kImageViewWidth * kImageScale; //image 高度
+    
+    CGFloat kLeftPadding = kWiFiNameWidthtScale * kImageViewWidth; // 转换到image view的左边距
+    CGFloat kTopPadding = kWiFiNameHeithtScale * kImageViewheight; //转换到image view的顶部距离
+    CGFloat kWiFiHeitht =  kWiFiNameHeitht * kImageViewheight; //转换到image view的高度
+    CGFloat kWiFiWidth = kWiFiNameWidth * kImageViewWidth; //转换到image view的宽度
+    
+    self.WiFiNameLabel = [[UILabel alloc]init];
+    self.WiFiNameLabel.text = @"tcloud_XXX";
+    [tipImageView addSubview:self.WiFiNameLabel];
+    [self.WiFiNameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(tipImageView.mas_left).offset(kLeftPadding);
+        make.top.equalTo(tipImageView.mas_top).offset(kTopPadding);
+        make.height.mas_equalTo(kWiFiHeitht);
+        make.width.mas_equalTo(kWiFiWidth);
+    }];
     
     UILabel *tip2 = [[UILabel alloc] init];
     tip2.text = NSLocalizedString(@"soft_ap_hotspot_step_2", @"2.返回APP,添加设备");

@@ -11,6 +11,7 @@
 
 #import "TIoTWebVC.h"
 #import "TIoTAppEnvironment.h"
+#import "TIoTConfigHardwareViewController.h"
 
 @interface TIoTConfigResultViewController ()
 
@@ -22,7 +23,7 @@
 @property (nonatomic, strong) NSDictionary *dataDic;
 
 @property (nonatomic, strong) NSDictionary *devieceData;
-
+@property (nonatomic, strong) NSDictionary *configData;
 @end
 
 @implementation TIoTConfigResultViewController
@@ -152,7 +153,8 @@
 }
 
 - (void)nav_customBack {
-    [self nextClick:nil];
+//    [self nextClick:nil];
+    [self goBackClick:YES];
 }
 
 - (id)findViewController:(NSString*)className{
@@ -168,20 +170,32 @@
 
 - (void)changeClick:(UIButton *)sender {
     // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
-    UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
-    if (vc) {
-        // 找到需要返回的控制器的处理方式
-        [self.navigationController popToViewController:vc animated:YES];
-    }else{
-        // 没找到需要返回的控制器的处理方式
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
+//    UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
+//    if (vc) {
+//        // 找到需要返回的控制器的处理方式
+//        [self.navigationController popToViewController:vc animated:YES];
+//    }else{
+//        // 没找到需要返回的控制器的处理方式
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//    }
     if (!_success) {
+//        if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+////            [HXYNotice postChangeAddDeviceType:0];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            [self getProductsConfig:self.devieceData[@"profile"][@"ProductId"]?:@""withType:0];
+//        } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+////            [HXYNotice postChangeAddDeviceType:1];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            [self getProductsConfig:self.devieceData[@"profile"][@"ProductId"]?:@""withType:1];
+//        }
+        
         if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-            [HXYNotice postChangeAddDeviceType:0];
-        } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-            [HXYNotice postChangeAddDeviceType:1];
+            [self changeConfig:NSLocalizedString(@"smart_config", @"智能配网")];
+            
+        }else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+            [self changeConfig:NSLocalizedString(@"soft_ap", @"自助配网")];
         }
+        
     }
 }
 
@@ -207,9 +221,8 @@
             }];
 }
 
-- (void)nextClick:(UIButton *)sender {
-    
-    if (!_success) {
+- (void)goBackClick:(BOOL)isBack {
+    if (isBack) {
         // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
         UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
         if (vc) {
@@ -219,14 +232,94 @@
             // 没找到需要返回的控制器的处理方式
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
+    }
+}
+
+- (void)nextClick:(UIButton *)sender {
+    
+    if (!_success) {
+        // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
+//        UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
+//        if (vc) {
+//            // 找到需要返回的控制器的处理方式
+//            [self.navigationController popToViewController:vc animated:YES];
+//        }else{
+//            // 没找到需要返回的控制器的处理方式
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//        }
+//        if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+////            [HXYNotice postChangeAddDeviceType:1];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            [self getProductsConfig:self.devieceData[@"profile"][@"ProductId"]?:@""];
+//        } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+////            [HXYNotice postChangeAddDeviceType:0];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            [self getProductsConfig:self.devieceData[@"profile"][@"ProductId"]?:@""];
+//        }
+        
         if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-            [HXYNotice postChangeAddDeviceType:1];
-        } else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
-            [HXYNotice postChangeAddDeviceType:0];
+            
+            [self changeConfig:NSLocalizedString(@"soft_ap", @"自助配网")];
+        }else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
+            
+            [self changeConfig:NSLocalizedString(@"smart_config", @"智能配网")];
         }
+        
     } else {
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
+}
+
+#pragma mark - 配网请求流程
+- (void)getProductsConfig:(NSString *)productId{
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+        
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = [[NSDictionary alloc]initWithDictionary:config];
+            WCLog(@"AppGetProductsConfig config%@", config);
+            NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
+            if (wifiConfTypeList.count > 0) {
+                NSString *configType = wifiConfTypeList.firstObject;
+                if ([configType isEqualToString:@"softap"]) {
+                    [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
+                    return;
+                }
+            }
+        }
+        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+//        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+                [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+    }];
+}
+
+- (void)jumpConfigVC:(NSString *)title{
+    TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
+    vc.configurationData = self.configData;
+    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
+    } else {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
+    }
+//    vc.roomId = self.roomId?:@"";
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)changeConfig:(NSString *)title{
+    TIoTConfigHardwareViewController *vc = [[TIoTConfigHardwareViewController alloc] init];
+    vc.configurationData = self.devieceData;
+    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSmartConfig;
+    } else {
+        vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
+    }
+//    vc.roomId = self.roomId?:@"";
+    vc.isDistributeNetFailure = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

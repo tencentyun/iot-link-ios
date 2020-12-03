@@ -376,7 +376,7 @@ static dispatch_once_t onceToken;
 #pragma mark private Method
 
 - (void)connectFaild {
-    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:NO devieceData:nil];
+    TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:self.configHardwareStyle success:NO devieceData:self.connectGuideData];
     [self.navigationController pushViewController:vc animated:YES];
 }
 //配网成功

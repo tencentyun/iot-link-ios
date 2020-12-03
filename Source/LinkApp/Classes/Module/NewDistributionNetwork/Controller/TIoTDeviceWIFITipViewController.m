@@ -19,7 +19,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *stepLabel;
-
+@property (nonatomic, strong) UILabel *WiFiName; //获取设备WiFi名称
 @end
 
 @implementation TIoTDeviceWIFITipViewController
@@ -68,14 +68,45 @@
         make.height.mas_equalTo(24);
     }];
 
+    CGFloat kImageScale = 0.866667; //高/宽
+    CGFloat kPadding = 20; //image 边距
     self.imageView = [[UIImageView alloc] init];
     self.imageView.image = [UIImage imageNamed:@"wifieg"];
     [self.view addSubview:self.imageView];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(topicLabel.mas_bottom).offset(20);
-        make.left.equalTo(self.scrollView).offset(20);
-        make.right.equalTo(self.scrollView).offset(-20);
-        make.height.mas_equalTo(self.imageView.mas_width).multipliedBy(0.8667);
+        make.left.equalTo(self.scrollView).offset(kPadding);
+        make.right.equalTo(self.scrollView).offset(-kPadding);
+        make.height.mas_equalTo(self.imageView.mas_width).multipliedBy(kImageScale);
+    }];
+    
+    CGFloat kWiFiNameHeithtScale =  0.5;//0.487179;//380/780   WiFi 距离顶部高度比例
+    CGFloat kWiFiNameWidthtScale = 0.1;//90/900  WiFi 距离左边距比例
+    CGFloat kWiFiNameHeitht = 0.0769230;//60/780 WiFi 高度比例
+    CGFloat kWiFiNameWidth = 0.6666;//200/900; WiFi 宽度比例
+    CGFloat kImageViewWidth = kScreenWidth - kPadding*2;  //imageview 宽度
+    CGFloat kImageViewheight = kImageViewWidth * kImageScale; //image 高度
+    
+    CGFloat kLeftPadding = kWiFiNameWidthtScale * kImageViewWidth; // 转换到image view的左边距
+    CGFloat kTopPadding = kWiFiNameHeithtScale * kImageViewheight; //转换到image view的顶部距离
+    CGFloat kWiFiHeitht =  kWiFiNameHeitht * kImageViewheight; //转换到image view的高度
+    CGFloat kWiFiWidth = kWiFiNameWidth * kImageViewWidth; //转换到image view的宽度
+    
+    self.WiFiName = [[UILabel alloc]init];
+    self.WiFiName.backgroundColor = [UIColor whiteColor];
+    if (![NSString isNullOrNilWithObject:self.connectGuideData[@"apName"]]) {
+        self.WiFiName.text = self.connectGuideData[@"apName"];
+    }else {
+        self.WiFiName.text = @"tcloud_XXX";
+    }
+    
+    self.WiFiName.font = [UIFont systemFontOfSize:18];
+    [self.imageView addSubview:self.WiFiName];
+    [self.WiFiName mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.imageView.mas_left).offset(kLeftPadding);
+        make.top.equalTo(self.imageView.mas_top).offset(kTopPadding);
+        make.height.mas_equalTo(kWiFiHeitht);
+        make.width.mas_equalTo(kWiFiWidth);
     }];
     
     self.stepLabel = [[UILabel alloc] init];
@@ -129,6 +160,7 @@
     vc.roomId = self.roomId;
     vc.currentDistributionToken = self.currentDistributionToken;
     vc.softApWifiInfo = [self.wifiInfo copy];
+    vc.configConnentData = self.configdata;
     [self.navigationController pushViewController:vc animated:YES];
     
 }
