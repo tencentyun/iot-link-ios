@@ -677,6 +677,7 @@ static CGFloat weatherHeight = 10;
                     NSString *requestID = responseObject[@"RequestId"]?:@"";
                     NSString *platform = @"iOS";
                     TIoTWebVC *vc = [TIoTWebVC new];
+                    weadkSelf.navigationController.tabBarController.tabBar.hidden = YES;
                     NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
                     NSString *url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&appID=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,bundleId,roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
                     vc.urlPath = url;
@@ -694,6 +695,7 @@ static CGFloat weatherHeight = 10;
                 
                 //标准面板
                 TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
+                self.navigationController.tabBarController.tabBar.hidden = YES;
                 vc.title = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"AliasName"]];
                 vc.productId = self.dataArr[indexPath.row][@"ProductId"];
                 vc.deviceName = [NSString stringWithFormat:@"%@",self.dataArr[indexPath.row][@"DeviceName"]];
