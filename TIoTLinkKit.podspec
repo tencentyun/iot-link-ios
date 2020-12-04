@@ -29,6 +29,9 @@ Pod::Spec.new do |s|
     ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
     ss.dependency 'YYModel'
     ss.dependency 'TIoTLinkKit/CoreBase'
+    ss.pod_target_xcconfig = {
+      'VALID_ARCHS'  => 'x86_64 armv7 arm64',
+    }
   end
 
 end
