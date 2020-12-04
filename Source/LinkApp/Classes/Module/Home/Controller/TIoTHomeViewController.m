@@ -31,6 +31,7 @@
 
 #import "Firebase.h"
 #import "TIoTTRTCUIManage.h"
+#import "UILabel+TIoTExtension.h"
 
 static CGFloat weatherHeight = 10;
 
@@ -816,6 +817,15 @@ static CGFloat weatherHeight = 10;
             make.bottom.equalTo(titleLab.mas_bottom);
         }];
         
+        UILabel *titleLabel = [[UILabel alloc] init];
+        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [_navView addSubview:titleLabel];
+        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(titleLab);
+            make.centerX.equalTo(_navView);
+            make.top.equalTo(titleLab.mas_top);
+        }];
+        
         self.addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_addBtn setImage:[UIImage imageNamed:@"homeAdd"] forState:UIControlStateNormal];
         [_addBtn addTarget:self action:@selector(addClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -873,6 +883,15 @@ static CGFloat weatherHeight = 10;
             make.centerY.equalTo(titleLab2);
             make.trailing.lessThanOrEqualTo(_navView2.mas_trailing).offset(-60);
             make.width.mas_equalTo(18);
+        }];
+        
+        UILabel *titleLab = [[UILabel alloc] init];
+        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [_navView2 addSubview:titleLab];
+        [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(titleLab2);
+            make.centerX.equalTo(_navView2);
+            make.top.equalTo(titleLab2.mas_top);
         }];
         
         self.addBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
