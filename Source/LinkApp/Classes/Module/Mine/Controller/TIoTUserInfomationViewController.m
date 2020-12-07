@@ -26,6 +26,7 @@
 #import "TIoTUserConfigModel.h"
 #import <YYModel.h>
 #import "TIoTChooseTimeZoneVC.h"
+#import "TIoTCustomSheetView.h"
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -35,7 +36,7 @@
 @property (nonatomic, strong) TIoTQCloudCOSXMLManage *cosXml;
 @property (nonatomic, copy) NSMutableArray *dataArr;
 @property (nonatomic, copy) NSString *picUrl;
-
+@property (nonatomic, strong) TIoTCustomSheetView *customSheet;
 @end
 
 @implementation TIoTUserInfomationViewController
@@ -181,6 +182,7 @@
     deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [deleteEquipmentBtn addTarget:self action:@selector(loginoutClick:) forControlEvents:UIControlEventTouchUpInside];
     deleteEquipmentBtn.backgroundColor = [UIColor whiteColor];
+    deleteEquipmentBtn.layer.cornerRadius = 20;
     [footerView addSubview:deleteEquipmentBtn];
     [deleteEquipmentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(footerView).offset(30);
@@ -191,7 +193,7 @@
             make.bottom.equalTo(footerView).offset(-40 * kScreenAllHeightScale);
         }
         
-        make.height.mas_equalTo(40 * kScreenAllHeightScale);
+        make.height.mas_equalTo(48 * kScreenAllHeightScale);
     }];
     
     self.tableView.tableFooterView = footerView;
@@ -200,21 +202,32 @@
 
 //选择获取图片方式
 - (void)getImageType{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *camera = [UIAlertAction actionWithTitle:NSLocalizedString(@"take_photo", @"拍照") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self openSystemPhotoOrCamara:YES];
+    
+    self.customSheet = [[TIoTCustomSheetView alloc]init];
+    
+    [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"take_photo", @"拍照") secondTitle:NSLocalizedString(@"choice_from_mobilealbum", @"从手机相册选择")];
+    __weak typeof(self)weakSelf = self;
+    self.customSheet.chooseIntelligentFirstBlock = ^{
+        //MARK: 拍照
+        [weakSelf openSystemPhotoOrCamara:YES];
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+        
+    };
+    self.customSheet.chooseIntelligentSecondBlock = ^{
+        //MARK: 从手机相册选取
+        
+        [weakSelf openSystemPhotoOrCamara:NO];
+        if (weakSelf.customSheet) {
+            [weakSelf.customSheet removeFromSuperview];
+        }
+    };
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
+    [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
     }];
-    
-    UIAlertAction *photo = [UIAlertAction actionWithTitle:NSLocalizedString(@"choice_from_mobilealbum", @"从手机相册选择")  style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self openSystemPhotoOrCamara:NO];
-    }];
-    
-    UIAlertAction *cancle = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:camera];
-    [alert addAction:photo];
-    [alert addAction:cancle];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 //打开系统相册
