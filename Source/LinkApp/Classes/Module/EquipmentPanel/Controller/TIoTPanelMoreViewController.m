@@ -11,6 +11,7 @@
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"
+#import "TIoTSigleCustomButton.h"
 
 @interface TIoTPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -34,7 +35,7 @@
 
 #pragma mark privateMethods
 - (void)setupUI{
-    self.view.backgroundColor = kBgColor;
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -74,19 +75,22 @@
 - (void)addTableFooterView{
     UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
 
-    UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [deleteEquipmentBtn setTitle:NSLocalizedString(@"delete_device", @"删除设备") forState:UIControlStateNormal];
-    [deleteEquipmentBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    deleteEquipmentBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:20];
-    [deleteEquipmentBtn addTarget:self action:@selector(deleteEquipment:) forControlEvents:UIControlEventTouchUpInside];
-    deleteEquipmentBtn.backgroundColor = kWarnColor;
-    deleteEquipmentBtn.layer.cornerRadius = 3;
-    [tableFooterView addSubview:deleteEquipmentBtn];
-    [deleteEquipmentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(tableFooterView).offset(30);
-        make.top.equalTo(tableFooterView).offset(80 * kScreenAllHeightScale);
-        make.right.equalTo(tableFooterView).offset(-30);
-        make.height.mas_equalTo(48);
+    TIoTSigleCustomButton *singleButton = [[TIoTSigleCustomButton alloc]init];
+    [singleButton singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_device", @"删除设备")];
+    singleButton.kLeftRightPadding = 20;
+    singleButton.singleAction = ^{
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        [av alertWithTitle:NSLocalizedString(@"confirm_delete_device", @"确定要删除设备吗？") message:NSLocalizedString(@"delete_toast_content", @"删除后数据无法直接恢复") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
+        av.doneAction = ^(NSString * _Nonnull text) {
+            [self deleteDevice];
+        };
+        [av showInView:[UIApplication sharedApplication].keyWindow];
+    };
+    [tableFooterView addSubview:singleButton];
+    [singleButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(tableFooterView);
+        make.height.mas_equalTo(40);
+        make.top.equalTo(tableFooterView).offset(60 * kScreenAllHeightScale);
     }];
     
     self.tableView.tableFooterView = tableFooterView;

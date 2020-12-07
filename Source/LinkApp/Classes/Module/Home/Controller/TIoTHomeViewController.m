@@ -785,25 +785,38 @@ static CGFloat weatherHeight = 10;
         _navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight)];
 //        _navView.backgroundColor = [UIColor whiteColor];
         
+        
+        UILabel *titleLabel = [[UILabel alloc] init];
+        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [_navView addSubview:titleLabel];
+        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.centerY.equalTo(titleLab);
+            make.height.mas_equalTo(44);
+            make.centerX.equalTo(_navView);
+//            make.top.equalTo(titleLab.mas_top);
+            make.top.mas_equalTo([TIoTUIProxy shareUIProxy].statusHeight);
+        }];
+        
         UILabel *titleLab = [[UILabel alloc] init];
         titleLab.text = NSLocalizedString(@"my_family", @"我的家");
         titleLab.textColor = [UIColor blackColor];
-        titleLab.font = [UIFont boldSystemFontOfSize:24];
+        titleLab.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView addSubview:titleLab];
         self.nick = titleLab;
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.mas_equalTo(16);
             make.height.mas_equalTo(44);
+            make.width.lessThanOrEqualTo(@120);
             make.top.mas_equalTo([TIoTUIProxy shareUIProxy].statusHeight);
         }];
         
         UIImageView *imgv = [[UIImageView alloc] init];
-        imgv.image = [UIImage imageNamed:@"downArrow"];
+        imgv.image = [UIImage imageNamed:@"down_arrow"];
         [_navView addSubview:imgv];
         [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(titleLab.mas_trailing).offset(10);
+            make.leading.equalTo(titleLab.mas_trailing);
             make.centerY.equalTo(titleLab);
-            make.trailing.lessThanOrEqualTo(_navView.mas_trailing).offset(-60);
+            make.trailing.lessThanOrEqualTo(titleLabel.mas_leading);
             make.width.mas_equalTo(18);
         }];
         
@@ -815,15 +828,6 @@ static CGFloat weatherHeight = 10;
             make.trailing.equalTo(imgv.mas_trailing);
             make.top.equalTo(titleLab.mas_top);
             make.bottom.equalTo(titleLab.mas_bottom);
-        }];
-        
-        UILabel *titleLabel = [[UILabel alloc] init];
-        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
-        [_navView addSubview:titleLabel];
-        [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(titleLab);
-            make.centerX.equalTo(_navView);
-            make.top.equalTo(titleLab.mas_top);
         }];
         
         self.addBtn = [UIButton buttonWithType:UIButtonTypeCustom];

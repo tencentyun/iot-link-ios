@@ -37,6 +37,8 @@
 #import "TIoTCoreUtil.h"
 #import "TIOTTRTCModel.h"
 #import "TIoTTRTCUIManage.h"
+#import "TIoTAlertView.h"
+#import "UIButton+LQRelayout.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -57,6 +59,8 @@ static NSString *itemId3 = @"i_ooo454";
 
 
 @interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate>
+@property  (nonatomic, strong) UIImageView *emptyImageView;
+@property (nonatomic, strong) UILabel *noIntelligentLogTipLabel;
 @property (nonatomic,strong) UIImageView *bgView;//背景
 @property (nonatomic,strong) TIoTCollectionView *coll;
 @property (nonatomic,strong) UIView *bottomBar;//底部导航栏
@@ -73,6 +77,8 @@ static NSString *itemId3 = @"i_ooo454";
 
 @property (nonatomic,copy) NSString *templateId;//底部左边对应的属性id
 
+@property (nonatomic, strong) TIoTAlertView *tipAlertView;
+@property (nonatomic, strong) UIView *backMaskView;
 @end
 
 @implementation TIoTPanelVC
@@ -107,18 +113,32 @@ static NSString *itemId3 = @"i_ooo454";
 - (void)showOfflineTip
 {
     if (![self.deviceDic[@"Online"] boolValue]) {
-        TIoTTipView *vc = [[TIoTTipView alloc] init];
-        vc.feedback = ^{
+//        TIoTTipView *vc = [[TIoTTipView alloc] init];
+        __weak typeof(self)WeakSelf = self;
+        self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+        [self.tipAlertView alertWithTitle:NSLocalizedString(@"device_offline", @"设备已离线") message:NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。") cancleTitlt:NSLocalizedString(@"q_feedback", @"问题反馈") doneTitle:NSLocalizedString(@"back_home", @"返回首页")];
+        self.tipAlertView.cancelAction = ^{
             UIViewController *vc = [NSClassFromString(@"TIoTFeedBackViewController") new];
-            [self.navigationController pushViewController:vc animated:YES];
+            [WeakSelf.navigationController pushViewController:vc animated:YES];
         };
-        vc.navback = ^{
-            [self.navigationController popViewControllerAnimated:YES];
+        [self.tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        self.tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+            [WeakSelf.navigationController popViewControllerAnimated:YES];
         };
-        [vc showInView:self.view];
+        
+        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+        [self.tipAlertView showInView:self.backMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.backMaskView addGestureRecognizer:tap];
+        
     }
 }
 
+- (void)hideAlertView {
+    [self.backMaskView removeFromSuperview];
+}
 
 - (void)setupUI
 {
@@ -129,9 +149,11 @@ static NSString *itemId3 = @"i_ooo454";
     }
     
     [self wr_setNavBarBackgroundAlpha:0];
-    self.view.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.bgView];
+    
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    
     [self.view addSubview:self.coll];
     [self.coll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.leading.trailing.mas_equalTo(0);
@@ -402,6 +424,11 @@ static NSString *itemId3 = @"i_ooo454";
 //
 //        }];
         
+//        if (self.configData.allKeys.count == 0) {
+//            [self addEmptyCandidateModelTipView];
+//        }else {
+//            
+//        }
         [self loadData:self.configData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
@@ -440,7 +467,9 @@ static NSString *itemId3 = @"i_ooo454";
         NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
         
 //        TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
-        
+        if (tmpDic.allKeys.count == 0) {
+            [self addEmptyCandidateModelTipView];
+        }
         [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
         [self layoutHeader];
         [self.coll reloadData];
@@ -511,6 +540,61 @@ static NSString *itemId3 = @"i_ooo454";
 
 
 #pragma mark - event
+
+- (void)addEmptyCandidateModelTipView {
+    
+    CGFloat kButtonWidth = 146;
+    
+    [self.view addSubview:self.emptyImageView];
+    [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        CGFloat kSpaceHeight = 70; //距离中心偏移量
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            kSpaceHeight = 150;
+        }
+        make.left.equalTo(self.view).offset(60);
+        make.right.equalTo(self.view).offset(-60);
+        make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.height.mas_equalTo(190);
+        }else {
+            make.height.mas_equalTo(160);
+        }
+
+    }];
+    
+    [self.view addSubview:self.noIntelligentLogTipLabel];
+    [self.noIntelligentLogTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.emptyImageView.mas_bottom).offset(16);
+        make.left.right.equalTo(self.view);
+        make.centerX.equalTo(self.view);
+    }];
+    
+    UIButton *deleteDeviceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    deleteDeviceButton.layer.cornerRadius = 20;
+    deleteDeviceButton.layer.borderWidth = 1;
+    deleteDeviceButton.layer.borderColor = [UIColor colorWithHexString:kWarnHexColor].CGColor;
+    [deleteDeviceButton setButtonFormateWithTitlt:NSLocalizedString(@"delete_device", @"删除设备") titleColorHexString:kWarnHexColor font:[UIFont wcPfRegularFontOfSize:16]];
+    [deleteDeviceButton addTarget:self action:@selector(deleteDevice) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:deleteDeviceButton];
+    [deleteDeviceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.noIntelligentLogTipLabel.mas_bottom).offset(30);
+        make.width.mas_equalTo(kButtonWidth);
+        make.height.mas_equalTo(40);
+        make.centerX.equalTo(self.view);
+    }];
+}
+
+- (void)deleteDevice {
+    
+    [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
+        
+        [HXYNotice addUpdateDeviceListPost];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
 
 - (void)moreClick:(UIButton *)sender{
     
@@ -754,6 +838,25 @@ static NSString *itemId3 = @"i_ooo454";
 }
 
 #pragma mark - getter
+
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        _emptyImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_noTask"]];
+    }
+    return _emptyImageView;
+}
+
+
+- (UILabel *)noIntelligentLogTipLabel {
+    if (!_noIntelligentLogTipLabel) {
+        _noIntelligentLogTipLabel = [[UILabel alloc]init];
+        _noIntelligentLogTipLabel.text = NSLocalizedString(@"no_candidate_model", @"您还未定义物模型，请定义后体验");
+        _noIntelligentLogTipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _noIntelligentLogTipLabel.textColor= [UIColor colorWithHexString:@"#6C7078"];
+        _noIntelligentLogTipLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _noIntelligentLogTipLabel;
+}
 
 - (UIImageView *)bgView
 {

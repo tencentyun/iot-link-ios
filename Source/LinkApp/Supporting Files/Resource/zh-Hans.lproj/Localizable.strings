@@ -801,3 +801,4 @@
 "no_intelligent_device" = "该设备暂无功能可作为智能任务，试试其他设备吧";
 "donot_setDelay_atLeast" = "延时不能设置为最后一个任务";
 "lialian_name" = "腾讯连连";
+"no_candidate_model" = "您还未定义物模型，请定义后体验";

@@ -64,6 +64,8 @@
 #define kIndexFontHexColor @"#006EFF"  //kRGBColor(0, 110, 255)
 //智能模块蓝色
 #define kIntelligentMainHexColor @"#0066FF" // (0,125,255)
+//警告颜色
+#define kWarnHexColor @"#E54545"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;
