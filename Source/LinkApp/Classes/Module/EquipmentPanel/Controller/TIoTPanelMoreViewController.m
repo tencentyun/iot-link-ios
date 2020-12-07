@@ -12,6 +12,7 @@
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"
 #import "TIoTSigleCustomButton.h"
+#import "TIoTModifyDeviceNameVC.h"
 
 @interface TIoTPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -99,21 +100,6 @@
 
 #pragma mark - requset
 
-- (void)modifyName:(NSString *)name
-{
-    [[TIoTRequestObject shared] post:AppUpdateDeviceInFamily Param:@{@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"],@"AliasName":name} success:^(id responseObject) {
-        [HXYNotice addUpdateDeviceListPost];
-        
-        [self.deviceDic setValue:name forKey:@"AliasName"];
-        NSMutableDictionary *dic = self.dataArr[0];
-        [dic setValue:name forKey:@"value"];
-        [self.tableView reloadData];
-        
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
-    }];
-}
-
 - (void)deleteDevice
 {
     [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
@@ -159,29 +145,38 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_name", @"设备名称")]) {
         
-        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        
+        __weak typeof(self)WeakSelf = self;
+        TIoTModifyDeviceNameVC *modifyDeviceNameVC = [[TIoTModifyDeviceNameVC alloc]init];
         NSString *tipString = NSLocalizedString(@"less20character", @"20字以内");
-        
-//        NSString * alias = self.deviceDic[@"AliasName"];
-//        if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
-//            tipString = self.deviceDic[@"AliasName"];
-//        }
-//        else
-//        {
-//            tipString = self.deviceDic[@"DeviceName"];
-//        }
         tipString = [self getDeviceAliasName:tipString];
-        
-        [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:tipString cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
-        av.maxLength = 20;
-        av.doneAction = ^(NSString * _Nonnull text) {
-            if (text.length > 0) {
-                [self modifyName:text];
-            }
+        modifyDeviceNameVC.titleText = [self dataArr][indexPath.row][@"title"];
+        modifyDeviceNameVC.defaultText = tipString;
+        modifyDeviceNameVC.deviceDic = self.deviceDic;
+        modifyDeviceNameVC.title = NSLocalizedString(@"device_name", @"设备名称");
+        modifyDeviceNameVC.modifyDeviceNameBlcok = ^(NSString * _Nonnull name) {
+            [HXYNotice addUpdateDeviceListPost];
+            [WeakSelf.deviceDic setValue:name forKey:@"AliasName"];
+            NSMutableDictionary *dic = WeakSelf.dataArr[0];
+            [dic setValue:name forKey:@"value"];
+            [WeakSelf.tableView reloadData];
         };
-        av.defaultText = [self dataArr][indexPath.row][@"value"];
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        [self.navigationController pushViewController:modifyDeviceNameVC animated:YES];
+        
+//        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+//
+//        NSString *tipString = NSLocalizedString(@"less20character", @"20字以内");
+//
+//        tipString = [self getDeviceAliasName:tipString];
+//
+//        [av alertWithTitle:NSLocalizedString(@"device_name", @"设备名称") message:tipString cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
+//        av.maxLength = 20;
+//        av.doneAction = ^(NSString * _Nonnull text) {
+//            if (text.length > 0) {
+//                [self modifyName:text];
+//            }
+//        };
+//        av.defaultText = [self dataArr][indexPath.row][@"value"];
+//        [av showInView:[UIApplication sharedApplication].keyWindow];
         
     }
     else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"device_share", @"设备分享")])

@@ -57,7 +57,7 @@
             make.height.mas_equalTo(1);
         }];
         
-        self.choseImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"g_default"]];
+        self.choseImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         [self.contentView addSubview:self.choseImageView];
         [self.choseImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.titleLab);
@@ -74,10 +74,10 @@
     self.titleLab.text = title;
     
     if (isSelect) {
-        self.choseImageView.image = [UIImage imageNamed:@"g_select"];
+        self.choseImageView.image = [UIImage imageNamed:@"click_tick"];
     }
     else{
-        self.choseImageView.image = [UIImage imageNamed:@"g_default"];
+        self.choseImageView.image = [UIImage imageNamed:@""];
     }
 }
 

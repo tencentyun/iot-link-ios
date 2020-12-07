@@ -49,7 +49,7 @@
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.backContentView).offset(20);
             make.centerY.equalTo(self.backContentView);
-            make.width.mas_greaterThanOrEqualTo(50);
+            make.width.mas_equalTo(100);
         }];
         
         self.lineView = [[UIView alloc] init];
@@ -76,7 +76,7 @@
         self.valueLab.textAlignment = NSTextAlignmentRight;
         [self.backContentView addSubview:self.valueLab];
         [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.arrowImageView.mas_left);
+            make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
             make.centerY.equalTo(self.backContentView);
             make.left.equalTo(self.titleLab.mas_right).offset(10).priority(750);
         }];
