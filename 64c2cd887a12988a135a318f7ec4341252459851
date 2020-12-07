@@ -16,6 +16,24 @@
       "revId": "64c2cd887a12988a135a318f7ec4341252459851",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f03fc2_6b0e5a86",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTChoseValueTableViewCell.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-07T11:05:09Z",
+      "side": 1,
+      "message": "不显示的image已置nil",
+      "parentUuid": "f29cefb8_a6662cd5",
+      "revId": "64c2cd887a12988a135a318f7ec4341252459851",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
