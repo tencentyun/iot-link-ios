@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f29cefb8_a6662cd5",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTChoseValueTableViewCell.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-07T10:51:30Z",
+      "side": 1,
+      "message": "\u003d nil",
+      "revId": "64c2cd887a12988a135a318f7ec4341252459851",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
