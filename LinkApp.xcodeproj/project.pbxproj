@@ -20,6 +20,7 @@
 		6D6489B1257D37C7000B340F /* TIoTSingleCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */; };
 		6D6489B5257E1592000B340F /* TIoTModifyDeviceNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B4257E1592000B340F /* TIoTModifyDeviceNameVC.m */; };
 		6D648A91257E5BAB000B340F /* TIoTShareDeviceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D648A90257E5BAB000B340F /* TIoTShareDeviceMessageCell.m */; };
+		6D648A9C257E948A000B340F /* TIoTModifyNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D648A9B257E948A000B340F /* TIoTModifyNameVC.m */; };
 		6D65A44224D7F3B5000C9BF1 /* TIoTCancelAccountVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */; };
 		6D65A44C24DBE85F000C9BF1 /* SwiftModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65A44B24DBE85F000C9BF1 /* SwiftModule.swift */; };
 		6D70C2D7255132D00069879E /* TIoTChooseIntelligentDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D70C2D6255132D00069879E /* TIoTChooseIntelligentDeviceVC.m */; };
@@ -424,6 +425,8 @@
 		6D6489B4257E1592000B340F /* TIoTModifyDeviceNameVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyDeviceNameVC.m; sourceTree = "<group>"; };
 		6D648A8F257E5BAB000B340F /* TIoTShareDeviceMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTShareDeviceMessageCell.h; sourceTree = "<group>"; };
 		6D648A90257E5BAB000B340F /* TIoTShareDeviceMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTShareDeviceMessageCell.m; sourceTree = "<group>"; };
+		6D648A9A257E948A000B340F /* TIoTModifyNameVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyNameVC.h; sourceTree = "<group>"; };
+		6D648A9B257E948A000B340F /* TIoTModifyNameVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyNameVC.m; sourceTree = "<group>"; };
 		6D65A44024D7F3B5000C9BF1 /* TIoTCancelAccountVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCancelAccountVC.h; sourceTree = "<group>"; };
 		6D65A44124D7F3B5000C9BF1 /* TIoTCancelAccountVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCancelAccountVC.m; sourceTree = "<group>"; };
 		6D65A44A24DBE85E000C9BF1 /* LinkApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LinkApp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1774,6 +1777,8 @@
 				D23104E523306A0D0003069D /* TIoTTabBarViewController.m */,
 				ED16D93D236FB87400D26D0A /* TIoTNavigationController.h */,
 				ED16D93E236FB87400D26D0A /* TIoTNavigationController.m */,
+				6D648A9A257E948A000B340F /* TIoTModifyNameVC.h */,
+				6D648A9B257E948A000B340F /* TIoTModifyNameVC.m */,
 				ED6BA5AA23C5855B00BE9EC9 /* TIoTButton.h */,
 				ED6BA5AB23C5855B00BE9EC9 /* TIoTButton.m */,
 				6D6489AF257D37C7000B340F /* TIoTSingleCustomButton.h */,
@@ -2849,6 +2854,7 @@
 				6DA08870256E307700938CF4 /* TIoTLogErrorDetailCell.m in Sources */,
 				6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */,
 				ED16D93F236FB87400D26D0A /* TIoTNavigationController.m in Sources */,
+				6D648A9C257E948A000B340F /* TIoTModifyNameVC.m in Sources */,
 				D23104D82330678F0003069D /* UIView+XDPExtension.m in Sources */,
 				A4DC768224D126780079F12C /* TIoTConfigInputView.m in Sources */,
 				F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */,
