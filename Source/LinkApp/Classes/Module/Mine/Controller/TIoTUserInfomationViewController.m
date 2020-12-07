@@ -27,6 +27,7 @@
 #import <YYModel.h>
 #import "TIoTChooseTimeZoneVC.h"
 #import "TIoTCustomSheetView.h"
+#import "TIoTModifyNameVC.h"
 
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -394,22 +395,23 @@
     if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"avatar", @"头像")]) {
         [self editIcon];
     }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"nick", @"昵称")]) {
-
-            TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-            [av alertWithTitle:NSLocalizedString(@"timing_name", @"名称设置")  message:NSLocalizedString(@"less10characters", @"10字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
-            av.maxLength = 10;
-            av.defaultText = tempSectionArray[indexPath.row][@"value"];
-            av.doneAction = ^(NSString * _Nonnull text) {
-                if (text.length > 0) {
-                    [self modifyName:text];
-                }
-                else
-                {
-                    [MBProgressHUD showMessage:NSLocalizedString(@"nick_length_illegality", @"昵称长度非法") icon:@""];
-                }
-            };
-        [av showInView:[[UIApplication sharedApplication] delegate].window];
-
+        
+        TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+        modifyNameVC.titleText = NSLocalizedString(@"user_nickName", @"用户昵称");
+        modifyNameVC.defaultText = tempSectionArray[indexPath.row][@"value"];
+        modifyNameVC.modifyType = ModifyTypeNickName;
+        modifyNameVC.title = NSLocalizedString(@"modify_nick", @"修改昵称");
+        modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
+            [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
+            [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
+            [HXYNotice addModifyUserInfoPost];
+            
+            NSMutableDictionary *nickDic = self.dataArr[0][1];
+            [nickDic setValue:name?:@"" forKey:@"value"];
+            [self.tableView reloadSections:[[NSIndexSet alloc]initWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        };
+        [self.navigationController pushViewController:modifyNameVC animated:YES];
+        
     //        WCModifyNikeNameViewController *vc = [[WCModifyNikeNameViewController alloc] init];
     //        [self.navigationController pushViewController:vc animated:YES];
         } else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"telephone_number", @"电话号码")]){
@@ -631,7 +633,7 @@
         //国际化版本
         _dataArr = [NSMutableArray arrayWithArray:@[
             @[@{@"title":NSLocalizedString(@"avatar", @"头像"),@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
-              @{@"title":NSLocalizedString(@"nick", @"昵称"),@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"},
+              [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"nick", @"昵称"),@"value":[TIoTCoreUserManage shared].nickName,@"vc":@"",@"haveArrow":@"1"}],
               @{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
             ],
             @[@{@"title":NSLocalizedString(@"account_and_safety", @"账号与安全"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
