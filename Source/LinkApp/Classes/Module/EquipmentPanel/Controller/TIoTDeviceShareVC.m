@@ -7,8 +7,11 @@
 //
 
 #import "TIoTDeviceShareVC.h"
-#import "TIoTUserCell.h"
+//#import "TIoTUserCell.h"
 #import "TIoTInvitationVC.h"
+#import "TIoTSingleCustomButton.h"
+#import "UIButton+LQRelayout.h"
+#import "TIoTShareDeviceMessageCell.h"
 
 static NSString *cellId = @"sd0679";
 @interface TIoTDeviceShareVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -31,14 +34,16 @@ static NSString *cellId = @"sd0679";
 - (void)setupUI
 {
     self.title = NSLocalizedString(@"device_share", @"设备分享");
-    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTUserCell" bundle:nil] forCellReuseIdentifier:cellId];
+//    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTUserCell" bundle:nil] forCellReuseIdentifier:cellId];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
-    
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 60)];
     UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, kScreenWidth - 40, 60)];
     lab.textColor = kFontColor;
     lab.font = [UIFont systemFontOfSize:14];
-    lab.text = NSLocalizedString(@"share_user_hint", @"设备已经单独分享给以下用户");
+    lab.text = NSLocalizedString(@"share_user_hint", @"设备已单独分享给以下用户");
     [header addSubview:lab];
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(20, 59, kScreenWidth - 40, 1)];
     line.backgroundColor = kLineColor;
@@ -51,15 +56,21 @@ static NSString *cellId = @"sd0679";
     line2.backgroundColor = kLineColor;
     [footer addSubview:line2];
     
+    CGFloat kLeftPadding = 16;
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(20, 40, kScreenWidth - 40, 48);
+    btn.frame = CGRectMake(kLeftPadding, 24, kScreenWidth - kLeftPadding*2, 48);
     [btn setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
+    [btn setBackgroundColor:[UIColor whiteColor]];
+    [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
+    [btn relayoutButton:XDPButtonLayoutStyleLeft];
     [btn addTarget:self action:@selector(toShare) forControlEvents:UIControlEventTouchUpInside];
-    btn.layer.cornerRadius = 4;
+    btn.layer.cornerRadius = 20;
     [footer addSubview:btn];
+    
     self.tableView.tableFooterView = footer;
 }
 
@@ -85,7 +96,11 @@ static NSString *cellId = @"sd0679";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TIoTUserCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+//    TIoTUserCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+//    [cell setInfo:self.userList[indexPath.row]];
+//    return cell;
+    
+    TIoTShareDeviceMessageCell *cell = [TIoTShareDeviceMessageCell cellWithTableView:tableView];
     [cell setInfo:self.userList[indexPath.row]];
     return cell;
 }

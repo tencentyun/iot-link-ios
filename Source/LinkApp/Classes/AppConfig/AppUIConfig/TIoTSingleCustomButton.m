@@ -1,19 +1,19 @@
 //
-//  TIoTSigleCustomButton.m
+//  TIoTSingleCustomButton.m
 //  LinkApp
 //
 //  Created by ccharlesren on 2020/12/7.
 //  Copyright © 2020 Tencent. All rights reserved.
 //
 
-#import "TIoTSigleCustomButton.h"
+#import "TIoTSingleCustomButton.h"
 #import "UIButton+LQRelayout.h"
 
-@interface TIoTSigleCustomButton ()
+@interface TIoTSingleCustomButton ()
 @property (nonatomic, strong) UIButton *singleButton;
 @end
 
-@implementation TIoTSigleCustomButton
+@implementation TIoTSingleCustomButton
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

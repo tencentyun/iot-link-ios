@@ -8,7 +8,7 @@
 
 #import "TIoTModifyRoomVC.h"
 #import "TIoTChoseValueTableViewCell.h"
-#import "TIoTSigleCustomButton.h"
+#import "TIoTSingleCustomButton.h"
 
 @interface TIoTModifyRoomVC ()
 @property (nonatomic,strong) NSArray *rooms;
@@ -36,7 +36,7 @@
     CGFloat kLeftPadding = 20;
     
     __weak typeof(self)weakSelf = self;
-    TIoTSigleCustomButton *saveButton = [[TIoTSigleCustomButton alloc]initWithFrame:CGRectMake(kLeftPadding, 60, kScreenWidth - kLeftPadding*2, 40)];
+    TIoTSingleCustomButton *saveButton = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(kLeftPadding, 60, kScreenWidth - kLeftPadding*2, 40)];
     saveButton.kLeftRightPadding = kLeftPadding;
     [saveButton singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"save", @"保存")];
     saveButton.singleAction = ^{

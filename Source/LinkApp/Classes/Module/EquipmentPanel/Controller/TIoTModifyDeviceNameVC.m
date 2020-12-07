@@ -8,7 +8,7 @@
 
 #import "TIoTModifyDeviceNameVC.h"
 #import "UILabel+TIoTExtension.h"
-#import "TIoTSigleCustomButton.h"
+#import "TIoTSingleCustomButton.h"
 
 @interface TIoTModifyDeviceNameVC ()
 @property (nonatomic, strong) UITextField *deviceNameField;
@@ -65,7 +65,7 @@
         make.right.equalTo(backgroundView.mas_right);
     }];
     
-    TIoTSigleCustomButton *saveButton = [[TIoTSigleCustomButton alloc]init];
+    TIoTSingleCustomButton *saveButton = [[TIoTSingleCustomButton alloc]init];
     saveButton.kLeftRightPadding = kLeftPadding * 2;
     [saveButton singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"save", @"保存")];
     saveButton.singleAction = ^{

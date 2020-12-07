@@ -207,7 +207,7 @@
 "device_share" = "设备分享";
 "device_share_to_user" = "分享用户";
 "share_user_list" = "分享用户列表";
-"share_user_hint" = "设备已经单独分享给以下用户";
+"share_user_hint" = "设备已单独分享给以下用户";
 
 
 "family_manager" = "家庭管理";

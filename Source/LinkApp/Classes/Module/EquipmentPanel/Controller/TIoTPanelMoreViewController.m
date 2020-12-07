@@ -11,7 +11,7 @@
 #import "TIoTDeviceDetailTableViewCell.h"
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"
-#import "TIoTSigleCustomButton.h"
+#import "TIoTSingleCustomButton.h"
 #import "TIoTModifyDeviceNameVC.h"
 
 @interface TIoTPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -76,7 +76,7 @@
 - (void)addTableFooterView{
     UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
 
-    TIoTSigleCustomButton *singleButton = [[TIoTSigleCustomButton alloc]init];
+    TIoTSingleCustomButton *singleButton = [[TIoTSingleCustomButton alloc]init];
     [singleButton singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_device", @"删除设备")];
     singleButton.kLeftRightPadding = 20;
     singleButton.singleAction = ^{

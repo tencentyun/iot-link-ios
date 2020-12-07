@@ -1,5 +1,5 @@
 //
-//  TIoTSigleCustomButton.h
+//  TIoTSingleCustomButton.h
 //  LinkApp
 //
 //  Created by ccharlesren on 2020/12/7.
@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, SingleCustomButton) {
 
 typedef void(^SingleButtonActioin)(void);
 
-@interface TIoTSigleCustomButton : UIView
+@interface TIoTSingleCustomButton : UIView
 
 @property (nonatomic, copy)SingleButtonActioin singleAction;
 @property (nonatomic, assign) CGFloat kLeftRightPadding;
