@@ -98,3 +98,8 @@
 * 若不使用微信授权登录功能，**WXAccessAppId** 设置为**长度为0字符串**即可。​    
 
 完成上述配置后，依赖 Xcode 的构建，即可在手机上运行。
+
+
+## 第三方服务接入指引
+
+* [实时音视频接入指南](https://github.com/tencentyun/iot-link-ios/blob/master/doc/实时音视频接入指南.md)
