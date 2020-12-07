@@ -61,6 +61,26 @@
     self.messageT.text = defaultText;
 }
 
+- (void)setAlertViewContentAlignment:(TextAlignmentStyle)TextAlignmentStyle {
+    switch (TextAlignmentStyle) {
+        case TextAlignmentStyleCenter: {
+            self.messageL.textAlignment = NSTextAlignmentCenter;
+            break;
+        }
+        case TextAlignmentStyleLeft: {
+            self.messageL.textAlignment = NSTextAlignmentLeft;
+            break;
+        }
+        case TextAlignmentStyleRight: {
+            self.messageL.textAlignment = NSTextAlignmentRight;
+            break;
+        }
+        default:
+            break;
+    }
+    
+}
+
 - (void)setUpViews {
     
     self.backgroundColor = kRGBAColor(0, 0, 0, 0.7);
@@ -89,7 +109,8 @@
     name.text = @"";
     name.textAlignment = NSTextAlignmentCenter;
     name.textColor = [UIColor colorWithHexString:@"#15161A"];
-    name.font = [UIFont wcPfRegularFontOfSize:16];
+//    name.font = [UIFont wcPfRegularFontOfSize:16];
+    name.font = [UIFont boldSystemFontOfSize:20];
     [bgView addSubview:name];
     self.nameL = name;
     [name mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -283,16 +304,23 @@
 
 - (void)cancle
 {
-    [self.messageT resignFirstResponder];
-    [self removeFromSuperview];
+    [self removeView];
+    if (self.cancelAction) {
+        self.cancelAction();
+    }
 }
 
 - (void)done
 {
-    [self cancle];
+    [self removeView];
     if (self.doneAction) {
         self.doneAction(self.messageT.text);
     }
+}
+
+- (void)removeView {
+    [self.messageT resignFirstResponder];
+    [self removeFromSuperview];
 }
 
 - (void)showSingleConfrimButton {
