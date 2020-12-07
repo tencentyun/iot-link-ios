@@ -8,6 +8,7 @@
 
 #import "TIoTModifyRoomVC.h"
 #import "TIoTChoseValueTableViewCell.h"
+#import "TIoTSigleCustomButton.h"
 
 @interface TIoTModifyRoomVC ()
 @property (nonatomic,strong) NSArray *rooms;
@@ -19,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = NSLocalizedString(@"change_room", @"更换房间");
+    self.title = NSLocalizedString(@"select_room", @"选择房间");
     self.currentRoomId = self.deviceInfo[@"RoomId"];
     self.tableView.rowHeight = 60;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -31,15 +32,26 @@
 - (void)addTableFooterView
 {
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
-    [btn addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
-    btn.layer.cornerRadius = 4;
-    [footer addSubview:btn];
+    
+    CGFloat kLeftPadding = 20;
+    
+    __weak typeof(self)weakSelf = self;
+    TIoTSigleCustomButton *saveButton = [[TIoTSigleCustomButton alloc]initWithFrame:CGRectMake(kLeftPadding, 60, kScreenWidth - kLeftPadding*2, 40)];
+    saveButton.kLeftRightPadding = kLeftPadding;
+    [saveButton singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"save", @"保存")];
+    saveButton.singleAction = ^{
+        
+        [[TIoTRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":weakSelf.deviceInfo[@"ProductId"],@"DeviceName":weakSelf.deviceInfo[@"DeviceName"],@"FamilyId": weakSelf.deviceInfo[@"FamilyId"],@"RoomId":weakSelf.currentRoomId} success:^(id responseObject) {
+            [MBProgressHUD showSuccess:NSLocalizedString(@"save_success", @"保存成功")];
+            [TIoTCoreUserManage shared].currentRoomId = weakSelf.currentRoomId;
+            [HXYNotice addUpdateDeviceListPost];
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
+    };
+    [footer addSubview:saveButton];
+    
     self.tableView.tableFooterView = footer;
 }
 
@@ -69,19 +81,6 @@
         [self.tableView hideStatus];
         [self.tableView reloadData];
     }
-}
-
-- (void)save
-{
-    
-    [[TIoTRequestObject shared] post:AppModifyFamilyDeviceRoom Param:@{@"ProductId":self.deviceInfo[@"ProductId"],@"DeviceName":self.deviceInfo[@"DeviceName"],@"FamilyId": self.deviceInfo[@"FamilyId"],@"RoomId":self.currentRoomId} success:^(id responseObject) {
-        [MBProgressHUD showSuccess:NSLocalizedString(@"save_success", @"保存成功")];
-        [TIoTCoreUserManage shared].currentRoomId = self.currentRoomId;
-        [HXYNotice addUpdateDeviceListPost];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
-    }];
 }
 
 

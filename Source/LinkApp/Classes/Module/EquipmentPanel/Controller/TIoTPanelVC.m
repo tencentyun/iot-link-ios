@@ -467,7 +467,8 @@ static NSString *itemId3 = @"i_ooo454";
         NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
         
 //        TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
-        if (tmpDic.allKeys.count == 0) {
+        NSArray *propertiesArray = baseInfo[@"properties"];
+        if (propertiesArray.count == 0) {
             [self addEmptyCandidateModelTipView];
         }
         [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
