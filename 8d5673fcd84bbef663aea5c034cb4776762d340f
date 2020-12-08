@@ -16,6 +16,24 @@
       "revId": "8d5673fcd84bbef663aea5c034cb4776762d340f",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460ad538_68aff438",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/Family/TIoTAddFamilyVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-08T10:28:12Z",
+      "side": 1,
+      "message": "已在patch2中删除",
+      "parentUuid": "b6bcdc22_f2c0e012",
+      "revId": "8d5673fcd84bbef663aea5c034cb4776762d340f",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
