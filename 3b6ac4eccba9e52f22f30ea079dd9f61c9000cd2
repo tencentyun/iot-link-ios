@@ -16,6 +16,24 @@
       "revId": "3b6ac4eccba9e52f22f30ea079dd9f61c9000cd2",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1cc427c_57940027",
+        "filename": "doc/实时音视频接入指南.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-08T08:56:55Z",
+      "side": 1,
+      "message": "应该放上面提供的方法部分，我改下介绍",
+      "parentUuid": "bdcf3a68_283d8b40",
+      "revId": "3b6ac4eccba9e52f22f30ea079dd9f61c9000cd2",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
