@@ -8,10 +8,13 @@
 
 #import "TIoTRoomsVC.h"
 #import "TIoTRoomCell.h"
-#import "TIoTAddRoomVC.h"
 #import "TIoTNavigationController.h"
 #import "TIoTRoomInfoVC.h"
 #import "UIButton+LQRelayout.h"
+<<<<<<< Updated upstream
+=======
+#import "TIoTModifyNameVC.h"
+>>>>>>> Stashed changes
 
 static NSString *cellId = @"wd9765";
 @interface TIoTRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -39,7 +42,7 @@ static NSString *cellId = @"wd9765";
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
-    self.tableView.rowHeight = 60;
+    self.tableView.rowHeight = 48;
     
     
     if (_isOwner) {
@@ -66,7 +69,13 @@ static NSString *cellId = @"wd9765";
         [self.rooms removeAllObjects];
         [self.rooms addObjectsFromArray:responseObject[@"RoomList"]];
         [self refreshUI:responseObject];
-        
+        if (self.rooms.count == 0) {
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+            self.tableView.scrollEnabled = NO;
+        }else {
+            self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+            self.tableView.scrollEnabled = YES;
+        }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -92,9 +101,17 @@ static NSString *cellId = @"wd9765";
 
 - (void)toAddRoom
 {
-    TIoTAddRoomVC *vc = [TIoTAddRoomVC new];
-    vc.familyId = self.familyId;
-    [self.navigationController pushViewController:vc animated:YES];
+   
+    TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+    modifyNameVC.titleText = NSLocalizedString(@"room_name_tip", @"房间名称");
+    modifyNameVC.defaultText = @"";
+    modifyNameVC.modifyType = ModifyTypeAddRoom;
+    modifyNameVC.familyId = self.familyId;
+    modifyNameVC.title = NSLocalizedString(@"add_room", @"添加房间");
+    modifyNameVC.addRoomBlock = ^(NSDictionary * _Nonnull roomDic) {
+        [self.rooms addObject:roomDic];
+    };
+    [self.navigationController pushViewController:modifyNameVC animated:YES];
 }
 
 #pragma mark - table

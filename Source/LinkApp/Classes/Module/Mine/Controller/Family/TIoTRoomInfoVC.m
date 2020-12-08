@@ -94,6 +94,7 @@ static NSString *cellId = @"rc62368";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
+<<<<<<< Updated upstream
 //        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
 //        [av alertWithTitle:NSLocalizedString(@"room_name_tip", @"房间名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
 //        av.maxLength = 20;
@@ -104,6 +105,8 @@ static NSString *cellId = @"rc62368";
 //        };
 //        [av showInView:[UIApplication sharedApplication].keyWindow];
         
+=======
+>>>>>>> Stashed changes
         
         NSDictionary *nameDic = self.roomInfo[0];
         
