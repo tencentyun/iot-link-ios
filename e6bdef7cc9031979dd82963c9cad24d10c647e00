@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ac6062c_164f49e6",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-08T02:52:14Z",
+      "side": 1,
+      "message": "好的，已经在patch2中修改，将userinfo内容保存一个dictionary后传入",
+      "parentUuid": "3d14a322_558a6e38",
+      "revId": "e6bdef7cc9031979dd82963c9cad24d10c647e00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8225491_5fb53049",
         "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "e6bdef7cc9031979dd82963c9cad24d10c647e00",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62813e1f_1a3f0d91",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-08T02:52:14Z",
+      "side": 1,
+      "message": "其实在corUserManager对象中已经判断，不过避免遗漏，在这里获取时候也加入非空判断",
+      "parentUuid": "a8225491_5fb53049",
+      "revId": "e6bdef7cc9031979dd82963c9cad24d10c647e00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
