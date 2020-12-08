@@ -57,6 +57,17 @@
     }
 }
 
+- (void)singleCustomBUttonBackGroundColor:(NSString *)colorString isSelected:(BOOL)isClick {
+    
+    self.singleButton.enabled = isClick;
+    if (isClick == YES) {
+        [self.singleButton setBackgroundColor:[UIColor colorWithHexString:colorString?:kNoSelectedHexColor]];
+    }else {
+        [self.singleButton setBackgroundColor:[UIColor colorWithHexString:colorString?:kIntelligentMainHexColor]];
+    }
+    
+}
+
 - (void)setKLeftRightPadding:(CGFloat)kLeftRightPadding {
     _kLeftRightPadding = kLeftRightPadding;
     [self.singleButton mas_updateConstraints:^(MASConstraintMaker *make) {

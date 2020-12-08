@@ -66,6 +66,8 @@
 #define kIntelligentMainHexColor @"#0066FF" // (0,125,255)
 //警告颜色
 #define kWarnHexColor @"#E54545"
+//按钮不可点击灰色
+#define kNoSelectedHexColor @"#D6D8DC"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;
