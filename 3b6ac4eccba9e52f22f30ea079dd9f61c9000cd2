@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdcf3a68_283d8b40",
+        "filename": "doc/实时音视频接入指南.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-12-08T08:10:33Z",
+      "side": 1,
+      "message": "这个方法是TRTCCallingViewDelegate协议中的吗？当用户自己改UI时，是否需要介绍一下在哪个时机来触发这个方法。",
+      "revId": "3b6ac4eccba9e52f22f30ea079dd9f61c9000cd2",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
