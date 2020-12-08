@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,50 +18,50 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1j-TM-YXl">
-                        <rect key="frame" x="20" y="41.5" width="75" height="21"/>
+                        <rect key="frame" x="20" y="42" width="75" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="75" id="1W1-4u-ZCP"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <fontDescription key="fontDescription" name="PingFangSC-Regular" family="PingFang SC" pointSize="14"/>
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLm-sQ-fQ0">
-                        <rect key="frame" x="287.5" y="42.5" width="39.5" height="19.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <rect key="frame" x="295.5" y="42" width="35.5" height="20"/>
+                        <fontDescription key="fontDescription" name="PingFangSC-Regular" family="PingFang SC" pointSize="14"/>
                         <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mineArrow" translatesAutoresizingMaskIntoConstraints="NO" id="X8b-We-2nJ">
-                        <rect key="frame" x="337" y="43" width="18" height="18"/>
+                        <rect key="frame" x="341" y="43" width="18" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="Wgk-7h-rGf"/>
                             <constraint firstAttribute="width" constant="18" id="YYR-PC-bN0"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kql-OV-Phb">
-                        <rect key="frame" x="16" y="59" width="343" height="1"/>
-                        <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <rect key="frame" x="16" y="59" width="359" height="1"/>
+                        <color key="backgroundColor" red="0.90588235294117647" green="0.90980392156862744" blue="0.92156862745098034" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="ody-Lp-jcd"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="J1j-TM-YXl" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="5Fw-Ah-Tar"/>
+                <constraint firstAttribute="trailing" secondItem="Kql-OV-Phb" secondAttribute="trailing" id="88S-eD-tUm"/>
                 <constraint firstItem="X8b-We-2nJ" firstAttribute="centerY" secondItem="vLm-sQ-fQ0" secondAttribute="centerY" id="BF4-Ba-UXw"/>
                 <constraint firstItem="Kql-OV-Phb" firstAttribute="bottom" secondItem="SEy-5g-ep8" secondAttribute="bottom" id="BcG-WL-7Qc"/>
                 <constraint firstItem="X8b-We-2nJ" firstAttribute="centerY" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="EJu-F3-WpK"/>
                 <constraint firstItem="X8b-We-2nJ" firstAttribute="leading" secondItem="vLm-sQ-fQ0" secondAttribute="trailing" constant="10" id="GcB-SX-7DD"/>
+                <constraint firstAttribute="trailing" secondItem="X8b-We-2nJ" secondAttribute="trailing" constant="16" id="HgR-98-b5E"/>
                 <constraint firstItem="Kql-OV-Phb" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" constant="16" id="WUO-n2-9A6"/>
-                <constraint firstItem="SEy-5g-ep8" firstAttribute="trailing" secondItem="Kql-OV-Phb" secondAttribute="trailing" constant="16" id="YiC-hR-KIh"/>
                 <constraint firstItem="J1j-TM-YXl" firstAttribute="centerY" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="lDK-2x-Toc"/>
                 <constraint firstItem="vLm-sQ-fQ0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="J1j-TM-YXl" secondAttribute="trailing" constant="10" id="pgo-UK-H0J"/>
-                <constraint firstAttribute="trailing" secondItem="X8b-We-2nJ" secondAttribute="trailing" constant="20" id="uZP-CI-eJW"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <connections>
                 <outlet property="contentL" destination="vLm-sQ-fQ0" id="xNT-eO-NLa"/>
                 <outlet property="nameL" destination="J1j-TM-YXl" id="VG9-6t-iNn"/>
@@ -70,6 +70,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="mineArrow" width="18" height="18"/>
+        <image name="mineArrow" width="27" height="27"/>
     </resources>
 </document>
