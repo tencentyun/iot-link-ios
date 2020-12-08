@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UIView    *bottomView;
 @property (nonatomic, strong) UIButton  *protocolButton;
 @property (nonatomic, strong) UIButton  *cancelButton;
+@property (nonatomic, strong) UIImage   *selectedBackImage;
+@property (nonatomic, strong) UIImage   *unSelectedBackImage;
 @end
 
 @implementation TIoTCancelAccountVC
@@ -240,8 +242,9 @@
 - (UIButton *)cancelButton {
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *backImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#FD8989"],[UIColor colorWithHexString:@"#FA5151"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
-        [_cancelButton setBackgroundImage:backImage forState:UIControlStateNormal];
+        self.selectedBackImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#FD8989"],[UIColor colorWithHexString:@"#FA5151"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
+        self.unSelectedBackImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#6C7078"],[UIColor colorWithHexString:@"#6C7078"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
+        [_cancelButton setBackgroundImage:self.unSelectedBackImage forState:UIControlStateNormal];
         _cancelButton.enabled = NO;
         [_cancelButton setTitle:NSLocalizedString(@"logout_text", @"注销")  forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -264,9 +267,11 @@
 - (void)checkCanceled {
     if (self.protocolButton.selected) {
         self.cancelButton.enabled = YES;
+        [_cancelButton setBackgroundImage:self.selectedBackImage forState:UIControlStateNormal];
     }else {
 
         self.cancelButton.enabled = NO;
+        [_cancelButton setBackgroundImage:self.unSelectedBackImage forState:UIControlStateNormal];
     }
 
 }
