@@ -63,7 +63,7 @@ static NSString *cellId = @"sd0679";
     [btn setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:20];
+    btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn setBackgroundColor:[UIColor whiteColor]];
     [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
     [btn relayoutButton:XDPButtonLayoutStyleLeft];

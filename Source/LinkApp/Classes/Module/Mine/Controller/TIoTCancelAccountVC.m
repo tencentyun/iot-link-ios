@@ -243,7 +243,7 @@
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.selectedBackImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#FD8989"],[UIColor colorWithHexString:@"#FA5151"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
-        self.unSelectedBackImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:@"#6C7078"],[UIColor colorWithHexString:@"#6C7078"]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
+        self.unSelectedBackImage = [UIImage makeRoundCornersWithRadius:20 withImage:[self gradientImageWithColors:@[[UIColor colorWithHexString:kNoSelectedHexColor],[UIColor colorWithHexString:kNoSelectedHexColor]] rect:CGRectMake(0, 0, (kScreenWidth - 32), 40 * kScreenAllHeightScale)]];
         [_cancelButton setBackgroundImage:self.unSelectedBackImage forState:UIControlStateNormal];
         _cancelButton.enabled = NO;
         [_cancelButton setTitle:NSLocalizedString(@"logout_text", @"注销")  forState:UIControlStateNormal];

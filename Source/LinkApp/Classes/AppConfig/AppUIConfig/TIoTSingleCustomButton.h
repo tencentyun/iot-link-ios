@@ -23,6 +23,7 @@ typedef void(^SingleButtonActioin)(void);
 @property (nonatomic, assign) CGFloat kLeftRightPadding;
 
 - (void)singleCustomButtonStyle:(SingleCustomButton)type withTitle:(NSString *)title;
+- (void)singleCustomBUttonBackGroundColor:(NSString *)colorString isSelected:(BOOL)isClick;
 @end
 
 NS_ASSUME_NONNULL_END
