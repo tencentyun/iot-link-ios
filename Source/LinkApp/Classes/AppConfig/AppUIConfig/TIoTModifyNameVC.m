@@ -126,6 +126,10 @@
             }
             break;
         }
+        case ModifyTypeAddRoom: {
+            [self addRoom:name];
+            break;
+        }
         default:
             break;
     }
@@ -144,6 +148,23 @@
     }];
 }
 
+- (void)addRoom:(NSString *)name {
+    
+    NSDictionary *param = @{@"FamilyId":self.familyId,@"Name":name};
+    [[TIoTRequestObject shared] post:AppCreateRoom Param:param success:^(id responseObject) {
+        [HXYNotice addUpdateRoomListPost];
+        NSString *roomID = responseObject[@"RoomId"]?:@"";
+        
+        if (self.addRoomBlock) {
+            self.addRoomBlock(@{@"RoomName":name,@"RoomId":roomID,@"DeviceNum":@"0"});
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
 - (void)setNameStringWithType:(ModifyType)nameType {
     switch (nameType) {
         case ModifyTypeNickName: {
@@ -159,6 +180,11 @@
         case ModifyTypeRoomName: {
             self.nameTypeString = NSLocalizedString(@"empty_room", @"请输入房间名称");
             self.errorTypeString = NSLocalizedString(@"no_roomName", @"房间名称不能为空");
+            break;
+        }
+        case ModifyTypeAddRoom: {
+            self.nameTypeString = NSLocalizedString(@"fill_room_name", @"填写房间名称");
+            self.errorTypeString = NSLocalizedString(@"please_fill_room_name", @"请填写房间名称");
             break;
         }
         default:

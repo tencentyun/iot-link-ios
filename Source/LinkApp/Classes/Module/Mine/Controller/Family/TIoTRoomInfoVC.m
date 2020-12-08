@@ -94,16 +94,6 @@ static NSString *cellId = @"rc62368";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-//        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-//        [av alertWithTitle:NSLocalizedString(@"room_name_tip", @"房间名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
-//        av.maxLength = 20;
-//        av.doneAction = ^(NSString * _Nonnull text) {
-//            if (text.length > 0) {
-//                [self modifyRoom:text];
-//            }
-//        };
-//        [av showInView:[UIApplication sharedApplication].keyWindow];
-        
         
         NSDictionary *nameDic = self.roomInfo[0];
         
