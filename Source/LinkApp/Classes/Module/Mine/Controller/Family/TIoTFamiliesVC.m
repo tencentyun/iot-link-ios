@@ -10,6 +10,7 @@
 #import "TIoTHelpCell.h"
 #import "TIoTNavigationController.h"
 #import "TIoTFamilyInfoVC.h"
+#import "UIButton+LQRelayout.h"
 
 static NSString *cellId = @"rbrb";
 
@@ -36,6 +37,8 @@ static NSString *cellId = @"rbrb";
 - (void)setupUI
 {
     self.title = NSLocalizedString(@"family_manager", @"家庭管理");
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerClass:[TIoTHelpCell class] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
@@ -44,13 +47,15 @@ static NSString *cellId = @"rbrb";
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
+    btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 48);
     [btn setTitle:NSLocalizedString(@"add_family", @"添加家庭")  forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
+    [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    [btn setBackgroundColor:[UIColor whiteColor]];
+    [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
+    [btn relayoutButton:XDPButtonLayoutStyleLeft];
     [btn addTarget:self action:@selector(toAddFamily) forControlEvents:UIControlEventTouchUpInside];
-    btn.layer.cornerRadius = 4;
+    btn.layer.cornerRadius = 20;
     [footer addSubview:btn];
     self.tableView.tableFooterView = footer;
     

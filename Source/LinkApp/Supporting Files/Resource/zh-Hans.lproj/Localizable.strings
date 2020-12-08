@@ -226,7 +226,6 @@
 "invite_member" = "邀请成员";
 "room_setting" = "房间设置";
 "delete_room" = "删除房间";
-"room_name" = "家庭名称";
 "member_setting" = "成员设置";
 "member_name" = "成员名称";
 "member_role" = "角色";
@@ -446,7 +445,7 @@
 "get_family_bind_state_failed" = "获取家庭与设备绑定关系失败";
 "select_room" = "选择房间";
 "somebody_family" = "%s 的家";
-"fill_family_name" = "填写家庭名称";
+"fill_family_name" = "请输入家庭名称";
 "fill_room_name" = "填写房间名称";
 "room_name_tip" = "房间名称";
 "title_name" = "标题";
@@ -806,3 +805,5 @@
 "please_input_devicename" = "请输入设备名称";
 "please_input_nickName" = "请输入昵称名称";
 "user_nickName" = "用户昵称";
+"setting_family_address" = "设置位置";
+"no_familyName" = "家庭名称不能为空";
