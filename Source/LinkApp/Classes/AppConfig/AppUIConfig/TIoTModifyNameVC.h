@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, ModifyType) {
     ModifyTypeNickName,
     ModifyTypeDeviceName,
     ModifyTypeFamilyName, //修改家庭名称
+    ModifyTypeRoomName, //房间名称
 };
 
 typedef void(^ModifyNameBlock)(NSString *name);

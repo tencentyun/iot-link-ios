@@ -8,6 +8,8 @@
 
 #import "TIoTRoomInfoVC.h"
 #import "TIoTRoomCell.h"
+#import "TIoTSingleCustomButton.h"
+#import "TIoTModifyNameVC.h"
 
 static NSString *cellId = @"rc62368";
 @interface TIoTRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
@@ -28,21 +30,22 @@ static NSString *cellId = @"rc62368";
 - (void)setupUI
 {
     self.title = NSLocalizedString(@"room_setting", @"房间设置");
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
     self.tableView.rowHeight = 60;
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
-    [btn setTitle:NSLocalizedString(@"delete_room", @"删除房间") forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kWarnColor];
-    [btn addTarget:self action:@selector(toDeleteRoom) forControlEvents:UIControlEventTouchUpInside];
-    btn.layer.cornerRadius = 4;
-    [footer addSubview:btn];
+    
+    TIoTSingleCustomButton *deleteRoomButton = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 24, kScreenWidth - 40, 48)];
+    deleteRoomButton.kLeftRightPadding = 20;
+    [deleteRoomButton singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_room", @"删除房间")];
+    deleteRoomButton.singleAction = ^{
+        [self toDeleteRoom];
+    };
+    [footer addSubview:deleteRoomButton];
     self.tableView.tableFooterView = footer;
     
 }
@@ -91,15 +94,31 @@ static NSString *cellId = @"rc62368";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-        [av alertWithTitle:NSLocalizedString(@"room_name_tip", @"房间名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
-        av.maxLength = 20;
-        av.doneAction = ^(NSString * _Nonnull text) {
-            if (text.length > 0) {
-                [self modifyRoom:text];
+//        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
+//        [av alertWithTitle:NSLocalizedString(@"room_name_tip", @"房间名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
+//        av.maxLength = 20;
+//        av.doneAction = ^(NSString * _Nonnull text) {
+//            if (text.length > 0) {
+//                [self modifyRoom:text];
+//            }
+//        };
+//        [av showInView:[UIApplication sharedApplication].keyWindow];
+        
+        
+        NSDictionary *nameDic = self.roomInfo[0];
+        
+        TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+        modifyNameVC.titleText =NSLocalizedString(@"room_name_tip", @"房间名称");
+        modifyNameVC.defaultText = nameDic[@"name"];
+        modifyNameVC.modifyType = ModifyTypeRoomName;
+        modifyNameVC.title = NSLocalizedString(@"family_setting", @"家庭设置");
+        modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
+            if (name.length > 0) {
+                [self modifyRoom:name];
             }
+            
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        [self.navigationController pushViewController:modifyNameVC animated:YES];
     }
 }
 
@@ -108,7 +127,7 @@ static NSString *cellId = @"rc62368";
 - (NSArray *)roomInfo
 {
     if (!_roomInfo) {
-        _roomInfo = @[@{@"title":NSLocalizedString(@"room_name_tip", @"房间名称"),@"name":self.roomDic[@"RoomName"]}];
+        _roomInfo = @[@{@"title":NSLocalizedString(@"room_name_tip", @"房间名称"),@"name":self.roomDic[@"RoomName"]?:@""}];
     }
     return _roomInfo;
 }

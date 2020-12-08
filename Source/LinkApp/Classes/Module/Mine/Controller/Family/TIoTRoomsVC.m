@@ -11,6 +11,7 @@
 #import "TIoTAddRoomVC.h"
 #import "TIoTNavigationController.h"
 #import "TIoTRoomInfoVC.h"
+#import "UIButton+LQRelayout.h"
 
 static NSString *cellId = @"wd9765";
 @interface TIoTRoomsVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -33,6 +34,8 @@ static NSString *cellId = @"wd9765";
 - (void)setupUI
 {
     self.title = NSLocalizedString(@"room_manager", @"房间管理");
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
@@ -42,13 +45,15 @@ static NSString *cellId = @"wd9765";
     if (_isOwner) {
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(20, 60, kScreenWidth - 40, 48);
+        btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 48);
         [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont systemFontOfSize:20];
-        [btn setBackgroundColor:kMainColor];
+        [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
+        [btn setBackgroundColor:[UIColor whiteColor]];
+        [btn relayoutButton:XDPButtonLayoutStyleLeft];
         [btn addTarget:self action:@selector(toAddRoom) forControlEvents:UIControlEventTouchUpInside];
-        btn.layer.cornerRadius = 4;
+        btn.layer.cornerRadius = 20;
         [footer addSubview:btn];
         self.tableView.tableFooterView = footer;
     }

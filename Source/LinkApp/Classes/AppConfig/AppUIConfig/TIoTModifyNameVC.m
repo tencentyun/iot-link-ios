@@ -12,6 +12,7 @@
 @interface TIoTModifyNameVC ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *nameField;
 @property (nonatomic, strong) NSString *nameTypeString;
+@property (nonatomic, strong) NSString *errorTypeString;
 @end
 
 @implementation TIoTModifyNameVC
@@ -25,6 +26,7 @@
 - (void)setupUI {
     
     self.nameTypeString = @"";
+    self.errorTypeString = @"";
     [self setNameStringWithType:self.modifyType];
     
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
@@ -77,7 +79,7 @@
         [self.nameField resignFirstResponder];
         
         if ([NSString isNullOrNilWithObject:self.nameField.text] || [NSString isFullSpaceEmpty:self.nameField.text]) {
-            [MBProgressHUD showMessage:self.nameTypeString icon:@""];
+            [MBProgressHUD showMessage:self.errorTypeString icon:@""];
         }else {
             
             if (self.modifyType == ModifyTypeNickName) {
@@ -117,6 +119,13 @@
             }
             break;
         }
+        case ModifyTypeRoomName: {
+            if (self.modifyNameBlock) {
+                self.modifyNameBlock(name);
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            break;
+        }
         default:
             break;
     }
@@ -139,11 +148,18 @@
     switch (nameType) {
         case ModifyTypeNickName: {
             self.nameTypeString = NSLocalizedString(@"please_input_nickName", @"请输入昵称名称");
+            self.errorTypeString = NSLocalizedString(@"no_nickName", @"昵称名称不能为空");
             break;
         }
         case ModifyTypeFamilyName: {
             self.nameTypeString = NSLocalizedString(@"fill_family_name", @"请输入家庭名称");
-            break;;
+            self.errorTypeString = NSLocalizedString(@"no_familyName", @"家庭名称不能为空");
+            break;
+        }
+        case ModifyTypeRoomName: {
+            self.nameTypeString = NSLocalizedString(@"empty_room", @"请输入房间名称");
+            self.errorTypeString = NSLocalizedString(@"no_roomName", @"房间名称不能为空");
+            break;
         }
         default:
             break;
