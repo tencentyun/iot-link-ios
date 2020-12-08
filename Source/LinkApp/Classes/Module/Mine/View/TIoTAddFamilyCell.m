@@ -75,7 +75,15 @@
         make.right.equalTo(self.contentView.mas_right).offset(-44);
     }];
     
-    
+    UIView *line = [[UIView alloc]init];
+    line.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.titleLabel.mas_left);
+        make.right.equalTo(self.contentView.mas_right);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-1);
+        make.bottom.mas_equalTo(1);
+    }];
 }
 
 - (void)setTitleString:(NSString *)titleString {

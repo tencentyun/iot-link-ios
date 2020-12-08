@@ -16,8 +16,8 @@
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UIImageView *arrowImageView;
 
-@property (nonatomic, strong) MASConstraint *rightValue;
-
+@property (nonatomic, strong) MASConstraint *rightValueConstraint;
+@property (nonatomic, strong) MASConstraint *rightImageConstraint;
 @end
 
 @implementation TIoTUserInfomationTableViewCell
@@ -46,6 +46,7 @@
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView).offset(30);
             make.centerY.equalTo(self.contentView);
+            make.width.mas_equalTo(100);
         }];
         
         self.lineView = [[UIView alloc] init];
@@ -54,7 +55,7 @@
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.titleLab);
             make.bottom.equalTo(self.contentView);
-            make.right.equalTo(self.contentView).offset(-16);
+            make.right.equalTo(self.contentView).offset(0);
             make.height.mas_equalTo(1);
         }];
         
@@ -71,18 +72,20 @@
         self.valueLab.font = [UIFont wcPfRegularFontOfSize:16];
         [self.contentView addSubview:self.valueLab];
         [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            self.rightValue = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
+            self.rightValueConstraint = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
             make.centerY.equalTo(self.contentView);
+            make.left.equalTo(self.valueLab.mas_left);
         }];
         
         //国际化
         self.iconImageView = [[UIImageView alloc]init];
+        self.iconImageView.layer.cornerRadius = 12;
+        self.iconImageView.layer.masksToBounds = YES;
         [self.contentView addSubview:self.iconImageView];
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            self.rightValue = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
+            self.rightImageConstraint = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
             make.centerY.equalTo(self.contentView);
-            make.height.mas_equalTo(24 * kScreenAllHeightScale);
-            make.width.mas_equalTo(24 * kScreenAllWidthScale);
+            make.height.width.mas_equalTo(24);
         }];
     }
     return self;
@@ -98,7 +101,8 @@
     }
     else{
         self.arrowImageView.hidden = YES;
-        [self.rightValue setOffset:18];
+        [self.rightImageConstraint setOffset:18];
+        [self.rightValueConstraint setOffset:18];
     }
     
     //国际化

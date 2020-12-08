@@ -11,6 +11,7 @@
 #import "TIoTFamilyMemberCell.h"
 #import "TIoTRoomsVC.h"
 #import "TIoTMemberInfoVC.h"
+#import "TIoTSingleCustomButton.h"
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
@@ -21,7 +22,7 @@ static NSString *itemId2 = @"pfDDD";
 @property (weak, nonatomic) IBOutlet UICollectionView *coll;
 
 @property (nonatomic,strong) NSMutableArray *dataArr;
-
+@property (nonatomic, strong) UIView *backMaskView;
 @end
 
 @implementation TIoTFamilyInfoVC
@@ -39,6 +40,7 @@ static NSString *itemId2 = @"pfDDD";
 - (void)setupUI
 {
     self.title = NSLocalizedString(@"family_detail", @"家庭详情") ;
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
     [self.coll registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerId];
@@ -108,24 +110,40 @@ static NSString *itemId2 = @"pfDDD";
 {
     if ([self.familyInfo[@"Role"] integerValue] == 1) {//删除
         
-        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
         [av alertWithTitle:NSLocalizedString(@"toast_delete_family_title", @"您确定要删除该家庭吗？")  message:NSLocalizedString(@"toast_delete_family_content", @"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        
+        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+        [av showInView:self.backMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.backMaskView addGestureRecognizer:tap];
         
     }
     else//退出
     {
-        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
+        TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
         [av alertWithTitle:NSLocalizedString(@"family_leaveConfirm_issue", @"您确定要离开该家庭吗？") message:NSLocalizedString(@"family_leaveConfirm_tip", @"离开家庭后，系统将清除您与该家庭数据")  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self leaveFamily];
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+
+        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+        [av showInView:self.backMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.backMaskView addGestureRecognizer:tap];
         
     }
+}
+
+- (void)hideAlertView {
+    [self.backMaskView removeFromSuperview];
 }
 
 #pragma mark - UICollectionView
@@ -158,17 +176,17 @@ static NSString *itemId2 = @"pfDDD";
 {
     if (kind == UICollectionElementKindSectionHeader) {
         UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerId forIndexPath:indexPath];
-        view.backgroundColor = [UIColor whiteColor];
+        view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         
         for (UIView *sub in view.subviews) {
             [sub removeFromSuperview];
         }
         
         if (indexPath.section == 1) {
-            UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, kScreenWidth - 40, 20)];
+            UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(20, 16, kScreenWidth - 40, 24)];
             lab.text = NSLocalizedString(@"family_member", @"家庭成员");
-            lab.textColor = kFontColor;
-            lab.font = [UIFont systemFontOfSize:18];
+            lab.textColor = [UIColor colorWithHexString:@"#6C7078"];
+            lab.font = [UIFont wcPfRegularFontOfSize:14];
             [view addSubview:lab];
         }
         return view;
@@ -186,24 +204,28 @@ static NSString *itemId2 = @"pfDDD";
         }
         else
         {
+            view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
             
-            TIoTButton *deleteBtn = [TIoTButton buttonWithType:UIButtonTypeCustom];
-            deleteBtn.frame = CGRectMake(20, 21, kScreenWidth - 40, 48);
-            deleteBtn.backgroundColor = kWarnColor;
-            [deleteBtn addTarget:self action:@selector(deleteOrLeaveFamily) forControlEvents:UIControlEventTouchUpInside];
+            TIoTSingleCustomButton *deleteBtn = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 21, kScreenWidth - 40, 48)];
+            [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
+            [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
+            deleteBtn.singleAction = ^{
+                [self deleteOrLeaveFamily];
+            };
             [view addSubview:deleteBtn];
             
             if ([self.familyInfo[@"Role"] integerValue] == 1) {
-                [deleteBtn setTitle:NSLocalizedString(@"delete_family", @"删除家庭") forState:UIControlStateNormal];
                 
+                [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
+                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
                 if (self.familyCount <= 1) {
-                    deleteBtn.enabled = NO;
-                    deleteBtn.backgroundColor = kWarnColorDisable;
+                    [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
                 }
             }
             else
             {
-                [deleteBtn setTitle:NSLocalizedString(@"exit_family", @"退出家庭") forState:UIControlStateNormal];
+                [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"exit_family", @"退出家庭")];
+                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
             }
             
         }
@@ -278,26 +300,27 @@ static NSString *itemId2 = @"pfDDD";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return CGSizeMake(kScreenWidth, 60);
-    }
-    else
-    {
-        return CGSizeMake(kScreenWidth / 3.0, 120);
-    }
+    return CGSizeMake(kScreenWidth, 60);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return CGSizeMake(kScreenWidth, 40);
+    if (section == 0) {
+        return CGSizeMake(kScreenWidth, 0.1);
+    }else {
+        return CGSizeMake(kScreenWidth, 44);
+    }
+    
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    if (section == 1) {
+    if (section == 0) {
+        return CGSizeMake(kScreenWidth, 0.1);
+    }else {
         return CGSizeMake(kScreenWidth, 90);
     }
-    return CGSizeMake(kScreenWidth, 20);
+    
 }
 
 #pragma mark -

@@ -205,7 +205,6 @@
 		ED6BA5BA23C5C10C00BE9EC9 /* TIoTRoomInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5B823C5C10C00BE9EC9 /* TIoTRoomInfoVC.m */; };
 		ED6BA5BB23C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */; };
 		ED6BA5BF23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5BD23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m */; };
-		ED6BA5C023C5C8AF00BE9EC9 /* TIoTMemberInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6BA5BE23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.xib */; };
 		ED6BA5C323C5DF8500BE9EC9 /* TIoTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6BA5C223C5DF8500BE9EC9 /* TIoTAlertView.m */; };
 		ED6D120623C8598400A7A333 /* TIoTTimerListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6D120423C8598400A7A333 /* TIoTTimerListCell.m */; };
 		ED6D120723C8598400A7A333 /* TIoTTimerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED6D120523C8598400A7A333 /* TIoTTimerListCell.xib */; };
@@ -789,7 +788,6 @@
 		ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTRoomInfoVC.xib; sourceTree = "<group>"; };
 		ED6BA5BC23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMemberInfoVC.h; sourceTree = "<group>"; };
 		ED6BA5BD23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMemberInfoVC.m; sourceTree = "<group>"; };
-		ED6BA5BE23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTMemberInfoVC.xib; sourceTree = "<group>"; };
 		ED6BA5C123C5DF8500BE9EC9 /* TIoTAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAlertView.h; sourceTree = "<group>"; };
 		ED6BA5C223C5DF8500BE9EC9 /* TIoTAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAlertView.m; sourceTree = "<group>"; };
 		ED6D120323C8598400A7A333 /* TIoTTimerListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTimerListCell.h; sourceTree = "<group>"; };
@@ -2048,7 +2046,6 @@
 				ED6BA5B923C5C10C00BE9EC9 /* TIoTRoomInfoVC.xib */,
 				ED6BA5BC23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.h */,
 				ED6BA5BD23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m */,
-				ED6BA5BE23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.xib */,
 				ED78228F241B2E7E00919FF6 /* TIoTInvitationVC.h */,
 				ED782290241B2E7E00919FF6 /* TIoTInvitationVC.m */,
 			);
@@ -2442,7 +2439,6 @@
 				D2C7D8082330CA6500C97A04 /* SGQRCode.bundle in Resources */,
 				ED67E59223C3138600BE7628 /* TIoTMediumCell.xib in Resources */,
 				6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */,
-				ED6BA5C023C5C8AF00BE9EC9 /* TIoTMemberInfoVC.xib in Resources */,
 				EDAF9848241F7F1F0049859F /* TIoTShareDevicesVC.xib in Resources */,
 				ED6DA52423C9B21500FDDC97 /* TIoTUserCell.xib in Resources */,
 				ED78229E241B70FA00919FF6 /* TIoTMessageText2Cell.xib in Resources */,
