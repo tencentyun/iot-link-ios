@@ -9,7 +9,7 @@
 #import "TIoTModifyNameVC.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTSingleCustomButton.h"
-@interface TIoTModifyNameVC ()
+@interface TIoTModifyNameVC ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *nameField;
 @property (nonatomic, strong) NSString *nameTypeString;
 @end
@@ -61,6 +61,8 @@
     self.nameField.font = [UIFont wcPfRegularFontOfSize:14];
     self.nameField.text = self.defaultText?:@"";
     self.nameField.placeholder = self.nameTypeString;
+    self.nameField.returnKeyType = UIReturnKeyDone;
+    self.nameField.delegate = self;
     [backgroundView addSubview:self.nameField];
     [self.nameField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(titleTipText.mas_right);
@@ -108,27 +110,22 @@
             [self modifyNickName:name];
             break;
         }
+        case ModifyTypeFamilyName: {
+            if (self.modifyNameBlock) {
+                self.modifyNameBlock(name);
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            break;
+        }
         default:
             break;
     }
-//    [[TIoTRequestObject shared] post:AppUpdateDeviceInFamily Param:@{@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"],@"AliasName":name} success:^(id responseObject) {
-//        if (self.modifyDeviceNameBlcok) {
-//            self.modifyDeviceNameBlcok(name);
-//            [self.navigationController popViewControllerAnimated:YES];
-//        }
-//
-//    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//
-//    }];
 }
 
 - (void)modifyNickName:(NSString *)name {
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
 
     [[TIoTRequestObject shared] post:AppUpdateUser Param:@{@"NickName":name,@"Avatar":[TIoTCoreUserManage shared].avatar} success:^(id responseObject) {
-//        [MBProgressHUD showSuccess:NSLocalizedString(@"modify_success", @"修改成功")];
-//        [[TIoTCoreUserManage shared] saveUserInfo:@{@"UserID":[TIoTCoreUserManage shared].userId,@"Avatar":[TIoTCoreUserManage shared].avatar,@"NickName":name,@"PhoneNumber":[TIoTCoreUserManage shared].phoneNumber}];
-//        [HXYNotice addModifyUserInfoPost];
         if (self.modifyNameBlock) {
             self.modifyNameBlock(name);
             [self.navigationController popViewControllerAnimated:YES];
@@ -144,10 +141,23 @@
             self.nameTypeString = NSLocalizedString(@"please_input_nickName", @"请输入昵称名称");
             break;
         }
-            
+        case ModifyTypeFamilyName: {
+            self.nameTypeString = NSLocalizedString(@"fill_family_name", @"请输入家庭名称");
+            break;;
+        }
         default:
             break;
     }
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    [self.nameField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.nameField resignFirstResponder];
+    return YES;
 }
 
 /*

@@ -12,6 +12,7 @@
 #import "TIoTRoomsVC.h"
 #import "TIoTMemberInfoVC.h"
 #import "TIoTSingleCustomButton.h"
+#import "TIoTModifyNameVC.h"
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
@@ -239,16 +240,21 @@ static NSString *itemId2 = @"pfDDD";
     if (indexPath.section == 0) {
         switch (indexPath.item) {
             case 0:
-            {
-                TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleTextField];
-                [av alertWithTitle:NSLocalizedString(@"family_name", @"家庭名称") message:NSLocalizedString(@"less20character", @"20字以内") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
-                av.maxLength = 20;
-                av.doneAction = ^(NSString * _Nonnull text) {
-                    if (text.length > 0) {
-                        [self modifyFamily:text];
+            {   
+                NSMutableDictionary *nameDic = self.dataArr[0][0];
+                
+                TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+                modifyNameVC.titleText = NSLocalizedString(@"family_name", @"家庭名称");
+                modifyNameVC.defaultText = nameDic[@"name"];
+                modifyNameVC.modifyType = ModifyTypeFamilyName;
+                modifyNameVC.title = NSLocalizedString(@"family_setting", @"家庭设置");
+                modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
+                    if (name.length > 0) {
+                        [self modifyFamily:name];
                     }
+                    
                 };
-                [av showInView:[UIApplication sharedApplication].keyWindow];
+                [self.navigationController pushViewController:modifyNameVC animated:YES];
             }
                 break;
             case 1:

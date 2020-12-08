@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, ModifyType) {
     ModifyTypeNickName,
     ModifyTypeDeviceName,
+    ModifyTypeFamilyName, //修改家庭名称
 };
 
 typedef void(^ModifyNameBlock)(NSString *name);

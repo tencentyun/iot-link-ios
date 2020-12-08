@@ -807,3 +807,4 @@
 "user_nickName" = "用户昵称";
 "setting_family_address" = "设置位置";
 "no_familyName" = "家庭名称不能为空";
+"family_setting" = "家庭设置";
