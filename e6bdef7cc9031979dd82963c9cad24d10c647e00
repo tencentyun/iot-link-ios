@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d14a322_558a6e38",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-08T02:45:18Z",
+      "side": 1,
+      "message": "建议，保存一个object，比较灵活",
+      "revId": "e6bdef7cc9031979dd82963c9cad24d10c647e00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8225491_5fb53049",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-08T02:45:18Z",
+      "side": 1,
+      "message": "nickname是否会为空",
+      "revId": "e6bdef7cc9031979dd82963c9cad24d10c647e00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
