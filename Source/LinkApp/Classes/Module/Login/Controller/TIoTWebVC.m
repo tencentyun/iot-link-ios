@@ -416,7 +416,7 @@
 }
 
 - (void)reloadUnmountDeviceWithMessage:(WKScriptMessage *)message {
-    [self.navigationController popViewControllerAnimated:YES];
+    //MARK:返回首页刷新设备列表
 }
 
 - (void)shareConfigWithMessage:(WKScriptMessage *)message {
