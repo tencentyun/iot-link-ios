@@ -817,3 +817,4 @@
 "no_share_other_user" = "暂未分享给其他用户";
 "contry_region" = "国家/地区";
 "second_confirm_password" = "再次确认";
+"phone_email_loginMethod" = "手机/邮箱";

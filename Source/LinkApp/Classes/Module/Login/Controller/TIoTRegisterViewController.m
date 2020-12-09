@@ -14,7 +14,7 @@
 #import "UILabel+TIoTExtension.h"
 #import "UIButton+LQRelayout.h"
 
-static CGFloat const kLeftRightPadding = 16; //左右边距
+static CGFloat const kLeftRightPadding = 20; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
 static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 
@@ -116,7 +116,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(20);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
     }];
     
     UITextView *procolTV = [[UITextView alloc] init];
@@ -501,7 +501,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:self.phoneAreaLabel];
         [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.areaCodeBtn.mas_right);
+            make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
             make.centerY.equalTo(contryLabel);
             make.height.mas_equalTo(kHeightCell);
         }];
@@ -546,7 +546,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         self.phoneTF = [[UITextField alloc] init];
         self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
-        self.phoneTF.textColor = [UIColor blackColor];
+        self.phoneTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
         self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:14];
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.phoneTF.attributedPlaceholder = ap;
@@ -618,7 +618,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:self.phoneAreaLabel2];
         [self.phoneAreaLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.areaCodeBtn2.mas_right);
+            make.left.equalTo(self.areaCodeBtn2.mas_right).offset(5);
             make.centerY.equalTo(contryLabel2);
             make.height.mas_equalTo(kHeightCell);
         }];
