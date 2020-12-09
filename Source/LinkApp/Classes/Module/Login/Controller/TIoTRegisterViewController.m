@@ -568,7 +568,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self.contentView addSubview:self.phoneTipLabel];
         [self.phoneTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.phoneTF.mas_bottom).offset(3);
-            make.leading.equalTo(phoneLabel.mas_leading);
+            make.leading.equalTo(self.phoneTF.mas_leading);
         }];
         
         UIView *lineViewTwo = [[UIView alloc] init];

@@ -11,11 +11,13 @@
 #import "TIoTBindAccountView.h"
 #import "TIoTChooseRegionVC.h"
 #import "TIoTCountdownTimer.h"
+#import "UILabel+TIoTExtension.h"
 
 @interface TIoTBindAccountVC ()<TIoTBindAccountViewDelegate>
 
 @property (nonatomic, strong) UIButton      *areaCodeBtn;
 @property (nonatomic, strong) NSString      *conturyCode;
+@property (nonatomic, strong) UILabel       *phoneAreaLabel;
 @property (nonatomic, strong) TIoTBindAccountView *bindAccountView;
 @property (nonatomic, strong) TIoTCountdownTimer *countdownTimer;
 @end
@@ -38,26 +40,75 @@
     
     self.conturyCode = @"86";
     
-    CGFloat kPadding = 30;
+    CGFloat kLeftRightPadding = 20;
+    CGFloat kWidthTitle = 90;
+    CGFloat kHeightCell = 50 * kScreenAllHeightScale;
     
-    [self.view addSubview:self.areaCodeBtn];
-    [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-
+    UIView *topView = [[UIView alloc]init];
+    [self.view addSubview:topView];
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale);
         }else {
             make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale);
         }
-        make.leading.mas_equalTo(kPadding);
-        make.height.mas_equalTo(kPadding);
+        make.height.mas_equalTo(kHeightCell);
     }];
+    
+    UILabel *contryLabel = [[UILabel alloc]init];
+    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [topView addSubview:contryLabel];
+    [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(kLeftRightPadding);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(kHeightCell);
+        make.width.mas_equalTo(kWidthTitle);
+    }];
+    
+    [self.view addSubview:self.areaCodeBtn];
+    [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(contryLabel);
+        make.left.equalTo(contryLabel.mas_right);
+        make.height.mas_equalTo(kHeightCell);
+    }];
+    
+    self.phoneAreaLabel = [[UILabel alloc]init];
+    [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+    [topView addSubview:self.phoneAreaLabel];
+    [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
+        make.centerY.equalTo(contryLabel);
+        make.height.mas_equalTo(kHeightCell);
+    }];
+    
     
     UIImageView *imgV = [UIImageView new];
     imgV.image = [UIImage imageNamed:@"mineArrow"];
     [self.view addSubview:imgV];
     [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.areaCodeBtn.mas_trailing).offset(5);
-        make.centerY.equalTo(self.areaCodeBtn);
+        make.right.mas_equalTo(-kLeftRightPadding);
+        make.centerY.equalTo(contryLabel);
+        make.width.height.mas_equalTo(18);
+    }];
+    
+    UIView *lineView = [[UIView alloc]init];
+    lineView.backgroundColor = kLineColor;
+    [topView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(1);
+        make.bottom.equalTo(contryLabel.mas_bottom).offset(-1);
+        make.leading.mas_equalTo(kLeftRightPadding);
+        make.trailing.mas_equalTo(0);
+    }];
+    
+    UIButton *chooseContryAreaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [chooseContryAreaBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
+    [topView addSubview:chooseContryAreaBtn];
+    [chooseContryAreaBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.left.mas_equalTo(0);
+        make.top.equalTo(contryLabel.mas_top);
+        make.bottom.equalTo(contryLabel.mas_bottom);
     }];
     
     [self.view addSubview:self.bindAccountView];
@@ -72,11 +123,12 @@
     }else if (self.accountType == AccountType_Email) {
         self.areaCodeBtn.hidden = YES;
         imgV.hidden = YES;
+        topView.hidden = YES;
         [self.bindAccountView mas_updateConstraints:^(MASConstraintMaker *make) {
             if (@available(iOS 11.0, *)) {
-                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale - kPadding);
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale - kLeftRightPadding);
             }else {
-                make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale - kPadding);
+                make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale - kLeftRightPadding);
             }
 
         }];
@@ -91,10 +143,10 @@
     if (!_areaCodeBtn) {
         _areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
-        [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
+        [_areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-        [_areaCodeBtn addTarget:self action:@selector(choseAreaCode:) forControlEvents:UIControlEventTouchUpInside];
+        [_areaCodeBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
     }
     return _areaCodeBtn;
 }
@@ -121,7 +173,7 @@
 }
 
 #pragma mark - event
-- (void)choseAreaCode:(id)sender{
+- (void)choseAreaCode{
     
 //    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
 //    countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
@@ -136,6 +188,8 @@
     
         self.conturyCode = CountryCode;
         [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+        
+        self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",CountryCode];
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }

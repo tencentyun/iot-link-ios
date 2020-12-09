@@ -7,11 +7,12 @@
 //
 
 #import "TIoTModifyView.h"
+#import "UILabel+TIoTExtension.h"
 
 @interface TIoTModifyView ()
 @property (nonatomic, strong) UIView        *contentView;
 @property (nonatomic, strong) UILabel *tipLabel;
-
+@property (nonatomic, strong) UILabel *phoneOrEmailLabel;
 @end
 
 @implementation TIoTModifyView
@@ -28,8 +29,9 @@
     self.backgroundColor = [UIColor whiteColor];
     
     CGFloat kSpace = 15;
-    CGFloat kPadding = 30;
+    CGFloat kPadding = 20;
     CGFloat kHeight = 50;
+    CGFloat kWidthTitle = 90;
     
     [self addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -38,11 +40,20 @@
         make.bottom.equalTo(self.mas_bottom);
     }];
     
-    [self.contentView addSubview:self.phoneOrEmailTF];
-    [self.phoneOrEmailTF mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.phoneOrEmailLabel = [[UILabel alloc]init];
+    [self.phoneOrEmailLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.contentView addSubview:self.phoneOrEmailLabel];
+    [self.phoneOrEmailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(kSpace * kScreenAllHeightScale);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
-        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
+        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        make.width.mas_equalTo(kWidthTitle);
+    }];
+    
+    [self.contentView addSubview:self.phoneOrEmailTF];
+    [self.phoneOrEmailTF mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.phoneOrEmailLabel.mas_trailing);
+        make.centerY.equalTo(self.phoneOrEmailLabel);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
     }];
     
@@ -56,22 +67,34 @@
     line1.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
     [self.contentView addSubview:line1];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
-        make.trailing.equalTo(self.phoneOrEmailTF.mas_trailing);
-        make.height.mas_equalTo(0.5);
+        make.leading.equalTo(self.phoneOrEmailLabel.mas_leading);
+        make.trailing.equalTo(self.contentView.mas_trailing);
+        make.height.mas_equalTo(1);
         make.top.equalTo(self.phoneOrEmailTF.mas_bottom);
+    }];
+    
+    UILabel *verificationlabel = [[UILabel alloc]init];
+    [verificationlabel setLabelFormateTitle:NSLocalizedString(@"verification_code", @"验证码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.contentView addSubview:verificationlabel];
+    [verificationlabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(line1.mas_bottom).offset(kSpace*kScreenAllHeightScale);
+       make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
+        make.width.mas_equalTo(kWidthTitle);
+       make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        
     }];
     
     [self.contentView addSubview:self.verificationButton];
     [self.verificationButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
-        make.top.equalTo(line1.mas_bottom).offset(kSpace);
+        make.top.equalTo(verificationlabel.mas_top);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        make.width.mas_equalTo(100);
     }];
     
     [self.contentView addSubview:self.verificationCodeTF];
     [self.verificationCodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.verificationButton.mas_top);
+       make.top.equalTo(verificationlabel.mas_top);
        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
        make.trailing.equalTo(self.verificationButton.mas_leading);
        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
@@ -81,9 +104,9 @@
     line2.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
     [self.contentView addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
-        make.trailing.equalTo(self.phoneOrEmailTF.mas_trailing);
-        make.height.mas_equalTo(0.5);
+        make.leading.equalTo(line1.mas_leading);
+        make.trailing.equalTo(self.contentView.mas_trailing);
+        make.height.mas_equalTo(1);
         make.top.equalTo(self.verificationCodeTF.mas_bottom);
     }];
     
@@ -103,9 +126,11 @@
     if (self.modifyAccoutType == ModifyAccountPhoneType) {
         placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
+        self.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
     }else if (self.modifyAccoutType == ModifyAccountEmailType) {
         placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
+        self.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
     }
     NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
     self.phoneOrEmailTF.attributedPlaceholder = attriStr;
@@ -183,6 +208,7 @@
         [_confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_confirmButton setBackgroundColor:kMainColorDisable];
         _confirmButton.enabled = NO;
+        _confirmButton.layer.cornerRadius = 20;
         _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:20];
         [_confirmButton addTarget:self action:@selector(confirmClickButton) forControlEvents:UIControlEventTouchUpInside];
     }
