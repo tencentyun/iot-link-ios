@@ -813,3 +813,4 @@
 "no_nickName" = "昵称名称不能为空";
 "family_setting" = "家庭设置";
 "please_fill_room_name" = "请填写房间名称";
+"sure_delete_room" = "确定删除该房间?";

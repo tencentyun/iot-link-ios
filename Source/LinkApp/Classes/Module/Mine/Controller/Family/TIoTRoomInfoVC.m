@@ -10,12 +10,15 @@
 #import "TIoTRoomCell.h"
 #import "TIoTSingleCustomButton.h"
 #import "TIoTModifyNameVC.h"
+#import "TIoTAlertView.h"
 
 static NSString *cellId = @"rc62368";
 @interface TIoTRoomInfoVC ()<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSArray *roomInfo;
+@property (nonatomic, strong) UIView *backMaskView;
+
 @end
 
 @implementation TIoTRoomInfoVC
@@ -39,15 +42,35 @@ static NSString *cellId = @"rc62368";
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     
+    __weak typeof(self)weakSelf = self;
     TIoTSingleCustomButton *deleteRoomButton = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 24, kScreenWidth - 40, 48)];
     deleteRoomButton.kLeftRightPadding = 20;
     [deleteRoomButton singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_room", @"删除房间")];
     deleteRoomButton.singleAction = ^{
-        [self toDeleteRoom];
+        
+        TIoTAlertView *deleteRoomAlert = [[TIoTAlertView alloc]initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+        
+        [deleteRoomAlert alertWithTitle:NSLocalizedString(@"sure_delete_room", @"确定删除该房间?")  message:@"" cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
+        deleteRoomAlert.doneAction = ^(NSString * _Nonnull text) {
+            [weakSelf toDeleteRoom];
+        };
+        
+        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+        [deleteRoomAlert showInView:self.backMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.backMaskView addGestureRecognizer:tap];
+        
     };
+    
     [footer addSubview:deleteRoomButton];
     self.tableView.tableFooterView = footer;
     
+}
+
+- (void)hideAlertView {
+    [self.backMaskView removeFromSuperview];
 }
 
 #pragma mark - request
