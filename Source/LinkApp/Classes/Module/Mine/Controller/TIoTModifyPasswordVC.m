@@ -15,15 +15,18 @@
 #import "TIoTAlertView.h"
 #import "TIoTChooseRegionVC.h"
 #import "TIoTCountdownTimer.h"
+#import "UILabel+TIoTExtension.h"
 
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL     modifyStyle;            // YES 手机  NO 邮箱
 
+@property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) TIoTModifyPasswordView *contentView;
 @property (nonatomic, strong) UIButton *areaCodeBtn;
 @property (nonatomic, strong) NSString *conturyCode;
+@property (nonatomic, strong) UILabel  *phoneAreaLabel;
 @property (nonatomic, strong) UIImageView *imgV;
 @property (nonatomic, strong) TIoTModifyPasswordView *contentView2;
 
@@ -51,32 +54,80 @@
     self.conturyCode2 = @"86";
     self.modifyStyle = YES;
     
-    CGFloat kPadding = 30;
+    CGFloat kLeftRightPadding = 20;
+    CGFloat kWidthTitle = 90;
+    CGFloat kHeightCell = 50 * kScreenAllHeightScale;
     
-    [self.view addSubview:self.areaCodeBtn];
-    [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-
+    self.topView = [[UIView alloc]init];
+    [self.view addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale);
         }else {
             make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale);
         }
-        make.leading.mas_equalTo(kPadding);
-        make.height.mas_equalTo(kPadding);
+        make.height.mas_equalTo(kHeightCell);
+    }];
+    
+    UILabel *contryLabel = [[UILabel alloc]init];
+    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.topView addSubview:contryLabel];
+    [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(kLeftRightPadding);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(kHeightCell);
+        make.width.mas_equalTo(kWidthTitle);
+    }];
+    
+    [self.view addSubview:self.areaCodeBtn];
+    [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(contryLabel);
+        make.left.equalTo(contryLabel.mas_right);
+        make.height.mas_equalTo(kHeightCell);
+    }];
+    
+    self.phoneAreaLabel = [[UILabel alloc]init];
+    [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+    [self.topView addSubview:self.phoneAreaLabel];
+    [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
+        make.centerY.equalTo(contryLabel);
+        make.height.mas_equalTo(kHeightCell);
     }];
     
     self.imgV = [UIImageView new];
     self.imgV.image = [UIImage imageNamed:@"mineArrow"];
     [self.view addSubview:self.imgV];
     [self.imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.areaCodeBtn.mas_trailing).offset(5);
-        make.centerY.equalTo(self.areaCodeBtn);
+        make.right.mas_equalTo(-kLeftRightPadding);
+        make.centerY.equalTo(contryLabel);
+        make.width.height.mas_equalTo(18);
+    }];
+    
+    UIView *lineView = [[UIView alloc]init];
+    lineView.backgroundColor = kLineColor;
+    [self.topView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(1);
+        make.bottom.equalTo(contryLabel.mas_bottom).offset(-1);
+        make.leading.mas_equalTo(kLeftRightPadding);
+        make.trailing.mas_equalTo(0);
+    }];
+    
+    UIButton *chooseContryAreaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [chooseContryAreaBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:chooseContryAreaBtn];
+    [chooseContryAreaBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.left.mas_equalTo(0);
+        make.top.equalTo(contryLabel.mas_top);
+        make.bottom.equalTo(contryLabel.mas_bottom);
     }];
     
     [self.view addSubview:self.scrollView];
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(self.areaCodeBtn.mas_bottom);
+        make.top.equalTo(lineView.mas_bottom);
         
         make.height.mas_equalTo(278 * kScreenAllHeightScale);
     }];
@@ -102,19 +153,25 @@
     [verificationCodeButton addTarget:self action:@selector(modifyStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:verificationCodeButton];
     [verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left).offset(30 * kScreenAllWidthScale);
+        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding * kScreenAllWidthScale);
         make.top.equalTo(self.scrollView.mas_bottom).offset(10 * kScreenAllWidthScale);
     }];
     
     [self.view addSubview:self.comfirmModifyButton];
     [self.comfirmModifyButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(verificationCodeButton.mas_bottom).offset(60 *kScreenAllHeightScale);
-        make.leading.mas_equalTo(kPadding * kScreenAllWidthScale);
-        make.trailing.mas_equalTo(-kPadding * kScreenAllWidthScale);
-        make.height.mas_equalTo(48 * kScreenAllHeightScale);
+        make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
+        make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
+        make.height.mas_equalTo(40 * kScreenAllHeightScale);
     }];
  
     [self responsedModifyPasswordVerifivationButton];
+    
+    if (self.modifyStyle == YES) {
+        self.contentView.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
+    }else {
+        self.contentView2.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
+    }
 }
 
 #pragma mark - setter and getter
@@ -139,7 +196,7 @@
         [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-        [_areaCodeBtn addTarget:self action:@selector(choseAreaCode:) forControlEvents:UIControlEventTouchUpInside];
+        [_areaCodeBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
     }
     return _areaCodeBtn;
 }
@@ -182,7 +239,8 @@
         [_comfirmModifyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_comfirmModifyButton setBackgroundColor:kMainColorDisable];
         _comfirmModifyButton.enabled = NO;
-        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _comfirmModifyButton.layer.cornerRadius = 20;
+        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_comfirmModifyButton addTarget:self action:@selector(modifySure) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmModifyButton;;
@@ -190,7 +248,7 @@
 
 #pragma mark - event
 
-- (void)choseAreaCode:(id)sender{
+- (void)choseAreaCode {
     
 //    XWCountryCodeController *countryCodeVC = [[XWCountryCodeController alloc] init];
 //    countryCodeVC.returnCountryCodeBlock = ^(NSString *countryName, NSString *code) {
@@ -206,6 +264,7 @@
     
         self.conturyCode = CountryCode;
         [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",Title] forState:UIControlStateNormal];
+        self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",CountryCode];
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
@@ -227,10 +286,11 @@
         self.contentView.phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
         NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         self.contentView.phoneOrEmailTF.attributedPlaceholder = attriStr;
+        self.contentView.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
         
         self.areaCodeBtn.hidden = NO;
         self.imgV.hidden = NO;
-
+        self.topView.hidden = NO;
     }else {
         self.modifyStyle = NO;
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
@@ -243,9 +303,11 @@
         self.contentView2.phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
         NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
         self.contentView2.phoneOrEmailTF.attributedPlaceholder = attriStr;
+        self.contentView2.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
         
         self.areaCodeBtn.hidden = YES;
         self.imgV.hidden = YES;
+        self.topView.hidden = YES;
     }
 }
 

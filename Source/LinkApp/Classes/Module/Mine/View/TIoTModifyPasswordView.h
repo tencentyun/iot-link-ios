@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITextField   *passwordTF;
 @property (nonatomic, strong) UITextField   *passwordConfirmTF;
 @property (nonatomic, strong) UIButton      *confirmButton;
+@property (nonatomic, strong) UILabel       *phoneOrEmailLabel;
 
 @property (nonatomic, weak) id<TIoTModifyPasswordViewDelegate>delegate;
 

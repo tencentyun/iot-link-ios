@@ -194,7 +194,7 @@
             make.bottom.equalTo(footerView).offset(-40 * kScreenAllHeightScale);
         }
         
-        make.height.mas_equalTo(48 * kScreenAllHeightScale);
+        make.height.mas_equalTo(40 * kScreenAllHeightScale);
     }];
     
     self.tableView.tableFooterView = footerView;

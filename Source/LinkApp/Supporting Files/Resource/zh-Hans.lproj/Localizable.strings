@@ -817,3 +817,4 @@
 "second_confirm_password" = "再次确认";
 "phone_email_loginMethod" = "手机/邮箱";
 "confirm_password" = "确认密码";
+"new_password" = "新密码";

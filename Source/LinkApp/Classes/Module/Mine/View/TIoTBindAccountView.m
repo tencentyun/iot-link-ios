@@ -97,7 +97,7 @@
     
     [self.contentView addSubview:self.verificationCodeTF];
     [self.verificationCodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(verificationlabel.mas_top);
+       make.top.equalTo(verificationlabel.mas_top);
        make.leading.equalTo(verificationlabel.mas_trailing);
        make.trailing.equalTo(self.verificationButton.mas_leading);
        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
@@ -115,7 +115,7 @@
     
     
     UILabel *passwordLabel = [[UILabel alloc]init];
-    [passwordLabel setLabelFormateTitle:NSLocalizedString(@"set_password", @"设置密码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [passwordLabel setLabelFormateTitle:NSLocalizedString(@"password", @"密码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:passwordLabel];
     [passwordLabel mas_makeConstraints:^(MASConstraintMaker *make) {
        make.top.equalTo(line2.mas_bottom).offset(kSpace*kScreenAllHeightScale);
@@ -184,7 +184,7 @@
         make.top.equalTo(line4.mas_bottom).offset(60 * kScreenAllHeightScale);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
-        make.height.mas_equalTo(48);
+        make.height.mas_equalTo(40);
     }];
     
     if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
@@ -339,7 +339,7 @@
         [_confirmButton setBackgroundColor:kMainColorDisable];
         _confirmButton.enabled = NO;
         _confirmButton.layer.cornerRadius = 20;
-        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:20];
+        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_confirmButton addTarget:self action:@selector(confirmClickButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;

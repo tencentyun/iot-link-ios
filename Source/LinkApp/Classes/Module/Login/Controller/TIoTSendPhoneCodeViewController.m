@@ -130,7 +130,7 @@
         make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(self.sendCodeBtn.mas_bottom).offset(114 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(40);
     }];
 }
 

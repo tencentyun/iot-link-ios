@@ -130,7 +130,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(procolTV.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
-        make.height.mas_equalTo(48);
+        make.height.mas_equalTo(40);
     }];
 }
 

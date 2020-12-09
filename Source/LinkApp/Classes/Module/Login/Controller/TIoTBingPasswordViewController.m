@@ -82,7 +82,7 @@
     }];
     
     UILabel *passWordLabel2 = [[UILabel alloc]init];
-    [passWordLabel2 setLabelFormateTitle:NSLocalizedString(@"second_confirm_password", @"再次确认") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [passWordLabel2 setLabelFormateTitle:NSLocalizedString(@"confirm_password", @"确认密码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.view addSubview:passWordLabel2];
     [passWordLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
@@ -139,7 +139,7 @@
         make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(tipLab.mas_bottom).offset(114 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(40);
     }];
 }
 
