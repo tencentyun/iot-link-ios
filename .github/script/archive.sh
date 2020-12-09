@@ -32,14 +32,15 @@ cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 #/usr/local/bin/pod install --verbose --no-repo-update
 #sudo gem install cocoapods --pre
 /usr/local/bin/pod --version
-/usr/local/bin/pod update --verbose
+/usr/local/bin/pod install --verbose
  
 BUILD_TYPE=$1
 
+rm *.ipa
+
+xcodebuild clean -workspace TIoTLinkKit.xcworkspace -scheme LinkApp -configuration Release
  
-xcodebuild clean -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Release
- 
-xcodebuild archive -workspace LinkApp.xcworkspace -scheme LinkApp -configuration Release -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
+xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkApp -configuration Release -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
  
 if [ $1 == 'Debug' ]; then
     xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./
