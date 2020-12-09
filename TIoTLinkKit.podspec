@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.default_subspec = 'CoreBase'
   
   s.subspec 'CoreBase' do |ss|
-    ss.source_files  = 'Source/LinkSDK/QCAPISets/**/*.{h,m,c}', 'Source/LinkSDK/QCDeviceCenter/**/*.{h,m,c}', 'Source/LinkSDK/QCFoundation/**/*.{h,m,c}'
+    ss.source_files  = 'Source/LinkSDK/Core/**/*.{h,m,c}'
     ss.dependency 'MBProgressHUD', '1.1.0'
   end
   
