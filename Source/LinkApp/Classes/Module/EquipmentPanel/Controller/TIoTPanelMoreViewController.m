@@ -50,26 +50,6 @@
 - (void)addTableHeaderView{
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
     
-//    self.nameLab = [[UILabel alloc] init];
-//    self.nameLab.text = self.deviceDic[@"DeviceName"];
-//    self.nameLab.textColor = kRGBColor(51, 51, 51);
-//    self.nameLab.font = [UIFont wcPfSemiboldFontOfSize:20];
-//    [tableHeaderView addSubview:self.nameLab];
-//    [self.nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(tableHeaderView).offset(20);
-//        make.top.equalTo(tableHeaderView).offset(30);
-//    }];
-//    
-//    self.timeLab = [[UILabel alloc] init];
-//    self.timeLab.text = [NSString stringWithFormat:@"绑定时间：%@",[NSString convertTimestampToTime:[NSString stringWithFormat:@"%@",self.deviceDic[@"CreateTime"]] byDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
-//    self.timeLab.textColor = kRGBColor(204, 204, 204);
-//    self.timeLab.font = [UIFont wcPfRegularFontOfSize:10];
-//    [tableHeaderView addSubview:self.timeLab];
-//    [self.timeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(tableHeaderView).offset(20);
-//        make.top.equalTo(self.nameLab.mas_bottom).offset(10);
-//    }];
-    
     self.tableView.tableHeaderView = tableHeaderView;
 }
 

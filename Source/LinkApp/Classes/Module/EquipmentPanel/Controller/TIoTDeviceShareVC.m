@@ -18,7 +18,10 @@ static NSString *cellId = @"sd0679";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSMutableArray *userList;
-
+@property (nonatomic, strong) UIView *emptyShareDeviceBackView;
+@property  (nonatomic, strong) UIImageView *emptyImageView;
+@property (nonatomic, strong) UILabel *noShareDeviceTipLabel;
+@property (nonatomic, strong) UIButton *addShareDeviceButton;
 @end
 
 @implementation TIoTDeviceShareVC
@@ -37,6 +40,9 @@ static NSString *cellId = @"sd0679";
 //    [self.tableView registerNib:[UINib nibWithNibName:@"TIoTUserCell" bundle:nil] forCellReuseIdentifier:cellId];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    
+    //添加空白缺省图
+    [self addEmptyShareDeviceTipView];
     
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 60)];
@@ -177,18 +183,62 @@ static NSString *cellId = @"sd0679";
     
     if ([data[@"Users"] count] == 0) {
         
-        [MBProgressHUD dismissInView:self.view];
-        
-        [self.tableView showEmpty:NSLocalizedString(@"add_device_share", @"添加分享") desc:NSLocalizedString(@"unshare_device_tip_message", @"暂未分享设备,点击任意处进行分享") image:[UIImage imageNamed:@"noShare"] block:^{
-            [self toShare];
-        }];
-        
+        self.tableView.hidden = YES;
+        self.emptyShareDeviceBackView.hidden = NO;
         [self.tableView reloadData];
     }
     else{
-        [self.tableView hideStatus];
+        self.tableView.hidden = NO;
+        self.emptyShareDeviceBackView.hidden = YES;
         [self.tableView reloadData];
     }
+}
+
+- (void)addEmptyShareDeviceTipView {
+    
+    self.emptyShareDeviceBackView = [[UIView alloc]init];
+    self.emptyShareDeviceBackView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    [self.view addSubview:self.emptyShareDeviceBackView];
+    [self.emptyShareDeviceBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        }else {
+            make.top.equalTo(self.view.mas_top).offset(64*kScreenAllHeightScale);
+        }
+    }];
+    
+    [self.emptyShareDeviceBackView addSubview:self.emptyImageView];
+    [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        CGFloat kSpaceHeight = 55; //距离中心偏移量
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            kSpaceHeight = 80;
+        }
+        make.centerY.mas_equalTo(kScreenHeight/2).offset(-kSpaceHeight);
+        make.left.equalTo(self.emptyShareDeviceBackView).offset(60);
+        make.right.equalTo(self.emptyShareDeviceBackView).offset(-60);
+        if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+            make.height.mas_equalTo(190);
+        }else {
+            make.height.mas_equalTo(160);
+        }
+
+    }];
+    
+    [self.emptyShareDeviceBackView addSubview:self.noShareDeviceTipLabel];
+    [self.noShareDeviceTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.emptyImageView.mas_bottom).offset(16);
+        make.left.right.equalTo(self.emptyShareDeviceBackView);
+        make.centerX.equalTo(self.emptyShareDeviceBackView);
+    }];
+    
+    [self.emptyShareDeviceBackView addSubview:self.addShareDeviceButton];
+    [self.addShareDeviceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.noShareDeviceTipLabel.mas_bottom).offset(20);
+        make.width.mas_equalTo(140);
+        make.height.mas_equalTo(36);
+        make.centerX.equalTo(self.emptyShareDeviceBackView);
+    }];
 }
 
 #pragma mark - getter
@@ -199,6 +249,38 @@ static NSString *cellId = @"sd0679";
         _userList = [NSMutableArray array];
     }
     return _userList;
+}
+
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        _emptyImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"empty_noTask"]];
+    }
+    return _emptyImageView;
+}
+
+- (UILabel *)noShareDeviceTipLabel {
+    if (!_noShareDeviceTipLabel) {
+        _noShareDeviceTipLabel = [[UILabel alloc]init];
+        _noShareDeviceTipLabel.text = NSLocalizedString(@"no_share_other_user", @"暂未分享给其他用户");
+        _noShareDeviceTipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _noShareDeviceTipLabel.textColor= [UIColor colorWithHexString:@"#6C7078"];
+        _noShareDeviceTipLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _noShareDeviceTipLabel;
+}
+
+- (UIButton *)addShareDeviceButton {
+    if (!_addShareDeviceButton) {
+        _addShareDeviceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addShareDeviceButton.layer.borderWidth = 1;
+        _addShareDeviceButton.layer.borderColor = [UIColor colorWithHexString:@"#0066FF"].CGColor;
+        _addShareDeviceButton.layer.cornerRadius = 18;
+        [_addShareDeviceButton setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
+        [_addShareDeviceButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+        _addShareDeviceButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        [_addShareDeviceButton addTarget:self action:@selector(toShare) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _addShareDeviceButton;
 }
 
 @end
