@@ -49,7 +49,7 @@
 #define kWarnColor kRGBColor(229, 69, 69)
 #define kWarnColorDisable kRGBAColor(229, 69, 69, 0.2)
 //线颜色
-#define kLineColor kRGBColor(245, 245, 245)
+#define kLineColor kRGBColor(231, 232, 235)
 //字体颜色
 #define kFontColor kRGBColor(51, 51, 51)
 //背景颜色
@@ -68,6 +68,10 @@
 #define kWarnHexColor @"#E54545"
 //按钮不可点击灰色
 #define kNoSelectedHexColor @"#D6D8DC"
+//注册/登录区域提示文字颜色
+#define kRegionHexColor @"#6C7078"
+//注册/登录 手机号邮箱文字颜色
+#define kPhoneEmailHexColor @"#A1A7B2"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;

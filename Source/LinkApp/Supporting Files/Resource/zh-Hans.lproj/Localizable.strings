@@ -621,7 +621,7 @@
 "modifiedSuccess_relogin" = "修改成功，请重新登录";
 "password_format" = "密码8～16位需包含字母和数字";
 "help" = "帮助";
-"bind_phonenumber" = "手机号";
+"bind_phonenumber" = "绑定手机";
 "bind_email_address" = "绑定邮箱";
 "email_verify_mofify" = "邮箱验证修改";
 "write_email_address" = "请输入邮箱";
@@ -813,3 +813,5 @@
 "please_fill_room_name" = "请填写房间名称";
 "sure_delete_room" = "确定删除该房间?";
 "no_share_other_user" = "暂未分享给其他用户";
+"contry_region" = "国家/地区";
+"second_confirm_password" = "再次确认";

@@ -45,12 +45,13 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = NSLocalizedString(@"verification_code", @"验证码");
     
-    
+    CGFloat kLeftRightPadding = 20;
+    CGFloat kBoxWidth = 50;
     JHVCConfig *config     = [[JHVCConfig alloc] init];
     config.inputBoxNumber  = 6;
-    config.inputBoxSpacing = 4;
-    config.inputBoxWidth   = 34;
-    config.inputBoxHeight  = 40;
+    config.inputBoxSpacing = (kScreenWidth-kLeftRightPadding*2- 6*kBoxWidth)/5;
+    config.inputBoxWidth   = 50;
+    config.inputBoxHeight  = 48;
     config.tintColor       = kFontColor;
     config.secureTextEntry = NO;
     config.inputBoxColor   = [UIColor clearColor];
@@ -60,13 +61,13 @@
     config.keyboardType = UIKeyboardTypeNumberPad;
     config.inputBoxBorderWidth  = 1;
     config.showUnderLine = YES;
-    config.underLineSize = CGSizeMake(30, 1);
-    config.underLineColor = [UIColor blackColor];
-    config.underLineHighlightedColor = [UIColor blackColor];
+    config.underLineSize = CGSizeMake(50, 1);
+    config.underLineColor = kLineColor;
+    config.underLineHighlightedColor = kLineColor;
     
     [self.view addSubview:({
         WeakObj(self)
-        self.codeView = [[JHVerificationCodeView alloc] initWithFrame:CGRectMake(kHorEdge, [TIoTUIProxy shareUIProxy].navigationBarHeight + 70* kScreenAllHeightScale, 246, 40) config:config];
+        self.codeView = [[JHVerificationCodeView alloc] initWithFrame:CGRectMake(kLeftRightPadding, [TIoTUIProxy shareUIProxy].navigationBarHeight + 70* kScreenAllHeightScale, kScreenWidth - kLeftRightPadding*2, 48) config:config];
         CGPoint center = self.codeView.center;
         center.x = self.view.center.x;
         self.codeView.center = center;
@@ -92,7 +93,7 @@
     }
     
     tipLab.textColor = kRGBColor(153, 153, 153);
-    tipLab.font = [UIFont wcPfRegularFontOfSize:12];
+    tipLab.font = [UIFont wcPfRegularFontOfSize:14];
     tipLab.textAlignment = NSTextAlignmentCenter;
     tipLab.numberOfLines = 0;
     [self.view addSubview:tipLab];
@@ -103,7 +104,7 @@
     }];
 
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:12];
+    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(60s)",NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
@@ -123,12 +124,12 @@
     [self.registerBtn addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     self.registerBtn.backgroundColor = kMainColorDisable;
     self.registerBtn.enabled = NO;
-    self.registerBtn.layer.cornerRadius = 3;
+    self.registerBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.registerBtn];
     [self.registerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(30);
+        make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(self.sendCodeBtn.mas_bottom).offset(114 * kScreenAllHeightScale);
-        make.right.equalTo(self.view).offset(-30);
+        make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(50);
     }];
 }

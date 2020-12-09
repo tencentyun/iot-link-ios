@@ -7,6 +7,7 @@
 //
 
 #import "TIoTBingPasswordViewController.h"
+#import "UILabel+TIoTExtension.h"
 
 @interface TIoTBingPasswordViewController ()
 
@@ -42,6 +43,18 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = NSLocalizedString(@"set_password", @"设置密码");
     
+    CGFloat kLeftRightPadding = 20;
+    CGFloat kHeightCell = 48;
+    CGFloat kWidthTitle = 90;
+    
+    UILabel *passWordLabel = [[UILabel alloc]init];
+    [passWordLabel setLabelFormateTitle:NSLocalizedString(@"password", @"密码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.view addSubview:passWordLabel];
+    [passWordLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
+        make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + 52 * kScreenAllHeightScale);
+        make.width.mas_equalTo(kWidthTitle);
+    }];
     
     self.passWordTF = [[UITextField alloc] init];
     self.passWordTF.placeholder = NSLocalizedString(@"password", @"密码");
@@ -52,10 +65,10 @@
     [self.passWordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.passWordTF];
     [self.passWordTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view).offset(24);
-        make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + 52 * kScreenAllHeightScale);
-        make.trailing.equalTo(self.view).offset(-24);
-        make.height.mas_equalTo(48);
+        make.leading.equalTo(passWordLabel.mas_trailing);
+        make.centerY.equalTo(passWordLabel);
+        make.trailing.equalTo(self.view).offset(-kLeftRightPadding);
+        make.height.mas_equalTo(kHeightCell);
     }];
     
     UIView *lineView = [[UIView alloc] init];
@@ -63,9 +76,18 @@
     [self.view addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.passWordTF.mas_bottom).offset(0);
-        make.left.equalTo(self.view).offset(24);
-        make.right.equalTo(self.view).offset(-24);
+        make.left.equalTo(self.view).offset(kLeftRightPadding);
+        make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(1);
+    }];
+    
+    UILabel *passWordLabel2 = [[UILabel alloc]init];
+    [passWordLabel2 setLabelFormateTitle:NSLocalizedString(@"second_confirm_password", @"再次确认") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.view addSubview:passWordLabel2];
+    [passWordLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
+        make.top.equalTo(lineView.mas_bottom).offset(20);
+        make.width.mas_equalTo(kWidthTitle);
     }];
     
     self.passWordTF2 = [[UITextField alloc] init];
@@ -77,10 +99,10 @@
     [self.passWordTF2 addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.passWordTF2];
     [self.passWordTF2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view).offset(24);
-        make.top.equalTo(lineView.mas_bottom).offset(20);
-        make.trailing.equalTo(self.view).offset(-24);
-        make.height.mas_equalTo(48);
+        make.leading.equalTo(passWordLabel2.mas_trailing);
+        make.centerY.equalTo(passWordLabel2);
+        make.trailing.equalTo(self.view).offset(-kLeftRightPadding);
+        make.height.mas_equalTo(kHeightCell);
     }];
     
     UIView *lineView2 = [[UIView alloc] init];
@@ -88,8 +110,8 @@
     [self.view addSubview:lineView2];
     [lineView2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.passWordTF2.mas_bottom).offset(0);
-        make.left.equalTo(self.view).offset(24);
-        make.right.equalTo(self.view).offset(-24);
+        make.left.equalTo(self.view).offset(kLeftRightPadding);
+        make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(1);
     }];
     
@@ -111,12 +133,12 @@
     [self.downBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
     self.downBtn.backgroundColor = kMainColorDisable;
     self.downBtn.enabled = NO;
-    self.downBtn.layer.cornerRadius = 3;
+    self.downBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.downBtn];
     [self.downBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(30);
+        make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(tipLab.mas_bottom).offset(114 * kScreenAllHeightScale);
-        make.right.equalTo(self.view).offset(-30);
+        make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(50);
     }];
 }
