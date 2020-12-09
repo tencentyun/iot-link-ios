@@ -97,7 +97,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             make.top.equalTo(self.view.mas_top).offset(64);
         }
         
-        make.height.mas_equalTo(kHeightCell*3 + 30 +3); //30 距离顶部距离，3 个分割线
+        make.height.mas_equalTo(kHeightCell*3 + 30); //30 距离顶部距离
     }];
     
     [self.scrollView addSubview:self.contentView];
@@ -383,8 +383,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         lineViewVerification.backgroundColor = kLineColor;
         [_contentView addSubview:lineViewVerification];
         [lineViewVerification mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(verificationlabel.mas_bottom);
             make.height.mas_equalTo(1);
-            make.bottom.mas_equalTo(0);
             make.leading.mas_equalTo(kLeftRightPadding);
             make.trailing.mas_equalTo(0);
         }];
@@ -508,8 +508,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         passwordLineView.backgroundColor = kLineColor;
         [_contentView2 addSubview:passwordLineView];
         [passwordLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(passWordLabel.mas_bottom);
             make.height.mas_equalTo(1);
-            make.bottom.mas_equalTo(0);
+//            make.bottom.mas_equalTo(0);
             make.leading.mas_equalTo(kLeftRightPadding);
             make.trailing.mas_equalTo(0);
         }];
@@ -605,7 +606,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         _passwordTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
         _passwordTF.secureTextEntry = YES;
         _passwordTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"password", @"密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"smart_config_second_hint", @"请输入密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
         _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];

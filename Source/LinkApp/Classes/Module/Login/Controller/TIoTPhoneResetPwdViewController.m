@@ -393,7 +393,6 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [_contentView addSubview:lineView2];
         [lineView2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.phoneTF.mas_bottom);
-            make.bottom.mas_equalTo(0);
             make.height.mas_equalTo(1);
             make.leading.mas_equalTo(kLeftRightPadding);
             make.trailing.mas_equalTo(0);
@@ -441,7 +440,6 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [_contentView2 addSubview:lineView];
         [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.emailTF.mas_bottom);
-            make.bottom.mas_equalTo(0);
             make.height.mas_equalTo(1);
             make.leading.mas_equalTo(kLeftRightPadding);
             make.trailing.mas_equalTo(0);

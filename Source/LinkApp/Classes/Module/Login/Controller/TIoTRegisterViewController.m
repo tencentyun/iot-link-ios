@@ -89,7 +89,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             // Fallback on earlier versions
             make.top.equalTo(self.view.mas_top).offset(64);
         }
-        make.height.mas_equalTo(kHeightCell*2 + 30 +2); //30为顶部空白 2两条分割线
+        make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
     }];
     
     if (self.defaultPhoneOrEmail != nil) {

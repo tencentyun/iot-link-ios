@@ -174,7 +174,7 @@
         kSignoutBtnHeight = kScreenHeight - 348 *kScreenAllHeightScale - [TIoTUIProxy shareUIProxy].navigationBarHeight;
     }
     
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kSignoutBtnHeight)];
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     footerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     UIButton *deleteEquipmentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
