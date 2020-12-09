@@ -1,12 +1,10 @@
-/Pods/Pods.xcodeproj/xcuserdata/
-/LinkApp.xcodeproj/xcuserdata/
-/LinkApp.xcworkspace/xcuserdata/
+xcuserdata
 /Pods/
 .DS_Store
 .idea/
 DistributionSummary.plist
 ExportOptions.plist
-LinkApp.ipa
-LinkApp.xcarchive/
+*.ipa
+*.xcarchive
 Packaging.log
 build.sh

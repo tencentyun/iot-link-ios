@@ -22,7 +22,7 @@ def common_all_pods
   pod 'Firebase/Performance', '6.31.1'
 end
 
-target 'LinkApp' do
+target 'TIoTLinkKit' do
   common_all_pods
   trtc_ui_pods
   
@@ -41,7 +41,7 @@ target 'LinkApp' do
   pod 'TIoTThridSDK', '1.0.1'
 end
 
-target 'LinkSDKDemo' do
+target 'TIoTLinkKitDemo' do
   common_all_pods
   trtc_ui_pods
   
