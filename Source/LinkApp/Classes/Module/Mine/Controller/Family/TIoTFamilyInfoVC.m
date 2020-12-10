@@ -59,8 +59,20 @@ static NSString *itemId2 = @"pfDDD";
         if (self.dataArr.count == 2) {
             [self.dataArr removeLastObject];
         }
+        
         [self.dataArr addObject:responseObject[@"MemberList"]];
-        [self.coll reloadData];
+        
+        //获取房间个数
+        NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Offset":@(0),@"Limit":@(400)};
+        [[TIoTRequestObject shared] post:AppGetRoomList Param:param success:^(id responseObject) {
+            NSString *roomCount = [NSString stringWithFormat:@"%@",responseObject[@"Total"]?:@"0"];
+            NSMutableDictionary *tempDic = self.dataArr[0][1];
+            [tempDic setValue:roomCount forKey:@"RoomCount"];
+            //刷新
+            [self.coll reloadData];
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -240,21 +252,25 @@ static NSString *itemId2 = @"pfDDD";
     if (indexPath.section == 0) {
         switch (indexPath.item) {
             case 0:
-            {   
-                NSMutableDictionary *nameDic = self.dataArr[0][0];
+            {
                 
-                TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
-                modifyNameVC.titleText = NSLocalizedString(@"family_name", @"家庭名称");
-                modifyNameVC.defaultText = nameDic[@"name"];
-                modifyNameVC.modifyType = ModifyTypeFamilyName;
-                modifyNameVC.title = NSLocalizedString(@"family_setting", @"家庭设置");
-                modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
-                    if (name.length > 0) {
-                        [self modifyFamily:name];
-                    }
+                if ([self.familyInfo[@"Role"] integerValue] == 1) { //所有者
+                    NSMutableDictionary *nameDic = self.dataArr[0][0];
                     
-                };
-                [self.navigationController pushViewController:modifyNameVC animated:YES];
+                    TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+                    modifyNameVC.titleText = NSLocalizedString(@"family_name", @"家庭名称");
+                    modifyNameVC.defaultText = nameDic[@"name"];
+                    modifyNameVC.modifyType = ModifyTypeFamilyName;
+                    modifyNameVC.title = NSLocalizedString(@"family_setting", @"家庭设置");
+                    modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
+                        if (name.length > 0) {
+                            [self modifyFamily:name];
+                        }
+                        
+                    };
+                    [self.navigationController pushViewController:modifyNameVC animated:YES];
+                }
+                
             }
                 break;
             case 1:
@@ -267,13 +283,14 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             case 2:
             {
-                
-                UIViewController *vc = [NSClassFromString(@"TIoTInvitationVC") new];
-                if (vc) {
-                    vc.title = NSLocalizedString(@"invite_member", @"邀请成员");
-                    [vc setValue:self.familyInfo[@"FamilyId"] forKey:@"familyId"];
-                    
-                    [self.navigationController pushViewController:vc animated:YES];
+                if ([self.familyInfo[@"Role"] integerValue] == 1) { //所有者
+                    UIViewController *vc = [NSClassFromString(@"TIoTInvitationVC") new];
+                    if (vc) {
+                        vc.title = NSLocalizedString(@"invite_member", @"邀请成员");
+                        [vc setValue:self.familyInfo[@"FamilyId"] forKey:@"familyId"];
+                        
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
                 }
                 
             }
@@ -336,8 +353,8 @@ static NSString *itemId2 = @"pfDDD";
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
         NSMutableArray *firstSection = [NSMutableArray array];
-        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"]}]];
-        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@""}]];
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"],@"Role":self.familyInfo[@"Role"]?:@""}]];
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@"",@"RoomCount":@"",@"Role":@"1"}]];
         
         if ([self.familyInfo[@"Role"] integerValue] == 1) {
             [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"invite_family_member", @"邀请家庭成员"),@"name":@""}]];

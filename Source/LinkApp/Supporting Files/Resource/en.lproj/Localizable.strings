@@ -273,9 +273,9 @@
 "scanning_retry" = "重试";
 "connect" = "连接";
 "all_device" = "全部";
-"living_room" = "客厅";
-"bedroom" = "卧室";
-"kitchen" = "厨房";
+//"living_room" = "客厅";
+//"bedroom" = "卧室";
+//"kitchen" = "厨房";
 "recommend" = "推荐";
 
 
@@ -820,3 +820,13 @@
 "phone_email_loginMethod" = "手机/邮箱";
 "confirm_password" = "确认密码";
 "new_password" = "新密码";
+"XXX_rooms" = "个房间";  //xxx 房间个数
+"living_room" = "客厅";
+"kitchen" = "厨房";
+"bedroom" = "卧室";
+"Assistant_bedroom" = "副卧";
+"bathroom" = "卫生间";
+"bathroom" = "浴室";
+"entrance" = "玄关";
+"balcony" = "阳台";
+"cloakroom" = "衣帽间";
