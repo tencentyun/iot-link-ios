@@ -116,19 +116,19 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(16);
     }];
     
     UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
     procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:kMainColor}; //
-    procolTV.textColor = kFontColor;
+    procolTV.textColor = [UIColor colorWithHexString:@"#6C7078"];
     procolTV.delegate = self;
     procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
     procolTV.scrollEnabled = NO;
     [self.view addSubview:procolTV];
     [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38 * kScreenAllHeightScale);
 //        make.centerX.equalTo(self.view).offset(15);
         make.left.equalTo(emailRegisterBtn.mas_left).offset(27);
     }];
@@ -136,7 +136,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     self.procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.procolBtn addTarget:self action:@selector(procolClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.procolBtn setImage:[UIImage imageNamed:@"procolDefault"] forState:UIControlStateNormal];
-    [self.procolBtn setImage:[UIImage imageNamed:@"procolSelect"] forState:UIControlStateSelected];
+    [self.procolBtn setImage:[UIImage imageNamed:@"single_seleccted"] forState:UIControlStateSelected];
     [self.view addSubview:self.procolBtn];
     [self.procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(procolTV);
@@ -157,7 +157,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(procolTV.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.top.equalTo(procolTV.mas_bottom).offset(16 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(kHeightCell - 8);
     }];
@@ -242,13 +242,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     NSRange range2 = [showStr rangeOfString:str4];
     NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
     [pstype setAlignment:NSTextAlignmentCenter];
-    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
+    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
     
     NSString *valueString1 = [[NSString stringWithFormat:@"Terms1://%@",str2] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
     NSString *valueString2 = [[NSString stringWithFormat:@"Privacy1://%@",str4] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
     
-    [mastring addAttributes:@{NSLinkAttributeName:valueString1,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],} range:range1];
-    [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],} range:range2];
+    [mastring addAttributes:@{NSLinkAttributeName:valueString1,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range1];
+    [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range2];
     return mastring;
 }
 
@@ -686,7 +686,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self.contentView2 addSubview:self.emailTipLabel];
         [self.emailTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.emailTF.mas_bottom).offset(3);
-            make.leading.equalTo(emailLabel.mas_leading);
+            make.leading.equalTo(self.emailTF.mas_leading);
         }];
         
         UIView *lineViewTwo = [[UIView alloc] init];
