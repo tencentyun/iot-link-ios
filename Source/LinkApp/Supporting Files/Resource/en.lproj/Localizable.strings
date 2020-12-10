@@ -830,3 +830,4 @@
 "entrance" = "玄关";
 "balcony" = "阳台";
 "cloakroom" = "衣帽间";
+"no_authority" = "您不是房间所有者，没有此权限";

@@ -41,21 +41,26 @@ static NSString *cellId = @"wd9765";
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     self.tableView.rowHeight = 48;
     
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 40);
+    [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
+    [btn setBackgroundColor:[UIColor whiteColor]];
+    [btn relayoutButton:XDPButtonLayoutStyleLeft];
+    [btn addTarget:self action:@selector(toAddRoom) forControlEvents:UIControlEventTouchUpInside];
+    btn.layer.cornerRadius = 20;
+    [footer addSubview:btn];
+    self.tableView.tableFooterView = footer;
     
     if (_isOwner) {
-        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 40);
-        [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-        [btn setImage:[UIImage imageNamed:@"share_device"] forState:UIControlStateNormal];
         [btn setBackgroundColor:[UIColor whiteColor]];
-        [btn relayoutButton:XDPButtonLayoutStyleLeft];
-        [btn addTarget:self action:@selector(toAddRoom) forControlEvents:UIControlEventTouchUpInside];
-        btn.layer.cornerRadius = 20;
-        [footer addSubview:btn];
-        self.tableView.tableFooterView = footer;
+        [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+    }else {
+        [btn setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
 }
 
@@ -98,17 +103,20 @@ static NSString *cellId = @"wd9765";
 
 - (void)toAddRoom
 {
-   
-    TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
-    modifyNameVC.titleText = NSLocalizedString(@"room_name_tip", @"房间名称");
-    modifyNameVC.defaultText = @"";
-    modifyNameVC.modifyType = ModifyTypeAddRoom;
-    modifyNameVC.familyId = self.familyId;
-    modifyNameVC.title = NSLocalizedString(@"add_room", @"添加房间");
-    modifyNameVC.addRoomBlock = ^(NSDictionary * _Nonnull roomDic) {
-        [self.rooms addObject:roomDic];
-    };
-    [self.navigationController pushViewController:modifyNameVC animated:YES];
+    if (self.isOwner == NO) {
+        [MBProgressHUD showError:NSLocalizedString(@"no_authority", @"您不是房间所有者，没有此权限")];
+    }else {
+        TIoTModifyNameVC *modifyNameVC = [[TIoTModifyNameVC alloc]init];
+        modifyNameVC.titleText = NSLocalizedString(@"room_name_tip", @"房间名称");
+        modifyNameVC.defaultText = @"";
+        modifyNameVC.modifyType = ModifyTypeAddRoom;
+        modifyNameVC.familyId = self.familyId;
+        modifyNameVC.title = NSLocalizedString(@"add_room", @"添加房间");
+        modifyNameVC.addRoomBlock = ^(NSDictionary * _Nonnull roomDic) {
+            [self.rooms addObject:roomDic];
+        };
+        [self.navigationController pushViewController:modifyNameVC animated:YES];
+    }
 }
 
 #pragma mark - table
