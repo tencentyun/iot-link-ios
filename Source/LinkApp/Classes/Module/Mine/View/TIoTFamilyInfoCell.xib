@@ -64,6 +64,7 @@
             </constraints>
             <connections>
                 <outlet property="contentL" destination="vLm-sQ-fQ0" id="xNT-eO-NLa"/>
+                <outlet property="mineArrow" destination="X8b-We-2nJ" id="Drk-Fw-710"/>
                 <outlet property="nameL" destination="J1j-TM-YXl" id="VG9-6t-iNn"/>
             </connections>
             <point key="canvasLocation" x="139" y="85"/>

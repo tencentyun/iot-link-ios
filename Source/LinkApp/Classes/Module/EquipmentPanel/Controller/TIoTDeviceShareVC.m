@@ -65,7 +65,7 @@ static NSString *cellId = @"sd0679";
     CGFloat kLeftPadding = 16;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(kLeftPadding, 24, kScreenWidth - kLeftPadding*2, 48);
+    btn.frame = CGRectMake(kLeftPadding, 24, kScreenWidth - kLeftPadding*2, 40);
     [btn setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];

@@ -118,7 +118,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         make.top.equalTo(self.scrollView.mas_bottom).offset(40);
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
         make.right.equalTo(self.view.mas_right).offset(-kLeftRightPadding);
-        make.height.mas_equalTo(45);
+        make.height.mas_equalTo(40);
     }];
     
     UIButton *verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -38,14 +38,14 @@ static NSString *cellId = @"wd9765";
     self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
-    self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     self.tableView.rowHeight = 48;
     
     
     if (_isOwner) {
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 48);
+        btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 40);
         [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -83,10 +83,10 @@ static NSString *cellId = @"wd9765";
     
     if ([data[@"Total"] integerValue] == 0) {
         
-        [MBProgressHUD dismissInView:self.view];
-        [self.tableView showEmpty:NSLocalizedString(@"add_room", @"添加房间") desc:NSLocalizedString(@"now_noRoom", @"当前暂无房间") image:[UIImage imageNamed:@"noDevice"] block:^{
-            [self toAddRoom];
-        }];
+//        [MBProgressHUD dismissInView:self.view];
+//        [self.tableView showEmpty:NSLocalizedString(@"add_room", @"添加房间") desc:NSLocalizedString(@"now_noRoom", @"当前暂无房间") image:[UIImage imageNamed:@"noDevice"] block:^{
+//            [self toAddRoom];
+//        }];
         
         [self.tableView reloadData];
     }

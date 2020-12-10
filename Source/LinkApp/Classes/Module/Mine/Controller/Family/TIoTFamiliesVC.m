@@ -47,7 +47,7 @@ static NSString *cellId = @"rbrb";
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 48);
+    btn.frame = CGRectMake(20, 24, kScreenWidth - 40, 40);
     [btn setTitle:NSLocalizedString(@"add_family", @"添加家庭")  forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
