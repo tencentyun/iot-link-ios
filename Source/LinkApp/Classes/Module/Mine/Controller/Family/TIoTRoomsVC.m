@@ -121,6 +121,7 @@ static NSString *cellId = @"wd9765";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TIoTRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
+    cell.isOwer = self.isOwner;
     [cell setInfo:self.rooms[indexPath.row]];
     return cell;
 }

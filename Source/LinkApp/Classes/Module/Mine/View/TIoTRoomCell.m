@@ -11,6 +11,7 @@
 @interface TIoTRoomCell()
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
+@property (weak, nonatomic) IBOutlet UIImageView *mineArrow;
 
 @end
 @implementation TIoTRoomCell
@@ -26,10 +27,24 @@
     // Configure the view for the selected state
 }
 
+- (void)setIsOwer:(BOOL)isOwer {
+    _isOwer = isOwer;
+    if (isOwer == YES) {
+        self.mineArrow.hidden = NO;
+    }else {
+        self.mineArrow.hidden = YES;
+    }
+}
+
 - (void)setInfo:(NSDictionary *)info
 {
     self.name.text = info[@"RoomName"];
     self.contentL.text = [NSString stringWithFormat:@"%@个设备",info[@"DeviceNum"]];
+    if (self.isOwer == YES) {
+        self.mineArrow.hidden = NO;
+    }else {
+        self.mineArrow.hidden = YES;
+    }
 }
 
 - (void)setInfo2:(NSDictionary *)info2

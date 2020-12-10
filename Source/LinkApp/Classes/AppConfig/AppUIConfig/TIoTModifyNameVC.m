@@ -229,23 +229,39 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
         [self.saveButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.collectionView.mas_bottom).offset(30);
         }];
+        
+        [self.saveButton singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:YES];
     }else {
         self.commendLabel.hidden = YES;
         self.collectionView.hidden = YES;
         [self.saveButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.backgroundView.mas_bottom).offset(30);
         }];
+        
+        [self.saveButton singleCustomBUttonBackGroundColor:kIntelligentMainHexColor isSelected:YES];
     }
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    [self.nameField resignFirstResponder];
+    [self judgeContent];
     return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.nameField resignFirstResponder];
+    [self judgeContent];
     return YES;
+}
+
+- (void)judgeContent {
+    [self.nameField resignFirstResponder];
+    if (self.modifyType == ModifyTypeAddRoom) {
+        if ([NSString isNullOrNilWithObject:self.nameField.text]|| [NSString isFullSpaceEmpty:self.nameField.text]) {
+            [self.saveButton singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:YES];
+        }else {
+            [self.saveButton singleCustomBUttonBackGroundColor:kIntelligentMainHexColor isSelected:YES];
+        }
+    }
+        
 }
 
 #pragma mark - UICollectionViewDataSource
