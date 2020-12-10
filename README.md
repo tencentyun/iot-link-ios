@@ -107,7 +107,7 @@
 * [定制 App 接入须知](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方定制APP接入指南.md)
 * [定制 App 常见问题](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方定制APP常见问题.md)
 * [APP发布前确认事项](https://github.com/tencentyun/iot-link-ios/blob/master/doc/APP发布前确认事项.md)
-*  [SDK 说明文档](https://github.com/tencentyun/iot-link-ios/blob/master/doc/平台技术文档/SDK%20接入说明.md)
+* [SDK 说明文档](https://github.com/tencentyun/iot-link-ios/blob/master/doc/平台技术文档/SDK%20接入说明.md)
 
 
 ## 第三方服务接入指引

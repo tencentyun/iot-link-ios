@@ -20,8 +20,7 @@
 	environment.appKey = @"物联网开发平台申请的 App Key";
 	environment.appSecret = @"物联网开发平台申请的 App Secret";
 	self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[UIViewController new]];
-		
-	}
+	
 	return YES;
 }    
 ```   

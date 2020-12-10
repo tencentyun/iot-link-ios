@@ -8,7 +8,7 @@
    注意：
 >!  登录前所使用的API URL 为 https://iot.cloud.tencent.com/api/exploreropen/appapi，不建议在设备端调用，需要替换为自建的后台服务，以避免密钥的泄漏。
      
-   api/studioapp/* 为公版APP专用，OEM的App使用的是应用端 API(api/exploreropen/*)，当在[App 参数写入配置文件]()中配置 TencentIotLinkAppkey 后, api/studioapp/* 调用将自动切换为 应用端 API 调用。
+   api/studioapp/* 为公版APP专用，OEM的App使用的是应用端 API(api/exploreropen/*)，当在 App 参数写入配置文件(app-config.json) 中配置 TencentIotLinkAppkey 后, api/studioapp/* 调用将自动切换为 应用端 API 调用。
      appapi(api/exploreropen/appapi)请在自建后台进行调用, tokenapi(api/exploreropen/tokenapi) 可安全在设备端调用。
 
     
