@@ -870,23 +870,13 @@ static CGFloat weatherHeight = 10;
         UILabel *titleLab2 = [[UILabel alloc] init];
         titleLab2.text = @"tao的家";
         titleLab2.textColor = [UIColor blackColor];
-        titleLab2.font = [UIFont boldSystemFontOfSize:24];
+        titleLab2.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView2 addSubview:titleLab2];
         self.nick2 = titleLab2;
         [titleLab2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.mas_equalTo(16);
             make.height.mas_equalTo(44);
             make.top.mas_equalTo(0);
-        }];
-        
-        UIImageView *imgv = [[UIImageView alloc] init];
-        imgv.image = [UIImage imageNamed:@"downArrow"];
-        [_navView2 addSubview:imgv];
-        [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(titleLab2.mas_trailing).offset(10);
-            make.centerY.equalTo(titleLab2);
-            make.trailing.lessThanOrEqualTo(_navView2.mas_trailing).offset(-60);
-            make.width.mas_equalTo(18);
         }];
         
         UILabel *titleLab = [[UILabel alloc] init];
@@ -896,6 +886,20 @@ static CGFloat weatherHeight = 10;
             make.centerY.equalTo(titleLab2);
             make.centerX.equalTo(_navView2);
             make.top.equalTo(titleLab2.mas_top);
+        }];
+        
+        UIImageView *imgv = [[UIImageView alloc] init];
+        imgv.image = [UIImage imageNamed:@"down_arrow"];
+        [_navView2 addSubview:imgv];
+        [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.leading.equalTo(titleLab2.mas_trailing).offset(10);
+//            make.centerY.equalTo(titleLab2);
+//            make.trailing.lessThanOrEqualTo(_navView2.mas_trailing).offset(-60);
+//            make.width.mas_equalTo(18);
+            make.leading.equalTo(titleLab2.mas_trailing);
+            make.centerY.equalTo(titleLab2);
+            make.trailing.lessThanOrEqualTo(titleLab.mas_leading);
+            make.width.mas_equalTo(18);
         }];
         
         self.addBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -41,7 +41,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CGFloat kLeftRightPadding = 16;
+    CGFloat kLeftRightPadding = 20;
     
     self.titleLabel = [[UILabel alloc]init];
     [self.titleLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];

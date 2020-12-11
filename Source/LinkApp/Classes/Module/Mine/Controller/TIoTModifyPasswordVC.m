@@ -56,7 +56,7 @@
     
     CGFloat kLeftRightPadding = 20;
     CGFloat kWidthTitle = 90;
-    CGFloat kHeightCell = 50 * kScreenAllHeightScale;
+    CGFloat kHeightCell = 48 * kScreenAllHeightScale;
     
     self.topView = [[UIView alloc]init];
     [self.view addSubview:self.topView];
@@ -71,7 +71,7 @@
     }];
     
     UILabel *contryLabel = [[UILabel alloc]init];
-    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.topView addSubview:contryLabel];
     [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
@@ -162,7 +162,7 @@
         make.top.equalTo(verificationCodeButton.mas_bottom).offset(60 *kScreenAllHeightScale);
         make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
         make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
-        make.height.mas_equalTo(40 * kScreenAllHeightScale);
+        make.height.mas_equalTo(kHeightCell);
     }];
  
     [self responsedModifyPasswordVerifivationButton];
@@ -195,7 +195,7 @@
         [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [_areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_areaCodeBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
     }
     return _areaCodeBtn;
@@ -240,7 +240,7 @@
         [_comfirmModifyButton setBackgroundColor:kMainColorDisable];
         _comfirmModifyButton.enabled = NO;
         _comfirmModifyButton.layer.cornerRadius = 20;
-        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_comfirmModifyButton addTarget:self action:@selector(modifySure) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmModifyButton;;
@@ -284,7 +284,7 @@
         self.contentView.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         self.contentView.phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
         
@@ -301,7 +301,7 @@
         self.contentView2.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         self.contentView2.phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView2.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView2.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
         

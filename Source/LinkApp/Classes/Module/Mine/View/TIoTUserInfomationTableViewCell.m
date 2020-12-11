@@ -41,10 +41,10 @@
         
         self.titleLab = [[UILabel alloc] init];
         self.titleLab.textColor = [UIColor blackColor];
-        self.titleLab.font = [UIFont wcPfRegularFontOfSize:16];
+        self.titleLab.font = [UIFont wcPfRegularFontOfSize:14];
         [self.contentView addSubview:self.titleLab];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView).offset(30);
+            make.left.equalTo(self.contentView).offset(20);
             make.centerY.equalTo(self.contentView);
             make.width.mas_equalTo(100);
         }];
@@ -63,13 +63,13 @@
         [self.contentView addSubview:self.arrowImageView];
         [self.arrowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.titleLab);
-            make.right.equalTo(self.contentView).offset(-30);
+            make.right.equalTo(self.contentView).offset(-20);
             make.height.width.mas_equalTo(18);
         }];
         
         self.valueLab = [[UILabel alloc] init];
         self.valueLab.textColor = kRGBColor(136, 136, 136);
-        self.valueLab.font = [UIFont wcPfRegularFontOfSize:16];
+        self.valueLab.font = [UIFont wcPfRegularFontOfSize:14];
         [self.contentView addSubview:self.valueLab];
         [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
             self.rightValueConstraint = make.right.equalTo(self.arrowImageView.mas_left).offset(-10);
@@ -101,8 +101,8 @@
     }
     else{
         self.arrowImageView.hidden = YES;
-        [self.rightImageConstraint setOffset:18];
-        [self.rightValueConstraint setOffset:18];
+        [self.rightImageConstraint setOffset:20];
+        [self.rightValueConstraint setOffset:20];
     }
     
     //国际化

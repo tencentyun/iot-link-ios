@@ -219,7 +219,7 @@ static NSString *itemId2 = @"pfDDD";
         {
             view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
             
-            TIoTSingleCustomButton *deleteBtn = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 21, kScreenWidth - 40, 48)];
+            TIoTSingleCustomButton *deleteBtn = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 21, kScreenWidth - 40, 40)];
             [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
             [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
             deleteBtn.singleAction = ^{
@@ -323,7 +323,7 @@ static NSString *itemId2 = @"pfDDD";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(kScreenWidth, 60);
+    return CGSizeMake(kScreenWidth, 48);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section

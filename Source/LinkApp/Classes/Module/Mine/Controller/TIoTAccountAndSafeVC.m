@@ -258,7 +258,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-        _tableView.rowHeight = 60;
+        _tableView.rowHeight = 48;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:[TIoTUserInfomationTableViewCell class] forCellReuseIdentifier:ID];
     }

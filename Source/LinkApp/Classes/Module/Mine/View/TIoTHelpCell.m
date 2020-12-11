@@ -35,7 +35,7 @@
         
         
         self.titleLab = [[UILabel alloc] init];
-        self.titleLab.font = [UIFont systemFontOfSize:18];
+        self.titleLab.font = [UIFont wcPfRegularFontOfSize:14];
         self.titleLab.textColor = kFontColor;
         [self.contentView addSubview:self.titleLab];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {

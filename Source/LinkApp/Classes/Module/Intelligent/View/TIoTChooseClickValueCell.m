@@ -39,7 +39,7 @@
     
     self.backgroundColor = [UIColor whiteColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    CGFloat kPadding = 30;
+    CGFloat kPadding = 20;
     CGFloat kImageHeithWidth = 19;
     
     

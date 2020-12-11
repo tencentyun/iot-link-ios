@@ -33,7 +33,7 @@
     
     CGFloat kSpace = 15;
     CGFloat kPadding = 20;
-    CGFloat kHeight = 50;
+    CGFloat kHeight = 48;
     CGFloat kWidthTitle = 90;
     
     [self addSubview:self.contentView];
@@ -44,7 +44,7 @@
     }];
     
     self.phoneOrEmailLabel = [[UILabel alloc]init];
-    [self.phoneOrEmailLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.phoneOrEmailLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.phoneOrEmailLabel];
     [self.phoneOrEmailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(kSpace * kScreenAllHeightScale);
@@ -78,7 +78,7 @@
     }];
     
     UILabel *verificationlabel = [[UILabel alloc]init];
-    [verificationlabel setLabelFormateTitle:NSLocalizedString(@"verification_code", @"验证码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [verificationlabel setLabelFormateTitle:NSLocalizedString(@"verification_code", @"验证码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:verificationlabel];
     [verificationlabel mas_makeConstraints:^(MASConstraintMaker *make) {
        make.top.equalTo(line1.mas_bottom).offset(kSpace*kScreenAllHeightScale);
@@ -108,13 +108,13 @@
     [self.contentView addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(verificationlabel.mas_leading);
-        make.trailing.equalTo(self.phoneOrEmailTF.mas_trailing);
+        make.trailing.equalTo(self.contentView.mas_trailing);
         make.height.mas_equalTo(1);
         make.top.equalTo(self.verificationCodeTF.mas_bottom);
     }];
     
     UILabel *passwordLabel = [[UILabel alloc]init];
-    [passwordLabel setLabelFormateTitle:NSLocalizedString(@"password", @"密码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [passwordLabel setLabelFormateTitle:NSLocalizedString(@"password", @"密码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:passwordLabel];
     [passwordLabel mas_makeConstraints:^(MASConstraintMaker *make) {
        make.top.equalTo(line2.mas_bottom).offset(kSpace*kScreenAllHeightScale);
@@ -126,7 +126,7 @@
     [self.contentView addSubview:self.passwordTF];
     [self.passwordTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(passwordLabel.mas_trailing);
-        make.trailing.equalTo(self.contentView.mas_trailing);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
         make.top.equalTo(passwordLabel.mas_top);
     }];
@@ -148,7 +148,7 @@
     }];
     
     UILabel *confirmPasswordLabel = [[UILabel alloc]init];
-    [confirmPasswordLabel setLabelFormateTitle:NSLocalizedString(@"confirm_password", @"确认密码") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [confirmPasswordLabel setLabelFormateTitle:NSLocalizedString(@"confirm_password", @"确认密码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:confirmPasswordLabel];
     [confirmPasswordLabel mas_makeConstraints:^(MASConstraintMaker *make) {
        make.top.equalTo(line3.mas_bottom).offset(kSpace*kScreenAllHeightScale);
@@ -161,7 +161,7 @@
     [self.contentView addSubview:self.passwordConfirmTF];
     [self.passwordConfirmTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(confirmPasswordLabel.mas_trailing);
-        make.trailing.equalTo(self.contentView.mas_trailing);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
         make.top.equalTo(confirmPasswordLabel.mas_top);
     }];
@@ -200,9 +200,9 @@
     if (!_phoneOrEmailTF) {
         _phoneOrEmailTF = [[UITextField alloc]init];
         _phoneOrEmailTF.textColor = [UIColor blackColor];
-        _phoneOrEmailTF.font = [UIFont wcPfRegularFontOfSize:16];
+        _phoneOrEmailTF.font = [UIFont wcPfRegularFontOfSize:14];
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneOrEmailTF.attributedPlaceholder = ap;
         _phoneOrEmailTF.clearButtonMode = UITextFieldViewModeAlways;
         [_phoneOrEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -238,7 +238,7 @@
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
-        _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
         _verificationButton.enabled = NO;
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
@@ -251,8 +251,8 @@
         _verificationCodeTF = [[UITextField alloc]init];
         _verificationCodeTF.keyboardType = UIKeyboardTypeNumberPad;
         _verificationCodeTF.textColor = [UIColor blackColor];
-        _verificationCodeTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_verifycode", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        _verificationCodeTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_verifycode", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationCodeTF.attributedPlaceholder = apVerification;
         _verificationCodeTF.clearButtonMode = UITextFieldViewModeAlways;
         [_verificationCodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -266,8 +266,8 @@
         _passwordTF.keyboardType = UITextFieldViewModeAlways;
         _passwordTF.textColor = [UIColor blackColor];
         _passwordTF.secureTextEntry = YES;
-        _passwordTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_set_passwd", @"请设置您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        _passwordTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_set_passwd", @"请设置您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
         _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -282,8 +282,8 @@
         _passwordConfirmTF.keyboardType = UITextFieldViewModeAlways;
         _passwordConfirmTF.textColor = [UIColor blackColor];
         _passwordConfirmTF.secureTextEntry = YES;
-        _passwordConfirmTF.font = [UIFont wcPfRegularFontOfSize:16];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_confirm_passwd", @"请再次确认您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont systemFontOfSize:16]}];
+        _passwordConfirmTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_confirm_passwd", @"请再次确认您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordConfirmTF.attributedPlaceholder = passwordAttStr;
         _passwordConfirmTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordConfirmTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -298,7 +298,7 @@
         [_confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_confirmButton setBackgroundColor:kMainColorDisable];
         _confirmButton.enabled = NO;
-        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_confirmButton addTarget:self action:@selector(confirmClickButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;

@@ -43,7 +43,7 @@
     self.title = @"注销账号";
     
     CGFloat kSpace = 20;
-    CGFloat kPadding = 25;
+    CGFloat kPadding = 20;
     
     [self.view addSubview:self.cancelTitle];
     [self.cancelTitle mas_makeConstraints:^(MASConstraintMaker *make) {

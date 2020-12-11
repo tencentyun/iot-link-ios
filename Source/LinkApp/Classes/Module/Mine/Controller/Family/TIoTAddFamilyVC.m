@@ -37,7 +37,7 @@
         }
     }];
     
-    CGFloat kLeftPadding = 15;
+    CGFloat kLeftPadding = 20;
     CGFloat kBackViewHeight = 40;
     
     __weak typeof(self)weakSelf = self;

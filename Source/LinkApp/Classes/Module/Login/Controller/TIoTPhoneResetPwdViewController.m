@@ -84,10 +84,10 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
-    emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(24);
+        make.left.mas_equalTo(20);
         make.top.equalTo(self.scrollView.mas_bottom).offset(20);
     }];
     
@@ -120,7 +120,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
-    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     self.sendCodeBtn.backgroundColor = kMainColorDisable;
     self.sendCodeBtn.enabled = NO;
@@ -145,13 +145,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     NSRange range2 = [showStr rangeOfString:str4];
     NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
     [pstype setAlignment:NSTextAlignmentCenter];
-    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
+    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
     
     NSString *valueString1 = [[NSString stringWithFormat:@"Terms1://%@",str2] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
     NSString *valueString2 = [[NSString stringWithFormat:@"Privacy1://%@",str4] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
     
-    [mastring addAttributes:@{NSLinkAttributeName:valueString1,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],} range:range1];
-    [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:12],} range:range2];
+    [mastring addAttributes:@{NSLinkAttributeName:valueString1,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range1];
+    [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range2];
     return mastring;
 }
 

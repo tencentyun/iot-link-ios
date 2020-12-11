@@ -42,7 +42,7 @@
     
     CGFloat kLeftRightPadding = 20;
     CGFloat kWidthTitle = 90;
-    CGFloat kHeightCell = 50 * kScreenAllHeightScale;
+    CGFloat kHeightCell = 48 * kScreenAllHeightScale;
     
     UIView *topView = [[UIView alloc]init];
     [self.view addSubview:topView];
@@ -57,7 +57,7 @@
     }];
     
     UILabel *contryLabel = [[UILabel alloc]init];
-    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [topView addSubview:contryLabel];
     [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
@@ -145,7 +145,7 @@
         [_areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [_areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         _areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        _areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_areaCodeBtn addTarget:self action:@selector(choseAreaCode) forControlEvents:UIControlEventTouchUpInside];
     }
     return _areaCodeBtn;

@@ -136,7 +136,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     self.procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.procolBtn addTarget:self action:@selector(procolClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.procolBtn setImage:[UIImage imageNamed:@"procolDefault"] forState:UIControlStateNormal];
-    [self.procolBtn setImage:[UIImage imageNamed:@"single_seleccted"] forState:UIControlStateSelected];
+    [self.procolBtn setImage:[UIImage imageNamed:@"agree_selected"] forState:UIControlStateSelected];
     [self.view addSubview:self.procolBtn];
     [self.procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(procolTV);

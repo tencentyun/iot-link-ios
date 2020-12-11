@@ -40,7 +40,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
-    CGFloat kLeftPadding = 15;
+    CGFloat kLeftPadding = 20;
     CGFloat kBackViewHeight = 48;
     CGFloat kCollectionHeight = 150;//collection高度
     
@@ -60,7 +60,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     }];
     
     UILabel *titleTipText = [[UILabel alloc]init];
-    [titleTipText setLabelFormateTitle:self.titleText?:@"" font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#000000" textAlignment:NSTextAlignmentLeft];
+    [titleTipText setLabelFormateTitle:self.titleText?:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#000000" textAlignment:NSTextAlignmentLeft];
     [self.backgroundView addSubview:titleTipText];
     [titleTipText mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.backgroundView.mas_left).offset(kLeftPadding);

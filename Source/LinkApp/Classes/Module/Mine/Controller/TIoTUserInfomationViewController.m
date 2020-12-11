@@ -186,15 +186,15 @@
     deleteEquipmentBtn.layer.cornerRadius = 20;
     [footerView addSubview:deleteEquipmentBtn];
     [deleteEquipmentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(footerView).offset(30);
-        make.right.equalTo(footerView).offset(-30);
+        make.left.equalTo(footerView).offset(20);
+        make.right.equalTo(footerView).offset(-20);
         if ([TIoTUIProxy shareUIProxy].iPhoneX) {
             make.bottom.equalTo(footerView).offset(-20 * kScreenAllHeightScale);
         }else {
             make.bottom.equalTo(footerView).offset(-40 * kScreenAllHeightScale);
         }
         
-        make.height.mas_equalTo(40 * kScreenAllHeightScale);
+        make.height.mas_equalTo(40);
     }];
     
     self.tableView.tableFooterView = footerView;
@@ -609,7 +609,7 @@
         //国际化版本
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-        _tableView.rowHeight = 50 *kScreenAllHeightScale;
+        _tableView.rowHeight = 48 *kScreenAllHeightScale;
         
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;

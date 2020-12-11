@@ -40,7 +40,7 @@
     [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
     [self.areaCodeBtn setTitleColor:kFontColor forState:UIControlStateNormal];
     self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
+    self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.areaCodeBtn addTarget:self action:@selector(choseAreaCode:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.areaCodeBtn];
     [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -61,14 +61,14 @@
     self.phoneTF.placeholder = NSLocalizedString(@"phone_number", @"手机号码");
     self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
     self.phoneTF.textColor = kFontColor;
-    self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:18];
+    self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:14];
 //    self.phoneTF.rightViewMode = UITextFieldViewModeAlways;
     self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
     [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.phoneTF];
     [self.phoneTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.mas_equalTo(24);
-        make.trailing.mas_equalTo(-24);
+        make.leading.mas_equalTo(20);
+        make.trailing.mas_equalTo(-20);
         make.top.equalTo(self.areaCodeBtn.mas_bottom).offset(20);
         make.height.mas_equalTo(48);
     }];
@@ -79,8 +79,8 @@
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.phoneTF.mas_bottom);
         make.height.mas_equalTo(1);
-        make.leading.mas_equalTo(24);
-        make.trailing.mas_equalTo(-24);
+        make.leading.mas_equalTo(20);
+        make.trailing.mas_equalTo(-20);
     }];
     
     self.tip = [[UILabel alloc] init];
@@ -88,8 +88,8 @@
     _tip.font = [UIFont wcPfRegularFontOfSize:12];
     [self.view addSubview:_tip];
     [self.tip mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.mas_equalTo(24);
-        make.trailing.mas_equalTo(-24);
+        make.leading.mas_equalTo(20);
+        make.trailing.mas_equalTo(-20);
         make.top.equalTo(lineView.mas_bottom).offset(5);
         make.height.mas_equalTo(16);
     }];
@@ -99,16 +99,16 @@
     [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
-    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
+    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     self.sendCodeBtn.backgroundColor = kRGBColor(230, 230, 230);
     self.sendCodeBtn.enabled = NO;
     self.sendCodeBtn.layer.cornerRadius = 3;
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(24);
+        make.left.equalTo(self.view).offset(20);
         make.top.equalTo(lineView.mas_bottom).offset(120 * kScreenAllHeightScale);
-        make.right.equalTo(self.view).offset(-24);
+        make.right.equalTo(self.view).offset(-20);
         make.height.mas_equalTo(48);
     }];
 }
