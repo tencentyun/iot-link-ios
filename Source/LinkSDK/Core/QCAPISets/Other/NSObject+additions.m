@@ -12,7 +12,7 @@
 
 + (BOOL)isNullOrNilWithObject:(id)object;
 {
-    if (object == nil || [object isEqual:[NSNull null]]) {
+    if (object == nil || [object isEqual:[NSNull null]] || [object isKindOfClass:[NSNull class]]) {
         return YES;
     } else if ([object isKindOfClass:[NSString class]]) {
         if ([object isEqualToString:@""]) {

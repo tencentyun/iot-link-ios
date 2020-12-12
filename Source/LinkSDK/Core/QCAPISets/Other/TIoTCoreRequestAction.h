@@ -105,7 +105,7 @@ FOUNDATION_EXPORT NSString *const AppCreateDeviceBindToken;//用户获取当次�
 FOUNDATION_EXPORT NSString *const AppGetDeviceBindTokenState;// 查询token，生成之后经hub回调后token状态标识为可用状态
 FOUNDATION_EXPORT NSString *const AppTokenBindDeviceFamily;//使用token进行设备绑定
 
-
+FOUNDATION_EXPORT NSString *const AppGetProductInfo;//扫一扫落地页面显示 （设备批量生产扫码也调用）
 
 //MARK: 设备定时
 
