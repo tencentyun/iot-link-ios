@@ -9,6 +9,9 @@
 #import "TIoTScanlViewController.h"
 #import "SGQRCode.h"
 #import "TIoTConfigHardwareViewController.h"
+#import "TIoTProductWelComeConfigModel.h"
+#import <YYModel.h>
+#import "TIoTConfigScanVC.h"
 
 @interface QRBlueObject : NSObject
 @property (nonatomic, strong)NSString *productId;
@@ -163,7 +166,8 @@
 //                        [HXYNotice postChangeAddDeviceType:0];
                         [self getProductsConfig:productId];
                     } else if ([page isEqualToString:@"adddevice"] && ![NSString isNullOrNilWithObject:productId]){ //设备批量生产的二维码扫描
-                        [self getProductsConfig:productId];
+//                        [self getProductsConfig:productId];
+                        [self getProductInfoConfigScan:productId];
                     }else {//未知page
                         [self bindDevice:signature];
                     }
@@ -221,6 +225,21 @@
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     }];
+}
+
+#pragma mark - 先展示落地页面，完后再选择房间走配网流程
+- (void)getProductInfoConfigScan:(NSString *)productId {
+    [[TIoTRequestObject shared] postWithoutToken:AppGetProductInfo Param:@{@"ProductId":productId?:@""} success:^(id responseObject) {
+//        TIoTProductWelComeConfigModel *model = [TIoTProductWelComeConfigModel yy_modelWithJSON:responseObject];
+        TIoTConfigScanVC *configScanVC = [[TIoTConfigScanVC alloc]init];
+//        configScanVC.productWelConfigModel = model;
+        configScanVC.welConfigDic = [NSDictionary dictionaryWithDictionary:responseObject];
+        configScanVC.productID = productId?:@"";
+        configScanVC.roomId = self.roomId;
+        [self.navigationController pushViewController:configScanVC animated:YES];
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            
+        }];
 }
 
 - (void)jumpConfigVC:(NSString *)title{
