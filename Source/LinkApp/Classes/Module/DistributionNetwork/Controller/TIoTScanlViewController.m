@@ -9,6 +9,9 @@
 #import "TIoTScanlViewController.h"
 #import "SGQRCode.h"
 #import "TIoTConfigHardwareViewController.h"
+#import "TIoTProductWelComeConfigModel.h"
+#import <YYModel.h>
+#import "TIoTConfigScanVC.h"
 
 @interface QRBlueObject : NSObject
 @property (nonatomic, strong)NSString *productId;
@@ -134,7 +137,7 @@
                 
                 NSURL *url = [NSURL URLWithString:result];
                 NSString *page = @"";
-                
+                NSString *preview = @"";
                 if (url.query) {
                     NSArray *params = [url.query componentsSeparatedByString:@"&"];
                     
@@ -147,6 +150,9 @@
                         }
                         if ([param containsString:@"productId"]) {
                             productId =[[param componentsSeparatedByString:@"="] lastObject];
+                        }
+                        if ([preview containsString:@"preview"]) {
+                            preview = [[param componentsSeparatedByString:@"="] lastObject];
                         }
                     }
                     
@@ -163,7 +169,17 @@
 //                        [HXYNotice postChangeAddDeviceType:0];
                         [self getProductsConfig:productId];
                     } else if ([page isEqualToString:@"adddevice"] && ![NSString isNullOrNilWithObject:productId]){ //设备批量生产的二维码扫描
-                        [self getProductsConfig:productId];
+                        
+                        if (![NSString isNullOrNilWithObject:preview]) {
+                            // 扫一扫落地页，有配置，则显示，没配置，则显示默认配置信息
+                            if ([preview isEqualToString:@"1"]) {
+                                [self getProductInfoConfigScan:productId showConfigData:YES];
+                            }
+                            
+                        }else {
+                            //批量生产，落地页有配置，则显示，没配置，则直接进默认配网流程
+                            [self getProductInfoConfigScan:productId showConfigData:NO];
+                        }
                     }else {//未知page
                         [self bindDevice:signature];
                     }
@@ -221,6 +237,50 @@
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
     }];
+}
+
+#pragma mark - 先展示落地页面，完后再选择房间走配网流程
+- (void)getProductInfoConfigScan:(NSString *)productId showConfigData:(BOOL)isEnterConfigScan {
+    
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+            self.configData = [[NSDictionary alloc]initWithDictionary:config];
+            if (isEnterConfigScan == YES) {
+                
+                //进入扫一扫页面
+                [self JumpConfigSacnWith:productId];
+                
+            }else {
+                //进入批量扫码
+                if ([NSString isNullOrNilWithObject:config[@"IconUrlAdvertise"]] && [NSString isNullOrNilWithObject:config[@"AddDeviceHintMsg"]]) {
+                 // 无配置，直接进配网流程
+                    [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+                    return;
+                }
+                
+                //进入扫一扫页面
+                [self JumpConfigSacnWith:productId];
+            }
+        }
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+        }];
+    
+}
+
+/**
+ 进入扫一扫页面
+ */
+- (void)JumpConfigSacnWith:(NSString *)productId {
+    //进入扫一扫落地页
+    TIoTConfigScanVC *configScanVC = [[TIoTConfigScanVC alloc]init];
+//    configScanVC.productWelConfigModel = [TIoTProductWelComeConfigModel yy_modelWithJSON:self.configData[@"Global"]?:@{}];
+    configScanVC.welConfigDic = [NSDictionary dictionaryWithDictionary:self.configData[@"Global"]?:@{}];
+    configScanVC.productID = productId?:@"";
+    configScanVC.roomId = self.roomId;
+    [self.navigationController pushViewController:configScanVC animated:YES];
 }
 
 - (void)jumpConfigVC:(NSString *)title{

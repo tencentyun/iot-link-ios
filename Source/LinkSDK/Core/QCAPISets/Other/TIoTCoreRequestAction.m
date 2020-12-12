@@ -95,6 +95,7 @@ NSString *const AppCreateDeviceBindToken = @"AppCreateDeviceBindToken";
 NSString *const AppGetDeviceBindTokenState = @"AppGetDeviceBindTokenState";
 NSString *const AppTokenBindDeviceFamily = @"AppTokenBindDeviceFamily";
 
+NSString *const AppGetProductInfo = @"AppGetProductInfo";
 
 //===============设备定时
 
