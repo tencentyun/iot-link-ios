@@ -831,3 +831,9 @@
 "balcony" = "阳台";
 "cloakroom" = "衣帽间";
 "no_authority" = "您不是房间所有者，没有此权限";
+"binding_device" = "绑定设备";
+"welcome_use" = "欢迎使用";
+"binding_immediately" = "立即绑定";
+"choose_family" = "选择家庭";
+"please_choose_familyOfdevice" = "请选择添加设备的家庭";
+"product_name" = "(产品的名称)";
