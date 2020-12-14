@@ -62,4 +62,48 @@
     }];
 }
 
++ (void)handleOpsenUrl:(NSString *)result {
+    
+    
+    
+    if ([result hasPrefix:@"http"]) {
+        
+        NSURL *url = [NSURL URLWithString:result];
+        NSString *signature = @"";//result;
+        NSString *page = @"";
+        
+        if (url.query) {
+            NSArray *params = [url.query componentsSeparatedByString:@"&"];
+            
+            for (NSString *param in params) {
+                if ([param containsString:@"signature"]) {
+                    signature = [[param componentsSeparatedByString:@"="] lastObject];
+                }
+                if ([param containsString:@"page"]) {
+                    page = [[param componentsSeparatedByString:@"="] lastObject];
+                }
+                
+            }
+            
+        }
+        if (signature.length) {
+            [self bindDevice:signature];
+        }
+    }
+}
+    
+    //绑定设备
++ (void)bindDevice:(NSString *)signature{
+    
+    NSString *roomId = [TIoTCoreUserManage shared].currentRoomId ?: @"";
+    NSDictionary *param = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
+        
+    [[TIoTRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
+            
+        [HXYNotice addUpdateFamilyListPost];
+            
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+    }];
+}
 @end

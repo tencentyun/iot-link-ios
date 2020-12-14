@@ -22,6 +22,8 @@
 #import "TIoTWebVC.h"
 #import "TIoTWebVC+TIoTWebVCCategory.h"
 #import <UserNotifications/UserNotifications.h>
+#import "TIoTScanlViewController.h"
+#import "TIoTAppUtilOC.h"
 
 @implementation TIoTAppDelegate
 
@@ -142,6 +144,11 @@
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+    
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+        [TIoTAppUtilOC handleOpsenUrl:userActivity.webpageURL.absoluteString];
+    }
+    
     return [[WxManager sharedWxManager] handleOpenUniversalLink:userActivity];
 }
 
