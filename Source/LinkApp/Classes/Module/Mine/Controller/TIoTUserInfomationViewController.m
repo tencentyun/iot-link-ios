@@ -609,7 +609,7 @@
         //国际化版本
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-        _tableView.rowHeight = 48 *kScreenAllHeightScale;
+        _tableView.rowHeight = 48;
         
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delegate = self;
