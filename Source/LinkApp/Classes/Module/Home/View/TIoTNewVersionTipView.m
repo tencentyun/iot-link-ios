@@ -159,7 +159,7 @@
     
     UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [confirmButton setTitle:NSLocalizedString(@"upgrade_now", @"立即升级") forState:UIControlStateNormal];
-    [confirmButton setTitleColor:kMainColor forState:UIControlStateNormal];
+    [confirmButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:18];
     [confirmButton addTarget:self action:@selector(confirmClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.bgView addSubview:confirmButton];

@@ -126,7 +126,7 @@
     self.pwdInputView.textChangedAction = ^(NSString * _Nonnull changedText) {
         if (selfWeak.step == 2) {
             if (selfWeak.wifiInputView.inputText.length > 0 && selfWeak.pwdInputView.inputText.length > 0) {
-                selfWeak.nextBtn.backgroundColor = kMainColor;
+                selfWeak.nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
                 selfWeak.nextBtn.enabled = YES;
             }
             else{
@@ -186,7 +186,7 @@
         nextBtn.backgroundColor = kMainColorDisable;
         nextBtn.enabled = NO;
     } else {
-        nextBtn.backgroundColor = kMainColor;
+        nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     }
     [self.view addSubview:nextBtn];
     self.nextBtn = nextBtn;

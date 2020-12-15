@@ -59,7 +59,7 @@
     
     self.deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.deleteBtn setTitle:NSLocalizedString(@"delete_action", @"删除动作") forState:UIControlStateNormal];
-    [self.deleteBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+    [self.deleteBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     self.deleteBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     self.deleteBtn.hidden = YES;
     [self.deleteBtn addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];

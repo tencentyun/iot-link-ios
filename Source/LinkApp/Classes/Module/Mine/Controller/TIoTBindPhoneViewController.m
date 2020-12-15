@@ -116,7 +116,7 @@
 //是否可发送验证码
 - (void)checkSendCode{
     if (self.phoneTF.text.length > 0) {
-        self.sendCodeBtn.backgroundColor = kMainColor;
+        self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.sendCodeBtn.enabled = YES;
     }
     else{

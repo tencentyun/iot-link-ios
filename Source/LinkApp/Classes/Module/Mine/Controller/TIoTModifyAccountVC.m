@@ -233,7 +233,7 @@
     [self responseModifyVerificationButton];
     
     if (isPhoneTypeOrEmail && ![NSString isNullOrNilWithObject:self.modifyView.verificationCodeTF.text] && self.modifyView.verificationCodeTF.text.length == 6) {
-        self.modifyView.confirmButton.backgroundColor =kMainColor;
+        self.modifyView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
         self.modifyView.confirmButton.enabled = YES;
     }else {
         self.modifyView.confirmButton.backgroundColor = kMainColorDisable;
@@ -267,7 +267,7 @@
     if ([self.modifyView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
         if (self.accountType == AccountModifyType_Phone) {
             if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
-                [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.modifyView.verificationButton.enabled = YES;
             }else {
                 [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
@@ -275,7 +275,7 @@
             }
         }else if (self.accountType == AccountModifyType_Email) {
             if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text])) {
-                [self.modifyView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.modifyView.verificationButton.enabled = YES;
             }else {
                 [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];

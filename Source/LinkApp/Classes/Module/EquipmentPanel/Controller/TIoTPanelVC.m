@@ -393,7 +393,7 @@ static NSString *itemId3 = @"i_ooo454";
     else if (self.themeStyle == WCThemeDark)
     {
         _bgView.image = [UIImage imageNamed:@"controlBg_dark"];
-        self.bottomLayer.colors = @[(id)kRGBColor(106, 255, 255).CGColor,(id)kMainColor.CGColor];
+        self.bottomLayer.colors = @[(id)kRGBColor(106, 255, 255).CGColor,(id)[UIColor colorWithHexString:kIntelligentMainHexColor].CGColor];
         [self wr_setNavBarTitleColor:[UIColor whiteColor]];
         [self wr_setNavBarTintColor:[UIColor whiteColor]];
     }

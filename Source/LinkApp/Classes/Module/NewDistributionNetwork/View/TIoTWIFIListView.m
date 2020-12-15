@@ -64,7 +64,7 @@
     
     self.refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.refreshButton setTitle:NSLocalizedString(@"refresh", @"刷新") forState:UIControlStateNormal];
-    [self.refreshButton setTitleColor:kMainColor forState:UIControlStateNormal];
+    [self.refreshButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     self.refreshButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.refreshButton addTarget:self action:@selector(refreshClick:) forControlEvents:UIControlEventTouchUpInside];
     self.refreshButton.hidden = YES;

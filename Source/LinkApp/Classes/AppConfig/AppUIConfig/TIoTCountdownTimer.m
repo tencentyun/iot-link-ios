@@ -76,7 +76,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                     if (type == YES) {
                         if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgePhoneNumberLegal:inputText]) {
                             sendCodeBtn.enabled = YES;
-                            [sendCodeBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+                            [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                         }else {
                             sendCodeBtn.enabled = NO;
                             [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
@@ -84,7 +84,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                     }else {
                         if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgeEmailLegal:inputText]) {
                             sendCodeBtn.enabled = YES;
-                            [sendCodeBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+                            [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                         }else {
                             sendCodeBtn.enabled = NO;
                             [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];

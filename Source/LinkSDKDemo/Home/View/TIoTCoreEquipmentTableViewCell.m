@@ -100,7 +100,7 @@
     self.titleLab.text = dataDic[@"DeviceName"];
     if ([dataDic[@"Online"] integerValue] == 1) {
         self.desLab.text = NSLocalizedString(@"online", @"设备在线");
-        self.desLab.textColor = kMainColor;
+        self.desLab.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     }
     else{
         self.desLab.text = NSLocalizedString(@"device_outline", @"设备离线");

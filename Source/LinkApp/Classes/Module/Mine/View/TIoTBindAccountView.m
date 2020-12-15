@@ -255,7 +255,7 @@
     if (!_verificationButton) {
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
-        [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
         _verificationButton.selected = NO;

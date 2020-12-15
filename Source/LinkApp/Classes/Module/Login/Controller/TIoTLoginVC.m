@@ -82,7 +82,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     }];
     CAGradientLayer *layer = [[CAGradientLayer alloc] init];
     layer.frame = CGRectMake(0, 0, kScreenWidth, 300);
-    layer.colors = @[(id)kMainColor.CGColor,(id)[UIColor whiteColor].CGColor];
+    layer.colors = @[(id)[UIColor colorWithHexString:kIntelligentMainHexColor].CGColor,(id)[UIColor whiteColor].CGColor];
     layer.startPoint = CGPointMake(0, 0);
     layer.endPoint = CGPointMake(0, 1);
     [header.layer addSublayer:layer];
@@ -164,7 +164,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         self.areaCodeBtn.frame = CGRectMake(0, 0, 70, 48);
         [self.areaCodeBtn setTitle:@"+86" forState:UIControlStateNormal];
-        [self.areaCodeBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [self.areaCodeBtn addTarget:self action:@selector(choseAreaCode:) forControlEvents:UIControlEventTouchUpInside];
         [leftView addSubview:self.areaCodeBtn];
@@ -401,7 +401,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn setTitle:@"注册账号" forState:UIControlStateNormal];
-        [btn setTitleColor:kMainColor forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:16];
         btn.userInteractionEnabled = NO;
         [contentView addSubview:btn];
@@ -431,7 +431,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     
     if (WCLoginStylePhone == self.loginStyle) {
         if ([NSString judgePhoneNumberLegal:self.phoneTF.text] && [NSString judgePassWordLegal:self.pwdTF.text]) {
-            self.loginBtn.backgroundColor = kMainColor;
+            self.loginBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginBtn.enabled = YES;
             
         }
@@ -445,7 +445,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     else if (WCLoginStyleEmail == self.loginStyle)
     {
         if ([NSString judgeEmailLegal:self.emailTF.text] && [NSString judgePassWordLegal:self.emailPwdTF.text]) {
-            self.loginBtn.backgroundColor = kMainColor;
+            self.loginBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginBtn.enabled = YES;
             
         }

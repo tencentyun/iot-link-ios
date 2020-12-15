@@ -199,7 +199,7 @@
         
         UIButton *protocolDetailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [protocolDetailBtn setTitle:NSLocalizedString(@"tencentll_account_logout_agreement", @"《腾讯连连账号注销协议》") forState:UIControlStateNormal];
-        [protocolDetailBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+        [protocolDetailBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         [protocolDetailBtn addTarget:self action:@selector(cancelProtocolClick) forControlEvents:UIControlEventTouchUpInside];
         protocolDetailBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_bottomView addSubview:protocolDetailBtn];

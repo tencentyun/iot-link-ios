@@ -64,7 +64,7 @@
     
     UIButton *cancelB = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancelB setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
-    [cancelB setTitleColor:kMainColor forState:UIControlStateNormal];
+    [cancelB setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [cancelB addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
     [cancelB.titleLabel setFont:[UIFont wcPfRegularFontOfSize:14]];
     [self.whiteView addSubview:cancelB];
@@ -75,7 +75,7 @@
     
     UIButton *doneB = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneB setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
-    [doneB setTitleColor:kMainColor forState:UIControlStateNormal];
+    [doneB setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [doneB.titleLabel setFont:[UIFont wcPfRegularFontOfSize:14]];
     [doneB addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [self.whiteView addSubview:doneB];

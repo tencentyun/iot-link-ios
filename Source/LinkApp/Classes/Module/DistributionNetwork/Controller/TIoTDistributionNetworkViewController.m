@@ -160,7 +160,7 @@
     [self.nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.nextBtn.backgroundColor = kMainColor;
+    self.nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     self.nextBtn.layer.cornerRadius = 3;
     [scroll addSubview:self.nextBtn];
     [self.nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {

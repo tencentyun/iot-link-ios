@@ -17,7 +17,7 @@
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.titleLabel.font = [UIFont systemFontOfSize:20];
         self.layer.cornerRadius = 4;
-        self.backgroundColor = kMainColor;
+        self.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     }
     return self;
 }

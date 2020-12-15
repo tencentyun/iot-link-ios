@@ -124,7 +124,7 @@
     _themeStyle = themeStyle;
     
     if (themeStyle == WCThemeSimple) {
-        self.tintColor = kMainColor;
+        self.tintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.name.textColor = kFontColor;
         self.content.textColor = kRGBColor(153, 153, 153);
         self.effMaskView.backgroundColor = [UIColor whiteColor];
@@ -138,7 +138,7 @@
     }
     else if (themeStyle == WCThemeDark)
     {
-        self.tintColor = kMainColor;
+        self.tintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.name.textColor = [UIColor whiteColor];
         self.content.textColor = [UIColor whiteColor];
         self.effMaskView.backgroundColor = [UIColor blackColor];

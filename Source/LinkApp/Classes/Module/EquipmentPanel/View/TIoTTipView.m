@@ -71,7 +71,7 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:NSLocalizedString(@"q_feedback", @"问题反馈")  forState:UIControlStateNormal];
-    [btn setTitleColor:kMainColor forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
     [btn addTarget:self action:@selector(toFeedback) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 4;
@@ -88,7 +88,7 @@
     [btn2 setTitle:NSLocalizedString(@"back_home", @"返回首页")  forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn2 setBackgroundColor:kMainColor];
+    [btn2 setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
     [btn2 addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     btn2.layer.cornerRadius = 4;
     [bgView addSubview:btn2];

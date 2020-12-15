@@ -75,7 +75,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     UIButton *emailRegisterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
-    [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+    [emailRegisterBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.view addSubview:emailRegisterBtn];
@@ -108,7 +108,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     if (_emailStyle) {
         if ([NSString judgeEmailLegal:self.emailTF.text]) {
-            self.sendCodeBtn.backgroundColor = kMainColor;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
         else{
@@ -119,7 +119,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     else
     {
         if ([NSString judgePhoneNumberLegal:self.phoneTF.text]) {
-            self.sendCodeBtn.backgroundColor = kMainColor;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
         else{

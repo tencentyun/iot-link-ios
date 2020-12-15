@@ -276,7 +276,7 @@
     cell.textLabel.textColor = kFontColor;
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.text = [area componentsSeparatedByString:@" + "].lastObject;
-    cell.detailTextLabel.textColor = kMainColor;
+    cell.detailTextLabel.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:18 weight:UIFontWeightBold];
     return cell;
 }
@@ -349,7 +349,7 @@
         
         //修改索引条颜色
         _tableView.sectionIndexColor = [UIColor colorWithHexString:kIndexFontHexColor];//修改右边索引字体的颜色
-//        _tableView.sectionIndexTrackingBackgroundColor = kMainColor;//修改右边索引点击时候的背景色
+//        _tableView.sectionIndexTrackingBackgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];//修改右边索引点击时候的背景色
     }
     return _tableView;
 }

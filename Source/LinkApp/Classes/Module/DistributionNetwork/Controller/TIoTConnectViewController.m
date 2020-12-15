@@ -177,7 +177,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [tryAgainBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     tryAgainBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [tryAgainBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
-    tryAgainBtn.backgroundColor = kMainColor;
+    tryAgainBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     tryAgainBtn.layer.cornerRadius = 3;
     [self.view addSubview:tryAgainBtn];
     [tryAgainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -193,7 +193,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [changeTypeBtn addTarget:self action:@selector(backHome:) forControlEvents:UIControlEventTouchUpInside];
-    changeTypeBtn.backgroundColor = kMainColor;
+    changeTypeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     changeTypeBtn.layer.cornerRadius = 3;
     [self.view addSubview:changeTypeBtn];
     [changeTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -236,7 +236,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [moreResultBtn setTitle:NSLocalizedString(@"see_more_fail_cause",  @"查看更多失败原因") forState:UIControlStateNormal];
     [moreResultBtn addTarget:self action:@selector(moreErrorResult:) forControlEvents:UIControlEventTouchUpInside];
     moreResultBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-    [moreResultBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+    [moreResultBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [self.contentView addSubview:moreResultBtn];
     [moreResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView).offset(30);
@@ -264,7 +264,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
     [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [changeTypeBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
-    changeTypeBtn.backgroundColor = kMainColor;
+    changeTypeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     changeTypeBtn.layer.cornerRadius = 3;
     [self.view addSubview:changeTypeBtn];
     [changeTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {

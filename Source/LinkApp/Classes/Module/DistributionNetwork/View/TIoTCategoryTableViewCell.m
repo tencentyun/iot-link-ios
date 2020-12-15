@@ -34,7 +34,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.lineView = [[UIView alloc] init];
-        self.lineView.backgroundColor = kMainColor;
+        self.lineView.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         [self.contentView addSubview:self.lineView];
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.centerY.equalTo(self.contentView);
@@ -71,7 +71,7 @@
     if (selected) {
         self.backgroundColor = [UIColor whiteColor];
         self.lineView.hidden = NO;
-        self.titleLab.textColor = kMainColor;
+        self.titleLab.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     } else {
         self.backgroundColor = kRGBColor(242, 242, 242);
         self.lineView.hidden = YES;

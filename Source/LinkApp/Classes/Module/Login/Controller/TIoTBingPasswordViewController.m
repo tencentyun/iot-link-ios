@@ -146,7 +146,7 @@
 #pragma mark eventResponse
 -(void)changedTextField:(UITextField *)textField{
     if (self.passWordTF.text.length >= 8 && self.passWordTF2.text.length >= 8) {
-        self.downBtn.backgroundColor = kMainColor;
+        self.downBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.downBtn.enabled = YES;
     }
     else
@@ -156,7 +156,7 @@
     }
 //    BOOL isPass = [NSString judgePassWordLegal:textField.text];
 //    if (isPass) {
-//        self.downBtn.backgroundColor = kMainColor;
+//        self.downBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
 //        self.downBtn.enabled = YES;
 //    }
 //    else{
