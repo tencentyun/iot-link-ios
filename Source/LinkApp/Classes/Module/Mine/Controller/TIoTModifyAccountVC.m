@@ -225,7 +225,7 @@
     //需要验证手机号、验证码、密码
     BOOL isPhoneTypeOrEmail = NO;
     if (accountType == ModifyAccountPhoneType) {
-        isPhoneTypeOrEmail = [NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text];
+        isPhoneTypeOrEmail = [NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId];
     }else if (accountType == ModifyAccountEmailType) {
         isPhoneTypeOrEmail = [NSString judgeEmailLegal:self.modifyView.phoneOrEmailTF.text];
     }
@@ -266,7 +266,7 @@
     
     if ([self.modifyView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
         if (self.accountType == AccountModifyType_Phone) {
-            if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
+            if (![NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] && ([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [self.modifyView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.modifyView.verificationButton.enabled = YES;
             }else {
@@ -289,7 +289,7 @@
         
         //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
         if (self.accountType == AccountModifyType_Phone) {
-            if ([NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] || !([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text])) {
+            if ([NSString isNullOrNilWithObject:self.modifyView.phoneOrEmailTF] || !([NSString judgePhoneNumberLegal:self.modifyView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
             }
         }else if (self.accountType == AccountModifyType_Email) {

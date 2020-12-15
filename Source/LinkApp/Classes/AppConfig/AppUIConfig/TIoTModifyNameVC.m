@@ -99,7 +99,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     
     __weak typeof(self)weakSelf = self;
     self.saveButton = [[TIoTSingleCustomButton alloc]init];
-    self.saveButton.kLeftRightPadding = kLeftPadding * 2;
+    self.saveButton.kLeftRightPadding = kLeftPadding;
     [self.saveButton singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"confirm", @"确定")];
     self.saveButton.singleAction = ^{
         [weakSelf.nameField resignFirstResponder];
@@ -272,13 +272,16 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TIoTAutoIntellSettingCustomTimeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kAutoCollectionViewCellID forIndexPath:indexPath];
     cell.itemString = self.dataArray[indexPath.row];
-    cell.autoRepeatTimeType = AutoRepeatTimeTypeTimerCustom;
+    cell.autoRepeatTimeType = AutoRepeatTimeTypeTimePeriod;
     cell.isSelected = NO;
     return  cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     self.nameField.text = self.dataArray[indexPath.row];
+    TIoTAutoIntellSettingCustomTimeCell *cell = (TIoTAutoIntellSettingCustomTimeCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.isSelected = YES;
+    [self judgeContent];
 }
 
 #pragma mark - lazy loading

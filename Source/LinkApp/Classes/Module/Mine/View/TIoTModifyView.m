@@ -53,6 +53,7 @@
     [self.contentView addSubview:self.phoneOrEmailTF];
     [self.phoneOrEmailTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.phoneOrEmailLabel.mas_trailing);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.centerY.equalTo(self.phoneOrEmailLabel);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
     }];
@@ -232,7 +233,7 @@
         
         if (self.phoneOrEmailTF.keyboardType == UIKeyboardTypeNumberPad) { //手机号改密码
             
-            if ([NSString judgePhoneNumberLegal:self.phoneOrEmailTF.text]) { //手机号合格
+            if ([NSString judgePhoneNumberLegal:self.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) { //手机号合格
                 self.tipLabel.hidden = YES;
             }else{ //手机号不合格
                 self.tipLabel.hidden = NO;

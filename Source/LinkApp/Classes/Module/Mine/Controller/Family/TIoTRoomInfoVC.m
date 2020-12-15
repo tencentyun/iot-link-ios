@@ -37,7 +37,7 @@ static NSString *cellId = @"rc62368";
     self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
-    self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     self.tableView.rowHeight = 48;
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];

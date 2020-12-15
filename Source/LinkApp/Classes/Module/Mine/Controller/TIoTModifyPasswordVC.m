@@ -313,7 +313,7 @@
 
 - (void)modifySure {
     
-    if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text]) {       //手机号获取验证码
+    if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {       //手机号获取验证码
 
         [self checkPasswordWithPassword:self.contentView.passwordTF.text confimPassword:self.contentView.passwordConfirmTF.text];
 
@@ -372,7 +372,7 @@
         [self.countdownTimerEmail startTimerWithShowView:self.contentView2.verificationButton inputText:self.contentView2.phoneOrEmailTF.text phoneOrEmailType:NO];
     }
     
-    if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text]) {       //手机号获取验证码
+    if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {       //手机号获取验证码
         
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
         
@@ -417,7 +417,7 @@
     //需要验证手机号、验证码、密码
 
     if (self.modifyStyle == YES) {
-        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
+        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
             self.comfirmModifyButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.comfirmModifyButton.enabled = YES;
         }else {
@@ -445,7 +445,7 @@
     if (self.modifyStyle == YES) {
         
         if ([self.contentView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
-            if (![NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] && ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text])) {
+            if (![NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] && ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.contentView.verificationButton.enabled = YES;
             }else {
@@ -457,7 +457,7 @@
             self.contentView.verificationButton.enabled = NO;
             
             //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
-            if ([NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] || !([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text])) {
+            if ([NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] || !([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
             }
         }

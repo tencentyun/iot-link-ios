@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  手机号格式校验
  */
-+ (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum;
++ (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum withRegionID:(NSString *)regionID;
 
 //返回设置时区当前时间
 + (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)formatter;
