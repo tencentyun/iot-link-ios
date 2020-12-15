@@ -230,7 +230,7 @@
     //需要验证手机号、验证码、密码
     BOOL isPhoneTypeOrEmail = NO;
     if (accountType == BindAccountPhoneType) {
-        isPhoneTypeOrEmail = [NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text];
+        isPhoneTypeOrEmail = [NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId];
     }else if (accountType == BindAccountEmailType) {
         isPhoneTypeOrEmail = [NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text];
     }
@@ -320,7 +320,7 @@
         
         if (self.accountType == AccountType_Phone) {
             //不为空且格式正确
-            if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+            if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = YES;
             }else {
@@ -344,7 +344,7 @@
         
         //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
         if (self.accountType == AccountType_Phone) {
-            if (([NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) || !([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
+            if (([NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) || !([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId])) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
             }
         }else if (self.accountType == AccountType_Email) {
