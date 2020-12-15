@@ -430,7 +430,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 -(void)changedTextField:(UITextField *)textField{
     
     if (WCLoginStylePhone == self.loginStyle) {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text] && [NSString judgePassWordLegal:self.pwdTF.text]) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && [NSString judgePassWordLegal:self.pwdTF.text]) {
             self.loginBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginBtn.enabled = YES;
             

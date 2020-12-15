@@ -34,7 +34,7 @@
 #define kXDPTabbarTintColor kRGBColor(51,51,51)
 #define kXDPTabbarNomalColor kRGBColor(51,51,51)
 #define kXDPTabbarBackgroundColor [UIColor whiteColor]
-#define kXDPTabbarTitleFont 8
+#define kXDPTabbarTitleFont 11
 #define kXDPTabbarHeight [TIoTUIProxy shareUIProxy].tabbarHeight
 //tabbar 线颜色
 #define kXDPTabbarLineColor kRGBAColor(0,0,0,0.1)

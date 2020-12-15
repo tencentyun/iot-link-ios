@@ -219,7 +219,7 @@ static NSString *itemId2 = @"pfDDD";
         {
             view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
             
-            TIoTSingleCustomButton *deleteBtn = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 21, kScreenWidth - 40, 40)];
+            TIoTSingleCustomButton *deleteBtn = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(0, 21, kScreenWidth, 40)];
             [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
             [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
             deleteBtn.singleAction = ^{

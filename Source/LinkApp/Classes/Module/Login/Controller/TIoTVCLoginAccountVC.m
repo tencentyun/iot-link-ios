@@ -194,7 +194,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 - (void)judgeVerificationButtonResponse {
 
     if ([self.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] ) {
-        if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
+        if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
             //手机号或邮箱不为空且格式正确
             [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
             _verificationButton.enabled = YES;
@@ -207,7 +207,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         _verificationButton.enabled = NO;
         
         //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
-        if ([NSString isNullOrNilWithObject:self.phoneAndEmailTF.text] || !([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
+        if ([NSString isNullOrNilWithObject:self.phoneAndEmailTF.text] || !([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"verificationCodeNotification" object:@(YES)];
         }
     }
@@ -673,7 +673,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     NSDictionary *tmpDic = nil;
     
     if (self.loginStyle == YES) {     //验证码登录
-        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text]) {
+        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
             
             //短信验证码登录
             tmpDic = @{
@@ -700,7 +700,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             [self emailLoginWith:tmpDic];
         }
     }else {         //账号密码登录
-        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text]) {
+        if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
 
             //手机号密码登录
             tmpDic = @{
@@ -800,7 +800,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
 
-    if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text]) {       //手机号获取验证码
+    if ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {       //手机号获取验证码
         
         //等待发送验证码倒计时
         [self.countdownTimer startTimerWithShowView:self.verificationButton inputText:self.phoneAndEmailTF.text phoneOrEmailType:YES];
@@ -939,7 +939,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 
         [self judgeVerificationButtonResponse];
         
-        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text]) && (![self.verificationcodeTF.text isEqual: @""] && self.verificationcodeTF.text != nil) && (self.verificationcodeTF.text.length == 6)) {
+        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text]) && (![self.verificationcodeTF.text isEqual: @""] && self.verificationcodeTF.text != nil) && (self.verificationcodeTF.text.length == 6)) {
             self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {
@@ -949,7 +949,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
     }else {                          //账号密码登录
         
-        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF2.text]) && [NSString judgePassWordLegal:self.passwordTF.text]) {
+        if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text withRegionID:[TIoTCoreUserManage shared].userRegionId] || [NSString judgeEmailLegal:self.phoneAndEmailTF2.text]) && [NSString judgePassWordLegal:self.passwordTF.text]) {
             self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {

@@ -169,7 +169,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     }
     else
     {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text] && self.procolBtn.selected) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }

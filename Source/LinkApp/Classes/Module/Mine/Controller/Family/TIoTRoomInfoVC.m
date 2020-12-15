@@ -37,13 +37,13 @@ static NSString *cellId = @"rc62368";
     self.tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TIoTRoomCell" bundle:nil] forCellReuseIdentifier:cellId];
-    self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     self.tableView.rowHeight = 48;
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     
     __weak typeof(self)weakSelf = self;
-    TIoTSingleCustomButton *deleteRoomButton = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(20, 24, kScreenWidth - 40, 40)];
+    TIoTSingleCustomButton *deleteRoomButton = [[TIoTSingleCustomButton alloc]initWithFrame:CGRectMake(0, 24, kScreenWidth, 40)];
     deleteRoomButton.kLeftRightPadding = 20;
     [deleteRoomButton singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_room", @"删除房间")];
     deleteRoomButton.singleAction = ^{
