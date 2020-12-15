@@ -75,7 +75,7 @@ static NSString *cellId = @"wd9765";
             self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
             self.tableView.scrollEnabled = NO;
         }else {
-            self.tableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+            self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
             self.tableView.scrollEnabled = YES;
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -144,6 +144,13 @@ static NSString *cellId = @"wd9765";
     }
 }
 
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    return [[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0.1)];
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 0.1;
+//}
 #pragma mark - getter
 
 - (NSMutableArray *)rooms

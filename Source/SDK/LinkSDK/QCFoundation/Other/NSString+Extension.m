@@ -249,7 +249,7 @@
     return [emailTest evaluateWithObject:email];
 }
 
-+ (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum
++ (BOOL)judgePhoneNumberLegal:(NSString *)phoneNum withRegionID:(NSString *)regionID;
 {
 //    ‘en-US’: /^(1?|(1\-)?)\d{10,12}$/
 //    'en-US': /^(\+?1)?[2-9]\d{2}[2-9](?!11)\d{6}$/
@@ -257,8 +257,28 @@
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
     NSString *regexUS = @"^[0-9]\\d{9}$";
     NSPredicate *predUS = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regexUS];
-    if ([pred evaluateWithObject:phoneNum] || [predUS evaluateWithObject:phoneNum]) {
-        return  YES;
+    
+    
+    if (regionID != nil) {
+        if ([regionID isEqualToString:@"1"]) { //国内
+            if ([pred evaluateWithObject:phoneNum]) {
+                return YES;
+            }else {
+                return NO;
+            }
+        }else if ([regionID isEqualToString:@"22"]) {//美东
+            if ([predUS evaluateWithObject:phoneNum]) {
+                return YES;
+            }else {
+                return NO;
+            }
+        }else {
+            if ([pred evaluateWithObject:phoneNum] || [predUS evaluateWithObject:phoneNum]) {
+                return  YES;
+            }else {
+                return NO;
+            }
+        }
     }else {
         return NO;
     }

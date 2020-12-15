@@ -94,7 +94,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     if (self.defaultPhoneOrEmail != nil) {
         
-        if ([NSString judgePhoneNumberLegal:self.defaultPhoneOrEmail]) {
+        if ([NSString judgePhoneNumberLegal:self.defaultPhoneOrEmail withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
             //手机号注册
             [self showPhoneRegisterStyle];
             self.phoneTF.text = self.defaultPhoneOrEmail;
@@ -267,7 +267,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     }
     else
     {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text] && self.procolBtn.selected) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -296,7 +296,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 
 
 - (void)judgePhoneNumberQualifiedWithString:(NSString *)textFieldText {
-    if ([NSString judgePhoneNumberLegal:textFieldText]) { //手机号合格
+    if ([NSString judgePhoneNumberLegal:textFieldText withRegionID:[TIoTCoreUserManage shared].userRegionId]) { //手机号合格
         self.phoneTipLabel.hidden = YES;
     }else{ //手机号不合格
         self.phoneTipLabel.hidden = NO;

@@ -74,7 +74,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                     [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
                 }else {
                     if (type == YES) {
-                        if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgePhoneNumberLegal:inputText]) {
+                        if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgePhoneNumberLegal:inputText withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
                             sendCodeBtn.enabled = YES;
                             [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                         }else {
