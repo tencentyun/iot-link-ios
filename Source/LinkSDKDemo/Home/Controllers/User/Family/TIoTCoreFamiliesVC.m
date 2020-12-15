@@ -43,7 +43,7 @@ static NSString *cellId = @"rbrb";
     [btn setTitle:NSLocalizedString(@"add_family", @"添加家庭") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
+    [btn setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
     [btn addTarget:self action:@selector(toAddFamily) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:btn];
     self.tableView.tableFooterView = footer;

@@ -46,7 +46,7 @@
     config.cm_switchMode = CMPageTitleSwitchMode_Underline;
     config.cm_additionalMode = CMPageTitleAdditionalMode_Seperateline;
     config.cm_seperaterLineColor = kRGBColor(230, 230, 230);
-    config.cm_underlineColor = kMainColor;
+    config.cm_underlineColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     config.cm_underlineWidth = 80;
     config.cm_selectedColor = kFontColor;
     config.cm_font = [UIFont systemFontOfSize:16];

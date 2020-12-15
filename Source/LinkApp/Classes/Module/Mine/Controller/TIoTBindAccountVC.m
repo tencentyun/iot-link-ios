@@ -241,12 +241,12 @@
         
         if (self.bindAccountView.passwordTF.isHidden || self.bindAccountView.passwordConfirmTF.isHidden) {
             
-            self.bindAccountView.confirmButton.backgroundColor =kMainColor;
+            self.bindAccountView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.bindAccountView.confirmButton.enabled = YES;
             
         }else if (self.bindAccountView.passwordTF.text.length >= 1 && self.bindAccountView.passwordConfirmTF.text.length >= 1) {
             
-            self.bindAccountView.confirmButton.backgroundColor =kMainColor;
+            self.bindAccountView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.bindAccountView.confirmButton.enabled = YES;
             
         }else {
@@ -321,7 +321,7 @@
         if (self.accountType == AccountType_Phone) {
             //不为空且格式正确
             if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.bindAccountView.phoneOrEmailTF.text])) {
-                [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = YES;
             }else {
                 [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
@@ -330,7 +330,7 @@
         }else if (self.accountType == AccountType_Email) {
             //不为空且格式正确
             if ((![NSString isNullOrNilWithObject:self.bindAccountView.phoneOrEmailTF.text]) && ([NSString judgeEmailLegal:self.bindAccountView.phoneOrEmailTF.text])) {
-                [self.bindAccountView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = YES;
             }else {
                 [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];

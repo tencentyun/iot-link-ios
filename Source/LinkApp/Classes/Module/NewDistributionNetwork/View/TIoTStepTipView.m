@@ -55,7 +55,7 @@
                 
                 if (_showAnimate) {
                     CAShapeLayer *layer = [CAShapeLayer layer];
-                    layer.fillColor = kMainColor.CGColor;
+                    layer.fillColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
                     UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, view.frame.size.width*0.5, view.frame.size.height)];
                     layer.path = path.CGPath;
                     [view.layer addSublayer:layer];
@@ -71,7 +71,7 @@
                 }
 
             } else {
-                view.backgroundColor = kMainColor;
+                view.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             }
         }
         
@@ -87,8 +87,8 @@
             stepLabel.backgroundColor = kRGBColor(219, 219, 219);
             tipLabel.textColor = kRGBColor(136, 136, 136);
         } else {
-            stepLabel.backgroundColor = kMainColor;
-            tipLabel.textColor = kMainColor;
+            stepLabel.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+            tipLabel.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         }
     }
 }

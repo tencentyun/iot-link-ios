@@ -31,7 +31,7 @@
 #pragma mark - event
 -(void)changedTextField:(UITextField *)textField{
     if (self.oldPwdTF.text.length >= 8 && self.passWordTF.text.length >= 8 && self.passWordTF2.text.length >= 8) {
-        self.downBtn.backgroundColor = kMainColor;
+        self.downBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.downBtn.enabled = YES;
     }
     else

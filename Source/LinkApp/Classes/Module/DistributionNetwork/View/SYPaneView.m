@@ -65,7 +65,7 @@
 
 - (void)sucess{
     self.perLayer.strokeColor = self.hightColor.CGColor;
-    self.toTaskNumLabel.textColor     = kMainColor;
+    self.toTaskNumLabel.textColor     = [UIColor colorWithHexString:kIntelligentMainHexColor];
     [self showHightColor];
 }
 
@@ -154,7 +154,7 @@
 
 - (void)showHightColor{
     [self.layerViewsArray enumerateObjectsUsingBlock:^(CAShapeLayer * _Nonnull perLayer, NSUInteger idx, BOOL * _Nonnull stop) {
-        perLayer.strokeColor = kMainColor.CGColor;;
+        perLayer.strokeColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;;
     }];
 }
 
@@ -187,7 +187,7 @@
             //speedLabel.center        = self.center;
             speedLabel.font          = [UIFont boldSystemFontOfSize:30.0f];
             speedLabel.textAlignment = NSTextAlignmentCenter;
-            speedLabel.textColor     = kMainColor;
+            speedLabel.textColor     = [UIColor colorWithHexString:kIntelligentMainHexColor];
             speedLabel.text          = @"0";
             speedLabel;
         });

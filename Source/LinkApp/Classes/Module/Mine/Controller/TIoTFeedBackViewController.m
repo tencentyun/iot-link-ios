@@ -200,7 +200,7 @@ static NSInteger maxNumber = 100;
 //是否可提交
 - (void)checkContext{
     if (self.contextTV.hasText && self.images.count > 0) {
-        self.submitBtn.backgroundColor = kMainColor;
+        self.submitBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.submitBtn.enabled = YES;
     }
     else{

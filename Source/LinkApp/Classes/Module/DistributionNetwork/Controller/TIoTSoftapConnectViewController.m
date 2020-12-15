@@ -122,7 +122,7 @@
     [connectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     connectBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [connectBtn addTarget:self action:@selector(connectClick:) forControlEvents:UIControlEventTouchUpInside];
-    connectBtn.backgroundColor = kMainColor;
+    connectBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     connectBtn.layer.cornerRadius = 3;
     [scroll addSubview:connectBtn];
     self.connectB = connectBtn;
@@ -139,7 +139,7 @@
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.backgroundColor = kMainColor;
+    nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     nextBtn.layer.cornerRadius = 3;
     nextBtn.hidden = YES;
     [scroll addSubview:nextBtn];

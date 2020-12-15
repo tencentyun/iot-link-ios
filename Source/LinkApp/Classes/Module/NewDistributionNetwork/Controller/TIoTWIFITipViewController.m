@@ -62,7 +62,7 @@
     [selectButton setImage:[UIImage imageNamed:@"new_distri_check"] forState:UIControlStateSelected];
     [selectButton setImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     selectButton.layer.borderWidth = 0.5f;
-    selectButton.layer.borderColor = kMainColor.CGColor;
+    selectButton.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
     selectButton.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:selectButton];
     [selectButton addTarget:self action:@selector(selectClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -88,7 +88,7 @@
     [refreshBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     refreshBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [refreshBtn addTarget:self action:@selector(refreshClick:) forControlEvents:UIControlEventTouchUpInside];
-    refreshBtn.backgroundColor = kMainColor;
+    refreshBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     refreshBtn.layer.cornerRadius = 2;
     [self.view addSubview:refreshBtn];
     [refreshBtn mas_makeConstraints:^(MASConstraintMaker *make) {

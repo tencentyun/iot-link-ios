@@ -137,7 +137,7 @@
 //是否可进行下一步
 - (void)checkSendCode{
     if (self.code.length == 6) {
-        self.registerBtn.backgroundColor = kMainColor;
+        self.registerBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.registerBtn.enabled = YES;
     }
     else{
@@ -165,7 +165,7 @@
                 //设置按钮的样式
                 [selfWeak.sendCodeBtn setTitle:NSLocalizedString(@"resend_verificationcode", @"重新发送验证码") forState:UIControlStateNormal];
                 selfWeak.sendCodeBtn.userInteractionEnabled = YES;
-                [selfWeak.sendCodeBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+                [selfWeak.sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
             });
             
         }else{

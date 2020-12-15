@@ -290,7 +290,7 @@
     [tryAgainBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     tryAgainBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [tryAgainBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
-    tryAgainBtn.backgroundColor = kMainColor;
+    tryAgainBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     tryAgainBtn.layer.cornerRadius = 3;
     [self.view addSubview:tryAgainBtn];
     [tryAgainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -306,7 +306,7 @@
     [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [changeTypeBtn addTarget:self action:@selector(backHome:) forControlEvents:UIControlEventTouchUpInside];
-    changeTypeBtn.backgroundColor = kMainColor;
+    changeTypeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     changeTypeBtn.layer.cornerRadius = 3;
     [self.view addSubview:changeTypeBtn];
     [changeTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -372,7 +372,7 @@
         [changeTypeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         changeTypeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [changeTypeBtn addTarget:self action:@selector(changeTypeClick:) forControlEvents:UIControlEventTouchUpInside];
-        changeTypeBtn.backgroundColor = kMainColor;
+        changeTypeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         changeTypeBtn.layer.cornerRadius = 3;
         [self.view addSubview:changeTypeBtn];
         [changeTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {

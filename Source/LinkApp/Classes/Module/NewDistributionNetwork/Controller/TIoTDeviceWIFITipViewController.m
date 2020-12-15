@@ -129,7 +129,7 @@
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.layer.cornerRadius = 2;
-    nextBtn.backgroundColor = kMainColor;
+    nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     [self.scrollView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.scrollView).offset(40);

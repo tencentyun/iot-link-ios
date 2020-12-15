@@ -149,7 +149,7 @@
     [btn2 setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn2 setBackgroundColor:kMainColor];
+    [btn2 setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
     [btn2 addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     btn2.layer.cornerRadius = 4;
     [stack addArrangedSubview:btn2];

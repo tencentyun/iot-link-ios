@@ -113,7 +113,7 @@
         [moreResultBtn setTitle:NSLocalizedString(@"see_more_fail_cause",  @"查看更多失败原因") forState:UIControlStateNormal];
         [moreResultBtn addTarget:self action:@selector(moreErrorResult:) forControlEvents:UIControlEventTouchUpInside];
         moreResultBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-        [moreResultBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+        [moreResultBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         [self.view addSubview:moreResultBtn];
         [moreResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(topicLabel);
@@ -124,7 +124,7 @@
     NSString *changeTitle = _success ? NSLocalizedString(@"continue_addDevice", @"继续添加其他设备") : [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"changeTo", @"切换到"), _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网") : NSLocalizedString(@"softAP_distributionNetwork", @"热点配网")];
     UIButton *changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [changeButton setTitle:changeTitle forState:UIControlStateNormal];
-    [changeButton setTitleColor:kMainColor forState:UIControlStateNormal];
+    [changeButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     changeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [changeButton addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:changeButton];
@@ -141,7 +141,7 @@
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.backgroundColor = kMainColor;
+    nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     nextBtn.layer.cornerRadius = 2;
     [self.view addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {

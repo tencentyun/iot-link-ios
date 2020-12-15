@@ -140,7 +140,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     otherLoginLabel.hidden = self.weixinLoginButton.hidden;
     [self.view addSubview:otherLoginLabel];
     [otherLoginLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(verificationCodeButton.mas_bottom).offset(80);
+        make.top.equalTo(verificationCodeButton.mas_bottom).offset(40);
         make.centerX.equalTo(self.view);
     }];
     
@@ -196,7 +196,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if ([self.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] ) {
         if ((![NSString isNullOrNilWithObject:self.phoneAndEmailTF.text]) && ([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text])) {
             //手机号或邮箱不为空且格式正确
-            [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+            [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
             _verificationButton.enabled = YES;
         }else {
             [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
@@ -551,7 +551,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if (!_verificationButton) {
         _verificationButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
-        [_verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
         _verificationButton.enabled = NO;
@@ -578,7 +578,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if (!_forgetPasswordButton) {
         _forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_forgetPasswordButton setTitle:NSLocalizedString(@"forgot_password", @"忘记密码") forState:UIControlStateNormal];
-        [_forgetPasswordButton setTitleColor:kMainColor forState:UIControlStateNormal];
+        [_forgetPasswordButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _forgetPasswordButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_forgetPasswordButton addTarget:self action:@selector(forgetPasswordClick) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -940,7 +940,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self judgeVerificationButtonResponse];
         
         if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF.text]) && (![self.verificationcodeTF.text isEqual: @""] && self.verificationcodeTF.text != nil) && (self.verificationcodeTF.text.length == 6)) {
-            self.loginAccountButton.backgroundColor =kMainColor;
+            self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {
             self.loginAccountButton.backgroundColor = kMainColorDisable;
@@ -950,7 +950,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     }else {                          //账号密码登录
         
         if (([NSString judgePhoneNumberLegal:self.phoneAndEmailTF2.text] || [NSString judgeEmailLegal:self.phoneAndEmailTF2.text]) && [NSString judgePassWordLegal:self.passwordTF.text]) {
-            self.loginAccountButton.backgroundColor =kMainColor;
+            self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {
             self.loginAccountButton.backgroundColor = kMainColorDisable;

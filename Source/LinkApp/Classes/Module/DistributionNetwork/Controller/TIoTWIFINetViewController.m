@@ -283,7 +283,7 @@
 
 -(void)changedTextField:(UITextField *)textField{
     if (self.wifiNameTF.text.length > 0 && self.wifiPwdTF.text.length > 0) {
-        self.sureBtn.backgroundColor = kMainColor;
+        self.sureBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
         self.sureBtn.enabled = YES;
     }
     else{

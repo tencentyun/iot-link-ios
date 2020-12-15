@@ -82,7 +82,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     UIButton *emailRegisterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
-    [emailRegisterBtn setTitleColor:kMainColor forState:UIControlStateNormal];
+    [emailRegisterBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.view addSubview:emailRegisterBtn];
@@ -93,7 +93,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
-    procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:kMainColor}; //
+    procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
     procolTV.textColor = kFontColor;
     procolTV.delegate = self;
     procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
@@ -107,7 +107,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     self.procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.procolBtn addTarget:self action:@selector(procolClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.procolBtn setImage:[UIImage imageNamed:@"procolDefault"] forState:UIControlStateNormal];
-    [self.procolBtn setImage:[UIImage imageNamed:@"procolSelect"] forState:UIControlStateSelected];
+    [self.procolBtn setImage:[UIImage imageNamed:@"agree_selected"] forState:UIControlStateSelected];
     [self.view addSubview:self.procolBtn];
     [self.procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(procolTV);
@@ -159,7 +159,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 - (void)checkSendCode{
     if (_emailStyle) {
         if ([NSString judgeEmailLegal:self.emailTF.text] && self.procolBtn.selected) {
-            self.sendCodeBtn.backgroundColor = kMainColor;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
         else{
@@ -170,7 +170,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     else
     {
         if ([NSString judgePhoneNumberLegal:self.phoneTF.text] && self.procolBtn.selected) {
-            self.sendCodeBtn.backgroundColor = kMainColor;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
         else{

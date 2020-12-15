@@ -57,7 +57,7 @@ static NSString *cellId = @"ub67989";
     [btn setTitle:NSLocalizedString(@"add_timer", @"添加定时") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
+    [btn setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
     [btn addTarget:self action:@selector(addTimer:) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 4;
     [footer addSubview:btn];

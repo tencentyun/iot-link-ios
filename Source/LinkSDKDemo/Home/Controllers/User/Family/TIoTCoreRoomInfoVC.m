@@ -38,7 +38,7 @@ static NSString *cellId = @"rc62368";
     [btn setTitle:NSLocalizedString(@"delete_room", @"删除房间") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:kMainColor];
+    [btn setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
     [btn addTarget:self action:@selector(toDeleteRoom) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:btn];
     self.tableView.tableFooterView = footer;

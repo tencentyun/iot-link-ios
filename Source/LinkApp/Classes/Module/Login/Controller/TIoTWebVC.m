@@ -140,7 +140,7 @@
     }];
     
     self.progressView = [[UIProgressView alloc] init];
-    self.progressView.tintColor = kMainColor;
+    self.progressView.tintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     self.progressView.trackTintColor = [UIColor lightGrayColor];
     [self.view addSubview:self.progressView];
     [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -418,7 +418,7 @@
 
     if (self.modifyStyle == YES) {
         if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
-            self.comfirmModifyButton.backgroundColor =kMainColor;
+            self.comfirmModifyButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.comfirmModifyButton.enabled = YES;
         }else {
             
@@ -429,7 +429,7 @@
         
     }else {
         if ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView2.verificationCodeTF.text] && self.contentView2.verificationCodeTF.text.length == 6 && (self.contentView2.passwordTF.text.length >= 8 && self.contentView2.passwordConfirmTF.text.length >= 8)) {
-            self.comfirmModifyButton.backgroundColor =kMainColor;
+            self.comfirmModifyButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.comfirmModifyButton.enabled = YES;
         }else {
             
@@ -446,7 +446,7 @@
         
         if ([self.contentView.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
             if (![NSString isNullOrNilWithObject:self.contentView.phoneOrEmailTF.text] && ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text])) {
-                [self.contentView.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.contentView.verificationButton.enabled = YES;
             }else {
                 [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
@@ -466,7 +466,7 @@
     }else {
         if ([self.contentView2.verificationButton.currentTitle isEqual:NSLocalizedString(@"register_get_code", @"获取验证码")] )  {
             if (![NSString isNullOrNilWithObject:self.contentView2.phoneOrEmailTF.text] && ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text])) {
-                [self.contentView2.verificationButton setTitleColor:kMainColor forState:UIControlStateNormal];
+                [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.contentView2.verificationButton.enabled = YES;
             }else {
                 [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];

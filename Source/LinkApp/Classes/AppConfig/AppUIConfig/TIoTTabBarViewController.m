@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view.
     
     [self.tabBar setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]]];
-    self.tabBar.tintColor = kMainColor;
+    self.tabBar.tintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
 //    [UINavigationBar appearance].shadowImage = [UIImage imageWithColor:kXDPNavigationLineColor];
     // 1.初始化子控制器
     
@@ -107,7 +107,7 @@
     textAttrs[NSFontAttributeName] = [UIFont wcPfRegularFontOfSize:kXDPTabbarTitleFont];
     
     NSMutableDictionary *selectTextAttrs = [NSMutableDictionary dictionary];
-    selectTextAttrs[NSForegroundColorAttributeName] = kMainColor;
+    selectTextAttrs[NSForegroundColorAttributeName] = [UIColor colorWithHexString:kIntelligentMainHexColor];
     selectTextAttrs[NSFontAttributeName] = [UIFont wcPfRegularFontOfSize:kXDPTabbarTitleFont];;
     [nav.tabBarItem setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
     [nav.tabBarItem setTitleTextAttributes:selectTextAttrs forState:UIControlStateSelected];
