@@ -170,7 +170,7 @@ static NSString *itemId2 = @"pfDDD";
             
             UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             deleteBtn.frame = CGRectMake(20, 21, kScreenWidth - 40, 48);
-            deleteBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+            deleteBtn.backgroundColor = kMainColor;
             [deleteBtn addTarget:self action:@selector(deleteOrLeaveFamily) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:deleteBtn];
             

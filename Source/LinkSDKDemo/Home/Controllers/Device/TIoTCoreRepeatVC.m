@@ -37,7 +37,7 @@ static NSString *cellId = @"ededf";
     [btn setTitle:NSLocalizedString(@"save", @"保存") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
+    [btn setBackgroundColor:kMainColor];
     [btn addTarget:self action:@selector(saveRepeatData) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 4;
     [footer addSubview:btn];

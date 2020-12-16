@@ -40,7 +40,7 @@ static NSString *cellId = @"wd9765";
     [btn setTitle:NSLocalizedString(@"add_room", @"添加房间") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:20];
-    [btn setBackgroundColor:[UIColor colorWithHexString:kIntelligentMainHexColor]];
+    [btn setBackgroundColor:kMainColor];
     [btn addTarget:self action:@selector(toAddRoom) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 4;
     [footer addSubview:btn];
