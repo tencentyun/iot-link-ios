@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary *)getWifiSsid;
 
 + (UIViewController *)topViewController;
+
+/**
+生成二维码
+ */
++ (UIImage *)qrCodeImageWithInfo:(NSString *)info width:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END
