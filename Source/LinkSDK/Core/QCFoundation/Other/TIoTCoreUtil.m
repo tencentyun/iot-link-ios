@@ -10,8 +10,42 @@
 #import "NSString+Extension.h"
 #import "TIoTVideoDistributionNetModel.h"
 #import <objc/runtime.h>
+#import "TIoTCoreAddDevice.h"
+
+@interface TIoTCoreUtil ()<TIoTCoreAddDeviceDelegate>
+@property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
+@end
 
 @implementation TIoTCoreUtil
+
++ (instancetype)shared {
+    static TIoTCoreUtil *coreUntil = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        coreUntil = [[self alloc]init];
+    });
+    return coreUntil;;
+}
+
+- (instancetype)initWithNetInfo:(TIoTVideoDistributionNetModel *)model withGatewayIp:(NSString *)ip {
+    self = [super init];
+    if (self) {
+        
+        NSString *apSsid = model.ssid?:@"";
+        NSString *apPwd = model.pwd?:@"";
+        
+        self.softAP = [[TIoTCoreSoftAP alloc] initWithSSID:apSsid PWD:apPwd];
+        self.softAP.delegate = self;
+        self.softAP.udpFaildBlock = ^{
+            
+        };
+//        [self.softAP startAddDevice];
+        
+    }
+    return self;
+}
+
+
 
 + (NSDictionary *)getWifiSsid{
     
@@ -63,7 +97,7 @@
 /**
  二维码扫码配网
  */
-+ (UIImage *)qrCodeScanDistributionNetWorkWithInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
++ (UIImage *)generateQrCodeNetWorkInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
     if (infoModel == nil) {
         return nil;
     }
