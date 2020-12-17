@@ -63,7 +63,7 @@
 /**
  二维码扫码配网
  */
-+ (UIImage *)qrCodeScanDistributionNetWorkWithInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
++ (UIImage *)generateQrCodeNetWorkInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
     if (infoModel == nil) {
         return nil;
     }
