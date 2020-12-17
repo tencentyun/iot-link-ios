@@ -7,6 +7,9 @@
 
 #import "TIoTCoreUtil.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import "NSString+Extension.h"
+#import "TIoTVideoDistributionNetModel.h"
+#import <objc/runtime.h>
 
 @implementation TIoTCoreUtil
 
@@ -56,4 +59,84 @@
     }
     return nil;
 }
+
+/**
+ 二维码扫码配网
+ */
++ (UIImage *)qrCodeScanDistributionNetWorkWithInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
+    if (infoModel == nil) {
+        return nil;
+    }
+    
+    NSArray *keyArray = [self getObjectKeyArray:infoModel];
+    NSDictionary *dic = [infoModel dictionaryWithValuesForKeys:keyArray];
+    NSString *infoJsonString = [NSString objectToJson:dic];
+    
+    UIImage *image = [self qrCodeImageWithInfo:infoJsonString size:size]?:[UIImage new];
+     
+    return  image;
+}
+
+
+/**
+生成二维码
+ */
++ (UIImage *)qrCodeImageWithInfo:(NSString *)info size:(CGSize)size
+
+{
+    if (!info) {
+        return nil;
+    }
+    
+    NSData *strData = [info dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:NO];
+    
+    //创建二维码滤镜
+    
+    CIFilter *qrFilter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    
+    [qrFilter setValue:strData forKey:@"inputMessage"];
+    
+    [qrFilter setValue:@"H" forKey:@"inputCorrectionLevel"];
+    
+    CIImage *qrImage = qrFilter.outputImage;
+    
+    CGRect qrRect = qrImage.extent;
+    CGImageRef imageRef = [[CIContext context] createCGImage:qrImage fromRect:qrRect];
+    CGFloat scale = fminf(size.width / qrRect.size.width, size.width / qrRect.size.height) * [UIScreen mainScreen].scale;
+    size_t contextW = ceilf(qrRect.size.width * scale);
+    size_t contextH = ceilf(qrRect.size.height * scale);
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceGray();
+    CGContextRef contextRef = CGBitmapContextCreate(nil, contextW, contextH, 8, 0, colorSpaceRef, (CGBitmapInfo)kCGImageAlphaNone);
+    CGColorSpaceRelease(colorSpaceRef);
+    
+    CGContextSetInterpolationQuality(contextRef, kCGInterpolationNone);
+    CGContextScaleCTM(contextRef, scale, scale);
+    CGContextDrawImage(contextRef, qrRect, imageRef);
+    CGImageRelease(imageRef);
+    
+    CGImageRef resultImageRef = CGBitmapContextCreateImage(contextRef);
+    CGContextRelease(contextRef);
+    
+    UIImage *resultImage = [UIImage imageWithCGImage:resultImageRef scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    CGImageRelease(resultImageRef);
+    
+    return resultImage;
+    
+}
+
++ (NSArray <NSString *>*)getObjectKeyArray:(TIoTVideoDistributionNetModel *)model {
+    
+    u_int keyCount;
+    objc_property_t *properties  =class_copyPropertyList([model class], &keyCount);
+    NSMutableArray *propertiesArray = [NSMutableArray array];
+    for (int k = 0; k < keyCount; k++)
+    {
+        const char *propertyName = property_getName(properties[k]);
+        [propertiesArray addObject: [NSString stringWithUTF8String: propertyName]];
+    }
+    free(properties);
+    return propertiesArray;
+
+}
+
 @end

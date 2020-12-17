@@ -16,7 +16,7 @@
 #define kMainColor kRGBColor(0, 110, 255)
 #define kBgColor kRGBColor(242, 242, 242)
 #define kFontColor kRGBColor(51, 51, 51)
-
+#define kMainThemeColor @"#006EFF"
 
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height

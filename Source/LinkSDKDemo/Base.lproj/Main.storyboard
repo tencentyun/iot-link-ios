@@ -114,16 +114,30 @@
                                     <outlet property="delegate" destination="6ts-Uc-m2S" id="pyW-3f-Mjs"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUu-gl-Zb1">
+                                <rect key="frame" x="0.0" y="251" width="414" height="50"/>
+                                <color key="backgroundColor" systemColor="systemTealColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="cHa-pw-4UV"/>
+                                </constraints>
+                                <state key="normal" title="Video 配网"/>
+                                <connections>
+                                    <action selector="jumpVideoConfigNet:" destination="6ts-Uc-m2S" eventType="touchUpInside" id="1mU-fe-qDJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7ep-JB-Qrs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="qlz-OY-zRD" firstAttribute="leading" secondItem="7ep-JB-Qrs" secondAttribute="leading" id="1Qq-5P-wDL"/>
+                            <constraint firstItem="LUu-gl-Zb1" firstAttribute="top" secondItem="m0x-6W-h5d" secondAttribute="bottom" constant="5" id="5SO-hq-jEB"/>
                             <constraint firstItem="qlz-OY-zRD" firstAttribute="top" secondItem="7ep-JB-Qrs" secondAttribute="top" constant="56" id="9BO-qD-eZe"/>
                             <constraint firstItem="m0x-6W-h5d" firstAttribute="top" secondItem="qlz-OY-zRD" secondAttribute="bottom" constant="2" id="IqW-yX-P5K"/>
                             <constraint firstItem="mFa-IG-8pM" firstAttribute="leading" secondItem="7ep-JB-Qrs" secondAttribute="leading" constant="76" id="NuB-uB-rfk"/>
                             <constraint firstItem="7ep-JB-Qrs" firstAttribute="trailing" secondItem="mFa-IG-8pM" secondAttribute="trailing" constant="94" id="Ugh-O8-9ui"/>
                             <constraint firstItem="m0x-6W-h5d" firstAttribute="leading" secondItem="7ep-JB-Qrs" secondAttribute="leading" id="VuB-Vb-hVG"/>
+                            <constraint firstItem="LUu-gl-Zb1" firstAttribute="leading" secondItem="7ep-JB-Qrs" secondAttribute="leading" id="Whe-yx-5GH"/>
+                            <constraint firstItem="7ep-JB-Qrs" firstAttribute="trailing" secondItem="LUu-gl-Zb1" secondAttribute="trailing" id="kXB-fU-zfV"/>
                             <constraint firstItem="7ep-JB-Qrs" firstAttribute="trailing" secondItem="m0x-6W-h5d" secondAttribute="trailing" id="mrg-Oh-bTp"/>
                             <constraint firstItem="mFa-IG-8pM" firstAttribute="top" secondItem="7ep-JB-Qrs" secondAttribute="top" constant="14" id="oKZ-Qj-1VU"/>
                             <constraint firstItem="7ep-JB-Qrs" firstAttribute="trailing" secondItem="qlz-OY-zRD" secondAttribute="trailing" id="wn1-a8-Oub"/>
@@ -440,6 +454,9 @@
         </systemColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemTealColor">
+            <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
