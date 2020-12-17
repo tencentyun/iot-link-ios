@@ -8,6 +8,7 @@
 
 #import "TIoTNetConfigViewController.h"
 #import "TIoTCoreUserManage.h"
+#import "TIoTVideoConfigNetVC.h"
 
 @interface TIoTNetConfigViewController ()<UITextFieldDelegate>
 
@@ -19,6 +20,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
+
+- (IBAction)jumpVideoConfigNet:(id)sender {
+    TIoTVideoConfigNetVC *VideoConfigVC = [[TIoTVideoConfigNetVC alloc]init];
+    [self.navigationController pushViewController:VideoConfigVC animated:YES];
+}
+
 
 /*
 #pragma mark - Navigation
