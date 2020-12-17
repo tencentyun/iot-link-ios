@@ -266,6 +266,10 @@
 
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data
 {
+    if ([NSString matchSinogram:data]) {
+        return @"";
+    }
+    
     const char *cKey  = [key cStringUsingEncoding:NSASCIIStringEncoding];
     const char *cData = [data cStringUsingEncoding:NSASCIIStringEncoding];
 
