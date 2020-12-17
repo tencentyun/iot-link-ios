@@ -10,6 +10,7 @@
 #import "TIoTVIdeoQRScanDistributionNet.h"
 #import "UIButton+LQRelayout.h"
 #import "UIColor+Color.h"
+#import "TIoTVideoSoftApDistributionNetVC.h"
 
 @interface TIoTVideoConfigNetVC ()
 
@@ -63,7 +64,8 @@
 }
 
 - (void)jumpSoftApConfigVC {
-    
+    TIoTVideoSoftApDistributionNetVC *softApVC = [[TIoTVideoSoftApDistributionNetVC alloc]init];
+    [self.navigationController pushViewController:softApVC animated:YES];
 }
 
 /*
