@@ -18,7 +18,7 @@
 #import "TIoTCoreAPISets.h"
 #import "TIoTCoreQMacros.h"
 
-#import "TIoTLinkKitDemo-Swift.h"
+#import "LinkSDKDemo-Swift.h"
 #endif
 
 #endif /* QCPrefix_pch */

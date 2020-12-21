@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F4F3D52824935BD3005D3396"
-               BuildableName = "TIoTLinkKitDemo.app"
-               BlueprintName = "TIoTLinkKitDemo"
+               BuildableName = "LinkSDKDemo.app"
+               BlueprintName = "LinkSDKDemo"
                ReferencedContainer = "container:TIoTLinkKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F4F3D52824935BD3005D3396"
-            BuildableName = "TIoTLinkKitDemo.app"
-            BlueprintName = "TIoTLinkKitDemo"
+            BuildableName = "LinkSDKDemo.app"
+            BlueprintName = "LinkSDKDemo"
             ReferencedContainer = "container:TIoTLinkKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F4F3D52824935BD3005D3396"
-            BuildableName = "TIoTLinkKitDemo.app"
-            BlueprintName = "TIoTLinkKitDemo"
+            BuildableName = "LinkSDKDemo.app"
+            BlueprintName = "LinkSDKDemo"
             ReferencedContainer = "container:TIoTLinkKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

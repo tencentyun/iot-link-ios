@@ -10,4 +10,4 @@ xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkSDKDemo -confi
 
 xcodebuild -exportArchive -archivePath LinkSDKDemo.xcarchive -exportOptionsPlist .github/script/ExportOptionsSDKDemoDevelop.plist  -exportPath ./
 
-mv TIoTLinkKitDemo.ipa LinkSDKDemo.ipa
+#mv TIoTLinkKitDemo.ipa LinkSDKDemo.ipa

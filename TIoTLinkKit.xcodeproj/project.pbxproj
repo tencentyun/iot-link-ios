@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A8DD0247CD0692F4B476E0A /* Pods_TIoTLinkKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BE09B578F353301C61BAD5 /* Pods_TIoTLinkKitDemo.framework */; };
-		6B44E6AD14FD69D29359E44F /* Pods_TIoTLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5897E825F629A6A37144A46 /* Pods_TIoTLinkKit.framework */; };
 		6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */; };
 		6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */; };
 		6D06B07425603C50006361B5 /* TIoTAutoCustomTimePeriodView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07325603C50006361B5 /* TIoTAutoCustomTimePeriodView.m */; };
@@ -89,6 +87,8 @@
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		6DEEB78025494DFD00247A66 /* TIoTH5CallResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */; };
 		6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB7832549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m */; };
+		8B92813569D959EFE08FFA8A /* Pods_LinkSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */; };
+		9A55D54345C86CE785C386E3 /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */; };
 		A40565E424D040C900A15699 /* TIoTConfigHardwareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */; };
 		A40565E724D040EE00A15699 /* TIoTStepTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E624D040EE00A15699 /* TIoTStepTipView.m */; };
 		A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */; };
@@ -397,6 +397,7 @@
 /* Begin PBXFileReference section */
 		0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		253144D80CC8A037F5D90897 /* Pods-TIoTLinkKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKitDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEC5EAB97F68CE0E6741FE2 /* Pods-TIoTLinkKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit.release.xcconfig"; sourceTree = "<group>"; };
 		580CE396098E50E9FB7555F0 /* Pods-TIoTLinkKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit.debug.xcconfig"; sourceTree = "<group>"; };
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -713,7 +714,7 @@
 		D2B29EE2235FEDF10086BDFA /* TIoTChoseValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChoseValueView.m; sourceTree = "<group>"; };
 		D2B29EE4235FF12B0086BDFA /* TIoTChoseValueTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChoseValueTableViewCell.h; sourceTree = "<group>"; };
 		D2B29EE5235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChoseValueTableViewCell.m; sourceTree = "<group>"; };
-		D2C7A9EF232F6AA4005E8006 /* TIoTLinkKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIoTLinkKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2C7A9EF232F6AA4005E8006 /* LinkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppDelegate.h; sourceTree = "<group>"; };
 		D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppDelegate.m; sourceTree = "<group>"; };
 		D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -758,7 +759,6 @@
 		D2E976AD233C4F2900182443 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		D2E976B6233D969A00182443 /* TIoTWebSocketManage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWebSocketManage.h; sourceTree = "<group>"; };
 		D2E976B7233D969A00182443 /* TIoTWebSocketManage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTWebSocketManage.m; sourceTree = "<group>"; };
-		D5897E825F629A6A37144A46 /* Pods_TIoTLinkKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TIoTLinkKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED153C6823712028007E9C4F /* TIoTResetPwdVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTResetPwdVC.h; sourceTree = "<group>"; };
 		ED153C6923712028007E9C4F /* TIoTResetPwdVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTResetPwdVC.m; sourceTree = "<group>"; };
 		ED16D93D236FB87400D26D0A /* TIoTNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNavigationController.h; sourceTree = "<group>"; };
@@ -951,7 +951,7 @@
 		F4DB306525676DF7006C45CD /* TRTCCalling.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TRTCCalling.xcassets; sourceTree = "<group>"; };
 		F4DB318B256771E3006C45CD /* CommonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
 		F4DB322F256788E5006C45CD /* AppUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
-		F4F3D52924935BD3005D3396 /* TIoTLinkKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIoTLinkKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F3D52B24935BD3005D3396 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F4F3D52C24935BD3005D3396 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F4F3D53524935BD3005D3396 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1044,7 +1044,7 @@
 		F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTBaseModel.swift; sourceTree = "<group>"; };
 		F4F4347F2546BA2000C44471 /* TIoTProductsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTProductsModel.swift; sourceTree = "<group>"; };
 		F4F434D425480B7100C44471 /* TIoTDeviceDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDeviceDataModel.swift; sourceTree = "<group>"; };
-		F6BE09B578F353301C61BAD5 /* Pods_TIoTLinkKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TIoTLinkKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF67F585247EB7480075C5C1 /* TIoTProductTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTProductTableViewCell.h; sourceTree = "<group>"; };
 		FF67F586247EB7480075C5C1 /* TIoTProductTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTProductTableViewCell.m; sourceTree = "<group>"; };
 		FF831E0024D1CC9100F797EA /* TIoTWIFITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWIFITableViewCell.h; sourceTree = "<group>"; };
@@ -1066,7 +1066,7 @@
 				D2E97691233C499700182443 /* UserNotifications.framework in Frameworks */,
 				D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */,
 				ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */,
-				6B44E6AD14FD69D29359E44F /* Pods_TIoTLinkKit.framework in Frameworks */,
+				9A55D54345C86CE785C386E3 /* Pods_LinkApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1075,7 +1075,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */,
-				0A8DD0247CD0692F4B476E0A /* Pods_TIoTLinkKitDemo.framework in Frameworks */,
+				8B92813569D959EFE08FFA8A /* Pods_LinkSDKDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1274,8 +1274,8 @@
 				D2E97694233C49AD00182443 /* SystemConfiguration.framework */,
 				D2E97692233C49A300182443 /* CoreTelephony.framework */,
 				D2E97690233C499700182443 /* UserNotifications.framework */,
-				D5897E825F629A6A37144A46 /* Pods_TIoTLinkKit.framework */,
-				F6BE09B578F353301C61BAD5 /* Pods_TIoTLinkKitDemo.framework */,
+				F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */,
+				43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1925,8 +1925,8 @@
 		D2C7A9F0232F6AA4005E8006 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2C7A9EF232F6AA4005E8006 /* TIoTLinkKit.app */,
-				F4F3D52924935BD3005D3396 /* TIoTLinkKitDemo.app */,
+				D2C7A9EF232F6AA4005E8006 /* LinkApp.app */,
+				F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2349,9 +2349,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D2C7A9EE232F6AA4005E8006 /* TIoTLinkKit */ = {
+		D2C7A9EE232F6AA4005E8006 /* LinkApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TIoTLinkKit" */;
+			buildConfigurationList = D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkApp" */;
 			buildPhases = (
 				1805E9362A06B178133EC800 /* [CP] Check Pods Manifest.lock */,
 				D2C7A9EB232F6AA4005E8006 /* Sources */,
@@ -2367,14 +2367,14 @@
 			);
 			dependencies = (
 			);
-			name = TIoTLinkKit;
+			name = LinkApp;
 			productName = TenextCloud;
-			productReference = D2C7A9EF232F6AA4005E8006 /* TIoTLinkKit.app */;
+			productReference = D2C7A9EF232F6AA4005E8006 /* LinkApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F4F3D52824935BD3005D3396 /* TIoTLinkKitDemo */ = {
+		F4F3D52824935BD3005D3396 /* LinkSDKDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F4F3D54124935BD3005D3396 /* Build configuration list for PBXNativeTarget "TIoTLinkKitDemo" */;
+			buildConfigurationList = F4F3D54124935BD3005D3396 /* Build configuration list for PBXNativeTarget "LinkSDKDemo" */;
 			buildPhases = (
 				FAA5A328888AFA13C2885AD0 /* [CP] Check Pods Manifest.lock */,
 				F4F3D52524935BD3005D3396 /* Sources */,
@@ -2387,9 +2387,9 @@
 			);
 			dependencies = (
 			);
-			name = TIoTLinkKitDemo;
+			name = LinkSDKDemo;
 			productName = LinkSDKDemo;
-			productReference = F4F3D52924935BD3005D3396 /* TIoTLinkKitDemo.app */;
+			productReference = F4F3D52924935BD3005D3396 /* LinkSDKDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2434,8 +2434,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2C7A9EE232F6AA4005E8006 /* TIoTLinkKit */,
-				F4F3D52824935BD3005D3396 /* TIoTLinkKitDemo */,
+				D2C7A9EE232F6AA4005E8006 /* LinkApp */,
+				F4F3D52824935BD3005D3396 /* LinkSDKDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -2541,7 +2541,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TIoTLinkKit-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-LinkApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2554,15 +2554,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2EC0ED5670A11587790F0BD1 /* [CP] Embed Pods Frameworks */ = {
@@ -2571,15 +2571,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		50ABE041C31296DBF30D9DC8 /* [CP] Embed Pods Frameworks */ = {
@@ -2588,15 +2588,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6DD4E8302489DAAE0056A162 /* ShellScript */ = {
@@ -2648,7 +2648,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TIoTLinkKitDemo-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-LinkSDKDemo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3218,7 +3218,7 @@
 		};
 		D2C7AA1C232F6AA6005E8006 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 580CE396098E50E9FB7555F0 /* Pods-TIoTLinkKit.debug.xcconfig */;
+			baseConfigurationReference = C6770FC7B2DE12C08C524BF2 /* Pods-LinkApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
@@ -3299,7 +3299,7 @@
 		};
 		D2C7AA1D232F6AA6005E8006 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4FEC5EAB97F68CE0E6741FE2 /* Pods-TIoTLinkKit.release.xcconfig */;
+			baseConfigurationReference = A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
@@ -3379,7 +3379,7 @@
 		};
 		F4F3D53F24935BD3005D3396 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 253144D80CC8A037F5D90897 /* Pods-TIoTLinkKitDemo.debug.xcconfig */;
+			baseConfigurationReference = 68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3401,6 +3401,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
+				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
@@ -3412,7 +3413,7 @@
 		};
 		F4F3D54024935BD3005D3396 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F1BF3FD8148FCEEFC5AA3220 /* Pods-TIoTLinkKitDemo.release.xcconfig */;
+			baseConfigurationReference = 0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -3433,6 +3434,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
+				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
@@ -3453,7 +3455,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "TIoTLinkKit" */ = {
+		D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2C7AA1C232F6AA6005E8006 /* Debug */,
@@ -3462,7 +3464,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F4F3D54124935BD3005D3396 /* Build configuration list for PBXNativeTarget "TIoTLinkKitDemo" */ = {
+		F4F3D54124935BD3005D3396 /* Build configuration list for PBXNativeTarget "LinkSDKDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F4F3D53F24935BD3005D3396 /* Debug */,

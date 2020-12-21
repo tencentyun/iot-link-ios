@@ -22,12 +22,12 @@ def common_all_pods
   pod 'Firebase/Performance', '6.31.1'
 end
 
-target 'TIoTLinkKit' do
+target 'LinkApp' do
   common_all_pods
   trtc_ui_pods
   
   pod 'TIoTLinkKit', :path => './'
-  pod 'TIoTLinkKit/TRTC', :path => './'
+  pod 'TIoTLinkKit/LinkTRTC', :path => './'
   pod 'MJRefresh', '3.2.0'
   pod 'IQKeyboardManager', '6.1.1'
   pod 'FDFullscreenPopGesture', '1.1'
@@ -41,10 +41,10 @@ target 'TIoTLinkKit' do
   pod 'TIoTThridSDK', '1.0.1'
 end
 
-target 'TIoTLinkKitDemo' do
+target 'LinkSDKDemo' do
   common_all_pods
   trtc_ui_pods
   
   pod 'TIoTLinkKit', :path => './'
-  pod 'TIoTLinkKit/TRTC', :path => './'
+  pod 'TIoTLinkKit/LinkTRTC', :path => './'
 end
