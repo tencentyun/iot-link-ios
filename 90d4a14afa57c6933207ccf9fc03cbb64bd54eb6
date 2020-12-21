@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89060fbb_4fd4853c",
+        "filename": "Source/LinkSDK/Core/QCFoundation/Other/TIoTCoreUtil.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-21T10:36:00Z",
+      "side": 1,
+      "message": "不需要声明，已经引入了头文件",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6187ab2_3782772a",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-21T10:36:00Z",
+      "side": 1,
+      "message": "次方法，是否没有用到",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bd34cc2_10e2627c",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-21T10:36:00Z",
+      "side": 1,
+      "message": "需要删除",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
