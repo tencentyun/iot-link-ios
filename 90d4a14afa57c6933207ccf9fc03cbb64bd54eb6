@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3dac5248_957a8f3d",
+        "filename": "Source/LinkSDK/Core/QCFoundation/Other/TIoTCoreUtil.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-21T14:01:26Z",
+      "side": 1,
+      "message": "已在patch6中删除",
+      "parentUuid": "89060fbb_4fd4853c",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6187ab2_3782772a",
         "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "443dfbf7_83ac7f3d",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-21T14:01:26Z",
+      "side": 1,
+      "message": "已修改，需要后台切前台时，需要加权限获取，但不赋值",
+      "parentUuid": "f6187ab2_3782772a",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bd34cc2_10e2627c",
         "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
         "patchSetId": 5
@@ -50,6 +86,24 @@
       "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37f4d313_eebee751",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVIdeoQRScanDistributionNet.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-21T14:01:26Z",
+      "side": 1,
+      "message": "已在patch6中删除",
+      "parentUuid": "2bd34cc2_10e2627c",
+      "revId": "90d4a14afa57c6933207ccf9fc03cbb64bd54eb6",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
