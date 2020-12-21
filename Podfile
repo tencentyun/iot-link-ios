@@ -6,9 +6,9 @@ def trtc_ui_pods
   pod 'RxSwift', '5.1.1'
   pod 'RxCocoa', '5.1.1'
   pod 'SnapKit', '5.0.1'
-  pod 'Alamofire', '4.9.1'
+#  pod 'Alamofire', '4.9.1'
   pod 'Toast-Swift', '5.0.1'
-  pod 'Material', '3.1.8'
+#  pod 'Material', '3.1.8'
   pod 'NVActivityIndicatorView', '5.1.1'
 end
 
