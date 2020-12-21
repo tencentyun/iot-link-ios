@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SnapKit
-import NVActivityIndicatorView
+//import SnapKit
+import Masonry
 import SDWebImage
 
 class CallingSelectUserTableViewCell: UITableViewCell {
@@ -40,24 +40,30 @@ class CallingSelectUserTableViewCell: UITableViewCell {
         guard !isViewReady else { return }
         isViewReady = true
         contentView.addSubview(userImg)
-        userImg.snp.remakeConstraints { (make) in
-            make.leading.equalToSuperview().offset(20)
-            make.width.height.equalTo(50)
-            make.centerY.equalTo(self)
+        
+        
+        userImg.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.leading.equalTo()(contentView)?.setOffset(20)
+            make?.width.mas_equalTo()(50)
+            make?.height.mas_equalTo()(50)
+            make?.centerY.equalTo()(self)
+            
         }
         
         contentView.addSubview(nameLabel)
-        nameLabel.snp.remakeConstraints { (make) in
-            make.leading.equalTo(userImg.snp.trailing).offset(12)
-            make.trailing.top.bottom.equalTo(self)
+        nameLabel.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.leading.equalTo()(userImg.mas_trailing)?.setOffset(12)
+            make?.trailing.equalTo()(self)
+            make?.top.equalTo()(self)
+            make?.bottom.equalTo()(self)
         }
         
         contentView.addSubview(callButton)
-        callButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.width.equalTo(60)
-            make.height.equalTo(30)
-            make.right.equalToSuperview().offset(-20)
+        callButton.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.centerY.equalTo()(contentView)
+            make?.width.mas_equalTo()(60)
+            make?.height.mas_equalTo()(30)
+            make?.right.equalTo()(contentView)?.setOffset(-20)
         }
         
         callButton.addTarget(self, action: #selector(callAction(_:)), for: .touchUpInside)
@@ -89,12 +95,6 @@ class AudioCallUserCell: UICollectionViewCell {
     
     private var isViewReady: Bool = false
     
-    lazy var loading: NVActivityIndicatorView  = {
-        let load = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 60),
-                                              type: .ballBeat,
-                                              color: .white)
-        return load
-    }()
 
     lazy var cellImgView: UIImageView = {
         let img = UIImageView()
@@ -129,35 +129,28 @@ class AudioCallUserCell: UICollectionViewCell {
         guard !isViewReady else { return }
         isViewReady = true
         addSubview(cellImgView)
-        cellImgView.snp.remakeConstraints { (make) in
-            make.width.height.equalTo(self.snp.height)
-            make.centerX.centerY.equalTo(self)
+        cellImgView.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.width.height()?.equalTo()(self.mas_height)
+            make?.centerX.centerY()?.equalTo()(self)
         }
         
         addSubview(cellUserLabel)
-        cellUserLabel.snp.remakeConstraints { (make) in
-            make.bottom.left.equalTo(cellImgView)
-            make.height.equalTo(24)
-            make.right.equalTo(cellImgView).offset(-24)
+        cellUserLabel.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.bottom.left()?.equalTo()(cellImgView)
+            make?.height.mas_equalTo()(24)
+            make?.right.equalTo()(cellImgView)?.setOffset(-24)
         }
         
         addSubview(cellVoiceImageView)
-        cellVoiceImageView.snp.remakeConstraints { (make) in
-            make.bottom.right.equalTo(cellImgView)
-            make.height.width.equalTo(24)
+        cellVoiceImageView.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.bottom.right()?.equalTo()(cellImgView)
+            make?.height.width()?.mas_equalTo()(24)
         }
-        
         addSubview(dimBk)
-        dimBk.snp.remakeConstraints { (make) in
-            make.edges.equalTo(cellImgView)
+        cellVoiceImageView.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.edges.equalTo()(cellImgView)
         }
         
-        addSubview(loading)
-        loading.snp.remakeConstraints { (make) in
-            make.center.equalTo(cellImgView)
-            make.width.equalTo(44)
-            make.height.equalTo(30)
-        }
     }
     
     var userModel = CallingUserModel(){
