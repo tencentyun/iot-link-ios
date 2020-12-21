@@ -7,9 +7,10 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
-import Toast_Swift
+//import RxSwift
+//import RxCocoa
+import Masonry
+import MBProgressHUD
 
 @objc public enum AudioiCallingState : Int32, Codable {
     case dailing = 0
@@ -30,7 +31,7 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     let accept = UIButton()
     let handsfree = UIButton()
     let mute = UIButton()
-    let disposebag = DisposeBag()
+//    let disposebag = DisposeBag()
     var curSponsor: CallingUserModel?
     var callingTime: UInt32 = 0
     var codeTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .userInteractive))
@@ -221,12 +222,17 @@ extension TRTCCallingAuidoViewController {
         
         view.addSubview(OnInviteePanel)
         OnInviteePanel.addSubview(OninviteeStackView)
-        OninviteeStackView.snp.makeConstraints { (make) in
-            make.leading.trailing.bottom.equalTo(OnInviteePanel)
-            make.top.equalTo(OnInviteePanel.snp.bottom)
+//        OninviteeStackView.snp.makeConstraints { (make) in
+//            make.leading.trailing.bottom.equalTo(OnInviteePanel)
+//            make.top.equalTo(OnInviteePanel.snp.bottom)
+//        }
+        OninviteeStackView.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.leading.trailing()?.bottom()?.equalTo()(OnInviteePanel)
+            make?.top.equalTo()(OnInviteePanel.mas_bottom)
         }
         
-        ToastManager.shared.position = .bottom
+        
+//        ToastManager.shared.position = .bottom
         var topPadding: CGFloat = 0
         
         gradientLayer.colors = colors.compactMap{ $0 }
@@ -238,11 +244,17 @@ extension TRTCCallingAuidoViewController {
             topPadding = window!.safeAreaInsets.top
         }
         view.addSubview(userCollectionView)
-        userCollectionView.snp.makeConstraints { (make) in
-            make.leading.trailing.equalTo(view)
-            make.height.equalTo(view.snp.width)
-            make.top.equalTo(topPadding + 62)
+//        userCollectionView.snp.makeConstraints { (make) in
+//            make.leading.trailing.equalTo(view)
+//            make.height.equalTo(view.snp.width)
+//            make.top.equalTo(topPadding + 62)
+//        }
+        userCollectionView.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.leading.trailing()?.equalTo()(view)
+            make?.height.equalTo()(view.mas_width)
+            make?.top.mas_equalTo()(topPadding + 62)
         }
+        
         setupControls()
         autoSetUIByState()
         accept.isHidden = (curSponsor == nil)
@@ -257,73 +269,102 @@ extension TRTCCallingAuidoViewController {
         if hangup.superview == nil {
             hangup.setImage(UIImage(named: "ic_hangup"), for: .normal)
             view.addSubview(hangup)
-            hangup.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
-                guard let self = self else {return}
-                TRTCCalling.shareInstance()
-                 TRTCCalling.shareInstance().hangup()
-                self.disMiss()
-                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+//            hangup.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
+//                guard let self = self else {return}
+//                TRTCCalling.shareInstance()
+//                 TRTCCalling.shareInstance().hangup()
+//                self.disMiss()
+//                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+            hangup.addTarget(self, action: #selector(hangupTapped), for: .touchUpInside)
         }
         
         
         if accept.superview == nil {
             accept.setImage(UIImage(named: "ic_dialing"), for: .normal)
             view.addSubview(accept)
-            accept.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
-                guard let self = self else {return}
-//                TRTCCalling.shareInstance().accept()
-                
-                var curUser = CallingUserModel()
-                curUser.isEnter = true
-                self.enterUser(user: curUser)
-                
-                self.curState = .calling
-                self.accept.isHidden = true
-                
-//                TIoTTRTCSessionManager.shared().enterRoom()
-                
-                if let delegate = self.actionDelegate {
-                    delegate.didAcceptJoinRoom()
-                }
-                
-                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+//            accept.rx.controlEvent(.touchUpInside).subscribe(onNext: {[weak self] in
+//                guard let self = self else {return}
+////                TRTCCalling.shareInstance().accept()
+//
+//                var curUser = CallingUserModel()
+//                curUser.isEnter = true
+//                self.enterUser(user: curUser)
+//
+//                self.curState = .calling
+//                self.accept.isHidden = true
+//
+////                TIoTTRTCSessionManager.shared().enterRoom()
+//
+//                if let delegate = self.actionDelegate {
+//                    delegate.didAcceptJoinRoom()
+//                }
+//
+//                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+            accept.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
         }
         
         if mute.superview == nil {
             mute.setImage(UIImage(named: "ic_mute"), for: .normal)
             view.addSubview(mute)
-            mute.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
-                guard let self = self else {return}
-                self.isMicMute = !self.isMicMute
-                TRTCCalling.shareInstance().setMicMute(self.isMicMute)
-                self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
-                self.view.makeToast(self.isMicMute ? "开启静音" : "关闭静音")
-                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+//            mute.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
+//                guard let self = self else {return}
+//                self.isMicMute = !self.isMicMute
+//                TRTCCalling.shareInstance().setMicMute(self.isMicMute)
+//                self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
+//                let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+//                indicator.mode = MBProgressHUDMode.text
+//                indicator.label.text = self.isMicMute ? "开启静音" : "关闭静音"
+//                indicator.margin = 10
+//                indicator.offset.y = 50
+//                indicator.removeFromSuperViewOnHide = true
+//                indicator.hide(animated: true, afterDelay: 0.5)
+//                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+            mute.addTarget(self, action: #selector(muteTapped), for: .touchUpInside)
             mute.isHidden = true
-            mute.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view).offset(-120)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(50)
-                make.height.equalTo(50)
+//            mute.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view).offset(-120)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(50)
+//                make.height.equalTo(50)
+//            }
+            mute.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)?.setOffset(-120)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(50)
+                make?.height.mas_equalTo()(50)
             }
+            
         }
         
         if handsfree.superview == nil {
             handsfree.setImage(UIImage(named: "ic_handsfree_on"), for: .normal)
             view.addSubview(handsfree)
-            handsfree.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
-                guard let self = self else {return}
-                self.isHandsFreeOn = !self.isHandsFreeOn
-                TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
-                self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
-                self.view.makeToast(self.isHandsFreeOn ? "开启免提" : "关闭免提")
-                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+//            handsfree.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
+//                guard let self = self else {return}
+//                self.isHandsFreeOn = !self.isHandsFreeOn
+//                TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
+//                self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
+//                let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+//                indicator.mode = MBProgressHUDMode.text
+//                indicator.label.text = self.isHandsFreeOn ? "开启免提" : "关闭免提"
+//                indicator.margin = 10
+//                indicator.offset.y = 50
+//                indicator.removeFromSuperViewOnHide = true
+//                indicator.hide(animated: true, afterDelay: 0.5)
+//                }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposebag)
+            handsfree.addTarget(self, action: #selector(handsfreeTapped), for: .touchUpInside)
             handsfree.isHidden = true
-            handsfree.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view).offset(120)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(50)
-                make.height.equalTo(50)
+//            handsfree.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view).offset(120)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(50)
+//                make.height.equalTo(50)
+//            }
+            handsfree.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)?.setOffset(120)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(50)
+                make?.height.mas_equalTo()(50)
             }
         }
         
@@ -334,49 +375,128 @@ extension TRTCCallingAuidoViewController {
             callTimeLabel.textAlignment = .center
             view.addSubview(callTimeLabel)
             callTimeLabel.isHidden = true
-            callTimeLabel.snp.remakeConstraints { (make) in
-                make.leading.trailing.equalTo(view)
-                make.bottom.equalTo(hangup.snp.top).offset(-10)
-                make.height.equalTo(30)
+//            callTimeLabel.snp.remakeConstraints { (make) in
+//                make.leading.trailing.equalTo(view)
+//                make.bottom.equalTo(hangup.snp.top).offset(-10)
+//                make.height.equalTo(30)
+//            }
+            callTimeLabel.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.leading.trailing()?.equalTo()(view)
+                make?.bottom.equalTo()(hangup.mas_top)?.setOffset(-10)
+                make?.height.mas_equalTo()(30)
             }
         }
+    }
+    
+    @objc func hangupTapped() {
+//        guard let self = self else {return}
+        TRTCCalling.shareInstance()
+        TRTCCalling.shareInstance().hangup()
+        self.disMiss()
+    }
+    
+    @objc func acceptTapped() {
+//        guard let self = self else {return}
+        
+        var curUser = CallingUserModel()
+        curUser.isEnter = true
+        self.enterUser(user: curUser)
+        
+        self.curState = .calling
+        self.accept.isHidden = true
+        
+        if let delegate = self.actionDelegate {
+            delegate.didAcceptJoinRoom()
+        }
+
+    }
+    
+    @objc func muteTapped () {
+//        guard let self = self else {return}
+        self.isMicMute = !self.isMicMute
+        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
+        self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
+        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+        indicator.mode = MBProgressHUDMode.text
+        indicator.label.text = self.isMicMute ? "开启静音" : "关闭静音"
+        indicator.margin = 10
+        indicator.offset.y = 50
+        indicator.removeFromSuperViewOnHide = true
+        indicator.hide(animated: true, afterDelay: 0.5)
+    }
+    
+    @objc func handsfreeTapped() {
+        self.isHandsFreeOn = !self.isHandsFreeOn
+        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
+        self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
+        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+        indicator.mode = MBProgressHUDMode.text
+        indicator.label.text = self.isHandsFreeOn ? "开启免提" : "关闭免提"
+        indicator.margin = 10
+        indicator.offset.y = 50
+        indicator.removeFromSuperViewOnHide = true
+        indicator.hide(animated: true, afterDelay: 0.5)
     }
     
     func autoSetUIByState() {
         switch curState {
         case .dailing:
-            hangup.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(80)
-                make.height.equalTo(80)
+//            hangup.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(80)
+//                make.height.equalTo(80)
+//            }
+            hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(80)
+                make?.height.mas_equalTo()(80)
             }
             
             tipLabel.text = "等待接听中…"
             break
         case .onInvitee:
-            hangup.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view).offset(-80)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(80)
-                make.height.equalTo(80)
+//            hangup.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view).offset(-80)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(80)
+//                make.height.equalTo(80)
+//            }
+            hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)?.setOffset(-80)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(80)
+                make?.height.mas_equalTo()(80)
             }
             
-            accept.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view).offset(80)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(80)
-                make.height.equalTo(80)
+//            accept.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view).offset(80)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(80)
+//                make.height.equalTo(80)
+//            }
+            accept.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)?.setOffset(80)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(80)
+                make?.height.mas_equalTo()(80)
             }
             
             tipLabel.text = "\(deviceName)\n邀请您语音通话"
             break
         case .calling:
-            hangup.snp.remakeConstraints { (make) in
-                make.centerX.equalTo(view)
-                make.bottom.equalTo(view).offset(-32)
-                make.width.equalTo(60)
-                make.height.equalTo(60)
+//            hangup.snp.remakeConstraints { (make) in
+//                make.centerX.equalTo(view)
+//                make.bottom.equalTo(view).offset(-32)
+//                make.width.equalTo(60)
+//                make.height.equalTo(60)
+//            }
+            hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
+                make?.centerX.equalTo()(view)
+                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             startGCDTimer()
             
@@ -397,11 +517,17 @@ extension TRTCCallingAuidoViewController {
         
         let shouldHideOnInviteePanel = (OnInviteePanelList.count == 0 || (self.curState != .onInvitee))
         
-        OnInviteePanel.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(self.hangup.snp.top).offset(-100)
-            make.width.equalTo(max(44, 44 * OnInviteePanelList.count + 2 * max(0, OnInviteePanelList.count - 1)))
-            make.centerX.equalTo(view)
-            make.height.equalTo(80)
+//        OnInviteePanel.snp.remakeConstraints { (make) in
+//            make.bottom.equalTo(self.hangup.snp.top).offset(-100)
+//            make.width.equalTo(max(44, 44 * OnInviteePanelList.count + 2 * max(0, OnInviteePanelList.count - 1)))
+//            make.centerX.equalTo(view)
+//            make.height.equalTo(80)
+//        }
+        OnInviteePanel.mas_updateConstraints { (make:MASConstraintMaker?) in
+            make?.bottom.equalTo()(self.hangup.mas_top)?.setOffset(-100)
+            make?.width.mas_equalTo()(max(44, 44 * OnInviteePanelList.count + 2 * max(0, OnInviteePanelList.count - 1)))
+            make?.centerX.equalTo()(view)
+            make?.height.mas_equalTo()(80)
         }
         
         OninviteeStackView.safelyRemoveArrangedSubviews()
@@ -565,10 +691,15 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
         if animate {
             userCollectionView.performBatchUpdates({ [weak self] in
                 guard let self = self else {return}
-                self.userCollectionView.snp.remakeConstraints { (make) in
-                    make.leading.trailing.equalTo(self.view)
-                    make.bottom.equalTo(self.view).offset(-132)
-                    make.top.equalTo(self.collectionCount == 1 ? (topPadding + 62) : topPadding)
+//                self.userCollectionView.snp.remakeConstraints { (make) in
+//                    make.leading.trailing.equalTo(self.view)
+//                    make.bottom.equalTo(self.view).offset(-132)
+//                    make.top.equalTo(self.collectionCount == 1 ? (topPadding + 62) : topPadding)
+//                }
+                self.userCollectionView.mas_updateConstraints { (make:MASConstraintMaker?) in
+                    make?.leading.trailing()?.equalTo()(self.view)
+                    make?.bottom.equalTo()(self.view)?.setOffset(-132)
+                    make?.top.mas_equalTo()(self.collectionCount == 1 ? (topPadding + 62) : topPadding)
                 }
                 self.userCollectionView.reloadSections(IndexSet(integer: 0))
             }) { _ in
@@ -576,10 +707,15 @@ extension TRTCCallingAuidoViewController: UICollectionViewDelegate, UICollection
             }
         } else {
             UIView.performWithoutAnimation {
-                userCollectionView.snp.remakeConstraints { (make) in
-                    make.leading.trailing.equalTo(view)
-                    make.bottom.equalTo(view).offset(-132)
-                    make.top.equalTo(collectionCount == 1 ? (topPadding + 62) : topPadding)
+//                userCollectionView.snp.remakeConstraints { (make) in
+//                    make.leading.trailing.equalTo(view)
+//                    make.bottom.equalTo(view).offset(-132)
+//                    make.top.equalTo(collectionCount == 1 ? (topPadding + 62) : topPadding)
+//                }
+                userCollectionView.mas_updateConstraints { (make:MASConstraintMaker?) in
+                    make?.leading.trailing()?.equalTo()(view)
+                    make?.bottom.equalTo()(view)?.setOffset(-132)
+                    make?.top.mas_equalTo()(collectionCount == 1 ? (topPadding + 62) : topPadding)
                 }
                 userCollectionView.reloadSections(IndexSet(integer: 0))
             }
