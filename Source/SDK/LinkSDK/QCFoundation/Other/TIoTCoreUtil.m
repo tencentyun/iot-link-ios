@@ -10,6 +10,11 @@
 #import "NSString+Extension.h"
 #import "TIoTVideoDistributionNetModel.h"
 #import <objc/runtime.h>
+#import "TIoTCoreAddDevice.h"
+
+@interface TIoTCoreUtil ()<TIoTCoreAddDeviceDelegate>
+@property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
+@end
 
 @implementation TIoTCoreUtil
 
@@ -63,7 +68,7 @@
 /**
  二维码扫码配网
  */
-+ (UIImage *)qrCodeScanDistributionNetWorkWithInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
++ (UIImage *)generateQrCodeNetWorkInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size{
     if (infoModel == nil) {
         return nil;
     }

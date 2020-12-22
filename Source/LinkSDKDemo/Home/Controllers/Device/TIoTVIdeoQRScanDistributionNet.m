@@ -174,7 +174,7 @@
 #warning token 需通过自建服务器获取
     model.token = self.token.text?:@"";
     
-    UIImage *qrimage = [TIoTCoreUtil qrCodeScanDistributionNetWorkWithInfo:model imageSize:CGSizeMake(200, 200)];
+    UIImage *qrimage = [TIoTCoreUtil generateQrCodeNetWorkInfo:model imageSize:CGSizeMake(200, 200)];
     self.qrImageView.image = qrimage;
     [self.view reloadInputViews];
 
