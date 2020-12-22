@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bbf8cb8c_854a19f5",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVideoSoftApDistributionNetVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-22T07:56:12Z",
+      "side": 1,
+      "message": "删除多于定时器",
+      "parentUuid": "e09686e1_208b912f",
+      "revId": "ec71eb96320329ff3f5c5809791250e23c185f00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9836da24_b6b496ac",
         "filename": "Source/SDK/LinkSDK/QCFoundation/Other/TIoTCoreUtil.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "ec71eb96320329ff3f5c5809791250e23c185f00",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f36c12_d0acba92",
+        "filename": "Source/SDK/LinkSDK/QCFoundation/Other/TIoTCoreUtil.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-22T07:56:12Z",
+      "side": 1,
+      "message": "已经patch2中删除多于初始化",
+      "parentUuid": "9836da24_b6b496ac",
+      "revId": "ec71eb96320329ff3f5c5809791250e23c185f00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
