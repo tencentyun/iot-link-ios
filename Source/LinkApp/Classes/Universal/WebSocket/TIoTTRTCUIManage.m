@@ -46,6 +46,19 @@
     [self isActiveCalling:deviceParam._sys_userid];
 }
 
+- (void)preLeaveRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        [_callAudioVC beHungUp];
+    }else if (_callVideoVC == topVC) {
+        [_callVideoVC beHungUp];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self exitRoom:deviceParam._sys_userid];
+    });
+}
+
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
 - (void)didAcceptJoinRoom {
     //2.根据UI决定是否进入房间
