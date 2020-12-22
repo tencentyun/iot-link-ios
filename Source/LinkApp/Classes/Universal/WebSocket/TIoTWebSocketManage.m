@@ -179,13 +179,27 @@ static NSString *heartBeatReqID = @"5002";
         model.params._sys_userid = deviceInfo[@"DeviceId"];
     }
 
-    if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
-        //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
-        [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-            
+    if ([model.method isEqualToString:@"report"]) {
+        if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
+            //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
+            [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                
+                [MBProgressHUD showError:reason];
+            }];
+        }else if (model.params._sys_audio_call_status.intValue == 0 || model.params._sys_video_call_status.intValue == 0) {
+            [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                [MBProgressHUD showError:reason];
+            }];
+        }
+        
+    }
+    
+    if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
+        [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
             [MBProgressHUD showError:reason];
         }];
     }
+
 }
 
 - (void)handleReceivedMessage:(id)message{
