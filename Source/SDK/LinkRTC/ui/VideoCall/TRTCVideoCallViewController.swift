@@ -118,6 +118,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     private var isMicMute = false // 默认开启麦克风
     private var isHandsFreeOn = true // 默认开启扬声器
     
+    var invite = UILabel()
     let hangup = UIButton()
     let accept = UIButton()
     let handsfree = UIButton()
@@ -130,7 +131,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     let localPreView = VideoCallingRenderView.init()
     static var renderViews:VideoCallingRenderView? = VideoCallingRenderView.init()
     
-    @objc var deviceName: String = "Device"
+    @objc var deviceName: String = ""
     
     var curState: VideoCallingState {
         didSet {
@@ -178,7 +179,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
         if let _ = ocUserID {
             curState = .onInvitee
         } else {
-            curSponsor = nil
+//            curSponsor = nil
             curState = .dailing
         }
         super.init(nibName: nil, bundle: nil)
@@ -575,17 +576,24 @@ extension TRTCCallingVideoViewController {
                 make?.top.leading().equalTo()(sponsorPanel)
             }
             //提醒文字
-            let invite = UILabel()
-            invite.textAlignment = .right
-            invite.font = UIFont.systemFont(ofSize: 13)
+            
+            invite.textAlignment = .center
+            invite.font = UIFont.systemFont(ofSize: 16)
             invite.textColor = .white
-            invite.text = "邀请你视频通话"
+            invite.text = "视频通话邀请"
             sponsorPanel.addSubview(invite)
             invite.mas_makeConstraints { (make:MASConstraintMaker?) in
-                make?.trailing.equalTo()(userImage.mas_leading)?.setOffset(-6)
-                make?.height.mas_equalTo()(32)
-                make?.top.equalTo()(userName.mas_bottom)?.setOffset(2)
-                make?.leading.equalTo()(sponsorPanel)
+                if #available(iOS 11.0, *) {
+                    make?.top.equalTo()(self.view.mas_safeAreaLayoutGuideTop)?.setOffset(70)
+                }else {
+                    make?.top.equalTo()(self.view.mas_top)?.setOffset(70)
+                }
+                make?.leading.trailing()?.equalTo()(self.view)
+                
+//                make?.trailing.equalTo()(userImage.mas_leading)?.setOffset(-6)
+//                make?.height.mas_equalTo()(32)
+//                make?.top.equalTo()(userName.mas_bottom)?.setOffset(2)
+//                make?.leading.equalTo()(sponsorPanel)
             }
         }
     }
@@ -705,6 +713,7 @@ extension TRTCCallingVideoViewController {
                 make?.bottom.equalTo()(view)?.setOffset(-32)
                 make?.width.mas_equalTo()(60)
             }
+            invite.text = "视频呼叫中..."
             break
         case .onInvitee:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
