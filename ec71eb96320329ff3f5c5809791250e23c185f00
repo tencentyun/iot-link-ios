@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e09686e1_208b912f",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVideoSoftApDistributionNetVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-22T07:44:45Z",
+      "side": 1,
+      "message": "建议timer改名具体的含义，后期维护的话timer1 timer2不好维护",
+      "revId": "ec71eb96320329ff3f5c5809791250e23c185f00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9836da24_b6b496ac",
+        "filename": "Source/SDK/LinkSDK/QCFoundation/Other/TIoTCoreUtil.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-22T07:44:45Z",
+      "side": 1,
+      "message": "softap的初始化操作，放在util工具类的init里面是否合适，可能会造成误导",
+      "revId": "ec71eb96320329ff3f5c5809791250e23c185f00",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
