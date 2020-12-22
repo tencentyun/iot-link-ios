@@ -118,6 +118,8 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     private var isMicMute = false // 默认开启麦克风
     private var isHandsFreeOn = true // 默认开启扬声器
     
+    let controlBackView = UIView()
+    var invite = UILabel()
     let hangup = UIButton()
     let accept = UIButton()
     let handsfree = UIButton()
@@ -130,7 +132,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     let localPreView = VideoCallingRenderView.init()
     static var renderViews:VideoCallingRenderView? = VideoCallingRenderView.init()
     
-    @objc var deviceName: String = "Device"
+    @objc var deviceName: String = ""
     
     var curState: VideoCallingState {
         didSet {
@@ -178,7 +180,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
         if let _ = ocUserID {
             curState = .onInvitee
         } else {
-            curSponsor = nil
+//            curSponsor = nil
             curState = .dailing
         }
         super.init(nibName: nil, bundle: nil)
@@ -273,6 +275,22 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     
     static func getRenderView(userId: String) -> VideoCallingRenderView? {
         return renderViews;
+    }
+    
+    @objc func beHungUp () {
+        invite.text = "对方已挂断..."
+    }
+    
+    @objc func hungUp() {
+        invite.text = "对方正忙..."
+    }
+    
+    @objc func noAnswered() {
+        invite.text = "对方无人接听..."
+    }
+    
+    @objc func otherAnswered() {
+        invite.text = "其他用户已接听..."
     }
 }
 
@@ -567,7 +585,7 @@ extension TRTCCallingVideoViewController {
             userName.textAlignment = .right
             userName.font = UIFont.boldSystemFont(ofSize: 20)
             userName.textColor = .white
-            userName.text = self.deviceName//sponsor.name
+//            userName.text = self.deviceName//sponsor.name
             sponsorPanel.addSubview(userName)
             userName.mas_makeConstraints { (make:MASConstraintMaker?) in
                 make?.trailing.equalTo()(userImage.mas_leading)?.setOffset(-6)
@@ -575,17 +593,24 @@ extension TRTCCallingVideoViewController {
                 make?.top.leading().equalTo()(sponsorPanel)
             }
             //提醒文字
-            let invite = UILabel()
-            invite.textAlignment = .right
-            invite.font = UIFont.systemFont(ofSize: 13)
+            
+            invite.textAlignment = .center
+            invite.font = UIFont.systemFont(ofSize: 16)
             invite.textColor = .white
-            invite.text = "邀请你视频通话"
+            invite.text = "视频通话邀请"
             sponsorPanel.addSubview(invite)
             invite.mas_makeConstraints { (make:MASConstraintMaker?) in
-                make?.trailing.equalTo()(userImage.mas_leading)?.setOffset(-6)
-                make?.height.mas_equalTo()(32)
-                make?.top.equalTo()(userName.mas_bottom)?.setOffset(2)
-                make?.leading.equalTo()(sponsorPanel)
+                if #available(iOS 11.0, *) {
+                    make?.top.equalTo()(self.view.mas_safeAreaLayoutGuideTop)?.setOffset(70)
+                }else {
+                    make?.top.equalTo()(self.view.mas_top)?.setOffset(70)
+                }
+                make?.leading.trailing()?.equalTo()(self.view)
+                
+//                make?.trailing.equalTo()(userImage.mas_leading)?.setOffset(-6)
+//                make?.height.mas_equalTo()(32)
+//                make?.top.equalTo()(userName.mas_bottom)?.setOffset(2)
+//                make?.leading.equalTo()(sponsorPanel)
             }
         }
     }
@@ -596,6 +621,23 @@ extension TRTCCallingVideoViewController {
     }
     
     func setupControls() {
+        
+        if controlBackView.superview == nil {
+            controlBackView.backgroundColor = UIColor(ciColor: .black).withAlphaComponent(0.1)
+            controlBackView.layer.cornerRadius = 33
+            view.addSubview(controlBackView)
+            controlBackView.mas_makeConstraints { (make:MASConstraintMaker?) in
+                make?.trailing.equalTo()(view.mas_trailing)?.setOffset(-60)
+                make?.leading.equalTo()(view.mas_leading)?.setOffset(60)
+                make?.height.mas_equalTo()(66)
+                if #available(iOS 11.0, *) {
+                    make?.bottom.equalTo()(view.mas_safeAreaLayoutGuideBottom)?.setOffset(-60)
+                }else {
+                    make?.bottom.equalTo()(view.mas_bottom)?.setOffset(-60)
+                }
+            }
+        }
+        
         if hangup.superview == nil {
             hangup.setImage(UIImage(named: "ic_hangup"), for: .normal)
             view.addSubview(hangup)
@@ -615,9 +657,10 @@ extension TRTCCallingVideoViewController {
             mute.addTarget(self, action: #selector(muteTapped), for: .touchUpInside)
             mute.isHidden = true
             mute.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(-120)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.height.width()?.mas_equalTo()(60)
+                make?.leading.equalTo()(controlBackView.mas_leading)?.setOffset(5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(50)
+                make?.height.mas_equalTo()(50)
             }
         }
         
@@ -627,9 +670,10 @@ extension TRTCCallingVideoViewController {
             handsfree.addTarget(self, action: #selector(handsfreeTapped), for: .touchUpInside)
             handsfree.isHidden = true
             handsfree.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(120)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.height()?.mas_equalTo()(60)
+                make?.trailing.equalTo()(controlBackView.mas_trailing)?.setOffset(-5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(50)
+                make?.height.mas_equalTo()(50)
             }
         }
         
@@ -701,28 +745,33 @@ extension TRTCCallingVideoViewController {
         switch curState {
         case .dailing:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.centerX.equalTo()(controlBackView)
+                make?.centerY.equalTo()(controlBackView)
                 make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
+            invite.text = "视频呼叫中..."
             break
         case .onInvitee:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(-80)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.height()?.mas_equalTo()(60)
+                make?.leading.equalTo()(controlBackView)?.setOffset(5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             accept.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(80)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.height()?.mas_equalTo()(60)
+                make?.trailing.equalTo()(controlBackView)?.setOffset(-5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             break
         case .calling:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.height()?.mas_equalTo()(60)
+                make?.centerX.equalTo()(controlBackView)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             startGCDTimer()
             break
