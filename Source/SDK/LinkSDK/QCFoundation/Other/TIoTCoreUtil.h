@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  二维码扫码配网
  *  @param infoModel 配网所需信息
  */
-+ (UIImage *)qrCodeScanDistributionNetWorkWithInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size;
++ (UIImage *)generateQrCodeNetWorkInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size;
 
 @end
 
