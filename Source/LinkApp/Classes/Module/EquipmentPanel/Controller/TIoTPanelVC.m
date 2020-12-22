@@ -79,6 +79,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 @property (nonatomic, strong) TIoTAlertView *tipAlertView;
 @property (nonatomic, strong) UIView *backMaskView;
+@property (nonatomic, strong) NSDictionary *reportData;
 @end
 
 @implementation TIoTPanelVC
@@ -481,12 +482,23 @@ static NSString *itemId3 = @"i_ooo454";
 }
 
 //下发数据
-- (void)reportDeviceData:(NSDictionary *)deviceReport{
+- (void)reportDeviceData:(NSDictionary *)deviceReport {
+    
+    //在这里都是主动呼叫，不存在被动
+    NSString *key = self.reportData[@"id"];
+    NSNumber *statusValue = self.reportData[@"status"][@"Value"];
+    
+    if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
+        if (statusValue.intValue != 0) {
+            [MBProgressHUD showMessage:NSLocalizedString(@"other_part_busy", @"对方正忙...") icon:nil];
+            return;
+        }
+    }
     
     NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
     if (userId) {
-        [trtcReport setValue:userId forKey:@"userid"];
+        [trtcReport setValue:userId forKey:@"_sys_userid"];
     }
     NSString *username = [TIoTCoreUserManage shared].nickName;
     if (username) {
@@ -526,7 +538,7 @@ static NSString *itemId3 = @"i_ooo454";
         }
     }
     if (isTRTCDevice) {
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo];
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
     }
 }
 
@@ -770,6 +782,7 @@ static NSString *itemId3 = @"i_ooo454";
             //trtc特殊判断逻辑
             NSString *key = dic[@"id"];
             if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
+                self.reportData = dic;
                 [self reportDeviceData:@{key: @1}];
                 return;
             }
