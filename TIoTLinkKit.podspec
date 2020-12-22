@@ -19,19 +19,25 @@ Pod::Spec.new do |s|
   s.default_subspec = 'LinkSDK'
   
   s.subspec 'LinkSDK' do |ss|
-    ss.source_files  = 'Source/LinkSDK/Core/**/*.{h,m,c}'
+    ss.source_files  = 'Source/SDK/LinkSDK/**/*.{h,m,c}'
     ss.dependency 'MBProgressHUD', '1.1.0'
   end
   
   #实时音视频，引入则开启
-  s.subspec 'LinkTRTC' do |ss|
-    ss.source_files  = 'Source/LinkSDK/TRTC/**/*.{h,m,c}'
+  s.subspec 'LinkRTC' do |ss|
+    ss.source_files  = 'Source/SDK/LinkRTC/**/*.{h,m,c}'
     ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
     ss.dependency 'YYModel'
     ss.dependency 'TIoTLinkKit/LinkSDK'
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'  => 'x86_64 armv7 arm64',
     }
+  end
+
+  #智能视频服务，引入则开启
+  s.subspec 'LinkVideo' do |ss|
+    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c}'
+    ss.dependency 'TIoTLinkKit/LinkSDK'
   end
 
 end

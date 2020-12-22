@@ -27,7 +27,7 @@ target 'LinkApp' do
   trtc_ui_pods
   
   pod 'TIoTLinkKit', :path => './'
-  pod 'TIoTLinkKit/LinkTRTC', :path => './'
+  pod 'TIoTLinkKit/LinkRTC', :path => './'
   pod 'MJRefresh', '3.2.0'
   pod 'IQKeyboardManager', '6.1.1'
   pod 'FDFullscreenPopGesture', '1.1'
@@ -46,5 +46,5 @@ target 'LinkSDKDemo' do
   trtc_ui_pods
   
   pod 'TIoTLinkKit', :path => './'
-  pod 'TIoTLinkKit/LinkTRTC', :path => './'
+  pod 'TIoTLinkKit/LinkRTC', :path => './'
 end
