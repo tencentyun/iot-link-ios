@@ -46,6 +46,38 @@
     [self isActiveCalling:deviceParam._sys_userid];
 }
 
+- (void)preLeaveRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        
+        if (_isActiveCall == YES) {
+            [_callAudioVC hungUp];
+        }else {
+            [_callAudioVC beHungUp];
+        }
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self->_callAudioVC hangupTapped];
+//        });
+        
+    }else if (_callVideoVC == topVC) {
+        
+        if (_isActiveCall == YES) {
+            [_callVideoVC hungUp];
+        }else {
+            [_callVideoVC beHungUp];
+        }
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self->_callVideoVC hangupTapped];
+//        });
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self exitRoom:deviceParam._sys_userid];
+    });
+}
+
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
 - (void)didAcceptJoinRoom {
     //2.根据UI决定是否进入房间
@@ -170,6 +202,18 @@
         _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
     }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(59 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (audioORvideo == TIoTTRTCSessionCallType_audio) {
+            [self->_callAudioVC noAnswered];
+
+        }else if (audioORvideo == TIoTTRTCSessionCallType_video) {
+            [self->_callVideoVC noAnswered];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self exitRoom:@""];
+        });
+    });
 }
 
 
