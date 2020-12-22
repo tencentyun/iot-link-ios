@@ -486,7 +486,7 @@ static NSString *itemId3 = @"i_ooo454";
     NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
     if (userId) {
-        [trtcReport setValue:userId forKey:@"userid"];
+        [trtcReport setValue:userId forKey:@"_sys_userid"];
     }
     NSString *username = [TIoTCoreUserManage shared].nickName;
     if (username) {
