@@ -99,7 +99,7 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
 
 - (void)enterRoom {
     //进房间,如果是主叫直接进房间，如果是被叫等待UI确认后进房间
-
+    _state = TIoTTRTCSessionType_calling;
     CallType _calltype = CallType_Audio;
     if (_deviceParam._sys_video_call_status.intValue == 1) {
         _calltype = CallType_Video;

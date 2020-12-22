@@ -46,12 +46,36 @@
     [self isActiveCalling:deviceParam._sys_userid];
 }
 
+- (void)preLeaveRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        
+        if (_isActiveCall == YES) {
+            [_callAudioVC hungUp];
+        }else {
+            [_callAudioVC beHungUp];
+        }
+        
+    }else if (_callVideoVC == topVC) {
+        
+        if (_isActiveCall == YES) {
+            [_callVideoVC hungUp];
+        }else {
+            [_callVideoVC beHungUp];
+        }
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self exitRoom:deviceParam._sys_userid];
+    });
+}
+
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
 - (void)didAcceptJoinRoom {
     //2.根据UI决定是否进入房间
     
     //开始准备进房间，通话中状态
-    NSDictionary *param = @{@"DeviceId":_deviceParam._sys_userid};
+    NSDictionary *param = @{@"DeviceId":_deviceParam.deviceName};
     
     [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
         
@@ -60,11 +84,51 @@
         [[TIoTTRTCSessionManager sharedManager] configRoom:model];
         [[TIoTTRTCSessionManager sharedManager] enterRoom];
         
+         //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
+        self->_isEnterError = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self->_isEnterError == YES) {
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if (self->_callAudioVC == topVC) {
+                    [self->_callAudioVC beHungUp];
+                }else {
+                    [self->_callVideoVC beHungUp];
+                }
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self exitRoom:self->_deviceParam._sys_userid];
+                });
+            }
+        });
+        
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
 }
 
+#pragma mark - 拒绝其他设备呼叫
+- (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic  {
+    
+    NSMutableDictionary *trtcReport = [reportDic mutableCopy];
+    NSString *userId = [TIoTCoreUserManage shared].userId;
+    if (userId) {
+        [trtcReport setValue:userId forKey:@"_sys_userid"];
+    }
+    NSString *username = [TIoTCoreUserManage shared].nickName;
+    if (username) {
+        [trtcReport setValue:username forKey:@"username"];
+    }
+    
+    NSDictionary *tmpDic = @{
+        @"ProductId":[_deviceParam.deviceName componentsSeparatedByString:@"/"].firstObject?:@"",
+        @"DeviceName":[_deviceParam.deviceName componentsSeparatedByString:@"/"].lastObject?:@"",
+        @"Data":[NSString objectToJson:trtcReport]?:@""};
+    
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
 
 //---------------------TRTC设备轮训状态与注册物模型----------------------------
 - (void)repeatDeviceData:(NSArray *)devices {
@@ -150,6 +214,7 @@
 
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo {
     _isActiveCall = YES; //表示主动呼叫
+    _isActiveStatus = _isActiveCall;
     
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC || _callVideoVC == topVC) {
@@ -170,6 +235,21 @@
         _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
         [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
     }
+    
+    //若对方60秒未接听，则显示对方无人接听…，并主动挂断退出
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(59 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling)  {
+            if (audioORvideo == TIoTTRTCSessionCallType_audio) {
+                [self->_callAudioVC noAnswered];
+
+            }else if (audioORvideo == TIoTTRTCSessionCallType_video) {
+                [self->_callVideoVC noAnswered];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self exitRoom:@""];
+            });
+        }
+    });
 }
 
 
@@ -180,11 +260,22 @@
         
         if (_isActiveCall) { //如果是被动呼叫的话，不能自动进入房间
             [self didAcceptJoinRoom];
+        }else {
+            //当前是被叫空闲或是正在通话，这时需要判断：设备A、B同时呼叫同一个用户1，用户1已经被一台比方说是设备A呼叫，后接到其他设备B的呼叫请求，用户1则调用AppControldeviceData 发送callstatus为0拒绝其他设备B的请求。
+            if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free || [TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+                if (_deviceParam._sys_audio_call_status.intValue == 1) {
+                    [self refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"}];
+                }else if (_deviceParam._sys_video_call_status.intValue == 1) {
+                    [self refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"}];
+                }
+                
+            }
         }
         return  YES;
     }
     
     _isActiveCall = NO;//表示被呼叫
+    _isActiveStatus = _isActiveCall;
     //被呼叫了，点击接听后才进房间吧
     if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
         
@@ -205,6 +296,15 @@
         }];
     }
     
+    //若60秒被叫不接听，则主动挂断退出
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+            [self exitRoom:@""];
+        }
+        
+    });
+    
+    
     return NO;
 }
 
@@ -212,6 +312,7 @@
 //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
 
 - (void)showRemoteUser:(NSString *)remoteUserID {
+    _isEnterError = NO;
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC) {
         //正在主动呼叫中，或呼叫UI已启动
