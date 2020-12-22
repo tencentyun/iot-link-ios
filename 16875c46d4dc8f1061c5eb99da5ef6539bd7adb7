@@ -16,6 +16,24 @@
       "revId": "16875c46d4dc8f1061c5eb99da5ef6539bd7adb7",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8153fc_44424085",
+        "filename": "Source/SDK/LinkRTC/ui/Views/TRTCCallingCell.swift",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-22T08:48:48Z",
+      "side": 1,
+      "message": "漏掉了一个约束，已添加",
+      "parentUuid": "b1de84ec_4322198a",
+      "revId": "16875c46d4dc8f1061c5eb99da5ef6539bd7adb7",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
