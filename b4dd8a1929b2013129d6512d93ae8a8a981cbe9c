@@ -16,6 +16,24 @@
       "revId": "b4dd8a1929b2013129d6512d93ae8a8a981cbe9c",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8ad3573_577a82ba",
+        "filename": "Podfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-22T08:29:56Z",
+      "side": 1,
+      "message": "在patch4中全部删除注释代码",
+      "parentUuid": "d09754ee_66819646",
+      "revId": "b4dd8a1929b2013129d6512d93ae8a8a981cbe9c",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
