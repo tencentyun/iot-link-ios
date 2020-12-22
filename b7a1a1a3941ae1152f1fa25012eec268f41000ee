@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "825bad72_570a2a84",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTVideoSoftApDistributionNetVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-22T07:59:39Z",
+      "side": 1,
+      "message": "优化点：建议之后有未知的出口，需要处理。要么打日志要么进行逻辑处理。",
+      "revId": "b7a1a1a3941ae1152f1fa25012eec268f41000ee",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    }
+  ]
+}
