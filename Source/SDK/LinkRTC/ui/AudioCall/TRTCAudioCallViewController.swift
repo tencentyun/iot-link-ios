@@ -25,6 +25,7 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     private var isMicMute = false // 默认开启麦克风
     private var isHandsFreeOn = true // 默认开启扬声器
     
+    let controlBackView = UIView()
     let hangup = UIButton()
     let accept = UIButton()
     let handsfree = UIButton()
@@ -34,16 +35,28 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     var callingTime: UInt32 = 0
     var codeTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global(qos: .userInteractive))
     let callTimeLabel = UILabel()
+    var avatarBigImage = UIImageView()
+    var avatarMidImage = UIImageView()
+    var avatarImage = UIImageView()
     
-    @objc var deviceName: String = "Device"
+    @objc var deviceName: String = ""
 
     lazy var tipLabel: UILabel = {
-        let label = UILabel(frame: CGRect(origin: CGPoint.zero, size: UIScreen.main.bounds.size ))
+        let label = UILabel()
         label.numberOfLines = 2
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .white
         label.textAlignment = .center
         self.view.addSubview(label)
+        label.mas_makeConstraints { (make:MASConstraintMaker?) in
+            if #available(iOS 11.0, *) {
+                make?.top.equalTo()(self.view.mas_safeAreaLayoutGuideTop)?.setOffset(70)
+            }else {
+                make?.top.equalTo()(self.view.mas_top)?.setOffset(70)
+            }
+            make?.leading.trailing()?.equalTo()(self.view)
+        }
+        
         return label
     }()
     
@@ -87,10 +100,10 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
         return stack
     }()
     
-    let colors = [UIColor(red: 19.0 / 255.0, green: 41.0 / 255.0,
-                          blue: 75.0 / 255.0, alpha: 1).cgColor,
-                  UIColor(red: 5.0 / 255.0, green: 12.0 / 255.0,
-                          blue: 23.0 / 255.0, alpha: 1).cgColor]
+    let colors = [UIColor(red: 61.0 / 255.0, green: 139.0 / 255.0,
+                          blue: 255.0 / 255.0, alpha: 1).cgColor,
+                  UIColor(red: 18.0 / 255.0, green: 66.0 / 255.0,
+                          blue: 255.0 / 255.0, alpha: 1).cgColor]
     
     let gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
@@ -213,10 +226,48 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
             UIApplication.shared.isIdleTimerDisabled = false
         }
     }
+    
+    @objc func beHungUp() {
+        tipLabel.text = "对方已挂断..."
+    }
+    
+    @objc func hungUp() {
+        tipLabel.text = "对方正忙..."
+    }
+    
+    @objc func noAnswered() {
+        tipLabel.text = "对方无人接听..."
+    }
+    
+    @objc func otherAnswered() {
+        tipLabel.text = "其他用户已接听..."
+    }
 }
 
 extension TRTCCallingAuidoViewController {
     func setupUI() {
+        
+        avatarBigImage.image = UIImage.init(named: "avatar_big")
+        view.addSubview(avatarBigImage)
+        avatarBigImage.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.top.equalTo()(tipLabel.mas_bottom)?.setOffset(45)
+            make?.width.height()?.mas_equalTo()(200)
+            make?.centerX.equalTo()(view)
+        }
+        
+        avatarMidImage.image = UIImage.init(named: "avatar_mid")
+        view.addSubview(avatarMidImage)
+        avatarMidImage.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.centerX.centerY().equalTo()(avatarBigImage)
+            make?.width.height()?.mas_equalTo()(120)
+        }
+        
+        avatarImage.image = UIImage.init(named: "avatar")
+        view.addSubview(avatarImage)
+        avatarImage.mas_makeConstraints { (make:MASConstraintMaker?) in
+            make?.centerX.centerY().equalTo()(avatarMidImage)
+            make?.width.height()?.mas_equalTo()(87)
+        }
         
         view.addSubview(OnInviteePanel)
         OnInviteePanel.addSubview(OninviteeStackView)
@@ -255,6 +306,23 @@ extension TRTCCallingAuidoViewController {
     }
     
     func setupControls() {
+        
+        if controlBackView.superview == nil {
+            controlBackView.backgroundColor = UIColor(ciColor: .black).withAlphaComponent(0.1)
+            controlBackView.layer.cornerRadius = 33
+            view.addSubview(controlBackView)
+            controlBackView.mas_makeConstraints { (make:MASConstraintMaker?) in
+                make?.trailing.equalTo()(view.mas_trailing)?.setOffset(-60)
+                make?.leading.equalTo()(view.mas_leading)?.setOffset(60)
+                make?.height.mas_equalTo()(66)
+                if #available(iOS 11.0, *) {
+                    make?.bottom.equalTo()(view.mas_safeAreaLayoutGuideBottom)?.setOffset(-60)
+                }else {
+                    make?.bottom.equalTo()(view.mas_bottom)?.setOffset(-60)
+                }
+            }
+        }
+        
         if hangup.superview == nil {
             hangup.setImage(UIImage(named: "ic_hangup"), for: .normal)
             view.addSubview(hangup)
@@ -274,8 +342,8 @@ extension TRTCCallingAuidoViewController {
             mute.addTarget(self, action: #selector(muteTapped), for: .touchUpInside)
             mute.isHidden = true
             mute.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(-120)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.leading.equalTo()(controlBackView.mas_leading)?.setOffset(5)
+                make?.centerY.equalTo()(controlBackView)
                 make?.width.mas_equalTo()(50)
                 make?.height.mas_equalTo()(50)
             }
@@ -288,8 +356,8 @@ extension TRTCCallingAuidoViewController {
             handsfree.addTarget(self, action: #selector(handsfreeTapped), for: .touchUpInside)
             handsfree.isHidden = true
             handsfree.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(120)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.trailing.equalTo()(controlBackView.mas_trailing)?.setOffset(-5)
+                make?.centerY.equalTo()(controlBackView)
                 make?.width.mas_equalTo()(50)
                 make?.height.mas_equalTo()(50)
             }
@@ -304,7 +372,7 @@ extension TRTCCallingAuidoViewController {
             callTimeLabel.isHidden = true
             callTimeLabel.mas_updateConstraints { (make:MASConstraintMaker?) in
                 make?.leading.trailing()?.equalTo()(view)
-                make?.bottom.equalTo()(hangup.mas_top)?.setOffset(-10)
+                make?.top.equalTo()(avatarBigImage.mas_bottom)?.setOffset(20)
                 make?.height.mas_equalTo()(30)
             }
         }
@@ -361,41 +429,41 @@ extension TRTCCallingAuidoViewController {
         switch curState {
         case .dailing:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.mas_equalTo()(80)
-                make?.height.mas_equalTo()(80)
+                make?.centerX.equalTo()(controlBackView)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             
-            tipLabel.text = "等待接听中…"
+            tipLabel.text = "语音呼叫中..."
             break
         case .onInvitee:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(-80)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.mas_equalTo()(80)
-                make?.height.mas_equalTo()(80)
+                make?.leading.equalTo()(controlBackView)?.setOffset(5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             
             accept.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)?.setOffset(80)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
-                make?.width.mas_equalTo()(80)
-                make?.height.mas_equalTo()(80)
+                make?.trailing.equalTo()(controlBackView)?.setOffset(-5)
+                make?.centerY.equalTo()(controlBackView)
+                make?.width.mas_equalTo()(60)
+                make?.height.mas_equalTo()(60)
             }
             
-            tipLabel.text = "\(deviceName)\n邀请您语音通话"
+            tipLabel.text = "语音通话邀请"
             break
         case .calling:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
-                make?.centerX.equalTo()(view)
-                make?.bottom.equalTo()(view)?.setOffset(-32)
+                make?.centerX.equalTo()(controlBackView)
+                make?.centerY.equalTo()(controlBackView)
                 make?.width.mas_equalTo()(60)
                 make?.height.mas_equalTo()(60)
             }
             startGCDTimer()
             
-            tipLabel.text = "正在通话中…"
+            tipLabel.text = "语音通话中..."
             break
         }
         
@@ -416,7 +484,7 @@ extension TRTCCallingAuidoViewController {
             make?.bottom.equalTo()(self.hangup.mas_top)?.setOffset(-100)
             make?.width.mas_equalTo()(max(44, 44 * OnInviteePanelList.count + 2 * max(0, OnInviteePanelList.count - 1)))
             make?.centerX.equalTo()(view)
-            make?.height.mas_equalTo()(80)
+            make?.height.mas_equalTo()(60)
         }
         
         OninviteeStackView.safelyRemoveArrangedSubviews()
