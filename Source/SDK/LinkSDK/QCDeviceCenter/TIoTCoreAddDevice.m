@@ -319,7 +319,7 @@
     }
     
     // 服务端
-    if (![self.socket connectToHost:ip onPort:8266 error:&error]) {   // 连接服务器
+    if (![self.socket connectToHost:ip onPort:(self.serverProt != 0?self.serverProt:8266) error:&error]) {   // 连接服务器
         QCLog(@"连接失败：%@", error);
         connectFialdBlock();
         return ;

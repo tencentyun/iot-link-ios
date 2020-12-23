@@ -30,11 +30,13 @@
 @property (nonatomic, strong) UITextField *wifiPassword;
 @property (nonatomic, strong) UILabel *progressTip;
 @property (nonatomic, strong) UITextField *token;
+@property (nonatomic, strong) UITextField *port;
 
 @property (nonatomic, strong) NSString *apSsid;
 @property (nonatomic, strong) NSString *wifiNameString;
 @property (nonatomic, strong) NSString *wifiPasswordString;
 @property (nonatomic, strong) NSString *tokenString;
+@property (nonatomic, strong) NSString *portString;
 @end
 
 @implementation TIoTVideoSoftApDistributionNetVC
@@ -109,8 +111,17 @@
     self.token.delegate = self;
     [self.view addSubview:self.token];
     
+    self.port =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.token.frame)+kInterval, kWidth, kHeight)];
+    self.port.textColor = [UIColor colorWithHexString:kMainThemeColor];
+    self.port.font = [UIFont systemFontOfSize:18];
+    self.port.placeholder = @"请输入port";
+    self.port.textAlignment = NSTextAlignmentCenter;
+    self.port.returnKeyType = UIReturnKeyDone;
+    self.port.delegate = self;
+    [self.view addSubview:self.port];
+    
     UIButton *startApConfigBuuton = [UIButton buttonWithType:UIButtonTypeCustom];
-    startApConfigBuuton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.token.frame)+kInterval, kWidth, kHeight);
+    startApConfigBuuton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.port.frame)+kInterval, kWidth, kHeight);
     [startApConfigBuuton setTitle:@"开始Ap配网" forState:UIControlStateNormal];
     [startApConfigBuuton setTitleColor:[UIColor colorWithHexString:kMainThemeColor] forState:UIControlStateNormal];
     startApConfigBuuton.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -125,6 +136,7 @@
     self.wifiNameString = @"";
     self.wifiPasswordString = @"";
     self.tokenString = @"";
+    self.portString = @"8266";
 }
 
 - (void)getWifiInfos
@@ -276,7 +288,6 @@
     [self releaseAlloc];
     self.sendCount = 0;
     
-    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@"配网中"];
     
     self.apSsid = self.wifiInfo[@"name"];
     NSString *apPwd = self.wifiPassword.text?:@"";
@@ -290,13 +301,33 @@
     self.softAP = [[TIoTCoreSoftAP alloc] initWithSSID:self.apSsid PWD:apPwd];
     self.softAP.delegate = self;
     self.softAP.gatewayIpString = [NSString getGateway];
+    self.softAP.serverProt = self.portString.intValue;
     __weak __typeof(self)weakSelf = self;
     self.softAP.udpFaildBlock = ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf connectFaildWith:@"Socket链接失败"];
         });
     };
-    [self.softAP startAddDevice];
+    if ([self judgeIsNumberByRegularExpressionWith:self.portString]) {
+        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@"配网中"];
+        [self.softAP startAddDevice];
+    }else {
+        [self connectFaildWith:@"port端口号非法"];
+    }
+    
+}
+
+- (BOOL)judgeIsNumberByRegularExpressionWith:(NSString *)str
+{
+   if (str.length == 0) {
+        return NO;
+    }
+    NSString *regex = @"[0-9]*";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    if ([pred evaluateWithObject:str]) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)connectFaildWith:(NSString *)test {
@@ -324,6 +355,9 @@
     if (textField == self.token) {
         self.tokenString = textField.text;
     }
+    if (textField == self.port) {
+        self.portString = textField.text;
+    }
     
     [self hideKeyBoard];
     return YES;
@@ -338,6 +372,9 @@
     }
     if (textField == self.token) {
         self.tokenString = textField.text;
+    }
+    if (textField == self.port) {
+        self.portString = textField.text;
     }
     [self hideKeyBoard];
     return YES;
@@ -379,6 +416,9 @@
     }
     if (textField == self.token) {
         self.tokenString = textField.text;
+    }
+    if (textField == self.port) {
+        self.portString = textField.text;
     }
     return YES;
 }

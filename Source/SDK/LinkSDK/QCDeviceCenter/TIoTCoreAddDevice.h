@@ -90,7 +90,7 @@ typedef void(^connectUdpFaildBlock)(void);
 @property (nonatomic,copy,readonly) NSString *password;
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
-
+@property (nonatomic, assign) NSInteger serverProt;
 /*
  必须实现
 */
