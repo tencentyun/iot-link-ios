@@ -41,6 +41,16 @@
                         <action selector="signIn:" destination="-1" eventType="touchUpInside" id="oTz-RA-MBe"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2HE-eR-dcJ">
+                    <rect key="frame" x="107" y="782" width="200" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="200" id="wye-WD-Z7w"/>
+                    </constraints>
+                    <state key="normal" title="查看直播"/>
+                    <connections>
+                        <action selector="showVideo:" destination="-1" eventType="touchUpInside" id="iqd-AK-T6R"/>
+                    </connections>
+                </button>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="pNf-YJ-u9S">
                     <rect key="frame" x="148.5" y="352" width="117" height="32"/>
                     <segments>
@@ -73,12 +83,14 @@
                 <constraint firstItem="Gwq-2a-fAC" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="90" id="BCq-Bc-zwO"/>
                 <constraint firstItem="pNf-YJ-u9S" firstAttribute="top" secondItem="WU1-iu-1fD" secondAttribute="bottom" constant="60" id="DBz-Dd-6j8"/>
                 <constraint firstItem="ahb-Z8-KP3" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="130" id="EDS-Pg-TxY"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="2HE-eR-dcJ" secondAttribute="bottom" constant="50" id="GCU-wE-lev"/>
                 <constraint firstItem="WU1-iu-1fD" firstAttribute="top" secondItem="ahb-Z8-KP3" secondAttribute="bottom" constant="50" id="IDe-ah-wvo"/>
                 <constraint firstItem="7HZ-d7-3PP" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="90" id="IfW-wz-7WY"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="WU1-iu-1fD" secondAttribute="trailing" constant="30" id="NC6-Nx-CTP"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="ahb-Z8-KP3" secondAttribute="trailing" constant="30" id="Qrt-w3-b0M"/>
                 <constraint firstItem="WU1-iu-1fD" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="30" id="SDf-ru-LjH"/>
                 <constraint firstItem="BoQ-Yd-SRA" firstAttribute="top" secondItem="pNf-YJ-u9S" secondAttribute="bottom" constant="47" id="YjG-3m-TEr"/>
+                <constraint firstItem="2HE-eR-dcJ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="bGo-7C-AQa"/>
                 <constraint firstItem="BoQ-Yd-SRA" firstAttribute="centerX" secondItem="Q5M-cg-NOt" secondAttribute="centerX" id="eEQ-rQ-hND"/>
                 <constraint firstItem="ahb-Z8-KP3" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="30" id="eIH-LJ-OtQ"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="Gwq-2a-fAC" secondAttribute="trailing" constant="30" id="qI0-Tc-Una"/>

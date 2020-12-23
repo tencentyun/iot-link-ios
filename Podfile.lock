@@ -120,7 +120,7 @@ PODS:
     - NVActivityIndicatorView/Base (= 5.1.1)
   - NVActivityIndicatorView/Base (5.1.1)
   - PromisesObjC (1.2.11)
-  - Protobuf (3.13.0)
+  - Protobuf (3.14.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -144,11 +144,12 @@ PODS:
     - YYModel
   - TIoTLinkKit/LinkSDK (1.0.0):
     - MBProgressHUD (= 1.1.0)
-  - TIoTThridSDK (1.0.1):
-    - TIoTThridSDK/TPNS-iOS (= 1.0.1)
-    - TIoTThridSDK/WechatOpenSDK_NoPay (= 1.0.1)
-  - TIoTThridSDK/TPNS-iOS (1.0.1)
-  - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.1)
+  - TIoTLinkKit/LinkVideo (1.0.0):
+    - TIoTLinkKit/LinkSDK
+    - TIoTThridSDK/FFmpeg-iOS (= 1.0.2)
+  - TIoTThridSDK/FFmpeg-iOS (1.0.2)
+  - TIoTThridSDK/TPNS-iOS (1.0.2)
+  - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.2)
   - Toast-Swift (5.0.1)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
@@ -178,7 +179,9 @@ DEPENDENCIES:
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
-  - TIoTThridSDK (= 1.0.1)
+  - TIoTLinkKit/LinkVideo (from `./`)
+  - TIoTThridSDK/TPNS-iOS (= 1.0.2)
+  - TIoTThridSDK/WechatOpenSDK_NoPay (= 1.0.2)
   - Toast-Swift (= 5.0.1)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
@@ -264,7 +267,7 @@ SPEC CHECKSUMS:
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
-  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
+  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
@@ -274,14 +277,14 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 2e734d7330faf724b95bbdde0c081a0ee673a486
-  TIoTThridSDK: 8b03ec0aa12cb318ff874692b244e6ba54880547
+  TIoTLinkKit: c8f0094605c548acde74ae0f1da7b3be853c617c
+  TIoTThridSDK: 2b85276b3e13248b55f2e5ab90e532405ed50aab
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: eb7f7b9cfea6eaf6fd3aa44fdef15c6e526758dc
+PODFILE CHECKSUM: e7426aee7aa39adf4d46bf3444c67da9be976a19
 
 COCOAPODS: 1.9.3

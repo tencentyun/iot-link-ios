@@ -38,7 +38,8 @@ target 'LinkApp' do
   pod 'KeychainAccess', '4.2.0'
   pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
-  pod 'TIoTThridSDK', '1.0.1'
+  pod 'TIoTThridSDK/TPNS-iOS', '1.0.2'
+  pod 'TIoTThridSDK/WechatOpenSDK_NoPay', '1.0.2'
 end
 
 target 'LinkSDKDemo' do
@@ -47,4 +48,5 @@ target 'LinkSDKDemo' do
   
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/LinkRTC', :path => './'
+  pod 'TIoTLinkKit/LinkVideo', :path => './'
 end

@@ -38,6 +38,7 @@ Pod::Spec.new do |s|
   s.subspec 'LinkVideo' do |ss|
     ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c}'
     ss.dependency 'TIoTLinkKit/LinkSDK'
+    ss.dependency 'TIoTThridSDK/FFmpeg-iOS', '1.0.2'
   end
 
 end
