@@ -136,7 +136,7 @@
     self.token = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.bssid.frame)+kInterval, kWidth, kHeight)];
     self.token.textColor = [UIColor colorWithHexString:kMainThemeColor];
     self.token.font = [UIFont systemFontOfSize:18];
-    self.token.placeholder = @"请输入bssid";
+    self.token.placeholder = @"请输入token";
     self.token.textAlignment = NSTextAlignmentCenter;
     self.token.returnKeyType = UIReturnKeyDone;
     self.token.delegate = self;
