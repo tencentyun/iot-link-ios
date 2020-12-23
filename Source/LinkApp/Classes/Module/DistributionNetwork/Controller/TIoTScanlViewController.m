@@ -254,9 +254,9 @@
                 
             }else {
                 //进入批量扫码
-                if ([NSString isNullOrNilWithObject:config[@"IconUrlAdvertise"]] && [NSString isNullOrNilWithObject:config[@"AddDeviceHintMsg"]]) {
+                if ([NSString isNullOrNilWithObject:config[@"Global"][@"IconUrlAdvertise"]] && [NSString isNullOrNilWithObject:config[@"Global"][@"AddDeviceHintMsg"]]) {
                  // 无配置，直接进配网流程
-                    [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
+                    [self getProductsConfig:productId];
                     return;
                 }
                 
