@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13b204e1_5ef8ac00",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-25T02:36:55Z",
+      "side": 1,
+      "message": "TIoTTRTCSessionType_calling表示已经在通话中吧",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4943551c_c379afe0",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTWebSocketManage.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-25T02:36:55Z",
+      "side": 1,
+      "message": "failure貌似目前还没用上，建议优化掉",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8912aa72_e7ab9dc3",
+        "filename": "Source/SDK/LinkRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-12-25T02:36:55Z",
+      "side": 1,
+      "message": "state状态需要在退出房间后复位",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
