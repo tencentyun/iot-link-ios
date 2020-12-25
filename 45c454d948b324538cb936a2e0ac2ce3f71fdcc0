@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "45611843_a80cd7ac",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-25T11:31:56Z",
+      "side": 1,
+      "message": "是的，calling是在通话中，这里判断是要处理非通话中的时候，如果时间到了，就退出",
+      "parentUuid": "13b204e1_5ef8ac00",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4943551c_c379afe0",
         "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTWebSocketManage.m",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "6c21da08_6c75d692",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTWebSocketManage.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-25T11:31:56Z",
+      "side": 1,
+      "message": "这里是设备端异常掉线的处理，在这里添加判断处理后不会进入后面流程，或者还有其他合适的处理",
+      "parentUuid": "4943551c_c379afe0",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8912aa72_e7ab9dc3",
         "filename": "Source/SDK/LinkRTC/TIoTTRTCSessionManager.m",
         "patchSetId": 7
@@ -50,6 +86,24 @@
       "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c110eb83_6f80326b",
+        "filename": "Source/SDK/LinkRTC/TIoTTRTCSessionManager.m",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2020-12-25T11:31:56Z",
+      "side": 1,
+      "message": "好的，这里遗漏了，想着对象已经置空，状态对象会默认归0初始值，这里我补充添加下",
+      "parentUuid": "8912aa72_e7ab9dc3",
+      "revId": "45c454d948b324538cb936a2e0ac2ce3f71fdcc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
