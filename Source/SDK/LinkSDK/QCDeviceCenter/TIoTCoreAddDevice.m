@@ -178,7 +178,7 @@
 - (void)createConnect:(NSString *)ip{
     self.socket = [[TCSocket alloc] init];
     [self.socket setDeleagte:self];
-    [self.socket openWithIP:ip port:SmartConfigPort];
+    [self.socket openWithIP:ip port:(self.serverProt != 0?self.serverProt:SmartConfigPort)];
 }
 
 
