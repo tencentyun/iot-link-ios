@@ -1,12 +1,12 @@
 //
-//  TIoTVideoSoftApDistributionNetVC.m
-//  TIoTLinkKitDemo
+//  TIoTWiredDistributionNetVC.m
+//  LinkSDKDemo
 //
-//  Created by ccharlesren on 2020/12/17.
+//  Created by ccharlesren on 2020/12/30.
 //  Copyright © 2020 Tencent. All rights reserved.
 //
 
-#import "TIoTVideoSoftApDistributionNetVC.h"
+#import "TIoTWiredDistributionNetVC.h"
 #import "UILabel+TIoTExtension.h"
 #import <CoreLocation/CoreLocation.h>
 #import "TIoTCoreUtil.h"
@@ -19,13 +19,13 @@
 #import "TIoTCoreAddDevice.h"
 #import "GCDAsyncUdpSocket.h"
 
-@interface TIoTVideoSoftApDistributionNetVC ()<CLLocationManagerDelegate,UITextFieldDelegate,TIoTCoreAddDeviceDelegate>
-@property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
+@interface TIoTWiredDistributionNetVC ()<CLLocationManagerDelegate,UITextFieldDelegate,TIoTCoreAddDeviceDelegate,GCDAsyncUdpSocketDelegate>
+//@property (nonatomic, strong) TIoTCoreSmartConfig   *smartConfig;
+@property (nonatomic, strong) GCDAsyncUdpSocket   *socket;
 @property (nonatomic, strong) dispatch_source_t timer;
-@property (nonatomic) NSUInteger sendCount;
+@property (nonatomic, assign) BOOL isSendSuccess;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (nonatomic, strong) NSMutableDictionary *wifiInfo;
 @property (nonatomic, strong) UITextField *wifiName;
 @property (nonatomic, strong) UITextField *wifiPassword;
 @property (nonatomic, strong) UILabel *progressTip;
@@ -39,13 +39,10 @@
 @property (nonatomic, strong) NSString *portString;
 @end
 
-@implementation TIoTVideoSoftApDistributionNetVC
+@implementation TIoTWiredDistributionNetVC
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    if (self.softAP) {
-        [self.softAP stopAddDevice];
-    }
     [self releaseAlloc];
 }
 
@@ -57,17 +54,20 @@
     if (self.timer) {
         dispatch_source_cancel(self.timer);
     }
+    
+    if (self.socket) {
+        [self.socket close];
+        self.socket = nil;
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self setupUI];
-    
-    [self getWifiInfos];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [self initInformation];
 }
 
 - (void)setupUI {
@@ -75,7 +75,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     CGFloat kTopPadding = 40 + kNavBarAndStatusBarHeight;
-    CGFloat kLeftPadding = 30;
+    CGFloat kLeftPadding = 60;
     CGFloat kWidth = kScreenWidth - kLeftPadding*2;
     CGFloat kHeight = 40;
     CGFloat kInterval = 10;
@@ -83,16 +83,18 @@
     self.wifiName = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, kTopPadding, kWidth,kHeight)];
     self.wifiName.textColor = [UIColor colorWithHexString:kMainThemeColor];
     self.wifiName.font = [UIFont systemFontOfSize:18];
-    self.wifiName.placeholder = @"请输入WiFi名称";
+    self.wifiName.placeholder = @"DeviceName";
     self.wifiName.textAlignment = NSTextAlignmentCenter;
     self.wifiName.returnKeyType = UIReturnKeyDone;
     self.wifiName.delegate = self;
+    self.wifiName.enabled = NO;
     [self.view addSubview:self.wifiName];
     
     self.wifiPassword = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.wifiName.frame)+kInterval, kWidth, kHeight)];
     self.wifiPassword.textColor = [UIColor colorWithHexString:kMainThemeColor];
     self.wifiPassword.font = [UIFont systemFontOfSize:18];
-    self.wifiPassword.placeholder = @"请输入WiFi密码";
+    self.wifiPassword.placeholder = @"ProductID";
+    self.wifiPassword.enabled = NO;
     self.wifiPassword.textAlignment = NSTextAlignmentCenter;
     self.wifiPassword.returnKeyType = UIReturnKeyDone;
     self.wifiPassword.delegate = self;
@@ -105,12 +107,12 @@
     self.token =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.progressTip.frame)+kInterval, kWidth, kHeight)];
     self.token.textColor = [UIColor colorWithHexString:kMainThemeColor];
     self.token.font = [UIFont systemFontOfSize:18];
-    self.token.placeholder = @"请输入token";
+    self.token.placeholder = @"收到信息后请输入token";
     self.token.textAlignment = NSTextAlignmentCenter;
     self.token.returnKeyType = UIReturnKeyDone;
     self.token.delegate = self;
     [self.view addSubview:self.token];
-    
+        
     self.port =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.token.frame)+kInterval, kWidth, kHeight)];
     self.port.textColor = [UIColor colorWithHexString:kMainThemeColor];
     self.port.font = [UIFont systemFontOfSize:18];
@@ -122,16 +124,15 @@
     
     UIButton *startApConfigBuuton = [UIButton buttonWithType:UIButtonTypeCustom];
     startApConfigBuuton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.port.frame)+kInterval, kWidth, kHeight);
-    [startApConfigBuuton setTitle:@"开始Ap配网" forState:UIControlStateNormal];
+    [startApConfigBuuton setTitle:@"开始" forState:UIControlStateNormal];
     [startApConfigBuuton setTitleColor:[UIColor colorWithHexString:kMainThemeColor] forState:UIControlStateNormal];
     startApConfigBuuton.titleLabel.font = [UIFont systemFontOfSize:18];
-    [startApConfigBuuton addTarget:self action:@selector(connectionApSocket) forControlEvents:UIControlEventTouchUpInside];
+    [startApConfigBuuton addTarget:self action:@selector(connectionSocket) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:startApConfigBuuton];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyBoard)];
     [self.view addGestureRecognizer:tap];
     
-    [self.wifiName becomeFirstResponder];
     
     self.wifiNameString = @"";
     self.wifiPasswordString = @"";
@@ -139,182 +140,160 @@
     self.portString = @"8266";
 }
 
-- (void)getWifiInfos
-{
-    float version = [[UIDevice currentDevice].systemVersion floatValue];
-    if (version >= 13) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-    else
-    {
-        [self judgeLocationWithInit:YES];
-    }
-}
-
-- (void)applicationwillenterforegound
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
-            [self judgeLocationWithInit:NO];
-        } else {
-            [self.locationManager requestWhenInUseAuthorization];
-        }
-    });
-}
-
-- (void)judgeLocationWithInit:(BOOL)isInit {
-    [self.wifiInfo removeAllObjects];
-    [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
-    if (isInit == YES) {
-        self.wifiName.text = self.wifiInfo[@"name"];
-        self.wifiNameString = self.wifiName.text;
-    }else {
-        self.wifiName.placeholder = self.wifiInfo[@"name"];
-    }
+- (void)initInformation {
     
+    self.wifiName.text = @"";
+    self.wifiNameString = self.wifiName.text;
+    self.wifiPassword.text = @"";
+    self.wifiPasswordString = self.wifiPassword.text;
     [self.view reloadInputViews];
 }
 
-#pragma mark - CLLocationManagerDelegate
+#pragma mark 代理-GCDAsyncUdpSocketDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
+    NSLog(@"----%@",address);
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
+    NSLog(@"----%@",error);
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
 {
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        [self judgeLocationWithInit:NO];
-    }
-    else if (status == kCLAuthorizationStatusNotDetermined)
-    {
-        [manager requestWhenInUseAuthorization];
-    }
-    else
-    {
-        
-    }
-}
-
-#pragma mark TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
-
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
-    [self connectFaildWith:@"连接成功，正在上报"];
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-    dispatch_source_set_event_handler(self.timer, ^{
-        
-        if (self.sendCount >= 5) {
-            dispatch_source_cancel(self.timer);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD dismissInView:nil];
-               [self connectFaildWith:@"设备上报失败"];
-            });
-            return ;
-        }
-        
-        NSString *Ssid = self.apSsid?:@"";
-        NSString *Pwd = self.wifiPasswordString?:@"";
-#warning token 需通过自建服务器获取
-        NSString *Token = self.tokenString?:@"";
-        NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid,@"password":Pwd,@"token":Token,@"region":@"ap-guangzhou"};
-        [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-        self.sendCount ++;
-    });
-    dispatch_resume(self.timer);
-}
-
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
-    //手机与设备连接成功,收到设备的udp数据
-    [self connectFaildWith:@"发送成功"];
-}
-
-- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [MBProgressHUD dismissInView:nil];
-        [self connectFaildWith:@"发动失败"];
+        [self connectFaildWith:@"发送信息成功"];
     });
 }
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
-    NSError *JSONParsingError;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-    WCLog(@"嘟嘟嘟 %@",dictionary);
-    //手机与设备连接成功,收到设备的udp数据
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self connectFaildWith:@"发送信息失败"];
+    });
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
+{
+    NSString *ip = [GCDAsyncUdpSocket hostFromAddress:address];
+    uint16_t port = [GCDAsyncUdpSocket portFromAddress:address];
+//    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSError *jsonerror = nil;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
+    NSLog(@"收到设备端的响应 [%@:%d] %@", ip, port, dic);
     
-    
-    if ([dictionary[@"cmdType"] integerValue] == 2) {
-        //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
-        //如果deviceReply返回的是Current_Error，则配网绑定过程中失败，需要退出配网操作;Previous_Error则为上一次配网的出错日志，只需要上报，不影响当此操作。
-        if (![NSObject isNullOrNilWithObject:dictionary[@"deviceReply"]])  {
-            if ([dictionary[@"deviceReply"] isEqualToString:@"Previous_Error"]) {
+    if (!jsonerror) {
+        
+        if ([dic.allKeys containsObject:@"status"] && [dic[@"status"] isEqualToString:@"online"]) {
+            //重复发送广播
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+            dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+            dispatch_source_set_event_handler(self.timer, ^{
+                NSLog(@"-------1");
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD dismissInView:nil];
-                    [self connectFaildWith:@"接收设备信息成功"];
+                    self.wifiPassword.text = dic[@"productId"]?:@"";
+                    self.wifiName.text = dic[@"deviceName"]?:@"";
                 });
-            }else {
-                //deviceReplay 为 Cuttent_Error
-                WCLog(@"soft配网过程中失败，需要重新配网");
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [MBProgressHUD dismissInView:nil];
-                    [self connectFaildWith:@"接收设备信息失败"];
-                });
-            }
-            
-        } else {
-            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD dismissInView:nil];
-                [self connectFaildWith:@"接收设备信息成功"];
+                
+                if (self.isSendSuccess == YES) {
+                    NSLog(@"-------2");
+                    [self.socket closeAfterSending];
+                    [self releaseAlloc];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self connectFaildWith:@"APP发送token成功"];
+                    });
+                    NSLog(@"-------3");
+                    return;
+                }
+                
+        #warning token 需通过自建服务器获取
+                NSLog(@"-------4");
+                NSString *Token = self.tokenString?:@"";
+                [self broadcastWithMessage:@{@"productId":dic[@"productId"]?:@"",@"deviceName":dic[@"deviceName"]?:@"",@"token":Token}];
+
             });
+            dispatch_resume(self.timer);
+            
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self connectFaildWith:@"设备上线,接收消息成功"];
+            });
+            
+        }else if ([dic.allKeys containsObject:@"status"] && [dic[@"status"] isEqualToString:@"received"] && ([self.wifiPassword.text isEqualToString:dic[@"productId"]] && ([self.wifiName.text isEqualToString:dic[@"deviceName"]]))) {
+            //需要将第一次接收的productId 和 deviceName 保存，用户设备端再次发送确定消息中的信息对比，是否相等（用户多设备广播鉴别）
+            self.isSendSuccess = YES;
+            NSLog(@"-------5");
         }
         
+    }else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self connectFaildWith:@"接收消息失败"];
+        });
     }
     
-    if ([dictionary[@"cmdType"] integerValue] == 2) {
-        //TODO:轮询设备状态进行绑定
-        
-    }
 }
 
 #pragma mark - event
 
-- (void)connectionApSocket {
+- (void)connectionSocket {
     [self hideKeyBoard];
-    if (self.softAP) {
-        [self.softAP stopAddDevice];
-    }
+    
     [self releaseAlloc];
-    self.sendCount = 0;
     
+    self.isSendSuccess = NO;
     
-    self.apSsid = self.wifiInfo[@"name"];
-    NSString *apPwd = self.wifiPassword.text?:@"";
+    self.wifiPassword.text = @"";
+    self.wifiName.text = @"";
     
-    if ([NSString isNullOrNilWithObject:self.wifiName.text] || [NSString isFullSpaceEmpty:self.wifiName.text]) {
-        self.apSsid = self.wifiName.placeholder?:@"";
-    }else {
-        self.apSsid = self.wifiName.text?:@"";
-    }
-    
-    self.softAP = [[TIoTCoreSoftAP alloc] initWithSSID:self.apSsid PWD:apPwd];
-    self.softAP.delegate = self;
-    self.softAP.gatewayIpString = [NSString getGateway];
-    self.softAP.serverProt = self.portString.intValue;
-    __weak __typeof(self)weakSelf = self;
-    self.softAP.udpFaildBlock = ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf connectFaildWith:@"Socket链接失败"];
-        });
-    };
     if ([self judgeIsNumberByRegularExpressionWith:self.portString]) {
-        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@"配网中"];
-        [self.softAP startAddDevice];
+        [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+        
+        self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+        self.socket.delegate = self;
+        
+        NSError *error = nil;
+        
+        //绑定本地端口
+        [self.socket bindToPort:self.portString.intValue error:&error];
+        
+        if (error) {
+            NSLog(@"---1:%@",error);
+            return;
+        }
+        
+        //启用广播
+        [self.socket enableBroadcast:YES error:&error];
+        
+        if (error) {
+            NSLog(@"---2:%@",error);
+            return;
+        }
+
+        //开始接收数据(不然会收不到数据)
+        [self.socket beginReceiving:&error];
+        
+        if (error) {
+            NSLog(@"---3:%@",error);
+            return;
+        }
+//        [self broadcastWithMessage:@{@"productId":@"testid",@"deviceName":@"name",@"status":@"online"} ];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(59 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD dismissInView:nil];
+        });
+        
     }else {
         [self connectFaildWith:@"port端口号非法"];
     }
     
+}
+
+
+- (void)broadcastWithMessage:(NSDictionary *)message{
+ 
+    [self.socket sendData:[NSJSONSerialization dataWithJSONObject:message?:@{} options:NSJSONWritingPrettyPrinted error:nil] toHost:@"255.255.255.255" port:self.portString.intValue withTimeout:-1 tag:100];
+ 
 }
 
 - (BOOL)judgeIsNumberByRegularExpressionWith:(NSString *)str
@@ -332,6 +311,7 @@
 
 - (void)connectFaildWith:(NSString *)test {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [MBProgressHUD dismissInView:nil];
         self.progressTip.text = test;
         [self.view reloadInputViews];
     });
@@ -353,8 +333,8 @@
         self.wifiPasswordString = textField.text;
     }
     if (textField == self.token) {
-        self.tokenString = textField.text;
-    }
+            self.tokenString = textField.text;
+        }
     if (textField == self.port) {
         self.portString = textField.text;
     }
@@ -371,8 +351,8 @@
         self.wifiPasswordString = textField.text;
     }
     if (textField == self.token) {
-        self.tokenString = textField.text;
-    }
+            self.tokenString = textField.text;
+        }
     if (textField == self.port) {
         self.portString = textField.text;
     }
@@ -415,8 +395,8 @@
         self.wifiPasswordString = inputString;
     }
     if (textField == self.token) {
-        self.tokenString = inputString;
-    }
+            self.tokenString = inputString;
+        }
     if (textField == self.port) {
         self.portString = inputString;
     }
@@ -431,13 +411,6 @@
         _locationManager.delegate = self;
     }
     return _locationManager;
-}
-
-- (NSMutableDictionary *)wifiInfo{
-    if (_wifiInfo == nil) {
-        _wifiInfo = [NSMutableDictionary dictionary];
-    }
-    return _wifiInfo;
 }
 
 - (void)setLabelFormateTitle:(NSString *)title font:(UIFont *)font titleColorHexString:(NSString *)titleColorString textAlignment:(NSTextAlignment)alignment label:(UILabel *)label {
