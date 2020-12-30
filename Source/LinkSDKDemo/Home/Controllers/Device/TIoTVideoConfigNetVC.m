@@ -11,6 +11,7 @@
 #import "UIButton+LQRelayout.h"
 #import "UIColor+Color.h"
 #import "TIoTVideoSoftApDistributionNetVC.h"
+#import "TIoTWiredDistributionNetVC.h"
 
 @interface TIoTVideoConfigNetVC ()
 
@@ -46,6 +47,12 @@
     [self setButtonWithTitlt:@"Ap配网" titleColorHexString:kMainThemeColor font:[UIFont systemFontOfSize:18] withButton:softApButton];
     [softApButton addTarget:self action:@selector(jumpSoftApConfigVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:softApButton];
+    
+    UIButton *wiredButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    wiredButton.frame = CGRectMake(kLeftPaddin, CGRectGetMaxY(softApButton.frame)+kInterval, kWidth, kHeight);
+    [self setButtonWithTitlt:@"有线配网" titleColorHexString:kMainThemeColor font:[UIFont systemFontOfSize:18] withButton:wiredButton];
+    [wiredButton addTarget:self action:@selector(jumpWiredConfigVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:wiredButton];
 }
 
 - (void)setButtonWithTitlt:(NSString *)titlt titleColorHexString:(NSString *)titleColorString font:(UIFont *)font withButton:(UIButton *)button {
@@ -66,6 +73,11 @@
 - (void)jumpSoftApConfigVC {
     TIoTVideoSoftApDistributionNetVC *softApVC = [[TIoTVideoSoftApDistributionNetVC alloc]init];
     [self.navigationController pushViewController:softApVC animated:YES];
+}
+
+- (void)jumpWiredConfigVC {
+    TIoTWiredDistributionNetVC *wiredVC = [[TIoTWiredDistributionNetVC alloc]init];
+    [self.navigationController pushViewController:wiredVC animated:YES];
 }
 
 /*

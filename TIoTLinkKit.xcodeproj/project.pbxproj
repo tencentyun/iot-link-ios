@@ -64,6 +64,7 @@
 		6DC7F8D92552E394009508EE /* TIoTSettingIntelligentImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8D82552E394009508EE /* TIoTSettingIntelligentImageVC.m */; };
 		6DC7F8DD2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8DC2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m */; };
 		6DC7F8E1255326DF009508EE /* TIoTSettingIntelligentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */; };
+		6DCB3587259CD908003E03DF /* TIoTWiredDistributionNetVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DCB3586259CD908003E03DF /* TIoTWiredDistributionNetVC.m */; };
 		6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D2A251B4449004FC023 /* Localizable.strings */; };
 		6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D3F251BB1DD004FC023 /* InfoPlist.strings */; };
 		6DCC3D43251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D45251BB7C2004FC023 /* TIoTCoreAddFamilyVC.xib */; };
@@ -520,6 +521,8 @@
 		6DC7F8DC2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSettingIntelligentNameVC.m; sourceTree = "<group>"; };
 		6DC7F8DF255326DF009508EE /* TIoTSettingIntelligentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSettingIntelligentCell.h; sourceTree = "<group>"; };
 		6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSettingIntelligentCell.m; sourceTree = "<group>"; };
+		6DCB3585259CD908003E03DF /* TIoTWiredDistributionNetVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWiredDistributionNetVC.h; sourceTree = "<group>"; };
+		6DCB3586259CD908003E03DF /* TIoTWiredDistributionNetVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTWiredDistributionNetVC.m; sourceTree = "<group>"; };
 		6DCC3D2B251B4449004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6DCC3D2E251B4459004FC023 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6DCC3D3E251BB1DD004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2315,6 +2318,8 @@
 				F4F3265525919C6C00A4CAAB /* TIoTVIdeoQRScanDistributionNet.m */,
 				6D6F0541259440AA002A4463 /* TIoTVideoSoftApDistributionNetVC.h */,
 				6D6F0540259440AA002A4463 /* TIoTVideoSoftApDistributionNetVC.m */,
+				6DCB3585259CD908003E03DF /* TIoTWiredDistributionNetVC.h */,
+				6DCB3586259CD908003E03DF /* TIoTWiredDistributionNetVC.m */,
 				F4F3D78724938EBD005D3396 /* UsersOfDeviceVC.h */,
 				F4F3D77A24938EBD005D3396 /* UsersOfDeviceVC.m */,
 				F4F3D78124938EBD005D3396 /* TIoTCoreRepeatVC.h */,
@@ -2927,6 +2932,7 @@
 			files = (
 				F4F3D7AE24938EBE005D3396 /* TIoTCoreEquipmentTableViewCell.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
+				6DCB3587259CD908003E03DF /* TIoTWiredDistributionNetVC.m in Sources */,
 				F4F3265825919C6D00A4CAAB /* TIoTVIdeoQRScanDistributionNet.m in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
 				F4F3D7C324938EBE005D3396 /* UserInfoVC.m in Sources */,

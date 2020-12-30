@@ -60,7 +60,6 @@ typedef void(^connectFaildBlock)(void);
 @property (nonatomic,copy,readonly) NSString *bssid;
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
-
 /*
  必须实现
 */
