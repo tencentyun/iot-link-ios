@@ -238,9 +238,9 @@
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             for (NSDictionary *productDic in tmpArr) {
-                NSString *DataTemplate = productDic[@"DataTemplate"];
+//                NSString *DataTemplate = productDic[@"DataTemplate"];
     //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
-                TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+//                TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
     //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
                 NSArray *serverArray = productDic[@"Services"]?:@[];
                 if ([serverArray containsObject:@"TRTC"]) {

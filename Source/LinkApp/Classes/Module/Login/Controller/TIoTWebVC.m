@@ -360,6 +360,9 @@
 }
 
 - (void)goDeviceDetailWithMessage:(WKScriptMessage *)message {
+    
+    [self callBackResultWith:message];
+    
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
     vc.title = @"设备详情";
     vc.deviceDic = self.deviceDic;
@@ -370,6 +373,8 @@
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
+        [self callBackResultWith:message];
+        
         WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
         NSString *ticket = responseObject[@"TokenTicket"]?:@"";
         TIoTWebVC *vc = [TIoTWebVC new];
@@ -388,11 +393,15 @@
 
 - (void)goDeviceInfoWithMessage:(WKScriptMessage *)message  {
 
+    [self callBackResultWith:message];
+    
     TIoTDeviceDetailVC *deviceDatailVC = [[TIoTDeviceDetailVC alloc]init];
     [self.navigationController pushViewController:deviceDatailVC animated:YES];
 }
 
 - (void)goEditDeviceNameWithMessage:(WKScriptMessage *)message {
+    [self callBackResultWith:message];
+    
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
     vc.title = @"设备详情";
     vc.deviceDic = self.deviceDic;
@@ -400,31 +409,47 @@
 }
 
 - (void)goRoomSettingWithMessage:(WKScriptMessage *)message {
+    [self callBackResultWith:message];
+    
     TIoTModifyRoomVC *vc = [[TIoTModifyRoomVC alloc] init];
     vc.deviceInfo = self.deviceDic;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)goShareDeviceWithMessage:(WKScriptMessage *)message {
+    [self callBackResultWith:message];
+    
     TIoTDeviceShareVC *vc = [[TIoTDeviceShareVC alloc] init];
     vc.deviceDic = self.deviceDic;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)goNavBackWithMessage:(WKScriptMessage *)message {
+    [self callBackResultWith:message];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)reloadUnmountDeviceWithMessage:(WKScriptMessage *)message {
     //MARK:返回首页刷新设备列表
+    [self callBackResultWith:message];
 }
 
 - (void)shareConfigWithMessage:(WKScriptMessage *)message {
-    
+    [self callBackResultWith:message];
 }
 
 - (void)goFirmwareUpgradeWithMessage:(WKScriptMessage *)message {
-    
+    [self callBackResultWith:message];
+}
+
+- (void)callBackResultWith:(WKScriptMessage *)message {
+    if (!(message.body == nil || [message.body isEqual:[NSNull null]] || [message.body isKindOfClass:[NSNull class]])) {
+        NSDictionary *bodyDic = [NSDictionary dictionaryWithDictionary:message.body];
+        if ([bodyDic.allKeys containsObject:@"callbackId"]) {
+            NSString *callbackIDString = message.body[@"callbackId"]?:@"";
+            [self webViewInvokeJavaScript:@{@"result":@(YES),@"callbackId":callbackIDString} port:@"callResult"];
+        }
+    }
 }
 
 #pragma mark - lazy loading
