@@ -233,18 +233,22 @@
     
     NSArray *productIDs = [devices valueForKey:@"ProductId"];
     NSSet *productIDSet = [NSSet setWithArray:productIDs];//去chong
-    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
-        NSArray *data = responseObject[@"Data"];
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
         
-        for (NSDictionary *configPanel in data) {
-                        
-            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:configPanel[@"Config"]];
-            
-            if ([configModel.Global.trtc intValue] == 1) {
-                
-                //是trtc设备,注册socket和检测trtc设备的状态
-                [self getTRTCDeviceData:configModel.profile.ProductId devices:devices];
+        NSArray *tmpArr = responseObject[@"Products"];
+        if (tmpArr.count > 0) {
+            for (NSDictionary *productDic in tmpArr) {
+                NSString *DataTemplate = productDic[@"DataTemplate"];
+    //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+                TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+    //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
+                NSArray *serverArray = productDic[@"Services"]?:@[];
+                if ([serverArray containsObject:@"TRTC"]) {
+                    //是trtc设备,注册socket和检测trtc设备的状态
+                    [self getTRTCDeviceData:productDic[@"ProductId"]?:@"" devices:devices];
+                }
             }
+            
         }
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
