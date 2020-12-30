@@ -371,3 +371,114 @@
 
 @end
 
+
+/*=======================================================================*/
+
+@interface TIoTCoreWired()<GCDAsyncUdpSocketDelegate>
+@property (nonatomic, strong) GCDAsyncUdpSocket   *socket;
+@property (nonatomic, strong) NSString *portString;
+@property (nonatomic, strong) NSString *addressString;
+
+@end
+
+@implementation TIoTCoreWired
+
+- (instancetype)initWithPort:(NSString *)port multicastGroupOrHost:(NSString *)address {
+    self = [super init];
+    if (self) {
+        self.portString = port?:@"7838"; //需要更改接入端口号
+        self.addressString = address?:@"239.0.0.255"; //需要更改接入IP
+    }
+    return self;
+}
+
+- (void)releaseAlloc{
+    
+    if (self.socket) {
+        [self.socket close];
+        self.socket = nil;
+    }
+}
+
+#pragma mark 代理-GCDAsyncUdpSocketDelegate
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
+    QCLog(@"--连接成功---udpSocketAddress--%@",address);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didConnectToAddress:)]) {
+        [self.delegate wiredDistributionNetUdpSocket:sock didConnectToAddress:address];
+    }
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
+    QCLog(@"---连接失败--udp Socket Not Connect--%@",error);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didNotConnect:)]) {
+        [self.delegate wiredDistributionNetUdpSocket:sock didNotConnect:error];
+    }
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
+{
+    QCLog(@"--发送消息成功-----Socket Send Data Success");
+    if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didSendDataWithTag:)]) {
+        [self.delegate wiredDistributionNetUdpSocket:sock didSendDataWithTag:tag];
+    }
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
+{
+    QCLog(@"---发送消息失败-----Socket Not Send Data Error--%@",error);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didNotSendDataWithTag:dueToError:)]) {
+        [self.delegate wiredDistributionNetUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
+    }
+}
+
+- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+    
+    NSString *ip = [GCDAsyncUdpSocket hostFromAddress:address];
+    uint16_t port = [GCDAsyncUdpSocket portFromAddress:address];
+    NSError *jsonerror = nil;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
+    QCLog(@"---接收消息成功---收到设备端的响应 [%@:%d] %@", ip, port, dic);
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
+        [self.delegate wiredDistributionNetUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+    }
+}
+
+- (void)monitorDeviceSignal {
+    
+    [self releaseAlloc];
+    
+    
+    self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    
+    self.socket.delegate = self;
+    
+    NSError *error = nil;
+    
+    //绑定本地端口
+    [self.socket bindToPort:self.portString.intValue error:&error];
+    
+    //加入组播
+    [self.socket joinMulticastGroup:self.addressString error:&error];
+    
+    //启用广播
+    [self.socket enableBroadcast:YES error:&error];
+
+    //开始接收数据
+    [self.socket beginReceiving:&error];
+    
+}
+
+- (void)sendDeviceMessage:(NSDictionary *)message {
+    
+    [self.socket sendData:[NSJSONSerialization dataWithJSONObject:message?:@{} options:NSJSONWritingPrettyPrinted error:nil] toHost:self.addressString port:self.portString.intValue withTimeout:-1 tag:100];
+}
+
+- (void)stopConnect {
+    [self.socket closeAfterSending];
+    [self releaseAlloc];
+}
+
+
+@end

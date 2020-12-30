@@ -415,10 +415,10 @@
         self.wifiPasswordString = inputString;
     }
     if (textField == self.token) {
-        self.tokenString = textField.text;
+        self.tokenString = inputString;
     }
     if (textField == self.port) {
-        self.portString = textField.text;
+        self.portString = inputString;
     }
     return YES;
 }
