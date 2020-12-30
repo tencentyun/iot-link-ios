@@ -49,7 +49,7 @@ static NSString *heartBeatReqID = @"5002";
 - (instancetype)init{
     self = [super init];
     if (self) {
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
     return self;
 }
@@ -208,6 +208,14 @@ static NSString *heartBeatReqID = @"5002";
 }
 
 #pragma mark - private
+
+- (void)goForeground {
+    
+    if (self.socket.readyState == QC_CLOSING || self.socket.readyState == QC_CLOSED) {
+        // websocket 断开了，调用 reConnect 方法重连
+        [self reConnect];
+    }
+}
 
 //重连
 - (void)reConnect

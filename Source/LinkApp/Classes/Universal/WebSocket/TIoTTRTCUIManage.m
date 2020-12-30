@@ -95,6 +95,8 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
                         [self->_callAudioVC hangupTapped];
+                        self->_isActiveCall = NO;
+                        self->_isActiveStatus = self->_isActiveCall;
                     });
                     return;
                 }
@@ -117,6 +119,8 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
                         [self->_callVideoVC hangupTapped];
+                        self->_isActiveCall = NO;
+                        _isActiveStatus = self->_isActiveCall;
                     });
                     return;
                 }
@@ -423,5 +427,7 @@
     _callAudioVC = nil;
     _callVideoVC = nil;
     
+    _isActiveCall = NO;
+    _isActiveStatus = _isActiveCall;
 }
 @end

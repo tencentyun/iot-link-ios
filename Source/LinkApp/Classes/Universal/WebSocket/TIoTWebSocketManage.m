@@ -198,16 +198,23 @@ static NSString *heartBeatReqID = @"5002";
                 }
             }else {
                 
-                NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-                for (NSString *userIdString in userIdArray) {
-                    model.params._sys_userid = userIdString?:@"";
-                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                        [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {
+                    [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
 
-                            [MBProgressHUD showError:reason];
-                        }];
+                        [MBProgressHUD showError:reason];
+                    }];
+                }else {
+                    NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
+                    for (NSString *userIdString in userIdArray) {
+                        model.params._sys_userid = userIdString?:@"";
+                        if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                            [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+
+                                [MBProgressHUD showError:reason];
+                            }];
+                        }
+                        
                     }
-                    
                 }
                 
             }
