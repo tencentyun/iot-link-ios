@@ -102,14 +102,14 @@
 
 ## 定制 App 相关指引
 
-* [定制 App 快速接入](https://github.com/tencentyun/iot-link-ios/blob/master/doc/平台技术文档/部署设置.md)
-* [定制 App 部署整体流程](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方APP部署流程.md)
-* [定制 App 接入须知](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方定制APP接入指南.md)
-* [定制 App 常见问题](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方定制APP常见问题.md)
-* [APP发布前确认事项](https://github.com/tencentyun/iot-link-ios/blob/master/doc/APP发布前确认事项.md)
-* [SDK 说明文档](https://github.com/tencentyun/iot-link-ios/blob/master/doc/平台技术文档/SDK%20接入说明.md)
+* [定制 App 快速接入](doc/平台技术文档/部署设置.md)
+* [定制 App 部署整体流程](doc/第三方APP部署流程.md)
+* [定制 App 接入须知](doc/第三方定制APP接入指南.md)
+* [定制 App 常见问题](doc/第三方定制APP常见问题.md)
+* [APP发布前确认事项](doc/APP发布前确认事项.md)
+* [SDK 说明文档](doc/平台技术文档/SDK%20接入说明.md)
 
 
 ## 第三方服务接入指引
 
-* [实时音视频接入指南](https://github.com/tencentyun/iot-link-ios/blob/master/doc/第三方服务接入/实时音视频接入指南.md)
+* [实时音视频接入指南](doc/第三方服务接入/实时音视频接入指南.md)
