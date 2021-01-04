@@ -59,13 +59,14 @@
     CGFloat kHeightCell = 48 * kScreenAllHeightScale;
     
     self.topView = [[UIView alloc]init];
+    self.topView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.topView];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 * kScreenAllHeightScale);
         }else {
-            make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
         }
         make.height.mas_equalTo(kHeightCell);
     }];
@@ -156,6 +157,17 @@
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding * kScreenAllWidthScale);
         make.top.equalTo(self.scrollView.mas_bottom).offset(10 * kScreenAllWidthScale);
     }];
+    
+//    UIView *bottomView = [[UIView alloc]init];
+//    bottomView.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:bottomView];
+//    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.equalTo(self.topView.mas_top);
+//        make.bottom.equalTo(verificationCodeButton.mas_bottom);
+//    }];
+//
+//    [self.view sendSubviewToBack:bottomView];
     
     [self.view addSubview:self.comfirmModifyButton];
     [self.comfirmModifyButton mas_makeConstraints:^(MASConstraintMaker *make) {

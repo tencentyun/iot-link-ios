@@ -68,7 +68,7 @@
     }];
     
     UIView *line1 = [[UIView alloc]init];
-    line1.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line1.backgroundColor = kLineColor;
     [self.contentView addSubview:line1];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.phoneOrEmailLabel.mas_leading);
@@ -104,7 +104,7 @@
     }];
     
     UIView *line2 = [[UIView alloc]init];
-    line2.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line2.backgroundColor = kLineColor;
     [self.contentView addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(verificationlabel.mas_leading);
@@ -138,7 +138,7 @@
     }];
     
     UIView *line3 = [[UIView alloc]init];
-    line3.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line3.backgroundColor = kLineColor;
     [self.contentView addSubview:line3];
     [line3 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(passwordLabel.mas_leading);
@@ -167,7 +167,7 @@
     }];
     
     UIView *line4 = [[UIView alloc]init];
-    line4.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line4.backgroundColor = kLineColor;
     [self.contentView addSubview:line4];
     [line4 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.contentView.mas_leading).offset(kSpace*kScreenAllHeightScale);
