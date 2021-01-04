@@ -125,6 +125,7 @@ static NSString *itemId2 = @"pfDDD";
         
         TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
         [av alertWithTitle:NSLocalizedString(@"toast_delete_family_title", @"您确定要删除该家庭吗？")  message:NSLocalizedString(@"toast_delete_family_content", @"删除家庭后，系统将清除所有成员与家庭数据，该家庭下的设备也将被删除") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"delete", @"删除")];
+        [av setConfirmButtonColor:kWarnHexColor];
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
         };

@@ -81,6 +81,10 @@
     
 }
 
+- (void)setConfirmButtonColor:(NSString *)hexString {
+    [self.doneBtn setTitleColor:[UIColor colorWithHexString:hexString?:kIntelligentMainHexColor] forState:UIControlStateNormal];
+}
+
 - (void)setUpViews {
     
     self.backgroundColor = kRGBAColor(0, 0, 0, 0.7);
@@ -110,7 +114,7 @@
     name.textAlignment = NSTextAlignmentCenter;
     name.textColor = [UIColor colorWithHexString:@"#15161A"];
 //    name.font = [UIFont wcPfRegularFontOfSize:16];
-    name.font = [UIFont boldSystemFontOfSize:20];
+    name.font = [UIFont boldSystemFontOfSize:16];
     [bgView addSubview:name];
     self.nameL = name;
     [name mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -17,6 +17,8 @@
 #import "TIoTCountdownTimer.h"
 #import "UILabel+TIoTExtension.h"
 
+static CGFloat kHeightCell = 48+13;
+
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -31,7 +33,7 @@
 @property (nonatomic, strong) TIoTModifyPasswordView *contentView2;
 
 @property (nonatomic, strong) NSString *conturyCode2;
-
+@property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIButton *comfirmModifyButton;
 
 @property (nonatomic, strong) TIoTCountdownTimer *countdownTimerPhone;
@@ -48,7 +50,7 @@
 
 - (void)setUpUI {
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     self.title = NSLocalizedString(@"modify_password", @"修改密码");
     self.conturyCode = @"86";
     self.conturyCode2 = @"86";
@@ -56,16 +58,16 @@
     
     CGFloat kLeftRightPadding = 20;
     CGFloat kWidthTitle = 90;
-    CGFloat kHeightCell = 48 * kScreenAllHeightScale;
     
     self.topView = [[UIView alloc]init];
+    self.topView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.topView];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 * kScreenAllHeightScale);
         }else {
-            make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
         }
         make.height.mas_equalTo(kHeightCell);
     }];
@@ -80,7 +82,7 @@
         make.width.mas_equalTo(kWidthTitle);
     }];
     
-    [self.view addSubview:self.areaCodeBtn];
+    [self.topView addSubview:self.areaCodeBtn];
     [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(contryLabel);
         make.left.equalTo(contryLabel.mas_right);
@@ -98,7 +100,7 @@
     
     self.imgV = [UIImageView new];
     self.imgV.image = [UIImage imageNamed:@"mineArrow"];
-    [self.view addSubview:self.imgV];
+    [self.topView addSubview:self.imgV];
     [self.imgV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-kLeftRightPadding);
         make.centerY.equalTo(contryLabel);
@@ -127,19 +129,27 @@
     [self.view addSubview:self.scrollView];
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(lineView.mas_bottom);
+        make.top.equalTo(self.topView.mas_bottom);
         
-        make.height.mas_equalTo(278 * kScreenAllHeightScale);
+        make.height.mas_equalTo(256 * kScreenAllHeightScale);
     }];
     
+    self.bottomView = [[UIView alloc]init];
+    self.bottomView.backgroundColor = [UIColor whiteColor];
+    [self.scrollView addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.scrollView.mas_top);
+        make.bottom.equalTo(self.scrollView.mas_bottom);
+    }];
     
-    [self.scrollView addSubview:self.contentView];
+    [self.bottomView addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.leading.bottom.equalTo(self.scrollView);
         make.width.height.equalTo(self.scrollView);
     }];
 
-    [self.scrollView addSubview:self.contentView2];
+    [self.bottomView addSubview:self.contentView2];
     [self.contentView2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.trailing.bottom.equalTo(self.scrollView);
         make.width.height.equalTo(self.scrollView);
@@ -162,7 +172,7 @@
         make.top.equalTo(verificationCodeButton.mas_bottom).offset(60 *kScreenAllHeightScale);
         make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
         make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
-        make.height.mas_equalTo(kHeightCell);
+        make.height.mas_equalTo(kHeightCell - 13);
     }];
  
     [self responsedModifyPasswordVerifivationButton];
@@ -291,6 +301,15 @@
         self.areaCodeBtn.hidden = NO;
         self.imgV.hidden = NO;
         self.topView.hidden = NO;
+        
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            if (@available(iOS 11.0, *)) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 + kHeightCell);
+            }else {
+                make.top.equalTo(self.view.mas_top).offset(64 + 16 + kHeightCell);
+            }
+        }];
+        
     }else {
         self.modifyStyle = NO;
         [self.scrollView setContentOffset:CGPointMake(kScreenWidth, 0) animated:YES];
@@ -308,6 +327,15 @@
         self.areaCodeBtn.hidden = YES;
         self.imgV.hidden = YES;
         self.topView.hidden = YES;
+        
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            if (@available(iOS 11.0, *)) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 * kScreenAllHeightScale);
+            }else {
+                make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
+            }
+            
+        }];
     }
 }
 
