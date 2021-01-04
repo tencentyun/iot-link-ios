@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 @property (nonatomic, copy) NSString *defaultText;//输入框默认文本
 
 - (void)alertWithTitle:(NSString *)title message:(NSString *)message cancleTitlt:(NSString *)cancleTitlt doneTitle:(NSString *)doneTitle;
-
+- (void)setConfirmButtonColor:(NSString *)hexString;
 - (void)showInView:(UIView *)superView;
 - (void)setAlertViewContentAlignment:(TextAlignmentStyle)TextAlignmentStyle;
 - (void)showSingleConfrimButton;
