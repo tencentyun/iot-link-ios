@@ -68,7 +68,7 @@
     }];
     
     UIView *line1 = [[UIView alloc]init];
-    line1.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line1.backgroundColor = kLineColor;
     [self.contentView addSubview:line1];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.phoneOrEmailLabel.mas_leading);
@@ -104,7 +104,7 @@
     }];
     
     UIView *line2 = [[UIView alloc]init];
-    line2.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line2.backgroundColor = kLineColor;
     [self.contentView addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(verificationlabel.mas_leading);
@@ -140,7 +140,7 @@
     }];
     
     UIView *line3 = [[UIView alloc]init];
-    line3.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line3.backgroundColor = kLineColor;
     [self.contentView addSubview:line3];
     [line3 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
@@ -170,7 +170,7 @@
     }];
     
     UIView *line4 = [[UIView alloc]init];
-    line4.backgroundColor = [UIColor colorWithHexString:@"#dddddd"];
+    line4.backgroundColor = kLineColor;
     [self.contentView addSubview:line4];
     [line4 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.contentView.mas_leading).offset(kSpace*kScreenAllHeightScale);
@@ -178,6 +178,16 @@
         make.height.mas_equalTo(1);
         make.top.equalTo(self.passwordConfirmTF.mas_bottom);
     }];
+    
+    UIView *bottomView = [[UIView alloc]init];
+    bottomView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.contentView);
+        make.bottom.equalTo(line4.mas_top);
+    }];
+    [self.contentView sendSubviewToBack:bottomView];
+    
     
     [self.contentView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -188,6 +198,11 @@
     }];
     
     if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
+        
+        [bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(line2.mas_top);
+        }];
+        
         self.passwordTF.hidden = YES;
         self.passwordConfirmTF.hidden = YES;
         confirmPasswordLabel.hidden = YES;
@@ -196,6 +211,11 @@
             make.top.equalTo(line2.mas_bottom).offset(60 * kScreenAllHeightScale);
         }];
     }else {
+        
+        [bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(line4.mas_top);
+        }];
+        
         self.passwordTF.hidden = NO;
         self.passwordConfirmTF.hidden = NO;
         confirmPasswordLabel.hidden = NO;
@@ -230,7 +250,7 @@
 - (UIView *)contentView {
     if (!_contentView) {
         _contentView = [[UIView alloc]init];
-        _contentView.backgroundColor = [UIColor whiteColor];
+        _contentView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         
     }
     return _contentView;

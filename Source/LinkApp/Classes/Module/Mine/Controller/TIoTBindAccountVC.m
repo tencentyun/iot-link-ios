@@ -31,7 +31,7 @@
 }
 
 - (void)setUpUI{
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     if (self.accountType == AccountType_Phone) {
         self.title = NSLocalizedString(@"bind_phonenumber", @"绑定手机");
     }else if (self.accountType == AccountType_Email) {
@@ -42,16 +42,17 @@
     
     CGFloat kLeftRightPadding = 20;
     CGFloat kWidthTitle = 90;
-    CGFloat kHeightCell = 48 * kScreenAllHeightScale;
+    CGFloat kHeightCell = 48;
     
     UIView *topView = [[UIView alloc]init];
+    topView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:topView];
     [topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         if (@available(iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 * kScreenAllHeightScale);
         }else {
-            make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale);
+            make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
         }
         make.height.mas_equalTo(kHeightCell);
     }];
@@ -126,9 +127,9 @@
         topView.hidden = YES;
         [self.bindAccountView mas_updateConstraints:^(MASConstraintMaker *make) {
             if (@available(iOS 11.0, *)) {
-                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(48 * kScreenAllHeightScale - kLeftRightPadding);
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(16 * kScreenAllHeightScale);
             }else {
-                make.top.equalTo(self.view.mas_top).offset(64 + 48 * kScreenAllHeightScale - kLeftRightPadding);
+                make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
             }
 
         }];

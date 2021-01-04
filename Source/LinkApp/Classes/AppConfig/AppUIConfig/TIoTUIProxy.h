@@ -49,7 +49,7 @@
 #define kWarnColor kRGBColor(229, 69, 69)
 #define kWarnColorDisable kRGBAColor(229, 69, 69, 0.2)
 //线颜色
-#define kLineColor kRGBColor(231, 232, 235)
+#define kLineColor kRGBColor(242, 244, 245)
 //字体颜色
 #define kFontColor kRGBColor(51, 51, 51)
 //背景颜色
