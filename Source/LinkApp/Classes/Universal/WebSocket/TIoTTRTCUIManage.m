@@ -69,9 +69,15 @@
             [self leaveRoomWith:deviceParam];
         }
         
-        if (deviceParam._sys_audio_call_status.intValue == 2) {
+        if (deviceParam._sys_audio_call_status.intValue == 2 || deviceParam._sys_video_call_status.intValue == 2) {
             [self leaveRoomWith:deviceParam];
         }
+        
+        //case 1
+        if ([_deviceParam._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+            [self leaveRoomWith:deviceParam];
+        }
+        
     }else {
         [self leaveRoomWith:deviceParam];
     }
@@ -120,7 +126,7 @@
                         self->tempModel = deviceParam;
                         [self->_callVideoVC hangupTapped];
                         self->_isActiveCall = NO;
-                        _isActiveStatus = self->_isActiveCall;
+                        self->_isActiveStatus = self->_isActiveCall;
                     });
                     return;
                 }

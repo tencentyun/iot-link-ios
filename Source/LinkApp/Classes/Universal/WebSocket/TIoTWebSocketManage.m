@@ -172,7 +172,7 @@ static NSString *heartBeatReqID = @"5002";
     
     //检测是否TRTC设备，是否在呼叫中
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
-    
+    NSLog(@"-------%@",payloadDic);
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     model.params.deviceName = deviceInfo[@"DeviceId"];
     if (model.params._sys_userid.length < 1) {
@@ -253,9 +253,12 @@ static NSString *heartBeatReqID = @"5002";
     if ([model.method isEqualToString:@"control"]) {
         if ([TIoTTRTCUIManage sharedManager].isActiveStatus == NO) {
             if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
+                if (![model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                        [MBProgressHUD showError:reason];
+                    }];
+                }     
+                
             }
         }
     }
