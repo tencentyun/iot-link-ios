@@ -57,6 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Title;              //登录页面 手机/邮箱 区域显示title
 //@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Text;            //登录页面 手机/邮箱
 
+/**
+ TRTC 通话
+ */
+@property (nonatomic, copy, nullable) NSString *sys_call_status;
+
 //保存accessToken 和 有效期
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt;
 

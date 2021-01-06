@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isActiveStatus; //YES主动  NO 被动
 @property (nonatomic, readonly) BOOL isEnterError; //yes 正常进入房间，no  15s内没进入
+
 //面板中主动呼叫设备 0 audio； 1video
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;
 
