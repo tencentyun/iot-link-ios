@@ -82,7 +82,6 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
         [self configRoom:model];
         [self enterRoom];
         
-        self->_state = TIoTTRTCSessionType_calling;
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
         failure(reason,error,dic);
     }];
@@ -107,6 +106,9 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
     [[TRTCCalling shareInstance] groupCall:@[_trtcModel.UserId] type:_calltype groupID:nil];
 }
 
+- (void)resetSessionType {
+    _state = TIoTTRTCSessionType_free;
+}
 
 #pragma mark -
 
@@ -119,8 +121,8 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
    
 /// 离开通话回调 | user leave room callback
 -(void)onUserLeave:(NSString *)uid {
+    _state = TIoTTRTCSessionType_free;
     if ([self.uidelegate respondsToSelector:@selector(exitRoom:)]) {
-        _state = TIoTTRTCSessionType_free;
         [self.uidelegate exitRoom:uid];
     }
 }

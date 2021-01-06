@@ -49,6 +49,7 @@ typedef enum : NSUInteger {
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure;
 - (void)configRoom:(TIOTTRTCModel *)model ;
 - (void)enterRoom;
+- (void)resetSessionType;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -172,18 +172,29 @@ static NSString *heartBeatReqID = @"5002";
     
     //检测是否TRTC设备，是否在呼叫中
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
-    
+    NSLog(@"----111---%@",payloadDic);
+    NSLog(@"----222---%@",[TIoTCoreUserManage shared].userId);
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     model.params.deviceName = deviceInfo[@"DeviceId"];
     if (model.params._sys_userid.length < 1) {
         model.params._sys_userid = deviceInfo[@"DeviceId"];
     }
 
+    
+    if ([payloadDic.allKeys containsObject:@"params"]) {
+        NSDictionary *paramsDic = payloadDic[@"params"];
+        if (paramsDic[@"_sys_audio_call_status"]) {
+            [TIoTCoreUserManage shared].sys_call_status = model.params._sys_audio_call_status;
+        }else if (paramsDic[@"_sys_video_call_status"]) {
+            [TIoTCoreUserManage shared].sys_call_status = model.params._sys_video_call_status;
+        }
+    }
+    
     if ([model.method isEqualToString:@"report"]) {
         if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
             
             
-            if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES) {
+            if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES && (![NSString stringWithString:[TIoTTRTCUIManage sharedManager].deviceID] && [[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName])) {
                 //用户1和用户2（不同账号）同时呼叫设备,deviceA 接听，则会上报对应callstatus属性为1 和 先接收到的比方说是用户1的userid，对应的用户1会调用App::IotRTC::CallDevice加入房间，另一个用户2收到的上报消息查看userid不是自己，则提示对方正忙…，并退出
                 if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
                     //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
@@ -238,9 +249,22 @@ static NSString *heartBeatReqID = @"5002";
 
                 model.params._sys_userid = userIdString?:@"";
                 if ([TIoTTRTCUIManage sharedManager].isEnterError == NO) {
-                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        [MBProgressHUD showError:reason];
-                    }];
+                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                        
+                        if ([[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName]) {
+                            [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                                [MBProgressHUD showError:reason];
+                            }];
+                        }
+                        
+                    }else if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
+                           //防止case 3 中另一个设备 呼叫正在调起通话页面的APP
+                            [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                                [MBProgressHUD showError:reason];
+                            }];
+                        
+                    }
+                    
                 }
 
             }
@@ -250,16 +274,8 @@ static NSString *heartBeatReqID = @"5002";
         
     }
     
-    if ([model.method isEqualToString:@"control"]) {
-        if ([TIoTTRTCUIManage sharedManager].isActiveStatus == NO) {
-            if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
-            }
-        }
-    }
     
+    //异常
     if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
         
         NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
