@@ -42,6 +42,8 @@
 @synthesize familyId = _familyId;
 @synthesize currentRoomId = _currentRoomId;
 
+@synthesize sys_call_status = _sys_call_status;
+
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
@@ -235,6 +237,22 @@
         return _currentRoomId;
     }
     return @"0";
+}
+
+- (void)setSys_call_status:(NSString *)sys_call_status {
+    _sys_call_status = sys_call_status;
+    [[NSUserDefaults standardUserDefaults] setValue:sys_call_status forKey:@"_sys_call_status"];
+}
+
+- (NSString *)sys_call_status {
+    if (!_sys_call_status) {
+        _sys_call_status = [[NSUserDefaults standardUserDefaults] valueForKey:@"_sys_call_status"];
+    }
+    if ([NSString isNullOrNilWithObject:_sys_call_status]) {
+        _sys_call_status = @"-1";
+    }
+    return _sys_call_status;
+    
 }
 
 - (void)setCurrentRoomId:(NSString *)currentRoomId {
