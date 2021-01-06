@@ -172,13 +172,42 @@ static NSString *heartBeatReqID = @"5002";
     
     //检测是否TRTC设备，是否在呼叫中
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
-    
+    NSLog(@"----111---%@",payloadDic);
+    NSLog(@"----222---%@",[TIoTCoreUserManage shared].userId);
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     model.params.deviceName = deviceInfo[@"DeviceId"];
     if (model.params._sys_userid.length < 1) {
         model.params._sys_userid = deviceInfo[@"DeviceId"];
     }
 
+    NSInteger _sys_audio_call_status = -1;
+    NSInteger _sys_video_call_status = -1;
+    
+    if (![NSString isNullOrNilWithObject:model.params._sys_audio_call_status]) {
+        _sys_audio_call_status = model.params._sys_audio_call_status.intValue;
+    }
+    
+    if (![NSString isNullOrNilWithObject:model.params._sys_video_call_status]) {
+        _sys_video_call_status = model.params._sys_video_call_status.intValue;
+        
+    }
+    
+//    [TIoTTRTCUIManage sharedManager].audio_call_status = _sys_audio_call_status;
+//    [TIoTTRTCUIManage sharedManager].video_call_status = _sys_audio_call_status;
+    
+    if ([model.method isEqualToString:@"control"]) {
+        if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES) {
+            if (_sys_audio_call_status != 0 || _sys_video_call_status != 0 ) {
+                if (![model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+//                   //判断主动呼叫，获取userID不是自己的就提示忙
+//                    [MBProgressHUD showMessage:NSLocalizedString(@"other_part_busy", @"对方正忙...") icon:nil];
+                }
+            }
+        }
+    }
+    
+    
+    
     if ([model.method isEqualToString:@"report"]) {
         if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
             
@@ -238,9 +267,16 @@ static NSString *heartBeatReqID = @"5002";
 
                 model.params._sys_userid = userIdString?:@"";
                 if ([TIoTTRTCUIManage sharedManager].isEnterError == NO) {
-                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        [MBProgressHUD showError:reason];
-                    }];
+                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                        [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                            [MBProgressHUD showError:reason];
+                        }];
+                    }else if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
+                        [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                            [MBProgressHUD showError:reason];
+                        }];
+                    }
+                    
                 }
 
             }
@@ -250,16 +286,24 @@ static NSString *heartBeatReqID = @"5002";
         
     }
     
+    /*
+    // case 1 主叫
     if ([model.method isEqualToString:@"control"]) {
         if ([TIoTTRTCUIManage sharedManager].isActiveStatus == NO) {
             if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
+                if (![model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                        [MBProgressHUD showError:reason];
+                    }];
+                }
             }
         }
     }
+ 
+    */
     
+    
+    //异常
     if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
         
         NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
