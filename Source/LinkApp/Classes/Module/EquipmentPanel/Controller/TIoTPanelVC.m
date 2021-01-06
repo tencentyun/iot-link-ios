@@ -80,6 +80,7 @@ static NSString *itemId3 = @"i_ooo454";
 @property (nonatomic, strong) TIoTAlertView *tipAlertView;
 @property (nonatomic, strong) UIView *backMaskView;
 @property (nonatomic, strong) NSDictionary *reportData;
+@property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
 @end
 
 @implementation TIoTPanelVC
@@ -538,7 +539,14 @@ static NSString *itemId3 = @"i_ooo454";
         }
     }
     if (isTRTCDevice) {
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+        if ((![self.reportModel.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) && ((self.reportModel.params._sys_audio_call_status && self.reportModel.params._sys_audio_call_status.intValue != 0) || (self.reportModel.params._sys_video_call_status && self.reportModel.params._sys_video_call_status.intValue != 0))) {
+            
+                [MBProgressHUD showMessage:NSLocalizedString(@"other_part_busy", @"对方正忙...") icon:nil];
+            
+        }else {
+            [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+        }
+        
     }
 }
 
@@ -549,6 +557,13 @@ static NSString *itemId3 = @"i_ooo454";
     
     [self reloadForBig];
     [self.coll reloadData];
+    
+    
+    NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
+    NSLog(@"----111---%@",payloadDic);
+    NSLog(@"----222---%@",[TIoTCoreUserManage shared].userId);
+    self.reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+    
 }
 
 
