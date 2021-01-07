@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf5b5c55_3420c69d",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTWiredDistributionNetVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-01-07T03:00:56Z",
+      "side": 1,
+      "message": "功能需放在sdk中，事例可以放在sdkdemo中",
+      "revId": "48f93113e8e6296a164dd024b0df7b46eccdd38d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
