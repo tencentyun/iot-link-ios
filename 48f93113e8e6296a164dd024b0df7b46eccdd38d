@@ -16,6 +16,24 @@
       "revId": "48f93113e8e6296a164dd024b0df7b46eccdd38d",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b26a3c5_0b537469",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTWiredDistributionNetVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-01-07T03:01:47Z",
+      "side": 1,
+      "message": "广播地址需修改为组播地址",
+      "parentUuid": "bf5b5c55_3420c69d",
+      "revId": "48f93113e8e6296a164dd024b0df7b46eccdd38d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
