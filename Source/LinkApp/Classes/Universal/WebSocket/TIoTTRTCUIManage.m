@@ -60,6 +60,15 @@
     
 //    _deviceParam = deviceParam;
     
+    //case 7 判断 其他设备呼叫主动通话的APP
+    if (![NSString isNullOrNilWithObject:_deviceID] && ![_deviceID isEqualToString:deviceParam.deviceName]) {
+        _isActiveCall = NO;//表示被呼叫
+        _isActiveStatus = _isActiveCall;
+    }else {
+        _isActiveCall = YES;
+        _isActiveStatus = _isActiveCall;
+    }
+    
     //1.先启动UI，再根据UI选择决定是否走calldevice逻辑
     [self isActiveCalling:deviceParam.deviceName];
 }
@@ -117,7 +126,7 @@
 
         }else {
             if (deviceParam._sys_audio_call_status.intValue == 2) {
-                if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free)  {
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling)  {
                     [_callAudioVC otherAnswered];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
@@ -163,7 +172,7 @@
             
         }else {
             if (deviceParam._sys_video_call_status.intValue == 2) {
-                if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free) {
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
                     [_callVideoVC otherAnswered];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
@@ -214,32 +223,32 @@
         [self cancelTimer];
         
          //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
-//        self->_isEnterError = YES;
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            if (self->_isEnterError == YES) {
-//                UIViewController *topVC = [TIoTCoreUtil topViewController];
-//                if (self->_callAudioVC == topVC) {
-//                    [self->_callAudioVC beHungUp];
-//                }else {
-//                    [self->_callVideoVC beHungUp];
-//                }
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                    [self exitRoom:self->_deviceParam._sys_userid];
-//                });
-//            }
-//        });
+        self->_isEnterError = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self->_isEnterError == YES) {
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if (self->_callAudioVC == topVC) {
+                    [self->_callAudioVC beHungUp];
+                }else {
+                    [self->_callVideoVC beHungUp];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self exitRoom:self->_deviceParam._sys_userid];
+                });
+            }
+        });
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//        UIViewController *topVC = [TIoTCoreUtil topViewController];
-//        if (self->_callAudioVC == topVC) {
-//            [self->_callAudioVC hungUp];
-//        }else {
-//            [self->_callVideoVC hungUp];
-//        }
-//
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self exitRoom:self->_deviceParam._sys_userid];
-//        });
+        UIViewController *topVC = [TIoTCoreUtil topViewController];
+        if (self->_callAudioVC == topVC) {
+            [self->_callAudioVC hungUp];
+        }else {
+            [self->_callVideoVC hungUp];
+        }
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self exitRoom:self->_deviceParam._sys_userid];
+        });
     }];
 }
 

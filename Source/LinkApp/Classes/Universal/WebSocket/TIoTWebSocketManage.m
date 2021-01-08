@@ -194,7 +194,7 @@ static NSString *heartBeatReqID = @"5002";
         if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
             
             
-            if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES && (![NSString stringWithString:[TIoTTRTCUIManage sharedManager].deviceID] && [[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName])) {
+            if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES && (![NSString isNullOrNilWithObject:[TIoTTRTCUIManage sharedManager].deviceID] && [[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName])) {
                 //用户1和用户2（不同账号）同时呼叫设备,deviceA 接听，则会上报对应callstatus属性为1 和 先接收到的比方说是用户1的userid，对应的用户1会调用App::IotRTC::CallDevice加入房间，另一个用户2收到的上报消息查看userid不是自己，则提示对方正忙…，并退出
                 if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
                     //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
@@ -235,12 +235,9 @@ static NSString *heartBeatReqID = @"5002";
             for (NSString *userIdString in userIdArray) {
 
                 model.params._sys_userid = userIdString?:@"";
-                if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        [MBProgressHUD showError:reason];
-                    }];
-                }
-
+                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                    [MBProgressHUD showError:reason];
+                }];
             }
             
         }else if (model.params._sys_audio_call_status.intValue == 0 || model.params._sys_video_call_status.intValue == 0) {
