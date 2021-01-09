@@ -86,7 +86,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(24);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(20);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(10);
     }];
     
     
@@ -101,7 +101,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(60 * kScreenAllHeightScale);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(40);
     }];
