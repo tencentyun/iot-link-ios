@@ -230,8 +230,10 @@ static NSString *itemId2 = @"pfDDD";
             
             if ([self.familyInfo[@"Role"] integerValue] == 1) {
                 
-                [deleteBtn singleCustomButtonStyle:SingleCustomButtonCenale withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
-                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
+                [deleteBtn singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
+//                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
+                [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
+                
                 if (self.familyCount <= 1) {
                     [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
                 }

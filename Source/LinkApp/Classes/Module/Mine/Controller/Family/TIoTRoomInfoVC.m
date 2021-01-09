@@ -55,6 +55,8 @@ static NSString *cellId = @"rc62368";
             [weakSelf toDeleteRoom];
         };
         
+        [deleteRoomAlert setConfirmButtonColor:kWarnHexColor];
+        
         self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
         [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
         [deleteRoomAlert showInView:self.backMaskView];

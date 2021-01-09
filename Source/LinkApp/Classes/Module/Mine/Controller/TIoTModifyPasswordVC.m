@@ -17,7 +17,7 @@
 #import "TIoTCountdownTimer.h"
 #import "UILabel+TIoTExtension.h"
 
-static CGFloat kHeightCell = 48+13;
+static CGFloat kHeightCell = 48+10;
 
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
@@ -172,7 +172,7 @@ static CGFloat kHeightCell = 48+13;
         make.top.equalTo(verificationCodeButton.mas_bottom).offset(60 *kScreenAllHeightScale);
         make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
         make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
-        make.height.mas_equalTo(kHeightCell - 13);
+        make.height.mas_equalTo(40);
     }];
  
     [self responsedModifyPasswordVerifivationButton];
