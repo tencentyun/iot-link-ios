@@ -190,6 +190,12 @@ static NSString *heartBeatReqID = @"5002";
         }
     }
     
+    if ([model.method isEqualToString:@"control"]) {
+        if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
+            
+        }
+    }
+    
     if ([model.method isEqualToString:@"report"]) {
         if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
             
