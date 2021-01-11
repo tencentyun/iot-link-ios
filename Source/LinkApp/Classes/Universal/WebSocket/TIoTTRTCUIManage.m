@@ -518,9 +518,13 @@
 }
 
 - (void)exitRoom:(NSString *)remoteUserID {
-
+    
+    _isEnterError = NO;
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
+    preCallingType = TIoTTRTCSessionCallType_audio;
+    deviceIDTempStr = @"";
+    tempModel = nil;
     [[TIoTTRTCSessionManager sharedManager] resetSessionType];
     [_callAudioVC remoteDismiss];
     [_callVideoVC remoteDismiss];
