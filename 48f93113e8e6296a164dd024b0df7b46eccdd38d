@@ -34,6 +34,24 @@
       "revId": "48f93113e8e6296a164dd024b0df7b46eccdd38d",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f49f6e_984658e3",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTWiredDistributionNetVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-01-12T07:07:42Z",
+      "side": 1,
+      "message": "1、有关功能的均已放入SDK中，数据解析、有关流程中判断等均方式Demo中。\n2、组播地址默认填写，",
+      "parentUuid": "5b26a3c5_0b537469",
+      "revId": "48f93113e8e6296a164dd024b0df7b46eccdd38d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
