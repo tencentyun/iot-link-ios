@@ -541,6 +541,9 @@ static CGFloat weatherHeight = 10;
 }
 
 - (void)getSharedDevicesList {
+    
+    [HXYNotice postAPPEnterForeground];
+    
     [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
         
         [self.shareDataArr removeAllObjects];
