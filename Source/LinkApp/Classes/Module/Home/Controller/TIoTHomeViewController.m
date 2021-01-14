@@ -68,6 +68,7 @@ static CGFloat weatherHeight = 10;
 @property (nonatomic, strong) NSMutableArray *dataArr;
 @property (nonatomic, copy) NSArray *deviceIds;
 
+@property (nonatomic, strong) NSMutableArray *shareDataArr;
 @property (nonatomic) dispatch_semaphore_t sem;
 
 @end
@@ -126,6 +127,8 @@ static CGFloat weatherHeight = 10;
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+    
+    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -452,6 +455,9 @@ static CGFloat weatherHeight = 10;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+    
+    //获取分享设备列表
+    [self getSharedDevicesList];
 }
 
 - (void)loadNewData{
@@ -532,6 +538,63 @@ static CGFloat weatherHeight = 10;
             
         }];
     }
+}
+
+- (void)getSharedDevicesList {
+    [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
+        
+        [self.shareDataArr removeAllObjects];
+        [self.shareDataArr addObjectsFromArray:responseObject[@"ShareDevices"]];
+        
+        [self updateShredDeviceStatus];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+//获取设备状态
+- (void)updateShredDeviceStatus{
+    NSArray *arr = [self.shareDataArr valueForKey:@"DeviceId"];
+    
+    if (arr.count > 0) {
+        NSDictionary *dic = @{@"ProductId":self.shareDataArr[0][@"ProductId"],@"DeviceIds":arr};
+        
+        [[TIoTRequestObject shared] post:AppGetDeviceStatuses Param:dic success:^(id responseObject) {
+            NSArray *statusArr = responseObject[@"DeviceStatuses"];
+            
+            NSMutableArray *tmpArr = [NSMutableArray array];
+            for (NSDictionary *tmpDic in self.shareDataArr) {
+                
+                NSString *deviceId = tmpDic[@"DeviceId"];
+                for (NSDictionary *statusDic in statusArr) {
+                    if ([deviceId isEqualToString:statusDic[@"DeviceId"]]) {
+                        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                        [dic addEntriesFromDictionary:tmpDic];
+                        [dic setValue:statusDic[@"Online"] forKey:@"Online"];
+                        [tmpArr addObject:dic];
+                    }
+                }
+                
+                
+            }
+            
+            [self.shareDataArr removeAllObjects];
+            [self.shareDataArr addObjectsFromArray:tmpArr];
+            
+            [self onceFrushTRTCShareDevice];
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
+    }
+}
+
+- (void)onceFrushTRTCShareDevice {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        //轮训设备状态，查看trtc设备是否要呼叫我
+        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+    });
 }
 
 - (void)onceFrushTRTCDevice {
@@ -953,6 +1016,13 @@ static CGFloat weatherHeight = 10;
     return _dataArr;
 }
 
+- (NSMutableArray *)shareDataArr
+{
+    if (!_shareDataArr) {
+        _shareDataArr = [NSMutableArray array];
+    }
+    return _shareDataArr;
+}
 
 - (NSMutableDictionary *)allRoomDeviceInfo
 {
