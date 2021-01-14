@@ -21,9 +21,7 @@ jobs:
         VERSION=${temptag#*v}
         echo $VERSION
         export LIB_VERSION=$VERSION
-        
-        sed -i "" "s/NSString *const TIoTLinkKitShortVersionString.*/NSString *const TIoTLinkKitShortVersionString = @"$VERSION";/g" Source/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m
-        
+                
         pod lib lint --verbose --allow-warnings --use-libraries
         pod trunk push --verbose --allow-warnings --use-libraries
       env:
