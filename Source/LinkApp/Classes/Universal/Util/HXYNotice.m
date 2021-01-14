@@ -25,6 +25,7 @@ static NSString * const changeAddDeviceType  = @"changeAddDeviceType";
 static NSString * const loginInTicketToken   = @"loginInTicketToken";
 static NSString * const appEnterBackground   = @"appEnterBackground";
 static NSString * const appEnterForeground   = @"appEnterForeground";
+static NSString * const receiveShareDevice   = @"receiveShareDevice";
 
 @implementation HXYNotice
 
@@ -207,6 +208,15 @@ static NSString * const appEnterForeground   = @"appEnterForeground";
 
 + (void)postAPPEnterForeground {
     [[NSNotificationCenter defaultCenter] postNotificationName:appEnterForeground object:nil];
+}
+
+//接收分享设备
++ (void)addReceiveShareDeviceLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:receiveShareDevice object:nil];
+}
+
++ (void)postReceiveShareDevice {
+    [[NSNotificationCenter defaultCenter] postNotificationName:receiveShareDevice object:nil];
 }
 
 @end

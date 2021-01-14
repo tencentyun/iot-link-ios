@@ -110,6 +110,9 @@ static CGFloat weatherHeight = 10;
     [self getFamilyList];
     
     [self registFeedBackRouterController];
+    
+    //获取分享设备列表
+    [self getSharedDevicesList];
 }
 
 #pragma mark - Other
@@ -122,13 +125,13 @@ static CGFloat weatherHeight = 10;
 
     //进入前台需要轮训下trtc状态，防止漏接现象
     [HXYNotice addAPPEnterForegroundLister:self reaction:@selector(appEnterForeground)];
+    
+    [HXYNotice addReceiveShareDeviceLister:self reaction:@selector(getSharedDevicesList)];
 }
 
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
-    
-    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -456,8 +459,6 @@ static CGFloat weatherHeight = 10;
         
     }];
     
-    //获取分享设备列表
-    [self getSharedDevicesList];
 }
 
 - (void)loadNewData{
@@ -542,7 +543,6 @@ static CGFloat weatherHeight = 10;
 
 - (void)getSharedDevicesList {
     
-    [HXYNotice postAPPEnterForeground];
     
     [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
         
@@ -586,6 +586,7 @@ static CGFloat weatherHeight = 10;
             [self.shareDataArr addObjectsFromArray:tmpArr];
             
             [self onceFrushTRTCShareDevice];
+            
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];
@@ -593,11 +594,8 @@ static CGFloat weatherHeight = 10;
 }
 
 - (void)onceFrushTRTCShareDevice {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
         [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
-    });
 }
 
 - (void)onceFrushTRTCDevice {

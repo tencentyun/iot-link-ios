@@ -60,6 +60,10 @@
         NSDictionary *param = @{@"ShareDeviceToken":self.msgData[@"Attachments"][@"ShareToken"],@"ProductId":self.msgData[@"ProductId"],@"DeviceName":self.msgData[@"DeviceName"]};
         [[TIoTRequestObject shared] post:AppBindUserShareDevice Param:param success:^(id responseObject) {
             [MBProgressHUD showSuccess:NSLocalizedString(@"bind_success", @"绑定成功")];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [HXYNotice postReceiveShareDevice];
+            });
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];

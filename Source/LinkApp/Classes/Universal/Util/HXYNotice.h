@@ -89,4 +89,8 @@
 + (void)addAPPEnterForegroundLister:(id)listener reaction:(SEL)selector;
 + (void)postAPPEnterForeground;
 
+//接收分享设备
++ (void)addReceiveShareDeviceLister:(id)listener reaction:(SEL)selector;
++ (void)postReceiveShareDevice;
+
 @end
