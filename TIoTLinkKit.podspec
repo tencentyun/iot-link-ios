@@ -34,10 +34,10 @@ Pod::Spec.new do |s|
     }
   end
 
-  #智能视频服务，引入则开启
-  s.subspec 'LinkVideo' do |ss|
-    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c}'
-    ss.dependency 'TIoTLinkKit/LinkSDK'
-  end
+  #智能视频服务，引入则开启 TODO
+#  s.subspec 'LinkVideo' do |ss|
+#    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c}'
+#    ss.dependency 'TIoTLinkKit/LinkSDK'
+#  end
 
 end
