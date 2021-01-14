@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TIoTMainVC">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JbQ-yo-0T0">
+                    <rect key="frame" x="157" y="433" width="100" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="btD-dH-pvD"/>
+                    </constraints>
+                    <state key="normal" title="VIDEO"/>
+                    <connections>
+                        <action selector="jumpVideo:" destination="-1" eventType="touchUpInside" id="szE-me-fGV"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S68-cD-7Np">
+                    <rect key="frame" x="157" y="233" width="100" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="Cif-pw-JW3"/>
+                        <constraint firstAttribute="height" constant="50" id="cLt-IW-HKh"/>
+                    </constraints>
+                    <state key="normal" title="LINKSDK"/>
+                    <connections>
+                        <action selector="jumpLinkSDK:" destination="-1" eventType="touchUpInside" id="s2R-cV-s21"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wvo-0t-jv4">
+                    <rect key="frame" x="157" y="613" width="100" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="6Tw-Ur-5hY"/>
+                        <constraint firstAttribute="width" constant="100" id="jAy-pL-kq0"/>
+                    </constraints>
+                    <state key="normal" title="RTC"/>
+                    <connections>
+                        <action selector="jumpRTC:" destination="-1" eventType="touchUpInside" id="fOr-Os-71m"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="JbQ-yo-0T0" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="DbT-e1-Y0W"/>
+                <constraint firstItem="JbQ-yo-0T0" firstAttribute="top" secondItem="S68-cD-7Np" secondAttribute="bottom" constant="150" id="E0i-8C-xm2"/>
+                <constraint firstItem="S68-cD-7Np" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="FhD-Ca-fFq"/>
+                <constraint firstItem="Wvo-0t-jv4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="MxP-jA-PkZ"/>
+                <constraint firstItem="Wvo-0t-jv4" firstAttribute="top" secondItem="JbQ-yo-0T0" secondAttribute="bottom" constant="150" id="cMQ-4x-EW6"/>
+                <constraint firstItem="JbQ-yo-0T0" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="sxx-sD-uCd"/>
+            </constraints>
+            <point key="canvasLocation" x="-123" y="80"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

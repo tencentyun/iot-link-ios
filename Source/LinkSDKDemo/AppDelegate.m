@@ -36,7 +36,7 @@
     [FIRApp configure];
     
     if (![TIoTCoreUserManage shared].isValidToken) {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"TIoTMainVC") new]];
     }
     
     return YES;
