@@ -60,13 +60,20 @@
     
 //    _deviceParam = deviceParam;
     
-    //case 7 判断 其他设备呼叫主动通话的APP
-    if (![NSString isNullOrNilWithObject:_deviceID] && ![_deviceID isEqualToString:deviceParam.deviceName]) {
+    
+    if ([NSString isNullOrNilWithObject:_deviceID]) {
+        //单设备被呼叫
         _isActiveCall = NO;//表示被呼叫
         _isActiveStatus = _isActiveCall;
     }else {
-        _isActiveCall = YES;
-        _isActiveStatus = _isActiveCall;
+        if (![NSString isNullOrNilWithObject:_deviceID] && ![_deviceID isEqualToString:deviceParam.deviceName]) {
+            _isActiveCall = NO;//表示被呼叫
+            _isActiveStatus = _isActiveCall;
+        }else {
+            _isActiveCall = YES;
+            _isActiveStatus = _isActiveCall;
+        }
+            
     }
     
     //1.先启动UI，再根据UI选择决定是否走calldevice逻辑
