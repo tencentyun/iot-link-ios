@@ -226,7 +226,10 @@
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
     WCLog(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
-    [self connectFaildWith:@"发送成功"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self connectFaildWith:@"发送成功"];
+    });
+    
 }
 
 - (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
