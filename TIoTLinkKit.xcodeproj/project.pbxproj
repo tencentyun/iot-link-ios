@@ -292,6 +292,8 @@
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4027792257775D70004E20F /* TIoTNetConfigViewController.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
+		F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */; };
+		F44D67A025B6D96D001B413C /* TIoTPlayMovieVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */; };
 		F47D60E7254FF4EF009BC66E /* TIoTWebVC+BLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */; };
 		F4833EBC24DD2E100033FAB2 /* TIoTDebugtools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */; };
 		F4833EBE24DD302F0033FAB2 /* TIoTLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */; };
@@ -953,6 +955,9 @@
 		F4027791257775D70004E20F /* TIoTNetConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNetConfigViewController.h; sourceTree = "<group>"; };
 		F4027792257775D70004E20F /* TIoTNetConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNetConfigViewController.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F44D679C25B6D96D001B413C /* TIoTPlayMovieVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTPlayMovieVC.h; sourceTree = "<group>"; };
+		F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPlayMovieVC.m; sourceTree = "<group>"; };
+		F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTPlayMovieVC.xib; sourceTree = "<group>"; };
 		F47D60E6254FF4EF009BC66E /* TIoTWebVC+BLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TIoTWebVC+BLE.swift"; sourceTree = "<group>"; };
 		F4833EBB24DD2E100033FAB2 /* TIoTDebugtools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDebugtools.swift; sourceTree = "<group>"; };
 		F4833EBD24DD302F0033FAB2 /* TIoTLaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLaunchManager.swift; sourceTree = "<group>"; };
@@ -2351,6 +2356,9 @@
 				6DDC6E9B25AFFD0D00CF75F4 /* TIoTPlayListVC.h */,
 				6DDC6E9C25AFFD0D00CF75F4 /* TIoTPlayListVC.m */,
 				6DDC6E9825AFFD0C00CF75F4 /* TIoTPlayListVC.xib */,
+				F44D679C25B6D96D001B413C /* TIoTPlayMovieVC.h */,
+				F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */,
+				F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */,
 				F4F3D78724938EBD005D3396 /* UsersOfDeviceVC.h */,
 				F4F3D77A24938EBD005D3396 /* UsersOfDeviceVC.m */,
 				F4F3D78124938EBD005D3396 /* TIoTCoreRepeatVC.h */,
@@ -2558,6 +2566,7 @@
 				F4F3D7B824938EBE005D3396 /* TIoTCoreMemberInfoVC.xib in Resources */,
 				6DCC3D4B251BB878004FC023 /* TIoTCoreAddRoomVC.xib in Resources */,
 				F4F325EB25919A1200A4CAAB /* TRTCCalling.xcassets in Resources */,
+				F44D67A025B6D96D001B413C /* TIoTPlayMovieVC.xib in Resources */,
 				F4F3D7BD24938EBE005D3396 /* TIoTCoreRoomsVC.xib in Resources */,
 				6DDC6E9625AFFBDF00CF75F4 /* TIoTVideoVC.xib in Resources */,
 				F4F3D7B524938EBE005D3396 /* TIoTCoreFamilyInfoVC.xib in Resources */,
@@ -2984,6 +2993,7 @@
 				F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */,
 				F4F3D7CD24938EBE005D3396 /* ChangeWifiVC.m in Sources */,
 				F4F325E325919A1200A4CAAB /* AppUtils.swift in Sources */,
+				F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */,
 				F4F3D7CA24938EBE005D3396 /* WifiInfoVC.m in Sources */,
 				F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */,
 				F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */,

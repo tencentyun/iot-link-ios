@@ -8,6 +8,7 @@
 
 #import "TIoTPlayListVC.h"
 #import "TIoTPlayListCell.h"
+#import "TIoTPlayMovieVC.h"
 
 @interface TIoTPlayListVC () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -35,7 +36,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTPlayListCell * cell = [TIoTPlayListCell cellWithTableView:tableView];
     cell.playLeftBlock = ^{
-        
+        TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
+        video.modalPresentationStyle = UIModalPresentationFullScreen;
+        video.videoUrl = @"http://zhibo.hkstv.tv/livestream/mutfysrq.flv";
+        [self presentViewController:video animated:NO completion:nil];
     };
     
     cell.playMiddBlock = ^{
