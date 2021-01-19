@@ -35,9 +35,11 @@ Pod::Spec.new do |s|
   end
 
   #智能视频服务，引入则开启 TODO
-#  s.subspec 'LinkVideo' do |ss|
-#    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c}'
-#    ss.dependency 'TIoTLinkKit/LinkSDK'
-#  end
+  s.subspec 'LinkVideo' do |ss|
+    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
+    ss.dependency 'TIoTLinkKit/LinkSDK'
+    ss.dependency 'TIoTThridSDK/FFmpeg-iOS', '1.0.3'
+    ss.dependency 'TIoTThridSDK/XP2P-iOS', '1.0.3'
+  end
 
 end
