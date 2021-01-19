@@ -17,6 +17,7 @@ typedef void (^SuccessResponseHandler)(id responseObject);
 + (void)sendRequestWithBuild:(NSDictionary *)build success:(SuccessResponseHandler)success
 failure:(FailureResponseHandler)failure;
 
++ (void)sendVideoRequestWithBuild:(NSDictionary *)build success:(SuccessResponseHandler)success failure:(FailureResponseHandler)failure;
 @end
 
 NS_ASSUME_NONNULL_END

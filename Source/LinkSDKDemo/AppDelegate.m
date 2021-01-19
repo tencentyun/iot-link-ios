@@ -32,6 +32,15 @@
     environment.appKey = @"物联网开发平台申请的 App Key";
     environment.appSecret = @"物联网开发平台申请的 App Secret";
 
+    /**
+     * 此处若接入腾讯云物理网智能视频服务,则需要进行相关注册后，获取以下信息
+     * 参考连接
+     * https://cloud.tencent.com/product
+     */
+    environment.videoSecretId = @"";
+    environment.videoSecretKey = @"";
+    environment.videoProductId = @"";
+    
     //firebase注册
     [FIRApp configure];
     

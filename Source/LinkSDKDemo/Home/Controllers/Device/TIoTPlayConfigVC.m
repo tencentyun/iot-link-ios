@@ -47,7 +47,7 @@
     self.secretID.layer.cornerRadius = 10;
     self.secretID.layer.borderWidth = 1;
     self.productID.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.secretID];
+//    [self.view addSubview:self.secretID];
     
     self.secretKey = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretID.frame)+kInterval, kWidth, kHeight)];
     self.secretKey.textColor = [UIColor colorWithHexString:kMainThemeColor];
@@ -59,7 +59,7 @@
     self.secretKey.layer.cornerRadius = 10;
     self.secretKey.layer.borderWidth = 1;
     self.secretKey.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.secretKey];
+//    [self.view addSubview:self.secretKey];
     
     self.productID =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretKey.frame)+kInterval, kWidth, kHeight)];
     self.productID.textColor = [UIColor colorWithHexString:kMainThemeColor];
@@ -71,10 +71,10 @@
     self.productID.layer.cornerRadius = 10;
     self.productID.layer.borderWidth = 1;
     self.productID.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.productID];
+//    [self.view addSubview:self.productID];
     
     UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    requestButton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.productID.frame)+kInterval, kWidth, kHeight);
+    requestButton.frame = CGRectMake(kLeftPadding, 200+kInterval, kWidth, kHeight);
     [requestButton setTitle:@"获取PRODUCTIF下的设备列表" forState:UIControlStateNormal];
     [requestButton setTitleColor:[UIColor colorWithHexString:kMainThemeColor] forState:UIControlStateNormal];
     requestButton.titleLabel.font = [UIFont systemFontOfSize:18];

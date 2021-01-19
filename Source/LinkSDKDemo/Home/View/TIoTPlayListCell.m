@@ -75,20 +75,20 @@
 }
 
 - (void)clickLeftBtn {
-    if (self.playLeftBlock) {
-        self.playLeftBlock();
+    if (self.playRealTimeMonitoringBlock) {
+        self.playRealTimeMonitoringBlock();
     }
 }
 
 - (void)clickMiddBtn {
-    if (self.playMiddBlock) {
-        self.playMiddBlock();
+    if (self.playLocalPlaybackBlock) {
+        self.playLocalPlaybackBlock();
     }
 }
 
 - (void)clickRightBtn {
-    if (self.playRightBlock) {
-        self.playRightBlock();
+    if (self.playCloudStorageBlock) {
+        self.playCloudStorageBlock();
     }
 }
 

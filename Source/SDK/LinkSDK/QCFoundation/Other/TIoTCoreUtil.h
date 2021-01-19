@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (UIImage *)generateQrCodeNetWorkInfo:(TIoTVideoDistributionNetModel *)infoModel imageSize:(CGSize )size;
 
++ (NSString *)generateSignature:(NSDictionary *)allParams params:(NSDictionary *)params server:(NSString *)serverHost;
+
++ (NSString *)qcloudasrutil_sortedJSONTypeQueryParams:(NSDictionary *)params;
 @end
 
 NS_ASSUME_NONNULL_END

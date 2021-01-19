@@ -15,6 +15,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareEnvironment;
 
+
+/**
+ video 云
+ */
+@property (nonatomic, copy) NSString *videoHostApi;
+
+/**
+ video 云用户身份标识
+ */
+@property (nonatomic, copy) NSString *videoSecretId;
+
+/**
+ video 云用户身身份沿验证
+ */
+@property (nonatomic, copy) NSString *videoSecretKey;
+
+/**
+ video 注册产品ID
+ */
+@property (nonatomic, copy) NSString *videoProductId;
+
+/**
+ explore 云
+ */
+@property (nonatomic, copy) NSString *exploreHostApi;
+
 /**
  未登录baseurl
  */

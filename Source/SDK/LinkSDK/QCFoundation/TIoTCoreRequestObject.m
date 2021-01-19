@@ -12,11 +12,12 @@
 #import "NSString+Extension.h"
 #import "TIoTCoreQMacros.h"
 #import "NSObject+additions.h"
+#import "TIoTCoreUtil.h"
 
 #define kCode @"code"
 #define kMsg @"msg"
 #define kData @"data"
-
+#define kResponse @"Response"
 
 @implementation TIoTCoreRequestObject
 
@@ -38,6 +39,90 @@ failure:(FailureResponseBlock)failure
         
     [self postRequestWithAction:urlStr url:url isWithoutToken:NO param:param urlAndBodySetting:nil isShowHelpCenter:nil success:success failure:failure];
 
+}
+
+- (void)videoPost:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
+          failure:(FailureResponseBlock)failure {
+    NSString *url = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+        
+        NSMutableDictionary *allParameters = [param mutableCopy];
+        
+        NSURL *URL = [[NSURL alloc] initWithString:url];
+    //    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+        
+        if (param[@"X-TC-Action"]) {
+            [request setValue:param[@"X-TC-Action"] forHTTPHeaderField:@"X-TC-Action"];
+            [allParameters removeObjectForKey:@"X-TC-Action"];
+        }
+        if (param[@"X-TC-Region"]) {
+            [request setValue:param[@"X-TC-Region"] forHTTPHeaderField:@"X-TC-Region"];
+            [allParameters removeObjectForKey:@"X-TC-Region"];
+        }
+        if (param[@"X-TC-Timestamp"]) {
+            [request setValue:param[@"X-TC-Timestamp"] forHTTPHeaderField:@"X-TC-Timestamp"];
+            [allParameters removeObjectForKey:@"X-TC-Timestamp"];
+        }
+        if (param[@"X-TC-Version"]) {
+            [request setValue:param[@"X-TC-Version"] forHTTPHeaderField:@"X-TC-Version"];
+            [allParameters removeObjectForKey:@"X-TC-Version"];
+        }
+        
+        if (param[@"Authorization"]) {
+            [request setValue:param[@"Authorization"] forHTTPHeaderField:@"Authorization"];
+            [allParameters removeObjectForKey:@"Authorization"];
+        }
+        
+        if (param[@"secretKey"]) {
+            [allParameters removeObjectForKey:@"secretKey"];
+        }
+        
+        if (param[@"secretId"]) {
+            [allParameters removeObjectForKey:@"secretId"];
+        }
+    
+        WCLog(@"请求action==%@==%@",param[@"X-TC-Action"],[NSString objectToJson:allParameters]);
+        
+        [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        request.HTTPMethod = @"POST";
+//        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:allParameters options:NSJSONWritingFragmentsAllowed error:nil];
+    request.HTTPBody = [[TIoTCoreUtil qcloudasrutil_sortedJSONTypeQueryParams:allParameters] dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            WCLog(@"收到action==%@==%@",URL,[[NSString alloc] initWithData:data encoding:4]);
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            if (httpResponse.statusCode == 200) {
+                NSError *jsonerror = nil;
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
+                if (jsonerror == nil) {
+                    if ([dic[kCode] integerValue] == 0) {
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            success(dic[kResponse]);
+                        });
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            failure(dic[kMsg],nil,dic);
+                        });
+                    }
+                }
+                else
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(nil,jsonerror,@{});
+                    });
+                }
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(nil,error,@{});
+                });
+            }
+        }];
+        [task resume];
 }
 
 //MARK: 重要

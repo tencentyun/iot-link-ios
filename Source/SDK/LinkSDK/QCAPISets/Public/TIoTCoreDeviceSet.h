@@ -165,4 +165,8 @@
 /// 发送设备分享邀请（邮箱账户）
 - (void)sendInvitationToEmail:(NSString *)email withFamilyId:(NSString *)familyId productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure;
 
+#pragma mark - 云端存储
+///video 获取设备列表
+- (void)getVideoDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId returnModel:(BOOL)returnModel success:(SRHandler)success failure:(FRHandler)failure;
+
 @end

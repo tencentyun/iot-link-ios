@@ -60,4 +60,20 @@ failure:(FailureResponseHandler)failure
     }
 }
 
++ (void)sendVideoRequestWithBuild:(NSDictionary *)build success:(SuccessResponseHandler)success failure:(FailureResponseHandler)failure {
+    
+    NSString *action = build[@"action"]?:@"";
+    NSDictionary *params = build[@"params"]?:@{};
+    
+    [[TIoTCoreRequestObject shared] videoPost:action Param:params success:^(id responseObject) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            success(responseObject);
+        });
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            failure(reason,error,dic);
+        });
+    }];
+}
+
 @end

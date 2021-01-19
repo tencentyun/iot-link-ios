@@ -44,19 +44,20 @@
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
     setDeviceInfo([pro_id UTF8String], [dev_name UTF8String]);
-    startServiceWithXp2pInfo("yy");
+    setXp2pInfoAttributes("_sys_xp2p_info");
+    startServiceWithXp2pInfo("_server_info");
     
     
     //2.模拟发送数据
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), 0.1 * NSEC_PER_SEC, 0);
-    dispatch_source_set_event_handler(timer, ^{
-        
-        NSLog(@"----");
-        [self sendDataToServer:@""];
-    });
-    dispatch_resume(timer);
+//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+//    dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), 0.1 * NSEC_PER_SEC, 0);
+//    dispatch_source_set_event_handler(timer, ^{
+//
+//        NSLog(@"----");
+//        [self sendDataToServer:@""];
+//    });
+//    dispatch_resume(timer);
     
     
     std::string httpflv =  delegateHttpFlv();

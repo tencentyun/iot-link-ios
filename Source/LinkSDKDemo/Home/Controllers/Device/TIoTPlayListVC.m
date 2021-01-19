@@ -9,6 +9,9 @@
 #import "TIoTPlayListVC.h"
 #import "TIoTPlayListCell.h"
 #import "TIoTPlayMovieVC.h"
+#import "TIoTCoreAppEnvironment.h"
+#import "TIoTCoreDeviceSet.h"
+#import "TIoTCoreXP2PBridge.h"
 
 @interface TIoTPlayListVC () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -22,6 +25,12 @@
     // Do any additional setup after loading the view from its nib.
     
     [self setUpUI];
+    
+    [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].videoProductId returnModel:YES success:^(id  _Nonnull responseObject) {
+        
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+            
+        }];
 }
 
 - (void)setUpUI {
@@ -37,18 +46,34 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTPlayListCell * cell = [TIoTPlayListCell cellWithTableView:tableView];
     cell.deviceNameString = self.dataArray[indexPath.row];
-    cell.playLeftBlock = ^{
-        TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
-        video.modalPresentationStyle = UIModalPresentationFullScreen;
-        video.videoUrl = @"http://zhibo.hkstv.tv/livestream/mutfysrq.flv";
-        [self presentViewController:video animated:NO completion:nil];
+    
+    cell.playRealTimeMonitoringBlock = ^{
+
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].videoSecretId sec_key:[TIoTCoreAppEnvironment shareEnvironment].videoSecretKey pro_id:[TIoTCoreAppEnvironment shareEnvironment].videoProductId dev_name:self.dataArray[indexPath.row]];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
+            TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
+            video.modalPresentationStyle = UIModalPresentationFullScreen;
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+            [self presentViewController:video animated:NO completion:nil];
+        });
     };
     
-    cell.playMiddBlock = ^{
+    cell.playLocalPlaybackBlock = ^{
         
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].videoSecretId sec_key:[TIoTCoreAppEnvironment shareEnvironment].videoSecretKey pro_id:[TIoTCoreAppEnvironment shareEnvironment].videoProductId dev_name:self.dataArray[indexPath.row]];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
+            TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
+            video.modalPresentationStyle = UIModalPresentationFullScreen;
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback",urlString];
+            [self presentViewController:video animated:NO completion:nil];
+        });
     };
     
-    cell.playRightBlock = ^{
+    cell.playCloudStorageBlock = ^{
         
     };
     return cell;

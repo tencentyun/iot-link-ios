@@ -49,6 +49,10 @@ failure:(FailureResponseBlock)failure;
 - (void)postRequestWithAction:(NSString *)actionStr url:(NSURL *)url  isWithoutToken:(BOOL)withoutToken param:(NSDictionary *)baseAccessParam urlAndBodySetting:(UrlAndBodyParamCustomSettingBlock )urlAndBodyCustomSettingBlock isShowHelpCenter:(ConfigModelH5CookieBlock )configH5CookieBlock success:(SuccessResponseBlock)success
                       failure:(FailureResponseBlock)failure;
 
+//Video 设备列表请求
+- (void)videoPost:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
+          failure:(FailureResponseBlock)failure;
+
 //MARK: 重要
 /**
   *******对于自定义 TIoTCoreAppEnvironment 文件，此属性必须赋值********

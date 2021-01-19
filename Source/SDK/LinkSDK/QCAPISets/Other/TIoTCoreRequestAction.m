@@ -130,6 +130,11 @@ NSString *const AppModifyAutomation = @"AppModifyAutomation";//修改自动智�
 NSString *const AppDescribeAutomation = @"AppDescribeAutomation";//获取自动智能场景详情
 NSString *const AppGetSceneAndAutomationLogs = @"AppGetSceneAndAutomationLogs";//智能联动执行日志
 
+//MARK:Video
+NSString *const DescribeDevices = @"DescribeDevices";//Video 设备列表
+
+//MARK:Explore
+NSString *const GetDeviceList = @"GetDeviceList";//Explore 设备列表 
 
 //MARK: TRTC
 NSString *const AppIotRTCInviteDevice = @"App::IotRTC::InviteDevice";//1.手机请求设备通话
