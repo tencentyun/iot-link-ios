@@ -12,6 +12,7 @@
 
 @interface TIoTPlayListVC () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSArray *dataArray;
 @end
 
 @implementation TIoTPlayListVC
@@ -30,11 +31,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTPlayListCell * cell = [TIoTPlayListCell cellWithTableView:tableView];
+    cell.deviceNameString = self.dataArray[indexPath.row];
     cell.playLeftBlock = ^{
         TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
         video.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -57,9 +59,16 @@
         _tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.rowHeight = 80;
+        _tableView.rowHeight = 110;
     }
     return _tableView;
+}
+
+- (NSArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = @[@"sp01_32820237_1",@"sp01_32820237_2",@"sp01_32820237_3"];
+    }
+    return  _dataArray;
 }
 
 /*

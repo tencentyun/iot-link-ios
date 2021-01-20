@@ -15,6 +15,7 @@ typedef void(^TIotPlayFunctionBlock)(void);
 @property (nonatomic, copy) TIotPlayFunctionBlock playLeftBlock;
 @property (nonatomic, copy) TIotPlayFunctionBlock playMiddBlock;
 @property (nonatomic, copy) TIotPlayFunctionBlock playRightBlock;
+@property (nonatomic, copy) NSString *deviceNameString;
 @end
 
 NS_ASSUME_NONNULL_END

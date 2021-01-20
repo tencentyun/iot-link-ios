@@ -9,6 +9,7 @@
 #import "TIoTPlayListCell.h"
 
 @interface TIoTPlayListCell ()
+@property (nonatomic, strong) UILabel *deviceName;
 @property (nonatomic, strong) UIButton *playLeft;
 @property (nonatomic, strong) UIButton *playMidd;
 @property (nonatomic, strong) UIButton *playRight;
@@ -40,23 +41,28 @@
     CGFloat kHeight = 60;
     CGFloat kSpace = (kScreenWidth-3*kWidth)/4;
     
+    self.deviceName = [[UILabel alloc]initWithFrame:CGRectMake(kSpace, 2, kScreenWidth-kHeight, 20)];
+    self.deviceName.textColor = [UIColor blackColor];
+    self.deviceName.font = [UIFont systemFontOfSize:14];
+    [self.contentView addSubview:self.deviceName];
+    
     self.playLeft = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.playLeft.frame = CGRectMake(kSpace, 10, kWidth, kHeight);
-    [self.playLeft setTitle:@"left" forState:UIControlStateNormal];
+    self.playLeft.frame = CGRectMake(kSpace, CGRectGetMaxY(self.deviceName.frame)+5, kWidth, kHeight);
+    [self.playLeft setTitle:@"实时监控" forState:UIControlStateNormal];
     [self setPlayButtonFormat:self.playLeft];
     [self.playLeft addTarget:self action:@selector(clickLeftBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.playLeft];
     
     self.playMidd = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.playMidd.frame = CGRectMake(CGRectGetMaxX(self.playLeft.frame)+kSpace, 10, kWidth, kHeight);
-    [self.playMidd setTitle:@"Middle" forState:UIControlStateNormal];
+    self.playMidd.frame = CGRectMake(CGRectGetMaxX(self.playLeft.frame)+kSpace, CGRectGetMaxY(self.deviceName.frame)+5, kWidth, kHeight);
+    [self.playMidd setTitle:@"本地回放" forState:UIControlStateNormal];
     [self setPlayButtonFormat:self.playMidd];
     [self.playMidd addTarget:self action:@selector(clickMiddBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.playMidd];
     
     self.playRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.playRight.frame = CGRectMake(CGRectGetMaxX(self.playMidd.frame)+kSpace, 10, kWidth, kHeight);
-    [self.playRight setTitle:@"Right" forState:UIControlStateNormal];
+    self.playRight.frame = CGRectMake(CGRectGetMaxX(self.playMidd.frame)+kSpace, CGRectGetMaxY(self.deviceName.frame)+5, kWidth, kHeight);
+    [self.playRight setTitle:@"云端存储" forState:UIControlStateNormal];
     [self setPlayButtonFormat:self.playRight];
     [self.playRight addTarget:self action:@selector(clickRightBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.playRight];
@@ -84,6 +90,11 @@
     if (self.playRightBlock) {
         self.playRightBlock();
     }
+}
+
+- (void)setDeviceNameString:(NSString *)deviceNameString {
+    _deviceNameString = deviceNameString;
+    self.deviceName.text = deviceNameString;
 }
 
 - (void)awakeFromNib {
