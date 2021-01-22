@@ -16,8 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;
 - (NSString *)getUrlForHttpFlv;
-- (void)sendDataToServer:(NSString *)flvData;
-- (void)setXp2pInfoAttributes:(NSString *)attributes;
+
+- (void)sendVoiceToServer;
+- (void)stopVoiceToServer;
+
 - (void)stopService;
 @end
 

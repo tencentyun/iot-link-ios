@@ -8,6 +8,7 @@
 
 #import "TIoTPlayMovieVC.h"
 #import "LVRTSPPlayer.h"
+#import "TIoTCoreXP2PBridge.h"
 
 @interface TIoTPlayMovieVC ()
 
@@ -72,8 +73,24 @@
     self.video = nil;
 }
 
+- (IBAction)sendFLV:(UIButton *)sender {
+    
+    if ([sender.currentTitle isEqualToString:@"开始对讲"]) {
+        
+        [sender setTitle:@"结束对讲" forState:UIControlStateNormal];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer];
+    
+    }else {
+        
+        [sender setTitle:@"开始对讲" forState:UIControlStateNormal];
+        [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+    }
+    
+}
 
 - (IBAction)dismiss:(id)sender {
+    [[TIoTCoreXP2PBridge sharedInstance] stopService];
+    
     [self stopPlayMovie];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

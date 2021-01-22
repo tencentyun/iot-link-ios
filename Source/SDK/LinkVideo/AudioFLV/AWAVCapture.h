@@ -4,6 +4,10 @@
 #import "AWEncoder.h"
 #import "AWEncoderManager.h"
 
+@protocol AWAVCaptureDelegate <NSObject>
+-(void) capture:(uint8_t *)data len:(size_t) size;
+@end
+
 @class AWAVCapture;
 
 @interface AWAVCapture : NSObject
@@ -13,7 +17,7 @@
 //编码器类型
 @property (nonatomic, unsafe_unretained) AWAudioEncoderType audioEncoderType;
 
-//状态变化回调
+@property (nonatomic, weak) id<AWAVCaptureDelegate> delegate;
 
 //是否将数据发送出去
 @property (nonatomic, unsafe_unretained) BOOL isCapturing;

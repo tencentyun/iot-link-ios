@@ -59,6 +59,17 @@
     [self.captureSession startRunning];
 }
 
+-(BOOL) startCapture {
+    [self.captureSession startRunning];
+    return [super startCapture];
+}
+
+//停止capture
+-(void) stopCapture {
+    [self.captureSession stopRunning];
+    [super stopCapture];
+}
+
 //销毁会话
 -(void) destroyCaptureSession{
     if (self.captureSession) {

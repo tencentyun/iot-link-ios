@@ -101,15 +101,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //先开启encoder
         [weakSelf.encoderManager openWithAudioConfig:weakSelf.audioConfig];
-        //再打开rtmp
-//        int retcode = aw_streamer_open(rtmpUrl.UTF8String, aw_rtmp_state_changed_cb_in_oc);
-        
-//        if(retcode){
-            weakSelf.isCapturing = YES;
-//        }else{
-//            NSLog(@"startCapture rtmpOpen error!!! retcode=%d", retcode);
-//            [weakSelf stopCapture];
-//        }
+        weakSelf.isCapturing = YES;
     });
     return YES;
 }
@@ -256,6 +248,8 @@ extern void aw_write_audio_header(){
     aw_data *ttt_output_buf = NULL;
     aw_write_flv_header(&ttt_output_buf);
     
+    //send flv header
+    [sAWAVCapture.delegate capture:ttt_output_buf->data len:ttt_output_buf->size];
 //   ttt_output_buf
     
     reset_aw_data(&ttt_output_buf);
@@ -294,7 +288,7 @@ static void aw_streamer_send_flv_tag_to_rtmp(aw_flv_common_tag *common_tag){
     }
 
 //TODO send FLVBody
-//    aw_rtmp_write(s_rtmp_ctx, (const char *)s_output_buf->data, s_output_buf->size);
+    [sAWAVCapture.delegate capture:s_output_buf->data len:s_output_buf->size];
     
     reset_aw_data(&s_output_buf);
 }

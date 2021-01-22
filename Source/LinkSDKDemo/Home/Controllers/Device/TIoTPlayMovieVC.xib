@@ -19,14 +19,26 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pc-du-ThJ">
-                    <rect key="frame" x="97.5" y="637" width="219" height="82"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Snm-SN-qFY">
+                    <rect key="frame" x="0.0" y="658" width="414" height="82"/>
+                    <color key="backgroundColor" systemColor="systemTealColor"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="219" id="eXE-xC-3eK"/>
+                        <constraint firstAttribute="height" constant="82" id="kfx-PE-0u9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="开始对讲"/>
+                    <connections>
+                        <action selector="sendFLV:" destination="-1" eventType="touchUpInside" id="sXc-Fd-1v1"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pc-du-ThJ">
+                    <rect key="frame" x="0.0" y="750" width="414" height="82"/>
+                    <color key="backgroundColor" systemColor="systemYellowColor"/>
+                    <constraints>
                         <constraint firstAttribute="height" constant="82" id="ems-LV-Hg8"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="停止播放"/>
+                    <state key="normal" title="停止观看"/>
                     <connections>
                         <action selector="dismiss:" destination="-1" eventType="touchUpInside" id="hl1-4r-ioc"/>
                     </connections>
@@ -35,8 +47,12 @@
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="0Pc-du-ThJ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="2BE-ny-7Ap"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="0Pc-du-ThJ" secondAttribute="bottom" constant="143" id="Uly-bw-W7U"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="0Pc-du-ThJ" secondAttribute="trailing" id="2Bs-A6-Pke"/>
+                <constraint firstItem="0Pc-du-ThJ" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="9yT-jI-AkI"/>
+                <constraint firstItem="Snm-SN-qFY" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="EP1-GG-Jq4"/>
+                <constraint firstItem="0Pc-du-ThJ" firstAttribute="top" secondItem="Snm-SN-qFY" secondAttribute="bottom" constant="10" id="HXz-kx-2fD"/>
+                <constraint firstItem="Snm-SN-qFY" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="UBh-33-Vg1"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="0Pc-du-ThJ" secondAttribute="bottom" constant="30" id="Uly-bw-W7U"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="82.366071428571431"/>
         </view>
@@ -44,6 +60,12 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemTealColor">
+            <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
