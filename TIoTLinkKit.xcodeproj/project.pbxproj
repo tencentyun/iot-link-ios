@@ -38,6 +38,8 @@
 		6D982C9724D340150080C961 /* TIoTModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9624D340150080C961 /* TIoTModifyView.m */; };
 		6D982C9A24D422DE0080C961 /* TIoTModifyPasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */; };
 		6D982C9D24D51AAC0080C961 /* TIoTModifyPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */; };
+		6D98FB4B25BAD21600518AC7 /* TIoTExploreDeviceListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */; };
+		6D98FB7825BAD98E00518AC7 /* TIoTVideoDeviceListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */; };
 		6D9AD45C251C7B7A004D968A /* TIoTAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */; };
 		6DA037F1257F5E44004E5A6F /* TIoTAddFamilyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA037F0257F5E44004E5A6F /* TIoTAddFamilyCell.m */; };
 		6DA086392564F65A00938CF4 /* TIoTAutoNoticeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA086382564F65A00938CF4 /* TIoTAutoNoticeVC.m */; };
@@ -482,6 +484,10 @@
 		6D982C9924D422DE0080C961 /* TIoTModifyPasswordVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyPasswordVC.m; sourceTree = "<group>"; };
 		6D982C9B24D51AAC0080C961 /* TIoTModifyPasswordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyPasswordView.h; sourceTree = "<group>"; };
 		6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTModifyPasswordView.m; sourceTree = "<group>"; };
+		6D98FAF425BAC92400518AC7 /* TIoTExploreDeviceListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTExploreDeviceListModel.h; sourceTree = "<group>"; };
+		6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTExploreDeviceListModel.m; sourceTree = "<group>"; };
+		6D98FB7625BAD98E00518AC7 /* TIoTVideoDeviceListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVideoDeviceListModel.h; sourceTree = "<group>"; };
+		6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTVideoDeviceListModel.m; sourceTree = "<group>"; };
 		6D9AD45D251C7B7A004D968A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAboutVC.xib; sourceTree = "<group>"; };
 		6D9AD461251C7B7E004D968A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAboutVC.strings; sourceTree = "<group>"; };
 		6D9AD463251C7B82004D968A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAboutVC.strings"; sourceTree = "<group>"; };
@@ -2238,6 +2244,10 @@
 			children = (
 				F4F3D73824938EBD005D3396 /* ControlInfo.h */,
 				F4F3D73724938EBD005D3396 /* ControlInfo.m */,
+				6D98FAF425BAC92400518AC7 /* TIoTExploreDeviceListModel.h */,
+				6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */,
+				6D98FB7625BAD98E00518AC7 /* TIoTVideoDeviceListModel.h */,
+				6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2994,6 +3004,7 @@
 				F4F3D7CD24938EBE005D3396 /* ChangeWifiVC.m in Sources */,
 				F4F325E325919A1200A4CAAB /* AppUtils.swift in Sources */,
 				F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */,
+				6D98FB4B25BAD21600518AC7 /* TIoTExploreDeviceListModel.m in Sources */,
 				F4F3D7CA24938EBE005D3396 /* WifiInfoVC.m in Sources */,
 				F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */,
 				F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */,
@@ -3004,6 +3015,7 @@
 				F4F3D7C924938EBE005D3396 /* UsersOfDeviceVC.m in Sources */,
 				F4F3D7D224938EBE005D3396 /* RegistVC.m in Sources */,
 				F4F3D52D24935BD3005D3396 /* AppDelegate.m in Sources */,
+				6D98FB7825BAD98E00518AC7 /* TIoTVideoDeviceListModel.m in Sources */,
 				F4F3D7B424938EBE005D3396 /* TIoTCoreAddRoomVC.m in Sources */,
 				F4F3D7C724938EBE005D3396 /* ControlDeviceVC.m in Sources */,
 				F4F3D7CF24938EBE005D3396 /* TIoTCoreTimerListVC.m in Sources */,

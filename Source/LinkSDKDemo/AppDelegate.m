@@ -37,9 +37,9 @@
      * 参考连接
      * https://cloud.tencent.com/product
      */
-    environment.videoSecretId = @"";
-    environment.videoSecretKey = @"";
-    environment.videoProductId = @"";
+    environment.cloudSecretId = @"";
+    environment.cloudSecretKey = @"";
+    environment.cloudProductId = @"";
     
     //firebase注册
     [FIRApp configure];

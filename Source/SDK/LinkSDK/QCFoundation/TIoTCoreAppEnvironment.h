@@ -22,19 +22,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *videoHostApi;
 
 /**
- video 云用户身份标识
+  云用户身份标识
  */
-@property (nonatomic, copy) NSString *videoSecretId;
+@property (nonatomic, copy) NSString *cloudSecretId;
 
 /**
- video 云用户身身份沿验证
+ 云用户身身份沿验证
  */
-@property (nonatomic, copy) NSString *videoSecretKey;
+@property (nonatomic, copy) NSString *cloudSecretKey;
 
 /**
- video 注册产品ID
+ 注册产品ID
  */
-@property (nonatomic, copy) NSString *videoProductId;
+@property (nonatomic, copy) NSString *cloudProductId;
 
 /**
  explore 云

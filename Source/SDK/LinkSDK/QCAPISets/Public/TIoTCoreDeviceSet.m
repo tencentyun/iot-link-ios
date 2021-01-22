@@ -1058,7 +1058,7 @@
 ///获取Video设备列表
 - (void)getVideoDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId returnModel:(BOOL)returnModel success:(SRHandler)success failure:(FRHandler)failure{
     
-    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeDevices];
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeDevices withVersioinData:@"2019-11-26"];
     
     NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
     thisInterfaceParams[@"Limit"] = [NSNumber numberWithInteger:limit];
@@ -1069,8 +1069,9 @@
     NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
     [allParams addEntriesFromDictionary:commonParams];
     [allParams addEntriesFromDictionary:thisInterfaceParams];
-    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].videoSecretKey forKey:@"secretKey"];
-    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].videoSecretId forKey:@"secretId"];
+
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
     
     
     NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
@@ -1083,7 +1084,8 @@
     allParams[@"Authorization"] = authorization;
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:DescribeDevices params:allParams useToken:YES];
-    [TIoTCoreRequestClient sendVideoRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
         failure(reason,error,dic);
@@ -1092,16 +1094,50 @@
     
 }
 
+/// explore 获取设备列表
+- (void)getExploreDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId success:(SRHandler)success failure:(FRHandler)failure {
+    
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:GetDeviceList withVersioinData:@"2019-04-23"];
+    NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
+    thisInterfaceParams[@"Limit"] = [NSNumber numberWithInteger:limit];
+    thisInterfaceParams[@"Offset"] = [NSNumber numberWithInteger:offset];
+    thisInterfaceParams[@"ProductId"] = productId?:@"";
+    
+    NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
+    [allParams addEntriesFromDictionary:commonParams];
+    [allParams addEntriesFromDictionary:thisInterfaceParams];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
+    
+    NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].exploreHostApi;
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *urlDomain = [url host];
+    NSString *firstDomainString = [urlDomain componentsSeparatedByString:@"."].firstObject?:@"";
+    
+    //V3签名
+    NSString *authorization = [TIoTCoreUtil generateSignature:thisInterfaceParams params:allParams server:firstDomainString];
+    allParams[@"Authorization"] = authorization;
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:GetDeviceList params:allParams useToken:YES];
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
+        failure(reason,error,dic);
+    }];
+    
+}
+
 #pragma mark - params function
 
-- (NSDictionary *)commonParamsForV3AuthenticationWithAction:(NSString *)actionString
+- (NSDictionary *)commonParamsForV3AuthenticationWithAction:(NSString *)actionString withVersioinData:(NSString *)dataString
 {
     NSMutableDictionary *commonParams = [[NSMutableDictionary alloc] init];
     commonParams[@"X-TC-Action"] = actionString?:@"";
     NSInteger timeInterval = [[NSDate date] timeIntervalSince1970];
     commonParams[@"X-TC-Timestamp"] = [NSString stringWithFormat:@"%ld", timeInterval];
     commonParams[@"X-TC-Region"] = @"ap-guangzhou";
-    commonParams[@"X-TC-Version"] = @"2019-11-26";
+    commonParams[@"X-TC-Version"] = dataString?:@"";
     return commonParams;
 }
 

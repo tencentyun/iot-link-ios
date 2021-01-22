@@ -9,6 +9,8 @@
 #import "TIoTVideoVC.h"
 #import "TIoTVideoConfigNetVC.h"
 #import "TIoTPlayConfigVC.h"
+#import "TIoTPlayListVC.h"
+
 @interface TIoTVideoVC ()
 
 @end
@@ -25,8 +27,8 @@
     
 }
 - (IBAction)jumpPlaying:(id)sender {
-    TIoTPlayConfigVC *playConfigVC = [[TIoTPlayConfigVC alloc]init];
-    [self.navigationController pushViewController:playConfigVC animated:YES];
+    TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+    [self.navigationController pushViewController:playListVC animated:YES];
 }
 
 /*

@@ -50,7 +50,7 @@ failure:(FailureResponseBlock)failure;
                       failure:(FailureResponseBlock)failure;
 
 //Video 设备列表请求
-- (void)videoPost:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
+- (void)videoOrExplorePost:(NSString *)urlStr Param:(NSDictionary *)param withUrlString:(NSString *)urlString success:(SuccessResponseBlock)success
           failure:(FailureResponseBlock)failure;
 
 //MARK: 重要

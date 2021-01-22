@@ -41,9 +41,9 @@ failure:(FailureResponseBlock)failure
 
 }
 
-- (void)videoPost:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
+- (void)videoOrExplorePost:(NSString *)urlStr Param:(NSDictionary *)param withUrlString:(NSString *)urlString success:(SuccessResponseBlock)success
           failure:(FailureResponseBlock)failure {
-    NSString *url = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+    NSString *url = urlString?:@"";
         
         NSMutableDictionary *allParameters = [param mutableCopy];
         

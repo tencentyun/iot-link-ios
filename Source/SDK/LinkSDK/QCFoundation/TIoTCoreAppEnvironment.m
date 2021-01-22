@@ -47,9 +47,9 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
     
     //Video
     self.videoHostApi = @"https://iotvideo.tencentcloudapi.com";
-    self.videoSecretId = @"";
-    self.videoSecretKey = @"";
-    self.videoProductId = @"";
+    self.cloudSecretId = @"";
+    self.cloudSecretKey = @"";
+    self.cloudProductId = @"";
     
     //explore
     self.exploreHostApi = @"https://iotexplorer.tencentcloudapi.com";
