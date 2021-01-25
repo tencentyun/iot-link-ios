@@ -51,6 +51,7 @@
 "register_agree_2" = "用户协议";
 "register_agree_3" = "及";
 "register_agree_4" = "隐私政策";
+"register_agree_5" = "开源软件信息";
 "register_get_code" = "获取验证码";
 "get_mobile_code_sent" = "验证码已经发送到您的手机:";
 "get_email_code_sent" = "验证码已经发送到您的邮箱:";

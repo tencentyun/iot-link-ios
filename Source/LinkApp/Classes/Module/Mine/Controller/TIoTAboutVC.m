@@ -8,6 +8,7 @@
 
 #import "TIoTAboutVC.h"
 #import "TIoTWebVC.h"
+#import "TIoTOpensourceLicenseViewController.h"
 #import <QuickLook/QLPreviewController.h>
 
 #import "TIoTNewVersionTipView.h"
@@ -19,6 +20,14 @@
 @property (nonatomic, assign) BOOL showLastestVerion;
 
 @property (nonatomic, strong) NSDictionary *versionInfo;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *versionTopConstraint;
+
+@property (weak, nonatomic) IBOutlet UIView *bottomLineView;
+
+@property (weak, nonatomic) IBOutlet UIView *opensourceView;
+
+@property (weak, nonatomic) IBOutlet UIView *versionView;
 
 @end
 
@@ -36,21 +45,60 @@
     self.versionLab.textAlignment = NSTextAlignmentCenter;
     self.versionLab.text = [NSString stringWithFormat:@"%@",appVersion];
     [self checkNewVersion];
+    
+    if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+        self.opensourceView.hidden = YES;
+        self.bottomLineView.hidden = YES;
+        self.versionTopConstraint.constant = 0.5f;
+        [self.versionView setNeedsLayout];
+    } else {
+        self.opensourceView.hidden = NO;
+        self.bottomLineView.hidden = NO;
+        self.versionTopConstraint.constant = 61.5f;
+        [self.versionView setNeedsLayout];
+    }
 }
 
 
 - (IBAction)privacyPolicy:(UITapGestureRecognizer *)sender {
-    TIoTWebVC *vc = [TIoTWebVC new];
-    vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
-    vc.urlPath = PrivacyProtocolURL;
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+        
+        TIoTWebVC *vc = [TIoTWebVC new];
+        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+        vc.urlPath = PrivacyProtocolURL;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        
+        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+        vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (IBAction)protocol:(UITapGestureRecognizer *)sender {
     
-    TIoTWebVC *vc = [TIoTWebVC new];
-    vc.title =  @"用户协议";
-    vc.urlPath = ServiceProtocolURl;
+    if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+        
+        TIoTWebVC *vc = [TIoTWebVC new];
+        vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+        vc.urlPath = ServiceProtocolURl;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        
+        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+        vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+        vc.urlPath = TIoTAPPConfig.serviceAgreementEnglishString;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+- (IBAction)opensourceLicense:(UITapGestureRecognizer *)sender {
+    
+    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+    vc.title = NSLocalizedString(@"register_agree_5", @"开源软件信息");
+    vc.urlPath = TIoTAPPConfig.opensourceLicenseString;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -53,6 +53,21 @@ class TIoTAPPConfig: NSObject {
     public static var intelligentSceneImageList: NSString {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/39/config2.js"
     }
+    
+    // static config
+    public static var opensourceLicenseString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config5.js"
+    }
+    
+    // static config
+    public static var privacyPolicyEnglishString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config4.js"
+    }
+    
+    // static config
+    public static var serviceAgreementEnglishString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config3.js"
+    }
 }
 
 

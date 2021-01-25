@@ -300,10 +300,18 @@ failure:(FailureResponseBlock)failure {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         NSString *responseString = (NSString *)jsonString;
-                        NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:@"[" end:@"]"]];
-                        [resultSubString insertString:@"[" atIndex:0];
-                        NSDictionary *regionListDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
-                        success(regionListDic);
+                        if ([requestString containsString:@"37/config1.js"]) {  //区域
+                            NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:@"[" end:@"]"]];
+                            [resultSubString insertString:@"[" atIndex:0];
+                            NSDictionary *regionListDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+                            success(regionListDic);
+                        } else {   //开源软件信息 或其他
+                            NSString *startString = @";(function(){var params=";
+                            NSString *endString = @"};\ntypeof callback_";
+                            NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:startString end:endString]];
+                            NSDictionary *opensourceDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+                            success(opensourceDic);
+                        }
                     });
                 }
                 else
