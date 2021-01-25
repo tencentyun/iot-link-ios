@@ -64,7 +64,7 @@
 }
 
 - (void)stopService {
-    stopSendService(_serverHandle);
+//    stopSendService(_serverHandle);
     stopService();
 }
 
