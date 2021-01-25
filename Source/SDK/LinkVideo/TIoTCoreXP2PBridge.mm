@@ -31,6 +31,17 @@
   return sharedInstance;
 }
 
+- (instancetype)init {
+    self =  [super init];
+    if (self) {
+        
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+        [audioSession setActive:YES error:nil];
+    }
+    return self;
+}
+
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 
     //1.配置IOT_P2P SDK
@@ -53,7 +64,7 @@
     AWAudioConfig *config = [[AWAudioConfig alloc] init];
     systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];
     systemAvCapture.delegate = self;
-    systemAvCapture.audioEncoderType = AWAudioEncoderTypeHWAACLC;
+    systemAvCapture.audioEncoderType = AWAudioEncoderTypeSWFAAC;
     [systemAvCapture startCapture];
 }
 
@@ -64,7 +75,7 @@
 }
 
 - (void)stopService {
-//    stopSendService(_serverHandle);
+    [self stopVoiceToServer];
     stopService();
 }
 

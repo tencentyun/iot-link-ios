@@ -1,5 +1,6 @@
 #import "AWEncoderManager.h"
 #import "AWHWAACEncoder.h"
+#import "AWSWFaacEncoder.h"
 
 @interface AWEncoderManager()
 //编码器
@@ -12,6 +13,9 @@
     switch (self.audioEncoderType) {
         case AWAudioEncoderTypeHWAACLC:
             self.audioEncoder = [[AWHWAACEncoder alloc] init];
+            break;
+        case AWAudioEncoderTypeSWFAAC:
+            self.audioEncoder = [[AWSWFaacEncoder alloc] init];
             break;
         default:
             NSLog(@"[E] AWEncoderManager.open please assin for audioEncoderType");

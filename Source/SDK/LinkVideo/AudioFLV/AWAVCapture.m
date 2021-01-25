@@ -209,7 +209,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
         //audio specific config tag
         aw_flv_audio_tag *audioSpecificConfigTag = [weakSelf.encoderManager.audioEncoder createAudioSpecificConfigFlvTag];
         if (audioSpecificConfigTag) {
-//            aw_streamer_send_audio_specific_config_tag(audioSpecificConfigTag);
+            aw_streamer_send_audio_specific_config_tag(audioSpecificConfigTag);
         }
         weakSelf.isSpsPpsAndAudioSpecificConfigSent = audioSpecificConfigTag;
         

@@ -40,6 +40,7 @@ Pod::Spec.new do |s|
     ss.dependency 'TIoTLinkKit/LinkSDK'
     ss.dependency 'TIoTThridSDK/FFmpeg-iOS'
     ss.dependency 'TIoTThridSDK/XP2P-iOS'
+    ss.dependency 'TIoTThridSDK/Faac-iOS'
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'  => 'arm64'
     }

@@ -32,9 +32,11 @@ void audioQueueIsRunningCallback(void *inClientData, AudioQueueRef inAQ,
 
 - (id)initWithStreamer:(LVRTSPPlayer*)streamer {
     if (self = [super init]) {
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord  withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-        [audioSession setActive:YES error:nil];
+//        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+//        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+//        [audioSession setCategory:AVAudioSessionCategoryMultiRoute  withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil ];
+//        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord  withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+//        [audioSession setActive:YES error:nil];
         _streamer = streamer;
         _audioCodecContext = _streamer.audioCodecContext;
     }
