@@ -10,6 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, TIoTTimeType) {
+    TIoTTimeTypeYear,
+    TIoTTimeTypeMonth,
+    TIoTTimeTypeDay,
+    TIoTTimeTypeHour,
+    TIoTTimeTypeMinute,
+    TIoTTimeTypeSecont,
+};
+
 @interface NSString (Extension)
 
 /**
@@ -59,6 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 获取当前时间时间戳
 + (NSString *)getNowTimeString;
+
+/// 计算两个时间戳的时间差
++ (NSInteger )timeDifferenceInfoWitFormTimeStamp:(NSTimeInterval )fromTimeStamp toTimeStamp:(NSTimeInterval )toTimeStamp dateFormatter:(NSString *)formatter timeType:(TIoTTimeType)timeType;
 
 ///时间戳转日期
 + (NSString *)convertTimestampToTime:(id)timestamp byDateFormat:(NSString *)format;

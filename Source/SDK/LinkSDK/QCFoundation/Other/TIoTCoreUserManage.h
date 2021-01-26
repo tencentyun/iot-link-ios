@@ -58,6 +58,19 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Text;            //登录页面 手机/邮箱
 
 /**
+ 首次进入，选择生日日期
+ */
+
+@property (nonatomic, copy, nullable) NSString *isShowBirthDayView;  //是否弹出生日选择View
+
+/*
+ 保存首次进入APP 设备
+ */
+
+@property (nonatomic, copy, nullable) NSString *addDeviceNumber; //用户首次进入APP，添加设备数量
+
+
+/**
  TRTC 通话
  */
 @property (nonatomic, copy, nullable) NSString *sys_call_status;

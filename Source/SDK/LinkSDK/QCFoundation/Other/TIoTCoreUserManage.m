@@ -44,6 +44,9 @@
 
 @synthesize sys_call_status = _sys_call_status;
 
+@synthesize isShowBirthDayView = _isShowBirthDayView;
+@synthesize addDeviceNumber = _addDeviceNumber;
+
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
@@ -340,6 +343,34 @@
 - (void)setCountryTitleEN:(NSString *)countryTitleEN {
     _countryTitleEN = countryTitleEN;
     [[NSUserDefaults standardUserDefaults] setValue:countryTitleEN forKey:@"country_TitleEN"];
+}
+
+#pragma mark - 生日日期
+
+- (NSString *)isShowBirthDayView {
+    if (!_isShowBirthDayView) {
+        _isShowBirthDayView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowBirthDayView"];
+    }
+    return _isShowBirthDayView;
+}
+
+- (void)setIsShowBirthDayView:(NSString *)isShowBirthDayView {
+    _isShowBirthDayView = isShowBirthDayView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowBirthDayView forKey:@"isShowBirthDayView"];
+}
+
+#pragma mark - 首次进入APP 添加设备数量
+
+- (NSString *)addDeviceNumber {
+    if (!_addDeviceNumber) {
+        _addDeviceNumber = [[NSUserDefaults standardUserDefaults] valueForKey:@"addDeviceNumber"];
+    }
+    return _addDeviceNumber;
+}
+
+- (void)setAddDeviceNumber:(NSString *)addDeviceNumber {
+    _addDeviceNumber = addDeviceNumber;
+    [[NSUserDefaults standardUserDefaults] setValue:addDeviceNumber forKey:@"addDeviceNumber"];
 }
 
 #pragma mark - 注册页面用户操作保存项

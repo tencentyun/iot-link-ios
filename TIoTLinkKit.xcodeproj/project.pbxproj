@@ -40,6 +40,7 @@
 		6D982C9D24D51AAC0080C961 /* TIoTModifyPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D982C9C24D51AAC0080C961 /* TIoTModifyPasswordView.m */; };
 		6D98FB4B25BAD21600518AC7 /* TIoTExploreDeviceListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */; };
 		6D98FB7825BAD98E00518AC7 /* TIoTVideoDeviceListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */; };
+		6D98FCD125C044B000518AC7 /* TIoTAlertCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */; };
 		6D9AD45C251C7B7A004D968A /* TIoTAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D9AD45E251C7B7A004D968A /* TIoTAboutVC.xib */; };
 		6DA037F1257F5E44004E5A6F /* TIoTAddFamilyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA037F0257F5E44004E5A6F /* TIoTAddFamilyCell.m */; };
 		6DA086392564F65A00938CF4 /* TIoTAutoNoticeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA086382564F65A00938CF4 /* TIoTAutoNoticeVC.m */; };
@@ -488,6 +489,8 @@
 		6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTExploreDeviceListModel.m; sourceTree = "<group>"; };
 		6D98FB7625BAD98E00518AC7 /* TIoTVideoDeviceListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVideoDeviceListModel.h; sourceTree = "<group>"; };
 		6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTVideoDeviceListModel.m; sourceTree = "<group>"; };
+		6D98FCCF25C044B000518AC7 /* TIoTAlertCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAlertCustomView.h; sourceTree = "<group>"; };
+		6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAlertCustomView.m; sourceTree = "<group>"; };
 		6D9AD45D251C7B7A004D968A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TIoTAboutVC.xib; sourceTree = "<group>"; };
 		6D9AD461251C7B7E004D968A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TIoTAboutVC.strings; sourceTree = "<group>"; };
 		6D9AD463251C7B82004D968A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TIoTAboutVC.strings"; sourceTree = "<group>"; };
@@ -1905,6 +1908,8 @@
 			children = (
 				D210C8442341F46200A53B08 /* JHVerificationCodeView.h */,
 				D210C8432341F46200A53B08 /* JHVerificationCodeView.m */,
+				6D98FCCF25C044B000518AC7 /* TIoTAlertCustomView.h */,
+				6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */,
 				D210C7D32341D7EB00A53B08 /* XWCountryCode */,
 			);
 			path = View;
@@ -2850,6 +2855,7 @@
 				6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */,
 				D23104D62330678F0003069D /* UIView+XDPGesture.m in Sources */,
 				D23104BE233066810003069D /* KeyChainUntil.m in Sources */,
+				6D98FCD125C044B000518AC7 /* TIoTAlertCustomView.m in Sources */,
 				ED6DA51E23C99BBE00FDDC97 /* TIoTPopoverVC.m in Sources */,
 				6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */,
 				6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */,

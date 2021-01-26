@@ -95,10 +95,62 @@
 
 }
 
+/// 计算两个时间戳的时间差
++ (NSInteger )timeDifferenceInfoWitFormTimeStamp:(NSTimeInterval )fromTimeStamp toTimeStamp:(NSTimeInterval )toTimeStamp dateFormatter:(NSString *)formatter timeType:(TIoTTimeType)timeType {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:formatter?:@"YYYY-MM-dd HH:mm:ss"];
+        //获取此时时间戳长度
+    NSInteger timeInt = fromTimeStamp - toTimeStamp; //时间差
+        
+    NSInteger year = timeInt / (3600 * 24 * 30 *12);
+    NSInteger month = timeInt / (3600 * 24 * 30);
+    NSInteger day = timeInt / (3600 * 24);
+    NSInteger hour = timeInt / 3600;
+    NSInteger minute = timeInt / 60;
+    NSInteger second = timeInt;
+    
+    switch (timeType) {
+        case TIoTTimeTypeYear:
+        {
+            return year;
+            break;
+        }
+        case TIoTTimeTypeMonth: {
+            return month;
+            break;
+        }
+        case TIoTTimeTypeDay: {
+            return day;
+            break;
+        }
+        case TIoTTimeTypeHour: {
+            return hour;
+            break;
+        }
+        case TIoTTimeTypeMinute: {
+            return minute;
+            break;
+        }
+        case TIoTTimeTypeSecont: {
+            return second;
+            break;
+        }
+        default:
+            break;
+    }
+        
+    
+}
+
 + (NSString *)getTimeStampWithString:(NSString *)timeString withFormatter:(NSString *)formatter withTimezone:(NSString *)timezone{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];// 创建一个时间格式化对象
     [dateFormatter setDateFormat:formatter]; //设定时间的格式
-    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    if (timezone == nil || [timezone isEqualToString:@""]) {
+        dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+    }else {
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    }
+    
     NSDate *tempDate = [dateFormatter dateFromString:timeString];//将字符串转换为时间对象
     NSString *timeStr = [NSString stringWithFormat:@"%ld", (long)[tempDate timeIntervalSince1970]];//字符串转成时间戳,精确到毫秒*1000
     return timeStr;

@@ -155,6 +155,7 @@ FOUNDATION_EXPORT NSString *const H5Evaluation;//评测
 //===============用户协议、隐私协议链接
 FOUNDATION_EXPORT NSString *const ServiceProtocolURl;//用户协议
 FOUNDATION_EXPORT NSString *const PrivacyProtocolURL;//隐私协议
+FOUNDATION_EXPORT NSString *const DeviceSharedPrivacyProtocolURL;//设备分享隐私协议
 FOUNDATION_EXPORT NSString *const CancelAccountURL;//账号注销协议
 @end
 

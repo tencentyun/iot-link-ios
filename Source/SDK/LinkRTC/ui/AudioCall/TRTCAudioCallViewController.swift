@@ -228,19 +228,19 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
     }
     
     @objc func beHungUp() {
-        tipLabel.text = "对方已挂断..."
+        tipLabel.text = NSLocalizedString("other_part_hangup", comment: "对方已挂断...")
     }
     
     @objc func hungUp() {
-        tipLabel.text = "对方正忙..."
+        tipLabel.text = NSLocalizedString("other_part_busy", comment: "对方正忙...")
     }
     
     @objc func noAnswered() {
-        tipLabel.text = "对方无人接听..."
+        tipLabel.text = NSLocalizedString("other_part_no_answer", comment: "对方无人接听...")
     }
     
     @objc func otherAnswered() {
-        tipLabel.text = "其他用户已接听..."
+        tipLabel.text = NSLocalizedString("other_part_answered", comment: "其他用户已接听...")
     }
 }
 
@@ -408,7 +408,7 @@ extension TRTCCallingAuidoViewController {
         self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text
-        indicator.label.text = self.isMicMute ? "开启静音" : "关闭静音"
+        indicator.label.text = self.isMicMute ? NSLocalizedString("mute_on", comment: "开启静音") : NSLocalizedString("mute_off", comment: "关闭静音")
         indicator.margin = 10
         indicator.offset.y = 50
         indicator.removeFromSuperViewOnHide = true
@@ -421,7 +421,7 @@ extension TRTCCallingAuidoViewController {
         self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text
-        indicator.label.text = self.isHandsFreeOn ? "开启免提" : "关闭免提"
+        indicator.label.text = self.isHandsFreeOn ? NSLocalizedString("turn_on_handsfree", comment: "开启免提") : NSLocalizedString("turn_off_handsfree", comment: "关闭免提")
         indicator.margin = 10
         indicator.offset.y = 50
         indicator.removeFromSuperViewOnHide = true
@@ -438,7 +438,7 @@ extension TRTCCallingAuidoViewController {
                 make?.height.mas_equalTo()(60)
             }
             
-            tipLabel.text = "语音呼叫中..."
+            tipLabel.text = NSLocalizedString("voice_calling", comment: "语音呼叫中...")
             break
         case .onInvitee:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
@@ -455,7 +455,7 @@ extension TRTCCallingAuidoViewController {
                 make?.height.mas_equalTo()(60)
             }
             
-            tipLabel.text = "语音通话邀请"
+            tipLabel.text = NSLocalizedString("voice_call_invitation", comment: "语音通话邀请")
             break
         case .calling:
             hangup.mas_updateConstraints { (make:MASConstraintMaker?) in
@@ -466,7 +466,7 @@ extension TRTCCallingAuidoViewController {
             }
             startGCDTimer()
             
-            tipLabel.text = "语音通话中..."
+            tipLabel.text = NSLocalizedString("voice_communicating", comment: "语音通话中...")
             break
         }
         

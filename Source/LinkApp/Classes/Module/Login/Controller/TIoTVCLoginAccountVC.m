@@ -21,6 +21,7 @@
 #import "YYModel.h"
 #import "TIoTCountdownTimer.h"
 #import "UILabel+TIoTExtension.h"
+#import "TIoTAlertCustomView.h"
 
 static CGFloat const kLeftRightPadding = 20; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
@@ -188,6 +189,34 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     //判断获取验证码按钮是否可点击
     [self judgeVerificationButtonResponse];
+    
+    [self firstShowBirthdayView];
+}
+
+- (void)firstShowBirthdayView {
+    
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView]) {
+        TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]initWithFrame:[UIScreen mainScreen].bounds withContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:YES];
+        [customView alertCustomViewTitleMessage:NSLocalizedString(@"please_setting_birthday", @"为了给您提供更好的体验，请设备您的出生日期") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
+        [self.view addSubview:customView];
+        
+        customView.cancelBlock = ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        };
+        
+        customView.confirmBlock = ^(NSString * _Nonnull timeString) {
+            
+            NSString *selectedTime = [NSString getTimeStampWithString:timeString withFormatter:@"yyyy-MM-dd" withTimezone:@""];
+
+            NSInteger age = [NSString timeDifferenceInfoWitFormTimeStamp:[[NSDate date] timeIntervalSince1970] toTimeStamp:selectedTime.longLongValue dateFormatter:@"yyyy-MM-dd" timeType:TIoTTimeTypeYear];
+            if (age < 13) {
+                [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+            }
+        };
+        
+        [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
+        
+    }
 }
 
 #pragma mark - //判断获取验证码按钮是否可点击

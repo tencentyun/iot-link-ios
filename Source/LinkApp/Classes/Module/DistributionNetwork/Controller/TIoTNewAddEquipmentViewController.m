@@ -20,6 +20,7 @@
 #import "TIoTAppConfig.h"
 
 #import "TIoTConfigHardwareViewController.h"
+#import "TIoTAlertCustomView.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -62,6 +63,31 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     
     [HXYNotice changeAddDeviceTypeListener:self reaction:@selector(receiveChangeAddDeviceType:)];
 //    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
+    
+    //条件：美东地区+初次添加设备
+    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"] && [NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].addDeviceNumber]) {
+        //让用户同意设备分享弹框
+        [self usserAgreeDeviceSharedClause];
+        
+        [TIoTCoreUserManage shared].addDeviceNumber = @"1";
+    }
+}
+
+- (void)usserAgreeDeviceSharedClause {
+    TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]initWithFrame:[UIScreen mainScreen].bounds withContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"device_share", @"设备共享") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
+    [self.view addSubview:customView];
+    
+    customView.cancelBlock = ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    
+    customView.privatePolicyBlock = ^{
+        TIoTWebVC *vc = [TIoTWebVC new];
+        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+        vc.urlPath = DeviceSharedPrivacyProtocolURL;
+        [self.navigationController pushViewController:vc animated:YES];
+    };
 }
 
 #pragma mark - other
