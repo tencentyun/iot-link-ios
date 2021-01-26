@@ -53,7 +53,7 @@ jobs:
         rl=$(git log --pretty=format:"%s" $rc -1)
         
         fir publish LinkApp.ipa -T $RELEASE_PGYER_API_KEY -c "$rl" --oversea_turbo --force_pin_history -V
-        fir publish LinkSDKDemo.ipa -T $RELEASE_PGYER_API_KEY --oversea_turbo --force_pin_history -V
+        fir publish LinkSDKDemo.ipa -T $RELEASE_PGYER_API_KEY -c "$rl" --oversea_turbo --force_pin_history -V
       env:
         RELEASE_PGYER_API_KEY: ${{ secrets.IOT_FIRIM_API_TOKEN }}
         

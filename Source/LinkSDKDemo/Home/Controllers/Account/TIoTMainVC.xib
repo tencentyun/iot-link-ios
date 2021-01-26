@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TIoTMainVC">
             <connections>
+                <outlet property="versionLB" destination="wcY-BY-Nwe" id="MiR-fs-4yP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -51,16 +52,24 @@
                         <action selector="jumpRTC:" destination="-1" eventType="touchUpInside" id="fOr-Os-71m"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcY-BY-Nwe">
+                    <rect key="frame" x="185" y="826" width="44" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" systemColor="systemGray2Color"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="JbQ-yo-0T0" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="DbT-e1-Y0W"/>
                 <constraint firstItem="JbQ-yo-0T0" firstAttribute="top" secondItem="S68-cD-7Np" secondAttribute="bottom" constant="150" id="E0i-8C-xm2"/>
+                <constraint firstItem="wcY-BY-Nwe" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="FJl-md-mzk"/>
                 <constraint firstItem="S68-cD-7Np" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="FhD-Ca-fFq"/>
                 <constraint firstItem="Wvo-0t-jv4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="MxP-jA-PkZ"/>
                 <constraint firstItem="Wvo-0t-jv4" firstAttribute="top" secondItem="JbQ-yo-0T0" secondAttribute="bottom" constant="150" id="cMQ-4x-EW6"/>
                 <constraint firstItem="JbQ-yo-0T0" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="sxx-sD-uCd"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="wcY-BY-Nwe" secondAttribute="bottom" constant="15" id="uhR-XQ-Pgf"/>
             </constraints>
             <point key="canvasLocation" x="-123" y="80"/>
         </view>
@@ -68,6 +77,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

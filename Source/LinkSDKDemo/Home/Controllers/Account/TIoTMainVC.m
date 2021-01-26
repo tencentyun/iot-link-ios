@@ -11,6 +11,7 @@
 #import "TIoTVideoVC.h"
 
 @interface TIoTMainVC ()
+@property (weak, nonatomic) IBOutlet UILabel *versionLB;
 
 @end
 
@@ -19,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    _versionLB.text = [NSString stringWithFormat:@"v%@",appVersion];
 }
 - (IBAction)jumpLinkSDK:(id)sender {
     LoginVC *loginVC = [[LoginVC alloc]init];
