@@ -99,6 +99,7 @@
             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.modalPresentationStyle = UIModalPresentationFullScreen;
+            video.playType = TIotPLayTypeLive;
             video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
             [self presentViewController:video animated:NO completion:nil];
         });
@@ -111,6 +112,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
+            video.playType = TIotPLayTypePlayback;
             video.modalPresentationStyle = UIModalPresentationFullScreen;
             video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback",urlString];
             [self presentViewController:video animated:NO completion:nil];

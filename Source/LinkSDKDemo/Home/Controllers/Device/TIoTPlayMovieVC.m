@@ -11,6 +11,7 @@
 #import "TIoTCoreXP2PBridge.h"
 
 @interface TIoTPlayMovieVC ()
+@property (weak, nonatomic) IBOutlet UIButton *startSpeekButton;
 
 @property (nonatomic,strong) UIImageView *imageView;
 @property (nonatomic, strong) LVRTSPPlayer *video;
@@ -24,6 +25,8 @@
     // Do any additional setup after loading the view from its nib.
     
     [self configVideo];
+    
+    [self setupUIViews:self.playType];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -45,6 +48,23 @@
                                                          selector:@selector(displayNextFrame:)
                                                          userInfo:nil
                                                           repeats:YES];
+}
+
+- (void)setupUIViews:(TIotPLayType )type {
+    switch (type) {
+        case TIotPLayTypeLive:
+        {
+            self.startSpeekButton.hidden = NO;
+            break;
+        }
+        case TIotPLayTypePlayback:
+        {
+            self.startSpeekButton.hidden = YES;
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 
