@@ -9,6 +9,7 @@
 #import "TIoTPlayListVC.h"
 #import "TIoTPlayListCell.h"
 #import "TIoTPlayMovieVC.h"
+#import "TIoTCloudStorageVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTCoreDeviceSet.h"
 #import "TIoTCoreXP2PBridge.h"
@@ -120,7 +121,8 @@
     };
     
     cell.playCloudStorageBlock = ^{
-        
+        TIoTCloudStorageVC *cloudStorage = [[TIoTCloudStorageVC alloc]init];
+        [self.navigationController pushViewController:cloudStorage animated:YES];
     };
     return cell;
 }
