@@ -11,6 +11,18 @@
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
 
+void TTTTLogMessageFunc(int type, char *format) {
+        
+    if (type == 1) {
+        
+        NSString *nsFormat = [NSString stringWithUTF8String:format];
+        NSLog(@"%@", nsFormat);
+    }else {
+        printf("Parameter is: %s\n", format);
+    }
+}
+
+
 @interface TIoTCoreXP2PBridge ()<AWAVCaptureDelegate>
 @end
 
@@ -38,11 +50,30 @@
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
         [audioSession setActive:YES error:nil];
+#ifndef DEBUG
+        [TIoTCoreXP2PBridge redirectNSLog];
+#endif
     }
     return self;
 }
 
++ (void)redirectNSLog {
+    
+    NSString *fileName = @"TTLog.log";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths.firstObject;
+    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+    
+//    [[NSFileManager defaultManager] removeItemAtPath:saveFilePath error:nil];
+
+    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
+    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
+}
+
+
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
+//注册log回调
+    setNativeCallback(TTTTLogMessageFunc);
 
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
