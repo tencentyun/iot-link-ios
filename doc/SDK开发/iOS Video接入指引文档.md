@@ -49,6 +49,18 @@
 * 参数说明:无参数
 * 返回值:无返回值
 
+[[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync];
+* 参数说明:
+    * cmd:命令参数,格式:`action=user_define&cmd=xxx`
+    * timeout:超时时间,单位us
+* 通过block返回值:
+    * 设备端响应请求返回的数据
+
+protocol  TIoTCoreXP2PBridgeDelegate
+* 接口说明:通过该接口获取实时音视频流数据
+
+
+
 ### 附带说明
 * 函数接口调用顺序:
     * startAppWith
