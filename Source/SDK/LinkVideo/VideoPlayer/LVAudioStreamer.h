@@ -28,7 +28,7 @@ typedef enum _AUDIO_STATE {
     AVCodecContext *_audioCodecContext;
 }
 
-@property (nonatomic, strong) LVRTSPPlayer *streamer;
+@property (nonatomic, weak) LVRTSPPlayer *streamer;
 
 - (void)_startAudio;
 - (void)_stopAudio;

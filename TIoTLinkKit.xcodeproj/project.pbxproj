@@ -17,6 +17,7 @@
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
+		6D5995AF25C41EF600E2BDD8 /* TIoTPlayBackListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5995AC25C419F700E2BDD8 /* TIoTPlayBackListModel.m */; };
 		6D6489B1257D37C7000B340F /* TIoTSingleCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */; };
 		6D6489B5257E1592000B340F /* TIoTModifyDeviceNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B4257E1592000B340F /* TIoTModifyDeviceNameVC.m */; };
 		6D648A91257E5BAB000B340F /* TIoTShareDeviceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D648A90257E5BAB000B340F /* TIoTShareDeviceMessageCell.m */; };
@@ -443,6 +444,8 @@
 		6D4E1EE22518AE40003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/ConfigHardware_WiFi.png; sourceTree = "<group>"; };
 		6D4E1EE52518AE44003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/ConfigHardware_WiFi.png; sourceTree = "<group>"; };
 		6D4E1EE62518AE45003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/ConfigHardware_WiFi.png"; sourceTree = "<group>"; };
+		6D5995AB25C419F700E2BDD8 /* TIoTPlayBackListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTPlayBackListModel.h; sourceTree = "<group>"; };
+		6D5995AC25C419F700E2BDD8 /* TIoTPlayBackListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPlayBackListModel.m; sourceTree = "<group>"; };
 		6D6489AF257D37C7000B340F /* TIoTSingleCustomButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSingleCustomButton.h; sourceTree = "<group>"; };
 		6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSingleCustomButton.m; sourceTree = "<group>"; };
 		6D6489B3257E1591000B340F /* TIoTModifyDeviceNameVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyDeviceNameVC.h; sourceTree = "<group>"; };
@@ -2251,6 +2254,8 @@
 				F4F3D73724938EBD005D3396 /* ControlInfo.m */,
 				6D98FAF425BAC92400518AC7 /* TIoTExploreDeviceListModel.h */,
 				6D98FAF525BAC92400518AC7 /* TIoTExploreDeviceListModel.m */,
+				6D5995AB25C419F700E2BDD8 /* TIoTPlayBackListModel.h */,
+				6D5995AC25C419F700E2BDD8 /* TIoTPlayBackListModel.m */,
 				6D98FB7625BAD98E00518AC7 /* TIoTVideoDeviceListModel.h */,
 				6D98FB7725BAD98E00518AC7 /* TIoTVideoDeviceListModel.m */,
 			);
@@ -3031,6 +3036,7 @@
 				F4F3D53E24935BD3005D3396 /* main.m in Sources */,
 				F4F3D7CB24938EBE005D3396 /* HomeVC.m in Sources */,
 				F4F325E925919A1200A4CAAB /* CallUserModel.swift in Sources */,
+				6D5995AF25C41EF600E2BDD8 /* TIoTPlayBackListModel.m in Sources */,
 				F4F325E525919A1200A4CAAB /* CommonUtils.swift in Sources */,
 				F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */,
 				F4F325E125919A1200A4CAAB /* TRTCAudioCallViewController.swift in Sources */,
