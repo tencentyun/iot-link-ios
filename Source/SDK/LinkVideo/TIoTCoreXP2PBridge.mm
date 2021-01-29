@@ -73,7 +73,7 @@ void TTTTLogMessageFunc(int type, char *format) {
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //注册log回调
-    setNativeCallback(TTTTLogMessageFunc);
+//    setNativeCallback(TTTTLogMessageFunc);
 
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
