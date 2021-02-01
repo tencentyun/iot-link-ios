@@ -79,9 +79,12 @@
     
     // Set the RTSP Options
     AVDictionary *opts = 0;
-    if (usesTcp) 
-        av_dict_set(&opts, "rtsp_transport", "tcp", 0);
-
+    if (usesTcp) {
+        av_dict_set(&opts, "rtsp_transport", "tcp", 0);//默认以udp方式打开，改为tcp
+        av_dict_set(&opts, "buffer_size", "102400", 0); //设置缓存大小，1080p可将值调大
+        av_dict_set(&opts, "stimeout", "3000000", 0); //设置超时断开连接时间，单位微秒
+        av_dict_set(&opts, "max_delay", "500000", 0); //设置最大时延
+    }
     
     if (avformat_open_input(&pFormatCtx, [moviePath UTF8String], NULL, &opts) !=0 ) {
         av_log(NULL, AV_LOG_ERROR, "Couldn't open file\n");
