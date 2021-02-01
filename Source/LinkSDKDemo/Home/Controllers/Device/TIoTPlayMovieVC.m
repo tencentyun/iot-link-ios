@@ -102,6 +102,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         case TIotPLayTypeLive:
         {
             self.startSpeekButton.hidden = NO;
+            [self configVideo];
             break;
         }
         case TIotPLayTypePlayback:
