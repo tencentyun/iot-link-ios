@@ -11,6 +11,7 @@
 #import "TIoTPlayConfigVC.h"
 #import "TIoTPlayListVC.h"
 #import "TIoTCoreXP2PBridge.h"
+#import "TIoTPlayConfigVC.h"
 
 @interface TIoTVideoVC ()
 @property (weak, nonatomic) IBOutlet UILabel *versionLB;
@@ -31,7 +32,7 @@
     
 }
 - (IBAction)jumpPlaying:(id)sender {
-    TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+    TIoTPlayConfigVC *playListVC = [[TIoTPlayConfigVC alloc]init];
     [self.navigationController pushViewController:playListVC animated:YES];
 }
 

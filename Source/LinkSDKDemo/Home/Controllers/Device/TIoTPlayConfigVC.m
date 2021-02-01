@@ -12,6 +12,7 @@
 #import "UIColor+Color.h"
 #import "NSString+Extension.h"
 #import "TIoTPlayListVC.h"
+#import "TIoTCoreAppEnvironment.h"
 
 @interface TIoTPlayConfigVC ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *secretID;
@@ -46,8 +47,8 @@
     self.secretID.delegate = self;
     self.secretID.layer.cornerRadius = 10;
     self.secretID.layer.borderWidth = 1;
-    self.productID.layer.borderColor = [UIColor blueColor].CGColor;
-//    [self.view addSubview:self.secretID];
+    self.secretID.layer.borderColor = [UIColor blueColor].CGColor;
+    [self.view addSubview:self.secretID];
     
     self.secretKey = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretID.frame)+kInterval, kWidth, kHeight)];
     self.secretKey.textColor = [UIColor colorWithHexString:kMainThemeColor];
@@ -59,7 +60,7 @@
     self.secretKey.layer.cornerRadius = 10;
     self.secretKey.layer.borderWidth = 1;
     self.secretKey.layer.borderColor = [UIColor blueColor].CGColor;
-//    [self.view addSubview:self.secretKey];
+    [self.view addSubview:self.secretKey];
     
     self.productID =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretKey.frame)+kInterval, kWidth, kHeight)];
     self.productID.textColor = [UIColor colorWithHexString:kMainThemeColor];
@@ -71,10 +72,10 @@
     self.productID.layer.cornerRadius = 10;
     self.productID.layer.borderWidth = 1;
     self.productID.layer.borderColor = [UIColor blueColor].CGColor;
-//    [self.view addSubview:self.productID];
+    [self.view addSubview:self.productID];
     
     UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    requestButton.frame = CGRectMake(kLeftPadding, 200+kInterval, kWidth, kHeight);
+    requestButton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.productID.frame)+kInterval, kWidth, kHeight);
     [requestButton setTitle:@"获取PRODUCTIF下的设备列表" forState:UIControlStateNormal];
     [requestButton setTitleColor:[UIColor colorWithHexString:kMainThemeColor] forState:UIControlStateNormal];
     requestButton.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -85,8 +86,6 @@
     [self.view addGestureRecognizer:tap];
     
     [self.secretID becomeFirstResponder];
-    
-    
     
     self.secretIDString = @"";
     self.secretKeyString = @"";
@@ -181,8 +180,20 @@
 }
 
 - (void)requestDeviceList {
-    TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-    [self.navigationController pushViewController:playListVC animated:YES];
+    
+    if ((![NSString isNullOrNilWithObject:self.secretIDString] && ![NSString isFullSpaceEmpty:self.secretIDString]) && (![NSString isNullOrNilWithObject:self.secretKeyString] && ![NSString isFullSpaceEmpty:self.secretKeyString]) && (![NSString isNullOrNilWithObject:self.productIDString] && ![NSString isFullSpaceEmpty:self.productIDString])) {
+        
+        TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
+        environment.cloudSecretId = self.secretIDString;
+        environment.cloudSecretKey = self.secretKeyString;
+        environment.cloudProductId = self.productIDString;
+        
+        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+        [self.navigationController pushViewController:playListVC animated:YES];
+    }else {
+        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+        [self.navigationController pushViewController:playListVC animated:YES];
+    }
     
 }
     
