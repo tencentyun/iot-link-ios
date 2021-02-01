@@ -15,7 +15,9 @@
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
-@interface TIoTPlayMovieVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTPlayMovieVC ()<UITableViewDelegate,UITableViewDataSource> {
+    dispatch_queue_t cfstreamThreadDemuxQueue;
+}
 @property (weak, nonatomic) IBOutlet UIButton *startSpeekButton;
 
 @property (nonatomic,strong) UIImageView *imageView;
@@ -58,6 +60,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)configVideo {
+    cfstreamThreadDemuxQueue = dispatch_queue_create("LVVideo-CFStreamThreadDemux", DISPATCH_QUEUE_SERIAL);
     
     self.video = [[LVRTSPPlayer alloc] initWithVideo:self.videoUrl usesTcp:YES];
     self.video.outputWidth = self.imageView.frame.size.width;
@@ -118,20 +121,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     self.nextFrameTimer = nil;
 }
 
--(void)displayNextFrame:(NSTimer *)timer{
-//    if (![self.video stepFrame]) {
-//        [timer invalidate];
-//        [self.video closeAudio];
-//        return;
-//    }
-//    self.imageView.image = self.video.currentImage;
-    
-    static dispatch_queue_t cfstreamThreadDemuxQueue; // setup & teardown
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
-        cfstreamThreadDemuxQueue = dispatch_queue_create("LVVideo-CFStreamThreadDemux", DISPATCH_QUEUE_SERIAL);
-    });
-    
+-(void)displayNextFrame:(NSTimer *)timer{    
     dispatch_async(cfstreamThreadDemuxQueue, ^{
         // 耗时的操作
         if (![self.video stepFrame]) {
