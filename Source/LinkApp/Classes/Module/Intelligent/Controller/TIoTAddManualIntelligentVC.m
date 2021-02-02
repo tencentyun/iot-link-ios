@@ -406,7 +406,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 #warning 后期添加判断类型 暂时先如下处理
-    TIoTAutoIntelligentModel *model = self.dataArray[indexPath.row];
+    TIoTAutoIntelligentModel *model;
+    if (self.dataArray.count == 0) {
+        model = [TIoTAutoIntelligentModel new];
+    }else {
+        model = self.dataArray[indexPath.row];
+    }
     
     if (tableView == self.tableView) {
         
