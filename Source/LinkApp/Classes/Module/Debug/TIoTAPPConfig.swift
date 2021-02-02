@@ -49,6 +49,10 @@ class TIoTAPPConfig: NSObject {
     public static var regionlistString: NSString {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/37/config1.js"
     }
+    
+    public static var intelligentSceneImageList: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/39/config2.js"
+    }
 }
 
 

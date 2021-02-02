@@ -75,6 +75,8 @@
         }];
         
         self.intelligentImage = [[UIImageView alloc]init];
+        self.intelligentImage.layer.cornerRadius = 8.0;
+        self.intelligentImage.layer.masksToBounds = YES;
         [self.contentView addSubview:self.intelligentImage];
         [self.intelligentImage mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(64);
