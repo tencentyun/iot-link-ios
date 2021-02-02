@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *sortedNameDict;
 @property (nonatomic, strong) NSMutableArray *indexArray;
+@property (nonatomic, strong) UIView *backMaskView;
 @end
 
 @implementation TIoTChooseTimeZoneVC
@@ -206,16 +207,40 @@
     NSString * cityName = [array.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString * timeZone = array.lastObject;
     
-    if (self.returnTimeZoneBlock != nil) {
-        self.returnTimeZoneBlock(timeZone,cityName);
-    }
-    
     _searchController.active = NO;
     [_searchController.searchBar resignFirstResponder];
     
-    [self.navigationController popViewControllerAnimated:YES];
-    
     WCLog(@"城市名称: %@   城市时区: %@",cityName,timeZone);
+    
+    //判断时区与选择时区是否一致，不一致则弹框提示
+    if ([self.defaultTimeZone isEqualToString:timeZone]) {
+        [self hideAlertView];
+        [self.navigationController popViewControllerAnimated:YES];
+    }else {
+        __weak typeof(self) Weakself = self;
+        TIoTAlertView *alertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:[UIImage imageNamed:@""]];
+        [alertView alertWithTitle:NSLocalizedString(@"Are you sure you want to switch the time zone?", @"确定切换时区吗？") message:NSLocalizedString(@"If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!", @"您切换时区将会同步更改您为家里的智能设备设置的定时、场景等任务时区，请知悉！") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
+        alertView.doneAction = ^(NSString * _Nonnull text) {
+            
+            [self hideAlertView];
+            if (Weakself.returnTimeZoneBlock != nil) {
+                Weakself.returnTimeZoneBlock(timeZone,cityName);
+            }
+            [Weakself.navigationController popViewControllerAnimated:YES];
+        };
+        
+        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+        [alertView showInView:self.backMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.backMaskView addGestureRecognizer:tap];
+    }
+    
+}
+
+- (void)hideAlertView {
+    [self.backMaskView removeFromSuperview];
 }
 
 - (void)back{

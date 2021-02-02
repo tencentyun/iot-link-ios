@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTChooseTimeZoneVC : UIViewController
 
 @property (nonatomic, copy) returnTimeZoneBlock returnTimeZoneBlock;
-
+@property (nonatomic, copy) NSString *defaultTimeZone;
 @end
 
 NS_ASSUME_NONNULL_END

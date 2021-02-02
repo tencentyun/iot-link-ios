@@ -489,6 +489,7 @@
             [actionSheet shwoActionSheetView];
         }else if ([tempSectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"time_zone", @"时区")]){
             TIoTChooseTimeZoneVC *timeZoneVC = [[TIoTChooseTimeZoneVC alloc]init];
+            timeZoneVC.defaultTimeZone = self.dataArr[2][1][@"value"];
             timeZoneVC.returnTimeZoneBlock = ^(NSString * _Nonnull timeZone, NSString * _Nonnull cityName) {
 
                 [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
