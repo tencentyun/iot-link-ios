@@ -36,12 +36,10 @@ typedef void(^TIoTAlertCustomViewPrivatePolicyBlock)(void);
 @property (nonatomic, copy) TIoTAlertCustomViewPrivatePolicyBlock privatePolicyBlock;
 
 
-/// 弹框初始化
-/// @param frame 尺寸
-/// @param contentType 弹框内容显示类型：TIoTAlertCustomViewContentType
-/// @param hideTap 是否在背景遮罩添加点击取消手势
-- (instancetype)initWithFrame:(CGRect)frame withContentType:(TIoTAlertCustomViewContentType)contentType isAddHideGesture:(BOOL)hideTap;
-
+/// 设置弹框类型和消失手势
+/// @param contentType 弹框类型
+/// @param hideTap 隐藏弹框手势
+- (void)alertContentType:(TIoTAlertCustomViewContentType)contentType isAddHideGesture:(BOOL)hideTap;
 
 /// 设置弹框内容
 /// @param titleString title 内容

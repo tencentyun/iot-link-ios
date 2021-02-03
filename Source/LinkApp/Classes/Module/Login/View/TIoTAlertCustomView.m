@@ -7,17 +7,22 @@
 //
 
 #import "TIoTAlertCustomView.h"
+#import "TIoTIntelligentBottomActionView.h"
+#import "UIView+XDPExtension.h"
 
 @interface TIoTAlertCustomView ()<UITextViewDelegate>
 @property (nonatomic, strong) UIView *blackMaskView;
+@property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UILabel *messageLabel;
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) UITextView *procolTV;
-@property (nonatomic, strong) UIButton *cancelButton;
-@property (nonatomic, strong) UIButton *confirmButton;
+@property (nonatomic, strong) NSString *cancelBtnTitle;
+@property (nonatomic, strong) NSString *confirmBtnTitle;
 
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) NSString *messsageString;
+@property (nonatomic, strong) UIView *procolHoldView;
 @property (nonatomic, strong) NSString *dateString;
 @property (nonatomic, assign) TIoTAlertCustomViewContentType type;
 @property (nonatomic, strong) NSMutableAttributedString *conentTextProtolString;
@@ -26,20 +31,30 @@
 
 @implementation TIoTAlertCustomView
 
-- (instancetype)initWithFrame:(CGRect)frame withContentType:(TIoTAlertCustomViewContentType)contentType isAddHideGesture:(BOOL)hideTap{
+- (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self initializationData:contentType];
-        [self setUPUIViewsWithHideMaskGesture:hideTap];
+        self.cancelBtnTitle = NSLocalizedString(@"cancel", @"取消");
+        self.confirmBtnTitle = NSLocalizedString(@"confirm", @"确定");
     }
     return self;
+}
+
+- (void)alertContentType:(TIoTAlertCustomViewContentType)contentType isAddHideGesture:(BOOL)hideTap {
+    [self initializationData:contentType];
+    [self setUPUIViewsWithHideMaskGesture:hideTap];
 }
 
 - (void)alertCustomViewTitleMessage:(NSString *)titleString cancelBtnTitle:(NSString *)cancelTitle confirmBtnTitle:(NSString *)confirmTitle {
     
     self.messageLabel.text = titleString?:@"";
-    [self.cancelButton setTitle:cancelTitle?:@"" forState:UIControlStateNormal];
-    [self.confirmButton setTitle:confirmTitle?:@"" forState:UIControlStateNormal];
+    self.cancelBtnTitle = cancelTitle?:self.cancelBtnTitle;
+    self.confirmBtnTitle = confirmTitle?:self.confirmBtnTitle;
+    
+    [_bottomView bottomViewType:IntelligentBottomViewTypeDouble withTitleArray:@[self.cancelBtnTitle,self.confirmBtnTitle]];
+    
+    self.titleLabel.text = titleString?:@"";
+    
 }
 
 - (void)setUPUIViewsWithHideMaskGesture:(BOOL)isHide {
@@ -51,19 +66,36 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
     if (isHide) [self.blackMaskView addGestureRecognizer:tap];
     
-    
-    
-    CGFloat kIntervalPadding = 10;
-    CGFloat kContentViewPadding = 30;
+    CGFloat kIntervalPadding = 12;
+    CGFloat kContentViewPadding = 20;
     CGFloat kTitleWidthPadding = 20;
+    
+    
+    CGFloat kBottomViewHeight = 56;
+    CGFloat kSafeAreaInsetBottom = 34;
+    
+    if (@available (iOS 11.0, *)) {
+        if ([UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom) {
+            kBottomViewHeight = kBottomViewHeight +[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+        }else {
+            kBottomViewHeight = kBottomViewHeight + kSafeAreaInsetBottom;
+        }
+    }else {
+        kBottomViewHeight = kBottomViewHeight + kSafeAreaInsetBottom;
+    }
+    
+    [self.blackMaskView addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.blackMaskView);
+        make.height.mas_equalTo(kBottomViewHeight);
+    }];
     
     self.contentView = [[UIView alloc]init];
     self.contentView.backgroundColor = [UIColor whiteColor];
-    self.contentView.layer.cornerRadius = 10;
     [self.blackMaskView addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.blackMaskView);
-        make.width.mas_equalTo(kScreenWidth - kContentViewPadding*2);
+        make.width.equalTo(self.blackMaskView.mas_width);
+        make.bottom.equalTo(self.bottomView.mas_top);
     }];
 
     UILabel *messageLabel = [[UILabel alloc]init];
@@ -73,42 +105,102 @@
     self.messageLabel = messageLabel;
     [messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(kTitleWidthPadding);
-        make.top.equalTo(self.contentView.mas_top).offset(kIntervalPadding*2);
+        make.top.equalTo(self.contentView.mas_top).offset(kIntervalPadding);
         make.trailing.mas_equalTo(-kTitleWidthPadding);
     }];
 
+    UIView *lineTop = [[UIView alloc]init];
+    lineTop.backgroundColor = kLineColor;
+    [self.contentView addSubview:lineTop];
+    [lineTop mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(self.contentView);
+        make.height.mas_equalTo(1);
+        make.top.equalTo(messageLabel.mas_bottom).offset(kIntervalPadding);
+    }];
+    
     UIView *middleView = [[UIView alloc]init];
     middleView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:middleView];
     [middleView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.leading.trailing.equalTo(self.contentView);
-        make.top.equalTo(messageLabel.mas_bottom).offset(kIntervalPadding);
-        make.height.mas_equalTo(200);
-        make.trailing.mas_equalTo(-kTitleWidthPadding);
-        make.leading.mas_equalTo(kTitleWidthPadding);
+        make.top.equalTo(lineTop.mas_bottom).offset(0);
+        make.height.mas_equalTo(272);
+        make.trailing.mas_equalTo(0);
+        make.leading.mas_equalTo(0);
     }];
     
     
     if (self.type == TIoTAlertViewContentTypeDatePick) {
+        
         [middleView addSubview:self.datePicker];
         [self.datePicker mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.left.right.equalTo(middleView);
         }];
     }else {
         
+        messageLabel.hidden = YES;
+        lineTop.hidden = YES;
         middleView.hidden = YES;
+        
+        CGFloat kTopPadding = 24;
+        CGFloat kTopViewHeight = 72;
+        
+        UIView *topView = [[UIView alloc]init];
+        [self.contentView addSubview:topView];
+        [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView.mas_top).offset(kTopPadding);
+            make.left.right.equalTo(self.contentView);
+            make.height.mas_equalTo(kTopViewHeight);
+        }];
+        
+        UIImageView *logoImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"AppIcon"]];
+        [topView addSubview:logoImage];
+        [logoImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.contentView.mas_left).offset(kTitleWidthPadding);
+            make.top.equalTo(self.contentView.mas_top).offset(kTopPadding);
+            make.width.height.mas_equalTo(24);
+        }];
+        
+        UILabel *logoLabel = [[UILabel alloc]init];
+        logoLabel.text = NSLocalizedString(@"lialian_name", @"腾讯连连");
+        logoLabel.font = [UIFont wcPfRegularFontOfSize:16];
+        logoLabel.textColor = [UIColor blackColor];
+        logoLabel.textAlignment = NSTextAlignmentLeft;
+        [topView addSubview:logoLabel];
+        [logoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(logoImage.mas_right).offset(8);
+            make.centerY.equalTo(logoImage);
+        }];
+        
+        self.titleLabel = [[UILabel alloc]init];
+        self.titleLabel.font = [UIFont wcPfMediumFontOfSize:22];
+        self.titleLabel.textColor = [UIColor blackColor];
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        [topView addSubview:self.titleLabel];
+        [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(logoImage.mas_bottom).offset(15);
+            make.left.equalTo(logoImage.mas_left);
+        }];
         
         self.procolTV = [[UITextView alloc] init];
         self.procolTV.attributedText = [self conentTextProtolString];;
         self.procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
-        self.procolTV.textColor = [UIColor colorWithHexString:@"#6C7078"];
+        self.procolTV.textColor = [UIColor colorWithHexString:@"#888888"];
         self.procolTV.delegate = self;
         self.procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
         self.procolTV.scrollEnabled = NO;
         [self.contentView addSubview:self.procolTV];
         [self.procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(middleView);
-            make.top.equalTo(messageLabel.mas_bottom);
+            make.left.equalTo(middleView.mas_left).offset(kTitleWidthPadding);
+            make.right.equalTo(middleView.mas_right).offset(-kTitleWidthPadding);
+            make.top.equalTo(topView.mas_bottom).offset(kContentViewPadding);
+        }];
+        
+        self.procolHoldView = [[UIView alloc]init];
+        [self.contentView addSubview:self.procolHoldView];
+        [self.procolHoldView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.contentView);
+            make.top.equalTo(self.procolTV.mas_bottom);
+            make.height.mas_equalTo(60);
         }];
     }
     
@@ -120,9 +212,9 @@
         make.leading.trailing.equalTo(self.contentView);
         make.height.mas_equalTo(1);
         if (self.type == TIoTAlertViewContentTypeDatePick) {
-            make.top.equalTo(middleView.mas_bottom).offset(kIntervalPadding);
+            make.top.equalTo(middleView.mas_bottom).offset(0);
         }else {
-            make.top.equalTo(self.procolTV.mas_bottom).offset(kIntervalPadding);
+            make.top.equalTo(self.procolHoldView.mas_bottom).offset(0);
         }
         
     }];
@@ -135,61 +227,28 @@
         make.leading.trailing.equalTo(self.contentView);
         make.top.equalTo(line.mas_bottom);
         make.bottom.equalTo(self.contentView.mas_bottom);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(8);
     }];
 
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelButton setTitleColor:[UIColor colorWithHexString:@"#6C7078"] forState:UIControlStateNormal];
-    cancelButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-    [cancelButton setBackgroundColor:[UIColor whiteColor]];
-    [cancelButton addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
-    cancelButton.layer.cornerRadius = 10;
-    [stack addArrangedSubview:cancelButton];
-    self.cancelButton = cancelButton;
-
-    UIView *lineBtn = [[UIView alloc]init];
-    lineBtn.backgroundColor = kLineColor;
-    [self.contentView addSubview:lineBtn];
-    [lineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(cancelButton);
-        make.leading.equalTo(cancelButton.mas_trailing);
-        make.width.mas_equalTo(1);
-    }];
-
-    UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [confirmButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
-    [confirmButton setBackgroundColor:[UIColor whiteColor]];
-    confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
-    [confirmButton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
-    confirmButton.layer.cornerRadius = 10;
-    [stack addArrangedSubview:confirmButton];
-    self.confirmButton = confirmButton;
+    UIView *intervalView = [[UIView alloc]init];
+    intervalView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+    [stack addArrangedSubview:intervalView];
     
-    
-}
-
-- (void)cancle {
-    [self hideAlertView];
-    if (self.cancelBlock) {
-        self.cancelBlock();
-    }
-}
-
-- (void)done {
-    [self hideAlertView];
-    if (self.confirmBlock) {
-        self.confirmBlock(self.dateString);
-    }
 }
 
 - (void)hideAlertView {
     [self.blackMaskView removeFromSuperview];
+    [self removeFromSuperview];
 }
 
 - (void)initializationData:(TIoTAlertCustomViewContentType)contentType {
     self.messsageString = @"";
     self.dateString = @"";
     self.type = contentType;
+}
+
+- (void)drawRect:(CGRect)rect {
+    [self changeViewRectConnerWithView:self.contentView withRect:CGRectMake(0, 0, kScreenWidth, CGRectGetHeight(self.contentView.frame)) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
 }
 
 - (void)dateChange:(UIDatePicker *)datePicker {
@@ -229,7 +288,7 @@
             _datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
         }
         _datePicker.backgroundColor = [UIColor whiteColor];
-        _datePicker.frame = CGRectMake(0, 14, kScreenWidth, 200);
+//        _datePicker.frame = CGRectMake(0, 14, kScreenWidth, 272);
         _datePicker.datePickerMode = UIDatePickerModeDate;
         // 设置当前显示时间
         [_datePicker setDate:[NSDate date] animated:YES];
@@ -243,6 +302,29 @@
     return _datePicker;
 }
 
+- (TIoTIntelligentBottomActionView *)bottomView {
+    if (!_bottomView) {
+        _bottomView = [[TIoTIntelligentBottomActionView alloc]init];
+        __weak typeof(self)weakSelf = self;
+        
+        _bottomView.firstBlock = ^{
+            [weakSelf hideAlertView];
+            if (weakSelf.cancelBlock) {
+                weakSelf.cancelBlock();
+            }
+        };
+        
+        _bottomView.secondBlock = ^{
+            [weakSelf hideAlertView];
+            if (weakSelf.confirmBlock) {
+                weakSelf.confirmBlock(weakSelf.dateString);
+            }
+        };
+        
+    }
+    return _bottomView;
+}
+
 - (NSMutableAttributedString *)conentTextProtolString {
     if (!_conentTextProtolString) {
 
@@ -252,8 +334,9 @@
         
         NSRange range2 = [showStr rangeOfString:str2];
         NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
-        [pstype setAlignment:NSTextAlignmentCenter];
-        NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
+        [pstype setAlignment:NSTextAlignmentLeft];
+        [pstype setParagraphSpacing:10];
+        NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor orangeColor],NSParagraphStyleAttributeName:pstype}];
         
         NSString *valueString2 = [[NSString stringWithFormat:@"Privacy2://%@",str2] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
 

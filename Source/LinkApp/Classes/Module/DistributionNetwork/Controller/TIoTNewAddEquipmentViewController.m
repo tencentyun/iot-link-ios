@@ -74,8 +74,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)usserAgreeDeviceSharedClause {
-    TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]initWithFrame:[UIScreen mainScreen].bounds withContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
-    [customView alertCustomViewTitleMessage:NSLocalizedString(@"device_share", @"设备共享") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
+
+    TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
+    [customView alertContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"device_share", @"设备共享") cancelBtnTitle:NSLocalizedString(@"exit", @"退出") confirmBtnTitle:NSLocalizedString(@"agree", @"同意")];
     [self.view addSubview:customView];
     
     customView.cancelBlock = ^{

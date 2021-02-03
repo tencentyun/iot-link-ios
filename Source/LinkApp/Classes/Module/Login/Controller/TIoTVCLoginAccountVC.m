@@ -77,6 +77,11 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self savePhoneOrEmailAccount];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self firstShowBirthdayView];
+}
+
 - (void)setUpUI {
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
@@ -190,13 +195,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     //判断获取验证码按钮是否可点击
     [self judgeVerificationButtonResponse];
     
-    [self firstShowBirthdayView];
 }
 
 - (void)firstShowBirthdayView {
     
-    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView]) {
-        TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]initWithFrame:[UIScreen mainScreen].bounds withContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:YES];
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView] &&  [[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+        TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
+        [customView alertContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:NO];
         [customView alertCustomViewTitleMessage:NSLocalizedString(@"please_setting_birthday", @"为了给您提供更好的体验，请设备您的出生日期") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
         [self.view addSubview:customView];
         
@@ -211,6 +216,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             NSInteger age = [NSString timeDifferenceInfoWitFormTimeStamp:[[NSDate date] timeIntervalSince1970] toTimeStamp:selectedTime.longLongValue dateFormatter:@"yyyy-MM-dd" timeType:TIoTTimeTypeYear];
             if (age < 13) {
                 [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         };
         
@@ -553,7 +559,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         _loginAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginAccountButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginAccountButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_loginAccountButton setBackgroundColor:kMainColorDisable];
+        [_loginAccountButton setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
         _loginAccountButton.enabled = NO;
         _loginAccountButton.layer.cornerRadius = 20;
         _loginAccountButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -663,7 +669,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 - (void)loginStyleChange:(UIButton *)sender {
     
     [self.view endEditing:YES];
-    self.loginAccountButton.backgroundColor = kMainColorDisable;
+    self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.loginAccountButton.enabled = NO;
     if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
         self.loginStyle = YES;
@@ -972,7 +978,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {
-            self.loginAccountButton.backgroundColor = kMainColorDisable;
+            self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.loginAccountButton.enabled = NO;
         }
         
@@ -982,7 +988,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             self.loginAccountButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.loginAccountButton.enabled = YES;
         }else {
-            self.loginAccountButton.backgroundColor = kMainColorDisable;
+            self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.loginAccountButton.enabled = NO;
         }
     }
