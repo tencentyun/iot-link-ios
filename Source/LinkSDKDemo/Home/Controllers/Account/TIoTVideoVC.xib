@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TIoTVideoVC">
             <connections>
+                <outlet property="versionLB" destination="m0Y-yr-KwA" id="hXg-qL-CPR"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -39,6 +40,12 @@
                         <action selector="jumpDistributeNet:" destination="-1" eventType="touchUpInside" id="bNT-kZ-rkc"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="videolocal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0Y-yr-KwA">
+                    <rect key="frame" x="168.5" y="826" width="77" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" systemColor="systemGray2Color"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -46,6 +53,8 @@
                 <constraint firstItem="LsQ-qt-sWQ" firstAttribute="top" secondItem="bfi-vR-aFh" secondAttribute="bottom" constant="175" id="Ec7-td-Hz5"/>
                 <constraint firstItem="bfi-vR-aFh" firstAttribute="trailing" secondItem="LsQ-qt-sWQ" secondAttribute="trailing" id="OJl-s3-EdT"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="LsQ-qt-sWQ" secondAttribute="bottom" constant="262" id="UrM-7L-4FF"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="m0Y-yr-KwA" secondAttribute="bottom" constant="15" id="ZPv-oU-uZT"/>
+                <constraint firstItem="m0Y-yr-KwA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ahG-vG-s0X"/>
                 <constraint firstItem="bfi-vR-aFh" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="157" id="hHt-Pa-5x1"/>
                 <constraint firstItem="bfi-vR-aFh" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="k6J-9v-zNl"/>
                 <constraint firstItem="bfi-vR-aFh" firstAttribute="leading" secondItem="LsQ-qt-sWQ" secondAttribute="leading" id="sk2-Ar-wdv"/>
@@ -56,6 +65,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

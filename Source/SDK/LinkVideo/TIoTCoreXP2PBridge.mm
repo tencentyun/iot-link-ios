@@ -139,4 +139,8 @@ void TTTTNativeVideoData(uint8_t *data, size_t len) {
     dataSend(data, size);
 }
 
+
++ (NSString *)getSDKVersion {    
+    return [NSString stringWithUTF8String:VIDEOSDKVERSION];
+}
 @end

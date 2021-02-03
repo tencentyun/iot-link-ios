@@ -10,9 +10,10 @@
 #import "TIoTVideoConfigNetVC.h"
 #import "TIoTPlayConfigVC.h"
 #import "TIoTPlayListVC.h"
+#import "TIoTCoreXP2PBridge.h"
 
 @interface TIoTVideoVC ()
-
+@property (weak, nonatomic) IBOutlet UILabel *versionLB;
 @end
 
 @implementation TIoTVideoVC
@@ -20,6 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    _versionLB.text = [NSString stringWithFormat:@"v%@",appVersion];
 }
 - (IBAction)jumpDistributeNet:(id)sender {
     TIoTVideoConfigNetVC *configNetVC = [[TIoTVideoConfigNetVC alloc]init];

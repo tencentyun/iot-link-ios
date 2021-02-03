@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTCoreXP2PBridge : NSObject
 @property (nonatomic, weak)id<TIoTCoreXP2PBridgeDelegate> delegate;
 
++ (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;

@@ -32,8 +32,9 @@ cat Source/LinkApp/Supporting\ Files/LinkAppCommon.xcconfig
 #/usr/local/bin/pod install --verbose --no-repo-update
 #sudo gem install cocoapods --pre
 /usr/local/bin/pod --version
-/usr/local/bin/pod install --verbose
- 
+#/usr/local/bin/pod install --verbose
+/usr/local/bin/pod update --verbose
+
 BUILD_TYPE=$1
 
 rm *.ipa
