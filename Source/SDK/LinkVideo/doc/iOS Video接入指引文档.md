@@ -1,12 +1,5 @@
 ## iOS Video接口使用说明
 
-### 版本信息
-* 版本:v1.0
-* 修改内容:
-    * 初始版本
-* 修改时间:2021.01.15
----------------------------
-
 ### 接口说明
 [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:@"" dev_name:@""];
 
