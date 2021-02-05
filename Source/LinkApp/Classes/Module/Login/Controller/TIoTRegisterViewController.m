@@ -14,6 +14,7 @@
 #import "UILabel+TIoTExtension.h"
 #import "UIButton+LQRelayout.h"
 #import "TIoTAlertCustomView.h"
+#import "TIoTOpensourceLicenseViewController.h"
 
 static CGFloat const kLeftRightPadding = 20; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
@@ -472,23 +473,41 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
         WCLog(@"用户协议");
-        TIoTWebVC *vc = [TIoTWebVC new];
-        vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
-        vc.urlPath = ServiceProtocolURl;
-        [self.navigationController pushViewController:vc animated:YES];
-        
-        return NO;
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+            
+            TIoTWebVC *vc = [TIoTWebVC new];
+            vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+            vc.urlPath = ServiceProtocolURl;
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        } else {
+            
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+            vc.urlPath = TIoTAPPConfig.serviceAgreementEnglishString;
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        }
         
     }
     else if ([[URL scheme] isEqualToString:@"Privacy1"]) {
         
         WCLog(@"隐私");
-        TIoTWebVC *vc = [TIoTWebVC new];
-        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
-        vc.urlPath = PrivacyProtocolURL;
-        [self.navigationController pushViewController:vc animated:YES];
-        
-        return NO;
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+            
+            TIoTWebVC *vc = [TIoTWebVC new];
+            vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+            vc.urlPath = PrivacyProtocolURL;
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        } else {
+            
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+            vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        }
     }
     return YES;
 }

@@ -68,6 +68,7 @@ class TIoTAPPConfig: NSObject {
     public static var serviceAgreementEnglishString: NSString {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config3.js"
     }
+    
 }
 
 

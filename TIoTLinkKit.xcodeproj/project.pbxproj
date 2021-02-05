@@ -1914,6 +1914,8 @@
 				6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */,
 				ED6BA5C123C5DF8500BE9EC9 /* TIoTAlertView.h */,
 				ED6BA5C223C5DF8500BE9EC9 /* TIoTAlertView.m */,
+				6D98FCCF25C044B000518AC7 /* TIoTAlertCustomView.h */,
+				6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */,
 				6DD4D1462536F4D2005272BE /* TIoTCountdownTimer.h */,
 				6DD4D1472536F4D2005272BE /* TIoTCountdownTimer.m */,
 				6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */,
@@ -1966,8 +1968,6 @@
 			children = (
 				D210C8442341F46200A53B08 /* JHVerificationCodeView.h */,
 				D210C8432341F46200A53B08 /* JHVerificationCodeView.m */,
-				6D98FCCF25C044B000518AC7 /* TIoTAlertCustomView.h */,
-				6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */,
 				D210C7D32341D7EB00A53B08 /* XWCountryCode */,
 			);
 			path = View;

@@ -21,6 +21,7 @@
 
 #import "TIoTConfigHardwareViewController.h"
 #import "TIoTAlertCustomView.h"
+#import "TIoTOpensourceLicenseViewController.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -85,9 +86,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     };
     
     customView.privatePolicyBlock = ^{
-        TIoTWebVC *vc = [TIoTWebVC new];
+        
+        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
         vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
-        vc.urlPath = DeviceSharedPrivacyProtocolURL;
+        vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
         [self.navigationController pushViewController:vc animated:YES];
     };
 }
