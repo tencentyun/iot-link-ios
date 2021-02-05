@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     self.registView.hidden = self.isExpireAt;
     
     UILabel *proctolLab = [[UILabel alloc] init];
-    proctolLab.text = @"Copyright @ 2013-2020 Tencent Cloud.All Right Reserved.\n腾讯云 版权所有";
+    proctolLab.text = NSLocalizedString(@"copyright", @"Copyright @ 2013-2021 Tencent Cloud.All Right Reserved.\n腾讯云 版权所有");
     proctolLab.textAlignment = NSTextAlignmentCenter;
     proctolLab.textColor = kRGBColor(187, 187, 187);
     proctolLab.font = [UIFont wcPfRegularFontOfSize:10];
