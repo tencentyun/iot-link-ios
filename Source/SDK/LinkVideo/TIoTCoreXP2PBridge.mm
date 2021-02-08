@@ -11,21 +11,28 @@
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
 
-void TTTTLogMessageFunc(int type, char *format) {
-        
+//type=0:close通知； type=1:日志； type=2:json;
+char* XP2PMsgHandle(int type, const char* msg, int len) {
     if (type == 1) {
         
-        NSString *nsFormat = [NSString stringWithUTF8String:format];
+        NSString *nsFormat = [NSString stringWithUTF8String:msg];
         NSLog(@"%@", nsFormat);
     }else {
-        printf("Parameter is: %s\n", format);
+        printf("XP2P log: %s\n", msg);
     }
+
+//    return (char *)nsFormat.UTF8String;
+    return nullptr;
 }
 
-void TTTTNativeVideoData(uint8_t *data, size_t len) {
-    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
-        [delegate getVideoPacket:data len:len];
+//type=0:视频数据； type=1:音频数据;  type=2:flv数据;
+void XP2PDataMsgHandle(int type, uint8_t* recv_buf, size_t recv_len) {
+    if (type == 2) {
+
+        id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+        if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+            [delegate getVideoPacket:recv_buf len:recv_len];
+        }
     }
 }
 
@@ -79,9 +86,8 @@ void TTTTNativeVideoData(uint8_t *data, size_t len) {
 
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
-//注册log回调
-    setNativeCallback(TTTTLogMessageFunc);
-    setNativeCallback(TTTTNativeVideoData);
+//注册回调
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
     
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
