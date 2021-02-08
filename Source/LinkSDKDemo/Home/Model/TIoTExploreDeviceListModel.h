@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "TIoTExploreOrVideoDeviceModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class TIoTExploreDeviceModel;
@@ -18,20 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface TIoTExploreDeviceModel: NSObject
-@property (nonatomic, copy) NSString *AppKey;
-@property (nonatomic, copy) NSString *AppSKey;
-@property (nonatomic, copy) NSString *CreateTime;
-@property (nonatomic, copy) NSString *DevAddr;
-@property (nonatomic, copy) NSString *DevEUI;
-@property (nonatomic, copy) NSString *DeviceCert;
-@property (nonatomic, copy) NSString *DeviceName;
-@property (nonatomic, copy) NSString *DevicePsk;
-@property (nonatomic, copy) NSString *FirstOnlineTime;
-@property (nonatomic, copy) NSString *LogLevel;
-@property (nonatomic, copy) NSString *LoginTime;
-@property (nonatomic, copy) NSString *NwkSKey;
-@property (nonatomic, copy) NSString *Status;
-@property (nonatomic, copy) NSString *Version;
 @end
 
 

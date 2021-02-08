@@ -11,7 +11,7 @@
 @implementation TIoTVideoDeviceListModel
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
-    return @{@"Data":[TIoTVideoDeviceModel class],
+    return @{@"Data":[TIoTExploreOrVideoDeviceModel class],
     };
 }
 
