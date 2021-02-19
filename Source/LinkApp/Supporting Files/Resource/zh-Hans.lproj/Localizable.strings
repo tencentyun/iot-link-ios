@@ -856,3 +856,7 @@
 "device_shared_agree_1" = "通过将设备与腾讯连连连接，即表示您同意共享有关您设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的";
 "Are you sure you want to switch the time zone?" = "确定切换时区吗？";
 "If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!" = "您切换时区将会同步更改您为家里的智能设备设置的定时、场景等任务时区，请知悉！";
+
+//v1.4.0首页重构
+"scan_device" = "扫描设备";
+"intelligent_addDevice" = "智能添加";

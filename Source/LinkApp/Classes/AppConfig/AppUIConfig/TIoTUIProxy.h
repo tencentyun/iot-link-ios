@@ -72,6 +72,8 @@
 #define kRegionHexColor @"#6C7078"
 //注册/登录 手机号邮箱文字颜色
 #define kPhoneEmailHexColor @"#A1A7B2"
+//tabbar自定义视图添加设备入口按钮背景色
+#define kAddDeviceEntrance @"#E1E2E5"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;

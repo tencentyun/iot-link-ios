@@ -13,6 +13,7 @@
 		6D06B07825616720006361B5 /* TIoTAutoConditionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07725616720006361B5 /* TIoTAutoConditionsView.m */; };
 		6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */; };
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
+		6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */; };
 		6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E81251899ED003BE1D9 /* aboutMe_logo.png */; };
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */; };
@@ -69,6 +70,7 @@
 		6DC056E824E7E8F400E06CC4 /* TIoTCustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056E724E7E8F400E06CC4 /* TIoTCustomActionSheet.m */; };
 		6DC056EE24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */; };
 		6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */; };
+		6DC32C0D25DE646100F74D8E /* TIoTCustomTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC32C0C25DE646100F74D8E /* TIoTCustomTabBar.m */; };
 		6DC7F7D02552856B009508EE /* TIoTChooseClickValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F7CF2552856B009508EE /* TIoTChooseClickValueView.m */; };
 		6DC7F7D4255285BC009508EE /* TIoTChooseSliderValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F7D3255285BC009508EE /* TIoTChooseSliderValueView.m */; };
 		6DC7F7DA2552974B009508EE /* TIoTChooseClickValueCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F7D92552974B009508EE /* TIoTChooseClickValueCell.m */; };
@@ -443,6 +445,8 @@
 		6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntelliListVC.m; sourceTree = "<group>"; };
 		6D06B07E2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoAddManualIntellListCell.h; sourceTree = "<group>"; };
 		6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntellListCell.m; sourceTree = "<group>"; };
+		6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTabBarCenterCustomView.h; sourceTree = "<group>"; };
+		6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTabBarCenterCustomView.m; sourceTree = "<group>"; };
 		6D4E1E80251899ED003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/aboutMe_logo.png; sourceTree = "<group>"; };
 		6D4E1E83251899F2003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/aboutMe_logo.png; sourceTree = "<group>"; };
 		6D4E1E84251899FF003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/aboutMe_logo.png"; sourceTree = "<group>"; };
@@ -557,6 +561,8 @@
 		6DC056ED24EA6AF700E06CC4 /* TIoTChooseTimeZoneVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseTimeZoneVC.m; sourceTree = "<group>"; };
 		6DC056F224EAEF2C00E06CC4 /* TIoTChooseRegionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseRegionVC.h; sourceTree = "<group>"; };
 		6DC056F324EAEF2C00E06CC4 /* TIoTChooseRegionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseRegionVC.m; sourceTree = "<group>"; };
+		6DC32C0B25DE646100F74D8E /* TIoTCustomTabBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomTabBar.h; sourceTree = "<group>"; };
+		6DC32C0C25DE646100F74D8E /* TIoTCustomTabBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomTabBar.m; sourceTree = "<group>"; };
 		6DC7F7CE2552856B009508EE /* TIoTChooseClickValueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseClickValueView.h; sourceTree = "<group>"; };
 		6DC7F7CF2552856B009508EE /* TIoTChooseClickValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTChooseClickValueView.m; sourceTree = "<group>"; };
 		6DC7F7D2255285BC009508EE /* TIoTChooseSliderValueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTChooseSliderValueView.h; sourceTree = "<group>"; };
@@ -1612,6 +1618,8 @@
 				EDC630A523D03B190079B64E /* TIoTOptionalView.m */,
 				A40574A524E2AF1E00836FB7 /* TIoTNewVersionTipView.h */,
 				A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */,
+				6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */,
+				6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1913,6 +1921,8 @@
 				6D648A9B257E948A000B340F /* TIoTModifyNameVC.m */,
 				ED6BA5AA23C5855B00BE9EC9 /* TIoTButton.h */,
 				ED6BA5AB23C5855B00BE9EC9 /* TIoTButton.m */,
+				6DC32C0B25DE646100F74D8E /* TIoTCustomTabBar.h */,
+				6DC32C0C25DE646100F74D8E /* TIoTCustomTabBar.m */,
 				6D6489AF257D37C7000B340F /* TIoTSingleCustomButton.h */,
 				6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */,
 				ED6BA5C123C5DF8500BE9EC9 /* TIoTAlertView.h */,
@@ -2831,6 +2841,7 @@
 				6D785E6624CFC0F5001169AE /* TIoTMainVC.m in Sources */,
 				F4F434802546BA2000C44471 /* TIoTProductsModel.swift in Sources */,
 				D23104D32330678F0003069D /* NSAttributedString+XDPAdd.m in Sources */,
+				6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */,
 				6DE640B1258372CB00CB985F /* TIoTProductWelComeConfigModel.m in Sources */,
 				6DC7F7D02552856B009508EE /* TIoTChooseClickValueView.m in Sources */,
 				6DC056F424EAEF2C00E06CC4 /* TIoTChooseRegionVC.m in Sources */,
@@ -2955,6 +2966,7 @@
 				D2C7A9F4232F6AA4005E8006 /* TIoTAppDelegate.m in Sources */,
 				F4F325E625919A1200A4CAAB /* TRTCCallingCell.swift in Sources */,
 				F4AD73122553D5A6003267FC /* TIoTVercheckTask.swift in Sources */,
+				6DC32C0D25DE646100F74D8E /* TIoTCustomTabBar.m in Sources */,
 				6DE47318255C508E000A96FE /* TIoTAutoIntelligentTimingVC.m in Sources */,
 				ED9C15D023B9DCB700CAC848 /* TIoTFamilyInfoVC.m in Sources */,
 				6DE4731D255C64F6000A96FE /* TIoTAutoSettingRepeatTimingView.m in Sources */,

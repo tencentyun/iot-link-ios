@@ -5,11 +5,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "add_intelligent_device@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "addIntelligent_Device@3x.png",
+      "filename" : "add_intelligent_device@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

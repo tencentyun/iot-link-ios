@@ -55,7 +55,7 @@
 
 - (void)setupUI {
     
-    [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
+//    [[UIApplication sharedApplication].delegate.window addSubview:self.navCustomTopView];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -84,6 +84,8 @@
     config.cm_minTitleMargin = 0.0;
     self.pageView.cm_config = config;
     self.pageView.titleView.scrollEnabled = NO; //进制titleview滚动
+    
+    [self.view addSubview:self.navCustomTopView];
 }
 
 #pragma mark - event

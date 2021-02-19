@@ -68,7 +68,9 @@
     }
     
     if ([TIoTCoreUserManage shared].isValidToken) {
+//        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTTabBarViewController alloc] init]];
         self.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+//        self.window.rootViewController = nav;
     }
     else{
         

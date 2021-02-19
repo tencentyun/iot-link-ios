@@ -863,3 +863,8 @@ If the problem still persists, we recommend you remove the device and add it aga
 "device_shared_agree_1" = "By connecting the device with Tencent LLink, you agree to share information about your device and device logs, and the third party can use the device in accordance with its terms and policies.\nFor more information, please read our ";
 "Are you sure you want to switch the time zone?" = "确定切换时区吗？";
 "If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!" = "您切换时区将会同步更改您为家里的智能设备设置的定时、场景等任务时区，请知悉！";
+
+
+//v1.4.0首页重构
+"scan_device" = "扫描设备";
+"intelligent_addDevice" = "智能添加";

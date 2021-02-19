@@ -15,6 +15,13 @@
 #import "TIoTCoreAppEnvironment.h"
 #import <WebKit/WebKit.h>
 #import "TIoTIntelligentHomeVC.h"
+#import "TIoTCustomTabBar.h"
+#import "UIViewController+GetController.h"
+#import "TIoTNewAddEquipmentViewController.h"
+#import "TIoTScanlViewController.h"
+#import "TIoTCustomSheetView.h"
+#import "TIoTAddAutoIntelligentVC.h"
+#import "TIoTAddManualIntelligentVC.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
@@ -30,7 +37,61 @@
     [self.tabBar setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]]];
     self.tabBar.tintColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
 //    [UINavigationBar appearance].shadowImage = [UIImage imageWithColor:kXDPNavigationLineColor];
-    // 1.初始化子控制器
+    
+    // 初始化自定义TabBar
+    TIoTCustomTabBar *customTabBar = [TIoTCustomTabBar new];
+    customTabBar.addDeviceBlock = ^{
+        TIoTNewAddEquipmentViewController *vc = [[TIoTNewAddEquipmentViewController alloc] init];
+        vc.roomId = [TIoTCoreUserManage shared].currentRoomId?:@"";
+        [self.selectedViewController pushViewController:vc animated:YES];
+        
+    };
+    customTabBar.scanDeviceBlock = ^{
+        TIoTScanlViewController *vc = [[TIoTScanlViewController alloc] init];
+        vc.roomId = [TIoTCoreUserManage shared].currentRoomId?:@"";
+        [self.selectedViewController pushViewController:vc animated:YES];
+        
+    };
+    customTabBar.intelliDeviceBlock = ^{
+        
+        TIoTCustomSheetView *customSheet = [[TIoTCustomSheetView alloc]init];
+    
+        NSArray *titleArray = @[NSLocalizedString(@"intelligent_manual", @"手动智能"),NSLocalizedString(@"intelligent_auto", @"自动智能"),NSLocalizedString(@"cancel", @"取消")];
+        
+        __weak typeof(self)weakSelf = self;
+        
+        ChooseFunctionBlock manualIntelliVC = ^(TIoTCustomSheetView *view) {
+            //MARK: 跳转手动智能
+            TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
+            [weakSelf.selectedViewController pushViewController:addManualTask animated:YES];
+            [customSheet removeFromSuperview];
+        };
+        ChooseFunctionBlock autoIntelligentVC = ^(TIoTCustomSheetView *view) {
+            //MARK: 跳转自动智能
+            TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
+            addAutoTask.paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"Offset":@(0),@"Limit":@(999)};
+            [weakSelf.selectedViewController pushViewController:addAutoTask animated:YES];
+            [customSheet removeFromSuperview];
+        };
+        ChooseFunctionBlock cancelBlock = ^(TIoTCustomSheetView *view){
+            [customSheet removeFromSuperview];
+        };
+        
+        NSArray *functionArray = @[manualIntelliVC,autoIntelligentVC,cancelBlock];
+        [customSheet sheetViewTopTitleArray:titleArray withMatchBlocks:functionArray];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication].delegate.window addSubview:customSheet];
+            [customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo([UIApplication sharedApplication].delegate.window);
+                make.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+            }];
+        });
+        
+    };
+    
+    [self setValue:customTabBar forKey:@"tabBar"];
+    
     
     //首页
     TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc] init];
