@@ -328,8 +328,8 @@
 - (NSMutableAttributedString *)conentTextProtolString {
     if (!_conentTextProtolString) {
 
-        NSString *str1 = NSLocalizedString(@"device_shared_agree_1", @"通过将设备名称与腾讯连连连接，即表示您同意与设备名称共享有关您的设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的");
-        NSString *str2= NSLocalizedString(@"register_agree_4", @"隐私政策");
+        NSString *str1 = NSLocalizedString(@"device_shared_agree_1", @"通过将设备与腾讯连连连接，即表示您同意共享有关您设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的");
+        NSString *str2= NSLocalizedString(@"privacy_policy_lower_case", @"隐私政策");
         NSString *showStr = [NSString stringWithFormat:@"%@%@",str1,str2];
         
         NSRange range2 = [showStr rangeOfString:str2];

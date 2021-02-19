@@ -852,6 +852,7 @@
 "please_setting_birthday" = "为了给您提供更好的体验，请设备您的出生日期";
 "sorry_we_cannot_support_service" = "很遗憾，我们目前无法向您提供腾通讯连连";
 "device_share" = "设备共享";
-"device_shared_agree_1" = "通过将设备名称与腾讯连连连接，即表示您同意与设备名称共享有关您的设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的";
+"privacy_policy_lower_case" = "隐私政策";
+"device_shared_agree_1" = "通过将设备与腾讯连连连接，即表示您同意共享有关您设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的";
 "Are you sure you want to switch the time zone?" = "确定切换时区吗？";
 "If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!" = "您切换时区将会同步更改您为家里的智能设备设置的定时、场景等任务时区，请知悉！";
