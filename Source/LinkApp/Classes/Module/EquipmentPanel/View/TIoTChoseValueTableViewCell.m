@@ -9,7 +9,7 @@
 #import "TIoTChoseValueTableViewCell.h"
 
 @interface TIoTChoseValueTableViewCell ()
-
+@property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UILabel *titleLab;
 @property (nonatomic, strong) UIImageView *choseImageView;
 @property (nonatomic, strong) UIView *lineView;
@@ -35,33 +35,44 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = kBgColor;
+        self.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        self.backView = [[UIView alloc]init];
+        self.backView.backgroundColor = kBgColor;
+        self.backView.layer.cornerRadius = 8;
+        [self.contentView addSubview:self.backView];
+        [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView.mas_top).offset(4);
+            make.bottom.equalTo(self.contentView.mas_bottom).offset(-4);
+            make.left.equalTo(self.contentView.mas_left).offset(16);
+            make.right.equalTo(self.contentView.mas_right).offset(-16);
+        }];
         
         self.titleLab = [[UILabel alloc] init];
         self.titleLab.textColor = [UIColor blackColor];
-        self.titleLab.font = [UIFont wcPfRegularFontOfSize:16];
-        [self.contentView addSubview:self.titleLab];
+        self.titleLab.font = [UIFont wcPfRegularFontOfSize:14];
+        [self.backView addSubview:self.titleLab];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView).offset(20);
-            make.centerY.equalTo(self.contentView);
+            make.left.equalTo(self.backView).offset(16);
+            make.centerY.equalTo(self.backView);
         }];
         
         self.lineView = [[UIView alloc] init];
         self.lineView.backgroundColor = kRGBColor(242, 244, 245);
-        [self.contentView addSubview:self.lineView];
+        [self.backView addSubview:self.lineView];
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             self.Lineleft = make.left.mas_equalTo(0);
-            make.bottom.equalTo(self.contentView);
+            make.bottom.equalTo(self.backView);
             make.right.mas_equalTo(0);
             make.height.mas_equalTo(1);
         }];
         
         self.choseImageView = [[UIImageView alloc] initWithImage:nil];
-        [self.contentView addSubview:self.choseImageView];
+        [self.backView addSubview:self.choseImageView];
         [self.choseImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.titleLab);
-            make.right.equalTo(self.contentView).offset(-20);
+            make.right.equalTo(self.backView).offset(-20);
             make.height.width.mas_equalTo(20);
         }];
         
@@ -74,10 +85,10 @@
     self.titleLab.text = title;
     
     if (isSelect) {
-        self.choseImageView.image = [UIImage imageNamed:@"click_tick"];
+        self.choseImageView.image = [UIImage imageNamed:@"single_seleccted"];
     }
     else{
-        self.choseImageView.image = nil;
+        self.choseImageView.image = [UIImage imageNamed:@"single_unseleccted"];
     }
 }
 

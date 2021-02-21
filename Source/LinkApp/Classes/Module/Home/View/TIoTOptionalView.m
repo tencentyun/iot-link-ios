@@ -65,9 +65,7 @@
     }];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:NSLocalizedString(@"family_manager", @"家庭管理") forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:18];
+    [btn setBackgroundColor:[UIColor colorWithHexString:kBackgroundHexColor]];
     [btn addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [_whiteView addSubview:btn];
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -77,6 +75,24 @@
         make.height.mas_equalTo(60);
     }];
     
+    UIImageView *tipImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"family_manage_tip"]];
+    tipImage.userInteractionEnabled = YES;
+    [btn addSubview:tipImage];
+    [tipImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(18);
+        make.left.equalTo(btn.mas_left).offset(32);
+        make.centerY.equalTo(btn);
+    }];
+    
+    UILabel *tipLabel = [[UILabel alloc]init];
+    tipLabel.text = NSLocalizedString(@"family_manager", @"家庭管理");
+    tipLabel.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+    tipLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    [btn addSubview:tipLabel];
+    [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(tipImage.mas_right).offset(11);
+        make.centerY.equalTo(tipImage);
+    }];
 }
 
 
@@ -150,7 +166,7 @@
 - (UITableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[UITableView alloc] init];
-        _tableView.backgroundColor = kBgColor;
+        _tableView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
         _tableView.rowHeight = 60;
         _tableView.separatorColor = kRGBColor(242, 244, 245);
         _tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
