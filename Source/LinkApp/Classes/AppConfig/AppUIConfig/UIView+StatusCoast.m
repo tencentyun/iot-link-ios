@@ -132,7 +132,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
 
 - (void)initEmptyView2{
     XDPEmptyView *emptyView = [[XDPEmptyView alloc] initWithFrame:CGRectMake(0, 44, self.frame.size.width, self.frame.size.height)];
-    emptyView.backgroundColor = [UIColor clearColor];
+    emptyView.backgroundColor = [UIColor redColor];
     [self addSubview:emptyView];
 //    [emptyView mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.width.mas_equalTo(kScreenWidth);
@@ -312,32 +312,37 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     self.imageView = [[UIImageView alloc] init];
     [self addSubview:self.imageView];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(52.5);
-        make.left.equalTo(self).offset(38);
-        make.right.equalTo(self).offset(-38);
-        make.height.equalTo(self.imageView.mas_width);
-    }];
-    
-    self.opreatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.opreatBtn addTarget:self action:@selector(opreatClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.opreatBtn setBackgroundColor:[UIColor clearColor]];
-    [self.imageView addSubview:self.opreatBtn];
-    [self.opreatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.imageView);
-        make.width.height.mas_equalTo(50 * kScreenAllWidthScale);
+        make.top.equalTo(self).offset(110);
+        make.centerX.equalTo(self);
+        make.height.mas_equalTo(160);
+        make.width.mas_equalTo(256);
     }];
     
     self.descLab = [[UILabel alloc] init];
-    self.descLab.textColor = kRGBColor(136, 136, 136);
+    self.descLab.textColor = [UIColor colorWithHexString:@"#6C7078"];
     self.descLab.font = [UIFont wcPfRegularFontOfSize:14];
     self.descLab.numberOfLines = 0;
     self.descLab.textAlignment = NSTextAlignmentCenter;
     [self.descLab sizeToFit];
     [self addSubview:self.descLab];
     [self.descLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.opreatBtn.mas_bottom).offset(25);
-        make.left.equalTo(self).offset(kHorEdge);
-        make.width.mas_equalTo(kXDPContentRealWidth);
+        make.centerX.equalTo(self.imageView);
+        make.top.equalTo(self.imageView.mas_bottom).offset(16);
+    }];
+    
+    self.opreatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.opreatBtn addTarget:self action:@selector(opreatClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.opreatBtn.layer.cornerRadius = 18;
+    self.opreatBtn.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
+    self.opreatBtn.layer.borderWidth = 1;
+    [self.opreatBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+    self.opreatBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    [self addSubview:self.opreatBtn];
+    [self.opreatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.descLab.mas_bottom).offset(20);
+        make.height.mas_equalTo(36);
+        make.width.mas_equalTo(140);
+        make.centerX.equalTo(self.imageView);
     }];
     
 }

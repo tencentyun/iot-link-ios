@@ -13,7 +13,19 @@
 		6D06B07825616720006361B5 /* TIoTAutoConditionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07725616720006361B5 /* TIoTAutoConditionsView.m */; };
 		6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */; };
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
+		6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */; };
 		6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */; };
+		6D48A9D125E4DBBE00523636 /* WeatherTypeCloud.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9CE25E4DBBE00523636 /* WeatherTypeCloud.json */; };
+		6D48A9DD25E4DCD200523636 /* CloudImg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9DB25E4DCD100523636 /* CloudImg0.png */; };
+		6D48A9DE25E4DCD200523636 /* CloudImg1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9DC25E4DCD100523636 /* CloudImg1.png */; };
+		6D48A9E325E4DEAB00523636 /* WeatherTypeRain.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9E125E4DEAB00523636 /* WeatherTypeRain.json */; };
+		6D48A9E425E4DEAB00523636 /* RainyImg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9E225E4DEAB00523636 /* RainyImg0.png */; };
+		6D48A9EC25E4DF3E00523636 /* SnowImg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9EB25E4DF3E00523636 /* SnowImg0.png */; };
+		6D48A9EF25E4DF4700523636 /* WeatherTypeSnow.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9EE25E4DF4700523636 /* WeatherTypeSnow.json */; };
+		6D48A9F625E4DFEF00523636 /* SunnyImg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9F325E4DFEF00523636 /* SunnyImg2.png */; };
+		6D48A9F725E4DFEF00523636 /* SunnyImg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9F425E4DFEF00523636 /* SunnyImg0.png */; };
+		6D48A9F825E4DFEF00523636 /* SunnyImg1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9F525E4DFEF00523636 /* SunnyImg1.png */; };
+		6D48A9FB25E4DFFB00523636 /* WeatherTypeSunny.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9FA25E4DFFB00523636 /* WeatherTypeSunny.json */; };
 		6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E81251899ED003BE1D9 /* aboutMe_logo.png */; };
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */; };
@@ -445,8 +457,20 @@
 		6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntelliListVC.m; sourceTree = "<group>"; };
 		6D06B07E2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoAddManualIntellListCell.h; sourceTree = "<group>"; };
 		6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntellListCell.m; sourceTree = "<group>"; };
+		6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTWeatherVC.swift; sourceTree = "<group>"; };
 		6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTabBarCenterCustomView.h; sourceTree = "<group>"; };
 		6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTabBarCenterCustomView.m; sourceTree = "<group>"; };
+		6D48A9CE25E4DBBE00523636 /* WeatherTypeCloud.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = WeatherTypeCloud.json; sourceTree = "<group>"; };
+		6D48A9DB25E4DCD100523636 /* CloudImg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloudImg0.png; sourceTree = "<group>"; };
+		6D48A9DC25E4DCD100523636 /* CloudImg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloudImg1.png; sourceTree = "<group>"; };
+		6D48A9E125E4DEAB00523636 /* WeatherTypeRain.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = WeatherTypeRain.json; sourceTree = "<group>"; };
+		6D48A9E225E4DEAB00523636 /* RainyImg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RainyImg0.png; sourceTree = "<group>"; };
+		6D48A9EB25E4DF3E00523636 /* SnowImg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SnowImg0.png; sourceTree = "<group>"; };
+		6D48A9EE25E4DF4700523636 /* WeatherTypeSnow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = WeatherTypeSnow.json; sourceTree = "<group>"; };
+		6D48A9F325E4DFEF00523636 /* SunnyImg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SunnyImg2.png; sourceTree = "<group>"; };
+		6D48A9F425E4DFEF00523636 /* SunnyImg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SunnyImg0.png; sourceTree = "<group>"; };
+		6D48A9F525E4DFEF00523636 /* SunnyImg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SunnyImg1.png; sourceTree = "<group>"; };
+		6D48A9FA25E4DFFB00523636 /* WeatherTypeSunny.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = WeatherTypeSunny.json; sourceTree = "<group>"; };
 		6D4E1E80251899ED003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/aboutMe_logo.png; sourceTree = "<group>"; };
 		6D4E1E83251899F2003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/aboutMe_logo.png; sourceTree = "<group>"; };
 		6D4E1E84251899FF003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/aboutMe_logo.png"; sourceTree = "<group>"; };
@@ -1205,9 +1229,92 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		6D48A9C625E4DA1700523636 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9CA25E4DAED00523636 /* Snow */,
+				6D48A9C925E4DAE400523636 /* Rainy */,
+				6D48A9C825E4DADC00523636 /* Sunny */,
+				6D48A9C725E4DAC900523636 /* Cloud */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		6D48A9C725E4DAC900523636 /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9D425E4DC7B00523636 /* images */,
+				6D48A9CE25E4DBBE00523636 /* WeatherTypeCloud.json */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
+		6D48A9C825E4DADC00523636 /* Sunny */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9E825E4DEF500523636 /* images */,
+				6D48A9FA25E4DFFB00523636 /* WeatherTypeSunny.json */,
+			);
+			path = Sunny;
+			sourceTree = "<group>";
+		};
+		6D48A9C925E4DAE400523636 /* Rainy */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9E625E4DEDA00523636 /* images */,
+				6D48A9E125E4DEAB00523636 /* WeatherTypeRain.json */,
+			);
+			path = Rainy;
+			sourceTree = "<group>";
+		};
+		6D48A9CA25E4DAED00523636 /* Snow */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9E725E4DEEA00523636 /* images */,
+				6D48A9EE25E4DF4700523636 /* WeatherTypeSnow.json */,
+			);
+			path = Snow;
+			sourceTree = "<group>";
+		};
+		6D48A9D425E4DC7B00523636 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9DB25E4DCD100523636 /* CloudImg0.png */,
+				6D48A9DC25E4DCD100523636 /* CloudImg1.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		6D48A9E625E4DEDA00523636 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9E225E4DEAB00523636 /* RainyImg0.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		6D48A9E725E4DEEA00523636 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9EB25E4DF3E00523636 /* SnowImg0.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		6D48A9E825E4DEF500523636 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				6D48A9F425E4DFEF00523636 /* SunnyImg0.png */,
+				6D48A9F525E4DFEF00523636 /* SunnyImg1.png */,
+				6D48A9F325E4DFEF00523636 /* SunnyImg2.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		6D4E1E7B25189944003BE1D9 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				6D48A9C625E4DA1700523636 /* Weather */,
 				6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */,
 				6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */,
 				6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */,
@@ -1629,6 +1736,7 @@
 			children = (
 				D2310498232F88040003069D /* TIoTHomeViewController.h */,
 				D2310499232F88040003069D /* TIoTHomeViewController.m */,
+				6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */,
 				ED6DA51B23C99BBE00FDDC97 /* TIoTPopoverVC.h */,
 				ED6DA51C23C99BBE00FDDC97 /* TIoTPopoverVC.m */,
 				ED6DA51D23C99BBE00FDDC97 /* TIotPopoverVC.xib */,
@@ -2605,32 +2713,42 @@
 			files = (
 				ED9C15D123B9DCB700CAC848 /* TIoTFamilyInfoVC.xib in Resources */,
 				ED72905F238E2AEC00175739 /* TIoTPhotoCell.xib in Resources */,
+				6D48A9E425E4DEAB00523636 /* RainyImg0.png in Resources */,
 				6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */,
 				ED549E9C23C710EE00325958 /* TIoTTimerCell.xib in Resources */,
+				6D48A9F825E4DFEF00523636 /* SunnyImg1.png in Resources */,
 				D210C7D82341D7EB00A53B08 /* sortedNameEN.plist in Resources */,
 				EDB2F91723B59A3100CDD4A6 /* TIoTFamiliesVC.xib in Resources */,
 				ED8D76C7237CEE5B00E358C9 /* img_1.png in Resources */,
+				6D48A9EC25E4DF3E00523636 /* SnowImg0.png in Resources */,
 				6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */,
+				6D48A9DE25E4DCD200523636 /* CloudImg1.png in Resources */,
 				D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */,
 				ED6D120723C8598400A7A333 /* TIoTTimerListCell.xib in Resources */,
 				F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */,
 				ED9C49B323B1BB46005D537F /* 腾讯连连用户服务协议V1.0(1).docx in Resources */,
 				ED6BA5A923C57DED00BE9EC9 /* TIoTFamilyMemberCell.xib in Resources */,
 				D2C7A9FC232F6AA5005E8006 /* Assets.xcassets in Resources */,
+				6D48A9E325E4DEAB00523636 /* WeatherTypeRain.json in Resources */,
 				D2C7D8082330CA6500C97A04 /* SGQRCode.bundle in Resources */,
 				ED67E59223C3138600BE7628 /* TIoTMediumCell.xib in Resources */,
+				6D48A9EF25E4DF4700523636 /* WeatherTypeSnow.json in Resources */,
 				6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */,
 				EDAF9848241F7F1F0049859F /* TIoTShareDevicesVC.xib in Resources */,
 				ED6DA52423C9B21500FDDC97 /* TIoTUserCell.xib in Resources */,
 				ED78229E241B70FA00919FF6 /* TIoTMessageText2Cell.xib in Resources */,
 				ED9C15B523B998DB00CAC848 /* TIoTAddTimerVC.xib in Resources */,
+				6D48A9D125E4DBBE00523636 /* WeatherTypeCloud.json in Resources */,
 				ED9C15BA23B9AB3800CAC848 /* TIoTDeviceShareVC.xib in Resources */,
 				6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */,
+				6D48A9DD25E4DCD200523636 /* CloudImg0.png in Resources */,
 				6DCC3D53251BB89F004FC023 /* TIoTAddRoomVC.xib in Resources */,
+				6D48A9FB25E4DFFB00523636 /* WeatherTypeSunny.json in Resources */,
 				ED932E4523BB286000F73F35 /* TIoTEnumItem.xib in Resources */,
 				ED67E58D23C30B1E00BE7628 /* TIoTLongCell.xib in Resources */,
 				ED8D76C6237CEE5B00E358C9 /* wifi_type.html in Resources */,
 				6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */,
+				6D48A9F725E4DFEF00523636 /* SunnyImg0.png in Resources */,
 				D210C7D92341D7EB00A53B08 /* sortedNameCH.plist in Resources */,
 				ED6BA5A423C57DD100BE9EC9 /* TIoTFamilyInfoCell.xib in Resources */,
 				6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */,
@@ -2642,6 +2760,7 @@
 				ED6BA5B123C5B10700BE9EC9 /* TIoTRoomCell.xib in Resources */,
 				ED8D76CA237CEE5B00E358C9 /* img_4.png in Resources */,
 				ED6DA51F23C99BBE00FDDC97 /* TIotPopoverVC.xib in Resources */,
+				6D48A9F625E4DFEF00523636 /* SunnyImg2.png in Resources */,
 				ED8D76C9237CEE5B00E358C9 /* img_3.png in Resources */,
 				ED782299241B5F4A00919FF6 /* TIoTMessageInviteCell.xib in Resources */,
 				F4F325EA25919A1200A4CAAB /* TRTCCalling.xcassets in Resources */,
@@ -2912,6 +3031,7 @@
 				ED6BA5A823C57DED00BE9EC9 /* TIoTFamilyMemberCell.m in Sources */,
 				F4F325E025919A1200A4CAAB /* TRTCAudioCallViewController.swift in Sources */,
 				ED85BE9B23C470A000DF7790 /* TIoTBaseBigBtnView.m in Sources */,
+				6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */,
 				6DC7F8E1255326DF009508EE /* TIoTSettingIntelligentCell.m in Sources */,
 				ED9C15B923B9AB3800CAC848 /* TIoTDeviceShareVC.m in Sources */,
 				ED7B178723BEF01800B61567 /* SliderView.m in Sources */,

@@ -281,6 +281,11 @@ typedef NS_ENUM(NSUInteger,CMPageTitleScaleGradientContentMode) {
  */
 @property (nonatomic,assign) CGFloat cm_underlineWidthScale;
 
+/**
+ 下划线距离title间距
+ 默认不更改
+ */
+@property (nonatomic,assign) CGFloat cm_underlineLabelInterval;
 
 /**
  下划线颜色

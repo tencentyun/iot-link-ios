@@ -868,3 +868,21 @@ If the problem still persists, we recommend you remove the device and add it aga
 //v1.4.0首页重构
 "scan_device" = "扫描设备";
 "intelligent_addDevice" = "智能添加";
+"relative_humidity" = "相对湿度";
+"now_windDirection" = "实况风向";
+"no_weather_info" = "暂无天气信息";
+"please_set_location" = "请先设置当前家庭位置";
+//天气部分已翻译
+"day_sunny" = "Sunny";    // 白天-晴
+"night_clear" = "Clear"; //晚上-晴
+"Overcast" = "Overcast"; //阴
+"Cloudy" = "Cloudy"; //云
+"Rain" = "Rain";   //一般雨
+"Storm" = "Storm"; //暴雨级别
+"Snow" = "Snow";
+"Sleet" = "Sleet";
+"Thundershower" = "Thundershower"; //雷阵雨
+"weatherType_dry" = "干燥";
+"weatherType_comfort" = "舒适";
+"weatherType_wet" = "潮湿";
+"no_device_please_addition" = "当前暂无设备，请添加设备";

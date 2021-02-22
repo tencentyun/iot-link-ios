@@ -39,7 +39,7 @@
     
     
     self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, -[TIoTUIProxy shareUIProxy].statusHeight - 200, kScreenWidth, [TIoTUIProxy shareUIProxy].statusHeight + 200)];
-    self.whiteView.backgroundColor = [UIColor whiteColor];
+    self.whiteView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     [self addSubview:self.whiteView];
 //    [self.whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.leading.trailing.mas_equalTo(0);
@@ -51,7 +51,8 @@
     [self.whiteView addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.whiteView);
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight);
+        make.height.mas_equalTo(330);
     }];
     
     UIView *line = [[UIView alloc] init];
@@ -189,7 +190,7 @@
 {
     _titles = titles;
     
-    CGFloat maxHeight = kScreenHeight - 200;
+    CGFloat maxHeight = kScreenHeight - 220;
     CGFloat height = [TIoTUIProxy shareUIProxy].statusHeight + titles.count * 60 + 60;
     if (height > maxHeight) {
         height = maxHeight;

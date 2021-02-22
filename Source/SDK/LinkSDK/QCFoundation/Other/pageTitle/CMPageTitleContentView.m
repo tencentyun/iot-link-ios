@@ -136,7 +136,7 @@
         underLine.layer.masksToBounds = YES;
         CGFloat underLineWidth = self.config.cm_underlineWidth ?: [self.titleLabels[self.config.cm_selectedIndex] cm_width] * self.config.cm_underlineWidthScale;
         underLine.cm_height = self.config.cm_underlineHeight;
-        underLine.cm_bottom = self.config.cm_titleHeight;
+        underLine.cm_bottom = self.config.cm_titleHeight-self.config.cm_underlineLabelInterval;
         underLine.cm_width  = underLineWidth;
         underLine.cm_centerX = [self.titleLabels[self.config.cm_selectedIndex] cm_centerX];
         _underLine = underLine;

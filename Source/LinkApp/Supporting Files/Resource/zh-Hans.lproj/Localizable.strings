@@ -860,3 +860,21 @@
 //v1.4.0首页重构
 "scan_device" = "扫描设备";
 "intelligent_addDevice" = "智能添加";
+"relative_humidity" = "相对湿度";
+"now_windDirection" = "实况风向";
+"no_weather_info" = "暂无天气信息";
+"please_set_location" = "请先设置当前家庭位置";
+//天气部分已翻译
+"day_sunny" = "晴";
+"night_Clear" = "晴";
+"Overcast" = "阴";
+"Cloudy" = "云";
+"Rain" = "雨";
+"Storm" = "雨";
+"Snow" = "雪";
+"Sleet" = "雨夹雪";
+"Thundershower" = "雷阵雨";
+"weatherType_dry" = "干燥";
+"weatherType_comfort" = "舒适";
+"weatherType_moist" = "潮湿";
+"no_device_please_addition" = "当前暂无设备，请添加设备";

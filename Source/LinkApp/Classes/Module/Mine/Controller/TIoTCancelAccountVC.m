@@ -40,7 +40,7 @@
 
 - (void)setUpUI {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"注销账号";
+    self.title = NSLocalizedString(@"logout_account", @"注销账号");
     
     CGFloat kSpace = 20;
     CGFloat kPadding = 20;
@@ -161,7 +161,7 @@
 
 - (UILabel *)setContentLabelFormatWithLabel:(UILabel *)contentLabel contentString:(NSString *)contentString textColour:(UIColor *)textColor textFont:(UIFont *)font {
     
-    contentLabel.text = contentString ? contentString : @"注销账号";
+    contentLabel.text = contentString ? contentString : NSLocalizedString(@"logout_account", @"注销账号");
     contentLabel.textColor = textColor ? textColor :[UIColor colorWithHexString:@"#15161A"];
     contentLabel.font = font ? font : [UIFont wcPfRegularFontOfSize:14];
     return contentLabel;

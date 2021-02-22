@@ -107,8 +107,8 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
 
         //调试天气数据
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+5) {
-            TIoTAppUtil.getWeatherType(location: "116.41,39.92") { (weatherType) in
-                print("天气预报--> \(weatherType)")
+            TIoTAppUtil.getWeatherType(location: "116.41,39.92") { (temp, weatherType, windDir, weatherContent,humidity) in
+                print("天气预报--> \(temp)--\(weatherType)---\(windDir)---\(weatherContent)---\(humidity)")
             }
         }
     }
