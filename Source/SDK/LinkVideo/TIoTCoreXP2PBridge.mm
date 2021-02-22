@@ -12,7 +12,7 @@
 #import "AWSystemAVCapture.h"
 
 //type=0:close通知； type=1:日志； type=2:json;
-char* XP2PMsgHandle(int type, const char* msg, int len) {
+char* XP2PMsgHandle(int type, const char* msg) {
     if (type == 1) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
@@ -25,14 +25,10 @@ char* XP2PMsgHandle(int type, const char* msg, int len) {
     return nullptr;
 }
 
-//type=0:视频数据； type=1:音频数据;  type=2:flv数据;
-void XP2PDataMsgHandle(int type, uint8_t* recv_buf, size_t recv_len) {
-    if (type == 2) {
-
-        id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-        if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
-            [delegate getVideoPacket:recv_buf len:recv_len];
-        }
+void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
+    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+        [delegate getVideoPacket:recv_buf len:recv_len];
     }
 }
 
