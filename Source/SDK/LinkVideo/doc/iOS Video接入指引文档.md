@@ -42,6 +42,15 @@
 * 参数说明:无参数
 * 返回值:无返回值
 
+
+[[TIoTCoreXP2PBridge sharedInstance] startAvRecvService];
+
+* 函数说明:启动接收数据服务,会通过TIoTCoreXP2PBridgeDelegate回调返回裸流数据，需改接口注意与getUrlForHttpFlv互斥
+* 参数说明:
+* cmd:直播action=live或回放参数action=playback
+* 返回值:无返回值
+
+
 [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync];
 * 参数说明:
     * cmd:命令参数,格式:`action=user_define&cmd=xxx`
