@@ -13,6 +13,7 @@
 #import "NSString+Extension.h"
 #import "TIoTPlayListVC.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "TIoTCoreXP2PBridge.h"
 
 @interface TIoTPlayConfigVC ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *secretID;
@@ -90,6 +91,21 @@
     self.secretIDString = @"";
     self.secretKeyString = @"";
     self.productIDString = @"";
+    
+    
+    UISwitch *fileSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(kScreenWidth-80, CGRectGetMaxY(requestButton.frame)+100, 55, 35)];
+    [fileSwitch addTarget:self action:@selector(changeWriteFileSwitch:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:fileSwitch];
+    
+    UILabel *fileSwitchTip = [[UILabel alloc] initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(requestButton.frame)+100, kWidth-65, 35)];
+    fileSwitchTip.text = @"数据帧写入文件:";
+    fileSwitchTip.textAlignment = NSTextAlignmentRight;
+    fileSwitchTip.textColor = [UIColor grayColor];
+    [self.view addSubview:fileSwitchTip];
+}
+
+- (void)changeWriteFileSwitch:(UISwitch *)sender {
+    [TIoTCoreXP2PBridge sharedInstance].writeFile = sender.on;
 }
 
 - (void)hideKeyBoard {

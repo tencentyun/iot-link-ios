@@ -11,12 +11,23 @@
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
 
-//type=0:close通知； type=1:日志； type=2:json;
+//type=0:close通知； type=1:日志； type=2:json; type=3:文件开关; type=4:文件路径;
 char* XP2PMsgHandle(int type, const char* msg) {
     if (type == 1) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
         NSLog(@"%@", nsFormat);
+    }else if (type == 3) {
+        
+        BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
+        return (char*)(isWriteFile?"1":"0");
+    }else if (type == 4) {
+        
+        NSString *fileName = @"video.data";
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentDirectory = paths.firstObject;
+        NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+        return (char *)saveFilePath.UTF8String;
     }else {
         printf("XP2P log: %s\n", msg);
     }
