@@ -60,19 +60,29 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)configVideo {
-    cfstreamThreadDemuxQueue = dispatch_queue_create("LVVideo-CFStreamThreadDemux", DISPATCH_QUEUE_SERIAL);
-    
-    self.video = [[LVRTSPPlayer alloc] initWithVideo:self.videoUrl usesTcp:YES];
-    self.video.outputWidth = self.imageView.frame.size.width;
-    self.video.outputHeight = self.imageView.frame.size.height;
-    
-    self.nextFrameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/30
-                                                           target:self
-                                                         selector:@selector(displayNextFrame:)
-                                                         userInfo:nil
-                                                          repeats:YES];
-    
-    [[NSRunLoop currentRunLoop] addTimer:self.nextFrameTimer forMode:NSRunLoopCommonModes];
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+        fileTip.text = @"数据帧写文件中...";
+        fileTip.textAlignment = NSTextAlignmentCenter;
+        fileTip.textColor = [UIColor whiteColor];
+        [self.imageView addSubview:fileTip];
+        
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:@"action=live"];
+    }else {
+        cfstreamThreadDemuxQueue = dispatch_queue_create("LVVideo-CFStreamThreadDemux", DISPATCH_QUEUE_SERIAL);
+        
+        self.video = [[LVRTSPPlayer alloc] initWithVideo:self.videoUrl usesTcp:YES];
+        self.video.outputWidth = self.imageView.frame.size.width;
+        self.video.outputHeight = self.imageView.frame.size.height;
+        
+        self.nextFrameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/30
+                                                               target:self
+                                                             selector:@selector(displayNextFrame:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:self.nextFrameTimer forMode:NSRunLoopCommonModes];
+    }
 }
 
 - (void)initializedViews  {
@@ -120,6 +130,10 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 - (void)viewDidDisappear:(BOOL)animated {
     [_nextFrameTimer invalidate];
     self.nextFrameTimer = nil;
+    
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
+    }
 }
 
 -(void)displayNextFrame:(NSTimer *)timer{    

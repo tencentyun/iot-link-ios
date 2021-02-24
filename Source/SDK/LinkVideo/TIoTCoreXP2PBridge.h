@@ -25,7 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;
 - (NSString *)getUrlForHttpFlv;
 - (void)getCommandRequestWithAsync:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
+
 - (void)startAvRecvService:(NSString *)cmd;
+- (void)stopAvRecvService;
 
 - (void)sendVoiceToServer;
 - (void)stopVoiceToServer;

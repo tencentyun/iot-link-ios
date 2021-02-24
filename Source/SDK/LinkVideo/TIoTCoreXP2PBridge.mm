@@ -129,6 +129,10 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
     startAvRecvService(cmd.UTF8String);
 }
 
+- (void)stopAvRecvService {
+    stopAvRecvService(nullptr);
+}
+
 - (void)sendVoiceToServer {
     
     _serverHandle = runSendService(); //发送数据前需要告知http proxy

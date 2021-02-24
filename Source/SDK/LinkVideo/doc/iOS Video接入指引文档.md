@@ -51,6 +51,13 @@
 * 返回值:无返回值
 
 
+[[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
+
+* 函数说明:停止接收数据服务
+* 参数说明:无参数
+* 返回值:无返回值
+
+
 [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync];
 
 * 参数说明:
