@@ -91,6 +91,8 @@
         goto initError;
     }
     
+    pFormatCtx->probesize = 33000;
+    
     // Retrieve stream information
     if (avformat_find_stream_info(pFormatCtx,NULL) < 0) {
         av_log(NULL, AV_LOG_ERROR, "Couldn't find stream information\n");

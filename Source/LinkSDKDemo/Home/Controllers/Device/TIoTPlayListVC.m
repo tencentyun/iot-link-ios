@@ -37,9 +37,9 @@
 //    [self requestVideoList];
     
     //explore 设备列表
-#ifdef DEBUG
+//#ifdef DEBUG
     [self requestExploreList];
-#endif
+//#endif
 }
 
 - (void)setUpUI {
