@@ -311,7 +311,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     
     CGFloat kTopPadding = 110+55;
     if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-        kTopPadding = kTopPadding + 50;
+        kTopPadding = kTopPadding + 100;
     }
     self.imageView = [[UIImageView alloc] init];
     [self addSubview:self.imageView];
