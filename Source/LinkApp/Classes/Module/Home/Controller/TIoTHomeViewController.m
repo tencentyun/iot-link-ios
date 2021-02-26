@@ -234,7 +234,7 @@ static CGFloat weatherHeight = 10;
         [MBProgressHUD dismissInView:self.view];
         WeakObj(self)
         if (!self.currentRoomId || self.currentRoomId.length == 0) {
-            [self.tableView showEmpty2:NSLocalizedString(@"addDeveice_immediately", @"立即添加") desc:NSLocalizedString(@"noDevice_addClick", @"还没有设备，点击添加") image:[UIImage imageNamed:@"home_no_device"] block:^{
+            [self.tableView showEmpty2:NSLocalizedString(@"addDeveice_immediately", @"立即添加") desc:NSLocalizedString(@"no_device_please_addition", @"当前暂无设备，请添加设备") image:[UIImage imageNamed:@"home_noDevice"] block:^{
                 [selfWeak addEquipmentViewController];
             }];
             
