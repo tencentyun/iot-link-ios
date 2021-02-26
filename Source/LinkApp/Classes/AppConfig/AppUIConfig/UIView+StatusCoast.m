@@ -307,7 +307,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
 
 - (void)setUpUI{
     
-    [self xdp_addTarget:self action:@selector(opreatClick:)];
+//    [self xdp_addTarget:self action:@selector(opreatClick:)];
     
     CGFloat kTopPadding = 110+55;
     if ([TIoTUIProxy shareUIProxy].iPhoneX) {
