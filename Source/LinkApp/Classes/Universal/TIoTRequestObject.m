@@ -33,9 +33,9 @@ NSString  * const kInvalidParameterValueInvalidAccessToken = @"InvalidParameterV
     return _xonet;
 }
 
-- (void)get:(NSString *)urlString success:(SuccessResponseBlock)success
+- (void)get:(NSString *)urlString isNormalRequest:(BOOL)normal success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure {
-    [[TIoTCoreRequestObject shared] getRequestURLString:urlString success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] getRequestURLString:urlString noH5Render:normal success:^(id responseObject) {
         success(responseObject);
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         failure(reason, error,nil);

@@ -144,6 +144,10 @@ NSString *const AppIotRTCCallDevice = @"App::IotRTC::CallDevice";//5. 手机请�
 NSString *const H5HelpCenter = @"help-center";//帮助中心
 NSString *const H5Evaluation = @"evaluation";//评测
 
+//腾讯地图
+NSString *const MapSDKLocationParseURL = @"https://apis.map.qq.com/ws/geocoder/v1/?location=";//腾讯逆地址解析(get)
+NSString *const MapSDKAddressParseURL = @"https://apis.map.qq.com/ws/geocoder/v1/?address=";// 地址解析
+
 //===============用户协议、隐私协议链接
 
 NSString *const ServiceProtocolURl = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service";//用户协议

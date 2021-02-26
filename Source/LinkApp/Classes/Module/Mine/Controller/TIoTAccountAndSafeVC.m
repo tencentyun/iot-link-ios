@@ -49,7 +49,7 @@
     self.tableView.tableHeaderView = headerView;
     
     //拉去静态配置文件（地区列表），根据手机系统判断显示账号地区
-    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString isNormalRequest:NO success:^(id responseObject) {
 
         NSArray *regionListArray = (NSArray *)responseObject;
         

@@ -9,6 +9,7 @@
 #import "TIoTOptionalView.h"
 #import "TIoTChoseValueTableViewCell.h"
 #import "FamilyModel.h"
+#import "UIView+XDPExtension.h"
 
 @interface TIoTOptionalView()<UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -109,6 +110,7 @@
     
     [UIView animateWithDuration:0.2 animations:^{
         self.whiteView.frame = CGRectMake(0, 0, kScreenWidth, self.currentHeight);
+        [self changeViewRectConnerWithView:self.whiteView withRect:CGRectMake(0, 0, self.whiteView.frame.size.width,  self.whiteView.frame.size.height) roundCorner:UIRectCornerBottomLeft|UIRectCornerBottomRight withRadius:CGSizeMake(12, 12)];
     }];
     
 }

@@ -13,6 +13,7 @@
 #import "TIoTMemberInfoVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "TIoTModifyNameVC.h"
+#import "TIoTMapVC.h"
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
@@ -286,6 +287,20 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             case 2:
             {
+                NSMutableDictionary *addressDictionary = self.dataArr[0][2];
+                TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
+                mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
+                mapVC.addressString = addressDictionary[@"name"];
+                mapVC.addressBlcok = ^(NSString * _Nonnull address) {
+                    NSMutableDictionary *addressDic = self.dataArr[0][2];
+                    [addressDic setValue:address forKey:@"name"];
+                    [self.coll reloadItemsAtIndexPaths:@[indexPath]];
+                };
+                [self.navigationController pushViewController:mapVC animated:YES];
+                break;
+            }
+            case 3:
+            {
                 if ([self.familyInfo[@"Role"] integerValue] == 1) { //所有者
                     UIViewController *vc = [NSClassFromString(@"TIoTInvitationVC") new];
                     if (vc) {
@@ -358,7 +373,8 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableArray *firstSection = [NSMutableArray array];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"],@"Role":self.familyInfo[@"Role"]?:@""}]];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@"",@"RoomCount":@"",@"Role":@"1"}]];
-        
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_location", @"家庭位置"),@"name":NSLocalizedString(@"setting_family_address", @"设置位置")}]];
+         
         if ([self.familyInfo[@"Role"] integerValue] == 1) {
             [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"invite_family_member", @"邀请家庭成员"),@"name":@""}]];
         }
