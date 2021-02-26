@@ -33,10 +33,13 @@
 #import "TIoTTRTCUIManage.h"
 #import "UILabel+TIoTExtension.h"
 #import "UIImage+Ex.h"
+#import "TIoTAddressParseModel.h"
+#import "TIoTFamilyInfoVC.h"
 
 @import Lottie;
 
 static CGFloat weatherHeight = 10;
+static CGFloat kHeaderViewHeight = 162;
 
 @interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
 
@@ -87,6 +90,12 @@ static CGFloat weatherHeight = 10;
 @property (nonatomic, strong) NSString *weatherTypeText;
 @property (nonatomic, strong) UIView *slideTitleBackView;
 @property (nonatomic, strong) UIImageView *weatherBackImage;
+@property (nonatomic, strong) UILabel *unitLabel;
+@property (nonatomic, strong) UIButton *weatherBottomBtn;
+
+@property (nonatomic, assign) double longitude;
+@property (nonatomic, assign) double latitude;
+
 @end
 
 @implementation TIoTHomeViewController
@@ -100,14 +109,12 @@ static CGFloat weatherHeight = 10;
     [super viewWillAppear:animated];
     if (self.tableView) {
         if (self.currentFamilyId != nil) {
-            [self getRoomList:self.currentFamilyId];;
+            [self getRoomList:self.currentFamilyId];
         }
         
         //保持天气动画位置，跟随滚动区域是否显示
         [self scrollViewDidScroll:self.tableView];
         
-        // 请求天气数据
-        [self requestWeatherData];
     }
 }
 
@@ -267,6 +274,8 @@ static CGFloat weatherHeight = 10;
         
         [self.tableView hideStatus];
         [self.tableView reloadData];
+        
+        [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
 }
 
@@ -325,7 +334,7 @@ static CGFloat weatherHeight = 10;
     config.cm_underlineWidthScale = 0.3;
     config.cm_underlineLabelInterval = 7;
     
-    CGFloat kHeaderViewHeight = 162;
+    
     if (self.slideTitleBackView == nil) {
         
         //在CMPage背景后添加view底层
@@ -350,18 +359,6 @@ static CGFloat weatherHeight = 10;
         _tableHeaderView.cm_selectedIndex = index;
         [self.tableView addSubview:self.tableHeaderView];
     }
-    
-    self.headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kHeaderViewHeight)];
-    self.headerView.backgroundColor = [UIColor whiteColor];
-    self.headerView.clipsToBounds = YES;
-    UIImageView *backImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"banner_header"]];
-    [self.headerView addSubview:backImage];
-    [backImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.headerView);
-        make.top.equalTo(self.headerView.mas_top).offset(-([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight));
-        make.height.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 162);
-    }];
-    self.tableView.tableHeaderView = self.headerView;
     
     /// 添加天气UI 要在CMPageTitleContentView完后再添加 达到天气在CMPage上效果
     [self setWeatherUI];
@@ -393,6 +390,28 @@ static CGFloat weatherHeight = 10;
 
 #pragma mark - 天气动画
 - (void)setWeatherUI {
+    
+    self.headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kHeaderViewHeight)];
+    self.headerView.backgroundColor = [UIColor whiteColor];
+    self.headerView.clipsToBounds = YES;
+    UIImageView *backImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"banner_header"]];
+    [self.headerView addSubview:backImage];
+    [backImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.headerView);
+        make.top.equalTo(self.headerView.mas_top).offset(-([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight));
+        make.height.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 162);
+    }];
+    self.tableView.tableHeaderView = self.headerView;
+    
+    
+    self.weatherBottomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.weatherBottomBtn addTarget:self action:@selector(chooseFamilyDetail) forControlEvents:UIControlEventTouchUpInside];
+    self.weatherBottomBtn.enabled = YES;
+    [self.headerView addSubview:self.weatherBottomBtn];
+    [self.weatherBottomBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.top.equalTo(self.headerView);
+    }];
+    
     //添加天气数据
     self.weatherLab = [[UILabel alloc] init];
     [self.weatherLab setLabelFormateTitle:[NSString stringWithFormat:@"%@",self.weatherTemp] font:[UIFont fontWithName:@"Helvetica" size:57] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
@@ -407,19 +426,19 @@ static CGFloat weatherHeight = 10;
         
     }];
     
-    UILabel *unitLabel = [[UILabel alloc]init];
+    self.unitLabel = [[UILabel alloc]init];
     
     if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
         
-        [unitLabel setLabelFormateTitle: @"˚" font:[UIFont fontWithName:@"Helvetica" size:80] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+        [self.unitLabel setLabelFormateTitle: @"˚" font:[UIFont fontWithName:@"Helvetica" size:80] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
     }else {
-        [unitLabel setLabelFormateTitle: @"" font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+        [self.unitLabel setLabelFormateTitle: @"" font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
         
         [self.weatherLab setLabelFormateTitle:NSLocalizedString(@"no_weather_info", "暂无天气信息") font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
     }
     
-    [self.headerView addSubview:unitLabel];
-    [unitLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.headerView addSubview:self.unitLabel];
+    [self.unitLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.weatherLab.mas_right);
         make.top.equalTo(self.weatherLab.mas_top);
     }];
@@ -431,7 +450,7 @@ static CGFloat weatherHeight = 10;
         
         if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
             make.bottom.equalTo(self.weatherLab.mas_bottom).offset(-11);
-            make.left.equalTo(unitLabel.mas_left).offset(3);
+            make.left.equalTo(self.unitLabel.mas_left).offset(3);
         }else {
             make.bottom.equalTo(self.weatherLab.mas_bottom);
             make.left.equalTo(self.weatherLab.mas_right);
@@ -481,16 +500,52 @@ static CGFloat weatherHeight = 10;
     
 }
 
+///MARK: 查询家庭的地址
+- (void)getFamilyInfoAddressWithFamilyID:(NSString *)currentFamilyId {
+    
+    NSDictionary *param = @{@"FamilyId":currentFamilyId};
+    [[TIoTRequestObject shared] post:AppDescribeFamily Param:param success:^(id responseObject) {
+        
+        NSString *addressString = responseObject[@"Data"][@"Address"]?:@"";
+        
+        [self getFamilyLocationWith:addressString];
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+///MARK: 获取家庭经纬度
+- (void)getFamilyLocationWith:(NSString *)addressString {
+    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@%@&key=%@",MapSDKAddressParseURL,addressString?:@"",model.TencentMapSDKValue];
+    
+    NSString *urlEncoded = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    [[TIoTRequestObject shared] get:urlEncoded isNormalRequest:YES success:^(id responseObject) {
+        TIoTAddressParseModel *addressModel = [TIoTAddressParseModel yy_modelWithJSON:responseObject[@"result"]];
+        
+        self.latitude = addressModel.location.lat;
+        self.longitude = addressModel.location.lng;
+        
+        //请求天气数据
+        [self requestWeatherData];
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
 ///MARK: 请求天气数据
 - (void)requestWeatherData {
-    
-    [self requestWeatherCityData];
+
     [self requestWeatherNowData];
+//    [self requestWeatherCityData];
 }
 
 ///MARK:请求天气实况
 - (void)requestWeatherNowData {
-    [TIoTAppUtil getWeatherTypeWithLocation:@"116.41,39.92" completion:^(NSString * _Nonnull temp, NSString * _Nonnull weatherType, NSString * _Nonnull windDir, NSString * _Nonnull weatherContent, NSString * _Nonnull humidity) {
+    [TIoTAppUtil getWeatherTypeWithLocation:[NSString stringWithFormat:@"%f,%f",self.longitude,self.latitude] completion:^(NSString * _Nonnull temp, NSString * _Nonnull weatherType, NSString * _Nonnull windDir, NSString * _Nonnull weatherContent, NSString * _Nonnull humidity) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.weatherTemp = temp;
@@ -498,11 +553,26 @@ static CGFloat weatherHeight = 10;
             self.weatherText = weatherContent;
             self.weatherTypeText = weatherType;
             self.weatherHumidity = humidity;
-            if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+            if (![NSString isNullOrNilWithObject:temp]) {
+                
+                [self.weatherLab setLabelFormateTitle:[NSString stringWithFormat:@"%@",self.weatherTemp] font:[UIFont fontWithName:@"Helvetica" size:57] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+                [self.unitLabel setLabelFormateTitle: @"˚" font:[UIFont fontWithName:@"Helvetica" size:80] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+                [self.dailyNameLabel setLabelFormateTitle:[NSString stringWithFormat:@"%@ %@ | %@ %@",NSLocalizedString(@"relative_humidity", @"相对湿度"),self.weatherHumidity,NSLocalizedString(@"now_windDirection", @"实况风向"),self.weatherWindDir] font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#BFD2FF" textAlignment:NSTextAlignmentLeft];
+                
+                self.weatherBottomBtn.enabled = NO;
                 self.weatherAnimationView.hidden = NO;
+                [self.animationVC switchWeatherAnimationWithJsName:self.weatherTypeText];
+                
             }else {
+                
+                [self.unitLabel setLabelFormateTitle: @"" font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+                [self.weatherLab setLabelFormateTitle:NSLocalizedString(@"no_weather_info", "暂无天气信息") font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+                [self.dailyNameLabel setLabelFormateTitle:NSLocalizedString(@"please_set_location", "请先设置当前家庭位置") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#BFD2FF" textAlignment:NSTextAlignmentLeft];
+                self.weatherBottomBtn.enabled = YES;
                 self.weatherAnimationView.hidden = YES;
             }
+            
+            [self requestWeatherCityData];
         });
     }];
     
@@ -510,10 +580,18 @@ static CGFloat weatherHeight = 10;
 
 ///MARK:请求城市信息
 - (void)requestWeatherCityData {
-    [TIoTAppUtil getWeatherCityDataTaskWithLocation:@"116.41,39.92" completion:^(NSString * _Nonnull cityName) {
-            NSLog(@"name---%@",cityName);
-        self.weatherLocation = cityName;
+    [TIoTAppUtil getWeatherCityDataTaskWithLocation:[NSString stringWithFormat:@"%f,%f",self.longitude,self.latitude] completion:^(NSString * _Nonnull cityName) {
         
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.weatherLocation = cityName;
+            if (![NSString isNullOrNilWithObject:cityName]) {
+                [self.cityMessageLabel setLabelFormateTitle:[NSString stringWithFormat:@"%@ %@",self.weatherText,self.weatherLocation] font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+            }else {
+                [self.cityMessageLabel setLabelFormateTitle:@"" font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+                
+            }
+            
+        });
     }];
 }
 
@@ -522,6 +600,17 @@ static CGFloat weatherHeight = 10;
 //    dispatch_semaphore_signal(self.sem);
 }
 
+/// 天气无数据时候，点击天气view进入家庭详情
+- (void)chooseFamilyDetail {
+    for (FamilyModel *model in self.families) {
+        if ([self.currentFamilyId isEqualToString:model.FamilyId]) {
+            NSDictionary * familyDic= [model yy_modelToJSONObject];
+            TIoTFamilyInfoVC *vc = [[TIoTFamilyInfoVC alloc] init];
+            vc.familyInfo = familyDic;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
+}
 
 /// 通过MGJRouter 注册帮助反馈控制器，以便点击通知后跳转
 - (void)registFeedBackRouterController {
@@ -810,6 +899,8 @@ static CGFloat weatherHeight = 10;
     [TIoTCoreUserManage shared].FamilyType = model.FamilyType;
     
     [self getRoomList:model.FamilyId];
+    
+    [self getFamilyInfoAddressWithFamilyID:model.FamilyId?:@""];
 }
 
 - (void)messageClick:(id)sender{
@@ -836,6 +927,7 @@ static CGFloat weatherHeight = 10;
 {
     if (self.families) {
         TIoTOptionalView *vv = [[TIoTOptionalView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        
         vv.selected = ^(NSInteger index) {
             [self chooseFamilyByIndex:index];
         };
@@ -1005,10 +1097,12 @@ static CGFloat weatherHeight = 10;
         
         
         if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+            self.weatherBottomBtn.enabled = NO;
             self.weatherAnimationView.hidden = NO;
             self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY);
             self.weatherAnimationView.alpha = 1;
         }else {
+            self.weatherBottomBtn.enabled = YES;
             self.weatherAnimationView.hidden = YES;
         }
         
@@ -1028,10 +1122,12 @@ static CGFloat weatherHeight = 10;
         }];
         
         if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+            self.weatherBottomBtn.enabled = NO;
             self.weatherAnimationView.hidden = NO;
             self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
             self.weatherAnimationView.alpha = (kOrigionY - offSetY)/kOrigionY;
         }else {
+            self.weatherBottomBtn.enabled = YES;
             self.weatherAnimationView.hidden = YES;
         }
         
@@ -1048,7 +1144,7 @@ static CGFloat weatherHeight = 10;
         [self.weatherBackImage mas_updateConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.slideTitleBackView.mas_right);
         }];
-        
+        self.weatherBottomBtn.enabled = YES;
         self.weatherAnimationView.hidden = YES;
         
     }
@@ -1108,7 +1204,7 @@ static CGFloat weatherHeight = 10;
         }];
         
         UILabel *titleLabel = [[UILabel alloc] init];
-        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [_navView addSubview:titleLabel];
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //            make.centerY.equalTo(titleLab);
@@ -1120,7 +1216,7 @@ static CGFloat weatherHeight = 10;
         
         UILabel *titleLab = [[UILabel alloc] init];
         titleLab.text = NSLocalizedString(@"my_family", @"我的家");
-        titleLab.textColor = [UIColor blackColor];
+        titleLab.textColor = [UIColor whiteColor];
         titleLab.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView addSubview:titleLab];
         self.nick = titleLab;
@@ -1182,7 +1278,7 @@ static CGFloat weatherHeight = 10;
         
         UILabel *titleLab2 = [[UILabel alloc] init];
         titleLab2.text = @"tao的家";
-        titleLab2.textColor = [UIColor blackColor];
+        titleLab2.textColor = [UIColor whiteColor];
         titleLab2.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView2 addSubview:titleLab2];
         self.nick2 = titleLab2;
@@ -1193,7 +1289,7 @@ static CGFloat weatherHeight = 10;
         }];
         
         UILabel *titleLab = [[UILabel alloc] init];
-        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [_navView2 addSubview:titleLab];
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(titleLab2);

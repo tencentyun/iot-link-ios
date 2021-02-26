@@ -15,7 +15,7 @@ typedef void (^SuccessResponseBlock)(id responseObject);
 @interface TIoTRequestObject : NSObject
 + (TIoTRequestObject *)shared;
 
-- (void)get:(NSString *)urlString success:(SuccessResponseBlock)success
+- (void)get:(NSString *)urlString isNormalRequest:(BOOL)normal success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure;
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure;

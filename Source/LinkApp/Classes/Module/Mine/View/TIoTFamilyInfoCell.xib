@@ -27,16 +27,16 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bMQ-4W-WkF">
-                        <rect key="frame" x="295.5" y="15" width="63.5" height="18"/>
+                        <rect key="frame" x="95.5" y="15" width="263.5" height="18"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLm-sQ-fQ0">
-                                <rect key="frame" x="0.0" y="0.0" width="35.5" height="18"/>
+                                <rect key="frame" x="0.0" y="0.0" width="235.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mineArrow" translatesAutoresizingMaskIntoConstraints="NO" id="X8b-We-2nJ">
-                                <rect key="frame" x="45.5" y="0.0" width="18" height="18"/>
+                                <rect key="frame" x="245.5" y="0.0" width="18" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="18" id="Wgk-7h-rGf"/>
                                     <constraint firstAttribute="width" constant="18" id="YYR-PC-bN0"/>
@@ -61,6 +61,7 @@
                 <constraint firstItem="Kql-OV-Phb" firstAttribute="bottom" secondItem="SEy-5g-ep8" secondAttribute="bottom" id="BcG-WL-7Qc"/>
                 <constraint firstItem="Kql-OV-Phb" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" constant="16" id="WUO-n2-9A6"/>
                 <constraint firstItem="bMQ-4W-WkF" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="ghC-Xi-vHu"/>
+                <constraint firstItem="bMQ-4W-WkF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="95.5" id="hOA-BU-RI3"/>
                 <constraint firstItem="J1j-TM-YXl" firstAttribute="centerY" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="lDK-2x-Toc"/>
                 <constraint firstAttribute="trailing" secondItem="bMQ-4W-WkF" secondAttribute="trailing" constant="16" id="tpV-tn-IBv"/>
             </constraints>

@@ -13,6 +13,7 @@
 #import "TIoTMemberInfoVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "TIoTModifyNameVC.h"
+#import "TIoTMapVC.h"
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
@@ -35,6 +36,13 @@ static NSString *itemId2 = @"pfDDD";
     [HXYNotice addUpdateMemberListListener:self reaction:@selector(getMemberList)];
     
     [self setupUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self getFamilyInfo];
+    
     [self getMemberList];
 }
 
@@ -50,6 +58,21 @@ static NSString *itemId2 = @"pfDDD";
 }
 
 #pragma mark - request
+
+- (void)getFamilyInfo {
+    NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"]};
+    [[TIoTRequestObject shared] post:AppDescribeFamily Param:param success:^(id responseObject) {
+        NSMutableDictionary *addressDic = self.dataArr[0][2];
+        NSString *addressString = responseObject[@"Data"][@"Address"]?:@"";
+        if (![NSString isNullOrNilWithObject:addressString]) {
+            [addressDic setValue:responseObject[@"Data"][@"Address"] forKey:@"name"];
+        }
+        //刷新
+        [self.coll reloadData];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
 
 - (void)getMemberList
 {
@@ -102,9 +125,9 @@ static NSString *itemId2 = @"pfDDD";
     }];
 }
 
-- (void)modifyFamily:(NSString *)name
+- (void)modifyFamily:(NSString *)name adddress:(NSString *)address
 {
-    NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name};
+    NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name,@"Address":address};
     [[TIoTRequestObject shared] post:AppModifyFamily Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateFamilyListPost];
@@ -230,13 +253,13 @@ static NSString *itemId2 = @"pfDDD";
             
             if ([self.familyInfo[@"Role"] integerValue] == 1) {
                 
-                [deleteBtn singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
-//                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
-                [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
-                
-                if (self.familyCount <= 1) {
-                    [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
-                }
+//                [deleteBtn singleCustomButtonStyle:SingleCustomButtonConfirm withTitle:NSLocalizedString(@"delete_family", @"删除家庭")];
+////                [deleteBtn singleCustomBUttonBackGroundColor:@"ffffff" isSelected:YES];
+//                [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
+//
+//                if (self.familyCount <= 1) {
+//                    [deleteBtn singleCustomBUttonBackGroundColor:kNoSelectedHexColor isSelected:NO];
+//                }
             }
             else
             {
@@ -266,8 +289,9 @@ static NSString *itemId2 = @"pfDDD";
                     modifyNameVC.modifyType = ModifyTypeFamilyName;
                     modifyNameVC.title = NSLocalizedString(@"family_setting", @"家庭设置");
                     modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
+                        NSMutableDictionary *addressDic = self.dataArr[0][2];
                         if (name.length > 0) {
-                            [self modifyFamily:name];
+                            [self modifyFamily:name adddress:addressDic[@"name"]?:@""];
                         }
                         
                     };
@@ -285,6 +309,24 @@ static NSString *itemId2 = @"pfDDD";
             }
                 break;
             case 2:
+            {
+                NSMutableDictionary *addressDictionary = self.dataArr[0][2];
+                TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
+                mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
+                mapVC.addressString = addressDictionary[@"name"];
+                mapVC.addressBlcok = ^(NSString * _Nonnull address) {
+                    NSMutableDictionary *addressDic = self.dataArr[0][2];
+                    [addressDic setValue:address forKey:@"name"];
+                    [self.coll reloadItemsAtIndexPaths:@[indexPath]];
+                    
+                    NSMutableDictionary *nameDic = self.dataArr[0][0];
+                    [self modifyFamily:nameDic[@"name"]?:@"" adddress:address?:@""];
+                    
+                };
+                [self.navigationController pushViewController:mapVC animated:YES];
+                break;
+            }
+            case 3:
             {
                 if ([self.familyInfo[@"Role"] integerValue] == 1) { //所有者
                     UIViewController *vc = [NSClassFromString(@"TIoTInvitationVC") new];
@@ -358,7 +400,8 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableArray *firstSection = [NSMutableArray array];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"],@"Role":self.familyInfo[@"Role"]?:@""}]];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@"",@"RoomCount":@"",@"Role":@"1"}]];
-        
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_location", @"家庭位置"),@"name":NSLocalizedString(@"setting_family_address", @"设置位置")}]];
+         
         if ([self.familyInfo[@"Role"] integerValue] == 1) {
             [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"invite_family_member", @"邀请家庭成员"),@"name":@""}]];
         }

@@ -36,7 +36,7 @@ static NSString * const kIntelligentSceneImageCellID = @"kIntelligentSceneImageC
 }
 
 - (void)requestImageSceneList {
-    [[TIoTRequestObject shared] get:TIoTAPPConfig.intelligentSceneImageList success:^(id responseObject) {
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.intelligentSceneImageList isNormalRequest:NO success:^(id responseObject) {
         self.imageArray = [responseObject yy_modelToJSONObject];
         [self.collectionView reloadData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {

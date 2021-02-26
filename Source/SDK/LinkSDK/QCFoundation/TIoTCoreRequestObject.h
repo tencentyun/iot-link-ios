@@ -32,7 +32,7 @@ typedef NSURL *(^UrlAndBodyParamCustomSettingBlock)(NSMutableDictionary *accessP
 
 @interface TIoTCoreRequestObject : NSObject
 + (TIoTCoreRequestObject *)shared;
-- (void)getRequestURLString:(NSString *)requestString success:(SuccessResponseBlock)success
+- (void)getRequestURLString:(NSString *)requestString noH5Render:(BOOL)normalRequest success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure;
 - (void)post:(NSString *)urlStr Param:(NSDictionary *)param success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure;

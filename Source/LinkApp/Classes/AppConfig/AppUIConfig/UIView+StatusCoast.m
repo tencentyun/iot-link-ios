@@ -131,7 +131,7 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
 }
 
 - (void)initEmptyView2{
-    XDPEmptyView *emptyView = [[XDPEmptyView alloc] initWithFrame:CGRectMake(0, 44, self.frame.size.width, self.frame.size.height)];
+    XDPEmptyView *emptyView = [[XDPEmptyView alloc] initWithFrame:CGRectMake(0, 162, self.frame.size.width, self.frame.size.height)];
     emptyView.backgroundColor = [UIColor clearColor];
     [self addSubview:emptyView];
 //    [emptyView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -309,9 +309,9 @@ static const void *XDPLoadEmptyStatusKey = &XDPLoadEmptyStatusKey;
     
 //    [self xdp_addTarget:self action:@selector(opreatClick:)];
     
-    CGFloat kTopPadding = 110+55;
+    CGFloat kTopPadding = 55;
     if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-        kTopPadding = kTopPadding + 100;
+        kTopPadding = kTopPadding + 10;
     }
     self.imageView = [[UIImageView alloc] init];
     [self addSubview:self.imageView];
