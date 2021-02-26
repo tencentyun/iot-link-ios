@@ -25,6 +25,9 @@
 #import "TIoTScanlViewController.h"
 #import "TIoTAppUtilOC.h"
 
+#import <QMapKit/QMapKit.h>
+#import <QMapKit/QMSSearchKit.h>
+
 @implementation TIoTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -45,6 +48,9 @@
     
     //注册微信
     [[WxManager sharedWxManager] registerApp]; 
+    
+    [QMapServices sharedServices].APIKey = @"";
+    [QMSSearchServices sharedServices].apiKey = @"";
     
     //firebase注册
     [FIRApp configure];
