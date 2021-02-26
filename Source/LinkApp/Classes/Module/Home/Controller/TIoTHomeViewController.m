@@ -836,6 +836,8 @@ static CGFloat weatherHeight = 10;
 {
     if (self.families) {
         TIoTOptionalView *vv = [[TIoTOptionalView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        
+        
         vv.selected = ^(NSInteger index) {
             [self chooseFamilyByIndex:index];
         };
@@ -1108,7 +1110,7 @@ static CGFloat weatherHeight = 10;
         }];
         
         UILabel *titleLabel = [[UILabel alloc] init];
-        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [_navView addSubview:titleLabel];
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //            make.centerY.equalTo(titleLab);
@@ -1120,7 +1122,7 @@ static CGFloat weatherHeight = 10;
         
         UILabel *titleLab = [[UILabel alloc] init];
         titleLab.text = NSLocalizedString(@"my_family", @"我的家");
-        titleLab.textColor = [UIColor blackColor];
+        titleLab.textColor = [UIColor whiteColor];
         titleLab.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView addSubview:titleLab];
         self.nick = titleLab;
@@ -1182,7 +1184,7 @@ static CGFloat weatherHeight = 10;
         
         UILabel *titleLab2 = [[UILabel alloc] init];
         titleLab2.text = @"tao的家";
-        titleLab2.textColor = [UIColor blackColor];
+        titleLab2.textColor = [UIColor whiteColor];
         titleLab2.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView2 addSubview:titleLab2];
         self.nick2 = titleLab2;
@@ -1193,7 +1195,7 @@ static CGFloat weatherHeight = 10;
         }];
         
         UILabel *titleLab = [[UILabel alloc] init];
-        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [_navView2 addSubview:titleLab];
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(titleLab2);

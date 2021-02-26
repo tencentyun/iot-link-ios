@@ -47,7 +47,7 @@
 }
 
 - (void)loadUrl:(NSString *)urlString {
-    [[TIoTRequestObject shared] get:urlString success:^(id responseObject) {
+    [[TIoTRequestObject shared] get:urlString isNormalRequest:NO success:^(id responseObject) {
 
         NSDictionary *opensourceDic = (NSDictionary *)responseObject;
         
