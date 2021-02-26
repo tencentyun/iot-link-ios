@@ -66,7 +66,7 @@
     * RegisterRegionListEN 英文注册区域列表，RegisterRegionListCN 中文注册区域列表
     */
     
-    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString success:^(id responseObject) {
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString isNormalRequest:NO success:^(id responseObject) {
 
         NSArray *regionListArray = (NSArray *)responseObject;
         

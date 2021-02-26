@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UITextField *contentTextField;
 @property (nonatomic, strong) NSString *inputContent;
+
 @end
 
 @implementation TIoTAddFamilyCell
@@ -99,6 +100,28 @@
 - (void)setContectString:(NSString *)contectString {
     _contectString = contectString;
     self.contentTextField.text = contectString;
+}
+
+- (void)drawRect:(CGRect)rect {
+    if (self.familyType == FillFamilyTypeFamilyAddress) {
+        self.contentTextField.hidden = YES;
+        
+        if (self.contentLabel == nil) {
+            self.contentLabel = [[UILabel alloc]init];
+            [self.contentLabel setLabelFormateTitle:self.placeHoldString font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
+            self.contentLabel.textColor = [UIColor colorWithHexString:@"#A1A7B2" withAlpha:0.7];
+            
+            [self.contentView addSubview:self.contentLabel];
+            [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.titleLabel.mas_right).offset(20);
+                make.centerY.equalTo(self.contentView);
+                make.right.equalTo(self.contentView.mas_right).offset(-44);
+            }];
+        }
+        
+    }else {
+        self.contentTextField.hidden = NO;
+    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

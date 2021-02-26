@@ -152,6 +152,10 @@ FOUNDATION_EXPORT NSString *const AppIotRTCCallDevice;//5. 手机请求加入房
 FOUNDATION_EXPORT NSString *const H5HelpCenter;//帮助中心
 FOUNDATION_EXPORT NSString *const H5Evaluation;//评测
 
+//腾讯地图
+FOUNDATION_EXPORT NSString *const MapSDKLocationParseURL;//腾讯逆地址解析(get)
+FOUNDATION_EXPORT NSString *const MapSDKAddressParseURL;//地址解析
+
 //===============用户协议、隐私协议链接
 FOUNDATION_EXPORT NSString *const ServiceProtocolURl;//用户协议
 FOUNDATION_EXPORT NSString *const PrivacyProtocolURL;//隐私协议

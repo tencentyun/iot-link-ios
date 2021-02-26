@@ -9,6 +9,7 @@
 #import "TIoTAddFamilyVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "TIoTAddFamilyCell.h"
+#import "TIoTMapVC.h"
 
 @interface TIoTAddFamilyVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -86,11 +87,10 @@
         [tempDic setValue:contentString?:@"" forKey:@"value"];
         [weakSelf.tableView reloadData];
         
-        //循环遍历数据源中是否有空值，有：按钮不响应，反之则允许点击
+        //家庭名称数据源中是否有空值，有：按钮不响应，反之则允许点击
         BOOL buttonIsEnable = NO;
-        for (int i = 0; i<weakSelf.dataArray.count; i++) {
-            NSMutableDictionary *tempDic = weakSelf.dataArray[i];
-            
+        if (indexPath.row == 0) {
+            NSMutableDictionary *tempDic = weakSelf.dataArray[indexPath.row];
             if ([NSString isNullOrNilWithObject:tempDic[@"value"]] || [NSString isFullSpaceEmpty:tempDic[@"value"]]) {
                 buttonIsEnable = NO;
             }else {
@@ -107,6 +107,27 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 1) {
+        // 点击跳转 地图选点页面
+        TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
+        mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
+        NSMutableDictionary *addressDictionary = self.dataArray[indexPath.row];
+        mapVC.addressString = addressDictionary[@"value"];
+        __weak typeof(self)weakSelf = self;
+        mapVC.addressBlcok = ^(NSString * _Nonnull address) {
+            NSMutableDictionary *addressDic = weakSelf.dataArray[indexPath.row];
+            [addressDic setValue:address forKey:@"value"];
+            [weakSelf.dataArray replaceObjectAtIndex:indexPath.row withObject:addressDic];
+            TIoTAddFamilyCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            cell.contentLabel.text = address;
+            cell.contentLabel.textColor = [UIColor colorWithHexString:@"#A1A7B2"];
+            [weakSelf.tableView reloadData];
+        };
+        [self.navigationController pushViewController:mapVC animated:YES];
+    }
+}
 
 #pragma mark - lazy loading
 - (UITableView *)tableView {

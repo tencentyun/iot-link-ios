@@ -23,7 +23,7 @@ class TIoTAppUtil: NSObject {
     //湿度类型
     public static var WeatherTypeDry = NSLocalizedString("weatherType_dry", comment: "干燥")
     public static var WeatherTypeComfort = NSLocalizedString("weatherType_comfort", comment: "舒适")
-    public static var WeatherTypeWet = NSLocalizedString("weatherType_wet", comment: "潮湿")
+    public static var WeatherTypeWet = NSLocalizedString("weatherType_moist", comment: "潮湿")
     
     //获取实时天气
     @objc class func getWeatherType(location: String, completion: @escaping (String,TIoTWeatherType,String,String,TIoTWeatherHumidityType) -> Void) {

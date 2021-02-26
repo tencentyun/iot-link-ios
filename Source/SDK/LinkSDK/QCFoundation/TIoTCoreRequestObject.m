@@ -278,7 +278,7 @@ failure:(FailureResponseBlock)failure
     [task resume];
 }
 
-- (void)getRequestURLString:(NSString *)requestString success:(SuccessResponseBlock)success
+- (void)getRequestURLString:(NSString *)requestString noH5Render:(BOOL)normalRequest success:(SuccessResponseBlock)success
 failure:(FailureResponseBlock)failure {
     
     NSURL *urlString = [NSURL URLWithString:requestString];
@@ -305,12 +305,22 @@ failure:(FailureResponseBlock)failure {
                             [resultSubString insertString:@"[" atIndex:0];
                             NSDictionary *regionListDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
                             success(regionListDic);
-                        } else {   //开源软件信息 或其他
-                            NSString *startString = @";(function(){var params=";
-                            NSString *endString = @"};\ntypeof callback_";
-                            NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:startString end:endString]];
-                            NSDictionary *opensourceDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
-                            success(opensourceDic);
+                        } else {
+                            
+                            if (normalRequest) {
+                                //正常get请求
+                                NSDictionary *regionListDic = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+                                success(regionListDic);
+                                
+                            }else {
+                                //开源软件信息 或其他
+                                NSString *startString = @";(function(){var params=";
+                                NSString *endString = @"};\ntypeof callback_";
+                                NSMutableString *resultSubString = [[NSMutableString alloc]initWithString:[NSString interceptingString:responseString withFrom:startString end:endString]];
+                                NSDictionary *opensourceDic = [NSJSONSerialization JSONObjectWithData:[resultSubString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+                                success(opensourceDic);
+                            }
+                            
                         }
                     });
                 }

@@ -10,16 +10,21 @@ import UIKit
 import Lottie
 
 class TIoTWeatherVC: NSObject {
+    var view = AnimationView()
     
     @objc func weatherAnimation(jsName: String, animationFrame frame:CGRect) -> AnimationView {
-        let view = AnimationView(name: jsName)
         view.frame = frame
         view.loopMode = .loop
         view.isUserInteractionEnabled = false
         view.contentMode = .scaleAspectFit
         view.backgroundColor = UIColor.clear
+        view.animation = Animation.named(jsName)
         view.play()
         return view
+    }
+    
+    @objc func switchWeatherAnimation(jsName: String) {
+        view.animation = Animation.named(jsName)
     }
     
     /*

@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, FillFamilyType) {
 @property (nonatomic, strong) NSString *contectString;
 @property (nonatomic, copy) FillMessageBlock fillMessageBlock;
 @property (nonatomic, assign) FillFamilyType familyType;
+@property (nonatomic, strong) UILabel *contentLabel;
 @end
 
 NS_ASSUME_NONNULL_END

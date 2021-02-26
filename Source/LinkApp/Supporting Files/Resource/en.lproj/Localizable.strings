@@ -882,7 +882,11 @@ If the problem still persists, we recommend you remove the device and add it aga
 "Snow" = "Snow";
 "Sleet" = "Sleet";
 "Thundershower" = "Thundershower"; //雷阵雨
+
 "weatherType_dry" = "干燥";
 "weatherType_comfort" = "舒适";
-"weatherType_wet" = "潮湿";
+"weatherType_moist" = "潮湿";
 "no_device_please_addition" = "当前暂无设备，请添加设备";
+"family_location" = "家庭位置";
+"set_location" = "设定位置";
+"choose_location" = "地图选点";
