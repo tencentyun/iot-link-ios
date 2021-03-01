@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
   s.subspec 'LinkVideo' do |ss|
     ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
     ss.dependency 'TIoTLinkKit/LinkSDK'
-    ss.dependency 'TIoTThridSDK/FFmpeg-iOS'
+    ss.dependency 'TIoTThridSDK/IJKPlayer-iOS'
     ss.dependency 'TIoTThridSDK/XP2P-iOS'
     ss.dependency 'TIoTThridSDK/Faac-iOS'
     ss.pod_target_xcconfig = {
