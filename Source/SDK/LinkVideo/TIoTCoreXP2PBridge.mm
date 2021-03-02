@@ -93,6 +93,7 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
 
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
+    CFTimeInterval startTime = CACurrentMediaTime();
 //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
     
@@ -101,6 +102,9 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
     setDeviceInfo([pro_id UTF8String], [dev_name UTF8String]);
     setXp2pInfoAttributes("_sys_xp2p_info");
     startServiceWithXp2pInfo("");
+    
+    CFTimeInterval elapsedTime = CACurrentMediaTime() - startTime;
+    NSLog(@"%@", [NSString stringWithFormat:@"****** %@ ended: %g seconds ******\n",NSStringFromSelector(_cmd),elapsedTime]);
 }
 
 - (NSString *)getUrlForHttpFlv {
