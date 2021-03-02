@@ -12,8 +12,10 @@
 #import "TIoTPlayBackListModel.h"
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
+#import <WebKit/WKWebView.h>
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
+CFTimeInterval PPstartTime;
 
 @interface TIoTPlayMovieVC ()<UITableViewDelegate,UITableViewDataSource> {
 }
@@ -23,6 +25,9 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
 @property(atomic, retain) IJKFFMoviePlayerController *player;
+@property(atomic, strong) CADisplayLink *link;
+@property(atomic, strong) NSDateFormatter *dataFormatter;
+@property(atomic, strong) UILabel *timerL;
 @end
 
 @implementation TIoTPlayMovieVC
@@ -41,10 +46,36 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         [self.tableView reloadData];
         
     }];
+    
+    self.dataFormatter = [[NSDateFormatter alloc] init];
+    self.dataFormatter.dateFormat = @"HH:mm:ss.SSS";
+    
+    
+    WKWebView *web = [[WKWebView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.imageView.frame)+50, kScreenWidth, 180)];
+    [web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.daojishiqi.com/bjtime.asp"]]];
+    [self.view addSubview:web];
+    /*self.timerL = [[UILabel alloc] initWithFrame:CGRectMake(60, CGRectGetMaxY(self.imageView.frame)+50, kScreenWidth-120, 80)];
+    self.timerL.textAlignment = NSTextAlignmentLeft;
+    self.timerL.font = [UIFont wcPfMediumFontOfSize:30];
+    self.timerL.textColor = [UIColor blackColor];
+    [self.view addSubview:self.timerL];*/
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    /*CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(linkClick)];
+    self.link = link;
+    
+    link.paused = NO;
+    [self.link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];*/
+}
+
+- (void)linkClick {
+    
+    
+    NSString *currentDayStr = [self.dataFormatter stringFromDate:[NSDate date]];
+    self.timerL.text = currentDayStr;
 }
 
 - (void)initializedVideo {
@@ -144,6 +175,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     
     [self installMovieNotificationObservers];
 
+    self.link.paused = YES;
+    [self.link invalidate];
+    self.link = nil;
+    
+    PPstartTime = CACurrentMediaTime();
     [self.player prepareToPlay];
     [self.player play];
 }
@@ -312,6 +348,8 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
     NSLog(@"mediaIsPreparedToPlayDidChange\n");
+    CFTimeInterval elapsedTime = CACurrentMediaTime() - PPstartTime;
+    NSLog(@"%@", [NSString stringWithFormat:@"****** %@ ended: %g seconds ******\n",NSStringFromSelector(_cmd),elapsedTime]);
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
