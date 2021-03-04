@@ -116,9 +116,10 @@
         NSMutableDictionary *addressDictionary = self.dataArray[indexPath.row];
         mapVC.addressString = addressDictionary[@"value"];
         __weak typeof(self)weakSelf = self;
-        mapVC.addressBlcok = ^(NSString * _Nonnull address) {
+        mapVC.addressBlcok = ^(NSString * _Nonnull address, NSString * _Nonnull addressJson) {
             NSMutableDictionary *addressDic = weakSelf.dataArray[indexPath.row];
             [addressDic setValue:address forKey:@"value"];
+            [addressDic setValue:addressJson forKey:@"addressJson"];
             [weakSelf.dataArray replaceObjectAtIndex:indexPath.row withObject:addressDic];
             TIoTAddFamilyCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             cell.contentLabel.text = address;
@@ -145,7 +146,7 @@
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray arrayWithArray:@[[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"value":@"",@"placeHold":NSLocalizedString(@"fill_family_name", @"请输入家庭名称")}],
-                                                      [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_address", @"家庭位置"),@"value":@"",@"placeHold":NSLocalizedString(@"setting_family_address", @"设置位置")}]]];
+                                                      [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_address", @"家庭位置"),@"value":@"",@"placeHold":NSLocalizedString(@"setting_family_address", @"设置位置"),@"addressJson":@""}]]];
     }
     return _dataArray;
 }

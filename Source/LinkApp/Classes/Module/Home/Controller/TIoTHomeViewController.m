@@ -609,7 +609,15 @@ static CGFloat kHeaderViewHeight = 162;
         
         NSString *addressString = responseObject[@"Data"][@"Address"]?:@"";
         
-        [self getFamilyLocationWith:addressString];
+        NSDictionary *dic = [NSString jsonToObject:addressString];
+        
+//        [self getFamilyLocationWith:addressString];
+        
+//        self.latitude = addressModel.location.lat;
+//        self.longitude = addressModel.location.lng;
+        NSLog(@"---dic---%@-addstri-->%@",dic,addressString);
+        //请求天气数据
+        [self requestWeatherData];
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
