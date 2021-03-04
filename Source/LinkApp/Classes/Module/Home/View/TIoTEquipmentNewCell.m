@@ -20,12 +20,12 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIImageView *leftDeviceImage;
 @property (nonatomic, strong) UILabel *leftDeviceNameLabel;
-@property (nonatomic, strong) UIView *leftWhiteMaskView;
+@property (nonatomic, strong) UIImageView *leftWhiteMaskView;
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
 @property (nonatomic, strong) UILabel *rightDeviceNameLabel;
-@property (nonatomic, strong) UIView *rightWhiteMaskView;
+@property (nonatomic, strong) UIImageView *rightWhiteMaskView;
 
 @end
 
@@ -63,6 +63,7 @@ static CGFloat kWidthHeightScale = 330/276;
     
     /// 左侧item
     self.leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.leftButton.layer.cornerRadius = 8;
     [self.leftButton addTarget:self action:@selector(clickLeftBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.leftButton setBackgroundColor:[UIColor whiteColor]];
     [self.contentView addSubview:self.leftButton];
@@ -94,7 +95,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     //左侧item离线蒙版
-    self.leftWhiteMaskView = [[UIView alloc]init];
+    self.leftWhiteMaskView = [[UIImageView alloc]init];
     self.leftWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     [self.leftButton addSubview:self.leftWhiteMaskView];
     [self.leftWhiteMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,6 +106,7 @@ static CGFloat kWidthHeightScale = 330/276;
     
     /// 右侧item
     self.rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightButton.layer.cornerRadius = 8;
     [self.rightButton addTarget:self action:@selector(clickRightBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.rightButton setBackgroundColor:[UIColor whiteColor]];
     [self.contentView addSubview:self.rightButton];
@@ -136,7 +138,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     //右侧item蒙版
-    self.rightWhiteMaskView = [[UIView alloc]init];
+    self.rightWhiteMaskView = [[UIImageView alloc]init];
     self.rightWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.7];
     [self.rightButton addSubview:self.rightWhiteMaskView];
     [self.rightWhiteMaskView mas_makeConstraints:^(MASConstraintMaker *make) {

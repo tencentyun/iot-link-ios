@@ -22,8 +22,8 @@ static CGFloat const kTableViewHeight = 400;
 static CGFloat const kSearchBarHeight = 0;   //searchbar 高度 80
 static CGFloat const KScrolledHeight = 200;   //向上滑动后，地图可视高度
 
-static CGFloat const kLocationBtnWidthOrHeight = 40;  //定位按钮宽、高
-static CGFloat const kIntervalHeight = 40;  //定位按钮距离tableview 距离
+static CGFloat const kLocationBtnWidthOrHeight = 60;  //定位按钮宽、高
+static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
 
 @interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,QMSSearchDelegate>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomActionView;
@@ -129,7 +129,7 @@ static CGFloat const kIntervalHeight = 40;  //定位按钮距离tableview 距离
     CGFloat kBottomViewHeight = 90;
     
     _searchResultTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    _searchResultTableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    _searchResultTableView.backgroundColor = [UIColor whiteColor];
     _searchResultTableView.dataSource = self;
     _searchResultTableView.delegate = self;
     _searchResultTableView.rowHeight = 75;
@@ -151,14 +151,13 @@ static CGFloat const kIntervalHeight = 40;  //定位按钮距离tableview 距离
     
     CGFloat kTopPadding = kTableViewHeight - kLocationBtnWidthOrHeight - kIntervalHeight;
     self.locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.locationBtn setBackgroundColor:[UIColor blueColor]];
     [self.locationBtn setImage:[UIImage imageNamed:@"location_choose"] forState:UIControlStateNormal];
     [self.locationBtn addTarget:self action:@selector(setupMapCenter) forControlEvents:UIControlEventTouchUpInside];
     self.locationBtn.layer.cornerRadius = kLocationBtnWidthOrHeight/2;
     [self.view addSubview:self.locationBtn];
     [self.locationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
-        make.right.equalTo(self.view.mas_right).offset(-20);
+        make.right.equalTo(self.view.mas_right);
         if (@available (iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopPadding);
         }else {
@@ -449,11 +448,12 @@ static CGFloat const kIntervalHeight = 40;  //定位按钮距离tableview 距离
     if (scrollOffSetY <= -kTableViewHeadrHeight) {
         self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY);
 
+        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight);
+        
     }else if (scrollOffSetY >-kTableViewHeadrHeight && scrollOffSetY < kOrigionY) {
 
 //        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY - (kTableViewHeadrHeight+scrollOffSetY));
         
-//        self.locationBtn.center = CGPointMake(kScreenWidth-kLocationBtnWidthOrHeight/2-20, kLocationBtnOriginY - (kTableViewHeadrHeight+scrollOffSetY));
         
         [self.locationBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             

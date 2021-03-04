@@ -41,6 +41,8 @@
     
     self.selectionStyle = UITableViewCellSeparatorStyleNone;
     self.contentView.backgroundColor = [UIColor whiteColor];
+    self.contentView.layer.cornerRadius = 12;
+    
     CGFloat kWidthPadding = 16;
     CGFloat kImageWidthOrHeight = 18;
     self.locationIcon = [[UIImageView alloc]init];

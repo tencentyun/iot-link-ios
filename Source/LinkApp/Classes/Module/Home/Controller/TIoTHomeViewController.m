@@ -1247,7 +1247,7 @@ static CGFloat kHeaderViewHeight = 162;
         
         UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
         NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"all_devices", @"所有设备"),(unsigned long)self.dataArr.count];
-        [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#6C7078" textAlignment:NSTextAlignmentLeft];
+        [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
         [headerSectionView addSubview:sectionTitle];
 
         return headerSectionView;
