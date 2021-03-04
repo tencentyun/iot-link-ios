@@ -377,12 +377,6 @@ static CGFloat kHeaderViewHeight = 162;
     gl.locations = @[@(0),@(1.0f)];
     [self.view.layer addSublayer:gl];
     
-    [self.view addSubview:self.tableView];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight);
-        make.left.right.bottom.mas_equalTo(0);
-    }];
-    
     [self.view addSubview:self.devicesTableView];
     [self.devicesTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight);
@@ -1256,19 +1250,24 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    if (section == 0) {
-        UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
-        headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-        
-        UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
-        NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"all_devices", @"所有设备"),(unsigned long)self.dataArr.count];
-        [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
-        [headerSectionView addSubview:sectionTitle];
+    if (self.dataArr.count != 0) {
+        if (section == 0) {
+            UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+            headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+            
+            UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
+            NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"all_devices", @"所有设备"),(unsigned long)self.dataArr.count];
+            [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
+            [headerSectionView addSubview:sectionTitle];
 
-        return headerSectionView;
+            return headerSectionView;
+        }else {
+            return nil;
+        }
     }else {
         return nil;
     }
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
