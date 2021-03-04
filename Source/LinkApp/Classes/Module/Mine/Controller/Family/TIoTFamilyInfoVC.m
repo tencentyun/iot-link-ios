@@ -65,7 +65,11 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableDictionary *addressDic = self.dataArr[0][2];
         NSString *addressString = responseObject[@"Data"][@"Address"]?:@"";
         if (![NSString isNullOrNilWithObject:addressString]) {
-            [addressDic setValue:responseObject[@"Data"][@"Address"] forKey:@"name"];
+            
+            NSDictionary *addDic = [NSString jsonToObject:addressString];
+            
+            [addressDic setValue:addDic[@"title"]?:@"" forKey:@"name"];
+            [addressDic setValue:addressString forKey:@"addresJson"];
         }
         //刷新
         [self.coll reloadData];
@@ -125,16 +129,28 @@ static NSString *itemId2 = @"pfDDD";
     }];
 }
 
-- (void)modifyFamily:(NSString *)name adddress:(NSString *)address
+- (void)modifyFamily:(NSString *)name addressTitle:(NSString *)title isModifyAddrss:(BOOL)modifyAdd addJson:(NSString *)addJson
 {
-    NSDictionary *param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name,@"Address":address};
+    NSDictionary *param = nil;
+    
+    if (modifyAdd == NO) {
+        param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name};
+    }else {
+        param = @{@"FamilyId":self.familyInfo[@"FamilyId"],@"Name":name,@"Address":addJson};
+    }
+    
     [[TIoTRequestObject shared] post:AppModifyFamily Param:param success:^(id responseObject) {
         
         [HXYNotice addUpdateFamilyListPost];
         
         NSMutableDictionary *dic = self.dataArr[0][0];
         [dic setValue:name forKey:@"name"];
-        [self.coll reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+        
+        NSMutableDictionary *tempDic = self.dataArr[0][2];
+        [tempDic setValue:title forKey:@"name"];
+        [tempDic setValue:addJson forKey:@"addresJson"];
+        
+        [self.coll reloadData];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -291,7 +307,7 @@ static NSString *itemId2 = @"pfDDD";
                     modifyNameVC.modifyNameBlock = ^(NSString * _Nonnull name) {
                         NSMutableDictionary *addressDic = self.dataArr[0][2];
                         if (name.length > 0) {
-                            [self modifyFamily:name adddress:addressDic[@"name"]?:@""];
+                            [self modifyFamily:name addressTitle:addressDic[@"name"] isModifyAddrss:NO addJson:@""];
                         }
                         
                     };
@@ -313,14 +329,14 @@ static NSString *itemId2 = @"pfDDD";
                 NSMutableDictionary *addressDictionary = self.dataArr[0][2];
                 TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
                 mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
-                mapVC.addressString = addressDictionary[@"name"];
-                mapVC.addressBlcok = ^(NSString * _Nonnull address) {
+                mapVC.addressString = addressDictionary[@"addresJson"];
+                mapVC.addressBlcok = ^(NSString * _Nonnull address, NSString * _Nonnull addressJson) {
                     NSMutableDictionary *addressDic = self.dataArr[0][2];
                     [addressDic setValue:address forKey:@"name"];
                     [self.coll reloadItemsAtIndexPaths:@[indexPath]];
                     
                     NSMutableDictionary *nameDic = self.dataArr[0][0];
-                    [self modifyFamily:nameDic[@"name"]?:@"" adddress:address?:@""];
+                    [self modifyFamily:nameDic[@"name"]?:@"" addressTitle:address isModifyAddrss:YES addJson:addressJson?:@""];
                     
                 };
                 [self.navigationController pushViewController:mapVC animated:YES];
@@ -400,7 +416,7 @@ static NSString *itemId2 = @"pfDDD";
         NSMutableArray *firstSection = [NSMutableArray array];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_name", @"家庭名称"),@"name":self.familyInfo[@"FamilyName"],@"Role":self.familyInfo[@"Role"]?:@""}]];
         [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_manager", @"房间管理"),@"name":@"",@"RoomCount":@"",@"Role":@"1"}]];
-        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_location", @"家庭位置"),@"name":NSLocalizedString(@"setting_family_address", @"设置位置")}]];
+        [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"family_location", @"家庭位置"),@"name":NSLocalizedString(@"setting_family_address", @"设置位置"),@"addresJson":@""}]];
          
         if ([self.familyInfo[@"Role"] integerValue] == 1) {
             [firstSection addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"invite_family_member", @"邀请家庭成员"),@"name":@""}]];

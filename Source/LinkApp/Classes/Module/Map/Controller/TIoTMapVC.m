@@ -102,15 +102,13 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
 }
 
 - (void)setupHavedLocation {
-    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%@&key=%@",MapSDKAddressParseURL,self.addressString?:@"",model.TencentMapSDKValue];
-    
-    NSString *urlEncoded = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-    [[TIoTRequestObject shared] get:urlEncoded isNormalRequest:YES success:^(id responseObject) {
-        TIoTAddressParseModel *addressModel = [TIoTAddressParseModel yy_modelWithJSON:responseObject[@"result"]];
+    NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""];
+    if (addJsonDic != nil) {
+        double lat = [addJsonDic[@"latitude"] doubleValue];
+        double lng = [addJsonDic[@"longitude"] doubleValue];
         
-        CLLocationCoordinate2D addressLocation = CLLocationCoordinate2DMake(addressModel.location.lat,addressModel.location.lng);
+        CLLocationCoordinate2D addressLocation = CLLocationCoordinate2DMake(lat,lng);
         
         //定位大头针
         [self.mapView setCenterCoordinate:addressLocation];
@@ -118,10 +116,30 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
         //刷新地点列表
         [self resetRequestPragma];
         [self requestLocationList:addressLocation];
+    }else {
+        TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
         
-    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        NSString *urlString = [NSString stringWithFormat:@"%@%@&key=%@",MapSDKAddressParseURL,self.addressString?:@"",model.TencentMapSDKValue];
         
-    }];
+        NSString *urlEncoded = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+        [[TIoTRequestObject shared] get:urlEncoded isNormalRequest:YES success:^(id responseObject) {
+            TIoTAddressParseModel *addressModel = [TIoTAddressParseModel yy_modelWithJSON:responseObject[@"result"]];
+            
+            CLLocationCoordinate2D addressLocation = CLLocationCoordinate2DMake(addressModel.location.lat,addressModel.location.lng);
+            
+            //定位大头针
+            [self.mapView setCenterCoordinate:addressLocation];
+            
+            //刷新地点列表
+            [self resetRequestPragma];
+            [self requestLocationList:addressLocation];
+            
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            
+        }];
+    }
+    
+    
 }
 
 - (void)setupBottomView {
@@ -615,8 +633,14 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
             if (weakSelf.addressBlcok) {
                 if (weakSelf.selectedIndex>=0) {
                     TIoTPoisModel *cellModel = weakSelf.searchResultArray[weakSelf.selectedIndex];
-                    NSString *addressString = [NSString stringWithFormat:@"%@%@%@%@",cellModel.ad_info.province?:@"",cellModel.ad_info.city?:@"",cellModel.ad_info.district?:@"",cellModel.address?:@""];
-                    weakSelf.addressBlcok(addressString);
+                    NSString *addressString = cellModel.title?:@"";
+                    NSString *addressDetail = [NSString stringWithFormat:@"%@%@%@%@",cellModel.ad_info.province?:@"",cellModel.ad_info.city?:@"",cellModel.ad_info.district?:@"",cellModel.address?:@""];
+                    NSString *lat = [NSString stringWithFormat:@"%f",cellModel.location.lat];
+                    NSString *lng = [NSString stringWithFormat:@"%f",cellModel.location.lng];
+                    NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":cellModel.ad_info.name?:@"",@"title":addressString};
+                    
+                    NSString *addressJson = [addressDic yy_modelToJSONString];
+                    weakSelf.addressBlcok(addressString, addressJson);
                 }
             }
             [weakSelf.navigationController popViewControllerAnimated:YES];
