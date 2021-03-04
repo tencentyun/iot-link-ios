@@ -1235,6 +1235,31 @@ static CGFloat kHeaderViewHeight = 162;
     }];
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+        headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+        
+        UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
+        NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"all_devices", @"所有设备"),(unsigned long)self.dataArr.count];
+        [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#6C7078" textAlignment:NSTextAlignmentLeft];
+        [headerSectionView addSubview:sectionTitle];
+
+        return headerSectionView;
+    }else {
+        return nil;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 44;
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat offSetY = scrollView.contentOffset.y;
@@ -1369,7 +1394,7 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (UITableView *)devicesTableView {
     if (!_devicesTableView) {
-        _devicesTableView = [[UITableView alloc]init];
+        _devicesTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _devicesTableView.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
         _devicesTableView.rowHeight = 150;
         _devicesTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

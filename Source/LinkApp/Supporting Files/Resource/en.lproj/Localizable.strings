@@ -890,3 +890,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "family_location" = "家庭位置";
 "set_location" = "设定位置";
 "choose_location" = "地图选点";
+"all_devices" = "所有设备";

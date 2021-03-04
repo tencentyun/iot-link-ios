@@ -64,7 +64,6 @@ static CGFloat kWidthHeightScale = 330/276;
     /// 左侧item
     self.leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.leftButton addTarget:self action:@selector(clickLeftBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self setShadowEffectWithButton:self.leftButton];
     [self.leftButton setBackgroundColor:[UIColor whiteColor]];
     [self.contentView addSubview:self.leftButton];
     [self.leftButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -107,7 +106,6 @@ static CGFloat kWidthHeightScale = 330/276;
     /// 右侧item
     self.rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rightButton addTarget:self action:@selector(clickRightBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self setShadowEffectWithButton:self.rightButton];
     [self.rightButton setBackgroundColor:[UIColor whiteColor]];
     [self.contentView addSubview:self.rightButton];
     [self.rightButton mas_makeConstraints:^(MASConstraintMaker *make) {
