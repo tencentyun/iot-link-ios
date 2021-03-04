@@ -35,6 +35,7 @@
 #import "UIImage+Ex.h"
 #import "TIoTAddressParseModel.h"
 #import "TIoTFamilyInfoVC.h"
+#import "TIoTEquipmentNewCell.h"
 
 @import Lottie;
 
@@ -43,6 +44,8 @@ static CGFloat kHeaderViewHeight = 162;
 
 @interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
 
+@property (nonatomic, strong) UITableView *devicesTableView;
+@property (nonatomic, strong) NSMutableArray *devicesArray;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) CMPageTitleContentView *tableHeaderView;
@@ -115,6 +118,15 @@ static CGFloat kHeaderViewHeight = 162;
         //保持天气动画位置，跟随滚动区域是否显示
         [self scrollViewDidScroll:self.tableView];
         
+    }
+    
+    if (self.devicesTableView) {
+        if (self.currentFamilyId != nil) {
+            [self getRoomList:self.currentFamilyId];
+        }
+        
+        //保持天气动画位置，跟随滚动区域是否显示
+        [self scrollViewDidScroll:self.devicesTableView];
     }
 }
 
@@ -211,6 +223,18 @@ static CGFloat kHeaderViewHeight = 162;
     
     // 设置自动切换透明度(在导航栏下面自动隐藏)
     self.tableView.mj_header.automaticallyChangeAlpha = YES;
+    
+    
+    self.devicesTableView.mj_header = [TIoTRefreshHeader headerWithRefreshingBlock:^{
+        [selfWeak getFamilyList];
+    }];
+    
+    self.devicesTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [selfWeak loadMoreData];
+    }];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    self.devicesTableView.mj_header.automaticallyChangeAlpha = YES;
 }
 
 - (void)endRefresh:(BOOL)isFooter total:(NSInteger)total {
@@ -230,6 +254,24 @@ static CGFloat kHeaderViewHeight = 162;
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
         } else {
             [self.tableView.mj_footer endRefreshing];
+        }
+    }
+    
+    if (isFooter) {
+        if (self.offset >= total) {
+            [self.devicesTableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        else
+        {
+            [self.devicesTableView.mj_footer endRefreshing];
+        }
+    }
+    else{
+        [self.devicesTableView.mj_header endRefreshing];
+        if (self.offset >= total) {
+            [self.devicesTableView.mj_footer endRefreshingWithNoMoreData];
+        } else {
+            [self.devicesTableView.mj_footer endRefreshing];
         }
     }
 }
@@ -277,6 +319,50 @@ static CGFloat kHeaderViewHeight = 162;
         
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
+    
+    
+    if (self.devicesArray.count == 0) {//[data[@"Total"] integerValue] == 0) {
+        
+        [MBProgressHUD dismissInView:self.view];
+        WeakObj(self)
+        if (!self.currentRoomId || self.currentRoomId.length == 0) {
+            [self.devicesTableView showEmpty2:NSLocalizedString(@"addDeveice_immediately", @"立即添加") desc:NSLocalizedString(@"no_device_please_addition", @"当前暂无设备，请添加设备") image:[UIImage imageNamed:@"home_noDevice"] block:^{
+                [selfWeak addEquipmentViewController];
+            }];
+            
+            self.addBtn.hidden = YES;
+            self.addBtn2.hidden = YES;
+            
+            [TIoTCoreUserManage shared].currentRoomId = @"";
+            
+            //房间列表隐藏
+            self.tableHeaderView.alpha = 0;
+            self.tableHeaderView2.alpha = 0;
+        } else {
+            [self.devicesTableView showEmpty2:NSLocalizedString(@"addDeveice_immediately", @"立即添加") desc:NSLocalizedString(@"no_device_please_addition", @"当前暂无设备，请添加设备") image:[UIImage imageNamed:@"home_noDevice"] block:^{
+                [selfWeak addEquipmentViewController];
+            }];
+        }
+        
+        [self.devicesTableView reloadData];
+    }
+    else{
+        
+        self.addBtn.hidden = YES;
+        self.addBtn2.hidden = YES;
+        
+        
+        //房间列表显示
+        [self addTableHeaderView];
+        self.tableHeaderView.alpha = 1;
+        self.tableHeaderView2.alpha = 1;
+        
+        [self.devicesTableView hideStatus];
+        [self.devicesTableView reloadData];
+        
+        [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
+    }
+    
 }
 
 - (void)setupUI{
@@ -296,6 +382,13 @@ static CGFloat kHeaderViewHeight = 162;
         make.top.equalTo(self.view.mas_top).offset([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight);
         make.left.right.bottom.mas_equalTo(0);
     }];
+    
+    [self.view addSubview:self.devicesTableView];
+    [self.devicesTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).offset([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight);
+        make.left.right.bottom.mas_equalTo(0);
+    }];
+    
     
     [self setNav];
     
@@ -342,6 +435,8 @@ static CGFloat kHeaderViewHeight = 162;
         self.slideTitleBackView.backgroundColor = [UIColor clearColor];
         [self.tableView addSubview:self.slideTitleBackView];
         
+        [self.devicesTableView addSubview:self.slideTitleBackView];
+        
         self.weatherBackImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"banner_header"]];
         self.slideTitleBackView.clipsToBounds = YES;
         [self.slideTitleBackView addSubview:self.weatherBackImage];
@@ -358,6 +453,8 @@ static CGFloat kHeaderViewHeight = 162;
         _tableHeaderView.cm_delegate = self;
         _tableHeaderView.cm_selectedIndex = index;
         [self.tableView addSubview:self.tableHeaderView];
+        
+        [self.devicesTableView addSubview:self.tableHeaderView];
     }
     
     /// 添加天气UI 要在CMPageTitleContentView完后再添加 达到天气在CMPage上效果
@@ -386,6 +483,8 @@ static CGFloat kHeaderViewHeight = 162;
     
     //滑动层显示的导航栏
     [self.tableView addSubview:self.navView2];
+    
+    [self.devicesTableView addSubview:self.navView2];
 }
 
 #pragma mark - 天气动画
@@ -402,6 +501,8 @@ static CGFloat kHeaderViewHeight = 162;
         make.height.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 162);
     }];
     self.tableView.tableHeaderView = self.headerView;
+    
+    self.devicesTableView.tableHeaderView = self.headerView;
     
     
     self.weatherBottomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -540,7 +641,6 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)requestWeatherData {
 
     [self requestWeatherNowData];
-//    [self requestWeatherCityData];
 }
 
 ///MARK:请求天气实况
@@ -738,7 +838,30 @@ static CGFloat kHeaderViewHeight = 162;
         [self endRefresh:NO total:[responseObject[@"Total"] integerValue]];
         [self.dataArr removeAllObjects];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
+        
+        
+        NSArray *tempListArray = responseObject[@"DeviceList"];
+        [self.devicesArray removeAllObjects];
+        for (int i = 0; i < tempListArray.count; i+=2) {
+            
+            NSArray *itemArr = nil;
+            if (i+1 <= tempListArray.count-1) {
+                itemArr = @[tempListArray[i],tempListArray[i+1]];
+            }else {
+                itemArr = @[tempListArray[i]];
+            }
+            
+//            NSArray *itemArr = @[tempListArray[i],tempListArray[i+1]];
+            
+            [self.devicesArray addObject:itemArr];
+            
+        }
+        
         if (self.dataArr.count == 0) {
+            [self refreshUI];
+        }
+        
+        if (self.devicesArray.count == 0) {
             [self refreshUI];
         }
         
@@ -755,9 +878,30 @@ static CGFloat kHeaderViewHeight = 162;
     [[TIoTRequestObject shared] post:AppGetFamilyDeviceList Param:@{@"FamilyId":self.currentFamilyId,@"RoomId":roomId,@"Offset":@(self.offset),@"Limit":@(10)} success:^(id responseObject) {
         [self endRefresh:YES total:[responseObject[@"Total"] integerValue]];
         [self.dataArr addObjectsFromArray:responseObject[@"DeviceList"]];
+        
+        NSArray *tempListArr = responseObject[@"DeviceList"];
+        for (int i = 0; i < tempListArr.count; i+=2) {
+            
+            NSArray *itemArr = nil;
+            if (i+1 <= tempListArr.count-1) {
+                itemArr = @[tempListArr[i],tempListArr[i+1]];
+            }else {
+                itemArr = @[tempListArr[i]];
+            }
+//            NSArray *itemArr = @[tempListArr[i],tempListArr[i+1]];
+            
+            [self.devicesArray addObject:itemArr];
+            
+        }
+        
         if (self.dataArr.count == 0) {
             [self refreshUI];
         }
+        
+        if (self.devicesArray.count == 0) {
+            [self refreshUI];
+        }
+        
         
         [self updateDeviceStatus];
         
@@ -799,6 +943,21 @@ static CGFloat kHeaderViewHeight = 162;
             
             [self.dataArr removeAllObjects];
             [self.dataArr addObjectsFromArray:tmpArr];
+            
+            [self.devicesArray removeAllObjects];
+            for (int i = 0; i < tmpArr.count; i+=2) {
+                NSArray *itemArr = nil;
+                if (i+1 <= tmpArr.count-1) {
+                    itemArr = @[tmpArr[i],tmpArr[i+1]];
+                }else {
+                    itemArr = @[tmpArr[i]];
+                }
+                
+                [self.devicesArray addObject:itemArr];
+                
+            }
+            
+            
             [self refreshUI];
             
             //轮训设备状态，查看trtc设备是否要呼叫我,只执行一次，防止过度刷新
@@ -900,6 +1059,7 @@ static CGFloat kHeaderViewHeight = 162;
     
     [self getRoomList:model.FamilyId];
     
+    //查询家庭的地址
     [self getFamilyInfoAddressWithFamilyID:model.FamilyId?:@""];
 }
 
@@ -962,27 +1122,54 @@ static CGFloat kHeaderViewHeight = 162;
 #pragma mark - TableViewDelegate && TableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataArr.count;
+    if (tableView == self.tableView) {
+        return self.dataArr.count;
+    }else {
+        return self.devicesArray.count;
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    TIoTEquipmentTableViewCell *cell = [TIoTEquipmentTableViewCell cellWithTableView:tableView];
-    cell.dataDic = self.dataArr[indexPath.row];
-    return cell;
+    if (tableView == self.tableView) {
+        TIoTEquipmentTableViewCell *cell = [TIoTEquipmentTableViewCell cellWithTableView:tableView];
+        cell.dataDic = self.dataArr[indexPath.row];
+        return cell;
+    }else {
+        TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
+        cell.dataArray = self.devicesArray[indexPath.row];
+        __weak typeof(self) weakSelf = self;
+        cell.clickLeftDeviceBlock = ^{
+            [weakSelf chooseDeviceWith:indexPath];
+        };
+        cell.clickRightDeviceBlock = ^{
+            [weakSelf chooseDeviceWith:indexPath];
+        };
+        return cell;
+    
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if (tableView == self.tableView) {
+        [self chooseDeviceWith:indexPath];
+    }
+}
+
+- (void)chooseDeviceWith:(NSIndexPath *)indexPath {
+    
     NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
-//    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
-        [HXYNotice postHeartBeat:devIds];
-        [HXYNotice addActivePushPost:devIds];
-        
-//    }
-//    else
-//    {
-//        [MBProgressHUD showError:@"请检查网络"];
-//    }
+    //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+    [HXYNotice postHeartBeat:devIds];
+    [HXYNotice addActivePushPost:devIds];
+    
+    //    }
+    //    else
+    //    {
+    //        [MBProgressHUD showError:@"请检查网络"];
+    //    }
     
     NSString *productIDString = self.dataArr[indexPath.row][@"ProductId"] ?:@"";
     
@@ -1002,12 +1189,12 @@ static CGFloat kHeaderViewHeight = 162;
                 NSString *familyId = [TIoTCoreUserManage shared].familyId;
                 NSString *roomID = self.currentRoomId ? : @"0";
                 NSString *familyType = [NSString stringWithFormat:@"%ld",(long)[TIoTCoreUserManage shared].FamilyType];
-               
+                
                 __weak typeof(self) weadkSelf= self;
                 
                 [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
                 [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
-
+                    
                     WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
                     NSString *ticket = responseObject[@"TokenTicket"]?:@"";
                     NSString *requestID = responseObject[@"RequestId"]?:@"";
@@ -1022,7 +1209,7 @@ static CGFloat kHeaderViewHeight = 162;
                     vc.deviceDic = [self.dataArr[indexPath.row] mutableCopy];
                     [weadkSelf.navigationController pushViewController:vc animated:YES];
                     [MBProgressHUD dismissInView:weadkSelf.view];
-
+                    
                 } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
                     [MBProgressHUD dismissInView:weadkSelf.view];
                 }];
@@ -1046,7 +1233,6 @@ static CGFloat kHeaderViewHeight = 162;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
-    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1082,8 +1268,10 @@ static CGFloat kHeaderViewHeight = 162;
     
     if (offSetY <=0) {
         [self.view insertSubview:self.tableHeaderView aboveSubview:self.tableView];
+        [self.view insertSubview:self.tableHeaderView aboveSubview:self.devicesTableView];
         self.tableHeaderView.center = CGPointMake(kScreenWidth/2, kOrigionY -offSetY + kOrigionY);
         [self.view insertSubview:self.slideTitleBackView aboveSubview:self.tableView];
+        [self.view insertSubview:self.slideTitleBackView aboveSubview:self.devicesTableView];
         
         if (![TIoTUIProxy shareUIProxy].iPhoneX) {
             self.slideTitleBackView.center = CGPointMake(self.tableHeaderView.center.x, self.tableHeaderView.center.y - 24);
@@ -1108,9 +1296,11 @@ static CGFloat kHeaderViewHeight = 162;
         
     }else if (offSetY > 0 && offSetY <= kOrigionY) {
         [self.view insertSubview:self.tableHeaderView aboveSubview:self.tableView];
+        [self.view insertSubview:self.tableHeaderView aboveSubview:self.devicesTableView];
         self.tableHeaderView.center = CGPointMake(kScreenWidth/2, kOrigionY - offSetY + kOrigionY);
         
         [self.view insertSubview:self.slideTitleBackView aboveSubview:self.tableView];
+        [self.view insertSubview:self.slideTitleBackView aboveSubview:self.devicesTableView];
         if (![TIoTUIProxy shareUIProxy].iPhoneX) {
             self.slideTitleBackView.center = CGPointMake(self.tableHeaderView.center.x, self.tableHeaderView.center.y - 24);
             self.tableHeaderView.center = self.slideTitleBackView.center;
@@ -1150,7 +1340,7 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
-#pragma mark - delegate
+#pragma mark - PageTitle delegate
 
 - (void)cm_pageTitleContentViewClickWithLastIndex:(NSUInteger)LastIndex Index:(NSUInteger)index Repeat:(BOOL)repeat
 {
@@ -1170,12 +1360,25 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
-- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+-(UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
 {
     return UIModalPresentationNone;
 }
 
-#pragma mark setter or getter
+#pragma mark - setter or getter
+
+- (UITableView *)devicesTableView {
+    if (!_devicesTableView) {
+        _devicesTableView = [[UITableView alloc]init];
+        _devicesTableView.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
+        _devicesTableView.rowHeight = 150;
+        _devicesTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _devicesTableView.delegate = self;
+        _devicesTableView.dataSource = self;
+    }
+    return _devicesTableView;
+}
+
 - (UITableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[UITableView alloc] init];
@@ -1394,6 +1597,13 @@ static CGFloat kHeaderViewHeight = 162;
         _weatherTypeText = @"";
     }
     return _weatherTypeText;
+}
+
+- (NSMutableArray *)devicesArray {
+    if (!_devicesArray) {
+        _devicesArray = [NSMutableArray array];
+    }
+    return _devicesArray;
 }
 
 - (NSMutableArray *)dataArr

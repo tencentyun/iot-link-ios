@@ -130,6 +130,7 @@
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		6DEEB78025494DFD00247A66 /* TIoTH5CallResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */; };
 		6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB7832549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m */; };
+		6DEFD96B25EFEFAD00F03E3C /* TIoTEquipmentNewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEFD96A25EFEFAD00F03E3C /* TIoTEquipmentNewCell.m */; };
 		8B92813569D959EFE08FFA8A /* Pods_LinkSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */; };
 		9A55D54345C86CE785C386E3 /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */; };
 		A40565E424D040C900A15699 /* TIoTConfigHardwareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */; };
@@ -683,6 +684,8 @@
 		6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTH5CallResultModel.m; sourceTree = "<group>"; };
 		6DEEB7822549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TIoTWebVC+TIoTWebVCCategory.h"; sourceTree = "<group>"; };
 		6DEEB7832549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TIoTWebVC+TIoTWebVCCategory.m"; sourceTree = "<group>"; };
+		6DEFD96925EFEFAC00F03E3C /* TIoTEquipmentNewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTEquipmentNewCell.h; sourceTree = "<group>"; };
+		6DEFD96A25EFEFAD00F03E3C /* TIoTEquipmentNewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTEquipmentNewCell.m; sourceTree = "<group>"; };
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkApp/Pods-LinkApp.release.xcconfig"; sourceTree = "<group>"; };
 		A40565E224D040C900A15699 /* TIoTConfigHardwareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTConfigHardwareViewController.h; sourceTree = "<group>"; };
@@ -1767,6 +1770,8 @@
 				A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */,
 				6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */,
 				6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */,
+				6DEFD96925EFEFAC00F03E3C /* TIoTEquipmentNewCell.h */,
+				6DEFD96A25EFEFAD00F03E3C /* TIoTEquipmentNewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3111,6 +3116,7 @@
 				D2C7D80B2330CA6500C97A04 /* SGQRCodeScanView.m in Sources */,
 				6D982C9124D31A5E0080C961 /* TIoTBindAccountView.m in Sources */,
 				D2310513233077D40003069D /* TIoTAppEnvironment.m in Sources */,
+				6DEFD96B25EFEFAD00F03E3C /* TIoTEquipmentNewCell.m in Sources */,
 				D2038B8C2331D5F10036F6B9 /* TIoTMessageViewController.m in Sources */,
 				D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */,
 				D2A2CD1F234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m in Sources */,
