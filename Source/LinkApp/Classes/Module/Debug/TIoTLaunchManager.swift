@@ -12,8 +12,8 @@ extension UIApplication {
         if appdelegate.isDebug {
             TIoTDebugtools.awake()
             TIoTLogTask.awake()
-            TIoTVercheckTask.awake()
         }
+        TIoTVercheckTask.awake()
     }()
         
     override open var next: UIResponder? {
