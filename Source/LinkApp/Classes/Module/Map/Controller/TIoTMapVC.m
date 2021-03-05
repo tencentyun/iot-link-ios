@@ -62,9 +62,9 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     
     self.mapView.zoomLevel = 15.0;
     [self setupPointAnnotation];
-    //    [self searchCurrentLocationWithKeyword:@""];
-    //    [self setupSearchView];
-    //    [self setupKeyboardNotification];
+        [self searchCurrentLocationWithKeyword:@""];
+        [self setupSearchView];
+        [self setupKeyboardNotification];
     [self setupBottomView];
     
     [self setupRefreshView];
