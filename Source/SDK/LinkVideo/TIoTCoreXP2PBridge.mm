@@ -104,9 +104,9 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (NSString *)getUrlForHttpFlv {
-    std::string httpflv =  delegateHttpFlv();
-    NSLog(@"httpflv---%s",httpflv.c_str());
-    return [NSString stringWithCString:httpflv.c_str() encoding:[NSString defaultCStringEncoding]];
+    const char *httpflv =  delegateHttpFlv();
+    NSLog(@"httpflv---%s",httpflv);
+    return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
 }
 
 - (void)getCommandRequestWithAsync:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
