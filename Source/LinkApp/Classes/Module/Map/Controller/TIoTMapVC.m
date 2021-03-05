@@ -17,13 +17,16 @@
 #import "TIoTIntelligentBottomActionView.h"
 #import "TIoTAddressParseModel.h"
 #import "TIoTChooseLocationCell.h"
+#import "UIView+XDPExtension.h"
 
-static CGFloat const kTableViewHeight = 400;
-static CGFloat const kSearchBarHeight = 0;   //searchbar 高度 80
-static CGFloat const KScrolledHeight = 200;   //向上滑动后，地图可视高度
+static CGFloat const kSearchTopMap = 20;     //searchview 距离map底部的高度
+static CGFloat const kMapVisualMaxHeight = 350 + kSearchTopMap;    // 最大地图可视高度，（不包含searchview,searchview添加在map上）
+static CGFloat const kSearchViewHeight = 54;    //searchview 高度
+static CGFloat const KScrolledHeight = 175 + kSearchTopMap;   //向上滑动后，地图可视高度
 
 static CGFloat const kLocationBtnWidthOrHeight = 60;  //定位按钮宽、高
-static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
+static CGFloat const kIntervalHeight = 25;  //定位按钮距离tableview 距离
+static CGFloat const kRightPadding = 0; //定位按钮右边距
 
 @interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,QMSSearchDelegate>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomActionView;
@@ -56,15 +59,15 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.mapView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kTableViewHeight);
+    self.mapView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kMapVisualMaxHeight);
     
     [self resetRequestPragma];
     
     self.mapView.zoomLevel = 15.0;
     [self setupPointAnnotation];
-    //    [self searchCurrentLocationWithKeyword:@""];
-    //    [self setupSearchView];
-    //    [self setupKeyboardNotification];
+        [self searchCurrentLocationWithKeyword:@""];
+//        [self setupSearchView];
+        [self setupKeyboardNotification];
     [self setupBottomView];
     
     [self setupRefreshView];
@@ -144,6 +147,17 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
 
 - (void)setupBottomView {
 
+    self.locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.locationBtn setImage:[UIImage imageNamed:@"location_choose"] forState:UIControlStateNormal];
+    [self.locationBtn addTarget:self action:@selector(setupMapCenter) forControlEvents:UIControlEventTouchUpInside];
+    [self.mapView addSubview:self.locationBtn];
+    [self.locationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
+        make.right.equalTo(self.view.mas_right).offset(-kRightPadding);
+        make.bottom.equalTo(self.mapView.mas_bottom).offset(-kIntervalHeight);
+    }];
+    
+    
     CGFloat kBottomViewHeight = 90;
     
     _searchResultTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -151,8 +165,9 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     _searchResultTableView.dataSource = self;
     _searchResultTableView.delegate = self;
     _searchResultTableView.rowHeight = 75;
-    _searchResultTableView.contentInset = UIEdgeInsetsMake(kTableViewHeight, 0, 0, 0);
+    _searchResultTableView.contentInset = UIEdgeInsetsMake(kMapVisualMaxHeight + kSearchViewHeight - kSearchTopMap, 0, 0, 0);
     _searchResultTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _searchResultTableView.layer.cornerRadius = 12;
     
     [self.view addSubview:_searchResultTableView];
     [self.view insertSubview:_searchResultTableView atIndex:0];
@@ -166,21 +181,11 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
         }
     }];
     
-    
-    CGFloat kTopPadding = kTableViewHeight - kLocationBtnWidthOrHeight - kIntervalHeight;
-    self.locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.locationBtn setImage:[UIImage imageNamed:@"location_choose"] forState:UIControlStateNormal];
-    [self.locationBtn addTarget:self action:@selector(setupMapCenter) forControlEvents:UIControlEventTouchUpInside];
-    self.locationBtn.layer.cornerRadius = kLocationBtnWidthOrHeight/2;
-    [self.view addSubview:self.locationBtn];
-    [self.locationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
-        make.right.equalTo(self.view.mas_right);
-        if (@available (iOS 11.0, *)) {
-            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopPadding);
-        }else {
-            make.top.equalTo(self.view).offset(64+kTopPadding);
-        }
+    [self.view addSubview:self.searchView];
+    [self.searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.mapView);
+        make.height.mas_equalTo(kSearchViewHeight);
+        make.top.equalTo(self.mapView.mas_bottom).offset(-kSearchTopMap);
     }];
     
     [self.view addSubview:self.bottomActionView];
@@ -189,6 +194,8 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
         make.height.mas_equalTo(kBottomViewHeight);
     }];
 
+    [self.view changeViewRectConnerWithView:self.searchView withRect:CGRectMake(0, 0, kScreenWidth, kSearchViewHeight) roundCorner:UIRectCornerTopLeft|UIRectCornerTopRight withRadius:CGSizeMake(12, 12)];
+    
 }
 
 - (void)setupRefreshView
@@ -386,7 +393,7 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
 #pragma mark - SearchBar
 - (void)setupSearchView {
     
-    _searchView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - kTableViewHeight, [UIScreen mainScreen].bounds.size.width, kTableViewHeight)];
+    _searchView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - kMapVisualMaxHeight, [UIScreen mainScreen].bounds.size.width, kMapVisualMaxHeight)];
     _searchView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:_searchView];
 
@@ -395,7 +402,7 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     _searchBar.delegate = self;
     [_searchView addSubview:_searchBar];
 
-    _searchResultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, [UIScreen mainScreen].bounds.size.width, kTableViewHeight - 44) style:UITableViewStyleGrouped];
+    _searchResultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, [UIScreen mainScreen].bounds.size.width, kMapVisualMaxHeight - 44) style:UITableViewStyleGrouped];
     _searchResultTableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _searchResultTableView.dataSource = self;
     _searchResultTableView.delegate = self;
@@ -456,12 +463,10 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     CGFloat scrollOffSetY = scrollView.contentOffset.y;
     NSLog(@"scrollOffset--->%f",scrollOffSetY);
 
-    CGFloat kTableViewHeadrHeight = kTableViewHeight;
+    CGFloat kTableViewHeadrHeight = kMapVisualMaxHeight;
 
-    CGFloat kHeaderViewOrigionY = kTableViewHeight/2;
-    CGFloat kOrigionY = - (kSearchBarHeight + KScrolledHeight);
-
-    CGFloat kLocationBtnOriginY = kTableViewHeight - kLocationBtnWidthOrHeight - kIntervalHeight;
+    CGFloat kHeaderViewOrigionY = (kMapVisualMaxHeight+kSearchViewHeight)/2;
+    CGFloat kOrigionY = - (kSearchViewHeight + KScrolledHeight);
     
     if (scrollOffSetY <= -kTableViewHeadrHeight) {
         self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY);
@@ -472,34 +477,11 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
 
 //        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY - (kTableViewHeadrHeight+scrollOffSetY));
         
-        
-        [self.locationBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-            
-            make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
-            make.right.equalTo(self.view.mas_right).offset(-20);
-            if (@available (iOS 11.0, *)) {
-                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kLocationBtnOriginY - (kTableViewHeadrHeight+scrollOffSetY));
-            }else {
-                make.top.equalTo(self.view).offset(64+kLocationBtnOriginY - (kTableViewHeadrHeight+scrollOffSetY));
-            }
-        }];
-        
         self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+scrollOffSetY));
         
     }else if (scrollOffSetY >= kOrigionY) {
 
 //        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY - (kTableViewHeadrHeight+kOrigionY));
-        
-        [self.locationBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-            
-            make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
-            make.right.equalTo(self.view.mas_right).offset(-20);
-            if (@available (iOS 11.0, *)) {
-                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kLocationBtnOriginY - (kTableViewHeadrHeight+kOrigionY));
-            }else {
-                make.top.equalTo(self.view).offset(64+kLocationBtnOriginY - (kTableViewHeadrHeight+kOrigionY));
-            }
-        }];
         
         self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+kOrigionY));
     }
@@ -546,7 +528,7 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     [self.headerView addSubview:self.searchView];
     [self.searchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.headerView);
-        make.height.mas_equalTo(kSearchBarHeight);
+        make.height.mas_equalTo(kSearchViewHeight);
     }];
     
 //    [self.view addSubview:self.tableView];
@@ -615,13 +597,13 @@ static CGFloat const kIntervalHeight = 20;  //定位按钮距离tableview 距离
     return _headerView;
 }
 
-//- (UIView *)searchView {
-//    if (!_searchView) {
-//        _searchView = [[UIView alloc]init];
-//        _searchView.backgroundColor = [UIColor orangeColor];
-//    }
-//    return _searchView;
-//}
+- (UIView *)searchView {
+    if (!_searchView) {
+        _searchView = [[UIView alloc]init];
+        _searchView.backgroundColor = [UIColor orangeColor];
+    }
+    return _searchView;
+}
 
 - (TIoTIntelligentBottomActionView *)bottomActionView  {
     if (!_bottomActionView) {
