@@ -47,6 +47,8 @@
 @synthesize isShowBirthDayView = _isShowBirthDayView;
 @synthesize addDeviceNumber = _addDeviceNumber;
 
+@synthesize searchHistoryArray = _searchHistoryArray;
+
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
@@ -420,6 +422,19 @@
 - (void)setSignIn_Email_Address:(NSString *)signIn_Email_Address {
     _signIn_Email_Address = signIn_Email_Address;
     [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_Address forKey:@"signIn_Email_Address"];
+}
+
+#pragma mark - 地图搜索
+- (void)setSearchHistoryArray:(NSMutableArray *)searchHistoryArray {
+    _searchHistoryArray = searchHistoryArray;
+    [[NSUserDefaults standardUserDefaults] setValue:searchHistoryArray forKey:@"search_historyArray"];
+}
+
+- (NSMutableArray *)searchHistoryArray {
+    if (!_searchHistoryArray) {
+        _searchHistoryArray = [[NSUserDefaults standardUserDefaults] valueForKey:@"search_historyArray"];
+    }
+    return _searchHistoryArray;
 }
 
 #pragma mark - 登录页 用户操作保存项

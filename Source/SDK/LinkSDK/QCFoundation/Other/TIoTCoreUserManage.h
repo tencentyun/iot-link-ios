@@ -69,6 +69,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *addDeviceNumber; //用户首次进入APP，添加设备数量
 
+/**
+ 地图搜索页面，搜索历史记录
+ */
+@property (nonatomic, copy, nullable) NSMutableArray *searchHistoryArray;//地图搜索历史记录
 
 /**
  TRTC 通话

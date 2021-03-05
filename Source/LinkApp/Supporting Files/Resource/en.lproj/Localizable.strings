@@ -891,3 +891,9 @@ If the problem still persists, we recommend you remove the device and add it aga
 "set_location" = "设定位置";
 "choose_location" = "地图选点";
 "all_devices" = "所有设备";
+"search_location" = "搜索地点";
+"search_text" = "搜索";
+"no_search_history" = "还没有历史记录哦~";
+"search_no_result" = "没有找到匹配结果";
+"clear_history" = "清空历史记录";
+"please_input_search_conent" = "请输入搜索内容";

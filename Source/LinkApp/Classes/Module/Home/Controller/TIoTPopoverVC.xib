@@ -30,7 +30,7 @@
                 </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.93180817370000002" green="0.93194228410000002" blue="0.93863540889999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="n7O-Fs-RM8" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="Em9-a3-B6U"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="n7O-Fs-RM8" secondAttribute="trailing" id="IHg-sP-IMI"/>
