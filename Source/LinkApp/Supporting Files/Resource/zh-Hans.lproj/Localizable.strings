@@ -882,3 +882,6 @@
 "set_location" = "设定位置";
 "choose_location" = "地图选点";
 "all_devices" = "所有设备";
+"search_location" = "搜索地点";
+"search_text" = "搜索";
+"no_search_history" = "还没有历史记录哦~";
