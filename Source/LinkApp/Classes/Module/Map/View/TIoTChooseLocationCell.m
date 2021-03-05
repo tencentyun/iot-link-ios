@@ -43,7 +43,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     self.contentView.layer.cornerRadius = 12;
     
-    CGFloat kWidthPadding = 16;
+    CGFloat kWidthPadding = 23;
     CGFloat kImageWidthOrHeight = 18;
     self.locationIcon = [[UIImageView alloc]init];
     self.locationIcon.image = [UIImage imageNamed:@"location_icon"];
@@ -81,6 +81,15 @@
         make.right.equalTo(self.choiceIcon.mas_left).offset(-kWidthPadding);
     }];
     
+    UIView *line = [[UIView alloc]init];
+    line.backgroundColor = [UIColor colorWithHexString:@"#E7E8EB"];
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView.mas_left).offset(kWidthPadding);
+        make.right.equalTo(self.contentView.mas_right).offset(-kWidthPadding);
+        make.bottom.equalTo(self.contentView.mas_bottom);
+        make.height.mas_equalTo(1);
+    }];
 }
 
 - (void)setLocationModel:(TIoTPoisModel *)locationModel {
