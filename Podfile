@@ -27,8 +27,8 @@ target 'LinkApp' do
   pod 'KeychainAccess', '4.2.0'
   pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
-  pod 'TIoTThridSDK/TPNS-iOS', '1.0.6' #'~> 1.0.5-beta.1'
-  pod 'TIoTThridSDK/WechatOpenSDK_NoPay', '1.0.6' #'~> 1.0.5-beta.1'#
+  pod 'TIoTThridSDK/TPNS-iOS', '~> 1.0.6-beta.1' #'1.0.5'
+  pod 'TIoTThridSDK/WechatOpenSDK_NoPay', '~> 1.0.6-beta.1' #'1.0.5'
 end
 
 target 'LinkSDKDemo' do
