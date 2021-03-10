@@ -93,4 +93,8 @@
 + (void)addReceiveShareDeviceLister:(id)listener reaction:(SEL)selector;
 + (void)postReceiveShareDevice;
 
+//蓝牙 停止搜索监听状态
++ (void)addBluetoothScanStopLister:(id)listener reaction:(SEL)selector;
++ (void)postBluetoothScanStop;
+
 @end
