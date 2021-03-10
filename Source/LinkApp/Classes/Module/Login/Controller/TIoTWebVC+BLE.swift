@@ -88,7 +88,7 @@ extension TIoTWebVC {
                         ]
                     ]
                 ]
-                self.webViewInvokeJavaScript(["result": true, "callbackId": callbackId, "data": data], port: "callResult")
+                self.webViewInvokeJavaScript(["result": true, "callbackId": callbackId, "data": self.peripheralInfoArray], port: "callResult")
             }
         }
     }
@@ -297,42 +297,42 @@ extension TIoTWebVC {
         self.webViewInvokeJavaScript(blueParm, port: "emitEvent")
     }
     
-    @objc public func bluetoothDeviceFound() {
-        let devices: Array<Dictionary<String, Any>> = [
-            [
-                "deviceId": "CF9E3AF0-98FC-4035-A6AA-51B0EBCB6349",
-                "advertisServiceUUIDs": [
-                    "21A0C549-7A37-495A-9A3A-2C2D9E504BAA",
-                    "5F8B724E-9EF2-4E01-9F39-A588450ADA1E"
-                ],
-                "localName": "dev001",
-                "name": "dev001",
-                "advertisData": ["01", "FA", "34", "68"],
-                "serviceData": [
-                    "9BCE9B97-9366-4FEE-8C5F-21875B6E6941": []
-                ],
-                "RSSI": -57
-            ],
-            [
-                "deviceId": "9A4DED58-E97D-4E13-8F4B-955F413FE67F",
-                "advertisServiceUUIDs": [
-                    "21A0C549-7A37-495A-9A3A-2C2D9E504BAA",
-                    "5F8B724E-9EF2-4E01-9F39-A588450ADA1E"
-                ],
-                "localName": "dev002",
-                "name": "dev002",
-                "advertisData": ["01", "FA", "34", "50"],
-                "serviceData": [
-                    "9BCE9B97-9366-4FEE-8C5F-21875B6E6941": []
-                ],
-                "RSSI": -60
-            ]
-        ]
+    @objc public func bluetoothDeviceFound(peripheralInfoArray:NSMutableArray) {
+//        let devices: Array<Dictionary<String, Any>> = [
+//            [
+//                "deviceId": "CF9E3AF0-98FC-4035-A6AA-51B0EBCB6349",
+//                "advertisServiceUUIDs": [
+//                    "21A0C549-7A37-495A-9A3A-2C2D9E504BAA",
+//                    "5F8B724E-9EF2-4E01-9F39-A588450ADA1E"
+//                ],
+//                "localName": "dev001",
+//                "name": "dev001",
+//                "advertisData": ["01", "FA", "34", "68"],
+//                "serviceData": [
+//                    "9BCE9B97-9366-4FEE-8C5F-21875B6E6941": []
+//                ],
+//                "RSSI": -57
+//            ],
+//            [
+//                "deviceId": "9A4DED58-E97D-4E13-8F4B-955F413FE67F",
+//                "advertisServiceUUIDs": [
+//                    "21A0C549-7A37-495A-9A3A-2C2D9E504BAA",
+//                    "5F8B724E-9EF2-4E01-9F39-A588450ADA1E"
+//                ],
+//                "localName": "dev002",
+//                "name": "dev002",
+//                "advertisData": ["01", "FA", "34", "50"],
+//                "serviceData": [
+//                    "9BCE9B97-9366-4FEE-8C5F-21875B6E6941": []
+//                ],
+//                "RSSI": -60
+//            ]
+//        ]
         
         let blueParm: Dictionary<String, Any> = [
             "name": "bluetoothDeviceFound",
             "payload": [
-                "devices": devices
+                "devices": peripheralInfoArray
             ]
         ]
         
@@ -346,19 +346,29 @@ extension TIoTWebVC {
 // delegate---BluetoothCentralManagerDelegate
 extension TIoTWebVC: BluetoothCentralManagerDelegate {
     
-    public func scanPerpheralsUpdatePerpherals(_ perphersArr: [CBPeripheral]!) {
+    
+    public func scanPerpheralsUpdatePerpherals(_ perphersArr: [CBPeripheral]!, peripheralInfo: NSMutableArray!) {
         
-        for onePerpher in perphersArr {
+        for _ in perphersArr {
             
-            if onePerpher.name == "MyLamp" {
-                
-                //搜索到设备后，吧设备传如H5
-                self.bluetoothDeviceFound()
-            }
+//            self.peripheralInfoArray = peripheralInfo.mutableCopy() as! NSMutableArray
+            
+//            //搜索到设备后，把设备传如H5
+//            self.bluetoothDeviceFound(peripheralInfoArray: peripheralInfo)
         }
+
+        self.peripheralInfoArray = peripheralInfo.mutableCopy() as! NSMutableArray
+        //搜索到设备后，把设备传如H5
+        self.bluetoothDeviceFound(peripheralInfoArray: peripheralInfo)
+        
     }
     
     public func connectPerpheralSucess() {
-        print("sussss")
+        
     }
+    
+    public func updateData(_ data: NSString) {
+        
+    }
+    
 }

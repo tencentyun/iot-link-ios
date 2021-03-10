@@ -7,7 +7,7 @@
 @protocol BluetoothCentralManagerDelegate <NSObject>
 @optional
 //实时扫描外设（目前扫描10s）
-- (void)scanPerpheralsUpdatePerpherals:(NSArray<CBPeripheral *> *)perphersArr;
+- (void)scanPerpheralsUpdatePerpherals:(NSArray<CBPeripheral *> *)perphersArr peripheralInfo:(NSMutableArray *)peripheralInfoArray;
 //连接外设成功
 - (void)connectPerpheralSucess;
 //发送数据后，蓝牙回调

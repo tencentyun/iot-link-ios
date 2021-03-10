@@ -43,6 +43,15 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 +(id)jsonToObject:(NSString *)json;
 
 
+/// NSData 转 16进制
+/// @param data data
++ (NSString *)convertDataToHexStr:(NSData *)data;
+
+/// NSData 转 16进制
++ (NSString *)transformStringWithData:(NSData *)data;
+
+/// 16进制字符串 获取外设Mac地址
++ (NSString *)macAddressWith:(NSString *)aString;
 
 /// 字符串是否有数字和字母
 /// @param pwd bool
