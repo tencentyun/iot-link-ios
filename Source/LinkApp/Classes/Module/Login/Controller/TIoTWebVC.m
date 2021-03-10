@@ -20,12 +20,15 @@
 #import "TIoTDeviceDetailVC.h"
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"
+#import "BluetoothCentralManager.h"
 
-@interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler>
+@interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler,CBCentralManagerDelegate>
 @property (nonatomic, strong,readwrite) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) NSDictionary *bridgeMethodDic;
 @property (nonatomic, strong) TIoTEvaluationSharedView * shareView;
+
+@property (nonatomic, strong) CBCentralManager *centralManager; //判断蓝牙是否开启
 @end
 
 @implementation TIoTWebVC
@@ -37,6 +40,9 @@
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.webView removeObserver:self forKeyPath:@"title"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //退出页面后，清楚连接设备
+    [[BluetoothCentralManager shareBluetooth] clearConnectedDevices];
 }
 
 - (instancetype)init {
@@ -102,6 +108,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //判断蓝牙是否开启
+    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+    //停止扫描蓝牙时候触发
+    [HXYNotice addBluetoothScanStopLister:self reaction:@selector(stopBlutoothScan)];
     
     //屏蔽左滑手势，面板中手势会有冲突
     self.fd_interactivePopDisabled = YES;
@@ -174,12 +185,110 @@
     }
 }
 
+#pragma mark - 判断蓝牙是否开启代理
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    switch (central.state) {
+        case CBManagerStatePoweredOn:
+            self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
+        case CBManagerStateUnknown:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
+        case CBManagerStateResetting:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
+        case CBManagerStateUnsupported:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
+        case CBManagerStatePoweredOff:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
+        case CBManagerStateUnauthorized:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
+        default:  break;
+    }
+    
+    [self bluetoothAdapterStateChange];
+}
+
+#pragma mark - 停止扫描蓝牙 触发通知
+- (void)stopBlutoothScan {
+    [self bluetoothAdapterStateChange];
+}
+
 #pragma mark - Public Methods
 // 加载url
 - (void)loadUrl:(NSString *)urlString {
 
     NSURL *url = [NSURL URLWithString:urlString];
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
+}
+
+// NSData 转 16进制
+- (NSString *)transformStringWithData:(NSData *)data {
+     NSString *result;
+    const unsigned char *dataBuffer = (const unsigned char *)[data bytes];
+    if (!dataBuffer) {
+        return nil;
+    }
+    NSUInteger dataLength = [data length];
+    NSMutableString *hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    for (int i = 0; i < dataLength; i++) {
+        //02x 表示两个位置 显示的16进制
+        [hexString appendString:[NSString stringWithFormat:@"%02lx",(unsigned long)dataBuffer[i]]];
+    }
+    result = [NSString stringWithString:hexString];
+    
+    return result;
+}
+
+/// 16进制 转 data
+- (NSData *)convertHexStrToData:(NSString *)str {
+    if (!str || [str length] == 0) {
+        return nil;
+    }
+    
+    NSMutableData *hexData = [[NSMutableData alloc] initWithCapacity:20];
+    NSRange range;
+    if ([str length] % 2 == 0) {
+        range = NSMakeRange(0, 2);
+    } else {
+        range = NSMakeRange(0, 1);
+    }
+    for (NSInteger i = range.location; i < [str length]; i += 2) {
+        unsigned int anInt;
+        NSString *hexCharStr = [str substringWithRange:range];
+        NSScanner *scanner = [[NSScanner alloc] initWithString:hexCharStr];
+        
+        [scanner scanHexInt:&anInt];
+        NSData *entity = [[NSData alloc] initWithBytes:&anInt length:1];
+        [hexData appendData:entity];
+        
+        range.location += range.length;
+        range.length = 2;
+    }
+    return hexData;
+}
+
+//16进制字符串 获取外设Mac地址
+- (NSString *)macAddressWith:(NSString *)aString {
+    
+    if ([aString containsString:@"0x"]) {
+        [aString stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+    }
+    
+    NSMutableString *macString = [[NSMutableString alloc] init];
+    if (aString.length >= 14) {
+        [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(8, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(10, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
+        if (aString.length >= 16) {
+            [macString appendString:@":"];
+            [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
+        }
+    }
+    return macString;
 }
 
 #pragma mark - KVO
@@ -487,7 +596,8 @@
                              @"writeBLECharacteristicValue":NSStringFromSelector(@selector(writeBLECharacteristicValueWithMessage:)),
                              @"notifyBLECharacteristicValueChange":NSStringFromSelector(@selector(notifyBLECharacteristicValueChangeWithMessage:)),
                              @"registerBluetoothDevice":NSStringFromSelector(@selector(registerBluetoothDeviceWithMessage:)),
-                             @"bindBluetoothDevice":NSStringFromSelector(@selector(bindBluetoothDeviceWithMessage:))
+                             @"bindBluetoothDevice":NSStringFromSelector(@selector(bindBluetoothDeviceWithMessage:)),
+                             @"setBLEMTU":NSStringFromSelector(@selector(setBLEMTUWithMessage:))
                              
         };
     }
