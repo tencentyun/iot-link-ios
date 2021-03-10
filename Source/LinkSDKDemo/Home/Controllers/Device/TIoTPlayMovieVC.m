@@ -40,12 +40,14 @@ CFTimeInterval PPstartTime;
     
     [self setupUIViews:self.playType];
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        
-        self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
-        [self.tableView reloadData];
-        
-    }];
+    if (self.playType ==  TIotPLayTypePlayback) {
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            
+            self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
+            [self.tableView reloadData];
+            
+        }];
+    }
     
     self.dataFormatter = [[NSDateFormatter alloc] init];
     self.dataFormatter.dateFormat = @"HH:mm:ss.SSS";
