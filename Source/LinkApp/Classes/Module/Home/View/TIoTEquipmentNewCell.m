@@ -21,12 +21,15 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIImageView *leftDeviceImage;
 @property (nonatomic, strong) UILabel *leftDeviceNameLabel;
 @property (nonatomic, strong) UIImageView *leftWhiteMaskView;
+@property (nonatomic, strong) UIImageView *leftSwitchBtn;
+@property (nonatomic, strong) UIImageView *leftSwitchIcon;
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
 @property (nonatomic, strong) UILabel *rightDeviceNameLabel;
 @property (nonatomic, strong) UIImageView *rightWhiteMaskView;
-
+@property (nonatomic, strong) UIImageView *rightSwitchBtn;
+@property (nonatomic, strong) UIImageView *rightSwitchIcon;
 @end
 
 @implementation TIoTEquipmentNewCell

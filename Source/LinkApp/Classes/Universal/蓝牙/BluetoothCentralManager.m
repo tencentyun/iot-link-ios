@@ -16,6 +16,10 @@
 @property (nonatomic, strong) CBPeripheral *peripheral;
 /** 所有的设备数组 */
 @property (nonatomic, strong) NSMutableArray *deviceList;
+
+/** peripheral 数组 */
+@property (nonatomic, strong) NSMutableArray *peripheralArray;   //和业务挂钩
+
 /** 特征z */
 @property (nonatomic, strong) CBCharacteristic *characteristic;
 
@@ -155,6 +159,51 @@
     [nsmstring appendFormat:@"adverisement:%@\n",advertisementData];
     WCLog(@"%@",nsmstring);
     
+    NSMutableDictionary *peripheralDic = [NSMutableDictionary new];
+    if (![NSString isNullOrNilWithObject:peripheral.name]) {
+        [peripheralDic setValue:peripheral.name forKey:@"name"];
+    }
+    
+    if (![NSString isNullOrNilWithObject:peripheral.identifier]) {    //uuid
+        [peripheralDic setValue:[NSString stringWithFormat:@"%@",peripheral.identifier] forKey:@"deviceId"];
+    }
+    
+    if (![NSString isNullOrNilWithObject:RSSI]) {
+        [peripheralDic setValue:RSSI forKey:@"RSSI"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+        
+        NSString *hexstr = [NSString transformStringWithData:advertisementData[@"kCBAdvDataManufacturerData"]];
+        NSString *macStr = [NSString macAddressWith:hexstr];
+        NSMutableArray *macArr = [NSMutableArray new];
+        NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+        for (NSString *hexUnit in tempArr) {
+            [macArr addObject:hexUnit];
+        }
+        [peripheralDic setValue:tempArr forKey:@"advertisData"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+        
+        NSMutableArray *uuidArray = [NSMutableArray array];
+        
+        NSArray *uuidArr = [NSArray arrayWithArray:advertisementData[@"kCBAdvDataServiceUUIDs"]];
+        
+        for (id uuidItem in uuidArr) {
+            NSString *uuidString = [NSString stringWithFormat:@"%@",uuidItem];
+            [uuidArray addObject:uuidString];
+        }
+        [peripheralDic setValue:uuidArray forKey:@"advertisServiceUUIDs"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataLocalName"]) {
+        [peripheralDic setValue:advertisementData[@"kCBAdvDataLocalName"] forKey:@"localName"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceData"]) {
+        [peripheralDic setValue:advertisementData[@"kCBAdvDataServiceData"] forKey:@"serviceData"];
+    }
+    
+//    if (advertisementData != nil) {
+//        [peripheralDic setValue:advertisementData forKey:@"adverisement"];
+//    }
     
     //4.如果数组里没有这个外围设备再添加进数组，避免重复添加相同的外围设备
     if(![self.deviceList containsObject:peripheral])
@@ -163,12 +212,17 @@
         if (peripheral.name.length > 0) {
             [self.deviceList addObject:peripheral];
         }
+        
+        //组建自定义peripheralInfo
+        if (![NSString isNullOrNilWithObject:peripheral.identifier]) {
+            [self.peripheralArray addObject:peripheralDic];
+        }
     }
     
     if (self.deviceList.count > 0) {
         
-        if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:)]) {
-            [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy];
+        if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:peripheralInfo:)]) {
+            [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy peripheralInfo:self.peripheralArray];
         }
     }
 
@@ -183,7 +237,6 @@
 //        }
 //    }
 }
-
 
 /// 连接外设成功的代理方法
 #pragma mark ------------------------连接成功、失败、终端
@@ -321,6 +374,13 @@
     }
     
     return _deviceList;
+}
+
+- (NSMutableArray *)peripheralArray {
+    if (!_peripheralArray) {
+        _peripheralArray = [NSMutableArray array];
+    }
+    return _peripheralArray;
 }
 
 @end

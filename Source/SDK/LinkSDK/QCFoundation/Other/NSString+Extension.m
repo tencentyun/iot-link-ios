@@ -224,6 +224,65 @@
     return obj;
 }
 
+
+/// NSData 转16进制
++ (NSString *)convertDataToHexStr:(NSData *)data {
+    if (!data || [data length] == 0) {
+        return @"";
+    }
+    NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
+    
+    [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
+        unsigned char *dataBytes = (unsigned char*)bytes;
+        for (NSInteger i = 0; i < byteRange.length; i++) {
+            NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
+            if ([hexStr length] == 2) {
+                [string appendString:hexStr];
+            } else {
+                [string appendFormat:@"0%@", hexStr];
+            }
+        }
+    }];
+    return string;
+}
+
+// NSData 转 16进制
++ (NSString *)transformStringWithData:(NSData *)data {
+     NSString *result;
+    const unsigned char *dataBuffer = (const unsigned char *)[data bytes];
+    if (!dataBuffer) {
+        return nil;
+    }
+    NSUInteger dataLength = [data length];
+    NSMutableString *hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    for (int i = 0; i < dataLength; i++) {
+        //02x 表示两个位置 显示的16进制
+        [hexString appendString:[NSString stringWithFormat:@"%02lx",(unsigned long)dataBuffer[i]]];
+    }
+    result = [NSString stringWithString:hexString];
+    
+    return result;
+}
+
+//16进制字符串 获取外设Mac地址
++ (NSString *)macAddressWith:(NSString *)aString{
+    NSMutableString *macString = [[NSMutableString alloc] init];
+    if (aString.length >= 16) {
+        [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(8, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(10, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
+    }
+    return macString;
+}
+
 ///base64编码
 + (NSString *)base64Encode:(id)object{
     NSError *error = nil;
