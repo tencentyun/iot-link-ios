@@ -20,12 +20,15 @@
 #import "TIoTDeviceDetailVC.h"
 #import "TIoTDeviceShareVC.h"
 #import "TIoTModifyRoomVC.h"
+#import "BluetoothCentralManager.h"
 
-@interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler>
+@interface TIoTWebVC () <WKUIDelegate, WKScriptMessageHandler,CBCentralManagerDelegate>
 @property (nonatomic, strong,readwrite) WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) NSDictionary *bridgeMethodDic;
 @property (nonatomic, strong) TIoTEvaluationSharedView * shareView;
+
+@property (nonatomic, strong) CBCentralManager *centralManager; //判断蓝牙是否开启
 @end
 
 @implementation TIoTWebVC
@@ -37,6 +40,9 @@
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.webView removeObserver:self forKeyPath:@"title"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //退出页面后，清楚连接设备
+    [[BluetoothCentralManager shareBluetooth] clearConnectedDevices];
 }
 
 - (instancetype)init {
@@ -102,6 +108,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //判断蓝牙是否开启
+    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+    //停止扫描蓝牙时候触发
+    [HXYNotice addBluetoothScanStopLister:self reaction:@selector(stopBlutoothScan)];
     
     //屏蔽左滑手势，面板中手势会有冲突
     self.fd_interactivePopDisabled = YES;
@@ -172,6 +183,32 @@
         
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+#pragma mark - 判断蓝牙是否开启代理
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    switch (central.state) {
+        case CBManagerStatePoweredOn:
+            self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
+        case CBManagerStateUnknown:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
+        case CBManagerStateResetting:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
+        case CBManagerStateUnsupported:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
+        case CBManagerStatePoweredOff:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
+        case CBManagerStateUnauthorized:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
+        default:  break;
+    }
+    
+    [self bluetoothAdapterStateChange];
+}
+
+#pragma mark - 停止扫描蓝牙 触发通知
+- (void)stopBlutoothScan {
+    [self bluetoothAdapterStateChange];
 }
 
 #pragma mark - Public Methods
