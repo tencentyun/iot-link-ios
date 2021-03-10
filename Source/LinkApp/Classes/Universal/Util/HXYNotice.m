@@ -26,6 +26,7 @@ static NSString * const loginInTicketToken   = @"loginInTicketToken";
 static NSString * const appEnterBackground   = @"appEnterBackground";
 static NSString * const appEnterForeground   = @"appEnterForeground";
 static NSString * const receiveShareDevice   = @"receiveShareDevice";
+static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
 
 @implementation HXYNotice
 
@@ -219,4 +220,12 @@ static NSString * const receiveShareDevice   = @"receiveShareDevice";
     [[NSNotificationCenter defaultCenter] postNotificationName:receiveShareDevice object:nil];
 }
 
+//蓝牙 停止搜索监听状态
++ (void)addBluetoothScanStopLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:bluetoothStopLister object:nil];
+}
+
++ (void)postBluetoothScanStop {
+    [[NSNotificationCenter defaultCenter] postNotificationName:bluetoothStopLister object:nil];
+}
 @end
