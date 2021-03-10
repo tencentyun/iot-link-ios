@@ -35,12 +35,36 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     
     [self setupUIViews:self.playType];
     
+<<<<<<< HEAD   (62efeb 地图选点搜索栏，以及涉及到滑动动画)
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         
         self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
         [self.tableView reloadData];
         
     }];
+=======
+    if (self.playType ==  TIotPLayTypePlayback) {
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            
+            self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
+            [self.tableView reloadData];
+            
+        }];
+    }
+    
+    self.dataFormatter = [[NSDateFormatter alloc] init];
+    self.dataFormatter.dateFormat = @"HH:mm:ss.SSS";
+    
+    
+    WKWebView *web = [[WKWebView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.imageView.frame)+50, kScreenWidth, 180)];
+    [web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.daojishiqi.com/bjtime.asp"]]];
+    [self.view addSubview:web];
+    /*self.timerL = [[UILabel alloc] initWithFrame:CGRectMake(60, CGRectGetMaxY(self.imageView.frame)+50, kScreenWidth-120, 80)];
+    self.timerL.textAlignment = NSTextAlignmentLeft;
+    self.timerL.font = [UIFont wcPfMediumFontOfSize:30];
+    self.timerL.textColor = [UIColor blackColor];
+    [self.view addSubview:self.timerL];*/
+>>>>>>> CHANGE (4694ac 更新sdk版本)
 }
 
 - (void)viewDidAppear:(BOOL)animated {
