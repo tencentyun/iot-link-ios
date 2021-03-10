@@ -33,6 +33,13 @@ typedef void(^requestTicketRefreshURL)(TIoTWebVC *webController);
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;//h5自定义面板
 @property (nonatomic, strong,readonly) WKWebView *webView;
 
+/**
+ 蓝牙部分
+ */
+/// 扫描蓝牙设备 自定义数据
+@property (nonatomic, strong) NSMutableArray *peripheralInfoArray;
+
+
 - (void)webViewInvokeJavaScript:(NSDictionary *)responseDic port:(NSString *)portString;
 @end
 
