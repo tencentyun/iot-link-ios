@@ -16,6 +16,11 @@
 @property (nonatomic, strong) CBPeripheral *peripheral;
 /** 所有的设备数组 */
 @property (nonatomic, strong) NSMutableArray *deviceList;
+/** 链接蓝牙设备后 service 特征数组 */
+@property (nonatomic, strong, readwrite) NSMutableArray <CBPeripheral *>*connectPeripheralArray;   //和业务挂钩
+/** 搜索蓝牙设备 peripheral 数组 */
+@property (nonatomic, strong, ) NSMutableArray *peripheralArray;   //和业务挂钩
+
 /** 特征z */
 @property (nonatomic, strong) CBCharacteristic *characteristic;
 
@@ -40,7 +45,7 @@
     self = [super init];
     if (self) {
         self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-        
+        self.isScanDevice = NO;
         
     }
     return self;
@@ -53,6 +58,10 @@
 - (void)scanNearPerpherals{
     WCLog(@"开始扫描四周的设备");
     [self.deviceList removeAllObjects];
+    
+    [self.peripheralArray removeAllObjects];
+    
+    self.isScanDevice = YES;
     /**
      1.第一个参数为Services的UUID(外设端的UUID) 不能为nil
      2.第二参数的CBCentralManagerScanOptionAllowDuplicatesKey为已发现的设备是否重复扫描，如果是同一设备会多次回调
@@ -75,10 +84,16 @@
 - (void)stopScan{
     WCLog(@"停止扫描四周的设备");
     [self.centralManager stopScan];
+    
+    self.isScanDevice = NO;
+    
+    [HXYNotice postBluetoothScanStop];
+    
+    
 }
 
 /// 连接指定的设备
-- (void)connectPeripheral:(CBPeripheral *)peripheral {
+- (void)connectBluetoothPeripheral:(CBPeripheral *)peripheral {
     self.peripheral = peripheral;
     WCLog(@"----尝试连接设备----\n%@", peripheral);
     [self.centralManager connectPeripheral:peripheral
@@ -95,6 +110,13 @@
         [self.centralManager cancelPeripheralConnection:self.peripheral];
         
     }
+}
+
+/**
+ 退出H5页面后，清楚连接设备数据
+ */
+- (void)clearConnectedDevices {
+    [self.connectPeripheralArray removeAllObjects];
 }
 
 #pragma mark privateMethods
@@ -155,22 +177,106 @@
     [nsmstring appendFormat:@"adverisement:%@\n",advertisementData];
     WCLog(@"%@",nsmstring);
     
+    NSMutableDictionary *peripheralDic = [NSMutableDictionary new];
+    if (![NSString isNullOrNilWithObject:peripheral.name]) {
+        [peripheralDic setValue:peripheral.name forKey:@"name"];
+    }
+    
+    if (![NSString isNullOrNilWithObject:peripheral.identifier]) {    //uuid
+        [peripheralDic setValue:[NSString stringWithFormat:@"%@",peripheral.identifier] forKey:@"deviceId"];
+    }
+    
+    if (![NSString isNullOrNilWithObject:peripheral.identifier]) {    //uuid
+        [peripheralDic setValue:[NSString stringWithFormat:@"%@",peripheral.identifier] forKey:@"UUID"];
+    }
+    
+    if (![NSString isNullOrNilWithObject:RSSI]) {
+        [peripheralDic setValue:RSSI forKey:@"RSSI"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+        
+        NSString *hexstr = [NSString transformStringWithData:advertisementData[@"kCBAdvDataManufacturerData"]];
+        NSString *macStr = [NSString macAddressWith:hexstr];
+        NSMutableArray *macArr = [NSMutableArray new];
+        NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+        for (NSString *hexUnit in tempArr) {
+            [macArr addObject:hexUnit];
+        }
+        [peripheralDic setValue:macArr forKey:@"advertisData"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+        
+        NSMutableArray *uuidArray = [NSMutableArray array];
+        
+        NSArray *uuidArr = [NSArray arrayWithArray:advertisementData[@"kCBAdvDataServiceUUIDs"]];
+        
+        for (id uuidItem in uuidArr) {
+            NSString *uuidString = [NSString stringWithFormat:@"%@",uuidItem];
+            [uuidArray addObject:uuidString];
+        }
+        [peripheralDic setValue:uuidArray forKey:@"advertisServiceUUIDs"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataLocalName"]) {
+        [peripheralDic setValue:advertisementData[@"kCBAdvDataLocalName"] forKey:@"localName"];
+    }
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceData"]) {
+        NSDictionary *serviceDataDic = [NSDictionary dictionaryWithDictionary:advertisementData[@"kCBAdvDataServiceData"]];
+        
+        NSMutableDictionary *dataDic = [NSMutableDictionary new];
+        for (int i = 0; i < serviceDataDic.allKeys.count; i++) {
+            
+            NSString *keyString = [NSString stringWithFormat:@"%@",serviceDataDic.allKeys[i]];
+            
+            NSString *hexstr = [NSString transformStringWithData:serviceDataDic.allValues[i]];
+            NSString *macStr = [NSString macAddressWith:hexstr];
+            NSMutableArray *macArr = [NSMutableArray new];
+            NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+            for (NSString *hexUnit in tempArr) {
+                [macArr addObject:hexUnit];
+            }
+            
+            [dataDic setValue:macArr forKey:keyString];
+            
+        }
+        
+        [peripheralDic setValue:dataDic forKey:@"serviceData"];
+    }
+    
+//    if (advertisementData != nil) {
+//        [peripheralDic setValue:advertisementData forKey:@"adverisement"];
+//    }
     
     //4.如果数组里没有这个外围设备再添加进数组，避免重复添加相同的外围设备
     if(![self.deviceList containsObject:peripheral])
     {
         //设备名长度大于0添加
-        if (peripheral.name.length > 0) {
+        if (peripheral.identifier.UUIDString.length > 0) {
             [self.deviceList addObject:peripheral];
+        }
+        
+    }
+    
+    NSString *uuidStr = [NSString stringWithFormat:@"%@",peripheral.identifier];
+    NSMutableArray *uuidsAllArray = [NSMutableArray new];
+    for (NSMutableDictionary *tempPeriphearDic in self.peripheralArray) {
+        if ([tempPeriphearDic.allKeys containsObject:@"deviceId"]) {
+            [uuidsAllArray addObject:tempPeriphearDic[@"deviceId"]];
         }
     }
     
-    if (self.deviceList.count > 0) {
-        
-        if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:)]) {
-            [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy];
+    if (![uuidsAllArray containsObject:uuidStr]&&advertisementData != nil) {
+        if ([advertisementData.allKeys containsObject:@"kCBAdvDataLocalName"]) {
+            [self.peripheralArray addObject:peripheralDic];
         }
+        
     }
+    
+//    if (self.deviceList.count > 0) {
+        
+        if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:peripheralInfo:)]) {
+            [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy peripheralInfo:self.peripheralArray];
+        }
+//    }
 
 //    NSArray *serviceUUIDArr = advertisementData[@"kCBAdvDataServiceUUIDs"];
 //    
@@ -184,7 +290,6 @@
 //    }
 }
 
-
 /// 连接外设成功的代理方法
 #pragma mark ------------------------连接成功、失败、终端
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
@@ -197,9 +302,18 @@
     //查找外围设备中的所有服务
     [peripheral discoverServices:nil];
     
+    //添加连接蓝牙设备成功后的设备数组
+    if(![self.connectPeripheralArray containsObject:peripheral])
+    {
+        //设备名长度大于0添加
+        if (peripheral.identifier.UUIDString.length > 0) {
+            [self.connectPeripheralArray addObject:peripheral];
+        }
+        
+    }
     
-    if ([self.delegate respondsToSelector:@selector(connectPerpheralSucess)]) {
-        [self.delegate connectPerpheralSucess];
+    if ([self.delegate respondsToSelector:@selector(connectBluetoothDeviceSucessWithPerpheral:withConnectedDevArray:)]) {
+        [self.delegate connectBluetoothDeviceSucessWithPerpheral:peripheral withConnectedDevArray:self.connectPeripheralArray];
     }
 }
 
@@ -210,6 +324,14 @@
 
 ///连接外设中断的代理方法
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    
+    if ([self.connectPeripheralArray containsObject:peripheral]) {
+        [self.connectPeripheralArray removeObject:peripheral];
+    }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(disconnectBluetoothDeviceWithPerpheral:)]) {
+        [self.delegate disconnectBluetoothDeviceWithPerpheral:peripheral];
+    }
     [MBProgressHUD showError:NSLocalizedString(@"connected_interrupt", @"连接中断")];
 }
 
@@ -321,6 +443,20 @@
     }
     
     return _deviceList;
+}
+
+- (NSMutableArray *)peripheralArray {
+    if (!_peripheralArray) {
+        _peripheralArray = [NSMutableArray array];
+    }
+    return _peripheralArray;
+}
+
+- (NSMutableArray *)connectPeripheralArray {
+    if (!_connectPeripheralArray) {
+        _connectPeripheralArray = [NSMutableArray array];
+    }
+    return _connectPeripheralArray;
 }
 
 @end

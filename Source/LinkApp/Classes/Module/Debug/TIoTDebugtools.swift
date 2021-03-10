@@ -242,12 +242,12 @@ extension TIoTDebugtools: BluetoothCentralManagerDelegate {
         for onePerpher in perphersArr {
             
             if onePerpher.name == "MyLamp" {
-                blue.connect(onePerpher)
+                blue.connectBluetoothPeripheral(onePerpher)
             }
         }    
     }
     
-    func connectPerpheralSucess() {
+    public func connectBluetoothDeviceSucess(withPerpheral connectedPerpheral: CBPeripheral!, withConnectedDevArray connectedDevArray: [CBPeripheral]!) {
         print("sussss")
     }
 }
