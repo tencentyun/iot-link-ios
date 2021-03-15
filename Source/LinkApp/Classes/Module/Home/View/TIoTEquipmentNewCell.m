@@ -21,15 +21,23 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIImageView *leftDeviceImage;
 @property (nonatomic, strong) UILabel *leftDeviceNameLabel;
 @property (nonatomic, strong) UIImageView *leftWhiteMaskView;
-@property (nonatomic, strong) UIImageView *leftSwitchBtn;
+@property (nonatomic, strong) UIButton *leftSwitchBtn;
 @property (nonatomic, strong) UIImageView *leftSwitchIcon;
+@property (nonatomic, strong) UILabel *leftRoomLabel;
+@property (nonatomic, strong) UIButton *leftQuickBtn;
+@property (nonatomic, strong) UIImageView *leftQuickIcon;
+@property (nonatomic, strong) UIImageView *leftBluetoothIcon;
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
 @property (nonatomic, strong) UILabel *rightDeviceNameLabel;
 @property (nonatomic, strong) UIImageView *rightWhiteMaskView;
-@property (nonatomic, strong) UIImageView *rightSwitchBtn;
+@property (nonatomic, strong) UIButton *rightSwitchBtn;
 @property (nonatomic, strong) UIImageView *rightSwitchIcon;
+@property (nonatomic, strong) UILabel *rightRoomLabel;
+@property (nonatomic, strong) UIButton *rightQuickBtn;
+@property (nonatomic, strong) UIImageView *rightQuickIcon;
+@property (nonatomic, strong) UIImageView *rightBluetoothIcon;
 @end
 
 @implementation TIoTEquipmentNewCell
@@ -78,7 +86,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     self.leftDeviceImage = [[UIImageView alloc]init];
-    self.leftDeviceImage.userInteractionEnabled = YES;
+//    self.leftDeviceImage.userInteractionEnabled = YES;
     self.leftDeviceImage.image = [UIImage imageNamed:@"deviceDefault"];
     self.leftDeviceImage.contentMode = UIViewContentModeScaleAspectFit;
     [self.leftButton addSubview:self.leftDeviceImage];
@@ -95,6 +103,57 @@ static CGFloat kWidthHeightScale = 330/276;
         make.left.equalTo(self.leftDeviceImage.mas_left);
         make.top.equalTo(self.leftDeviceImage.mas_bottom).offset(16);
         make.right.equalTo(self.leftButton.mas_right).offset(-16);
+    }];
+    
+    CGFloat kSwitchBtnSize = 29;
+    CGFloat kSwitchBtnRightPadding = 18;
+    self.leftSwitchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.leftSwitchBtn.layer.cornerRadius = kSwitchBtnSize/2;
+    self.leftSwitchBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
+    [self.leftSwitchBtn addTarget:self action:@selector(clickLeftSwitch:) forControlEvents:UIControlEventTouchUpInside];
+    [self.leftButton addSubview:self.leftSwitchBtn];
+    [self.leftSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.leftDeviceImage.mas_top);
+        make.right.equalTo(self.leftButton.mas_right).offset(-kSwitchBtnRightPadding);
+        make.height.width.mas_equalTo(kSwitchBtnSize);
+    }];
+    
+    CGFloat kswitchIconSize = 12;
+    self.leftSwitchIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"device_turnoff"]];//device_turnon
+//    self.leftSwitchIcon.userInteractionEnabled = YES;
+    [self.leftSwitchBtn addSubview:self.leftSwitchIcon];
+    [self.leftSwitchIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.leftSwitchBtn);
+        make.height.width.mas_equalTo(kswitchIconSize);
+    }];
+    
+    CGFloat kQuickBtnSize = 29;
+    self.leftQuickBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.leftQuickBtn.layer.cornerRadius = kQuickBtnSize/2;
+    [self.leftQuickBtn addTarget:self action:@selector(clickLeftQuickBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.leftButton addSubview:self.leftQuickBtn];
+    [self.leftQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kQuickBtnSize);
+        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom).offset(2);
+        make.centerX.equalTo(self.leftSwitchBtn);
+    }];
+    
+    CGFloat kQuickIconSize = 12;
+    self.leftQuickIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"quict_icon"]];
+//    self.leftQuickIcon.userInteractionEnabled = YES;
+    [self.leftQuickBtn addSubview:self.leftQuickIcon];
+    [self.leftQuickIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kQuickIconSize);
+        make.center.equalTo(self.leftQuickBtn);
+    }];
+    
+    self.leftRoomLabel = [[UILabel alloc]init];
+    [self.leftRoomLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
+    [self.leftButton addSubview:self.leftRoomLabel];
+    [self.leftRoomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.leftDeviceNameLabel.mas_left);
+        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom);
+        make.right.equalTo(self.leftQuickBtn.mas_left);
     }];
     
     //左侧item离线蒙版
@@ -121,7 +180,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     self.rightDeviceImage = [[UIImageView alloc]init];
-    self.rightDeviceImage.userInteractionEnabled = YES;
+//    self.rightDeviceImage.userInteractionEnabled = YES;
     self.rightDeviceImage.image = [UIImage imageNamed:@"deviceDefault"];
     self.rightDeviceImage.contentMode = UIViewContentModeScaleAspectFit;
     [self.rightButton addSubview:self.rightDeviceImage];
@@ -138,6 +197,52 @@ static CGFloat kWidthHeightScale = 330/276;
         make.left.equalTo(self.rightDeviceImage.mas_left);
         make.top.equalTo(self.rightDeviceImage.mas_bottom).offset(16);
         make.right.equalTo(self.rightButton.mas_right).offset(-16);
+    }];
+    
+    self.rightSwitchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightSwitchBtn.layer.cornerRadius = kSwitchBtnSize/2;
+    self.rightSwitchBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
+    [self.rightSwitchBtn addTarget:self action:@selector(clickRightSwitch:) forControlEvents:UIControlEventTouchUpInside];
+    [self.rightButton addSubview:self.rightSwitchBtn];
+    [self.rightSwitchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.rightDeviceImage.mas_top);
+        make.right.equalTo(self.rightButton.mas_right).offset(-kSwitchBtnRightPadding);
+        make.height.width.mas_equalTo(kSwitchBtnSize);
+    }];
+    
+    self.rightSwitchIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"device_turnoff"]];//device_turnon
+//    self.rightSwitchIcon.userInteractionEnabled = YES;
+    [self.rightSwitchBtn addSubview:self.rightSwitchIcon];
+    [self.rightSwitchIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.rightSwitchBtn);
+        make.height.width.mas_equalTo(kswitchIconSize);
+    }];
+    
+    self.rightQuickBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightQuickBtn.layer.cornerRadius = kQuickBtnSize/2;
+    [self.rightQuickBtn addTarget:self action:@selector(clickRightQuickBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.rightButton addSubview:self.rightQuickBtn];
+    [self.rightQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kQuickBtnSize);
+        make.top.equalTo(self.rightDeviceNameLabel.mas_bottom).offset(2);
+        make.centerX.equalTo(self.rightSwitchBtn);
+    }];
+    
+    self.rightQuickIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"quict_icon"]];
+//    self.rightQuickIcon.userInteractionEnabled = YES;
+    [self.rightQuickBtn addSubview:self.rightQuickIcon];
+    [self.rightQuickIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kQuickIconSize);
+        make.center.equalTo(self.rightQuickBtn);
+    }];
+    
+    self.rightRoomLabel = [[UILabel alloc]init];
+    [self.rightRoomLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
+    [self.rightButton addSubview:self.rightRoomLabel];
+    [self.rightRoomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.leftDeviceNameLabel.mas_left);
+        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom);
+        make.right.equalTo(self.leftQuickBtn.mas_left);
     }];
     
     //右侧item蒙版
@@ -237,6 +342,46 @@ static CGFloat kWidthHeightScale = 330/276;
 - (void)clickRightBtn {
     if (self.clickRightDeviceBlock) {
         self.clickRightDeviceBlock();
+    }
+}
+
+- (void)clickLeftQuickBtn {
+    if (self.clickQuickBtnBlock) {
+        self.clickQuickBtnBlock();
+    }
+}
+
+- (void)clickRightQuickBtn {
+    if (self.clickQuickBtnBlock) {
+        self.clickQuickBtnBlock();
+    }
+}
+
+- (void)clickLeftSwitch:(UIButton *)leftSwitch {
+    
+    if (!leftSwitch.selected) {
+        self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+    }else {
+        self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+    }
+    leftSwitch.selected = !leftSwitch.selected;
+    
+    if (self.clickDeviceSwitchBlock) {
+        self.clickDeviceSwitchBlock();
+    }
+}
+
+- (void)clickRightSwitch:(UIButton *)rightSwitch {
+    
+    if (!rightSwitch.selected) {
+        self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+    }else {
+        self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+    }
+    rightSwitch.selected = !rightSwitch.selected;
+    
+    if (self.clickDeviceSwitchBlock) {
+        self.clickDeviceSwitchBlock();
     }
 }
 

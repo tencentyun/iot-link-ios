@@ -36,6 +36,7 @@
 #import "TIoTAddressParseModel.h"
 #import "TIoTFamilyInfoVC.h"
 #import "TIoTEquipmentNewCell.h"
+#import "TIoTShortcutView.h"
 
 @import Lottie;
 
@@ -1145,6 +1146,7 @@ static CGFloat kHeaderViewHeight = 162;
         cell.dataDic = self.dataArr[indexPath.row];
         return cell;
     }else {
+        
         TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
         cell.dataArray = self.devicesArray[indexPath.row];
         __weak typeof(self) weakSelf = self;
@@ -1153,6 +1155,17 @@ static CGFloat kHeaderViewHeight = 162;
         };
         cell.clickRightDeviceBlock = ^{
             [weakSelf chooseDeviceWith:indexPath];
+        };
+        cell.clickDeviceSwitchBlock = ^{
+
+        };
+        
+        cell.clickQuickBtnBlock = ^{
+            TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
+            shortcut.moreFunctionBlock = ^{
+                [weakSelf chooseDeviceWith:indexPath];
+            };
+            [weakSelf.view addSubview:shortcut];
         };
         return cell;
     
