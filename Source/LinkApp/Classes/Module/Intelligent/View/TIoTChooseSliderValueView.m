@@ -315,13 +315,25 @@
 - (void)setModel:(TIoTPropertiesModel *)model {
     _model = model;
     if ([self.model.define.type isEqualToString:@"int"]) {
-        self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.define.start ,model.define.unit?:@""];
-        self.slider.value = model.define.start.intValue;
+        
+        if (![NSString isNullOrNilWithObject:model.status.Value]) {
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.status.Value ,model.define.unit?:@""];
+            self.slider.value = model.status.Value.intValue;
+        }else {
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.define.start ,model.define.unit?:@""];
+            self.slider.value = model.define.start.intValue;
+        }
+        
     }
     else
     {
-        self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", model.define.start.floatValue ,model.define.unit?:@""];
-        self.slider.value = model.define.start.floatValue;
+        if (![NSString isNullOrNilWithObject:model.status.Value]) {
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.status.Value ,model.define.unit?:@""];
+            self.slider.value = model.status.Value.floatValue;
+        }else {
+            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", model.define.start.floatValue ,model.define.unit?:@""];
+            self.slider.value = model.define.start.floatValue;
+        }
     }
     
     CGFloat kValueWidth = [self WidthWithString:self.valueLab.text font:[UIFont wcPfRegularFontOfSize:16] height:30];

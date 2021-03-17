@@ -33,6 +33,7 @@
 @property (nonatomic,strong) NSMutableDictionary *bigProp;//大按钮数据
 @property (nonatomic,strong) NSMutableArray *allProperties;//所有数据
 
+- (void)handleShortcutReportDeveic:(NSDictionary *)reportDevice;
 - (void)handleReportDevice:(NSDictionary *)reportDevice;
 - (void)zipData:(NSDictionary *)uiInfo baseInfo:(NSDictionary *)baseInfo deviceData:(NSDictionary *)deviceInfo;
 

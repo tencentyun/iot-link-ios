@@ -61,6 +61,40 @@
     
 }
 
+- (void)handleShortcutReportDeveic:(NSDictionary *)reportDevice {
+    if ([self.deviceId isEqualToString:reportDevice[@"DeviceId"]]) {
+        
+        NSDictionary *payloadDic = [NSString base64Decode:reportDevice[@"Payload"]];
+        
+        NSDictionary *reportDic = payloadDic[@"state"][@"reported"];
+        if (reportDic == nil) {
+            reportDic = payloadDic[@"payload"][@"state"];
+        }
+        if (reportDic == nil) {
+            reportDic = payloadDic[@"params"];
+        }
+        
+        
+        NSArray *keys = [reportDic allKeys];
+        for (NSString *key in keys) {
+            if ([key isEqualToString:self.bigProp[@"id"]]) {
+                NSMutableDictionary *dic = self.bigProp[@"status"];
+                [dic setObject:reportDic[key] forKey:@"Value"];
+            }
+            else
+            {
+                for (NSMutableDictionary *propertie in self.properties) {
+                    if ([key isEqualToString:propertie[@"id"]]) {
+                        NSMutableDictionary *dic = propertie[@"status"];
+                        [dic setObject:reportDic[key] forKey:@"Value"];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 - (void)zipData:(NSDictionary *)uiInfo baseInfo:(NSDictionary *)baseInfo deviceData:(NSDictionary *)deviceInfo
 {
     NSDictionary *standard = uiInfo[@"Panel"][@"standard"];

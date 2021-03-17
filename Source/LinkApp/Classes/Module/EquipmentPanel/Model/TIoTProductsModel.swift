@@ -54,11 +54,17 @@ class TIoTProductsModel: TIoTBaseModel {
     var required: String?
     var mode: String?
     var define: TIoTDefineModel?
-    
+    var status: TIoTStatusModel?
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
         return ["ui": TIoTUIModel.classForCoder(),
-                "define": TIoTDefineModel.classForCoder()]
+                "define": TIoTDefineModel.classForCoder(),
+                "status": TIoTStatusModel.classForCoder()]
     }
+}
+
+@objcMembers class TIoTStatusModel: TIoTBaseModel {
+    var LastUpdate: String?
+    var Value: String?
 }
 
 @objcMembers class TIoTUIModel: TIoTBaseModel {

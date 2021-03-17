@@ -14,6 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isVisible;
 @property (nonatomic, copy) NSString *propertyName;
 @property (nonatomic, copy) NSString *propertyValue;
+@property (nonatomic, copy) void (^boolUpdate)(NSDictionary *uploadInfo); //bool
+@property (nonatomic, copy) void (^intOrFloatUpdate)(void);               // int float
+@property (nonatomic, copy) void (^enumUpdate)(void);                     //enum 
+
+- (void)setPropertyModel:(NSDictionary *)infoModel;
 
 - (void)setIconDefaultImageString:(NSString *)iconImage withURLString:(NSString *)urlString;
 @end

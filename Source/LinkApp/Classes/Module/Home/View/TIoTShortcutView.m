@@ -12,6 +12,10 @@
 #import "TIoTShortcutViewCell.h"
 #import "UIButton+LQRelayout.h"
 #import "TIoTCoreDeviceSet.h"
+#import "TIOTTRTCModel.h"
+#import "TIoTTRTCUIManage.h"
+#import "TIoTChooseSliderValueView.h"
+#import "TIoTChooseClickValueView.h"
 
 static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 
@@ -30,7 +34,10 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 @property (nonatomic, strong) NSString *deviceName;
 @property (nonatomic, strong)  DeviceInfo *deviceInfo;
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;
-@property (nonatomic, strong) NSDictionary *deviceDataDic;
+
+// TRTC 相关
+@property (nonatomic, strong) NSDictionary *reportData;
+@property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
 @end
 
 @implementation TIoTShortcutView
@@ -151,12 +158,15 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 
 - (void)clickMoreBtn {
     [self hideAlertView];
+    
     if (self.moreFunctionBlock) {
         self.moreFunctionBlock();
     }
 }
 
 - (void)shortcutViewData:(NSDictionary *)config productId:(NSString *)productId deviceDic:(NSMutableDictionary *)deviceDic withDeviceName:aliasName shortcutArray:(NSArray *)shortcutArray{
+    
+    [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
     
     self.configData = [config copy]; // 设备面板详情的每个属性和快捷页面的添加属性项
     self.productId = productId?:@"";
@@ -170,8 +180,6 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     NSArray *itemArray = shortcutDic[@"shortcut"] ? : @[];
     
     self.dataArray = [itemArray mutableCopy];
-    
-//    [self.collectionView reloadData];
     
     [self loadData:self.configData];
     
@@ -228,17 +236,14 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         }
         [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
         
-        self.deviceDataDic = [tmpDic mutableCopy];
-        
-        TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithDictionary:baseInfo];
-        
         self.panelShortcutProperties = [NSMutableArray array];
         
         //筛选和快捷属性对应的设备属性列表中的完整值（包括属性值、最大值等）
-        for (TIoTPropertiesModel *prpertyModel in product.properties) {
+        
+        for (NSDictionary *prpertyModel in self.deviceInfo.allProperties) {
             for (NSDictionary *shortcutDic in self.dataArray) {
-                if (![NSString isNullOrNilWithObject:shortcutDic[@"id"]] && ![NSString isNullOrNilWithObject:prpertyModel.id]) {
-                    if ([shortcutDic[@"id"] isEqualToString:prpertyModel.id]) {
+                if (![NSString isNullOrNilWithObject:shortcutDic[@"id"]] && ![NSString isNullOrNilWithObject:prpertyModel[@"id"]?:@""]) {
+                    if ([shortcutDic[@"id"]?:@"" isEqualToString:prpertyModel[@"id"]?:@""]) {
                         [self.panelShortcutProperties addObject:prpertyModel];
                     }
                 }
@@ -258,44 +263,255 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+//    TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+    
     NSDictionary *shortcutDic = self.dataArray[indexPath.row]?:@{};
 //    cell.iconURLString = shortcutDic[@"ui"][@"icon"]?:@"";
-    TIoTPropertiesModel *model = self.panelShortcutProperties[indexPath.row];
-    cell.propertyName = model.name;
-    if ([model.define.type isEqualToString:@"int"]) {
+    NSDictionary *model = self.panelShortcutProperties[indexPath.row];
+    
+//    TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+//    cell.propertyName = model[@"name"];
+    
+    if (indexPath.row < self.panelShortcutProperties.count) {
         
-        cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
-        
-        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
-        
-    }else if ([model.define.type isEqualToString:@"float"]) {
-        cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
-        
-        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
-        
-    }else if ([model.define.type isEqualToString:@"enum"]) {
-        NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
-        NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
-        cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
-        
-        [cell setIconDefaultImageString:@"c_color" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
-    }else if ([model.define.type isEqualToString:@"bool"]) {
-        
-        NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
-        NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
-        cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
-        
-        [cell setIconDefaultImageString:@"c_switch" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+        ///MARK: 逻辑判断放入cell内  优化点
+        if ([model[@"define"][@"type"] isEqualToString:@"int"]||[model[@"define"][@"type"] isEqualToString:@"float"]) {
+            
+            TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+            cell.propertyName = model[@"name"];
+            
+            __weak typeof(self)weakSelf = self;
+            cell.propertyValue = [NSString stringWithFormat:@"%@%@",model[@"status"][@"Value"]?:@"",model[@"define"][@"unit"]?:@""];
+            cell.userInteractionEnabled = [weakSelf.deviceDic[@"Online"] boolValue];
+            [cell setIconDefaultImageString:@"shortcut_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+            
+            [cell setPropertyModel:model];
+            
+            cell.intOrFloatUpdate = ^{
+                
+                TIoTChooseSliderValueView *sliderValueView = [[TIoTChooseSliderValueView alloc]init];
+                TIoTPropertiesModel *propertyModel = [TIoTPropertiesModel yy_modelWithDictionary:model];
+                sliderValueView.model = propertyModel;
+                sliderValueView.sliderTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model, NSString * _Nonnull numberStr, NSString * _Nonnull compareValue) {
+                    if ([model.define.type isEqualToString:@"int"]) {
+                        [weakSelf reportDeviceData:@{model.id:@(roundf(numberStr.floatValue))}];
+                    }else if ([model.define.type isEqualToString:@"float"]){
+                        [weakSelf reportDeviceData:@{model.id:@(numberStr.floatValue)}];
+                    }else {
+                        [weakSelf reportDeviceData:@{model.id:numberStr}];
+                    }
+                };
+                
+                [self.blackMaskView addSubview:sliderValueView];
+                [sliderValueView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.left.right.equalTo([UIApplication sharedApplication].delegate.window);
+                    if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                        if (@available(iOS 11.0, *)) {
+                            make.bottom.equalTo(self.blackMaskView.mas_bottom).offset(-[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom);
+                        }else {
+                            make.bottom.equalTo(self.blackMaskView.mas_bottom);
+                        }
+                    }else {
+                        make.bottom.equalTo(self.blackMaskView.mas_bottom);
+                    }
+                }];
+                
+            };
+            return cell;
+        }else if ([model[@"define"][@"type"] isEqualToString:@"enum"]) {
+            TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+            cell.propertyName = model[@"name"];
+            __weak typeof(self)weakSelf = self;
+            
+            NSString *valueString = [NSString stringWithFormat:@"%@",model[@"status"][@"Value"]?:@"0"];
+            cell.propertyValue = [NSString stringWithFormat:@"%@",model[@"define"][@"mapping"][valueString]?:@""];
+            cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
+            [cell setIconDefaultImageString:@"shortcut_color" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+            [cell setPropertyModel:model];
+            cell.enumUpdate = ^{
+                //trtc特殊判断逻辑
+                NSString *key = model[@"id"];
+                if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
+                    weakSelf.reportData = model;
+                    [weakSelf reportDeviceData:@{key: @1}];
+                }
+                
+                __weak typeof(self) weakSelf = self;
+                TIoTChooseClickValueView *clickValueView = [[TIoTChooseClickValueView alloc]init];
+                TIoTPropertiesModel *propertyModel = [TIoTPropertiesModel yy_modelWithDictionary:model];
+                clickValueView.model = propertyModel;
+                
+                clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+                    
+                    for (int i= 0; i < model.define.mapping.allValues.count; i++) {
+                        NSString *key = [NSString stringWithFormat:@"%d",i];
+                        NSString *value = model.define.mapping[key];
+                        if ([value isEqualToString:valueString]) {
+                            [weakSelf reportDeviceData:@{model.id:@(i)}];
+                        }
+                    }
+                };
+                
+                [self.blackMaskView addSubview:clickValueView];
+                [clickValueView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.left.right.equalTo([UIApplication sharedApplication].delegate.window);
+                    if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                        if (@available(iOS 11.0, *)) {
+                            make.bottom.equalTo(self.blackMaskView.mas_bottom).offset(-[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom);
+                        }else {
+                            make.bottom.equalTo(self.blackMaskView.mas_bottom);
+                        }
+                    }else {
+                        make.bottom.equalTo(self.blackMaskView.mas_bottom);
+                    }
+                }];
+                
+            };
+            
+            return cell;
+            
+        }else if ([model[@"define"][@"type"] isEqualToString:@"bool"]) {
+            TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+            cell.propertyName = model[@"name"];
+            
+            NSString *valueString = [NSString stringWithFormat:@"%@",model[@"status"][@"Value"]?:@"0"];
+            cell.propertyValue = [NSString stringWithFormat:@"%@",model[@"define"][@"mapping"][valueString]?:@""];
+            
+            
+            NSString *iconStr = @"";
+            if (valueString.intValue) {
+                iconStr = @"shortcut_switch_on";
+            }else {
+                iconStr = @"shortcut_switch_off";
+            }
+            [cell setPropertyModel:model];
+            [cell setIconDefaultImageString:iconStr withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+    
+            cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
+            cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
+                [self reportDeviceData:uploadInfo];
+            };
+            return cell;
+        }else {
+            TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+            cell.propertyName = model[@"name"];
+            
+            if (![NSString isNullOrNilWithObject:model[@"define"][@"type"]]) {
+                cell.propertyValue = @"";
+                [cell setPropertyModel:model];
+                [cell setIconDefaultImageString:@"shortcut_color" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+            }
+            return cell;
+        }
     }else {
-        cell.propertyValue = @"";
-        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+        //云端定时
+        TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+        cell.propertyName = model[@"name"];
+        return cell;
     }
-
-    return  cell;
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+
+#pragma mark - 上报 下发数据
+//下发数据
+- (void)reportDeviceData:(NSDictionary *)deviceReport {
+    
+    //在这里都是主动呼叫，不存在被动
+    NSString *key = self.reportData[@"id"];
+//    NSNumber *statusValue = self.reportData[@"status"][@"Value"];
+    
+    if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"-1"]) {
+        NSLog(@"--!!-%@---",[TIoTCoreUserManage shared].sys_call_status);
+        if ([key isEqualToString:@"_sys_audio_call_status"]) {
+            if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
+                [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self];
+                return;
+            }
+        }else if ([key isEqualToString:@"_sys_video_call_status"]) {
+            if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
+                [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self];
+                return;
+            }
+        }
+    }
+    
+    NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
+    NSString *userId = [TIoTCoreUserManage shared].userId;
+    if (userId) {
+        [trtcReport setValue:userId forKey:@"_sys_userid"];
+    }
+    NSString *username = [TIoTCoreUserManage shared].nickName;
+    if (username) {
+        [trtcReport setValue:username forKey:@"username"];
+    }
+    
+    NSDictionary *tmpDic = @{
+                                @"ProductId":self.productId,
+                                @"DeviceName":self.deviceName,
+//                                @"Data":[NSString objectToJson:deviceReport],
+                                @"Data":[NSString objectToJson:trtcReport]
+                            };
+    
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+    
+    //主动呼叫，开始拨打
+    TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
+    BOOL isTRTCDevice = NO;
+    for (NSString *prototype in deviceReport.allKeys) {
+        
+        NSString *protoValue = deviceReport[prototype];
+        if ([prototype isEqualToString:TIoTTRTCaudio_call_status] || [prototype isEqualToString:TIoTTRTCvideo_call_status]) {
+         
+            if (protoValue.intValue == 1) {
+                isTRTCDevice = YES;
+                
+                if ([prototype isEqualToString:TIoTTRTCaudio_call_status]) {
+                    audioORvideo = TIoTTRTCSessionCallType_audio;
+                }else {
+                    audioORvideo = TIoTTRTCSessionCallType_video;
+                }
+                break;
+            }
+        }
+    }
+    if (isTRTCDevice) {
+        
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+        
+    }
+}
+
+//收到上报
+- (void)deviceReport:(NSNotification *)notification{
+    NSDictionary *dic = notification.userInfo;
+    [self.deviceInfo handleShortcutReportDeveic:dic];
+    
+//    [self reloadForBig];
+    [self.collectionView reloadData];
+    
+    
+    NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
+    NSLog(@"----6666---%@",payloadDic);
+    NSLog(@"----7777---%@",[TIoTCoreUserManage shared].userId);
+    
+    if ([payloadDic.allKeys containsObject:@"params"]) {
+        NSDictionary *paramsDic = payloadDic[@"params"];
+        self.reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+        if (paramsDic[@"_sys_audio_call_status"]) {
+            [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_audio_call_status;
+        }else if (paramsDic[@"_sys_video_call_status"]) {
+            [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_video_call_status;
+        }
+    }
+    
     
 }
 

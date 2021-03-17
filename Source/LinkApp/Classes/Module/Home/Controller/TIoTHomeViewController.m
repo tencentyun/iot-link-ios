@@ -1247,6 +1247,11 @@ static CGFloat kHeaderViewHeight = 162;
         
         cell.clickQuickBtnBlock = ^{
             
+            NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
+            //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+            [HXYNotice postHeartBeat:devIds];
+            [HXYNotice addActivePushPost:devIds];
+            
             NSString * alias = self.dataArr[indexPath.row][@"AliasName"];
             NSString *deviceName = @"";
             if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {

@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UIImageView *itemIcon;
 @property (nonatomic, strong) UILabel *functionName;
 @property (nonatomic, strong) UILabel *functionValue;
+@property (nonatomic, strong) NSDictionary *infoModel;
 @end
 
 @implementation TIoTShortcutViewCell
@@ -35,6 +36,7 @@
     self.itemBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.itemBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
     self.itemBtn.layer.cornerRadius = kItemBtnSize/2;
+    [self.itemBtn addTarget:self action:@selector(switchTrunOnOrOff:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.itemBtn];
     [self.itemBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(44);
@@ -74,7 +76,41 @@
     [self.itemIcon setImageWithURLStr:urlString?:@"" placeHolder:iconImage];
 }
 
-- (void)setIconURLImage:(UIImage *)iconURLImage {
+- (void)switchTrunOnOrOff:(UIButton *)sender {
+    
+    NSString *typeString = self.infoModel[@"define"][@"type"]?:@"";
+    
+    if ([typeString isEqualToString:@"bool"]) {
+        if (self.boolUpdate) {
+            
+            BOOL isTurnOn = [self.infoModel[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
+            
+            self.boolUpdate(@{self.infoModel[@"id"]:@(!isTurnOn)});
+        }
+    }else if ([typeString isEqualToString:@"int"]||[typeString isEqualToString:@"float"]) {
+        if (self.intOrFloatUpdate) {
+            self.intOrFloatUpdate();
+        }
+    }else if ([typeString isEqualToString:@"enum"]) {
+        if (self.enumUpdate) {
+            self.enumUpdate();
+        }
+    }else {
+        
+    }
+}
+
+- (void)setPropertyModel:(NSDictionary *)infoModel{
+    self.infoModel = infoModel;
+
+    if ([infoModel[@"define"][@"type"] isEqualToString:@"bool"]) {
+        BOOL isTurnOn = [infoModel[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
+        if (isTurnOn) {
+            self.itemBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+        }else {
+            self.itemBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
+        }
+    }
     
 }
 
@@ -86,6 +122,12 @@
 - (void)setPropertyValue:(NSString *)propertyValue {
     _propertyValue = propertyValue;
     self.functionValue.text = propertyValue;
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.itemBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
+
 }
 
 @end
