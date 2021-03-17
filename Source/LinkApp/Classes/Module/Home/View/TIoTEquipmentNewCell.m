@@ -23,7 +23,6 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIImageView *leftWhiteMaskView;
 @property (nonatomic, strong) UIButton *leftSwitchBtn;
 @property (nonatomic, strong) UIImageView *leftSwitchIcon;
-@property (nonatomic, strong) UILabel *leftRoomLabel;
 @property (nonatomic, strong) UIButton *leftQuickBtn;
 @property (nonatomic, strong) UIImageView *leftQuickIcon;
 @property (nonatomic, strong) UIImageView *leftBluetoothIcon;
@@ -34,7 +33,6 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIImageView *rightWhiteMaskView;
 @property (nonatomic, strong) UIButton *rightSwitchBtn;
 @property (nonatomic, strong) UIImageView *rightSwitchIcon;
-@property (nonatomic, strong) UILabel *rightRoomLabel;
 @property (nonatomic, strong) UIButton *rightQuickBtn;
 @property (nonatomic, strong) UIImageView *rightQuickIcon;
 @property (nonatomic, strong) UIImageView *rightBluetoothIcon;
@@ -96,17 +94,19 @@ static CGFloat kWidthHeightScale = 330/276;
         make.left.equalTo(self.leftButton.mas_left).offset(16);
     }];
     
+    CGFloat kSwitchBtnSize = 29;
+    CGFloat kSwitchBtnRightPadding = 18;
+    
     self.leftDeviceNameLabel = [[UILabel alloc]init];
     [self.leftDeviceNameLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
     [self.leftButton addSubview:self.leftDeviceNameLabel];
     [self.leftDeviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.leftDeviceImage.mas_left);
         make.top.equalTo(self.leftDeviceImage.mas_bottom).offset(16);
-        make.right.equalTo(self.leftButton.mas_right).offset(-16);
+//        make.right.equalTo(self.leftButton.mas_right).offset(-16);
+        make.right.equalTo(self.leftButton.mas_right).offset(-kSwitchBtnRightPadding - kSwitchBtnSize);
     }];
     
-    CGFloat kSwitchBtnSize = 29;
-    CGFloat kSwitchBtnRightPadding = 18;
     self.leftSwitchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.leftSwitchBtn.layer.cornerRadius = kSwitchBtnSize/2;
     self.leftSwitchBtn.backgroundColor = [UIColor colorWithHexString:@"#F3F3F5"];
@@ -134,8 +134,10 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.leftButton addSubview:self.leftQuickBtn];
     [self.leftQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickBtnSize);
-        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom).offset(2);
-        make.centerX.equalTo(self.leftSwitchBtn);
+//        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom).offset(2);
+        make.centerY.equalTo(self.leftDeviceNameLabel);
+//        make.centerX.equalTo(self.leftSwitchBtn);
+        make.right.equalTo(self.leftButton.mas_right).offset(-kSwitchBtnRightPadding);
     }];
     
     CGFloat kQuickIconSize = 12;
@@ -145,15 +147,6 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.leftQuickIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickIconSize);
         make.center.equalTo(self.leftQuickBtn);
-    }];
-    
-    self.leftRoomLabel = [[UILabel alloc]init];
-    [self.leftRoomLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
-    [self.leftButton addSubview:self.leftRoomLabel];
-    [self.leftRoomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.leftDeviceNameLabel.mas_left);
-        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom);
-        make.right.equalTo(self.leftQuickBtn.mas_left);
     }];
     
     //左侧item离线蒙版
@@ -196,7 +189,7 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.rightDeviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.rightDeviceImage.mas_left);
         make.top.equalTo(self.rightDeviceImage.mas_bottom).offset(16);
-        make.right.equalTo(self.rightButton.mas_right).offset(-16);
+        make.right.equalTo(self.rightButton.mas_right).offset(-kSwitchBtnRightPadding - kSwitchBtnSize);
     }];
     
     self.rightSwitchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -224,8 +217,10 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.rightButton addSubview:self.rightQuickBtn];
     [self.rightQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickBtnSize);
-        make.top.equalTo(self.rightDeviceNameLabel.mas_bottom).offset(2);
-        make.centerX.equalTo(self.rightSwitchBtn);
+//        make.top.equalTo(self.rightDeviceNameLabel.mas_bottom).offset(2);
+        make.centerY.equalTo(self.rightDeviceNameLabel);
+//        make.centerX.equalTo(self.rightSwitchBtn);
+        make.right.equalTo(self.rightButton.mas_right).offset(-kSwitchBtnRightPadding);
     }];
     
     self.rightQuickIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"quict_icon"]];
@@ -236,15 +231,6 @@ static CGFloat kWidthHeightScale = 330/276;
         make.center.equalTo(self.rightQuickBtn);
     }];
     
-    self.rightRoomLabel = [[UILabel alloc]init];
-    [self.rightRoomLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#A1A7B2" textAlignment:NSTextAlignmentLeft];
-    [self.rightButton addSubview:self.rightRoomLabel];
-    [self.rightRoomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.leftDeviceNameLabel.mas_left);
-        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom);
-        make.right.equalTo(self.leftQuickBtn.mas_left);
-    }];
-    
     //右侧item蒙版
     self.rightWhiteMaskView = [[UIImageView alloc]init];
     self.rightWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.7];
@@ -253,6 +239,13 @@ static CGFloat kWidthHeightScale = 330/276;
         make.left.right.top.bottom.equalTo(self.rightButton);
     }];
     self.rightWhiteMaskView.hidden = YES;
+    
+    
+    self.leftSwitchBtn.hidden = YES;
+    self.rightSwitchBtn.hidden = YES;
+    
+    self.leftQuickBtn.hidden = YES;
+    self.rightQuickBtn.hidden = YES;
 }
 
 #pragma mark - setter or getter
@@ -354,6 +347,42 @@ static CGFloat kWidthHeightScale = 330/276;
 - (void)clickRightQuickBtn {
     if (self.clickQuickBtnBlock) {
         self.clickQuickBtnBlock();
+    }
+}
+
+- (void)setIsHideLeftSwitch:(BOOL)isHideLeftSwitch {
+    _isHideLeftSwitch = isHideLeftSwitch;
+    if (self.isHideLeftSwitch == YES) {
+        self.leftSwitchBtn.hidden = YES;
+    }else {
+        self.leftSwitchBtn.hidden = NO;
+    }
+}
+
+- (void)setIsHideRightSwitch:(BOOL)isHideRightSwitch {
+    _isHideRightSwitch = isHideRightSwitch;
+    if (self.isHideRightSwitch == YES) {
+        self.rightSwitchBtn.hidden = YES;
+    }else {
+        self.rightSwitchBtn.hidden = NO;
+    }
+}
+
+- (void)setIsHideLeftShortcut:(BOOL)isHideLeftShortcut {
+    _isHideLeftShortcut = isHideLeftShortcut;
+    if (self.isHideLeftShortcut == YES) {
+        self.leftQuickBtn.hidden = YES;
+    }else {
+        self.leftQuickBtn.hidden = NO;
+    }
+}
+
+- (void)setIsHideRightShortcut:(BOOL)isHideRightShortcut {
+    _isHideRightShortcut = isHideRightShortcut;
+    if (self.isHideRightShortcut == YES) {
+        self.rightQuickBtn.hidden = YES;
+    }else {
+        self.rightQuickBtn.hidden = NO;
     }
 }
 

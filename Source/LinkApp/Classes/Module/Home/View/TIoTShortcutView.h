@@ -19,10 +19,8 @@ typedef void(^TIoTEnterDevicePanel)(void);
 
 
 /// 设置设备快捷入口视图
-/// @param config 设备物模型
-/// @param deviceName 设备别名或设备名称
-- (void)shortcutViewData:(NSDictionary *)config withDeviceName:(NSString *)deviceName;
 
+- (void)shortcutViewData:(NSDictionary *)config productId:(NSString *)productId deviceDic:(NSMutableDictionary *)deviceDic withDeviceName:aliasName shortcutArray:(NSArray *)shortcutArray;
 @end
 
 NS_ASSUME_NONNULL_END

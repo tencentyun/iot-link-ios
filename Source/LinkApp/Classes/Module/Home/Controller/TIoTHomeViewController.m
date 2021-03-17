@@ -47,6 +47,7 @@ static CGFloat kHeaderViewHeight = 162;
 
 @property (nonatomic, strong) UITableView *devicesTableView;
 @property (nonatomic, strong) NSMutableArray *devicesArray;
+@property (nonatomic, strong) NSMutableArray *deviceConfigArray;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) CMPageTitleContentView *tableHeaderView;
@@ -344,8 +345,21 @@ static CGFloat kHeaderViewHeight = 162;
                 [selfWeak addEquipmentViewController];
             }];
         }
+        //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
+//        [self.deviceConfigArray removeAllObjects];
+//        for (int i = 0; i< self.dataArr.count; i++) {
+//            [self requestDeviceEquipmentWithProductID:i];
+//        }
+//        [self.devicesTableView reloadData];
         
-        [self.devicesTableView reloadData];
+        [self.deviceConfigArray removeAllObjects];
+        NSMutableArray *productidArr = [NSMutableArray new];
+        for (int i = 0; i< self.dataArr.count; i++) {
+            NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
+            [productidArr addObject:productIDString];
+        }
+        
+        [self requestDeviceEquipmentWithProductID:productidArr];
     }
     else{
         
@@ -359,8 +373,22 @@ static CGFloat kHeaderViewHeight = 162;
         self.tableHeaderView2.alpha = 1;
         
         [self.devicesTableView hideStatus];
-        [self.devicesTableView reloadData];
+//        [self.devicesTableView reloadData];
         
+        //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
+//        [self.deviceConfigArray removeAllObjects];
+//        for (int i = 0; i< self.dataArr.count; i++) {
+//            [self requestDeviceEquipmentWithProductID:i];
+//        }
+        
+        [self.deviceConfigArray removeAllObjects];
+        NSMutableArray *productidArr = [NSMutableArray new];
+        for (int i = 0; i< self.dataArr.count; i++) {
+            NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
+            [productidArr addObject:productIDString];
+        }
+        
+        [self requestDeviceEquipmentWithProductID:productidArr];
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
     
@@ -1053,6 +1081,30 @@ static CGFloat kHeaderViewHeight = 162;
     }];
 }
 
+//MARK: 获取添加快捷入口的设备信息（是否显示开关，快捷项有多少）
+- (void)requestDeviceEquipmentWithProductID:(NSMutableArray *)IdArray {
+    
+//    NSString *productIDString = self.dataArr[indexPathRow][@"ProductId"] ?:@"";
+
+    [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":IdArray?:@[]} success:^(id responseObject) {
+        NSArray *data = responseObject[@"Data"];
+        if (data.count > 0) {
+            
+            for (int i= 0; i<data.count; i++) {
+                NSDictionary *config = [NSString jsonToObject:data[i][@"Config"]]?:@{};
+                NSDictionary *shortcutDic = config?:@{};
+                [self.deviceConfigArray addObject:shortcutDic];
+            }
+            
+            if (self.deviceConfigArray.count == self.dataArr.count) {
+                [self.devicesTableView reloadData];
+            }
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
+}
+
 #pragma mark - event
 
 ///切换家庭
@@ -1157,16 +1209,77 @@ static CGFloat kHeaderViewHeight = 162;
             [weakSelf chooseDeviceWith:indexPath];
         };
         cell.clickDeviceSwitchBlock = ^{
-
+            
         };
         
+        NSDictionary *configData = self.deviceConfigArray[indexPath.row]?:@{};
+        NSDictionary *shortcutDic = configData[@"ShortCut"]?:@{};
+
+        //标准面板
+        if (![NSString isNullOrNilWithObject:shortcutDic[@"powerSwitch"]]) {
+            if (indexPath.row%2 != 0) {
+                cell.isHideRightSwitch = NO;
+            }else {
+                cell.isHideLeftSwitch = NO;
+            }
+        }else {
+            if (indexPath.row%2 != 0) {
+                cell.isHideRightSwitch = YES;
+            }else {
+                cell.isHideLeftSwitch = YES;
+            }
+        }
+
+        NSArray *configArray = shortcutDic[@"shortcut"]?:@[];
+        if (configArray.count == 0) {
+            if (indexPath.row%2 != 0) {
+                cell.isHideRightShortcut = YES;
+            }else {
+                cell.isHideLeftShortcut = YES;
+            }
+        }else {
+            if (indexPath.row%2 != 0) {
+                cell.isHideRightShortcut = NO;
+            }else {
+                cell.isHideLeftShortcut = NO;
+            }
+        }
+        
         cell.clickQuickBtnBlock = ^{
+            
+            NSString * alias = self.dataArr[indexPath.row][@"AliasName"];
+            NSString *deviceName = @"";
+            if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
+                
+                deviceName = alias;
+                
+            } else {
+                
+                deviceName = self.dataArr[indexPath.row][@"DeviceName"];
+            }
+            
+            __weak typeof(self)weakSelf = self;
             TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
+            [shortcut shortcutViewData:configData?:@{} productId:weakSelf.dataArr[indexPath.row][@"ProductId"]?:@"" deviceDic:[weakSelf.dataArr[indexPath.row] mutableCopy] withDeviceName:deviceName shortcutArray:configArray];
+            
             shortcut.moreFunctionBlock = ^{
-                [weakSelf chooseDeviceWith:indexPath];
+                
+                //点击更多进入设备面板详情
+                TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
+                weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
+                vc.title = [NSString stringWithFormat:@"%@",weakSelf.dataArr[indexPath.row][@"AliasName"]];
+                vc.productId = weakSelf.dataArr[indexPath.row][@"ProductId"];
+                vc.deviceName = [NSString stringWithFormat:@"%@",weakSelf.dataArr[indexPath.row][@"DeviceName"]];
+                vc.deviceDic = [weakSelf.dataArr[indexPath.row] mutableCopy];
+                vc.isOwner = [weakSelf.currentFamilyRole integerValue] == 1;
+                vc.configData = configData?:@{};
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+                
             };
             [weakSelf.view addSubview:shortcut];
+            
         };
+        
         return cell;
     
     }
@@ -1423,7 +1536,7 @@ static CGFloat kHeaderViewHeight = 162;
     if (!_devicesTableView) {
         _devicesTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _devicesTableView.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
-        _devicesTableView.rowHeight = 150;
+        _devicesTableView.rowHeight = 130;
         _devicesTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _devicesTableView.delegate = self;
         _devicesTableView.dataSource = self;
@@ -1690,4 +1803,11 @@ static CGFloat kHeaderViewHeight = 162;
     return _sem;
 }
 
+
+- (NSMutableArray *)deviceConfigArray {
+    if (!_deviceConfigArray) {
+        _deviceConfigArray = [NSMutableArray new];
+    }
+    return _deviceConfigArray;
+}
 @end
