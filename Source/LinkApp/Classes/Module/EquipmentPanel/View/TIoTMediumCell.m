@@ -88,6 +88,16 @@
             }else {
                 self.contentLab.text = [NSString stringWithFormat:@"%@%@",key,define[@"unit"]];
             }
+        }else {
+            //结构体 数组 字符串 时间类  暂时数值不做处理
+            [self.imgV setImage:[[UIImage imageNamed:@"c_light"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"] ?: @""];
+            if ([info[@"id"]isEqualToString:@"Temperature"]) {
+                NSDictionary *userconfig = info[@"Userconfig"];
+                self.contentLab.text = [NSString judepTemperatureWithUserConfig:userconfig[@"TemperatureUnit"] templeUnit:[NSString stringWithFormat:@"%@%@",key,define[@"unit"]]];;
+            }else {
+                self.contentLab.text = [NSString stringWithFormat:@"%@%@",key,define[@"unit"]];
+            }
         }
     }
 }

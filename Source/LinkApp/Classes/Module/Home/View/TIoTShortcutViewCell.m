@@ -70,9 +70,12 @@
 
 #pragma mark - setter
 
-- (void)setIconURLString:(NSString *)iconURLString {
-    _iconURLString = iconURLString;
-    [self.itemIcon setImageWithURLStr:iconURLString?:@"" placeHolder:@""];
+- (void)setIconDefaultImageString:(NSString *)iconImage withURLString:(NSString *)urlString {
+    [self.itemIcon setImageWithURLStr:urlString?:@"" placeHolder:iconImage];
+}
+
+- (void)setIconURLImage:(UIImage *)iconURLImage {
+    
 }
 
 - (void)setPropertyName:(NSString *)propertyName {

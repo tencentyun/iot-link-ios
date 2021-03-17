@@ -169,21 +169,6 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     NSDictionary *shortcutDic = config[@"ShortCut"]?:@{};
     NSArray *itemArray = shortcutDic[@"shortcut"] ? : @[];
     
-//    //筛选和快捷属性对应的设备属性列表中的完整值（包括属性值、最大值等）
-//    NSDictionary *panelDic = config[@"Panel"]?:@{};
-//    NSDictionary *standard = panelDic[@"standard"]?:@{};
-//    NSArray *configProperties = standard[@"properties"]?:@[];
-//     NSMutableArray *panelShortcutProperties = [NSMutableArray array];
-//    for (NSDictionary *propertyDic in configProperties) {
-//        for (NSDictionary *shortcutDic in itemArray) {
-//            if (![NSString isNullOrNilWithObject:propertyDic[@"id"]] && ![NSString isNullOrNilWithObject:shortcutDic[@"id"]]) {
-//                if (propertyDic[@"id"] == shortcutDic[@"id"]) {
-//                    [panelShortcutProperties addObject:propertyDic];
-//                }
-//            }
-//        }
-//    }
-    
     self.dataArray = [itemArray mutableCopy];
     
 //    [self.collectionView reloadData];
@@ -249,6 +234,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         
         self.panelShortcutProperties = [NSMutableArray array];
         
+        //筛选和快捷属性对应的设备属性列表中的完整值（包括属性值、最大值等）
         for (TIoTPropertiesModel *prpertyModel in product.properties) {
             for (NSDictionary *shortcutDic in self.dataArray) {
                 if (![NSString isNullOrNilWithObject:shortcutDic[@"id"]] && ![NSString isNullOrNilWithObject:prpertyModel.id]) {
@@ -258,7 +244,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
                 }
             }
         }
-        NSLog(@"---uiInfo-->%@ \n ---baseInfo--->%@ \n ---tmpDic--->%@",uiInfo,baseInfo,tmpDic);
+        
         [self.collectionView reloadData];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -274,24 +260,36 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
     NSDictionary *shortcutDic = self.dataArray[indexPath.row]?:@{};
-    cell.iconURLString = shortcutDic[@"ui"][@"icon"]?:@"";
+//    cell.iconURLString = shortcutDic[@"ui"][@"icon"]?:@"";
     TIoTPropertiesModel *model = self.panelShortcutProperties[indexPath.row];
     cell.propertyName = model.name;
     if ([model.define.type isEqualToString:@"int"]) {
         
         cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
+        
+        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+        
     }else if ([model.define.type isEqualToString:@"float"]) {
         cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
+        
+        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
+        
     }else if ([model.define.type isEqualToString:@"enum"]) {
         NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
         NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
         cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
+        
+        [cell setIconDefaultImageString:@"c_color" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
     }else if ([model.define.type isEqualToString:@"bool"]) {
+        
         NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
         NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
         cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
+        
+        [cell setIconDefaultImageString:@"c_switch" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
     }else {
         cell.propertyValue = @"";
+        [cell setIconDefaultImageString:@"c_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
     }
 
     return  cell;
