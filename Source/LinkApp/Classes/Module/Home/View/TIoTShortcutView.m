@@ -11,6 +11,7 @@
 #import "UILabel+TIoTExtension.h"
 #import "TIoTShortcutViewCell.h"
 #import "UIButton+LQRelayout.h"
+#import "TIoTCoreDeviceSet.h"
 
 static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 
@@ -20,7 +21,16 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UILabel *messageLabel;
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataArray;                //设备快捷属性数组
+@property (nonatomic, strong) NSMutableArray *panelShortcutProperties; //设备完整属性中和快捷属性对应的数据（包含设备名和属性值）
+
+@property (nonatomic, strong) NSDictionary *userConfigDic;
+@property (nonatomic, strong) NSDictionary *configData;
+@property (nonatomic, strong) NSString *productId;
+@property (nonatomic, strong) NSString *deviceName;
+@property (nonatomic, strong)  DeviceInfo *deviceInfo;
+@property (nonatomic, strong) NSMutableDictionary *deviceDic;
+@property (nonatomic, strong) NSDictionary *deviceDataDic;
 @end
 
 @implementation TIoTShortcutView
@@ -146,21 +156,144 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     }
 }
 
-- (void)shortcutViewData:(NSDictionary *)config withDeviceName:(NSString *)deviceName {
-    NSArray *itemArray = config[@"shortcut"] ? : @[];
-    self.dataArray = [itemArray mutableCopy];
-    [self.collectionView reloadData];
+- (void)shortcutViewData:(NSDictionary *)config productId:(NSString *)productId deviceDic:(NSMutableDictionary *)deviceDic withDeviceName:aliasName shortcutArray:(NSArray *)shortcutArray{
     
-    self.messageLabel.text = deviceName;
+    self.configData = [config copy]; // 设备面板详情的每个属性和快捷页面的添加属性项
+    self.productId = productId?:@"";
+    self.deviceDic = deviceDic;
+    self.messageLabel.text = aliasName?:@"";
+    self.deviceName = deviceDic[@"DeviceName"]?:@"";
+    
+    self.deviceInfo.deviceId = deviceDic[@"DeviceId"]?:@"";
+    
+    NSDictionary *shortcutDic = config[@"ShortCut"]?:@{};
+    NSArray *itemArray = shortcutDic[@"shortcut"] ? : @[];
+    
+//    //筛选和快捷属性对应的设备属性列表中的完整值（包括属性值、最大值等）
+//    NSDictionary *panelDic = config[@"Panel"]?:@{};
+//    NSDictionary *standard = panelDic[@"standard"]?:@{};
+//    NSArray *configProperties = standard[@"properties"]?:@[];
+//     NSMutableArray *panelShortcutProperties = [NSMutableArray array];
+//    for (NSDictionary *propertyDic in configProperties) {
+//        for (NSDictionary *shortcutDic in itemArray) {
+//            if (![NSString isNullOrNilWithObject:propertyDic[@"id"]] && ![NSString isNullOrNilWithObject:shortcutDic[@"id"]]) {
+//                if (propertyDic[@"id"] == shortcutDic[@"id"]) {
+//                    [panelShortcutProperties addObject:propertyDic];
+//                }
+//            }
+//        }
+//    }
+    
+    self.dataArray = [itemArray mutableCopy];
+    
+//    [self.collectionView reloadData];
+    
+    [self loadData:self.configData];
+    
+}
+
+
+#pragma mark - Network Request
+- (void)getProductsConfig
+{
+    //先获取用户配置信息
+    [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
+        self.userConfigDic = [[NSDictionary alloc]initWithDictionary:responseObject[@"UserSetting"]];
+        [self loadData:self.configData];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
+    
+}
+
+- (void)loadData:(NSDictionary *)dic {
+//    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
+        NSArray *tmpArr = responseObject[@"Products"];
+        if (tmpArr.count > 0) {
+            NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
+            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+            
+//            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
+            
+            TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
+            if ([config.Panel.type isEqualToString:@"h5"]) {
+
+            }else {
+                [self getDeviceData:dic andBaseInfo:DataTemplateDic];
+            }
+
+        }
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+    }];
+}
+
+- (void)getDeviceData:(NSDictionary *)uiInfo andBaseInfo:(NSDictionary *)baseInfo {
+
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
+        NSString *tmpStr = (NSString *)responseObject[@"Data"];
+        NSDictionary *tmpDic = [NSString jsonToObject:tmpStr]?:@{};
+        
+//        TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
+        NSArray *propertiesArray = baseInfo[@"properties"];
+        if (propertiesArray.count == 0) {
+//            [self addEmptyCandidateModelTipView];
+        }
+        [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
+        
+        self.deviceDataDic = [tmpDic mutableCopy];
+        
+        TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithDictionary:baseInfo];
+        
+        self.panelShortcutProperties = [NSMutableArray array];
+        
+        for (TIoTPropertiesModel *prpertyModel in product.properties) {
+            for (NSDictionary *shortcutDic in self.dataArray) {
+                if (![NSString isNullOrNilWithObject:shortcutDic[@"id"]] && ![NSString isNullOrNilWithObject:prpertyModel.id]) {
+                    if ([shortcutDic[@"id"] isEqualToString:prpertyModel.id]) {
+                        [self.panelShortcutProperties addObject:prpertyModel];
+                    }
+                }
+            }
+        }
+        NSLog(@"---uiInfo-->%@ \n ---baseInfo--->%@ \n ---tmpDic--->%@",uiInfo,baseInfo,tmpDic);
+        [self.collectionView reloadData];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+    }];
 }
 
 #pragma mark - UICollectionDelegate And  UICollectionDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 4;//self.dataArray.count;
+    return self.dataArray.count;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+    NSDictionary *shortcutDic = self.dataArray[indexPath.row]?:@{};
+    cell.iconURLString = shortcutDic[@"ui"][@"icon"]?:@"";
+    TIoTPropertiesModel *model = self.panelShortcutProperties[indexPath.row];
+    cell.propertyName = model.name;
+    if ([model.define.type isEqualToString:@"int"]) {
+        
+        cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
+    }else if ([model.define.type isEqualToString:@"float"]) {
+        cell.propertyValue = [NSString stringWithFormat:@"%@%@",self.deviceDataDic[model.id?:@""][@"Value"]?:@"",model.define.unit?:@""];
+    }else if ([model.define.type isEqualToString:@"enum"]) {
+        NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
+        NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
+        cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
+    }else if ([model.define.type isEqualToString:@"bool"]) {
+        NSDictionary *valueDic = self.deviceDataDic[model.id?:@""]?:@{};
+        NSString *valueString = [NSString stringWithFormat:@"%@",valueDic[@"Value"]?:@"0"];
+        cell.propertyValue = [NSString stringWithFormat:@"%@",model.define.mapping[valueString]?:@""];
+    }else {
+        cell.propertyValue = @"";
+    }
+
     return  cell;
 }
 
@@ -175,7 +308,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         
         CGFloat kMiddleHeight = 184;
         CGFloat kWidthPadding = 28;
-        CGFloat kHorizontalSpace = 28;
+        CGFloat kHorizontalSpace = 17;
         
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
         CGFloat itemWidth = (kScreenWidth - kWidthPadding*2 - 3*kHorizontalSpace)/4;
@@ -197,5 +330,13 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         _dataArray = [NSMutableArray new];
     }
     return _dataArray;
+}
+
+- (DeviceInfo *)deviceInfo
+{
+    if (!_deviceInfo) {
+        _deviceInfo = [[DeviceInfo alloc] init];
+    }
+    return _deviceInfo;
 }
 @end

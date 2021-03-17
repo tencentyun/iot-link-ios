@@ -785,6 +785,15 @@ static NSString *itemId3 = @"i_ooo454";
                 [self reportDeviceData:uploadInfo];
             };
             return cell;
+        }else {
+            TIoTLongCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:itemId2 forIndexPath:indexPath];
+            [cell setInfo:pro];
+            [cell setThemeStyle:self.themeStyle];
+            cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
+            cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
+                [self reportDeviceData:uploadInfo];
+            };
+            return cell;
         }
     }
     else

@@ -11,7 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTShortcutViewCell : UICollectionViewCell
-
+@property (nonatomic, assign) BOOL isVisible;
+@property (nonatomic, copy) NSString *iconURLString;
+@property (nonatomic, copy) NSString *propertyName;
+@property (nonatomic, copy) NSString *propertyValue;
 @end
 
 NS_ASSUME_NONNULL_END

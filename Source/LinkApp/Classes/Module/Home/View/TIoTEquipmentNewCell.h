@@ -22,6 +22,11 @@ typedef void(^TIoTQuickBtnBlcok)(void);
 @property (nonatomic, copy) TIoTRightDeviceBlock clickRightDeviceBlock;
 @property (nonatomic, copy) TIoTDeviceSwitchBlock clickDeviceSwitchBlock; //设备开关
 @property (nonatomic, copy) TIoTQuickBtnBlcok clickQuickBtnBlock;         //设备快捷按钮
+
+@property (nonatomic, assign) BOOL isHideLeftSwitch;
+@property (nonatomic, assign) BOOL isHideRightSwitch;
+@property (nonatomic, assign) BOOL isHideLeftShortcut;
+@property (nonatomic, assign) BOOL isHideRightShortcut;
 @end
 
 NS_ASSUME_NONNULL_END

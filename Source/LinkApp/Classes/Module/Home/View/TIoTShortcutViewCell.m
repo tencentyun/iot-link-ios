@@ -8,7 +8,7 @@
 
 #import "TIoTShortcutViewCell.h"
 #import "UILabel+TIoTExtension.h"
-
+#import "UIImageView+TIoTWebImageView.h"
 @interface TIoTShortcutViewCell ()
 @property (nonatomic, strong) UIButton *itemBtn;
 @property (nonatomic, strong) UIImageView *itemIcon;
@@ -53,7 +53,7 @@
     [self.functionName setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentCenter];
     [self.contentView addSubview:self.functionName];
     [self.functionName mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(self.itemBtn);
+        make.width.equalTo(self.contentView);
         make.centerX.equalTo(self.itemBtn);
         make.top.equalTo(self.itemBtn.mas_bottom).offset(8);
     }];
@@ -64,8 +64,25 @@
     [self.functionValue mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.functionName.mas_bottom);
         make.width.equalTo(self.itemBtn);
-        make.centerX.equalTo(self.itemBtn);
+        make.centerX.equalTo(self.functionName);
     }];
+}
+
+#pragma mark - setter
+
+- (void)setIconURLString:(NSString *)iconURLString {
+    _iconURLString = iconURLString;
+    [self.itemIcon setImageWithURLStr:iconURLString?:@"" placeHolder:@""];
+}
+
+- (void)setPropertyName:(NSString *)propertyName {
+    _propertyName = propertyName;
+    self.functionName.text = propertyName;
+}
+
+- (void)setPropertyValue:(NSString *)propertyValue {
+    _propertyValue = propertyValue;
+    self.functionValue.text = propertyValue;
 }
 
 @end
