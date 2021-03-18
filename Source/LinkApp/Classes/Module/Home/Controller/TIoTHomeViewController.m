@@ -348,13 +348,7 @@ static CGFloat kHeaderViewHeight = 162;
         //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
         
         [self.deviceConfigArray removeAllObjects];
-        NSMutableArray *productidArr = [NSMutableArray new];
-        for (int i = 0; i< self.dataArr.count; i++) {
-            NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
-            [productidArr addObject:productIDString];
-        }
-        
-        [self requestDeviceEquipmentWithProductID:productidArr];
+        [self.devicesTableView reloadData];
     }
     else{
         
