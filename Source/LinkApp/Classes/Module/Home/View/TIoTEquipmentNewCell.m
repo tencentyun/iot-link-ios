@@ -26,6 +26,8 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIButton *leftQuickBtn;
 @property (nonatomic, strong) UIImageView *leftQuickIcon;
 @property (nonatomic, strong) UIImageView *leftBluetoothIcon;
+@property (nonatomic, strong) NSDictionary *leftConfigData;
+@property (nonatomic, strong) NSArray *leftShortcutArray;
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
@@ -36,6 +38,9 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIButton *rightQuickBtn;
 @property (nonatomic, strong) UIImageView *rightQuickIcon;
 @property (nonatomic, strong) UIImageView *rightBluetoothIcon;
+@property (nonatomic, strong) NSDictionary *rightConfigData;
+@property (nonatomic, strong) NSArray *rightShortcutArray;
+
 @end
 
 @implementation TIoTEquipmentNewCell
@@ -103,7 +108,6 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.leftDeviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.leftDeviceImage.mas_left);
         make.top.equalTo(self.leftDeviceImage.mas_bottom).offset(16);
-//        make.right.equalTo(self.leftButton.mas_right).offset(-16);
         make.right.equalTo(self.leftButton.mas_right).offset(-kSwitchBtnRightPadding - kSwitchBtnSize);
     }];
     
@@ -120,7 +124,6 @@ static CGFloat kWidthHeightScale = 330/276;
     
     CGFloat kswitchIconSize = 12;
     self.leftSwitchIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"device_turnoff"]];//device_turnon
-//    self.leftSwitchIcon.userInteractionEnabled = YES;
     [self.leftSwitchBtn addSubview:self.leftSwitchIcon];
     [self.leftSwitchIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.leftSwitchBtn);
@@ -134,20 +137,26 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.leftButton addSubview:self.leftQuickBtn];
     [self.leftQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickBtnSize);
-//        make.top.equalTo(self.leftDeviceNameLabel.mas_bottom).offset(2);
         make.centerY.equalTo(self.leftDeviceNameLabel);
-//        make.centerX.equalTo(self.leftSwitchBtn);
         make.right.equalTo(self.leftButton.mas_right).offset(-kSwitchBtnRightPadding);
     }];
     
     CGFloat kQuickIconSize = 12;
     self.leftQuickIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"quict_icon"]];
-//    self.leftQuickIcon.userInteractionEnabled = YES;
     [self.leftQuickBtn addSubview:self.leftQuickIcon];
     [self.leftQuickIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickIconSize);
         make.center.equalTo(self.leftQuickBtn);
     }];
+    
+    CGFloat kBleIconSize = 20;
+    self.leftBluetoothIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@""]];
+    [self.leftButton addSubview:self.leftBluetoothIcon];
+    [self.leftBluetoothIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kBleIconSize);
+        make.left.top.equalTo(self.leftButton);
+    }];
+    
     
     //左侧item离线蒙版
     self.leftWhiteMaskView = [[UIImageView alloc]init];
@@ -173,7 +182,6 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     self.rightDeviceImage = [[UIImageView alloc]init];
-//    self.rightDeviceImage.userInteractionEnabled = YES;
     self.rightDeviceImage.image = [UIImage imageNamed:@"deviceDefault"];
     self.rightDeviceImage.contentMode = UIViewContentModeScaleAspectFit;
     [self.rightButton addSubview:self.rightDeviceImage];
@@ -204,7 +212,6 @@ static CGFloat kWidthHeightScale = 330/276;
     }];
     
     self.rightSwitchIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"device_turnoff"]];//device_turnon
-//    self.rightSwitchIcon.userInteractionEnabled = YES;
     [self.rightSwitchBtn addSubview:self.rightSwitchIcon];
     [self.rightSwitchIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.rightSwitchBtn);
@@ -217,18 +224,23 @@ static CGFloat kWidthHeightScale = 330/276;
     [self.rightButton addSubview:self.rightQuickBtn];
     [self.rightQuickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickBtnSize);
-//        make.top.equalTo(self.rightDeviceNameLabel.mas_bottom).offset(2);
         make.centerY.equalTo(self.rightDeviceNameLabel);
-//        make.centerX.equalTo(self.rightSwitchBtn);
         make.right.equalTo(self.rightButton.mas_right).offset(-kSwitchBtnRightPadding);
     }];
     
     self.rightQuickIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"quict_icon"]];
-//    self.rightQuickIcon.userInteractionEnabled = YES;
     [self.rightQuickBtn addSubview:self.rightQuickIcon];
     [self.rightQuickIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(kQuickIconSize);
         make.center.equalTo(self.rightQuickBtn);
+    }];
+    
+    
+    self.rightBluetoothIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@""]];
+    [self.rightButton addSubview:self.rightBluetoothIcon];
+    [self.rightBluetoothIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.width.mas_equalTo(kBleIconSize);
+        make.left.top.equalTo(self.rightButton);
     }];
     
     //右侧item蒙版
@@ -246,9 +258,12 @@ static CGFloat kWidthHeightScale = 330/276;
     
     self.leftQuickBtn.hidden = YES;
     self.rightQuickBtn.hidden = YES;
+    
+    self.leftBluetoothIcon.hidden = YES;
+    self.rightBluetoothIcon.hidden = YES;
 }
 
-#pragma mark - setter or getter
+#pragma mark - Public method
 
 - (void)setDataArray:(NSArray *)dataArray {
     _dataArray = dataArray;
@@ -273,6 +288,50 @@ static CGFloat kWidthHeightScale = 330/276;
     
 }
 
+- (void)setDeviceConfigDataArray:(NSArray<NSDictionary *> *)deviceConfigDataArray {
+    _deviceConfigDataArray = deviceConfigDataArray;
+    
+    /// 每个dataArray 只包含两个dictionary
+
+    if (deviceConfigDataArray.count%2 == 0) { //双数
+        self.rightButton.hidden = NO;
+
+        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
+        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+        
+        NSDictionary *rightDic = deviceConfigDataArray[1]?:@{};
+        [self setConfigDataWithDic:rightDic withDirection:TIoTDeviceTypeRight];
+    }else { //单数 只有左边的
+        self.rightButton.hidden = YES;
+        
+        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
+        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+    }
+}
+
+///MARK: 设置每个产品差异性显示内容
+- (void)setConfigDataWithDic:(NSDictionary *)configData withDirection:(TIoTDeviceType)type {
+    
+    //标准面板
+    if (type == TIoTDeviceTypeLeft) {
+        
+        self.leftConfigData = [NSDictionary dictionaryWithDictionary:configData?:@{}];
+        NSDictionary *configDataDic = configData[@"ShortCut"]?:@{};
+        self.leftShortcutArray = [NSArray arrayWithArray:configDataDic[@"shortcut"]?:@[]];
+        
+        [self productConfigData:configData?:@{} switchBtn:self.leftSwitchBtn queckBtn:self.leftQuickBtn bleImageView:self.leftBluetoothIcon];
+        
+    }else if (type == TIoTDeviceTypeRight) {
+        
+        self.rightConfigData = [NSDictionary dictionaryWithDictionary:configData?:@{}];
+        NSDictionary *configDataDic = configData[@"ShortCut"]?:@{};
+        self.rightShortcutArray = [NSArray arrayWithArray:configDataDic[@"shortcut"]?:@[]];
+        
+        [self productConfigData:configData?:@{} switchBtn:self.rightSwitchBtn queckBtn:self.rightQuickBtn bleImageView:self.rightBluetoothIcon];
+    }
+}
+
+///MARK: 设置每个产品通用显示内容
 - (void)setCellConentWithDic:(NSDictionary *)dataDic withDirection:(TIoTDeviceType)type {
     
     if (type == TIoTDeviceTypeLeft) {
@@ -340,49 +399,13 @@ static CGFloat kWidthHeightScale = 330/276;
 
 - (void)clickLeftQuickBtn {
     if (self.clickQuickBtnBlock) {
-        self.clickQuickBtnBlock();
+        self.clickQuickBtnBlock(self.leftConfigData, self.leftShortcutArray);
     }
 }
 
 - (void)clickRightQuickBtn {
     if (self.clickQuickBtnBlock) {
-        self.clickQuickBtnBlock();
-    }
-}
-
-- (void)setIsHideLeftSwitch:(BOOL)isHideLeftSwitch {
-    _isHideLeftSwitch = isHideLeftSwitch;
-    if (self.isHideLeftSwitch == YES) {
-        self.leftSwitchBtn.hidden = YES;
-    }else {
-        self.leftSwitchBtn.hidden = NO;
-    }
-}
-
-- (void)setIsHideRightSwitch:(BOOL)isHideRightSwitch {
-    _isHideRightSwitch = isHideRightSwitch;
-    if (self.isHideRightSwitch == YES) {
-        self.rightSwitchBtn.hidden = YES;
-    }else {
-        self.rightSwitchBtn.hidden = NO;
-    }
-}
-
-- (void)setIsHideLeftShortcut:(BOOL)isHideLeftShortcut {
-    _isHideLeftShortcut = isHideLeftShortcut;
-    if (self.isHideLeftShortcut == YES) {
-        self.leftQuickBtn.hidden = YES;
-    }else {
-        self.leftQuickBtn.hidden = NO;
-    }
-}
-
-- (void)setIsHideRightShortcut:(BOOL)isHideRightShortcut {
-    _isHideRightShortcut = isHideRightShortcut;
-    if (self.isHideRightShortcut == YES) {
-        self.rightQuickBtn.hidden = YES;
-    }else {
-        self.rightQuickBtn.hidden = NO;
+        self.clickQuickBtnBlock(self.rightConfigData, self.rightShortcutArray);
     }
 }
 
@@ -411,6 +434,51 @@ static CGFloat kWidthHeightScale = 330/276;
     
     if (self.clickDeviceSwitchBlock) {
         self.clickDeviceSwitchBlock();
+    }
+}
+
+- (void)productConfigData:(NSDictionary *)configData switchBtn:(UIButton *)switchBtn queckBtn:(UIButton *)quickBtn bleImageView:(UIImageView *)bleIcon{
+
+    [self controlSwtichBtnHide:switchBtn withShortcutDic:configData?:@{}];
+    
+    [self controlQuickBtnHide:quickBtn withShortcutDic:configData?:@{}];
+    
+    [self controlBleIconHide:bleIcon withShortcutDic:configData?:@{}];
+}
+
+///MARK:用户判断是否显示快捷入口开关
+- (void)controlSwtichBtnHide:(UIButton *)switchBtn withShortcutDic:(NSDictionary *)configData {
+    
+    NSDictionary *shortcutDic = configData[@"ShortCut"]?:@{};
+    
+    if (![NSString isNullOrNilWithObject:shortcutDic[@"powerSwitch"]]) {
+        switchBtn.hidden = NO;
+    }else {
+        switchBtn.hidden = YES;
+    }
+    
+}
+
+///MARK:用户判断是否显示快捷入口
+- (void)controlQuickBtnHide:(UIButton *)quickBtn withShortcutDic:(NSDictionary *)configData{
+    
+    NSDictionary *shortcutDic = configData[@"ShortCut"]?:@{};
+    
+    NSArray *configArray = shortcutDic[@"shortcut"]?:@[];
+    if (configArray.count == 0) {
+        quickBtn.hidden = YES;
+    }else {
+        quickBtn.hidden = NO;
+    }
+}
+
+///MARK:用户判断是否是蓝牙设备，显示蓝牙标识icon
+- (void)controlBleIconHide:(UIImageView *)bleIcon withShortcutDic:(NSDictionary *)configData {
+    NSDictionary *bleCondigDataDic = configData[@"BleConfig"]?:@{};
+    if (bleCondigDataDic.allKeys.count == 0) {
+        bleIcon.hidden = YES;
+    }else {
+        bleIcon.hidden = NO;
     }
 }
 

@@ -346,11 +346,6 @@ static CGFloat kHeaderViewHeight = 162;
             }];
         }
         //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
-//        [self.deviceConfigArray removeAllObjects];
-//        for (int i = 0; i< self.dataArr.count; i++) {
-//            [self requestDeviceEquipmentWithProductID:i];
-//        }
-//        [self.devicesTableView reloadData];
         
         [self.deviceConfigArray removeAllObjects];
         NSMutableArray *productidArr = [NSMutableArray new];
@@ -376,10 +371,6 @@ static CGFloat kHeaderViewHeight = 162;
 //        [self.devicesTableView reloadData];
         
         //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
-//        [self.deviceConfigArray removeAllObjects];
-//        for (int i = 0; i< self.dataArr.count; i++) {
-//            [self requestDeviceEquipmentWithProductID:i];
-//        }
         
         [self.deviceConfigArray removeAllObjects];
         NSMutableArray *productidArr = [NSMutableArray new];
@@ -387,8 +378,8 @@ static CGFloat kHeaderViewHeight = 162;
             NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
             [productidArr addObject:productIDString];
         }
-        
         [self requestDeviceEquipmentWithProductID:productidArr];
+        
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
     
@@ -1083,22 +1074,40 @@ static CGFloat kHeaderViewHeight = 162;
 
 //MARK: 获取添加快捷入口的设备信息（是否显示开关，快捷项有多少）
 - (void)requestDeviceEquipmentWithProductID:(NSMutableArray *)IdArray {
-    
-//    NSString *productIDString = self.dataArr[indexPathRow][@"ProductId"] ?:@"";
 
     [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":IdArray?:@[]} success:^(id responseObject) {
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
             
-            for (int i= 0; i<data.count; i++) {
-                NSDictionary *config = [NSString jsonToObject:data[i][@"Config"]]?:@{};
-                NSDictionary *shortcutDic = config?:@{};
-                [self.deviceConfigArray addObject:shortcutDic];
+//            for (int i= 0; i<data.count; i++) {
+//                NSDictionary *config = [NSString jsonToObject:data[i][@"Config"]]?:@{};
+//                NSDictionary *shortcutDic = config?:@{};
+//                [self.deviceConfigArray addObject:shortcutDic];
+//            }
+            
+            //和devicesArray 组合方式一样，将源数据按照@[@{},@{}] 为一个cellItem重新组装
+            for (int i = 0; i < data.count; i+=2) {
+                
+                NSArray *itemArr = nil;
+                if (i+1 <= data.count-1) {
+                    NSDictionary *configLeft = [NSString jsonToObject:data[i][@"Config"]]?:@{};
+                    NSDictionary *shortcutDicLeft = configLeft?:@{};
+                    
+                    NSDictionary *configRight = [NSString jsonToObject:data[i+1][@"Config"]]?:@{};
+                    NSDictionary *shortcutDicRight = configRight?:@{};
+                    
+                    itemArr = @[shortcutDicLeft,shortcutDicRight];
+                }else {
+                    NSDictionary *configLeft = [NSString jsonToObject:data[i][@"Config"]]?:@{};
+                    NSDictionary *shortcutDicLeft = configLeft?:@{};
+                    itemArr = @[shortcutDicLeft];
+                }
+                
+                [self.deviceConfigArray addObject:itemArr];
+                
             }
             
-            if (self.deviceConfigArray.count == self.dataArr.count) {
-                [self.devicesTableView reloadData];
-            }
+            [self.devicesTableView reloadData];
         }
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
@@ -1212,40 +1221,9 @@ static CGFloat kHeaderViewHeight = 162;
             
         };
         
-        NSDictionary *configData = self.deviceConfigArray[indexPath.row]?:@{};
-        NSDictionary *shortcutDic = configData[@"ShortCut"]?:@{};
-
-        //标准面板
-        if (![NSString isNullOrNilWithObject:shortcutDic[@"powerSwitch"]]) {
-            if (indexPath.row%2 != 0) {
-                cell.isHideRightSwitch = NO;
-            }else {
-                cell.isHideLeftSwitch = NO;
-            }
-        }else {
-            if (indexPath.row%2 != 0) {
-                cell.isHideRightSwitch = YES;
-            }else {
-                cell.isHideLeftSwitch = YES;
-            }
-        }
-
-        NSArray *configArray = shortcutDic[@"shortcut"]?:@[];
-        if (configArray.count == 0) {
-            if (indexPath.row%2 != 0) {
-                cell.isHideRightShortcut = YES;
-            }else {
-                cell.isHideLeftShortcut = YES;
-            }
-        }else {
-            if (indexPath.row%2 != 0) {
-                cell.isHideRightShortcut = NO;
-            }else {
-                cell.isHideLeftShortcut = NO;
-            }
-        }
+        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
         
-        cell.clickQuickBtnBlock = ^{
+        cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
             
             NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
             //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
@@ -1265,7 +1243,7 @@ static CGFloat kHeaderViewHeight = 162;
             
             __weak typeof(self)weakSelf = self;
             TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
-            [shortcut shortcutViewData:configData?:@{} productId:weakSelf.dataArr[indexPath.row][@"ProductId"]?:@"" deviceDic:[weakSelf.dataArr[indexPath.row] mutableCopy] withDeviceName:deviceName shortcutArray:configArray];
+            [shortcut shortcutViewData:configData?:@{} productId:weakSelf.dataArr[indexPath.row][@"ProductId"]?:@"" deviceDic:[weakSelf.dataArr[indexPath.row] mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
             
             shortcut.moreFunctionBlock = ^{
                 
