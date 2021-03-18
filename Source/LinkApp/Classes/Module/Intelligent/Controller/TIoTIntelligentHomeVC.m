@@ -88,31 +88,6 @@
     [self.view addSubview:self.navCustomTopView];
 }
 
-#pragma mark - event
-- (void)addClick {
-    self.customSheet = [[TIoTCustomSheetView alloc]init];
-    [self.customSheet sheetViewTopTitleFirstTitle:NSLocalizedString(@"intelligent_manual", @"手动智能") secondTitle:NSLocalizedString(@"intelligent_auto", @"自动智能")];
-    __weak typeof(self)weakSelf = self;
-    self.customSheet.chooseIntelligentFirstBlock = ^{
-        //MARK: 跳转手动智能
-        TIoTAddManualIntelligentVC *addManualTask = [[TIoTAddManualIntelligentVC alloc]init];
-        [weakSelf.navigationController pushViewController:addManualTask animated:YES];
-        
-    };
-    self.customSheet.chooseIntelligentSecondBlock = ^{
-        //MARK: 跳转自动智能
-        TIoTAddAutoIntelligentVC *addAutoTask = [[TIoTAddAutoIntelligentVC alloc]init];
-        addAutoTask.paramDic = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"Offset":@(0),@"Limit":@(999)};
-        [weakSelf.navigationController pushViewController:addAutoTask animated:YES];
-    };
-    
-    [[UIApplication sharedApplication].delegate.window addSubview:self.customSheet];
-    [self.customSheet mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo([UIApplication sharedApplication].delegate.window);
-        make.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
-    }];
-}
-
 #pragma mark - lazy loading
 - (UIView *)navCustomTopView {
     if (!_navCustomTopView) {
@@ -120,16 +95,6 @@
         CGFloat kTopHeight = [TIoTUIProxy shareUIProxy].statusHeight;
         
         _navCustomTopView = [[UIView alloc]initWithFrame:CGRectMake(0, kTopHeight, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight - [TIoTUIProxy shareUIProxy].statusHeight)];
-        
-        UIButton *addActionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [addActionButton setImage:[UIImage imageNamed:@"homeAdd"] forState:UIControlStateNormal];
-        [addActionButton addTarget:self action:@selector(addClick) forControlEvents:UIControlEventTouchUpInside];
-        [_navCustomTopView addSubview:addActionButton];
-        [addActionButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.trailing.mas_equalTo(-13*kScreenAllWidthScale);
-            make.centerY.equalTo(_navCustomTopView.mas_centerY);
-            make.width.height.mas_equalTo(24);
-        }];
         
         
         UILabel *titleLab = [[UILabel alloc] init];
