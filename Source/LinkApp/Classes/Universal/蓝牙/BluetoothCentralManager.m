@@ -178,7 +178,7 @@
 }
 
 -(void)sendDataToBluetoothWith:(NSData *)data sendCharacteristic:(CBCharacteristic *)characteristic{
-    if(!characteristic){
+    if(characteristic){
         self.characteristic = characteristic;
         [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     }
@@ -494,10 +494,14 @@
     if (error) {
         [MBProgressHUD showError:NSLocalizedString(@"transferFailure", @"传输数据失败")];
     }
+    
+    WCLog(@"写入数据成功:%@",characteristic);
+    [peripheral readValueForCharacteristic:characteristic];
 }
 
 /// 获取到特征的值时回调 -- 获取回调数据
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    WCLog(@"特征UUID:%@，数据：%@", characteristic.UUID.UUIDString,characteristic.value);
     if (error) {
         WCLog(@"特征UUID:%@回调数据错误:%@", characteristic.UUID.UUIDString,error.localizedDescription);
         return;
@@ -539,6 +543,20 @@
         WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
         WCLog(@"%@", characteristic);
         //[self.centralManager cancelPeripheralConnection:peripheral];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    WCLog(@"特征描述(%@)",descriptor.description);
+}
+
+//发现外设的特征数组
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
+    WCLog(@"--->%@",characteristic);
+    // 读取特征数据
+    for (CBDescriptor *descriptor in characteristic.descriptors) {
+        WCLog(@"发现外设的特征descriptor(%@)",descriptor);
+        [peripheral readValueForDescriptor:descriptor];
     }
 }
 
