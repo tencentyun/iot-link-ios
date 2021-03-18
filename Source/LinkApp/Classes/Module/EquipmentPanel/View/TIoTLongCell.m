@@ -57,6 +57,7 @@
     _info = info;
     self.name.text = info[@"name"];
     
+    NSString *defaultKey = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]?:@""];
     NSDictionary *define = info[@"define"];
     if ([define[@"type"] isEqualToString:@"bool"]) {
         
@@ -67,7 +68,13 @@
         self.swich.hidden = NO;
         
 //        self.swich.on = [info[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
-        self.swich.on = [info[@"Value"] integerValue] == 0 ? NO : YES;
+        
+        if (![NSString isNullOrNilWithObject:defaultKey]) {
+            self.swich.on = [defaultKey integerValue] == 0 ? NO : YES;
+        }else {
+            self.swich.on = [info[@"Value"] integerValue] == 0 ? NO : YES;
+        }
+        
     }
     else
     {
@@ -78,8 +85,12 @@
         if ([define[@"type"] isEqualToString:@"enum"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_color"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 //            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]];
-            NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"]]?:@"";
-            self.content.text = define[@"mapping"][key];
+            if (![NSString isNullOrNilWithObject:defaultKey]) {
+                self.content.text = define[@"mapping"][defaultKey];
+            }else {
+                NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"]]?:@"";
+                self.content.text = define[@"mapping"][key];
+            }
             
             //trtc特殊判断逻辑
             NSString *infoid = info[@"id"];
@@ -94,7 +105,14 @@
         else if ([define[@"type"] isEqualToString:@"int"] || [define[@"type"] isEqualToString:@"float"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_light"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 //            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"] ?: @""];
-            NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"] ?: @""];
+            NSString *key = @"";
+            if (![NSString isNullOrNilWithObject:defaultKey]) {
+                key = [NSString stringWithFormat:@"%@",defaultKey];
+            }else {
+                key = [NSString stringWithFormat:@"%@",info[@"Value"] ?: @""];
+            }
+            
+            
             
             if ([info[@"id"]isEqualToString:@"Temperature"]) {
                 NSDictionary *userconfig = info[@"Userconfig"];
@@ -106,7 +124,13 @@
         }else { //结构体 数组 字符串 时间类  暂时数值不做处理
             [self.imgV setImage:[[UIImage imageNamed:@"c_light"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 //            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"] ?: @""];
-            NSString *key = [NSString stringWithFormat:@"%@",info[@"Value"] ?: @""];
+            NSString *key = @"";
+            
+            if (![NSString isNullOrNilWithObject:defaultKey]) {
+                key = [NSString stringWithFormat:@"%@",defaultKey];
+            }else {
+                key = [NSString stringWithFormat:@"%@",info[@"Value"] ?: @""];
+            }
             
             if ([info[@"id"]isEqualToString:@"Temperature"]) {
                 NSDictionary *userconfig = info[@"Userconfig"];

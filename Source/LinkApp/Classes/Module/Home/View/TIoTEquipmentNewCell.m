@@ -43,6 +43,24 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) NSArray *rightShortcutArray;
 @property (nonatomic, strong) NSDictionary *rightProductDataDic; //产品dic
 
+/**
+ * @[@{},@{}]; 左右各一个Dictionary
+ * 实现blcok需要传
+ */
+@property (nonatomic, strong) NSArray <NSDictionary *>*dataArray;
+
+/**
+ * 请求接口后每个产品的配置详情数据
+ * 实现blcok需要传
+ */
+@property (nonatomic, strong) NSArray <NSDictionary *>* deviceConfigDataArray;
+
+/**
+ * 选中的indexpath （每一行两device是同一个indexpath）
+ * 实现blcok需要传
+ */
+@property (nonatomic, strong) NSIndexPath *indexPatch;
+
 @end
 
 @implementation TIoTEquipmentNewCell
@@ -267,6 +285,22 @@ static CGFloat kWidthHeightScale = 330/276;
 
 #pragma mark - Public method
 
+- (void)setIndexPatch:(NSIndexPath *)indexPatch {
+    _indexPatch = indexPatch;
+}
+
+- (void)setCellDataArray:(NSArray<NSDictionary *> * _Nonnull)dataArray {
+    self.dataArray = dataArray;
+}
+
+- (void)setSelectIndexPatch:(NSIndexPath *)indexPatch {
+    self.indexPatch = indexPatch;
+}
+
+- (void)setDeviceConfigArray:(NSArray<NSDictionary *> * _Nonnull)deviceConfigDataArray {
+    self.deviceConfigDataArray = deviceConfigDataArray;
+}
+
 - (void)setDataArray:(NSArray *)dataArray {
     _dataArray = dataArray;
     
@@ -395,13 +429,15 @@ static CGFloat kWidthHeightScale = 330/276;
 
 - (void)clickLeftBtn {
     if (self.clickLeftDeviceBlock) {
-        self.clickLeftDeviceBlock();
+        NSInteger selectNumber = self.indexPatch.row*2;
+        self.clickLeftDeviceBlock([NSIndexPath indexPathForRow:selectNumber   inSection:self.indexPatch.section]);
     }
 }
 
 - (void)clickRightBtn {
     if (self.clickRightDeviceBlock) {
-        self.clickRightDeviceBlock();
+        NSInteger selectNumber = self.indexPatch.row*2 + 1;
+        self.clickRightDeviceBlock([NSIndexPath indexPathForRow:selectNumber   inSection:self.indexPatch.section]);
     }
 }
 

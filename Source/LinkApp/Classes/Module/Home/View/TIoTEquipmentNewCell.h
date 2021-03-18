@@ -10,15 +10,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^TIoTLeftDeviceBlock)(void);
-typedef void(^TIoTRightDeviceBlock)(void);
+typedef void(^TIoTLeftDeviceBlock)(NSIndexPath *leftIndexPath);
+typedef void(^TIoTRightDeviceBlock)(NSIndexPath *rightIndexPath);
 typedef void(^TIoTDeviceSwitchBlock)(void);
 typedef void(^TIoTQuickBtnBlcok)(NSDictionary *productData, NSDictionary *configData,NSArray *shortcutConfigArray);
 
 @interface TIoTEquipmentNewCell : UITableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView;
-@property (nonatomic, strong) NSArray <NSDictionary *>*dataArray; //@[@{},@{}]; 左右各一个Dictionary
-@property (nonatomic, strong) NSArray <NSDictionary *>* deviceConfigDataArray;//请求接口后每个产品的配置详情数据
+
+/// @[@{},@{}]; 左右各一个Dictionary
+/// @param dataArray cell 一行两个设备组成的数组
+- (void)setCellDataArray:(NSArray<NSDictionary *> * _Nonnull)dataArray;
+
+/// 请求接口后每个产品的配置详情数据
+/// @param deviceConfigDataArray 每个设备配置全部信息
+- (void)setDeviceConfigArray:(NSArray<NSDictionary *> * _Nonnull)deviceConfigDataArray;
+
+/// 选中的indexpath （每一行两device是同一个indexpath）
+/// @param indexPatch 用户选则的indexpath
+- (void)setSelectIndexPatch:(NSIndexPath *)indexPatch;
 
 @property (nonatomic, copy) TIoTLeftDeviceBlock clickLeftDeviceBlock;
 @property (nonatomic, copy) TIoTRightDeviceBlock clickRightDeviceBlock;

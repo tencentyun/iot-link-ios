@@ -1209,19 +1209,27 @@ static CGFloat kHeaderViewHeight = 162;
     }else {
         
         TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
-        cell.dataArray = self.devicesArray[indexPath.row];
+        
+        [cell setCellDataArray:self.devicesArray[indexPath.row]];
+        [cell setSelectIndexPatch:indexPath];
+//        cell.dataArray = self.devicesArray[indexPath.row];
+//        cell.indexPatch = indexPath;
+        
+        
         __weak typeof(self) weakSelf = self;
-        cell.clickLeftDeviceBlock = ^{
-            [weakSelf chooseDeviceWith:indexPath];
+        cell.clickLeftDeviceBlock = ^(NSIndexPath * _Nonnull leftIndexPath) {
+            [weakSelf chooseDeviceWith:leftIndexPath];
         };
-        cell.clickRightDeviceBlock = ^{
-            [weakSelf chooseDeviceWith:indexPath];
+        
+        cell.clickRightDeviceBlock = ^(NSIndexPath * _Nonnull rightIndexPath) {
+            [weakSelf chooseDeviceWith:rightIndexPath];
         };
+
         cell.clickDeviceSwitchBlock = ^{
             
         };
-        
-        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
+        [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
+//        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
         
         cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
             
@@ -1271,9 +1279,10 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (tableView == self.tableView) {
-        [self chooseDeviceWith:indexPath];
-    }
+//    if (tableView == self.tableView) {
+//        [self chooseDeviceWith:indexPath];
+//    }
+    //self.dataArr[indexPath.row]  对应原始数据源每个device的配置完整信息
 }
 
 - (void)chooseDeviceWith:(NSIndexPath *)indexPath {
