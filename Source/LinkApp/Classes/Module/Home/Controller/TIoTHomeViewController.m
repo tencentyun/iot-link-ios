@@ -116,17 +116,17 @@ static CGFloat kHeaderViewHeight = 162;
         if (self.currentFamilyId != nil) {
             [self getRoomList:self.currentFamilyId];
         }
-        
+
         //保持天气动画位置，跟随滚动区域是否显示
-        [self scrollViewDidScroll:self.tableView];
-        
+//        [self scrollViewDidScroll:self.tableView];
+
     }
-    
+
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
             [self getRoomList:self.currentFamilyId];
         }
-        
+
         //保持天气动画位置，跟随滚动区域是否显示
         [self scrollViewDidScroll:self.devicesTableView];
     }
