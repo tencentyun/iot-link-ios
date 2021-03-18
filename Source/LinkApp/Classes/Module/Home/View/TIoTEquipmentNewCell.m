@@ -26,8 +26,9 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIButton *leftQuickBtn;
 @property (nonatomic, strong) UIImageView *leftQuickIcon;
 @property (nonatomic, strong) UIImageView *leftBluetoothIcon;
-@property (nonatomic, strong) NSDictionary *leftConfigData;
+@property (nonatomic, strong) NSDictionary *leftConfigData;     //设备dic
 @property (nonatomic, strong) NSArray *leftShortcutArray;
+@property (nonatomic, strong) NSDictionary *leftProductDataDic; //产品dic
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
@@ -38,8 +39,9 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) UIButton *rightQuickBtn;
 @property (nonatomic, strong) UIImageView *rightQuickIcon;
 @property (nonatomic, strong) UIImageView *rightBluetoothIcon;
-@property (nonatomic, strong) NSDictionary *rightConfigData;
+@property (nonatomic, strong) NSDictionary *rightConfigData;     //设备dic
 @property (nonatomic, strong) NSArray *rightShortcutArray;
+@property (nonatomic, strong) NSDictionary *rightProductDataDic; //产品dic
 
 @end
 
@@ -309,7 +311,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }
 }
 
-///MARK: 设置每个产品差异性显示内容
+///MARK: 设置每个产品差异性显示内容(快捷功能、蓝牙)
 - (void)setConfigDataWithDic:(NSDictionary *)configData withDirection:(TIoTDeviceType)type {
     
     //标准面板
@@ -335,6 +337,9 @@ static CGFloat kWidthHeightScale = 330/276;
 - (void)setCellConentWithDic:(NSDictionary *)dataDic withDirection:(TIoTDeviceType)type {
     
     if (type == TIoTDeviceTypeLeft) {
+        
+        self.leftProductDataDic = [dataDic mutableCopy];
+        
         [self.leftDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
         
         NSString * alias = dataDic[@"AliasName"];
@@ -354,6 +359,9 @@ static CGFloat kWidthHeightScale = 330/276;
             self.leftWhiteMaskView.hidden = YES;
         }
     }else if (type == TIoTDeviceTypeRight) {
+        
+        self.rightProductDataDic = [dataDic mutableCopy];
+        
         [self.rightDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
         
         NSString * alias = dataDic[@"AliasName"];
@@ -399,13 +407,13 @@ static CGFloat kWidthHeightScale = 330/276;
 
 - (void)clickLeftQuickBtn {
     if (self.clickQuickBtnBlock) {
-        self.clickQuickBtnBlock(self.leftConfigData, self.leftShortcutArray);
+        self.clickQuickBtnBlock(self.leftProductDataDic, self.leftConfigData, self.leftShortcutArray);
     }
 }
 
 - (void)clickRightQuickBtn {
     if (self.clickQuickBtnBlock) {
-        self.clickQuickBtnBlock(self.rightConfigData, self.rightShortcutArray);
+        self.clickQuickBtnBlock(self.rightProductDataDic,self.rightConfigData, self.rightShortcutArray);
     }
 }
 

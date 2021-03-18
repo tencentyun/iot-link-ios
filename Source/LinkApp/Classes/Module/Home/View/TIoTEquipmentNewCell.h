@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^TIoTLeftDeviceBlock)(void);
 typedef void(^TIoTRightDeviceBlock)(void);
 typedef void(^TIoTDeviceSwitchBlock)(void);
-typedef void(^TIoTQuickBtnBlcok)(NSDictionary *configData,NSArray *shortcutConfigArray);
+typedef void(^TIoTQuickBtnBlcok)(NSDictionary *productData, NSDictionary *configData,NSArray *shortcutConfigArray);
 
 @interface TIoTEquipmentNewCell : UITableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView;

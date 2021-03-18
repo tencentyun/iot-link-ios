@@ -1223,14 +1223,14 @@ static CGFloat kHeaderViewHeight = 162;
         
         cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
         
-        cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
+        cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
             
-            NSArray *devIds = @[self.dataArr[indexPath.row][@"DeviceId"]];
+            NSArray *devIds = @[productData[@"DeviceId"]];
             //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
             [HXYNotice postHeartBeat:devIds];
             [HXYNotice addActivePushPost:devIds];
             
-            NSString * alias = self.dataArr[indexPath.row][@"AliasName"];
+            NSString * alias = productData[@"AliasName"];
             NSString *deviceName = @"";
             if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
                 
@@ -1238,22 +1238,22 @@ static CGFloat kHeaderViewHeight = 162;
                 
             } else {
                 
-                deviceName = self.dataArr[indexPath.row][@"DeviceName"];
+                deviceName = productData[@"DeviceName"];
             }
             
             __weak typeof(self)weakSelf = self;
             TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
-            [shortcut shortcutViewData:configData?:@{} productId:weakSelf.dataArr[indexPath.row][@"ProductId"]?:@"" deviceDic:[weakSelf.dataArr[indexPath.row] mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
+            [shortcut shortcutViewData:configData?:@{} productId:productData[@"ProductId"]?:@"" deviceDic:[productData mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
             
             shortcut.moreFunctionBlock = ^{
                 
                 //点击更多进入设备面板详情
                 TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
                 weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
-                vc.title = [NSString stringWithFormat:@"%@",weakSelf.dataArr[indexPath.row][@"AliasName"]];
-                vc.productId = weakSelf.dataArr[indexPath.row][@"ProductId"];
-                vc.deviceName = [NSString stringWithFormat:@"%@",weakSelf.dataArr[indexPath.row][@"DeviceName"]];
-                vc.deviceDic = [weakSelf.dataArr[indexPath.row] mutableCopy];
+                vc.title = [NSString stringWithFormat:@"%@",productData[@"AliasName"]];
+                vc.productId = productData[@"ProductId"];
+                vc.deviceName = [NSString stringWithFormat:@"%@",productData[@"DeviceName"]];
+                vc.deviceDic = [productData mutableCopy];
                 vc.isOwner = [weakSelf.currentFamilyRole integerValue] == 1;
                 vc.configData = configData?:@{};
                 [weakSelf.navigationController pushViewController:vc animated:YES];
