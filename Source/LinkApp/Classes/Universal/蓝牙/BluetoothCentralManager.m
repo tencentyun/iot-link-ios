@@ -540,6 +540,23 @@
         WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
         WCLog(@"%@", characteristic);
         [peripheral readValueForCharacteristic:characteristic];
+        
+        if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
+            
+            
+            NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+            NSString *macStr = [NSString macAddressWith:hexstr];
+            NSMutableArray *macArr = [NSMutableArray new];
+            NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+            for (NSString *hexUnit in tempArr) {
+                [macArr addObject:hexUnit];
+            }
+            //传递hex 2位一个字符串的数组
+            if ([self.delegate respondsToSelector:@selector(updateData:withCharacteristic:pheropheralUUID:serviceUUID:)]) {
+                [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:self.senderServiceUUID];
+            }
+        }
+        
         //[self.centralManager cancelPeripheralConnection:peripheral];
     }
 }

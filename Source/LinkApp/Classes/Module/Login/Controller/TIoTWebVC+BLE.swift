@@ -349,7 +349,7 @@ extension TIoTWebVC {
                                             
                                             let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
                                             
-                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
+//                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
                                             
                                         }
                                     }
