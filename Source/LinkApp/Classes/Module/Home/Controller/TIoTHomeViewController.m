@@ -1574,18 +1574,19 @@ static CGFloat kHeaderViewHeight = 162;
         [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.mas_equalTo(16);
             make.height.mas_equalTo(44);
-            make.width.lessThanOrEqualTo(@120);
+            make.width.lessThanOrEqualTo(@80);
             make.top.mas_equalTo([TIoTUIProxy shareUIProxy].statusHeight);
         }];
         
         UIImageView *imgv = [[UIImageView alloc] init];
-        imgv.image = [UIImage imageNamed:@"down_arrow"];
+        imgv.image = [[UIImage imageNamed:@"down_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        imgv.tintColor = [UIColor whiteColor];
         [_navView addSubview:imgv];
         [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(titleLab.mas_trailing);
             make.centerY.equalTo(titleLab);
-            make.trailing.lessThanOrEqualTo(titleLabel.mas_leading);
-            make.width.mas_equalTo(18);
+            make.trailing.lessThanOrEqualTo(titleLabel.mas_leading).offset(-20);
+            make.width.height.mas_equalTo(18);
         }];
         
         UIButton *cover = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1593,7 +1594,7 @@ static CGFloat kHeaderViewHeight = 162;
         [_navView addSubview:cover];
         [cover mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(titleLab.mas_leading);
-            make.trailing.equalTo(imgv.mas_trailing);
+            make.trailing.equalTo(imgv.mas_leading);
             make.top.equalTo(titleLab.mas_top);
             make.bottom.equalTo(titleLab.mas_bottom);
         }];
@@ -1649,7 +1650,8 @@ static CGFloat kHeaderViewHeight = 162;
         }];
         
         UIImageView *imgv = [[UIImageView alloc] init];
-        imgv.image = [UIImage imageNamed:@"down_arrow"];
+        imgv.image = [[UIImage imageNamed:@"down_arrow"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        imgv.tintColor = [UIColor whiteColor];
         [_navView2 addSubview:imgv];
         [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
 //            make.leading.equalTo(titleLab2.mas_trailing).offset(10);
@@ -1659,7 +1661,7 @@ static CGFloat kHeaderViewHeight = 162;
             make.leading.equalTo(titleLab2.mas_trailing);
             make.centerY.equalTo(titleLab2);
             make.trailing.lessThanOrEqualTo(titleLab.mas_leading);
-            make.width.mas_equalTo(18);
+            make.width.height.mas_equalTo(18);
         }];
         
         self.addBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
