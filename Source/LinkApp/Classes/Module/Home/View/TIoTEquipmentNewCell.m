@@ -29,6 +29,9 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) NSDictionary *leftConfigData;     //设备dic
 @property (nonatomic, strong) NSArray *leftShortcutArray;
 @property (nonatomic, strong) NSDictionary *leftProductDataDic; //产品dic
+@property (nonatomic, strong) NSString *leftProductId;
+@property (nonatomic, strong) NSString *leftDeviceName;
+@property (nonatomic, strong) NSString *leftDeviceId;
 
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIImageView *rightDeviceImage;
@@ -42,6 +45,11 @@ static CGFloat kWidthHeightScale = 330/276;
 @property (nonatomic, strong) NSDictionary *rightConfigData;     //设备dic
 @property (nonatomic, strong) NSArray *rightShortcutArray;
 @property (nonatomic, strong) NSDictionary *rightProductDataDic; //产品dic
+@property (nonatomic, strong) NSString *rightProductId;
+@property (nonatomic, strong) NSString *rightDeviceName;
+@property (nonatomic, assign) TIoTDeviceType deviceType;
+@property (nonatomic, strong) NSString *rightDeviceId;
+
 
 /**
  * @[@{},@{}]; 左右各一个Dictionary
@@ -84,6 +92,8 @@ static CGFloat kWidthHeightScale = 330/276;
 }
 
 - (void)setupUIViews {
+    
+    [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.contentView.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
@@ -285,10 +295,6 @@ static CGFloat kWidthHeightScale = 330/276;
 
 #pragma mark - Public method
 
-- (void)setIndexPatch:(NSIndexPath *)indexPatch {
-    _indexPatch = indexPatch;
-}
-
 - (void)setCellDataArray:(NSArray<NSDictionary *> * _Nonnull)dataArray {
     self.dataArray = dataArray;
     
@@ -336,51 +342,7 @@ static CGFloat kWidthHeightScale = 330/276;
     }
 }
 
-- (void)setDataArray:(NSArray *)dataArray {
-    _dataArray = dataArray;
-    
-//    /// 每个dataArray 只包含两个dictionary
-//
-//    if (dataArray.count%2 == 0) { //双数
-//        self.rightButton.hidden = NO;
-//
-//        NSDictionary *leftDic = dataArray[0];
-//        [self setCellConentWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
-//
-//        NSDictionary *rightDic = dataArray[1];
-//        [self setCellConentWithDic:rightDic withDirection:TIoTDeviceTypeRight];
-//
-//    }else { //单数 只有左边的
-//        self.rightButton.hidden = YES;
-//
-//        NSDictionary *leftDic = dataArray[0];
-//        [self setCellConentWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
-//    }
-    
-}
-
-- (void)setDeviceConfigDataArray:(NSArray<NSDictionary *> *)deviceConfigDataArray {
-    _deviceConfigDataArray = deviceConfigDataArray;
-    
-//    /// 每个dataArray 只包含两个dictionary
-//
-//    if (deviceConfigDataArray.count%2 == 0) { //双数
-//        self.rightButton.hidden = NO;
-//
-//        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
-//        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
-//
-//        NSDictionary *rightDic = deviceConfigDataArray[1]?:@{};
-//        [self setConfigDataWithDic:rightDic withDirection:TIoTDeviceTypeRight];
-//    }else { //单数 只有左边的
-//        self.rightButton.hidden = YES;
-//
-//        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
-//        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
-//    }
-}
-
-///MARK: 设置每个产品差异性显示内容(快捷功能、蓝牙)
+///MARK: 设置每个产品快捷入口显示内容(快捷功能)
 - (void)setConfigDataWithDic:(NSDictionary *)configData withDirection:(TIoTDeviceType)type {
     
     //标准面板
@@ -391,6 +353,8 @@ static CGFloat kWidthHeightScale = 330/276;
         self.leftShortcutArray = [NSArray arrayWithArray:configDataDic[@"shortcut"]?:@[]];
         
         [self productConfigData:configData?:@{} switchBtn:self.leftSwitchBtn queckBtn:self.leftQuickBtn bleImageView:self.leftBluetoothIcon];
+     
+        
         
     }else if (type == TIoTDeviceTypeRight) {
         
@@ -427,6 +391,22 @@ static CGFloat kWidthHeightScale = 330/276;
         } else { //在线
             self.leftWhiteMaskView.hidden = YES;
         }
+        
+        //下发数据用
+        NSString *deviceName = dataDic[@"DeviceName"]?:@"";
+        self.leftProductId = self.leftProductDataDic[@"ProductId"]?:@"";
+        self.leftDeviceName = @"";
+        if (deviceName && [deviceName isKindOfClass:[NSString class]] && deviceName.length > 0) {
+            self.leftDeviceName = deviceName;
+        }else {
+            self.leftDeviceName = self.leftProductDataDic[@"alias"]?:@"";
+        }
+        
+        self.leftDeviceId = self.leftProductDataDic[@"DeviceId"]?:@"";
+        
+        //用户显示switch
+        [self getDeviceDataWithProductId:dataDic[@"ProductId"]?:@"" anddeviceName:dataDic[@"DeviceName"]?:@"" withDir:TIoTDeviceTypeLeft];
+        
     }else if (type == TIoTDeviceTypeRight) {
         
         self.rightProductDataDic = [dataDic mutableCopy];
@@ -444,11 +424,25 @@ static CGFloat kWidthHeightScale = 330/276;
             self.rightDeviceNameLabel.text = dataDic[@"DeviceName"];
         }
         
+        //下发数据用
+        NSString *deviceName = dataDic[@"DeviceName"]?:@"";
+        self.rightProductId = self.rightProductDataDic[@"ProductId"]?:@"";
+        self.rightDeviceName = @"";
+        if (deviceName && [deviceName isKindOfClass:[NSString class]] && deviceName.length > 0) {
+            self.rightDeviceName = deviceName;
+        }else {
+            self.rightDeviceName = self.rightProductDataDic[@"alias"]?:@"";
+        }
+        self.rightDeviceId = self.rightProductDataDic[@"DeviceId"]?:@"";
+        
         if ([dataDic[@"Online"] integerValue] == 0) {  //离线
             self.rightWhiteMaskView.hidden = NO;
         } else { //在线
             self.rightWhiteMaskView.hidden = YES;
         }
+        
+        //用户显示switch
+        [self getDeviceDataWithProductId:dataDic[@"ProductId"]?:@"" anddeviceName:dataDic[@"DeviceName"]?:@"" withDir:TIoTDeviceTypeRight];
     }
     
 }
@@ -490,30 +484,40 @@ static CGFloat kWidthHeightScale = 330/276;
 
 - (void)clickLeftSwitch:(UIButton *)leftSwitch {
     
+    self.deviceType = TIoTDeviceTypeLeft;
+    
     if (!leftSwitch.selected) {
         self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+        [self reportLeftDeviceData:@{@"power_switch":@(1)}];
     }else {
         self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+        [self reportLeftDeviceData:@{@"power_switch":@(0)}];
     }
     leftSwitch.selected = !leftSwitch.selected;
     
-    if (self.clickDeviceSwitchBlock) {
-        self.clickDeviceSwitchBlock();
-    }
+    
+//    if (self.clickDeviceSwitchBlock) {
+//        self.clickDeviceSwitchBlock();
+//    }
+    
 }
 
 - (void)clickRightSwitch:(UIButton *)rightSwitch {
     
+    self.deviceType = TIoTDeviceTypeRight;
+    
     if (!rightSwitch.selected) {
         self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+        [self reportRightDeviceData:@{@"power_switch":@(1)}];
     }else {
         self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+        [self reportRightDeviceData:@{@"power_switch":@(0)}];
     }
     rightSwitch.selected = !rightSwitch.selected;
     
-    if (self.clickDeviceSwitchBlock) {
-        self.clickDeviceSwitchBlock();
-    }
+//    if (self.clickDeviceSwitchBlock) {
+//        self.clickDeviceSwitchBlock();
+//    }
 }
 
 - (void)productConfigData:(NSDictionary *)configData switchBtn:(UIButton *)switchBtn queckBtn:(UIButton *)quickBtn bleImageView:(UIImageView *)bleIcon{
@@ -559,6 +563,112 @@ static CGFloat kWidthHeightScale = 330/276;
     }else {
         bleIcon.hidden = NO;
     }
+}
+    
+#pragma mark - 上报 下发数据
+//左侧下发数据
+- (void)reportLeftDeviceData:(NSDictionary *)deviceReport {
+    
+    NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
+    NSDictionary *tmpDic = @{
+                                @"ProductId":self.leftProductId,
+                                @"DeviceName":self.leftDeviceName,
+//                                @"Data":[NSString objectToJson:deviceReport],
+                                @"Data":[NSString objectToJson:trtcReport]
+                            };
+    
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+//右侧下发数据
+- (void)reportRightDeviceData:(NSDictionary *)deviceReport {
+    NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
+    NSDictionary *tmpDic = @{
+                                @"ProductId":self.rightProductId,
+                                @"DeviceName":self.rightDeviceName,
+//                                @"Data":[NSString objectToJson:deviceReport],
+                                @"Data":[NSString objectToJson:trtcReport]
+                            };
+    
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+//收到上报
+- (void)deviceReport:(NSNotification *)notification{
+    NSDictionary *dic = notification.userInfo;
+    
+    NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
+    if ([payloadDic.allKeys containsObject:@"params"]) {
+        
+        NSDictionary *paramsDic = payloadDic[@"params"];
+        NSString *receiveDeviceID = dic[@"DeviceId"]?:@"";
+        NSString *switchBtnStatus = [NSString stringWithFormat:@"%@",paramsDic[@"power_switch"]?:@""];
+        
+        if (![NSString isNullOrNilWithObject:receiveDeviceID]) {
+            if (self.deviceType == TIoTDeviceTypeRight) {
+                
+                if ([receiveDeviceID isEqualToString:self.rightDeviceId]) {
+                    //在此刷新按钮状态
+                    
+                    if (![NSString isNullOrNilWithObject:switchBtnStatus]) {
+                        
+                        if (switchBtnStatus.intValue) {
+                            self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+                        }else {
+                            self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+                        }
+                    }
+                }
+                
+            }else if (self.deviceType == TIoTDeviceTypeLeft)  {
+                if ([receiveDeviceID isEqualToString:self.leftDeviceId]) {
+                    
+                    if (![NSString isNullOrNilWithObject:switchBtnStatus]) {
+                        if (switchBtnStatus.intValue) {
+                            self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+                        }else {
+                            self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)getDeviceDataWithProductId:(NSString *)productId anddeviceName:(NSString *)deviceName withDir:(TIoTDeviceType)type {
+
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":productId?:@"",@"DeviceName":deviceName?:@""} success:^(id responseObject) {
+        NSString *tmpStr = (NSString *)responseObject[@"Data"];
+        NSDictionary *tmpDic = [NSString jsonToObject:tmpStr]?:@{};
+        
+        NSDictionary *dic = tmpDic[@"power_switch"]?:@{};
+        NSString *status = [NSString stringWithFormat:@"%@",dic[@"Value"]?:@""];
+        if (status.intValue == 1) {
+            if (type == TIoTDeviceTypeLeft) {
+                self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+            }else {
+                self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnon"];
+            }
+        }else {
+            if (type == TIoTDeviceTypeLeft) {
+                self.leftSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+            }else {
+                self.rightSwitchIcon.image = [UIImage imageNamed:@"device_turnoff"];
+            }
+        }
+        
+        [self.contentView reloadInputViews];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+    }];
 }
 
 - (void)awakeFromNib {

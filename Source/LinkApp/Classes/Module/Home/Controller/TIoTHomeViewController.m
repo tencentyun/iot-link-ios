@@ -1218,10 +1218,7 @@ static CGFloat kHeaderViewHeight = 162;
         cell.clickRightDeviceBlock = ^(NSIndexPath * _Nonnull rightIndexPath) {
             [weakSelf chooseDeviceWith:rightIndexPath];
         };
-
-        cell.clickDeviceSwitchBlock = ^{
-            
-        };
+        
         [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
 //        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
         

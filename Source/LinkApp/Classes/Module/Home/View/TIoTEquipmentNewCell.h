@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^TIoTLeftDeviceBlock)(NSIndexPath *leftIndexPath);
 typedef void(^TIoTRightDeviceBlock)(NSIndexPath *rightIndexPath);
-typedef void(^TIoTDeviceSwitchBlock)(void);
+//typedef void(^TIoTDeviceSwitchBlock)(void);
 typedef void(^TIoTQuickBtnBlcok)(NSDictionary *productData, NSDictionary *configData,NSArray *shortcutConfigArray);
 
 @interface TIoTEquipmentNewCell : UITableViewCell
@@ -32,7 +32,7 @@ typedef void(^TIoTQuickBtnBlcok)(NSDictionary *productData, NSDictionary *config
 
 @property (nonatomic, copy) TIoTLeftDeviceBlock clickLeftDeviceBlock;
 @property (nonatomic, copy) TIoTRightDeviceBlock clickRightDeviceBlock;
-@property (nonatomic, copy) TIoTDeviceSwitchBlock clickDeviceSwitchBlock; //设备开关
+//@property (nonatomic, copy) TIoTDeviceSwitchBlock clickDeviceSwitchBlock; //设备按钮开关
 @property (nonatomic, copy) TIoTQuickBtnBlcok clickQuickBtnBlock;         //设备快捷按钮
 
 @end

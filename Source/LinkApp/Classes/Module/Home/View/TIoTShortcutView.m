@@ -421,34 +421,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 //下发数据
 - (void)reportDeviceData:(NSDictionary *)deviceReport {
     
-    //在这里都是主动呼叫，不存在被动
-    NSString *key = self.reportData[@"id"];
-//    NSNumber *statusValue = self.reportData[@"status"][@"Value"];
-    
-    if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"-1"]) {
-        NSLog(@"--!!-%@---",[TIoTCoreUserManage shared].sys_call_status);
-        if ([key isEqualToString:@"_sys_audio_call_status"]) {
-            if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
-                [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self];
-                return;
-            }
-        }else if ([key isEqualToString:@"_sys_video_call_status"]) {
-            if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
-                [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self];
-                return;
-            }
-        }
-    }
-    
     NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
-    NSString *userId = [TIoTCoreUserManage shared].userId;
-    if (userId) {
-        [trtcReport setValue:userId forKey:@"_sys_userid"];
-    }
-    NSString *username = [TIoTCoreUserManage shared].nickName;
-    if (username) {
-        [trtcReport setValue:username forKey:@"username"];
-    }
     
     NSDictionary *tmpDic = @{
                                 @"ProductId":self.productId,
@@ -461,32 +434,6 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
-    
-    //主动呼叫，开始拨打
-    TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
-    BOOL isTRTCDevice = NO;
-    for (NSString *prototype in deviceReport.allKeys) {
-        
-        NSString *protoValue = deviceReport[prototype];
-        if ([prototype isEqualToString:TIoTTRTCaudio_call_status] || [prototype isEqualToString:TIoTTRTCvideo_call_status]) {
-         
-            if (protoValue.intValue == 1) {
-                isTRTCDevice = YES;
-                
-                if ([prototype isEqualToString:TIoTTRTCaudio_call_status]) {
-                    audioORvideo = TIoTTRTCSessionCallType_audio;
-                }else {
-                    audioORvideo = TIoTTRTCSessionCallType_video;
-                }
-                break;
-            }
-        }
-    }
-    if (isTRTCDevice) {
-        
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
-        
-    }
 }
 
 //收到上报
@@ -494,24 +441,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     NSDictionary *dic = notification.userInfo;
     [self.deviceInfo handleShortcutReportDeveic:dic];
     
-//    [self reloadForBig];
     [self.collectionView reloadData];
-    
-    
-    NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
-    NSLog(@"----6666---%@",payloadDic);
-    NSLog(@"----7777---%@",[TIoTCoreUserManage shared].userId);
-    
-    if ([payloadDic.allKeys containsObject:@"params"]) {
-        NSDictionary *paramsDic = payloadDic[@"params"];
-        self.reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
-        if (paramsDic[@"_sys_audio_call_status"]) {
-            [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_audio_call_status;
-        }else if (paramsDic[@"_sys_video_call_status"]) {
-            [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_video_call_status;
-        }
-    }
-    
     
 }
 
