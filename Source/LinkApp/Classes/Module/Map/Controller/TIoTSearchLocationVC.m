@@ -213,46 +213,35 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
 - (void)getInputAddressCoordinateWithString:(NSString *)addressString
 {
     
-    TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-
-    NSString *urlString = [NSString stringWithFormat:@"%@%@&key=%@",MapSDKAddressParseURL,addressString?:@"",model.TencentMapSDKValue];
-
-    NSString *urlEncoded = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-    [[TIoTRequestObject shared] get:urlEncoded isNormalRequest:YES success:^(id responseObject) {
-        TIoTAddressParseModel *addressModel = [TIoTAddressParseModel yy_modelWithJSON:responseObject[@"result"]];
-        
-        self.addressLocation = CLLocationCoordinate2DMake(addressModel.location.lat,addressModel.location.lng);
-
-        //刷新地点列表
-        [self resetRequestPragma];
-        [self requestLocationList:self.addressLocation];
-    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-    }];
+    //刷新地点列表
+    [self resetRequestPragma];
+    [self requestLocationList:addressString];
 }
 
 - (void)loadMoreData {
     
-    [self requestLocationList:self.addressLocation];
+    [self requestLocationList:self.inputAddress];
 }
 
-- (void)requestLocationList:(CLLocationCoordinate2D )location {
+- (void)requestLocationList:(NSString *)inputContentString {
     
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     
-    NSString *locationString = [NSString stringWithFormat:@"%f,%f",location.latitude,location.longitude];
+    NSString *urlString = [NSString stringWithFormat:@"%@region=%@&keyword=%@&key=%@",MapSDKSearchAddressURL,@"",inputContentString?:@"",model.TencentMapSDKValue];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%@&get_poi=1&key=%@&poi_options=address_format=short;page_size=%ld;page_index=%ld",MapSDKLocationParseURL,locationString,model.TencentMapSDKValue,(long)self.offset,(long)self.pageNumber];
-    [[TIoTRequestObject shared] get:urlString isNormalRequest:YES success:^(id responseObject) {
-        TIoTMapLocationModel *locationModel = [TIoTMapLocationModel yy_modelWithJSON:responseObject[@"result"]];
+    NSString *urlEncoded = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    [[TIoTRequestObject shared] get:urlEncoded isNormalRequest:YES success:^(id responseObject) {
         
-        [self endRefresh:YES total:[locationModel.poi_count integerValue]];
-        [self.dataArray addObjectsFromArray:locationModel.pois];
+        TIoTMapLocationModel *locationModel = [TIoTMapLocationModel yy_modelWithJSON:responseObject];
         
+        [self endRefresh:YES total:[locationModel.count?:@"0" integerValue]];
+        [self.dataArray addObjectsFromArray:locationModel.data];
+
         if (self.inputAddress.length == 0) {
             self.historyEmptyLabel.hidden = NO;
             self.searchEmptyLable.hidden = YES;
-            
+
         }else {
             if (self.dataArray.count == 0) {
                 self.searchEmptyLable.hidden = NO;
@@ -261,7 +250,7 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
             }
             self.historyEmptyLabel.hidden = YES;
         }
-        
+
         [self.tableView reloadData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         [self.tableView.mj_footer endRefreshing];

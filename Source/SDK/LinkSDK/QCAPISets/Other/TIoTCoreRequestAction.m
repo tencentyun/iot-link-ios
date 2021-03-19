@@ -147,6 +147,7 @@ NSString *const H5Evaluation = @"evaluation";//评测
 //腾讯地图
 NSString *const MapSDKLocationParseURL = @"https://apis.map.qq.com/ws/geocoder/v1/?location=";//腾讯逆地址解析(get)
 NSString *const MapSDKAddressParseURL = @"https://apis.map.qq.com/ws/geocoder/v1/?address=";// 地址解析
+NSString *const MapSDKSearchAddressURL = @"https://apis.map.qq.com/ws/place/v1/suggestion/?";//地点搜索
 
 //===============用户协议、隐私协议链接
 

@@ -155,6 +155,7 @@ FOUNDATION_EXPORT NSString *const H5Evaluation;//评测
 //腾讯地图
 FOUNDATION_EXPORT NSString *const MapSDKLocationParseURL;//腾讯逆地址解析(get)
 FOUNDATION_EXPORT NSString *const MapSDKAddressParseURL;//地址解析
+FOUNDATION_EXPORT NSString *const MapSDKSearchAddressURL;//地点搜索
 
 //===============用户协议、隐私协议链接
 FOUNDATION_EXPORT NSString *const ServiceProtocolURl;//用户协议

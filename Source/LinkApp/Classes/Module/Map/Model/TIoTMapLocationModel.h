@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) TIoTADInfoModel *ad_info;
 @property (nonatomic, copy) NSString *poi_count;
 @property (nonatomic, strong) NSArray <TIoTPoisModel *>*pois;
+@property (nonatomic, strong) NSArray <TIoTPoisModel *>*data;
+@property (nonatomic, copy) NSString *count;
 @end
 
 
@@ -68,6 +70,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) TIoTADInfoModel *ad_info;
 @property (nonatomic, copy) NSString *_distance;
 @property (nonatomic, copy) NSString *_dir_desc;
+//关键字输入提示
+@property (nonatomic, copy) NSString *district;
+@property (nonatomic, copy) NSString *city;
+@property (nonatomic, copy) NSString *province;
+@property (nonatomic, copy) NSString *adcode;
+@property (nonatomic, copy) NSString *type;
 @end
 
 NS_ASSUME_NONNULL_END

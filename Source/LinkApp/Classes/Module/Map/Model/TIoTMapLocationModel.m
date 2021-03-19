@@ -11,6 +11,7 @@
 @implementation TIoTMapLocationModel
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"pois":[TIoTPoisModel class],
+             @"data":[TIoTPoisModel class],
              @"location":[TIoTLocationModel class],
              @"formatted_addresses":[TIoTAddressModel class],
              @"address_component":[TIoTAddressComponentModel class],

@@ -95,7 +95,7 @@
 - (void)setLocationModel:(TIoTPoisModel *)locationModel {
     _locationModel = locationModel;
     self.addressTitleLabel.text = locationModel.title;
-    self.addressDetailLabel.text =  [NSString stringWithFormat:@"%@%@%@%@",locationModel.ad_info.province,locationModel.ad_info.city,locationModel.ad_info.district,locationModel.address];
+    self.addressDetailLabel.text =  [NSString stringWithFormat:@"%@%@%@%@",locationModel.ad_info.province?:@"",locationModel.ad_info.city?:@"",locationModel.ad_info.district?:@"",locationModel.address?:@""];
 }
 
 - (void)setIsChoosed:(BOOL)isChoosed {
