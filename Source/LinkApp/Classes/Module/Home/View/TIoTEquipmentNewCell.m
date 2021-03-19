@@ -183,7 +183,7 @@ static CGFloat kWidthHeightScale = 330/276;
     self.leftWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     [self.leftButton addSubview:self.leftWhiteMaskView];
     [self.leftWhiteMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.leftWhiteMaskView);
+        make.left.right.top.bottom.equalTo(self.leftButton);
     }];
     self.leftWhiteMaskView.hidden = YES;
     
@@ -291,18 +291,6 @@ static CGFloat kWidthHeightScale = 330/276;
 
 - (void)setCellDataArray:(NSArray<NSDictionary *> * _Nonnull)dataArray {
     self.dataArray = dataArray;
-}
-
-- (void)setSelectIndexPatch:(NSIndexPath *)indexPatch {
-    self.indexPatch = indexPatch;
-}
-
-- (void)setDeviceConfigArray:(NSArray<NSDictionary *> * _Nonnull)deviceConfigDataArray {
-    self.deviceConfigDataArray = deviceConfigDataArray;
-}
-
-- (void)setDataArray:(NSArray *)dataArray {
-    _dataArray = dataArray;
     
     /// 每个dataArray 只包含两个dictionary
     
@@ -321,11 +309,14 @@ static CGFloat kWidthHeightScale = 330/276;
         NSDictionary *leftDic = dataArray[0];
         [self setCellConentWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
     }
-    
 }
 
-- (void)setDeviceConfigDataArray:(NSArray<NSDictionary *> *)deviceConfigDataArray {
-    _deviceConfigDataArray = deviceConfigDataArray;
+- (void)setSelectIndexPatch:(NSIndexPath *)indexPatch {
+    self.indexPatch = indexPatch;
+}
+
+- (void)setDeviceConfigArray:(NSArray<NSDictionary *> * _Nonnull)deviceConfigDataArray {
+    self.deviceConfigDataArray = deviceConfigDataArray;
     
     /// 每个dataArray 只包含两个dictionary
 
@@ -343,6 +334,50 @@ static CGFloat kWidthHeightScale = 330/276;
         NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
         [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
     }
+}
+
+- (void)setDataArray:(NSArray *)dataArray {
+    _dataArray = dataArray;
+    
+//    /// 每个dataArray 只包含两个dictionary
+//
+//    if (dataArray.count%2 == 0) { //双数
+//        self.rightButton.hidden = NO;
+//
+//        NSDictionary *leftDic = dataArray[0];
+//        [self setCellConentWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+//
+//        NSDictionary *rightDic = dataArray[1];
+//        [self setCellConentWithDic:rightDic withDirection:TIoTDeviceTypeRight];
+//
+//    }else { //单数 只有左边的
+//        self.rightButton.hidden = YES;
+//
+//        NSDictionary *leftDic = dataArray[0];
+//        [self setCellConentWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+//    }
+    
+}
+
+- (void)setDeviceConfigDataArray:(NSArray<NSDictionary *> *)deviceConfigDataArray {
+    _deviceConfigDataArray = deviceConfigDataArray;
+    
+//    /// 每个dataArray 只包含两个dictionary
+//
+//    if (deviceConfigDataArray.count%2 == 0) { //双数
+//        self.rightButton.hidden = NO;
+//
+//        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
+//        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+//
+//        NSDictionary *rightDic = deviceConfigDataArray[1]?:@{};
+//        [self setConfigDataWithDic:rightDic withDirection:TIoTDeviceTypeRight];
+//    }else { //单数 只有左边的
+//        self.rightButton.hidden = YES;
+//
+//        NSDictionary *leftDic = deviceConfigDataArray[0]?:@{};
+//        [self setConfigDataWithDic:leftDic withDirection:TIoTDeviceTypeLeft];
+//    }
 }
 
 ///MARK: 设置每个产品差异性显示内容(快捷功能、蓝牙)
@@ -387,7 +422,7 @@ static CGFloat kWidthHeightScale = 330/276;
             self.leftDeviceNameLabel.text = dataDic[@"DeviceName"];
         }
         
-        if ([dataDic[@"Online"] integerValue] == 1) {  //离线
+        if ([dataDic[@"Online"] integerValue] == 0) {  //离线
             self.leftWhiteMaskView.hidden = NO;
         } else { //在线
             self.leftWhiteMaskView.hidden = YES;
@@ -409,7 +444,7 @@ static CGFloat kWidthHeightScale = 330/276;
             self.rightDeviceNameLabel.text = dataDic[@"DeviceName"];
         }
         
-        if ([dataDic[@"Online"] integerValue] == 1) {  //离线
+        if ([dataDic[@"Online"] integerValue] == 0) {  //离线
             self.rightWhiteMaskView.hidden = NO;
         } else { //在线
             self.rightWhiteMaskView.hidden = YES;
