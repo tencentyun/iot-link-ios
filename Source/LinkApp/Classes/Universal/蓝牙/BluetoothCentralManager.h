@@ -62,7 +62,7 @@
 /**
  设置最大阈值 分段给蓝牙发送数据
  */
-- (void)writeDataToBluetoothWith:(NSString *)context sendCharacteristic:(CBCharacteristic *)characteristic;
+- (void)writeDataToBluetoothWith:(NSString *)context sendCharacteristic:(CBCharacteristic *)characteristic serviceUUID:(NSString *)serviceUUID;
 
 /**
  设置蓝牙最大传输单元

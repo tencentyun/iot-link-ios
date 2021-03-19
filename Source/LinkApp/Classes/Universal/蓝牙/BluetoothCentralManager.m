@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong,readwrite) CBService *notifiService;
 
+@property (nonatomic, strong) NSString *senderServiceUUID;
+
 /** 特征z */
 @property (nonatomic, strong) CBCharacteristic *characteristic;
 
@@ -148,7 +150,9 @@
 }
 
 //MARK:设置最大阈值 分段给蓝牙发送数据
-- (void)writeDataToBluetoothWith:(NSString *)context sendCharacteristic:(CBCharacteristic *)characteristic {
+- (void)writeDataToBluetoothWith:(NSString *)context sendCharacteristic:(CBCharacteristic *)characteristic serviceUUID:(NSString *)serviceUUID{
+    
+    self.senderServiceUUID = serviceUUID;
     
     NSData *data = [NSString convertHexStrToData:context?:@""];
     
@@ -493,6 +497,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         [MBProgressHUD showError:NSLocalizedString(@"transferFailure", @"传输数据失败")];
+        return;
     }
     
     WCLog(@"写入数据成功:%@",characteristic);
@@ -507,28 +512,20 @@
         return;
     }
     
-//    self.characteristic = characteristic;
-//    NSString * str  =[[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     
-    if (self.notifiPeripheral.identifier.UUIDString == peripheral.identifier.UUIDString) {
-        for (CBService * serviceDev in peripheral.services) {
-            if (serviceDev.UUID.UUIDString == self.notifiService.UUID.UUIDString) {
-                if (self.characteristic.UUID.UUIDString == characteristic.UUID.UUIDString) {
-                    NSString *hexstr = [NSString transformStringWithData:characteristic.value];
-                    NSString *macStr = [NSString macAddressWith:hexstr];
-                    NSMutableArray *macArr = [NSMutableArray new];
-                    NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
-                    for (NSString *hexUnit in tempArr) {
-                        [macArr addObject:hexUnit];
-                    }
-                    
-                    //传递hex 2位一个字符串的数组
-                    if ([self.delegate respondsToSelector:@selector(updateData:withCharacteristic:pheropheralUUID:serviceUUID:)]) {
-//                        [self.delegate updateData:macArr withCharacteristic:characteristic];
-                        [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:serviceDev.UUID.UUIDString];
-                    }
-                }
-            }
+    if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
+        
+        
+        NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+        NSString *macStr = [NSString macAddressWith:hexstr];
+        NSMutableArray *macArr = [NSMutableArray new];
+        NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+        for (NSString *hexUnit in tempArr) {
+            [macArr addObject:hexUnit];
+        }
+        //传递hex 2位一个字符串的数组
+        if ([self.delegate respondsToSelector:@selector(updateData:withCharacteristic:pheropheralUUID:serviceUUID:)]) {
+            [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:self.senderServiceUUID];
         }
     }
     WCLog(@"特征UUID:%@，数据：%@", characteristic.UUID.UUIDString,characteristic.value);
@@ -542,6 +539,7 @@
     } else {
         WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
         WCLog(@"%@", characteristic);
+        [peripheral readValueForCharacteristic:characteristic];
         //[self.centralManager cancelPeripheralConnection:peripheral];
     }
 }

@@ -413,7 +413,8 @@ extension TIoTWebVC {
                                         if characteristicId as! String == characteristicUUID {
                                             
                                             if let value = messBody["value"] as? String {
-                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem)
+//                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem)
+                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem, serviceUUID: serviceId)
                                             }
                                             
                                         }
@@ -549,7 +550,8 @@ extension TIoTWebVC {
     @objc public func bleCharacteristicValueChange(characteristicDic:Dictionary<String,Any>) {
        
         let blueParm: Dictionary<String, Any> = [
-            "name": characteristicDic
+            "name": "bleCharacteristicValueChange",
+            "payload":characteristicDic
         ]
         self.webViewInvokeJavaScript(blueParm, port: "emitEvent")
     }
