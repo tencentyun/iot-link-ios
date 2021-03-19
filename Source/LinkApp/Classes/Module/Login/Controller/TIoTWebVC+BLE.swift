@@ -257,7 +257,7 @@ extension TIoTWebVC {
                                     if  characteristicUUID.count == 4 {
                                         characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
                                     }else {
-                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                     }
                                     
                                     let characterDic:[String:Any] = ["properties":["notify":propertiesItem == CBCharacteristicProperties.notify,"write":propertiesItem == CBCharacteristicProperties.write,"indicate":propertiesItem == CBCharacteristicProperties.indicate,"read":propertiesItem == CBCharacteristicProperties.read],
@@ -328,7 +328,7 @@ extension TIoTWebVC {
                                     if  characteristicUUID.count == 4 {
                                         characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
                                     }else {
-                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                     }
                                     
                                     if let  characteristicId = messBody["characteristicId"]{
@@ -406,7 +406,7 @@ extension TIoTWebVC {
                                     if  characteristicUUID.count == 4 {
                                         characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
                                     }else {
-                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                     }
                                     
                                     if let  characteristicId = messBody["characteristicId"]{
@@ -480,13 +480,30 @@ extension TIoTWebVC {
                                         if characteristicId as! String == characteristicUUID {
                                             
                                             if let value = messBody["state"] as? Bool {
-                                                if characteristicItem.properties == CBCharacteristicProperties.notify {
+//                                                if characteristicItem.properties == CBCharacteristicProperties.notify {
                                                     blue?.deviceServicePeripheral.setNotifyValue(value, for: characteristicItem)
                                                     blue?.notififation(with: deviceServicePeripheral, service: serviceItem)
                                                     
+//                                                }
+                                                
+                                            }
+                                            
+                                            var macArr = Array<String>()
+                                            
+                                            if let value = characteristicItem.value {
+                                                 let hexstr = self.transformString(with: value)
+                                                let macStr = self.macAddress(with: hexstr)
+                                                
+                                                let tempArr = macStr.components(separatedBy: ":")
+                                                for hexUnit:String in tempArr {
+                                                    macArr.append(hexUnit)
                                                 }
                                                 
                                             }
+                                            
+                                            let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
+                                            
+                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
                                         }
                                     }
 
