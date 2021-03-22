@@ -473,7 +473,7 @@ extension TIoTWebVC {
                                     if  characteristicUUID.count == 4 {
                                         characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
                                     }else {
-                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                     }
                                     
                                     if let  characteristicId = messBody["characteristicId"]{
