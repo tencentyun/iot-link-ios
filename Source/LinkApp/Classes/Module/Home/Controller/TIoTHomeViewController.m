@@ -124,7 +124,8 @@ static CGFloat kHeaderViewHeight = 162;
 
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
-            [self getRoomList:self.currentFamilyId];
+            [self getRoomList:[TIoTCoreUserManage shared].familyId];
+            [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
         }
 
         //保持天气动画位置，跟随滚动区域是否显示

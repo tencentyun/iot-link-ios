@@ -25,6 +25,7 @@ class TIoTWeatherVC: NSObject {
     
     @objc func switchWeatherAnimation(jsName: String) {
         view.animation = Animation.named(jsName)
+        view.play()
     }
     
     /*
