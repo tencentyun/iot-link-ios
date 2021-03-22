@@ -139,6 +139,15 @@
 }
 
 #pragma mark privateMethods
+- (void)readDataBleWith:(NSString *)serverUUID characteristic:(CBCharacteristic *)characteristic {
+    self.senderServiceUUID = serverUUID;
+    if (characteristic) {
+        self.characteristic = characteristic;
+    }
+    [self.peripheral readValueForCharacteristic:characteristic];
+}
+
+
 //MARK:设置一条数据给蓝牙发送数据
 - (void)writeDataToBLE:(NSString *)context
 {

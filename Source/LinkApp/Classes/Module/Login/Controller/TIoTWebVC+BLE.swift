@@ -348,7 +348,7 @@ extension TIoTWebVC {
                                             }
                                             
                                             let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
-                                            
+                                            blue?.readDataBle(with: serviceId, characteristic: characteristicItem)
 //                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
                                             
                                         }
@@ -667,8 +667,16 @@ extension TIoTWebVC: BluetoothCentralManagerDelegate {
     }
     
     public func updateData(_ dataHexArray: [Any]!, with characteristic: CBCharacteristic!, pheropheralUUID: String!, serviceUUID serviceString: String!) {
-        let characterDic:[String : Any] = ["deviceId":pheropheralUUID ?? "","serviceId":serviceString ?? "","characteristicId":characteristic.uuid.uuidString,"value":dataHexArray ?? []]
-
+        
+        let bluetoothStandard = "-0000-1000-8000-00805F9B34FB"
+        var characteristicUUID = characteristic.uuid.uuidString
+        if  characteristicUUID.count == 4 {
+            characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
+        }else {
+//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+        }
+        
+        let characterDic:[String : Any] = ["deviceId":pheropheralUUID ?? "","serviceId":serviceString ?? "","characteristicId":characteristicUUID,"value":dataHexArray ?? []]
         self.bleCharacteristicValueChange(characteristicDic: characterDic)
     }
     

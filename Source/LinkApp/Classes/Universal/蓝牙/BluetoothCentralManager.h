@@ -65,6 +65,11 @@
 - (void)writeDataToBluetoothWith:(NSString *)context sendCharacteristic:(CBCharacteristic *)characteristic serviceUUID:(NSString *)serviceUUID;
 
 /**
+读取特征值
+ */
+- (void)readDataBleWith:(NSString *)serverUUID characteristic:(CBCharacteristic *)characteristic;
+
+/**
  设置蓝牙最大传输单元
  */
 - (void)setMacTransValue:(NSInteger)maxValue;
