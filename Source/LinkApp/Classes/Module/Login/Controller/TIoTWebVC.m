@@ -274,6 +274,10 @@
     
     NSMutableString *macString = [[NSMutableString alloc] init];
     if (aString.length >= 14) {
+        [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
+        [macString appendString:@":"];
+        [macString appendString:[[aString substringWithRange:NSMakeRange(2, 2)] uppercaseString]];
+        [macString appendString:@":"];
         [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
         [macString appendString:@":"];
         [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
@@ -287,6 +291,24 @@
             [macString appendString:@":"];
             [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
         }
+    }else {
+        if (aString.length %2 == 0) {
+            if (aString.length == 2) {
+                [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
+            }else {
+                for (int i = 0; i<aString.length; i+=2) {
+                        [macString appendString:[[aString substringWithRange:NSMakeRange(i, 2)] uppercaseString]];
+                    
+                    if (i+2 < aString.length) {
+                        [macString appendString:@":"];
+                    }
+                        
+//                        [macString appendString:[[aString substringWithRange:NSMakeRange(i+2, 2)] uppercaseString]];
+                }
+            }
+            
+        }
+        
     }
     return macString;
 }
