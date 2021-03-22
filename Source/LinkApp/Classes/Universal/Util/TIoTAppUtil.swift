@@ -63,10 +63,13 @@ class TIoTAppUtil: NSObject {
         let appModel = TIoTAppConfig.loadLocalConfigList()
         var urlStr: String?
         let isEn:Bool = languageIsEn()
+        
+        let appEnviromment = TIoTCoreAppEnvironment()
+        
         if isEn {
-            urlStr = "https://api.heweather.net/v7/weather/now?location=\(location)&key=\(appModel.hEweatherKey)&lang=en"
+            urlStr = "\(appEnviromment.weatherNowHost)location=\(location)&key=\(appModel.hEweatherKey)&lang=en"
         }else {
-            urlStr = "https://api.heweather.net/v7/weather/now?location=\(location)&key=\(appModel.hEweatherKey)"
+            urlStr = "\(appEnviromment.weatherNowHost)location=\(location)&key=\(appModel.hEweatherKey)"
         }
         
         let sess = URLSession.shared;
@@ -91,10 +94,11 @@ class TIoTAppUtil: NSObject {
         let appModel = TIoTAppConfig.loadLocalConfigList()
         var urlStr: String?
         let isEn:Bool = languageIsEn()
+        let appEnviromment = TIoTCoreAppEnvironment()
         if isEn {
-            urlStr = "https://geoapi.qweather.com/v2/city/lookup?location=\(location)&key=\(appModel.hEweatherKey)&lang=en"
+            urlStr = "\(appEnviromment.weatherCityHost)location=\(location)&key=\(appModel.hEweatherKey)&lang=en"
         }else {
-            urlStr = "https://geoapi.qweather.com/v2/city/lookup?location=\(location)&key=\(appModel.hEweatherKey)"
+            urlStr = "\(appEnviromment.weatherCityHost)location=\(location)&key=\(appModel.hEweatherKey)"
         }
         
         let session = URLSession.shared;
@@ -119,10 +123,11 @@ class TIoTAppUtil: NSObject {
         let appModel = TIoTAppConfig.loadLocalConfigList()
         var urlStr: String?
         let isEn:Bool = languageIsEn()
+        let appEnviromment = TIoTCoreAppEnvironment()
         if isEn {
-            urlStr = "https://api.qweather.com/v7/indices/1d?location=\(location)&key=\(appModel.hEweatherKey)&type=\(8)lang=en"
+            urlStr = "\(appEnviromment.weatherIndicesHost)location=\(location)&key=\(appModel.hEweatherKey)&type=\(8)lang=en"
         }else {
-            urlStr = "https://api.qweather.com/v7/indices/1d?location=\(location)&key=\(appModel.hEweatherKey)&type=\(8)"
+            urlStr = "\(appEnviromment.weatherIndicesHost)location=\(location)&key=\(appModel.hEweatherKey)&type=\(8)"
         }
         
         let session = URLSession.shared;

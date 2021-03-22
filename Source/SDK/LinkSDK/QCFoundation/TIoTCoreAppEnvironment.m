@@ -41,6 +41,20 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
     self.studioBaseUrl = @"https://iot.cloud.tencent.com/api/studioapp";
     self.studioBaseUrlForLogined = @"https://iot.cloud.tencent.com/api/studioapp/tokenapi";
     
+    //天气公版和开源版
+    NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+    if ([bundleId containsString:@"opensource"]) {
+        self.weatherNowHost = @"https://devapi.heweather.net/v7/weather/now?";
+        self.weatherIndicesHost = @"https://devapi.qweather.com/v7/indices/1d?";
+    }else {
+        self.weatherNowHost = @"https://api.heweather.net/v7/weather/now?";
+        self.weatherIndicesHost = @"https://api.qweather.com/v7/indices/1d?";
+    }
+    
+    self.weatherCityHost = @"https://geoapi.qweather.com/v2/city/lookup?";
+    
+    
+    
     //OEM App 使用
     self.oemAppApi = @"https://iot.cloud.tencent.com/api/exploreropen/appapi"; // 需要在 TIoTAppEnvironment.m 的 -selectEnvironmentType: 中替换为自建后台服务地址。
     self.oemTokenApi = @"https://iot.cloud.tencent.com/api/exploreropen/tokenapi";  // 可安全在设备端调用。

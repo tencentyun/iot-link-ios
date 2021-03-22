@@ -101,6 +101,21 @@ h5
  */
 @property (nonatomic , copy) NSString *platform;
 
+/**
+ 实时天气公版api
+ */
+@property (nonatomic , copy) NSString *weatherNowHost;
+ 
+/**
+ 天气城市信息
+ */
+@property (nonatomic, copy) NSString *weatherCityHost;
+
+/**
+ 天气生活指数信息
+ */
+@property (nonatomic, copy) NSString *weatherIndicesHost;
+
 
 - (void)setEnvironment;
 @end
