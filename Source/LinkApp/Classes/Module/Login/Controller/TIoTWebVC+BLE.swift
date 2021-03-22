@@ -260,7 +260,7 @@ extension TIoTWebVC {
 //                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                     }
                                     
-                                    let characterDic:[String:Any] = ["properties":["notify":propertiesItem == CBCharacteristicProperties.notify,"write":propertiesItem == CBCharacteristicProperties.write,"indicate":propertiesItem == CBCharacteristicProperties.indicate,"read":propertiesItem == CBCharacteristicProperties.read],
+                                    let characterDic:[String:Any] = ["properties":["notify":propertiesItem.contains(.notify),"write":propertiesItem.contains(.write),"indicate":propertiesItem.contains(.indicate),"read":propertiesItem.contains(.read)],
                                                                      "uuid":characteristicUUID]
                                     
                                     servicesArray.append(characterDic)
