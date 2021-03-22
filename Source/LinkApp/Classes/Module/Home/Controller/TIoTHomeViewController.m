@@ -365,8 +365,6 @@ static CGFloat kHeaderViewHeight = 162;
 //        [self.devicesTableView reloadData];
         
         //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
-        
-        [self.deviceConfigArray removeAllObjects];
         NSMutableArray *productidArr = [NSMutableArray new];
         for (int i = 0; i< self.dataArr.count; i++) {
             NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
@@ -879,6 +877,9 @@ static CGFloat kHeaderViewHeight = 162;
             [self.devicesArray addObject:itemArr];
             
         }
+        
+        //刷新新页面时候，需要清空
+        [self.deviceConfigArray removeAllObjects];
         
         if (self.dataArr.count == 0) {
             [self refreshUI];
