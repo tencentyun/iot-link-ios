@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdbed5d5_b3dafa4b",
+        "filename": "Source/SDK/LinkSDK/QCFoundation/TIoTCoreAppEnvironment.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-22T05:59:31Z",
+      "side": 1,
+      "message": "建议host只写到v7为止，后面的query放在调用部分，后期添加接口就不用改这块了",
+      "revId": "cfe124f736b359f9adc83033c5cc830425089a92",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
