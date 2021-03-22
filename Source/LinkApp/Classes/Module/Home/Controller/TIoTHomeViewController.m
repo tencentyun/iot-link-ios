@@ -86,6 +86,7 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, strong) UILabel *dailyNameLabel;
 @property (nonatomic, strong) TIoTWeatherVC *animationVC;
 @property (nonatomic, strong) AnimationView * weatherAnimationView;
+@property (nonatomic, strong) NSString *weatherContentTypeText;
 
 @property (nonatomic, strong) NSString *weatherTemp;
 @property (nonatomic, strong) NSString *weatherLocation;
@@ -181,6 +182,16 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+    
+    if (self.devicesTableView) {
+        if (self.currentFamilyId != nil) {
+            [self getRoomList:[TIoTCoreUserManage shared].familyId];
+            [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
+        }
+
+        //保持天气动画位置，跟随滚动区域是否显示
+        [self scrollViewDidScroll:self.devicesTableView];
+    }
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -683,7 +694,9 @@ static CGFloat kHeaderViewHeight = 162;
                 
                 self.weatherBottomBtn.enabled = NO;
                 self.weatherAnimationView.hidden = NO;
-                [self.animationVC switchWeatherAnimationWithJsName:self.weatherTypeText];
+                if ( [NSString isNullOrNilWithObject:self.weatherContentTypeText] || ![self.weatherContentTypeText isEqualToString:self.weatherTypeText]) {
+              [self.animationVC switchWeatherAnimationWithJsName:self.weatherTypeText];
+                }
                 
             }else {
                 
@@ -695,6 +708,8 @@ static CGFloat kHeaderViewHeight = 162;
             }
             
             [self requestWeatherCityData];
+            
+            self.weatherContentTypeText = weatherType;
         });
     }];
     
