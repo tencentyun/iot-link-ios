@@ -354,6 +354,8 @@ static CGFloat kWidthHeightScale = 330/276;
         
         [self productConfigData:configData?:@{} switchBtn:self.leftSwitchBtn queckBtn:self.leftQuickBtn bleImageView:self.leftBluetoothIcon];
      
+        NSDictionary *imageDic = configData[@"Global"]?:@"";
+        [self.leftDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"] placeHolder:@"deviceDefault"];
         
         
     }else if (type == TIoTDeviceTypeRight) {
@@ -363,6 +365,9 @@ static CGFloat kWidthHeightScale = 330/276;
         self.rightShortcutArray = [NSArray arrayWithArray:configDataDic[@"shortcut"]?:@[]];
         
         [self productConfigData:configData?:@{} switchBtn:self.rightSwitchBtn queckBtn:self.rightQuickBtn bleImageView:self.rightBluetoothIcon];
+        
+        NSDictionary *imageDic = configData[@"Global"]?:@"";
+        [self.rightDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"] placeHolder:@"deviceDefault"];
     }
 }
 
@@ -372,8 +377,6 @@ static CGFloat kWidthHeightScale = 330/276;
     if (type == TIoTDeviceTypeLeft) {
         
         self.leftProductDataDic = [dataDic mutableCopy];
-        
-        [self.leftDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
         
         NSString * alias = dataDic[@"AliasName"];
         
@@ -410,8 +413,6 @@ static CGFloat kWidthHeightScale = 330/276;
     }else if (type == TIoTDeviceTypeRight) {
         
         self.rightProductDataDic = [dataDic mutableCopy];
-        
-        [self.rightDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
         
         NSString * alias = dataDic[@"AliasName"];
         
