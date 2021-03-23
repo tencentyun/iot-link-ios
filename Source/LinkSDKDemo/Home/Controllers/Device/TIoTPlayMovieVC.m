@@ -36,12 +36,12 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self setupUIViews:self.playType];
     
     if (self.playType ==  TIotPLayTypePlayback) {
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-            
-            self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
-            [self.tableView reloadData];
-            
-        }];
+//        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+//
+//            self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
+//            [self.tableView reloadData];
+//
+//        }];
     }
 }
 
@@ -60,6 +60,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)configVideo {
+    
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
         UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
         fileTip.text = @"数据帧写文件中...";
@@ -67,7 +68,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:@"action=live"];
+//        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:@"action=live"];
     }else {
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
@@ -117,9 +118,9 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)testCustomSignalling {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        [MBProgressHUD showMessage:jsonList icon:@""];
-    }];
+//    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+//        [MBProgressHUD showMessage:jsonList icon:@""];
+//    }];
 }
 
 - (void)setupUIViews:(TIotPLayType )type {
@@ -157,7 +158,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self removeMovieNotificationObservers];
     
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
+//        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
     }
 }
 
@@ -171,7 +172,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     if ([sender.currentTitle isEqualToString:@"开始对讲"]) {
         
         [sender setTitle:@"结束对讲" forState:UIControlStateNormal];
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer];
+//        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer];
     
     }else {
         
@@ -182,7 +183,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (IBAction)dismiss:(id)sender {
-    [[TIoTCoreXP2PBridge sharedInstance] stopService];
+//    [[TIoTCoreXP2PBridge sharedInstance] stopService];
     
     [self stopPlayMovie];
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -206,7 +207,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     
     [self stopPlayMovie];
     
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv];
+//    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv];
     
     TIoTPlayBackListModel *model = self.dataArray[indexPath.row];
     
@@ -216,7 +217,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     NSString *startStamp = [NSString getTimeStampWithString:startDate withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     NSString *endStamp = [NSString getTimeStampWithString:endDate withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     
-    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&start_time=%@&end_time=%@",urlString,startStamp,endStamp];
+//    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&start_time=%@&end_time=%@",urlString,startStamp,endStamp];
     
     [self configVideo];
     [self.player prepareToPlay];

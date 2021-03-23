@@ -12,7 +12,7 @@
 #import "AWSystemAVCapture.h"
 
 //type=0:close通知； type=1:日志； type=2:json; type=3:文件开关; type=4:文件路径;
-char* XP2PMsgHandle(int type, const char* msg) {
+char* XP2PMsgHandle(const char *idd, int type, const char* msg) {
     if (type == 1) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
@@ -36,7 +36,7 @@ char* XP2PMsgHandle(int type, const char* msg) {
     return nullptr;
 }
 
-void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
+void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
     if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
         [delegate getVideoPacket:recv_buf len:recv_len];
@@ -94,28 +94,28 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //注册回调
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
+    setUserCallbackToXp2p(dev_name.UTF8String, XP2PDataMsgHandle, XP2PMsgHandle);
     
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
-    setDeviceInfo([pro_id UTF8String], [dev_name UTF8String]);
-    setXp2pInfoAttributes("_sys_xp2p_info");
-    startServiceWithXp2pInfo("");
+//    setDeviceInfo([pro_id UTF8String], [dev_name UTF8String]);
+//    setXp2pInfoAttributes("_sys_xp2p_info");
+    startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], "_sys_xp2p_info", "");
 }
 
-- (NSString *)getUrlForHttpFlv {
-    const char *httpflv =  delegateHttpFlv();
+- (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
+    const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
     NSLog(@"httpflv---%s",httpflv);
     return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
 }
 
-- (void)getCommandRequestWithAsync:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
+- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         char *buf = nullptr;
         size_t len = 0;
-        getCommandRequestWithSync(cmd.UTF8String, &buf, &len, timeout);
+        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
@@ -125,17 +125,17 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
     });
 }
 
-- (void)startAvRecvService:(NSString *)cmd {
-    startAvRecvService(cmd.UTF8String);
+- (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd {
+    startAvRecvService(dev_name.UTF8String, cmd.UTF8String);
 }
 
-- (void)stopAvRecvService {
-    stopAvRecvService(nullptr);
+- (void)stopAvRecvService:(NSString *)dev_name {
+    stopAvRecvService(dev_name.UTF8String, nullptr);
 }
 
-- (void)sendVoiceToServer {
+- (void)sendVoiceToServer:(NSString *)dev_name {
     
-    _serverHandle = runSendService(); //发送数据前需要告知http proxy
+    _serverHandle = runSendService(dev_name.UTF8String); //发送数据前需要告知http proxy
     
     AWAudioConfig *config = [[AWAudioConfig alloc] init];
     systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];
@@ -150,14 +150,14 @@ void XP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
     systemAvCapture.delegate = nil;
 }
 
-- (void)stopService {
+- (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
-    stopService();
+    stopService(dev_name.UTF8String);
 }
 
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
-    dataSend(data, size);
+    dataSend("dev_name", data, size);
 }
 
 

@@ -40,6 +40,44 @@
 //#ifdef DEBUG
     [self requestExploreList];
 //#endif
+    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(rightBarItemClick:)];
+    self.navigationItem.rightBarButtonItem = item;
+}
+
+- (void)rightBarItemClick:(UIBarButtonItem *)item{
+    if ([item.title isEqualToString:@"编辑"]) {
+        
+        item.title = @"选后播放";
+        [self.tableView setEditing:YES animated:YES];
+
+    }else{
+        
+        //初始化
+        __block CGFloat yyy = 0;
+        [[self.tableView indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            TIoTExploreOrVideoDeviceModel *model = self.dataArray[obj.row];
+                        
+            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                     dev_name:model.DeviceName];
+
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+            TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
+            video.playType = TIotPLayTypeLive;
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+            [self addChildViewController:video];
+            [self.view addSubview:video.view];
+            [video.view setFrame:CGRectMake(0, yyy, kScreenWidth, 300)];
+            yyy = 300;
+        }];
+        
+        item.title = @"编辑";
+        [self.tableView setEditing:NO animated:YES];
+    }
+    
 }
 
 - (void)setUpUI {
@@ -96,9 +134,12 @@
     
     cell.playRealTimeMonitoringBlock = ^{
 
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId dev_name:nameNameString];
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                 dev_name:nameNameString];
 
-            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.modalPresentationStyle = UIModalPresentationFullScreen;
             video.playType = TIotPLayTypeLive;
@@ -110,7 +151,7 @@
 
         [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId dev_name:nameNameString];
 
-            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypePlayback;
             video.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -123,6 +164,16 @@
         [self.navigationController pushViewController:cloudStorage animated:YES];
     };
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView.isEditing) {
+        return;
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
 }
 
 - (UITableView *)tableView {
