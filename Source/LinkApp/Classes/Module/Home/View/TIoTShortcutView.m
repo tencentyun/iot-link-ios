@@ -291,7 +291,12 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             cell.propertyName = model[@"name"];
             
             __weak typeof(self)weakSelf = self;
-            cell.propertyValue = [NSString stringWithFormat:@"%@%@",model[@"status"][@"Value"]?:@"",model[@"define"][@"unit"]?:@""];
+            
+            NSString * valueString = model[@"status"][@"Value"]?:@"";
+            if ([NSString isNullOrNilWithObject:valueString]) {
+                valueString = model[@"define"][@"start"]?:@"";
+            }
+            cell.propertyValue = [NSString stringWithFormat:@"%@%@",valueString,model[@"define"][@"unit"]?:@""];
             cell.userInteractionEnabled = [weakSelf.deviceDic[@"Online"] boolValue];
             [cell setIconDefaultImageString:@"shortcut_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
             

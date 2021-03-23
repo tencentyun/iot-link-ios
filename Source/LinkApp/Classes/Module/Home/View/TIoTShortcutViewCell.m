@@ -102,8 +102,8 @@
 
 - (void)setPropertyModel:(NSDictionary *)infoModel{
     self.infoModel = infoModel;
-
-    if ([infoModel[@"define"][@"type"] isEqualToString:@"bool"]) {
+    NSString *typeString = self.infoModel[@"define"][@"type"]?:@"";
+    if ([typeString isEqualToString:@"bool"]) {
         BOOL isTurnOn = [infoModel[@"status"][@"Value"] integerValue] == 0 ? NO : YES;
         if (isTurnOn) {
             self.itemBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
