@@ -64,11 +64,13 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
     
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
+        make.left.right.equalTo(self.view);
         if (@available (iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            make.bottom.equalTo(self.view).offset([UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom);
         }else {
             make.top.equalTo(self.view).offset(64);
+            make.bottom.equalTo(self.view);
         }
     }];
     
@@ -156,8 +158,11 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
     self.historyEmptyLabel.hidden = YES;
     self.searchEmptyLable.hidden = YES;
     
-    if (self.dataArray.count == 0) {
+    if (self.histroyDataArray.count == 0) {
         self.historyEmptyLabel.hidden = NO;
+    }
+    if (self.dataArray.count == 0) {
+        self.searchEmptyLable.hidden = NO;
     }
     return YES;
 }
@@ -202,6 +207,10 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
         }else {
             self.tableView.tableFooterView = nil;
             self.searchEmptyLable.hidden = YES;
+            
+        }
+        
+        if (self.histroyDataArray.count == 0) {
             self.historyEmptyLabel.hidden = NO;
         }
     }
@@ -239,7 +248,11 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
         [self.dataArray addObjectsFromArray:locationModel.data];
 
         if (self.inputAddress.length == 0) {
-            self.historyEmptyLabel.hidden = NO;
+            if (self.histroyDataArray.count == 0) {
+                self.historyEmptyLabel.hidden = NO;
+            }else {
+                self.historyEmptyLabel.hidden = YES;
+            }
             self.searchEmptyLable.hidden = YES;
 
         }else {
