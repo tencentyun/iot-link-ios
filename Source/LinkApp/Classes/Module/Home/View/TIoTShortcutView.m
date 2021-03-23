@@ -52,11 +52,11 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 
 - (void)setupUIView {
     
-    CGFloat kIntervalPadding = 12;
+//    CGFloat kIntervalPadding = 12;
     CGFloat kMessageHeight = 48;
     CGFloat kMiddleHeight = 184;
 
-    CGFloat kBottomViewHeight = 56;
+    CGFloat kBottomViewHeight = 48;
     CGFloat kSafeAreaInsetBottom = 34;
     
     self.blackMaskView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -67,7 +67,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         if ([UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom) {
             kBottomViewHeight = kBottomViewHeight +[UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
         }else {
-            kBottomViewHeight = kBottomViewHeight + kSafeAreaInsetBottom;
+            kBottomViewHeight = kBottomViewHeight;
         }
     }else {
         kBottomViewHeight = kBottomViewHeight + kSafeAreaInsetBottom;
@@ -92,7 +92,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     self.messageLabel = messageLabel;
     [messageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(0);
-        make.top.equalTo(self.contentView.mas_top).offset(kIntervalPadding);
+        make.top.equalTo(self.contentView.mas_top).offset(0);
         make.trailing.mas_equalTo(-0);
         make.height.mas_equalTo(kMessageHeight);
     }];
@@ -103,7 +103,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     [lineTop mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(self.contentView);
         make.height.mas_equalTo(1);
-        make.top.equalTo(messageLabel.mas_bottom).offset(kIntervalPadding);
+        make.top.equalTo(messageLabel.mas_bottom).offset(0);
     }];
     
     [self.contentView addSubview:self.collectionView];
@@ -136,7 +136,17 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     [moreBtn setButtonFormateWithTitlt:NSLocalizedString(@"more_operation", @"更多操作") titleColorHexString:@"#15161A" font:[UIFont wcPfRegularFontOfSize:14]];
     [self.bottomView addSubview:moreBtn];
     [moreBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.bottomView.mas_top).offset(15);
+        if (@available(iOS 11.0, *)) {
+            if ([UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom) {
+                make.top.equalTo(self.bottomView.mas_top).offset(10);
+            }else {
+                make.centerY.equalTo(self.bottomView);
+            }
+        } else {
+            // Fallback on earlier versions
+            make.centerY.equalTo(self.bottomView);
+        }
+        
         make.centerX.equalTo(self.bottomView);
         make.left.right.equalTo(self.bottomView);
     }];
