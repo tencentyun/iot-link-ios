@@ -859,7 +859,7 @@
 
 //v1.4.0首页重构
 "scan_device" = "扫描设备";
-"intelligent_addDevice" = "智能添加";
+"intelligent_addDevice" = "添加智能";
 "relative_humidity" = "相对湿度";
 "now_windDirection" = "实况风向";
 "no_weather_info" = "暂无天气信息";

@@ -124,7 +124,7 @@
         make.center.equalTo(self.addIntelligentDevice);
     }];
     UILabel *intellientDeviceLabel = [[UILabel alloc]init];
-    [intellientDeviceLabel setLabelFormateTitle:NSLocalizedString(@"intelligent_addDevice", @"智能添加") font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
+    [intellientDeviceLabel setLabelFormateTitle:NSLocalizedString(@"intelligent_addDevice", @"添加智能") font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentCenter];
     [self.contentView addSubview:intellientDeviceLabel];
     [intellientDeviceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.addIntelligentDevice);
