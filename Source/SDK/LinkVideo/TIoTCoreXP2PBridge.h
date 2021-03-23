@@ -23,16 +23,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance ;
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;
-- (NSString *)getUrlForHttpFlv;
-- (void)getCommandRequestWithAsync:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
+- (NSString *)getUrlForHttpFlv:(NSString *)dev_name;
+- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
 
-- (void)startAvRecvService:(NSString *)cmd;
-- (void)stopAvRecvService;
+- (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd;
+- (void)stopAvRecvService:(NSString *)dev_name;
 
-- (void)sendVoiceToServer;
+- (void)sendVoiceToServer:(NSString *)dev_name;
 - (void)stopVoiceToServer;
 
-- (void)stopService;
+- (void)stopService:(NSString *)dev_name;
 @end
 
 NS_ASSUME_NONNULL_END

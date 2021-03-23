@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, TIotPLayType) {
 
 @interface TIoTPlayMovieVC : UIViewController
 
+@property (nonatomic, strong)NSString *deviceName;
 @property (nonatomic, strong)NSString *videoUrl;
 @property (nonatomic, assign)TIotPLayType playType;
 @end

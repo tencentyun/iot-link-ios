@@ -36,11 +36,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self setupUIViews:self.playType];
     
     if (self.playType ==  TIotPLayTypePlayback) {
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-            
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+
             self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
             [self.tableView reloadData];
-            
+
         }];
     }
 }
@@ -60,6 +60,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)configVideo {
+    
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
         UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
         fileTip.text = @"数据帧写文件中...";
@@ -67,7 +68,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:@"action=live"];
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName cmd:@"action=live"];
     }else {
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
@@ -117,7 +118,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)testCustomSignalling {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         [MBProgressHUD showMessage:jsonList icon:@""];
     }];
 }
@@ -157,7 +158,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self removeMovieNotificationObservers];
     
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
+        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName];
     }
 }
 
@@ -171,7 +172,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     if ([sender.currentTitle isEqualToString:@"开始对讲"]) {
         
         [sender setTitle:@"结束对讲" forState:UIControlStateNormal];
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName];
     
     }else {
         
@@ -182,9 +183,6 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (IBAction)dismiss:(id)sender {
-    [[TIoTCoreXP2PBridge sharedInstance] stopService];
-    
-    [self stopPlayMovie];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -206,7 +204,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     
     [self stopPlayMovie];
     
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv];
+    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName];
     
     TIoTPlayBackListModel *model = self.dataArray[indexPath.row];
     
@@ -394,6 +392,9 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
 - (void)dealloc
 {
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName];
+    
+    [self stopPlayMovie];
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 @end
