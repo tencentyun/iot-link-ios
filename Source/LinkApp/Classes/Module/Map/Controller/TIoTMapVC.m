@@ -596,7 +596,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
                     NSString *addressDetail = [NSString stringWithFormat:@"%@%@%@%@",cellModel.ad_info.province?:@"",cellModel.ad_info.city?:@"",cellModel.ad_info.district?:@"",cellModel.address?:@""];
                     NSString *lat = [NSString stringWithFormat:@"%f",cellModel.location.lat];
                     NSString *lng = [NSString stringWithFormat:@"%f",cellModel.location.lng];
-                    NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":cellModel.ad_info.name?:@"",@"title":addressString};
+                    NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":addressString,@"title":cellModel.ad_info.name?:@""};
                     
                     NSString *addressJson = [addressDic yy_modelToJSONString];
                     weakSelf.addressBlcok(addressString, addressJson);

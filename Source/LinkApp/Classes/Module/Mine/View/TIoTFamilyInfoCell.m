@@ -28,10 +28,11 @@
     
     if ([info.allKeys containsObject:@"addresJson"]) {
         if (![NSString isNullOrNilWithObject:info[@"addresJson"]]) {
-            if (![NSString isNullOrNilWithObject:info[@"name"]]) {
-                self.contentL.text = info[@"name"]?:@"";
+            NSDictionary *addJsonDic =  [NSString jsonToObject:info[@"addresJson"]?:@""]?:@{};
+            if (![NSString isNullOrNilWithObject:addJsonDic[@"name"]]) {
+                self.contentL.text = addJsonDic[@"name"]?:@"";
             }else {
-                self.contentL.text = info[@"address"]?:@"";
+                self.contentL.text = addJsonDic[@"address"]?:@"";
             }
         }
     }

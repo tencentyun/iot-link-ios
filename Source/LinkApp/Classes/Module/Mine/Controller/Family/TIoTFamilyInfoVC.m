@@ -326,20 +326,22 @@ static NSString *itemId2 = @"pfDDD";
                 break;
             case 2:
             {
-                NSMutableDictionary *addressDictionary = self.dataArr[0][2];
-                TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
-                mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
-                mapVC.addressString = addressDictionary[@"addresJson"];
-                mapVC.addressBlcok = ^(NSString * _Nonnull address, NSString * _Nonnull addressJson) {
-                    NSMutableDictionary *addressDic = self.dataArr[0][2];
-                    [addressDic setValue:address forKey:@"name"];
-                    [self.coll reloadItemsAtIndexPaths:@[indexPath]];
-                    
-                    NSMutableDictionary *nameDic = self.dataArr[0][0];
-                    [self modifyFamily:nameDic[@"name"]?:@"" addressTitle:address isModifyAddrss:YES addJson:addressJson?:@""];
-                    
-                };
-                [self.navigationController pushViewController:mapVC animated:YES];
+                if ([self.familyInfo[@"Role"] integerValue] == 1) { //所有者
+                    NSMutableDictionary *addressDictionary = self.dataArr[0][2];
+                    TIoTMapVC *mapVC = [[TIoTMapVC alloc]init];
+                    mapVC.title = NSLocalizedString(@"choose_location", @"地图选点");
+                    mapVC.addressString = addressDictionary[@"addresJson"];
+                    mapVC.addressBlcok = ^(NSString * _Nonnull address, NSString * _Nonnull addressJson) {
+                        NSMutableDictionary *addressDic = self.dataArr[0][2];
+                        [addressDic setValue:address forKey:@"name"];
+                        [self.coll reloadItemsAtIndexPaths:@[indexPath]];
+                        
+                        NSMutableDictionary *nameDic = self.dataArr[0][0];
+                        [self modifyFamily:nameDic[@"name"]?:@"" addressTitle:address isModifyAddrss:YES addJson:addressJson?:@""];
+                        
+                    };
+                    [self.navigationController pushViewController:mapVC animated:YES];
+                }
                 break;
             }
             case 3:
