@@ -23,6 +23,8 @@
 - (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value
 {
     bounds = [super thumbRectForBounds:bounds trackRect:rect value:value];
+    self.sliderThumbRectOriginX = bounds.origin.x;
+    self.sliderThumbRectWidth = bounds.size.width;
     return CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
 }
 @end
@@ -36,7 +38,7 @@
 @property (nonatomic, strong) UILabel *viewTitle;
 //@property (nonatomic,copy) NSString *type;//数据类型，整形还是浮点  用model中type判断
 
-@property (nonatomic, strong) UISlider *slider;
+@property (nonatomic, strong) TIoTCustomSlider *slider;
 @property (nonatomic, strong) UILabel *valueLab;
 @property (nonatomic, assign) CGFloat sliderWidth;
 @property (nonatomic, strong) UIButton *reduceButton;
@@ -301,11 +303,12 @@
     }
     
     CGFloat KSliderValueX = 0;
-    CGFloat kValueWidth = CGRectGetWidth(self.valueLab.frame);
+//    CGFloat kValueWidth = CGRectGetWidth(self.valueLab.frame);
     CGFloat kValueLabX = 0;
     KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
-    kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
-
+//    kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
+    kValueLabX = self.slider.sliderThumbRectOriginX + self.kvalueLabPadding;
+    
     [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kValueLabX);
     }];
@@ -323,7 +326,8 @@
             self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.define.start ,model.define.unit?:@""];
             self.slider.value = model.define.start.intValue;
         }
-        
+        self.slider.minimumValue = self.model.define.min.intValue?:0;// 设置最小值
+        self.slider.maximumValue = self.model.define.max.intValue?:100;// 设置最大值
     }
     else
     {
@@ -334,12 +338,14 @@
             self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", model.define.start.floatValue ,model.define.unit?:@""];
             self.slider.value = model.define.start.floatValue;
         }
+        self.slider.minimumValue = self.model.define.min.floatValue?:0;// 设置最小值
+        self.slider.maximumValue = self.model.define.max.floatValue?:100;// 设置最大值
     }
     
     CGFloat kValueWidth = [self WidthWithString:self.valueLab.text font:[UIFont wcPfRegularFontOfSize:16] height:30];
-    CGFloat KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
-    CGFloat kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
-    
+//    CGFloat KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
+//    CGFloat kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
+    CGFloat kValueLabX = self.slider.sliderThumbRectOriginX + self.kvalueLabPadding - - kValueWidth/2;
     [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kValueLabX);
     }];
