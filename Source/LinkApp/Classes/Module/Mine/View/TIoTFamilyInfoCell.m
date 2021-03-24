@@ -26,6 +26,15 @@
     self.nameL.text = info[@"title"];
     self.contentL.text = info[@"name"];
     
+    if ([info.allKeys containsObject:@"addresJson"]) {
+        if (![NSString isNullOrNilWithObject:info[@"addresJson"]]) {
+            if (![NSString isNullOrNilWithObject:info[@"name"]]) {
+                self.contentL.text = info[@"name"]?:@"";
+            }else {
+                self.contentL.text = info[@"address"]?:@"";
+            }
+        }
+    }
     
     if ([info.allKeys containsObject:@"RoomCount"]) {
         if (![NSString isNullOrNilWithObject:info[@"RoomCount"]]) {

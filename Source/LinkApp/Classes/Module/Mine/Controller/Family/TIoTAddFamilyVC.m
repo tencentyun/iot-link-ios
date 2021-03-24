@@ -49,7 +49,7 @@
     self.singleButton.singleAction = ^{
         NSMutableDictionary *nameDic = weakSelf.dataArray[0];
         NSMutableDictionary *addressDic = weakSelf.dataArray[1];
-        NSDictionary *param = @{@"Name":nameDic[@"value"]?:@"",@"Address":addressDic[@"value"]?:@""};
+        NSDictionary *param = @{@"Name":nameDic[@"value"]?:@"",@"Address":addressDic[@"addressJson"]?:@""};
         [[TIoTRequestObject shared] post:AppCreateFamily Param:param success:^(id responseObject) {
             [HXYNotice addUpdateFamilyListPost];
             [weakSelf cancel];

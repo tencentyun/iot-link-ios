@@ -290,7 +290,10 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         
         //每次进入页面 判断上页面中 设置位置 是否有值
         if (_isFirstLocatePin == NO) {
-            if ([NSString isNullOrNilWithObject:self.addressString] || [NSString isFullSpaceEmpty:self.addressString] || [self.addressString isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) {
+            
+            NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
+            
+            if ([NSString isNullOrNilWithObject:addJsonDic[@"address"]?:@""] || [NSString isFullSpaceEmpty:addJsonDic[@"address"]?:@""] || [addJsonDic[@"address"]?:@"" isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) {
                 [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.latitude,self.longitude)];
                 //首次请求定位周围地点列表
                 [self resetRequestPragma];
