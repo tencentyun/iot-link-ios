@@ -415,7 +415,7 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)addTableHeaderView {
     
     NSMutableArray *roomNames = [NSMutableArray array];
-    [roomNames addObject:NSLocalizedString(@"all_devices", @"全部设备")];
+    [roomNames addObject:NSLocalizedString(@"all__", @"全部")];
     [roomNames addObjectsFromArray:[self.rooms valueForKey:@"RoomName"]];
     
     NSInteger index = 0;
@@ -1382,7 +1382,7 @@ static CGFloat kHeaderViewHeight = 162;
             headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
             
             UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
-            NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"all_devices", @"所有设备"),(unsigned long)self.dataArr.count];
+            NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"my_devices", @"我的设备"),(unsigned long)self.dataArr.count];
             [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
             [headerSectionView addSubview:sectionTitle];
 
