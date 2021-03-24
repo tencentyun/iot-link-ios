@@ -12,7 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTCustomSlider : UISlider
-
+@property (nonatomic, assign, readonly) CGFloat sliderThumbRectOriginX;
+@property (nonatomic, assign, readonly) CGFloat sliderThumbRectWidth;
 @end
 
 typedef void(^SliderTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model,NSString *numberStr,NSString *compareValue);
