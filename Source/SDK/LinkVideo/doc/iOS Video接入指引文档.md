@@ -33,13 +33,11 @@
 	//1.注册回调
 	setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
 	
-	//2.配置IOT_P2P SDK
-	setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]);
-	setDeviceInfo([pro_id UTF8String], [dev_name UTF8String]);
-	setXp2pInfoAttributes("_sys_xp2p_info");
-	
-	//3.启动p2p通道，demoapp作为演示需要配置第二步，客户正式发布的app不建议配置第二步，需通过自建业务服务获取xp2pInfo传入第三步的参数中
-	startServiceWithXp2pInfo("");
+   //2.配置IOT_P2P SDK,demoapp作为演示需要配置第二步，客户正式发布的app不建议配置第二步，需通过自建业务服务获取xp2pInfo传入第三步的参数中
+   setQcloudApiCred(sec_id, sec_key);   //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
+
+	//3.启动p2p通道,此处id参数传入了dev_name，用户也可以维护一套自己区分不同设备的id
+   startServiceWithXp2pInfo(dev_name, pro_id, dev_name, "_sys_xp2p_info", "");
 	
 	```
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
@@ -58,15 +56,15 @@
 	//1.开始接受裸流数据,参数说明:cmd直播传action=live，回放action=playback
 	
 	const char *cmd = "action=live"
-	startAvRecvService(cmd);
+	startAvRecvService(dev_name, cmd, false);
 	
 	//2.通过初始化p2p回调返回
-	voidXP2PDataMsgHandle(uint8_t* recv_buf, size_t recv_len) {
-	   ...处理接收到的裸流数据
+	void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+	   ...处理接收到的裸流数据，此处idd为传入的dev_name,用于区分传入的不同设备
 	}
 	
 	//3.结束裸流数据
-	stopAvRecvService(nullptr);
+	stopAvRecvService(dev_name, nullptr);
 	```
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
 
@@ -74,7 +72,7 @@
 
 	```
 	//1.获取httpflv的url,ipc拼接参数说明 直播拼接ipc.flv?action=live；本地回看拼接ipc.flv?action=playback
-	const char *httpflv = delegateHttpFlv();
+	const char *httpflv = delegateHttpFlv(dev_name);
 	NSString *videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",httpflv];
 	
 	//2.使用ijkplayer播放器播放
@@ -92,11 +90,11 @@
 * 发送语音对讲数据
 	
 	```
-	//1.准备开始发送对讲voice数据
-	runSendService();
+	//1.准备开始发送对讲voice数据, false表示音视频数据不加密传输，true加密传输；中间的参数为预留参数传空
+	runSendService(dev_name, "", false);
 	
-	//2.开始发送app采集到的音频数据,此处demo发送的音频格式为flv
-	dataSend(pcm, pcm_size);
+	//2.开始发送app采集到的音频数据,此处demo发送的音频格式为flv,传输的id会区分传输到某个对应的设备
+	dataSend("dev_name", pcm, pcm_size);
 	```
 
 
@@ -108,7 +106,7 @@
 	
 	char *buf = nullptr; //返回值
 	size_t len = 0;
-	getCommandRequestWithSync(cmd.UTF8String,&buf,&len,timeout);
+	getCommandRequestWithSync(dev_name, cmd.UTF8String, &buf, &len, timeout);
 	```
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
 
@@ -116,14 +114,14 @@
 * 主动关闭P2P通道
 
 	```
-	stopService();
+	stopService(dev_name);
 	```
 
 * P2P通道关闭回调
 	
 	```
-	//type=0:close通知； type=1:日志； type=2:json; type=3:文件开关; type=4:文件路径;type=5:p2p通道断开
-	char* XP2PMsgHandle(int type, constchar* msg) {
+	//type参数请参考头文件里XP2PType的类型表示，此处idd参数为区分不同设备回调
+	char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
 	  if(type == 5){
 	    //断开p2p通道
 	  }
@@ -144,7 +142,7 @@
 	
 	```
 	//1.开始接受裸流数据,参数说明:cmd直播传action=live，回放action=playback
-	[[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:@"action=live"];
+	[[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:dev_name, cmd:@"action=live"];
 	
 	//通过TIoTCoreXP2PBridgeDelegate返回裸流数据
 	[TIoTCoreXP2PBridge sharedInstance].delegate = self
@@ -153,14 +151,14 @@
 	}
 	
 	//结束裸流传输
-	[[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService];
+	[[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:dev_name];
 	```
 
 * 接收FLV音视频流，使用ijkplayer播放
 	
 	```
 	//1.获取httpflv的url,ipc拼接参数说明 直播拼接ipc.flv?action=live；本地回看拼接ipc.flv?action=playback
-	NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv]?:@"";
+	NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:dev_name]?:@"";
 	NSString *videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback",urlString];
 	
 	//2.使用ijkplayer播放器播放
@@ -175,7 +173,7 @@
 	
 	```
 	//开始对讲
-	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer];
+	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:dev_name];
 	
 	//结束对讲
 	[[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
@@ -186,22 +184,22 @@
 	
 	```
 	// 发送自定义数据
-	[[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+	[[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:dev_name cmd:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
 	 ...处理返回的数据
 	}];
 	```
 
-* 主动关闭P2P通道
+* 主动关闭P2P通道,参数为区分停止某个设备的通道
 
 	```
-	[[TIoTCoreXP2PBridge sharedInstance] stopService];
+	[[TIoTCoreXP2PBridge sharedInstance] stopService:dev_name];
 	```
 
 * P2P通道关闭回调
 
 	```
-	//type=0:close通知； type=1:日志； type=2:json; type=3:文件开关; type=4:文件路径;type=5:p2p通道断开
-	char* XP2PMsgHandle(int type, constchar* msg) {
+	//type=XP2PTypeDisconnect 表示p2p通道断开
+	char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
 	  if(type == 5){
 	    //断开p2p通道
 	  }
@@ -210,4 +208,12 @@
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
 
 
+### Video SDK 多路视频观看接口说明
 
+*  多路视频可通过各接口的id区分不同设备。当前的 iOS 层接口采用设备名称（dev_name）区分不同的设备通道。
+*  用户也可通过接入 c++ 版本 sdk后， 采用自己的 ID 区分不同设备，自定义 ID 列表需自己维护管理
+
+
+### Video SDK接口参数说明
+
+*  [各接口参数说明指引](https://github.com/tonychanchen/TIoTThridSDK/blob/master/TIoTThridSDK/XP2P-iOS/Classes/AppWrapper.h)
