@@ -354,7 +354,7 @@ static CGFloat kWidthHeightScale = 330/276;
         
         [self productConfigData:configData?:@{} switchBtn:self.leftSwitchBtn queckBtn:self.leftQuickBtn bleImageView:self.leftBluetoothIcon];
      
-        NSDictionary *imageDic = configData[@"Global"]?:@"";
+        NSDictionary *imageDic = configData[@"Global"]?:@{};
         [self.leftDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"]?:@"" placeHolder:@"deviceDefault"];
         
         
@@ -366,7 +366,7 @@ static CGFloat kWidthHeightScale = 330/276;
         
         [self productConfigData:configData?:@{} switchBtn:self.rightSwitchBtn queckBtn:self.rightQuickBtn bleImageView:self.rightBluetoothIcon];
         
-        NSDictionary *imageDic = configData[@"Global"]?:@"";
+        NSDictionary *imageDic = configData[@"Global"]?:@{};
         [self.rightDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"]?:@"" placeHolder:@"deviceDefault"];
     }
 }
@@ -410,6 +410,8 @@ static CGFloat kWidthHeightScale = 330/276;
         //用户显示switch
         [self getDeviceDataWithProductId:dataDic[@"ProductId"]?:@"" anddeviceName:dataDic[@"DeviceName"]?:@"" withDir:TIoTDeviceTypeLeft];
         
+//        [self.leftDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
+        
     }else if (type == TIoTDeviceTypeRight) {
         
         self.rightProductDataDic = [dataDic mutableCopy];
@@ -444,6 +446,9 @@ static CGFloat kWidthHeightScale = 330/276;
         
         //用户显示switch
         [self getDeviceDataWithProductId:dataDic[@"ProductId"]?:@"" anddeviceName:dataDic[@"DeviceName"]?:@"" withDir:TIoTDeviceTypeRight];
+        
+        
+//        [self.rightDeviceImage setImageWithURLStr:dataDic[@"IconUrl"] placeHolder:@"deviceDefault"];
     }
     
 }
