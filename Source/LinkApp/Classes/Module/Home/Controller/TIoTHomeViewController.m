@@ -102,6 +102,7 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, assign) double longitude;
 @property (nonatomic, assign) double latitude;
 
+@property (nonatomic, assign) bool isHideWeatherView;
 @end
 
 @implementation TIoTHomeViewController
@@ -113,6 +114,14 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.isHideWeatherView = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.navigationController.tabBarController.tabBar.hidden = NO;
+    
+    
     if (self.tableView) {
         if (self.currentFamilyId != nil) {
             [self getRoomList:self.currentFamilyId];
@@ -122,7 +131,7 @@ static CGFloat kHeaderViewHeight = 162;
 //        [self scrollViewDidScroll:self.tableView];
 
     }
-
+    
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
             [self getRoomList:[TIoTCoreUserManage shared].familyId];
@@ -134,14 +143,10 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.navigationController.tabBarController.tabBar.hidden = NO;
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.weatherAnimationView.hidden = YES;
+    self.isHideWeatherView = YES;
 }
 
 - (void)dealloc{
@@ -693,7 +698,10 @@ static CGFloat kHeaderViewHeight = 162;
                 [self.dailyNameLabel setLabelFormateTitle:[NSString stringWithFormat:@"%@ %@ | %@ %@",NSLocalizedString(@"relative_humidity", @"相对湿度"),self.weatherHumidity,NSLocalizedString(@"now_windDirection", @"实况风向"),self.weatherWindDir] font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#BFD2FF" textAlignment:NSTextAlignmentLeft];
                 
                 self.weatherBottomBtn.enabled = NO;
-                self.weatherAnimationView.hidden = NO;
+                
+                if (self.isHideWeatherView == NO) {
+                    self.weatherAnimationView.hidden = NO;
+                }
                 if ( [NSString isNullOrNilWithObject:self.weatherContentTypeText] || ![self.weatherContentTypeText isEqualToString:self.weatherTypeText]) {
               [self.animationVC switchWeatherAnimationWithJsName:self.weatherTypeText];
                 }
