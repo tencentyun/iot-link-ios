@@ -77,6 +77,11 @@ h5
 @property (nonatomic, copy) NSString *deviceDetailH5URL;
 
 /**
+ 打开 H5 蓝牙搜索页面
+ */
+@property (nonatomic, copy) NSString *bluetoothSearchH5URL;
+
+/**
  微信分享要的type
  */
 @property (nonatomic , assign) NSInteger wxShareType;

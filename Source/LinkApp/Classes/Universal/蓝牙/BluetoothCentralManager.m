@@ -356,9 +356,9 @@
     }
     
     if (![uuidsAllArray containsObject:uuidStr]&&advertisementData != nil) {
-        if ([advertisementData.allKeys containsObject:@"kCBAdvDataLocalName"]) {
+//        if ([advertisementData.allKeys containsObject:@"kCBAdvDataLocalName"]) {
             [self.peripheralArray addObject:peripheralDic];
-        }
+//        }
         
     }
     

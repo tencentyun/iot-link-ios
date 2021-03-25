@@ -268,6 +268,54 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     }];
 }
 
+- (void)chooseEntertanceTypeWithProductId:(NSString *)productId {
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+
+        NSArray *tmpArr = responseObject[@"Products"];
+        if (tmpArr.count > 0) {
+
+            /*满足以下条件之一的，进入H5面板绑定蓝牙设备
+            a. productInfo.NetType == 'ble' && productConfig.BleConfig.protocolType == 'custom'（通信方式选择 BLE，然后设备开发里面选择【基于自定义蓝牙协议开发】）
+            b. productInfo.NetType == 'else'（通信方式选择【其他】）
+             */
+            
+            NSString * netTypeString = tmpArr.firstObject[@"NetType"]?:@"";
+            if ([netTypeString isEqualToString:@"else"]) {
+                
+                //进入h5面板绑定蓝牙设备
+                [self enterBluetoothSearchWithProductID:productId];
+                
+            }else {
+                [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
+
+                    NSArray *data = responseObject[@"Data"];
+                    if (data.count > 0) {
+                        NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
+                        self.configData = [[NSDictionary alloc]initWithDictionary:config];
+                        NSDictionary *BleConfigDic = self.configData[@"BleConfig"]?:@{};
+                        NSString *protocolTypeString = BleConfigDic[@"protocolType"]?:@"";
+                        if ([protocolTypeString isEqualToString:@"custom"] && [netTypeString isEqualToString:@"ble"]) {
+                            //进入h5面板绑定蓝牙设备
+                            [self enterBluetoothSearchWithProductID:productId];
+                        }else {
+                            //走正常配网流程
+                            [self getProductsConfig:productId];
+                        }
+
+                    WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+                    }
+                } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+                }];
+            }
+
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
+}
+
+//softap smartconfig走正常配网流程
 - (void)getProductsConfig:(NSString *)productId{
     [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[productId]} success:^(id responseObject) {
         
@@ -290,6 +338,34 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         [self jumpConfigVC:TIoTConfigHardwareStyleSmartConfig]; //智能配网
+    }];
+}
+
+//跳转蓝牙搜索页面
+- (void)enterBluetoothSearchWithProductID:(NSString *)productId {
+    //h5面板
+    NSString *productIdString = productId?:@"";
+    __weak typeof(self) weadkSelf= self;
+    
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
+        
+        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        NSString *ticket = responseObject[@"TokenTicket"]?:@"";
+        NSString *requestID = responseObject[@"RequestId"]?:@"";
+        NSString *platform = @"iOS";
+        TIoTWebVC *vc = [TIoTWebVC new];
+        weadkSelf.navigationController.tabBarController.tabBar.hidden = YES;
+        NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+        NSString *url = [NSString stringWithFormat:@"%@?productId=%@&appID=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@&!debug=1", [TIoTCoreAppEnvironment shareEnvironment].bluetoothSearchH5URL,productIdString,bundleId,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
+        vc.urlPath = url;
+        vc.needJudgeJump = YES;
+        vc.needRefresh = YES;
+        [weadkSelf.navigationController pushViewController:vc animated:YES];
+        [MBProgressHUD dismissInView:weadkSelf.view];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        [MBProgressHUD dismissInView:weadkSelf.view];
     }];
 }
 
@@ -411,7 +487,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         NSDictionary *dic = self.recommendArr[indexPath.row];
         NSString *productId = dic[@"ProductId"]?:@"";
         self.selectedProducetedID = productId;
-        [self getProductsConfig:productId];
+        [self chooseEntertanceTypeWithProductId:productId];
     } else {
         self.selectedProducetedID = @"";
         self.configData = nil;

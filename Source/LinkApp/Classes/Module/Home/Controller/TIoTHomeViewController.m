@@ -102,7 +102,7 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, assign) double longitude;
 @property (nonatomic, assign) double latitude;
 
-@property (nonatomic, assign) bool isHideWeatherView;
+@property (nonatomic, assign) bool isHideWeatherView; //用户判断切换页面或跳转页面后，天气view 加载时间延时出现情况
 @end
 
 @implementation TIoTHomeViewController
