@@ -126,9 +126,25 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
     if (self.chooseLocBlcok) {
         self.chooseLocBlcok(cellModel);
         NSDictionary *model = [cellModel yy_modelToJSONObject];
-        [self.histroyDataArray insertObject:model atIndex:0];
-        [TIoTCoreUserManage shared].searchHistoryArray = self.histroyDataArray;
         
+        NSArray *tempHistory = [NSMutableArray arrayWithArray:self.histroyDataArray];
+        if (tempHistory.count == 0) {
+            [self.histroyDataArray insertObject:model atIndex:0];
+        }else {
+            
+            NSMutableArray *idString = [NSMutableArray new];
+            for (NSDictionary *modelDic in tempHistory) {
+                [idString addObject:modelDic[@"id"]?:@""];
+            }
+            
+            if (![NSString isNullOrNilWithObject:model[@"id"]?:@""]) {
+                if (![idString containsObject:model[@"id"]?:@""]) {
+                    [self.histroyDataArray insertObject:model atIndex:0];
+                }
+            }
+        }
+        
+        [TIoTCoreUserManage shared].searchHistoryArray = self.histroyDataArray;
         self.tableView.tableFooterView = self.footerView;
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -160,9 +176,6 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
     
     if (self.histroyDataArray.count == 0) {
         self.historyEmptyLabel.hidden = NO;
-    }
-    if (self.dataArray.count == 0) {
-        self.searchEmptyLable.hidden = NO;
     }
     return YES;
 }

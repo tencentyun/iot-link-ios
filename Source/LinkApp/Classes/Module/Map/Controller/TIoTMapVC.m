@@ -294,10 +294,14 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
             NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
             
             if ([NSString isNullOrNilWithObject:addJsonDic[@"address"]?:@""] || [NSString isFullSpaceEmpty:addJsonDic[@"address"]?:@""] || [addJsonDic[@"address"]?:@"" isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) {
-                [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.latitude,self.longitude)];
+                
+                CLLocationDegrees destlat = [addJsonDic[@"latitude"]?:@"" doubleValue];
+                CLLocationDegrees destlng = [addJsonDic[@"longitude"]?:@"" doubleValue];
+                
+                [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(destlat,destlng)];
                 //首次请求定位周围地点列表
                 [self resetRequestPragma];
-                [self requestLocationList:CLLocationCoordinate2DMake(self.latitude,self.longitude)];
+                [self requestLocationList:CLLocationCoordinate2DMake(destlat,destlng)];
             }else {
                 [self setupHavedLocation];
             }
@@ -371,7 +375,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     
-    NSString *locationString = [NSString stringWithFormat:@"%f,%f",location.latitude,location.longitude];
+    NSString *locationString = [NSString stringWithFormat:@"%.9f,%.9f",location.latitude,location.longitude];
     
     NSString *urlString = [NSString stringWithFormat:@"%@%@&get_poi=1&key=%@&poi_options=address_format=short;page_size=%ld;page_index=%ld",MapSDKLocationParseURL,locationString,model.TencentMapSDKValue,(long)self.offset,(long)self.pageNumber];
     [[TIoTRequestObject shared] get:urlString isNormalRequest:YES success:^(id responseObject) {

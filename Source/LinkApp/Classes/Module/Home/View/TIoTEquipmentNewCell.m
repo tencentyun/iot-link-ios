@@ -355,7 +355,7 @@ static CGFloat kWidthHeightScale = 330/276;
         [self productConfigData:configData?:@{} switchBtn:self.leftSwitchBtn queckBtn:self.leftQuickBtn bleImageView:self.leftBluetoothIcon];
      
         NSDictionary *imageDic = configData[@"Global"]?:@"";
-        [self.leftDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"] placeHolder:@"deviceDefault"];
+        [self.leftDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"]?:@"" placeHolder:@"deviceDefault"];
         
         
     }else if (type == TIoTDeviceTypeRight) {
@@ -367,7 +367,7 @@ static CGFloat kWidthHeightScale = 330/276;
         [self productConfigData:configData?:@{} switchBtn:self.rightSwitchBtn queckBtn:self.rightQuickBtn bleImageView:self.rightBluetoothIcon];
         
         NSDictionary *imageDic = configData[@"Global"]?:@"";
-        [self.rightDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"] placeHolder:@"deviceDefault"];
+        [self.rightDeviceImage setImageWithURLStr:imageDic[@"IconUrlGrid"]?:@"" placeHolder:@"deviceDefault"];
     }
 }
 
