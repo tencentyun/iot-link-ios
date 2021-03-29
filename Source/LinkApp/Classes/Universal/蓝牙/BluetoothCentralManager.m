@@ -24,8 +24,7 @@
 /** 已连接蓝牙设备的所有服务service*/
 @property (nonatomic, strong,readwrite) CBPeripheral *deviceServicePeripheral;
 
-
-@property (nonatomic, strong, readwrite) CBPeripheral *servicePeripheral;
+@property (nonatomic, strong) CBPeripheral *servicePeripheral;
  
 @property (nonatomic, assign) NSInteger maxValue;
 
@@ -77,6 +76,11 @@
     [self.deviceList removeAllObjects];
     
     [self.peripheralArray removeAllObjects];
+    
+    
+    self.deviceServicePeripheral = nil;
+
+    [self.connectPeripheralArray removeAllObjects];
     
     self.isScanDevice = self.centralManager.isScanning;
     /**
@@ -136,6 +140,13 @@
     [self.connectPeripheralArray removeAllObjects];
     [self stopScan];
     [self disconnectPeripheral];
+    
+    
+    self.deviceServicePeripheral = nil;
+    
+    [self.deviceList removeAllObjects];
+    [self.peripheralArray removeAllObjects];
+    [self.connectPeripheralArray removeAllObjects];
 }
 
 #pragma mark privateMethods
@@ -163,6 +174,7 @@
     
     self.senderServiceUUID = serviceUUID;
     
+    //默认是16进制的字符串
     NSData *data = [NSString convertHexStrToData:context?:@""];
     
     // 写入字节的最大长度
@@ -466,6 +478,10 @@
         return;
     }
     
+    if ([self.peripheral.identifier.UUIDString isEqual:peripheral.identifier.UUIDString]) {
+        self.deviceServicePeripheral = peripheral;
+    }
+    
     NSMutableString* nsmstring=[NSMutableString stringWithString:@"\n"];
     [nsmstring appendFormat:@"------在服务: %@ 中发现 %lu 个特征 ------\n",service.UUID,(unsigned long)service.characteristics.count];
     //这种连接的设备特征值
@@ -477,13 +493,12 @@
         [nsmstring appendFormat:@"%@\n",characteristic];
         [nsmstring appendFormat:@"\n"];
         WCLog(@"------characteristic--->>>%@",nsmstring);
-  
         CBCharacteristicProperties p = characteristic.properties;
         
         if (p & CBCharacteristicPropertyWrite) {
             WCLog(@"Write---扫描服务：%@的特征值为：%@",service.UUID,characteristic.UUID);
             // 订阅, 实时接收
-            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+//            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             
             /*
             // 获取特征值发送数据（用于测试，正式可以注释下面两行代码）
@@ -497,9 +512,6 @@
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
     
-    if ([self.peripheral.identifier.UUIDString isEqual:peripheral.identifier.UUIDString]) {
-        self.deviceServicePeripheral = peripheral;
-    }
 }
 
 // 写入数据后的回调方法
@@ -521,9 +533,7 @@
         return;
     }
     
-    
     if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
-        
         
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
         NSString *macStr = [NSString macAddressWith:hexstr];
@@ -537,44 +547,43 @@
             [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:self.senderServiceUUID];
         }
     }
-    WCLog(@"特征UUID:%@，数据：%@", characteristic.UUID.UUIDString,characteristic.value);
 }
 
 #pragma mark - 中心读取外设实时数据
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
 
     if (characteristic.isNotifying) {
-        [peripheral readValueForCharacteristic:characteristic];
+        
     } else {
         WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
         WCLog(@"%@", characteristic);
-        [peripheral readValueForCharacteristic:characteristic];
-        
-        if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
-            
-            
-            NSString *hexstr = [NSString transformStringWithData:characteristic.value];
-            NSString *macStr = [NSString macAddressWith:hexstr];
-            NSMutableArray *macArr = [NSMutableArray new];
-            NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
-            for (NSString *hexUnit in tempArr) {
-                [macArr addObject:hexUnit];
-            }
-            //传递hex 2位一个字符串的数组
-            if ([self.delegate respondsToSelector:@selector(updateData:withCharacteristic:pheropheralUUID:serviceUUID:)]) {
-                [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:self.senderServiceUUID];
-            }
-        }
+//        [peripheral readValueForCharacteristic:characteristic];
         
         //[self.centralManager cancelPeripheralConnection:peripheral];
     }
+//    [peripheral readValueForCharacteristic:characteristic];
+//    if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
+//
+//
+//        NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+//        NSString *macStr = [NSString macAddressWith:hexstr];
+//        NSMutableArray *macArr = [NSMutableArray new];
+//        NSArray *tempArr = [macStr componentsSeparatedByString:@":"];
+//        for (NSString *hexUnit in tempArr) {
+//            [macArr addObject:hexUnit];
+//        }
+//        //传递hex 2位一个字符串的数组
+//        if ([self.delegate respondsToSelector:@selector(updateData:withCharacteristic:pheropheralUUID:serviceUUID:)]) {
+//            [self.delegate updateData:macArr withCharacteristic:characteristic pheropheralUUID:peripheral.identifier.UUIDString serviceUUID:self.senderServiceUUID];
+//        }
+//    }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
     WCLog(@"特征描述(%@)",descriptor.description);
 }
 
-//发现外设的特征数组
+//发现已连接外设的描述特征数组
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
     WCLog(@"--->%@",characteristic);
     // 读取特征数据
@@ -605,6 +614,13 @@
         _connectPeripheralArray = [NSMutableArray array];
     }
     return _connectPeripheralArray;
+}
+
+- (NSString *)callBackIDString {
+    if (!_callBackIDString) {
+        _callBackIDString = [NSString new];
+    }
+    return _callBackIDString;
 }
 
 @end

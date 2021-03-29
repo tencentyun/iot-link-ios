@@ -294,25 +294,25 @@
 //16进制字符串 获取外设Mac地址
 + (NSString *)macAddressWith:(NSString *)aString{
     NSMutableString *macString = [[NSMutableString alloc] init];
-    if (aString.length >= 14) {
-        [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(2, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(8, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(10, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
-        if (aString.length >= 16) {
-            [macString appendString:@":"];
-            [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
-        }
-    }else {
+//    if (aString.length >= 14) {
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(2, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(8, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(10, 2)] uppercaseString]];
+//        [macString appendString:@":"];
+//        [macString appendString:[[aString substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
+//        if (aString.length >= 16) {
+//            [macString appendString:@":"];
+//            [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
+//        }
+//    }else {
         if (aString.length %2 == 0) {
             if (aString.length == 2) {
                 [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
@@ -328,8 +328,100 @@
             
         }
         
-    }
+//    }
     return macString;
+}
+
+/// 16进制转byte 格式的NSdata
++ (NSData *)hexstringToBytes:(NSString *)hexString {
+    int j=0;
+    Byte bytes[hexString.length / 2];
+    for(int i=0;i<[hexString length];i++)
+    {
+        int int_ch;  /// 两位16进制数转化后的10进制数
+        unichar hex_char1 = [hexString characterAtIndex:i]; ////两位16进制数中的第一位(高位*16)
+        int int_ch1;
+        if(hex_char1 >= '0' && hex_char1 <='9')
+        {
+            int_ch1 = (hex_char1-48)*16;   //// 0 的Ascll - 48
+        }
+        else if(hex_char1 >= 'A' && hex_char1 <='F')
+        {
+            int_ch1 = (hex_char1-55)*16; //// A 的Ascll - 65
+        }
+        else
+        {
+            int_ch1 = (hex_char1-87)*16; //// a 的Ascll - 97
+        }
+        i++;
+        unichar hex_char2 = [hexString characterAtIndex:i]; ///两位16进制数中的第二位(低位)
+        int int_ch2;
+        if(hex_char2 >= '0' && hex_char2 <='9')
+        {
+            int_ch2 = (hex_char2-48); //// 0 的Ascll - 48
+        }
+        else if(hex_char1 >= 'A' && hex_char1 <='F')
+        {
+            int_ch2 = hex_char2-55; //// A 的Ascll - 65
+        }
+        else
+        {
+            int_ch2 = hex_char2-87; //// a 的Ascll - 97
+        }
+        int_ch = int_ch1+int_ch2;
+        NSLog(@"int_ch=%d",int_ch);
+        bytes[j] = int_ch;  ///将转化后的数放入Byte数组里
+        j++;
+    }
+    NSData *newData = [[NSData alloc] initWithBytes:bytes length:hexString.length / 2];
+    return newData;
+    
+}
+
+///16进制与2进制互转
++ (NSString *)getBinaryByhexString:(NSString *)hex binaryString:(NSString *)binary{
+    NSMutableDictionary *hexDic = [[NSMutableDictionary alloc] init];
+    hexDic = [[NSMutableDictionary alloc] initWithCapacity:16];
+    [hexDic setObject:@"0000" forKey:@"0"];
+    [hexDic setObject:@"0001" forKey:@"1"];
+    [hexDic setObject:@"0010" forKey:@"2"];
+    [hexDic setObject:@"0011" forKey:@"3"];
+    [hexDic setObject:@"0100" forKey:@"4"];
+    [hexDic setObject:@"0101" forKey:@"5"];
+    [hexDic setObject:@"0110" forKey:@"6"];
+    [hexDic setObject:@"0111" forKey:@"7"];
+    [hexDic setObject:@"1000" forKey:@"8"];
+    [hexDic setObject:@"1001" forKey:@"9"];
+    [hexDic setObject:@"1010" forKey:@"a"];
+    [hexDic setObject:@"1011" forKey:@"b"];
+    [hexDic setObject:@"1100" forKey:@"c"];
+    [hexDic setObject:@"1101" forKey:@"d"];
+    [hexDic setObject:@"1110" forKey:@"e"];
+    [hexDic setObject:@"1111" forKey:@"f"];
+
+    NSMutableString *binaryStr=[[NSMutableString alloc] init];
+    if (hex.length) {
+        for (int i=0; i<[hex length]; i++) {
+            NSRange rage;
+            rage.length = 1;
+            rage.location = i;
+            NSString *key = [hex substringWithRange:rage];
+            [binaryStr appendString:hexDic[key]];
+        }
+    }else{
+        for (int i=0; i<binary.length; i+=4) {
+            NSString *subStr = [binary substringWithRange:NSMakeRange(i, 4)];
+            int index = 0;
+            for (NSString *str in hexDic.allValues) {
+                index ++;
+                if ([subStr isEqualToString:str]) {
+                    [binaryStr appendString:hexDic.allKeys[index-1]];
+                    break;
+                }
+            }
+        }
+    }
+    return binaryStr;
 }
 
 ///base64编码
