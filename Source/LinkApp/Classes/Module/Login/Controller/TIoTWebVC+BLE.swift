@@ -153,8 +153,8 @@ extension TIoTWebVC {
                         if deviceID as! String == item.identifier.uuidString {
                             let blue = BluetoothCentralManager.shareBluetooth()
                             blue?.connectBluetoothPeripheral(item)
-                            
-                            self.webViewInvokeJavaScript(["result": true, "callbackId": callbackId], port: "callResult")
+                            blue?.callBackIDString = callbackId as? String
+//                            self.webViewInvokeJavaScript(["result": true, "callbackId": callbackId], port: "callResult")
                         }
                     }
                     
@@ -186,7 +186,7 @@ extension TIoTWebVC {
                 
                 var servicesArray = [[String:Any]]()
                 if let deviceServicePeripheral = blue?.deviceServicePeripheral {
-                    if messBody["deviceId"] as? String == deviceServicePeripheral.identifier.uuidString {
+                    if messBody["deviceId"] as? String == deviceServicePeripheral.identifier.uuidString ,deviceServicePeripheral.services != nil {
                         for periphInfo in deviceServicePeripheral.services! {
                             
                             //0000FFE0-0000-1000-8000-00805F9B34FB
@@ -227,7 +227,7 @@ extension TIoTWebVC {
             if let serviceId = messBody["serviceId"] as? String , let diviceId = messBody["deviceId"] as? String{
                 
                 if let deviceServicePeripheral:CBPeripheral = blue?.deviceServicePeripheral {
-                    if diviceId == deviceServicePeripheral.identifier.uuidString {
+                    if diviceId == deviceServicePeripheral.identifier.uuidString ,deviceServicePeripheral.services != nil{
                         
                         for serviceItem in deviceServicePeripheral.services! {
                             
@@ -248,26 +248,25 @@ extension TIoTWebVC {
                             }
                             
                             if serviceId == serviceUuid128bit {
-                                for characteristicItem in serviceItem.characteristics! {
-                                    
-                                    let propertiesItem:CBCharacteristicProperties = characteristicItem.properties
-                                    
-                                    var characteristicUUID = characteristicItem.uuid.uuidString
-                                    
-                                    if  characteristicUUID.count == 4 {
-                                        characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
-                                    }else {
-//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+                                if serviceItem.characteristics != nil {
+                                    for characteristicItem in serviceItem.characteristics! {
+                                        
+                                        let propertiesItem:CBCharacteristicProperties = characteristicItem.properties
+                                        
+                                        var characteristicUUID = characteristicItem.uuid.uuidString
+                                        
+                                        if  characteristicUUID.count == 4 {
+                                            characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
+                                        }else {
+    //                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+                                        }
+                                        
+                                        let characterDic:[String:Any] = ["properties":["notify":propertiesItem.contains(.notify),"write":propertiesItem.contains(.write),"indicate":propertiesItem.contains(.indicate),"read":propertiesItem.contains(.read)],
+                                                                         "uuid":characteristicUUID]
+                                        
+                                        servicesArray.append(characterDic)
                                     }
-                                    
-                                    let characterDic:[String:Any] = ["properties":["notify":propertiesItem.contains(.notify),"write":propertiesItem.contains(.write),"indicate":propertiesItem.contains(.indicate),"read":propertiesItem.contains(.read)],
-                                                                     "uuid":characteristicUUID]
-                                    
-                                    servicesArray.append(characterDic)
                                 }
-                                
-                                
-                                
                             }
                         }
                         
@@ -300,7 +299,7 @@ extension TIoTWebVC {
             if let serviceId = messBody["serviceId"] as? String , let diviceId = messBody["deviceId"] as? String{
                 
                 if let deviceServicePeripheral:CBPeripheral = blue?.deviceServicePeripheral {
-                    if diviceId == deviceServicePeripheral.identifier.uuidString {
+                    if diviceId == deviceServicePeripheral.identifier.uuidString ,deviceServicePeripheral.services != nil{
                         
                         for serviceItem in deviceServicePeripheral.services! {
                             
@@ -321,39 +320,41 @@ extension TIoTWebVC {
                             }
                             
                             if serviceId == serviceUuid128bit {
-                                for characteristicItem in serviceItem.characteristics! {
-                                    
-                                    var characteristicUUID = characteristicItem.uuid.uuidString
-                                    
-                                    if  characteristicUUID.count == 4 {
-                                        characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
-                                    }else {
-//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
-                                    }
-                                    
-                                    if let  characteristicId = messBody["characteristicId"]{
-                                        if characteristicId as! String == characteristicUUID {
-                                            
-                                            var macArr = Array<String>()
-                                            
-                                            if let value = characteristicItem.value {
-                                                 let hexstr = self.transformString(with: value)
-                                                let macStr = self.macAddress(with: hexstr)
+                                if serviceItem.characteristics != nil {
+                                    for characteristicItem in serviceItem.characteristics! {
+                                        
+                                        var characteristicUUID = characteristicItem.uuid.uuidString
+                                        
+                                        if  characteristicUUID.count == 4 {
+                                            characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
+                                        }else {
+    //                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+                                        }
+                                        
+                                        if let  characteristicId = messBody["characteristicId"]{
+                                            if characteristicId as! String == characteristicUUID {
                                                 
-                                                let tempArr = macStr.components(separatedBy: ":")
-                                                for hexUnit:String in tempArr {
-                                                    macArr.append(hexUnit)
+                                                var macArr = Array<String>()
+                                                
+                                                if let value = characteristicItem.value {
+                                                     let hexstr = self.transformString(with: value)
+                                                    let macStr = self.macAddress(with: hexstr)
+                                                    
+                                                    let tempArr = macStr.components(separatedBy: ":")
+                                                    for hexUnit:String in tempArr {
+                                                        macArr.append(hexUnit)
+                                                    }
+                                                    
                                                 }
                                                 
+                                                let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
+                                                blue?.readDataBle(with: serviceId, characteristic: characteristicItem)
+                                                self.bleCharacteristicValueChange(characteristicDic: characterDic)
+                                                
                                             }
-                                            
-                                            let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
-                                            blue?.readDataBle(with: serviceId, characteristic: characteristicItem)
-//                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
-                                            
                                         }
-                                    }
 
+                                    }
                                 }
                                 
                             }
@@ -378,7 +379,7 @@ extension TIoTWebVC {
             if let serviceId = messBody["serviceId"] as? String , let diviceId = messBody["deviceId"] as? String{
                 
                 if let deviceServicePeripheral:CBPeripheral = blue?.deviceServicePeripheral {
-                    if diviceId == deviceServicePeripheral.identifier.uuidString {
+                    if diviceId == deviceServicePeripheral.identifier.uuidString ,deviceServicePeripheral.services != nil{
                         
                         for serviceItem in deviceServicePeripheral.services! {
                             
@@ -399,27 +400,29 @@ extension TIoTWebVC {
                             }
                             
                             if serviceId == serviceUuid128bit {
-                                for characteristicItem in serviceItem.characteristics! {
-                                    
-                                    var characteristicUUID = characteristicItem.uuid.uuidString
-                                    
-                                    if  characteristicUUID.count == 4 {
-                                        characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
-                                    }else {
-//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
-                                    }
-                                    
-                                    if let  characteristicId = messBody["characteristicId"]{
-                                        if characteristicId as! String == characteristicUUID {
-                                            
-                                            if let value = messBody["value"] as? String {
-//                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem)
-                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem, serviceUUID: serviceId)
-                                            }
-                                            
+                                if serviceItem.characteristics != nil {
+                                    for characteristicItem in serviceItem.characteristics! {
+                                        
+                                        var characteristicUUID = characteristicItem.uuid.uuidString
+                                        
+                                        if  characteristicUUID.count == 4 {
+                                            characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
+                                        }else {
+    //                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
                                         }
-                                    }
+                                        
+                                        if let  characteristicId = messBody["characteristicId"]{
+                                            if characteristicId as! String == characteristicUUID {
+                                                
+                                                if let value = messBody["value"] as? String {
+    //                                                blue?.writeDataToBluetooth(with: value, send: characteristicItem)
+                                                    blue?.writeDataToBluetooth(with: value, send: characteristicItem, serviceUUID: serviceId)
+                                                }
+                                                
+                                            }
+                                        }
 
+                                    }
                                 }
                                 
                             }
@@ -445,7 +448,7 @@ extension TIoTWebVC {
             if let serviceId = messBody["serviceId"] as? String , let diviceId = messBody["deviceId"] as? String{
                 
                 if let deviceServicePeripheral:CBPeripheral = blue?.deviceServicePeripheral {
-                    if diviceId == deviceServicePeripheral.identifier.uuidString {
+                    if diviceId == deviceServicePeripheral.identifier.uuidString ,deviceServicePeripheral.services != nil{
                         
                         for serviceItem in deviceServicePeripheral.services! {
                             
@@ -466,47 +469,49 @@ extension TIoTWebVC {
                             }
                             
                             if serviceId == serviceUuid128bit {
-                                for characteristicItem in serviceItem.characteristics! {
-                                    
-                                    var characteristicUUID = characteristicItem.uuid.uuidString
-                                    
-                                    if  characteristicUUID.count == 4 {
-                                        characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
-                                    }else {
-//                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
-                                    }
-                                    
-                                    if let  characteristicId = messBody["characteristicId"]{
-                                        if characteristicId as! String == characteristicUUID {
-                                            
-                                            if let value = messBody["state"] as? Bool {
-//                                                if characteristicItem.properties == CBCharacteristicProperties.notify {
-                                                    blue?.deviceServicePeripheral.setNotifyValue(value, for: characteristicItem)
-                                                    blue?.notififation(with: deviceServicePeripheral, service: serviceItem)
+                                if serviceItem.characteristics != nil {
+                                    for characteristicItem in serviceItem.characteristics! {
+                                        
+                                        var characteristicUUID = characteristicItem.uuid.uuidString
+                                        
+                                        if  characteristicUUID.count == 4 {
+                                            characteristicUUID = "0000\(characteristicUUID)\(bluetoothStandard)"
+                                        }else {
+    //                                        characteristicUUID = "\(characteristicUUID)\(bluetoothStandard)"
+                                        }
+                                        
+                                        if let  characteristicId = messBody["characteristicId"]{
+                                            if characteristicId as! String == characteristicUUID {
+                                                
+                                                if let value = messBody["state"] as? Bool {
+    //                                                if characteristicItem.properties == CBCharacteristicProperties.notify {
+                                                        blue?.deviceServicePeripheral.setNotifyValue(value, for: characteristicItem)
+                                                        blue?.notififation(with: deviceServicePeripheral, service: serviceItem)
+                                                        
+    //                                                }
                                                     
-//                                                }
-                                                
-                                            }
-                                            
-                                            var macArr = Array<String>()
-                                            
-                                            if let value = characteristicItem.value {
-                                                 let hexstr = self.transformString(with: value)
-                                                let macStr = self.macAddress(with: hexstr)
-                                                
-                                                let tempArr = macStr.components(separatedBy: ":")
-                                                for hexUnit:String in tempArr {
-                                                    macArr.append(hexUnit)
                                                 }
                                                 
+                                                var macArr = Array<String>()
+                                                
+                                                if let value = characteristicItem.value {
+                                                     let hexstr = self.transformString(with: value)
+                                                    let macStr = self.macAddress(with: hexstr)
+                                                    
+                                                    let tempArr = macStr.components(separatedBy: ":")
+                                                    for hexUnit:String in tempArr {
+                                                        macArr.append(hexUnit)
+                                                    }
+                                                    
+                                                }
+                                                
+                                                let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
+                                                
+//                                                self.bleCharacteristicValueChange(characteristicDic: characterDic)
                                             }
-                                            
-                                            let characterDic:[String : Any] = ["deviceId":diviceId,"serviceId":serviceId,"characteristicId":characteristicUUID,"value":macArr]
-                                            
-                                            self.bleCharacteristicValueChange(characteristicDic: characterDic)
                                         }
-                                    }
 
+                                    }
                                 }
                                 
                             }
@@ -654,7 +659,10 @@ extension TIoTWebVC: BluetoothCentralManagerDelegate {
     public func connectBluetoothDeviceSucess(withPerpheral connectedPerpheral: CBPeripheral!, withConnectedDevArray connectedDevArray: [CBPeripheral]!) {
         
 //        self.connectedArray = [CBPeripheral](connectedDevArray)
+        let blue = BluetoothCentralManager.shareBluetooth()
+        let callBackString :String = blue?.callBackIDString ?? ""
         
+        self.webViewInvokeJavaScript(["result": true, "callbackId": callBackString], port: "callResult")
         //透传事件
         self.bleConnectionStateChange(perpheral: connectedPerpheral)
     }

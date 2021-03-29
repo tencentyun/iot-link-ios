@@ -35,6 +35,11 @@
 @property (nonatomic, strong, readonly) CBPeripheral *deviceServicePeripheral;
 
 /**
+ *开始创建蓝牙连接时，保存h5 callback
+ */
+@property (nonatomic, strong) NSString *callBackIDString;
+
+/**
  * 单例构造方法
  * @return Bluetooth共享实例
  */

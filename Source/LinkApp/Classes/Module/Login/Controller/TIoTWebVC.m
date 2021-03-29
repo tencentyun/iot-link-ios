@@ -273,25 +273,7 @@
     }
     
     NSMutableString *macString = [[NSMutableString alloc] init];
-    if (aString.length >= 14) {
-        [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(2, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(4, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(6, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(8, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(10, 2)] uppercaseString]];
-        [macString appendString:@":"];
-        [macString appendString:[[aString substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
-        if (aString.length >= 16) {
-            [macString appendString:@":"];
-            [macString appendString:[[aString substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
-        }
-    }else {
+
         if (aString.length %2 == 0) {
             if (aString.length == 2) {
                 [macString appendString:[[aString substringWithRange:NSMakeRange(0, 2)] uppercaseString]];
@@ -303,13 +285,11 @@
                         [macString appendString:@":"];
                     }
                         
-//                        [macString appendString:[[aString substringWithRange:NSMakeRange(i+2, 2)] uppercaseString]];
                 }
             }
             
         }
         
-    }
     return macString;
 }
 
@@ -624,5 +604,12 @@
         };
     }
     return _bridgeMethodDic;
+}
+
+- (NSMutableArray <NSMutableDictionary*>*)peripheralInfoArray {
+    if (!_peripheralInfoArray) {
+        _peripheralInfoArray = [NSMutableArray new];
+    }
+    return _peripheralInfoArray;
 }
 @end

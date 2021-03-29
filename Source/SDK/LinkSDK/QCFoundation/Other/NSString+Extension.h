@@ -53,6 +53,10 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 + (NSData *)convertHexStrToData:(NSString *)str;
 /// 16进制字符串 获取外设Mac地址
 + (NSString *)macAddressWith:(NSString *)aString;
+/// 16进制转byte 格式的NSdata
++ (NSData *)hexstringToBytes:(NSString *)hexString;
+//16进制与2进制互转
++ (NSString *)getBinaryByhexString:(NSString *)hex binaryString:(NSString *)binary;
 
 /// 字符串是否有数字和字母
 /// @param pwd bool
