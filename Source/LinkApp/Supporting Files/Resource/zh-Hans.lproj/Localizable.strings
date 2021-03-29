@@ -697,6 +697,10 @@
 "region_success" = "注册成功";
 "reset_password_success" = "重置密码成功";
 "phoneNumber_error" = "号码错误";
+"device" = "设备";
+"family" = "家庭";
+"notify" = "通知";
+
 
 //v1.1.0 版本新加
 "home_projuct" = "连连";

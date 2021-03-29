@@ -49,7 +49,7 @@
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.backContentView).offset(20);
             make.centerY.equalTo(self.backContentView);
-            make.width.mas_equalTo(100);
+            make.width.mas_greaterThanOrEqualTo(150);
         }];
         
         self.lineView = [[UIView alloc] init];

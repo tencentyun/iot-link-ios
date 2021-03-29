@@ -702,6 +702,10 @@ If the problem still persists, we recommend you remove the device and add it aga
 "region_success" = "Registration succeeded";
 "reset_password_success" = "Reset password successfully";
 "phoneNumber_error" = "号码错误"; //缺失
+"device" = "Device";
+"family" = "Family";
+"notify" = "Notification";
+
 
 
 //v1.1.0 版本新加

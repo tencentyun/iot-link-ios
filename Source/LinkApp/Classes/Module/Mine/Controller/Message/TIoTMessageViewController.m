@@ -78,10 +78,9 @@
         UIViewController *vc1 = [NSClassFromString(@"TIoTMessageFamilyVC") new];
         UIViewController *vc2 = [NSClassFromString(@"TIoTMessageNoticeVC") new];
         
-        vc0.title = @"设备";
-        vc1.title = @"家庭";
-        vc2.title = @"通知";
-        
+        vc0.title = NSLocalizedString(@"device", @"设备");
+        vc1.title = NSLocalizedString(@"family", @"家庭");
+        vc2.title = NSLocalizedString(@"notify", @"通知");
         
         vc0.view.backgroundColor = kBgColor;
         vc1.view.backgroundColor = kBgColor;

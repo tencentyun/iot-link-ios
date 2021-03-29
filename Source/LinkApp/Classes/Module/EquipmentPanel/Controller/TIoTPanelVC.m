@@ -644,7 +644,7 @@ static NSString *itemId3 = @"i_ooo454";
 - (void)moreClick:(UIButton *)sender{
     
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
-    vc.title = @"设备详情";
+    vc.title = NSLocalizedString(@"device_details", @"设备详情");
     vc.deviceDic = self.deviceDic;
     [self.navigationController pushViewController:vc animated:YES];
 }

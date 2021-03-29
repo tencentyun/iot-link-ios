@@ -475,7 +475,7 @@
     [self callBackResultWith:message];
     
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
-    vc.title = @"设备详情";
+    vc.title = NSLocalizedString(@"device_details", @"设备详情");
     vc.deviceDic = self.deviceDic;
     [self.navigationController pushViewController:vc animated:YES];
 }

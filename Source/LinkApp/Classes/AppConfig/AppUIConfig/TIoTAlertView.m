@@ -48,6 +48,7 @@
 - (void)alertWithTitle:(NSString *)title message:(NSString *)message cancleTitlt:(NSString *)cancleTitlt doneTitle:(NSString *)doneTitle
 {
     self.nameL.text = title;
+    self.nameL.numberOfLines = 0;
     self.messageL.text = message;
     self.messageL.textAlignment = NSTextAlignmentCenter;
     self.messageT.placeholder = message;
