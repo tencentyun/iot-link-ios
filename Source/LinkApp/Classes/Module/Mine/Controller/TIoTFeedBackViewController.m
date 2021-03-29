@@ -184,8 +184,8 @@ static NSInteger maxNumber = 100;
 //    [self.submitBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.submitBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.submitBtn addTarget:self action:@selector(submitClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.submitBtn.backgroundColor = kMainColorDisable;
-    self.submitBtn.enabled = NO;
+    self.submitBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];//kMainColorDisable;
+    self.submitBtn.enabled = YES;
     self.submitBtn.layer.cornerRadius = 3;
     [scroll addSubview:self.submitBtn];
     [self.submitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -204,8 +204,9 @@ static NSInteger maxNumber = 100;
         self.submitBtn.enabled = YES;
     }
     else{
-        self.submitBtn.backgroundColor = kMainColorDisable;
-        self.submitBtn.enabled = NO;
+//        self.submitBtn.backgroundColor = kMainColorDisable;
+        self.submitBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+        self.submitBtn.enabled = YES;
     }
 }
 
@@ -222,19 +223,20 @@ static NSInteger maxNumber = 100;
         return;
     }
     
-    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
     
     NSMutableArray *urlArr = [NSMutableArray array];
     for (NSDictionary *dic in self.images) {
         [urlArr addObject:dic[@"url"]];
     }
     
-    
+    __weak typeof(self)weakSelf = self;
     [[TIoTRequestObject shared] post:AppUserFeedBack Param:@{@"Type":@"advise",@"Desc":self.contextTV.text,@"Contact":self.contactTF.hasText ? self.contactTF.text : @"",@"LogUrl":[urlArr componentsJoinedByString:@","]} success:^(id responseObject) {
+        [MBProgressHUD dismissInView:weakSelf.view];
         [MBProgressHUD showSuccess:NSLocalizedString(@"feedback_success", @"反馈成功")];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+        [MBProgressHUD dismissInView:weakSelf.view];
     }];
 }
 
