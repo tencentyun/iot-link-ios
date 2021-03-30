@@ -295,8 +295,8 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
             
             if ([NSString isNullOrNilWithObject:addJsonDic[@"address"]?:@""] || [NSString isFullSpaceEmpty:addJsonDic[@"address"]?:@""] || [addJsonDic[@"address"]?:@"" isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) {
                 
-                CLLocationDegrees destlat = [addJsonDic[@"latitude"]?:@"" doubleValue];
-                CLLocationDegrees destlng = [addJsonDic[@"longitude"]?:@"" doubleValue];
+                CLLocationDegrees destlat = self.latitude;
+                CLLocationDegrees destlng = self.longitude;
                 
                 [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(destlat,destlng)];
                 //首次请求定位周围地点列表

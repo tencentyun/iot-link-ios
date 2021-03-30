@@ -121,6 +121,8 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewDidAppear:animated];
     self.navigationController.tabBarController.tabBar.hidden = NO;
     
+    //涉及到房间变化，需要clear再刷新
+    [self clearCMTitleView];
     
     if (self.tableView) {
         if (self.currentFamilyId != nil) {
@@ -322,7 +324,7 @@ static CGFloat kHeaderViewHeight = 162;
         [self addTableHeaderView];
         self.tableHeaderView.alpha = 1;
         self.tableHeaderView2.alpha = 1;
-        
+        self.tableHeaderView.hidden = NO;
         [self.tableView hideStatus];
         [self.tableView reloadData];
         
@@ -352,10 +354,15 @@ static CGFloat kHeaderViewHeight = 162;
                 [selfWeak addEquipmentViewController];
             }];
         }
-        //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
         
+        //房间列表显示
+        self.tableHeaderView.alpha = 1;
+        self.tableHeaderView.hidden = NO;
+        [self addTableHeaderView];
         [self.deviceConfigArray removeAllObjects];
         [self.devicesTableView reloadData];
+        
+        [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
     else{
         
@@ -364,10 +371,10 @@ static CGFloat kHeaderViewHeight = 162;
         
         
         //房间列表显示
-        [self addTableHeaderView];
         self.tableHeaderView.alpha = 1;
+        self.tableHeaderView.hidden = NO;
         self.tableHeaderView2.alpha = 1;
-        
+        [self addTableHeaderView];
         [self.devicesTableView hideStatus];
 //        [self.devicesTableView reloadData];
         
@@ -435,7 +442,7 @@ static CGFloat kHeaderViewHeight = 162;
     config.cm_additionalMode = CMPageTitleAdditionalMode_Seperateline;
     config.cm_underlineColor = [UIColor whiteColor];
     config.cm_underlineWidth = 16;
-    config.cm_contentMode = CMPageTitleContentMode_Center;
+    config.cm_contentMode = CMPageTitleContentMode_Left;
     config.cm_underlineBorder = YES;
     config.cm_underlineWidthScale = 0.3;
     config.cm_underlineLabelInterval = 7;
@@ -460,13 +467,27 @@ static CGFloat kHeaderViewHeight = 162;
             make.height.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 162);
         }];
         
+//        self.tableHeaderView = [[CMPageTitleContentView alloc] initWithConfig:config];
+//        _tableHeaderView.backgroundColor = [UIColor clearColor];
+//        _tableHeaderView.frame = CGRectMake(0,kHeaderViewHeight - 44, kScreenWidth, 44);
+//        _tableHeaderView.contentSize = CGSizeMake(config.cm_minContentWidth, 44);
+//        _tableHeaderView.cm_delegate = self;
+//        _tableHeaderView.cm_selectedIndex = index;
+//        [self.tableView addSubview:self.tableHeaderView];
+//
+//        [self.devicesTableView addSubview:self.tableHeaderView];
+    }
+    
+    
+    if (self.tableHeaderView == nil) {
         self.tableHeaderView = [[CMPageTitleContentView alloc] initWithConfig:config];
-        _tableHeaderView.backgroundColor = [UIColor clearColor];
-        _tableHeaderView.frame = CGRectMake(0,kHeaderViewHeight - 44, kScreenWidth, 44);
-        _tableHeaderView.cm_delegate = self;
-        _tableHeaderView.cm_selectedIndex = index;
+        self.tableHeaderView.backgroundColor = [UIColor clearColor];
+        self.tableHeaderView.frame = CGRectMake(0,kHeaderViewHeight - 44, kScreenWidth, 44);
+        self.tableHeaderView.contentSize = CGSizeMake(config.cm_minContentWidth, 44);
+        self.tableHeaderView.cm_delegate = self;
+        self.tableHeaderView.cm_selectedIndex = index;
         [self.tableView addSubview:self.tableHeaderView];
-        
+
         [self.devicesTableView addSubview:self.tableHeaderView];
     }
     
@@ -1125,7 +1146,7 @@ static CGFloat kHeaderViewHeight = 162;
 
 #pragma mark - event
 
-///切换家庭
+///MARK:切换家庭
 - (void)chooseFamilyByIndex:(NSInteger)index
 {
     
@@ -1137,10 +1158,19 @@ static CGFloat kHeaderViewHeight = 162;
     self.currentFamilyRole = model.Role;
     [TIoTCoreUserManage shared].FamilyType = model.FamilyType;
     
+    //涉及到房间变化，需要clear再刷新
+    [self clearCMTitleView];
+    
     [self getRoomList:model.FamilyId];
     
     //查询家庭的地址
     [self getFamilyInfoAddressWithFamilyID:model.FamilyId?:@""];
+}
+
+///MARK:清理CMTitleContentView 保证每次切换房间都能刷新rooms
+- (void)clearCMTitleView {
+    [self.tableHeaderView removeFromSuperview];
+    self.tableHeaderView = nil;
 }
 
 - (void)messageClick:(id)sender{

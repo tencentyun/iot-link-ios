@@ -103,17 +103,25 @@
             labelW = [self.config.cm_titleWidths[i] floatValue];
             
             [self addSubview:label];
-            
+            NSArray *lauoutConstraintArray = @[];
             if (self.config.cm_contentMode == CMPageTitleContentMode_Center) {
                 labelX = 0;
             }
-            NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:itemWidth];
             
             NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:60];
             
             NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.titleLabels.lastObject ?: self attribute:self.titleLabels.lastObject ? NSLayoutAttributeRight : NSLayoutAttributeLeft multiplier:1 constant:labelX];
             NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem: self attribute: NSLayoutAttributeCenterY multiplier:1 constant:0];
-            [NSLayoutConstraint activateConstraints:@[leftConstraint,centerYConstraint,widthConstraint,heightConstraint]];
+            
+            lauoutConstraintArray = @[leftConstraint,centerYConstraint,heightConstraint];
+            
+            if (self.config.cm_contentMode == CMPageTitleContentMode_Center) {
+                NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:itemWidth];
+                lauoutConstraintArray = @[leftConstraint,centerYConstraint,widthConstraint,heightConstraint];
+            }
+            
+            
+            [NSLayoutConstraint activateConstraints:lauoutConstraintArray];
             
             label.userInteractionEnabled = YES;
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickLabel:)];
