@@ -190,7 +190,7 @@ static CGFloat kWidthHeightScale = 330/276;
     
     //左侧item离线蒙版
     self.leftWhiteMaskView = [[UIImageView alloc]init];
-    self.leftWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    self.leftWhiteMaskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.7];
     [self.leftButton addSubview:self.leftWhiteMaskView];
     [self.leftWhiteMaskView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.leftButton);
