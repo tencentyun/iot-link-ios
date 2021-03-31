@@ -54,6 +54,9 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 @property (nonatomic, assign) double latitude;
 @property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, assign) NSInteger pageNumber;
+
+@property (nonatomic, assign) BOOL isSearchLocationVCBack; //是否从搜索页面选点返回
+@property (nonatomic, strong) TIoTPoisModel *searchLocationModel; //保存从搜索传的位置model
 @end
 
 @implementation TIoTMapVC
@@ -78,6 +81,16 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     self.mapView.delegate = self;
     [self.mapView setUserLocationHidden:NO];
     [self.mapView setShowsUserLocation:YES];
+    
+    self.isSearchLocationVCBack = NO;
+    self.searchLocationModel = nil;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 - (void)setupMapCenter {
@@ -275,6 +288,9 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         weakSelf.annotation.coordinate = chooseLocation;
         [weakSelf.mapView setCenterCoordinate:chooseLocation];
         
+        weakSelf.isSearchLocationVCBack = YES;
+        weakSelf.searchLocationModel = posiModel;
+        
         [weakSelf resetRequestPragma];
         [weakSelf requestLocationList:weakSelf.mapView.centerCoordinate];
     };
@@ -293,7 +309,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
             
             NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
             
-            if ([NSString isNullOrNilWithObject:addJsonDic[@"address"]?:@""] || [NSString isFullSpaceEmpty:addJsonDic[@"address"]?:@""] || [addJsonDic[@"address"]?:@"" isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) {
+            if (([NSString isNullOrNilWithObject:addJsonDic[@"address"]?:@""] || [NSString isFullSpaceEmpty:addJsonDic[@"address"]?:@""] || [addJsonDic[@"address"]?:@"" isEqualToString:NSLocalizedString(@"setting_family_address", @"设置定位")]) && ([NSString isNullOrNilWithObject:addJsonDic[@"name"]])) {
                 
                 CLLocationDegrees destlat = self.latitude;
                 CLLocationDegrees destlng = self.longitude;
@@ -385,6 +401,45 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         [self.searchResultArray addObjectsFromArray:locationModel.pois];
         if (self.searchResultArray.count == 0) {
             [MBProgressHUD dismissInView:self.view];
+        }
+        
+        //判断是否是从搜索页面返回的刷新；是：将选筛选选择地点是否包含，有的话将选择地点放首位
+        if (self.isSearchLocationVCBack == YES) {
+            if (self.pageNumber == 2) {
+                
+                NSMutableArray *tempArray = [self.searchResultArray mutableCopy];
+                
+                for (int i = 0; i < tempArray.count; i++) {
+                    TIoTPoisModel *model = tempArray[i];
+                    model.address = self.searchLocationModel.address;
+                    if ([model.title isEqualToString:self.searchLocationModel.title]) {
+                        
+                        [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
+                        [self.searchResultArray replaceObjectAtIndex:0 withObject:model];
+                    }
+                }
+            }
+        }else {
+            NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
+            if (self.pageNumber == 2) {
+                if (![NSString isNullOrNilWithObject:addJsonDic[@"name"]]) {
+                 //之前有定位情况下，从家庭页面进入的地址是首位
+                    NSMutableArray *tempArray = [self.searchResultArray mutableCopy];
+                    for (int i = 0; i < tempArray.count; i++) {
+                        TIoTPoisModel *model = tempArray[i];
+                        if ([addJsonDic[@"name"] isEqualToString:model.title]) {
+                            [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
+                            
+                            //补充搜索页面有address，而从家庭详情进来没有address的情况
+                            if (![NSString isNullOrNilWithObject:addJsonDic[@"address"]] && self.searchResultArray.count >0) {
+                                TIoTPoisModel *firstModel = self.searchResultArray[0];
+                                firstModel.address = addJsonDic[@"address"];
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
         
         [self.searchResultTableView reloadData];
@@ -544,12 +599,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     }];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark - QMSSearchDelegate
 - (void)searchWithReverseGeoCodeSearchOption:(QMSReverseGeoCodeSearchOption *)reverseGeoCodeSearchOption didReceiveResult:(QMSReverseGeoCodeSearchResult *)reverseGeoCodeSearchResult {
     NSLog(@"pois--->%@", reverseGeoCodeSearchResult);
@@ -600,6 +649,12 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
                     NSString *addressDetail = [NSString stringWithFormat:@"%@%@%@%@",cellModel.ad_info.province?:@"",cellModel.ad_info.city?:@"",cellModel.ad_info.district?:@"",cellModel.address?:@""];
                     NSString *lat = [NSString stringWithFormat:@"%f",cellModel.location.lat];
                     NSString *lng = [NSString stringWithFormat:@"%f",cellModel.location.lng];
+                    
+                    if (weakSelf.isSearchLocationVCBack == YES && weakSelf.searchLocationModel != nil) {
+                        if (weakSelf.selectedIndex==0) {
+                            addressDetail = weakSelf.searchLocationModel.address;
+                        }
+                    }
                     NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":addressString,@"title":cellModel.ad_info.name?:@""};
                     
                     NSString *addressJson = [addressDic yy_modelToJSONString];
