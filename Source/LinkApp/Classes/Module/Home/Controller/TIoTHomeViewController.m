@@ -1264,7 +1264,10 @@ static CGFloat kHeaderViewHeight = 162;
             [weakSelf chooseDeviceWith:rightIndexPath];
         };
         
-        [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
+        if (indexPath.row < self.deviceConfigArray.count) {
+            [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
+        }
+        
 //        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
         
         cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
