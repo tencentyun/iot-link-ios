@@ -300,7 +300,7 @@
 - (void)sliderValueChanged:(id)sender{
     UISlider *slider = (UISlider *)sender;
     if ([self.model.define.type isEqualToString:@"int"]) {
-        self.valueLab.text = [NSString stringWithFormat:@"%.f%@", roundf(slider.value) ,self.model.define.unit?:@""];
+        self.valueLab.text = [NSString stringWithFormat:@"%@%@", @(roundf(slider.value)) ,self.model.define.unit?:@""];
     }
     else
     {
@@ -308,11 +308,12 @@
     }
     
     CGFloat KSliderValueX = 0;
-//    CGFloat kValueWidth = CGRectGetWidth(self.valueLab.frame);
+    CGFloat kValueWidth = CGRectGetWidth(self.valueLab.frame);
+//    CGFloat kValueWidth = [self WidthWithString:self.valueLab.text font:[UIFont wcPfRegularFontOfSize:16] height:30];
     CGFloat kValueLabX = 0;
     KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
 //    kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
-    kValueLabX = self.slider.sliderThumbRectOriginX + self.kvalueLabPadding;
+    kValueLabX = self.slider.sliderThumbRectOriginX + self.slider.sliderThumbRectWidth/2 + self.kvalueLabPadding - kValueWidth/2;
     
     [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kValueLabX);
@@ -322,35 +323,13 @@
 
 - (void)setModel:(TIoTPropertiesModel *)model {
     _model = model;
-    if ([self.model.define.type isEqualToString:@"int"]) {
-        
-        if (![NSString isNullOrNilWithObject:model.status.Value]) {
-            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.status.Value ,model.define.unit?:@""];
-            self.slider.value = model.status.Value.intValue;
-        }else {
-            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.define.start ,model.define.unit?:@""];
-            self.slider.value = model.define.start.intValue;
-        }
-        self.slider.minimumValue = self.model.define.min.intValue?:0;// 设置最小值
-        self.slider.maximumValue = self.model.define.max.intValue?:100;// 设置最大值
-    }
-    else
-    {
-        if (![NSString isNullOrNilWithObject:model.status.Value]) {
-            self.valueLab.text = [NSString stringWithFormat:@"%@%@", model.status.Value ,model.define.unit?:@""];
-            self.slider.value = model.status.Value.floatValue;
-        }else {
-            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", model.define.start.floatValue ,model.define.unit?:@""];
-            self.slider.value = model.define.start.floatValue;
-        }
-        self.slider.minimumValue = self.model.define.min.floatValue?:0;// 设置最小值
-        self.slider.maximumValue = self.model.define.max.floatValue?:100;// 设置最大值
-    }
+    
+    [self initSliderValue];
     
     CGFloat kValueWidth = [self WidthWithString:self.valueLab.text font:[UIFont wcPfRegularFontOfSize:16] height:30];
-//    CGFloat KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
-//    CGFloat kValueLabX = KSliderValueX + self.kvalueLabPadding - kValueWidth/2;
-    CGFloat kValueLabX = self.slider.sliderThumbRectOriginX + self.kvalueLabPadding - - kValueWidth/2;
+    CGFloat KSliderValueX = self.slider.value/(self.slider.maximumValue - self.slider.minimumValue)*(self.sliderWidth);
+    CGFloat kValueLabX = KSliderValueX + self.slider.sliderThumbRectWidth/2 + self.kvalueLabPadding - kValueWidth/2;
+//    CGFloat kValueLabX = self.slider.sliderThumbRectOriginX + self.slider.sliderThumbRectWidth/2 + self.kvalueLabPadding - kValueWidth/2;
     [self.valueLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kValueLabX);
     }];
@@ -418,7 +397,7 @@
             if (weakSelf.sliderTaskValueBlock) {
                 NSString *valueString = @"";
                 if ([weakSelf.model.define.type isEqualToString:@"int"]) {
-                    valueString = [NSString stringWithFormat:@"%.f%@", roundf(weakSelf.slider.value) ,weakSelf.model.define.unit?:@""];
+                    valueString = [NSString stringWithFormat:@"%@%@", @(roundf(weakSelf.slider.value)) ,weakSelf.model.define.unit?:@""];
                 }
                 else if ([weakSelf.model.define.type isEqualToString:@"float"])
                 {
@@ -474,6 +453,36 @@
             make.top.mas_equalTo(self.kReduceBtnY);
         }];
     }
+    
+    [self initSliderValue];
 }
 
+///MARK: 初始化slider 初始值
+- (void)initSliderValue {
+    
+    if ([self.model.define.type isEqualToString:@"int"]) {
+        
+        if (![NSString isNullOrNilWithObject:self.model.status.Value]) {
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", self.model.status.Value ,self.model.define.unit?:@""];
+            self.slider.value = self.model.status.Value.intValue;
+        }else {
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", self.model.define.start ,self.model.define.unit?:@""];
+            self.slider.value = self.model.define.start.intValue;
+        }
+        self.slider.minimumValue = self.model.define.min.intValue?:0;// 设置最小值
+        self.slider.maximumValue = self.model.define.max.intValue?:100;// 设置最大值
+    }
+    else
+    {
+        if (![NSString isNullOrNilWithObject:self.model.status.Value]) {
+            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", self.model.status.Value.floatValue ,self.model.define.unit?:@""];
+            self.slider.value = self.model.status.Value.floatValue;
+        }else {
+            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", self.model.define.start.floatValue ,self.model.define.unit?:@""];
+            self.slider.value = self.model.define.start.floatValue;
+        }
+        self.slider.minimumValue = self.model.define.min.floatValue?:0;// 设置最小值
+        self.slider.maximumValue = self.model.define.max.floatValue?:100;// 设置最大值
+    }
+}
 @end

@@ -296,6 +296,11 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             if ([NSString isNullOrNilWithObject:valueString]) {
                 valueString = model[@"define"][@"start"]?:@"";
             }
+            if ([model[@"define"][@"type"] isEqualToString:@"int"]) {
+                valueString = [NSString stringWithFormat:@"%d",valueString.intValue];
+            }else if ([model[@"define"][@"type"] isEqualToString:@"float"]) {
+                valueString = [NSString stringWithFormat:@"%.1f",valueString.floatValue];
+            }
             cell.propertyValue = [NSString stringWithFormat:@"%@%@",valueString,model[@"define"][@"unit"]?:@""];
             cell.userInteractionEnabled = [weakSelf.deviceDic[@"Online"] boolValue];
             [cell setIconDefaultImageString:@"shortcut_light" withURLString:shortcutDic[@"ui"][@"icon"]?:@""];
@@ -315,6 +320,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
                     }else {
                         [weakSelf reportDeviceData:@{model.id:numberStr}];
                     }
+                    [collectionView reloadData];
                 };
                 
                 [self.blackMaskView addSubview:sliderValueView];
@@ -365,6 +371,8 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
                             [weakSelf reportDeviceData:@{model.id:@(i)}];
                         }
                     }
+                    
+                    [collectionView reloadData];
                 };
                 
                 [self.blackMaskView addSubview:clickValueView];
@@ -405,6 +413,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
                 [self reportDeviceData:uploadInfo];
+                [collectionView reloadData];
             };
             return cell;
         }else {
