@@ -11,7 +11,7 @@
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
 
-char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
+const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (type == 1) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
@@ -19,14 +19,14 @@ char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     }else if (type == 3) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
-        return (char*)(isWriteFile?"1":"0");
+        return (isWriteFile?"1":"0");
     }else if (type == 4) {
         
         NSString *fileName = @"video.data";
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentDirectory = paths.firstObject;
         NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-        return (char *)saveFilePath.UTF8String;
+        return saveFilePath.UTF8String;
     }else {
         printf("XP2P log: %s\n", msg);
     }
@@ -97,7 +97,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     
     //1.配置IOT_P2P SDK
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], "_sys_xp2p_info", "");
+    startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], "");
 }
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {

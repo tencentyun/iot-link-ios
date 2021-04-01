@@ -1,5 +1,4 @@
 PODS:
-  - FDFullscreenPopGesture (1.1)
   - Firebase/Analytics (6.31.1):
     - Firebase/Core
   - Firebase/Core (6.31.1):
@@ -96,13 +95,8 @@ PODS:
   - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.5.0)
-  - IQKeyboardManager (6.1.1)
-  - KeychainAccess (4.2.0)
-  - lottie-ios (3.1.8)
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
-  - MGJRouter (0.10.0)
-  - MJRefresh (3.2.0)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -116,8 +110,6 @@ PODS:
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
-  - SocketRocket (0.5.1)
-  - Tencent-MapSDK (4.3.9)
   - TIoTLinkKit (1.0.0):
     - TIoTLinkKit/LinkSDK (= 1.0.0)
   - TIoTLinkKit/LinkRTC (1.0.0):
@@ -131,43 +123,28 @@ PODS:
     - TIoTThridSDK/Faac-iOS
     - TIoTThridSDK/IJKPlayer-iOS
     - TIoTThridSDK/XP2P-iOS
-  - TIoTThridSDK/Faac-iOS (1.0.6-beta.202103250850)
-  - TIoTThridSDK/IJKPlayer-iOS (1.0.6-beta.202103250850)
-  - TIoTThridSDK/TPNS-iOS (1.0.6-beta.202103250850)
-  - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.6-beta.202103250850)
-  - TIoTThridSDK/XP2P-iOS (1.0.6-beta.202103250850)
-  - TrueTime (5.0.3)
+  - TIoTThridSDK/Faac-iOS (1.0.6-beta.202103311418)
+  - TIoTThridSDK/IJKPlayer-iOS (1.0.6-beta.202103311418)
+  - TIoTThridSDK/TPNS-iOS (1.0.6-beta.202103311418)
+  - TIoTThridSDK/XP2P-iOS (1.0.6-beta.202103311418)
   - TXLiteAVSDK_TRTC (8.0.9644)
-  - TZImagePickerController (3.2.1)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - FDFullscreenPopGesture (= 1.1)
   - Firebase/Analytics (= 6.31.1)
   - Firebase/Crashlytics (= 6.31.1)
   - Firebase/Performance (= 6.31.1)
-  - IQKeyboardManager (= 6.1.1)
-  - KeychainAccess (= 4.2.0)
-  - lottie-ios (= 3.1.8)
   - Masonry (= 1.1.0)
-  - MGJRouter (= 0.10.0)
-  - MJRefresh (= 3.2.0)
   - QCloudCOSXML/Transfer (= 5.5.2)
   - SDWebImage (= 4.4.2)
-  - SocketRocket (= 0.5.1)
-  - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
   - TIoTLinkKit/LinkVideo (from `./`)
   - TIoTThridSDK/TPNS-iOS (~> 1.0.6-beta.1)
-  - TIoTThridSDK/WechatOpenSDK_NoPay (~> 1.0.6-beta.1)
-  - TrueTime (= 5.0.3)
-  - TZImagePickerController (= 3.2.1)
   - YYModel (= 1.0.4)
 
 SPEC REPOS:
   trunk:
-    - FDFullscreenPopGesture
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -182,25 +159,16 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
-    - IQKeyboardManager
-    - KeychainAccess
-    - lottie-ios
     - Masonry
     - MBProgressHUD
-    - MGJRouter
-    - MJRefresh
     - nanopb
     - PromisesObjC
     - Protobuf
     - QCloudCore
     - QCloudCOSXML
     - SDWebImage
-    - SocketRocket
-    - Tencent-MapSDK
     - TIoTThridSDK
-    - TrueTime
     - TXLiteAVSDK_TRTC
-    - TZImagePickerController
     - YYModel
 
 EXTERNAL SOURCES:
@@ -208,7 +176,6 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   Firebase: 658370fa0181826a74b7cfca8d68c5856ca749ae
   FirebaseABTesting: 8a9d8df3acc2b43f4a22014ddf9f601bca6af699
   FirebaseAnalytics: 0ca9aa2af7cc4dc92392b7a78bfc49feaa2eb60f
@@ -223,28 +190,19 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 471e0c05d39506e50e6398f46fa9a12ae0efeff9
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
-  KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
-  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
-  MGJRouter: 15d94541eb2cc81eff7d577337288feb7ae9575f
-  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
-  Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 8d8ce502e94c41a5c7f9f2ea43e82c9d1483810e
-  TIoTThridSDK: e89d8019bee5c80439b0d3cc1e1ccef000fc4485
-  TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
+  TIoTThridSDK: 625e140de2dd56d585e761ab61aedc87a4e48c0e
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
-  TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 2302a4ed7020dd720705e0ae8c99320362163b8b
+PODFILE CHECKSUM: f3a9b89b1e866c074cd06af5abc75345851b0031
 
 COCOAPODS: 1.9.3
