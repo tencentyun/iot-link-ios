@@ -37,4 +37,5 @@ target 'LinkSDKDemo' do
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/LinkRTC', :path => './'
   pod 'TIoTLinkKit/LinkVideo', :path => './'
+  pod 'TIoTThridSDK', '~> 1.0.6-beta.1' #'1.0.5'
 end
