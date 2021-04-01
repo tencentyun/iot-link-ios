@@ -46,8 +46,11 @@ static CGFloat kHeaderViewHeight = 162;
 @interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic, strong) UITableView *devicesTableView;
-@property (nonatomic, strong) NSMutableArray *devicesArray;
-@property (nonatomic, strong) NSMutableArray *deviceConfigArray;
+@property (nonatomic, strong) NSMutableArray *devicesArray; //一般设备原始数据拆分后的数组
+@property (nonatomic, strong) NSMutableArray *deviceConfigArray; //一般设备获取每个配置后数组
+
+@property (nonatomic, strong) NSMutableArray *shareDevicesArray; //分享设备原始数据拆分后的数组
+@property (nonatomic, strong) NSMutableArray *shareDeviceConfigArray; //分享设备获取每个配置后数组
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) CMPageTitleContentView *tableHeaderView;
@@ -169,7 +172,7 @@ static CGFloat kHeaderViewHeight = 162;
     [self registFeedBackRouterController];
     
     //获取分享设备列表
-    [self getSharedDevicesList];
+//    [self getSharedDevicesList];
 }
 
 #pragma mark - Other
@@ -189,6 +192,7 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -360,6 +364,9 @@ static CGFloat kHeaderViewHeight = 162;
         self.tableHeaderView.hidden = NO;
         [self addTableHeaderView];
         [self.deviceConfigArray removeAllObjects];
+        
+        [self.shareDeviceConfigArray removeAllObjects];
+        
         [self.devicesTableView reloadData];
         
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
@@ -384,7 +391,15 @@ static CGFloat kHeaderViewHeight = 162;
             NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
             [productidArr addObject:productIDString];
         }
-        [self requestDeviceEquipmentWithProductID:productidArr];
+        [self requestDeviceEquipmentWithProductID:productidArr isSharedDevice:NO];
+        
+        //共享设备 配对原始请求数据进行拆分
+        NSMutableArray *shareProductidArr = [NSMutableArray new];
+        for (int i = 0; i< self.shareDataArr.count; i++) {
+            NSString *productIDString = self.shareDataArr[i][@"ProductId"] ?:@"";
+            [shareProductidArr addObject:productIDString];
+        }
+        [self requestDeviceEquipmentWithProductID:shareProductidArr isSharedDevice:YES];
         
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
@@ -929,6 +944,8 @@ static CGFloat kHeaderViewHeight = 162;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+    
+    [self getSharedDevicesListWithLoadMore:NO];
 }
 
 - (void)loadMoreData{
@@ -967,6 +984,8 @@ static CGFloat kHeaderViewHeight = 162;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+    
+    [self getSharedDevicesListWithLoadMore:YES];
 }
 
 //获取设备状态
@@ -1027,15 +1046,46 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
-- (void)getSharedDevicesList {
+///MARK: 分享设备列表请求
+- (void)getSharedDevicesListWithLoadMore:(BOOL)isLoadMore {
     
-    
-    [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@0,@"Limit":@50} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppListUserShareDevices Param:@{@"Offset":@(self.offset),@"Limit":@(50)} success:^(id responseObject) {
         
-        [self.shareDataArr removeAllObjects];
+        [self endRefresh:isLoadMore total:[responseObject[@"Total"] integerValue]];
+        
+        if (isLoadMore == NO) {
+            [self.shareDataArr removeAllObjects];
+            [self.shareDevicesArray removeAllObjects];
+        }
+        
         [self.shareDataArr addObjectsFromArray:responseObject[@"ShareDevices"]];
         
-        [self updateShredDeviceStatus];
+        
+        NSArray *tempListArr = responseObject[@"ShareDevices"];
+        for (int i = 0; i < tempListArr.count; i+=2) {
+            
+            NSArray *itemArr = nil;
+            if (i+1 <= tempListArr.count-1) {
+                itemArr = @[tempListArr[i],tempListArr[i+1]];
+            }else {
+                itemArr = @[tempListArr[i]];
+            }
+//            NSArray *itemArr = @[tempListArr[i],tempListArr[i+1]];
+            
+            [self.shareDevicesArray addObject:itemArr];
+            
+        }
+        
+        if (self.shareDataArr.count == 0) {
+            [self refreshUI];
+        }
+        
+        if (self.shareDevicesArray.count == 0) {
+            [self refreshUI];
+        }
+        
+        
+        [self updateSharedDeviceStatus];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -1043,7 +1093,7 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 //获取设备状态
-- (void)updateShredDeviceStatus{
+- (void)updateSharedDeviceStatus{
     NSArray *arr = [self.shareDataArr valueForKey:@"DeviceId"];
     
     if (arr.count > 0) {
@@ -1071,6 +1121,21 @@ static CGFloat kHeaderViewHeight = 162;
             [self.shareDataArr removeAllObjects];
             [self.shareDataArr addObjectsFromArray:tmpArr];
             
+            [self.shareDevicesArray removeAllObjects];
+            for (int i = 0; i < tmpArr.count; i+=2) {
+                NSArray *itemArr = nil;
+                if (i+1 <= tmpArr.count-1) {
+                    itemArr = @[tmpArr[i],tmpArr[i+1]];
+                }else {
+                    itemArr = @[tmpArr[i]];
+                }
+                
+                [self.shareDevicesArray addObject:itemArr];
+                
+            }
+            
+            [self refreshUI];
+            
             [self onceFrushTRTCShareDevice];
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -1080,8 +1145,11 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 - (void)onceFrushTRTCShareDevice {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
         [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+    });
 }
 
 - (void)onceFrushTRTCDevice {
@@ -1103,7 +1171,7 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 //MARK: 获取添加快捷入口的设备信息（是否显示开关，快捷项有多少）
-- (void)requestDeviceEquipmentWithProductID:(NSMutableArray *)IdArray {
+- (void)requestDeviceEquipmentWithProductID:(NSMutableArray *)IdArray isSharedDevice:(BOOL)isShared{
 
     [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":IdArray?:@[]} success:^(id responseObject) {
         NSArray *data = responseObject[@"Data"];
@@ -1133,7 +1201,11 @@ static CGFloat kHeaderViewHeight = 162;
                     itemArr = @[shortcutDicLeft];
                 }
                 
-                [self.deviceConfigArray addObject:itemArr];
+                if (isShared == NO) {
+                    [self.deviceConfigArray addObject:itemArr];
+                }else {
+                    [self.shareDeviceConfigArray addObject:itemArr];
+                }
                 
             }
             
@@ -1231,11 +1303,30 @@ static CGFloat kHeaderViewHeight = 162;
 
 #pragma mark - TableViewDelegate && TableViewDataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    if ([NSString isNullOrNilWithObject:self.currentRoomId]) {   //【全部】房间
+        if (self.shareDevicesArray.count>0) {
+            return 2;
+        }else {
+            return 1;
+        }
+    }else {
+        return 1;
+    }
+    
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView == self.tableView) {
         return self.dataArr.count;
     }else {
-        return self.devicesArray.count;
+        if (section == 0) {
+            return self.devicesArray.count;
+        }else {
+            return self.shareDevicesArray.count;
+        }
+        
     }
     
 }
@@ -1247,70 +1338,144 @@ static CGFloat kHeaderViewHeight = 162;
         return cell;
     }else {
         
-        TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
-        
-        [cell setCellDataArray:self.devicesArray[indexPath.row]];
-        [cell setSelectIndexPatch:indexPath];
-//        cell.dataArray = self.devicesArray[indexPath.row];
-//        cell.indexPatch = indexPath;
-        
-        
-        __weak typeof(self) weakSelf = self;
-        cell.clickLeftDeviceBlock = ^(NSIndexPath * _Nonnull leftIndexPath) {
-            [weakSelf chooseDeviceWith:leftIndexPath];
-        };
-        
-        cell.clickRightDeviceBlock = ^(NSIndexPath * _Nonnull rightIndexPath) {
-            [weakSelf chooseDeviceWith:rightIndexPath];
-        };
-        
-        if (indexPath.row < self.deviceConfigArray.count) {
-            [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
-        }
-        
-//        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
-        
-        cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
-            
-            NSArray *devIds = @[productData[@"DeviceId"]];
-            //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
-            [HXYNotice postHeartBeat:devIds];
-            [HXYNotice addActivePushPost:devIds];
-            
-            NSString * alias = productData[@"AliasName"];
-            NSString *deviceName = @"";
-            if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
-                
-                deviceName = alias;
-                
-            } else {
-                
-                deviceName = productData[@"DeviceName"];
+        if (indexPath.section == 0) {
+            ///一般设备
+            TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
+            if (indexPath.row < self.devicesArray.count) {
+                [cell setCellDataArray:self.devicesArray[indexPath.row]];
             }
             
-            __weak typeof(self)weakSelf = self;
-            TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
-            [shortcut shortcutViewData:configData?:@{} productId:productData[@"ProductId"]?:@"" deviceDic:[productData mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
+            [cell setSelectIndexPatch:indexPath];
+    //        cell.dataArray = self.devicesArray[indexPath.row];
+    //        cell.indexPatch = indexPath;
             
-            shortcut.moreFunctionBlock = ^{
+            
+            __weak typeof(self) weakSelf = self;
+            cell.clickLeftDeviceBlock = ^(NSIndexPath * _Nonnull leftIndexPath) {
+                [weakSelf chooseDeviceWith:leftIndexPath];
+            };
+            
+            cell.clickRightDeviceBlock = ^(NSIndexPath * _Nonnull rightIndexPath) {
+                [weakSelf chooseDeviceWith:rightIndexPath];
+            };
+            
+            if (indexPath.row < self.deviceConfigArray.count) {
+                [cell setDeviceConfigArray:self.deviceConfigArray[indexPath.row]?:@[]];
+            }
+            
+    //        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
+            
+            cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
                 
-                //点击更多进入设备面板详情
-                TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
-                weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
-                vc.title = [NSString stringWithFormat:@"%@",productData[@"AliasName"]];
-                vc.productId = productData[@"ProductId"];
-                vc.deviceName = [NSString stringWithFormat:@"%@",productData[@"DeviceName"]];
-                vc.deviceDic = [productData mutableCopy];
-                vc.isOwner = [weakSelf.currentFamilyRole integerValue] == 1;
-                vc.configData = configData?:@{};
-                [weakSelf.navigationController pushViewController:vc animated:YES];
+                NSArray *devIds = @[productData[@"DeviceId"]];
+                //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+                [HXYNotice postHeartBeat:devIds];
+                [HXYNotice addActivePushPost:devIds];
+                
+                NSString * alias = productData[@"AliasName"];
+                NSString *deviceName = @"";
+                if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
+                    
+                    deviceName = alias;
+                    
+                } else {
+                    
+                    deviceName = productData[@"DeviceName"];
+                }
+                
+                __weak typeof(self)weakSelf = self;
+                TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
+                [shortcut shortcutViewData:configData?:@{} productId:productData[@"ProductId"]?:@"" deviceDic:[productData mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
+                
+                shortcut.moreFunctionBlock = ^{
+                    
+                    //点击更多进入设备面板详情
+                    TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
+                    weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
+                    vc.title = [NSString stringWithFormat:@"%@",productData[@"AliasName"]];
+                    vc.productId = productData[@"ProductId"];
+                    vc.deviceName = [NSString stringWithFormat:@"%@",productData[@"DeviceName"]];
+                    vc.deviceDic = [productData mutableCopy];
+                    vc.isOwner = [weakSelf.currentFamilyRole integerValue] == 1;
+                    vc.configData = configData?:@{};
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                    
+                };
+                [weakSelf.view addSubview:shortcut];
                 
             };
-            [weakSelf.view addSubview:shortcut];
             
-        };
+            return cell;
+        }else {
+            ///分享设备
+            TIoTEquipmentNewCell *cell = [TIoTEquipmentNewCell cellWithTableView:tableView];
+            if (indexPath.row < self.shareDevicesArray.count) {
+                [cell setCellDataArray:self.shareDevicesArray[indexPath.row]];
+            }
+            
+            [cell setSelectIndexPatch:indexPath];
+    //        cell.dataArray = self.devicesArray[indexPath.row];
+    //        cell.indexPatch = indexPath;
+            
+            
+            __weak typeof(self) weakSelf = self;
+            cell.clickLeftDeviceBlock = ^(NSIndexPath * _Nonnull leftIndexPath) {
+                [weakSelf chooseDeviceWith:leftIndexPath];
+            };
+            
+            cell.clickRightDeviceBlock = ^(NSIndexPath * _Nonnull rightIndexPath) {
+                [weakSelf chooseDeviceWith:rightIndexPath];
+            };
+            
+            if (indexPath.row < self.shareDeviceConfigArray.count) {
+                [cell setDeviceConfigArray:self.shareDeviceConfigArray[indexPath.row]?:@[]];
+            }
+            
+    //        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
+            
+            cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
+                
+                NSArray *devIds = @[productData[@"DeviceId"]];
+                //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
+                [HXYNotice postHeartBeat:devIds];
+                [HXYNotice addActivePushPost:devIds];
+                
+                NSString * alias = productData[@"AliasName"];
+                NSString *deviceName = @"";
+                if (alias && [alias isKindOfClass:[NSString class]] && alias.length > 0) {
+                    
+                    deviceName = alias;
+                    
+                } else {
+                    
+                    deviceName = productData[@"DeviceName"];
+                }
+                
+                __weak typeof(self)weakSelf = self;
+                TIoTShortcutView *shortcut = [[TIoTShortcutView alloc]init];
+                [shortcut shortcutViewData:configData?:@{} productId:productData[@"ProductId"]?:@"" deviceDic:[productData mutableCopy] withDeviceName:deviceName shortcutArray:shortcutConfigArray];
+                
+                shortcut.moreFunctionBlock = ^{
+                    
+                    //点击更多进入设备面板详情
+                    TIoTPanelVC *vc = [[TIoTPanelVC alloc] init];
+                    weakSelf.navigationController.tabBarController.tabBar.hidden = YES;
+                    vc.title = [NSString stringWithFormat:@"%@",productData[@"AliasName"]];
+                    vc.productId = productData[@"ProductId"];
+                    vc.deviceName = [NSString stringWithFormat:@"%@",productData[@"DeviceName"]];
+                    vc.deviceDic = [productData mutableCopy];
+                    vc.isOwner = [weakSelf.currentFamilyRole integerValue] == 1;
+                    vc.configData = configData?:@{};
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                    
+                };
+                [weakSelf.view addSubview:shortcut];
+                
+            };
+            
+            return cell;
+        }
         
-        return cell;
     
     }
     
@@ -1401,28 +1566,61 @@ static CGFloat kHeaderViewHeight = 162;
     }];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    if (self.dataArr.count != 0) {
+    if ([NSString isNullOrNilWithObject:self.currentRoomId]) {
+        //正常设备【全部】房间
         if (section == 0) {
-            UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
-            headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
-            
-            UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
-            NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"my_devices", @"我的设备"),(unsigned long)self.dataArr.count];
-            [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
-            [headerSectionView addSubview:sectionTitle];
+            if (self.dataArr.count != 0) {
+                UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+                headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+                
+                UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
+                NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"my_devices", @"我的设备"),(unsigned long)self.dataArr.count];
+                [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
+                [headerSectionView addSubview:sectionTitle];
 
-            return headerSectionView;
+                return headerSectionView;
+            }else {
+                return nil;
+            }
+            
+        }else {
+            //【全部】房间，共享设备有数据时显示，没有则不显示
+            if (self.shareDataArr.count != 0) {
+                UIView *shareHeaderSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+                shareHeaderSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+                
+                UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
+                NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"shared_devices", @"共享设备"),(unsigned long)self.shareDataArr.count];
+                [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
+                [shareHeaderSectionView addSubview:sectionTitle];
+
+                return shareHeaderSectionView;
+            }else {
+                return nil;
+            }
+        }
+    }else {
+        //切换到其他房间
+        
+        if (section == 0) {
+            if (self.dataArr.count != 0) {
+                UIView *headerSectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+                headerSectionView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
+                
+                UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, kScreenWidth, 44)];
+                NSString *titleString = [NSString stringWithFormat:@"%@(%lu)",NSLocalizedString(@"my_devices", @"我的设备"),(unsigned long)self.dataArr.count];
+                [sectionTitle setLabelFormateTitle:titleString font:[UIFont wcPfMediumFontOfSize:14] titleColorHexString:@"#15161A" textAlignment:NSTextAlignmentLeft];
+                [headerSectionView addSubview:sectionTitle];
+
+                return headerSectionView;
+            }else {
+                return nil;
+            }
         }else {
             return nil;
         }
-    }else {
-        return nil;
     }
     
 }
@@ -1434,7 +1632,7 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat offSetY = scrollView.contentOffset.y;
-    NSLog(@"天地的==%f",offSetY);
+    NSLog(@"offsetY==%f",offSetY);
     CGFloat limit = 44 + weatherHeight;
     if (offSetY <= -(limit + [TIoTUIProxy shareUIProxy].statusHeight)) {
         self.navView2.hidden = YES;
@@ -1677,7 +1875,7 @@ static CGFloat kHeaderViewHeight = 162;
         _navView2.backgroundColor = [UIColor redColor];
         
         UILabel *titleLab2 = [[UILabel alloc] init];
-        titleLab2.text = @"tao的家";
+        titleLab2.text = @"";
         titleLab2.textColor = [UIColor whiteColor];
         titleLab2.font = [UIFont wcPfRegularFontOfSize:16];
         [_navView2 addSubview:titleLab2];
@@ -1842,5 +2040,19 @@ static CGFloat kHeaderViewHeight = 162;
         _deviceConfigArray = [NSMutableArray new];
     }
     return _deviceConfigArray;
+}
+
+- (NSMutableArray *)shareDevicesArray {
+    if (!_shareDevicesArray) {
+        _shareDevicesArray = [NSMutableArray new];
+    }
+    return _shareDevicesArray;
+}
+
+- (NSMutableArray *)shareDeviceConfigArray {
+    if (!_shareDeviceConfigArray) {
+        _shareDeviceConfigArray = [NSMutableArray new];
+    }
+    return _shareDeviceConfigArray;
 }
 @end
