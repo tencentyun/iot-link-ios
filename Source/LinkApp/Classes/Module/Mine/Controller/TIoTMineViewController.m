@@ -233,7 +233,7 @@
     if (_dataArr == nil) {
         _dataArr = @[
             @{@"title":NSLocalizedString(@"family_manager", @"家庭管理"),@"image":@"mineFamily",@"vc":@"TIoTFamiliesVC"},
-            @{@"title":NSLocalizedString(@"share_device", @"共享设备"),@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
+//            @{@"title":NSLocalizedString(@"share_device", @"共享设备"),@"image":@"mineDevice",@"vc":@"TIoTShareDevicesVC"},
             @{@"title":NSLocalizedString(@"message_notification", @"消息通知"),@"image":@"mineMessage",@"vc":@"TIoTMessageViewController"},
             @{@"title":NSLocalizedString(@"help_center", @"帮助中心"),@"image":@"mineHelp",@"vc":@"TIoTWebVC"},
             @{@"title":NSLocalizedString(@"about_me", @"关于我们"),@"image":@"mineAbout",@"vc":@"TIoTAboutVC"}
