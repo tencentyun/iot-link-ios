@@ -150,6 +150,8 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewWillDisappear:animated];
     self.weatherAnimationView.hidden = YES;
     self.isHideWeatherView = YES;
+    self.currentRoomId = @"";
+//    self.currentFamilyId = @"";
 }
 
 - (void)dealloc{
@@ -698,7 +700,27 @@ static CGFloat kHeaderViewHeight = 162;
                 self.weatherBottomBtn.enabled = NO;
                 
                 if (self.isHideWeatherView == NO) {
-                    self.weatherAnimationView.hidden = NO;
+                    
+                    CGFloat offSetY = self.tableHeaderView.contentOffset.y;
+                    CGFloat kOrigionY = 162 - 44+1;
+                    CGFloat kWeatherOriY = [TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 150/2 -12;
+                    CGFloat kWeatherOriX = kScreenWidth - 150/2 + 5;
+                    if (offSetY > 0 && offSetY <= kOrigionY) {
+                        if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+                            self.weatherBottomBtn.enabled = NO;
+                            self.weatherAnimationView.hidden = NO;
+                            self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
+                            self.weatherAnimationView.alpha = (kOrigionY - offSetY)/kOrigionY;
+                        }else {
+                            self.weatherBottomBtn.enabled = YES;
+                            self.weatherAnimationView.hidden = YES;
+                        }
+                    }else if (offSetY > kOrigionY) {
+                        self.weatherAnimationView.hidden = YES;
+                    }else {
+                        self.weatherAnimationView.hidden = NO;
+                    }
+                    
                 }
                 if ( [NSString isNullOrNilWithObject:self.weatherContentTypeText] || ![self.weatherContentTypeText isEqualToString:self.weatherTypeText]) {
               [self.animationVC switchWeatherAnimationWithJsName:self.weatherTypeText];
