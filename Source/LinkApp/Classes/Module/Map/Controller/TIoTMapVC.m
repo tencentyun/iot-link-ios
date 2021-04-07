@@ -40,7 +40,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 @property (nonatomic, strong) QPointAnnotation *annotation;
 @property (nonatomic, strong) QPinAnnotationView *pinView;
 @property (nonatomic, assign) CLLocationCoordinate2D lastLocation;
-@property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) UIView *searchView;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UILabel *searchTipLabel;
@@ -407,17 +406,35 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         if (self.isSearchLocationVCBack == YES) {
             if (self.pageNumber == 2) {
                 
-                NSMutableArray *tempArray = [self.searchResultArray mutableCopy];
+                NSMutableArray *tempArray = [self.searchResultArray mutableCopy]?:[NSMutableArray new];
                 
-                for (int i = 0; i < tempArray.count; i++) {
-                    TIoTPoisModel *model = tempArray[i];
-                    model.address = self.searchLocationModel.address;
-                    if ([model.title isEqualToString:self.searchLocationModel.title]) {
-                        
-                        [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
-                        [self.searchResultArray replaceObjectAtIndex:0 withObject:model];
+                if (tempArray.count>0) {
+                    NSArray *titleArray = [tempArray valueForKey:@"title"];
+                    if (![titleArray containsObject:self.searchLocationModel.title] && self.searchLocationModel != nil) {
+                        [self.searchResultArray insertObject:self.searchLocationModel atIndex:0];
+                        [self.searchResultArray removeObjectAtIndex:1];
+                    }else {
+                        for (int i = 0; i < tempArray.count; i++) {
+                            TIoTPoisModel *model = tempArray[i];
+                            model.address = self.searchLocationModel.address;
+                            if ([model.title isEqualToString:self.searchLocationModel.title]) {
+                                [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
+                                [self.searchResultArray replaceObjectAtIndex:0 withObject:model];
+                            }
+                        }
                     }
                 }
+                
+                
+//                for (int i = 0; i < tempArray.count; i++) {
+//                    TIoTPoisModel *model = tempArray[i];
+//                    model.address = self.searchLocationModel.address;
+//                    if ([model.title isEqualToString:self.searchLocationModel.title]) {
+//
+//                        [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
+//                        [self.searchResultArray replaceObjectAtIndex:0 withObject:model];
+//                    }
+//                }
             }
         }else {
             NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
@@ -649,13 +666,14 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
                     NSString *addressDetail = [NSString stringWithFormat:@"%@%@%@%@",cellModel.ad_info.province?:@"",cellModel.ad_info.city?:@"",cellModel.ad_info.district?:@"",cellModel.address?:@""];
                     NSString *lat = [NSString stringWithFormat:@"%f",cellModel.location.lat];
                     NSString *lng = [NSString stringWithFormat:@"%f",cellModel.location.lng];
-                    
+                    NSString *title = cellModel.ad_info.name?:@"";
                     if (weakSelf.isSearchLocationVCBack == YES && weakSelf.searchLocationModel != nil) {
                         if (weakSelf.selectedIndex==0) {
-                            addressDetail = weakSelf.searchLocationModel.address;
+                            addressDetail = weakSelf.searchLocationModel.address?:@"";
+                            title = weakSelf.searchLocationModel.title?:@"";
                         }
                     }
-                    NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":addressString,@"title":cellModel.ad_info.name?:@""};
+                    NSDictionary *addressDic = @{@"address":addressDetail,@"latitude":lat,@"longitude":lng,@"city":cellModel.ad_info.city?:@"",@"name":addressString,@"title":title};
                     
                     NSString *addressJson = [addressDic yy_modelToJSONString];
                     weakSelf.addressBlcok(addressString, addressJson);

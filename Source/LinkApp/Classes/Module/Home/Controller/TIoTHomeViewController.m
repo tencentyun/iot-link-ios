@@ -1039,6 +1039,47 @@ static CGFloat kHeaderViewHeight = 162;
         
         [self.shareDeviceConfigArray removeAllObjects];
         
+        NSArray *shareDeviceArray = [NSArray arrayWithArray:responseObject[@"ShareDevices"]?:@[]];
+        
+        NSArray *prodictIDArr = [shareDeviceArray valueForKey:@"ProductId"]?:@[];
+        
+        [self getShareDeviceListInfo:prodictIDArr];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
+}
+
+///MARK: 获取分享设备列表设备信息
+
+- (void)getShareDeviceListInfo:(NSArray *)productIDsArray {
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDsArray?:@[]} success:^(id responseObject) {
+        NSArray *deviceInfoArr = responseObject[@"Products"];
+        
+        NSMutableArray *tmpArr = [NSMutableArray array];
+        for (NSDictionary *tmpDic in self.shareDataArr) {
+            
+            NSString *deviceId = tmpDic[@"ProductId"];
+            for (NSDictionary *statusDic in deviceInfoArr) {
+                if ([deviceId isEqualToString:statusDic[@"ProductId"]]) {
+                    NSString *onLineSing = [NSString stringWithFormat:@"%@",statusDic[@"Name"]?:@""];
+                    if (!([NSString isNullOrNilWithObject:onLineSing] || onLineSing.integerValue < 0)) {
+                        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                        [dic addEntriesFromDictionary:tmpDic];
+                        [dic setValue:statusDic[@"Name"] forKey:@"AliasName"];
+                        [tmpArr addObject:dic];
+                        break;
+                    }
+                    
+                }
+            }
+            
+            
+        }
+        
+        [self.shareDataArr removeAllObjects];
+        [self.shareDataArr addObjectsFromArray:tmpArr];
+        
         [self updateSharedDeviceStatus];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
