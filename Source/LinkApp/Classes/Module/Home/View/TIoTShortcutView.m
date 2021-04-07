@@ -274,10 +274,16 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 //    TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
+    NSDictionary *shortcutDic = @{};
+    if (indexPath.row < self.dataArray.count) {
+        shortcutDic = self.dataArray[indexPath.row]?:@{};
+    }
     
-    NSDictionary *shortcutDic = self.dataArray[indexPath.row]?:@{};
 //    cell.iconURLString = shortcutDic[@"ui"][@"icon"]?:@"";
-    NSDictionary *model = self.panelShortcutProperties[indexPath.row];
+    NSDictionary *model = @{};
+    if (indexPath.row < self.panelShortcutProperties.count) {
+        model = self.panelShortcutProperties[indexPath.row];
+    }
     
 //    TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
 //    cell.propertyName = model[@"name"];
@@ -288,7 +294,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         if ([model[@"define"][@"type"] isEqualToString:@"int"]||[model[@"define"][@"type"] isEqualToString:@"float"]) {
             
             TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-            cell.propertyName = model[@"name"];
+            cell.propertyName = model[@"name"]?:@"";
             
             __weak typeof(self)weakSelf = self;
             
@@ -341,7 +347,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             return cell;
         }else if ([model[@"define"][@"type"] isEqualToString:@"enum"]) {
             TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-            cell.propertyName = model[@"name"];
+            cell.propertyName = model[@"name"]?:@"";
             __weak typeof(self)weakSelf = self;
             
             NSString *valueString = [NSString stringWithFormat:@"%@",model[@"status"][@"Value"]?:@"0"];
@@ -351,7 +357,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             [cell setPropertyModel:model];
             cell.enumUpdate = ^{
                 //trtc特殊判断逻辑
-                NSString *key = model[@"id"];
+                NSString *key = model[@"id"]?:@"";
                 if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
                     weakSelf.reportData = model;
                     [weakSelf reportDeviceData:@{key: @1}];
@@ -395,7 +401,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             
         }else if ([model[@"define"][@"type"] isEqualToString:@"bool"]) {
             TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-            cell.propertyName = model[@"name"];
+            cell.propertyName = model[@"name"]?:@"";
             
             NSString *valueString = [NSString stringWithFormat:@"%@",model[@"status"][@"Value"]?:@"0"];
             cell.propertyValue = [NSString stringWithFormat:@"%@",model[@"define"][@"mapping"][valueString]?:@""];
@@ -418,7 +424,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             return cell;
         }else {
             TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-            cell.propertyName = model[@"name"];
+            cell.propertyName = model[@"name"]?:@"";
             
             if (![NSString isNullOrNilWithObject:model[@"define"][@"type"]]) {
                 cell.propertyValue = @"";
@@ -430,7 +436,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     }else {
         //云端定时
         TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-        cell.propertyName = model[@"name"];
+        cell.propertyName = model[@"name"]?:@"";
         return cell;
     }
     
