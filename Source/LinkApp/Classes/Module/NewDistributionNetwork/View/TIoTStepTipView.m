@@ -76,11 +76,16 @@
         }
         
         UILabel *tipLabel = [[UILabel alloc] init];
-        tipLabel.bounds = CGRectMake(0, 0, stepLabelWidth, stepLabelWidth);
+        tipLabel.bounds = CGRectMake(0, 0, kScreenWidth/_titlesArray.count, stepLabelWidth);
         tipLabel.text = _titlesArray[i];
+        tipLabel.numberOfLines = 0;
         tipLabel.font = [UIFont wcPfRegularFontOfSize:12];
         [tipLabel sizeToFit];
-        tipLabel.center = CGPointMake(stepLabel.center.x, CGRectGetMaxY(stepLabel.frame) + 18.0f);
+        CGFloat xOffet = stepLabel.center.x;
+        if (i == 0) {
+            xOffet = stepLabel.center.x + 20;
+        }
+        tipLabel.center = CGPointMake(xOffet, CGRectGetMaxY(stepLabel.frame) + 18.0f);
         [self addSubview:tipLabel];
         
         if (self.step < i+1) {

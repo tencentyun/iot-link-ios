@@ -202,10 +202,14 @@
         [protocolDetailBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         [protocolDetailBtn addTarget:self action:@selector(cancelProtocolClick) forControlEvents:UIControlEventTouchUpInside];
         protocolDetailBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        protocolDetailBtn.titleLabel.numberOfLines = 0;
         [_bottomView addSubview:protocolDetailBtn];
         [protocolDetailBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(cancelProtocolLabel.mas_trailing);
             make.centerY.equalTo(self.protocolButton.mas_centerY);
+            if (LanguageIsEnglish) {
+                make.right.equalTo(_bottomView.mas_right).offset(-15);
+            }
         }];
         
         UIView *line2 = [[UIView alloc]init];

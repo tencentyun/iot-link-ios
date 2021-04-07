@@ -103,6 +103,11 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(emailRegisterBtn.mas_bottom).offset(40 * kScreenAllHeightScale);
         make.centerX.equalTo(self.view).offset(15);
+        if (LanguageIsEnglish) {
+            make.left.equalTo(self.view.mas_left).offset(40);
+            make.right.equalTo(self.view.mas_right).offset(-40);
+        }
+        
     }];
     
     self.procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -111,7 +116,12 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.procolBtn setImage:[UIImage imageNamed:@"agree_selected"] forState:UIControlStateSelected];
     [self.view addSubview:self.procolBtn];
     [self.procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(procolTV);
+        
+        if (LanguageIsEnglish) {
+            make.centerY.equalTo(procolTV).offset(-8);
+        }else {
+            make.centerY.equalTo(procolTV);
+        }
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV.mas_left);
     }];

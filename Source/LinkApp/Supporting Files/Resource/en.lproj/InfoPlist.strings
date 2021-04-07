@@ -6,7 +6,7 @@
   Copyright © 2020 Tencent. All rights reserved.
 */
 
-CFBundleName = "连连开源体验";
+CFBundleName = "Lianlian";
 NSBluetoothAlwaysUsageDescription = "打开蓝牙用于扫描硬件";
 NSBluetoothPeripheralUsageDescription = "打开蓝牙用于扫描硬件";
 NSCameraUsageDescription = "获取相机权限用于扫描设备二维码";
