@@ -97,6 +97,9 @@ NSString *const AppTokenBindDeviceFamily = @"AppTokenBindDeviceFamily";
 
 NSString *const AppGetProductInfo = @"AppGetProductInfo";
 
+NSString *const AppGetGatewayBindDeviceList = @"AppGetGatewayBindDeviceList";
+NSString *const AppBindSubDeviceInFamily = @"AppBindSubDeviceInFamily";
+
 //===============设备定时
 
 NSString *const AppGetTimerList = @"AppGetTimerList";//获取定时任务列表

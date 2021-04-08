@@ -15,6 +15,8 @@
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
 		6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */; };
 		6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */; };
+		6D42390C261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390B261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m */; };
+		6D423910261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390F261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m */; };
 		6D48A9D125E4DBBE00523636 /* WeatherTypeCloud.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9CE25E4DBBE00523636 /* WeatherTypeCloud.json */; };
 		6D48A9DD25E4DCD200523636 /* CloudImg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9DB25E4DCD100523636 /* CloudImg0.png */; };
 		6D48A9DE25E4DCD200523636 /* CloudImg1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9DC25E4DCD100523636 /* CloudImg1.png */; };
@@ -467,6 +469,10 @@
 		6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTWeatherVC.swift; sourceTree = "<group>"; };
 		6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTabBarCenterCustomView.h; sourceTree = "<group>"; };
 		6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTabBarCenterCustomView.m; sourceTree = "<group>"; };
+		6D42390A261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTGateWayBindDeviceModel.h; sourceTree = "<group>"; };
+		6D42390B261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTGateWayBindDeviceModel.m; sourceTree = "<group>"; };
+		6D42390E261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSecureAddDeviceModel.h; sourceTree = "<group>"; };
+		6D42390F261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSecureAddDeviceModel.m; sourceTree = "<group>"; };
 		6D48A9CE25E4DBBE00523636 /* WeatherTypeCloud.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = WeatherTypeCloud.json; sourceTree = "<group>"; };
 		6D48A9DB25E4DCD100523636 /* CloudImg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloudImg0.png; sourceTree = "<group>"; };
 		6D48A9DC25E4DCD100523636 /* CloudImg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloudImg1.png; sourceTree = "<group>"; };
@@ -1513,6 +1519,10 @@
 			children = (
 				6DE640AF258372CB00CB985F /* TIoTProductWelComeConfigModel.h */,
 				6DE640B0258372CB00CB985F /* TIoTProductWelComeConfigModel.m */,
+				6D42390E261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.h */,
+				6D42390F261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m */,
+				6D42390A261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.h */,
+				6D42390B261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3129,6 +3139,7 @@
 				6D91797D255130A000AEF28C /* TIoTChooseDelayTimeVC.m in Sources */,
 				A43FCE63247E3F2F00A7CEF3 /* TIoTNewAddEquipmentViewController.m in Sources */,
 				D2A2CD33234EBBE50039EB51 /* TIoTModifyNikeNameViewController.m in Sources */,
+				6D423910261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m in Sources */,
 				D2C7D80B2330CA6500C97A04 /* SGQRCodeScanView.m in Sources */,
 				6D982C9124D31A5E0080C961 /* TIoTBindAccountView.m in Sources */,
 				D2310513233077D40003069D /* TIoTAppEnvironment.m in Sources */,
@@ -3138,6 +3149,7 @@
 				D2A2CD1F234C385B0039EB51 /* TIoTPhoneResetPwdViewController.m in Sources */,
 				6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */,
 				ED800C95240CA28A0045A268 /* TIoTMessageFamilyVC.m in Sources */,
+				6D42390C261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m in Sources */,
 				6DBC59B225ED440800070461 /* TIoTBaseMapViewController.m in Sources */,
 				D20621BC23559E5600142DAC /* TYCyclePagerTransformLayout.m in Sources */,
 				F4F434D525480B7100C44471 /* TIoTDeviceDataModel.swift in Sources */,

@@ -12,6 +12,8 @@
 #import "TIoTProductWelComeConfigModel.h"
 #import <YYModel.h>
 #import "TIoTConfigScanVC.h"
+#import "TIoTSecureAddDeviceModel.h"
+#import "TIoTGateWayBindDeviceModel.h"
 
 @interface QRBlueObject : NSObject
 @property (nonatomic, strong)NSString *productId;
@@ -84,16 +86,69 @@
     NSDictionary *param = @{@"FamilyId":[TIoTCoreUserManage shared].familyId,@"DeviceSignature":signature,@"RoomId":roomId};
     
     [[TIoTRequestObject shared] post:AppSecureAddDeviceInFamily Param:param success:^(id responseObject) {
-        
-        [MBProgressHUD showSuccess:NSLocalizedString(@"add_sucess", @"添加成功")];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [HXYNotice addUpdateDeviceListPost];
+        TIoTSecureAddDeviceModel *model =  [TIoTSecureAddDeviceModel yy_modelWithJSON:responseObject];
+        if (![NSString isNullOrNilWithObject:model.Data.AppDeviceInfo.DeviceType]) {
+            if (model.Data.AppDeviceInfo.DeviceType.intValue == 1) {
+                //网关设备,需查询子设备列表再绑定
+                [self getGetWayDeviceList:model];
+            }else {
+                //其他设备
+                [MBProgressHUD hideHUD];
+                [MBProgressHUD showSuccess:NSLocalizedString(@"add_sucess", @"添加成功")];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                [HXYNotice addUpdateDeviceListPost];
+            }
+        }
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        [MBProgressHUD dismissInView:self.view];
+//        [MBProgressHUD dismissInView:self.view];
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }
+
+///MARK: 网关设备列表
+- (void)getGetWayDeviceList:(TIoTSecureAddDeviceModel *)secureModel {
+    
+    NSDictionary *param = @{@"GatewayProductId":secureModel.Data.AppDeviceInfo.ProductId?:@"",@"GatewayDeviceName":secureModel.Data.AppDeviceInfo.DeviceName?:@"",@"Limit":@(100),@"Limit":@(0)};
+    [[TIoTRequestObject shared] post:AppGetGatewayBindDeviceList Param:param success:^(id responseObject) {
+        TIoTGateWayBindDeviceModel *model = [TIoTGateWayBindDeviceModel yy_modelWithJSON:responseObject];
+        
+        dispatch_group_t group = dispatch_group_create();
+        
+        if (![NSString isNullOrNilWithObject:model.DeviceList]) {
+            NSArray *deviceList = [[model.DeviceList reverseObjectEnumerator] allObjects]?:[NSArray new];
+            for (TIoTGateWayBindDeviceInfo *deviceInfoModel in deviceList) {
+                
+                [self bingSubDeviceWithScureModel:secureModel withDeviceInfo:deviceInfoModel withGrpup:group];
+            }
+            
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUD];
+            [MBProgressHUD showSuccess:NSLocalizedString(@"add_sucess", @"添加成功")];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            [HXYNotice addUpdateDeviceListPost];
+        });
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+}
+
+///MARK: 子设备绑定
+- (void)bingSubDeviceWithScureModel:(TIoTSecureAddDeviceModel*)secureModel withDeviceInfo:(TIoTGateWayBindDeviceInfo *)deviceInfoModel withGrpup:(dispatch_group_t)group{
+    dispatch_group_enter(group);
+    NSDictionary *param = @{@"GatewayProductId":secureModel.Data.AppDeviceInfo.ProductId?:@"",@"GatewayDeviceName":secureModel.Data.AppDeviceInfo.DeviceName?:@"",@"ProductId":deviceInfoModel.ProductId?:@"",@"DeviceName":deviceInfoModel.DeviceName?:@""};
+    [[TIoTRequestObject shared] post:AppBindSubDeviceInFamily Param:param success:^(id responseObject) {
+        dispatch_group_leave(group);
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+
 
 - (void)processQRCodeResult:(NSString *)result {
     if (result) {

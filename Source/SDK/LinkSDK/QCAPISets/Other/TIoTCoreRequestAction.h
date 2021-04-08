@@ -107,6 +107,9 @@ FOUNDATION_EXPORT NSString *const AppTokenBindDeviceFamily;//使用token进行�
 
 FOUNDATION_EXPORT NSString *const AppGetProductInfo;//扫一扫落地页面显示 （设备批量生产扫码也调用）
 
+FOUNDATION_EXPORT NSString *const AppGetGatewayBindDeviceList;//网关设备列表
+FOUNDATION_EXPORT NSString *const AppBindSubDeviceInFamily;//绑定子设备
+
 //MARK: 设备定时
 
 FOUNDATION_EXPORT NSString *const AppGetTimerList;//获取定时任务列表
