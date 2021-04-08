@@ -106,6 +106,9 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, assign) double latitude;
 
 @property (nonatomic, assign) bool isHideWeatherView; //用户判断切换页面或跳转页面后，天气view 加载时间延时出现情况
+@property (nonatomic, assign) CGFloat tableViewScrollOffset;
+@property (nonatomic, assign) CGFloat weatherScrollOffsetY;
+@property (nonatomic, assign) BOOL isFreshRoomList;
 @end
 
 @implementation TIoTHomeViewController
@@ -124,26 +127,19 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewDidAppear:animated];
     self.navigationController.tabBarController.tabBar.hidden = NO;
     
-    
-//    if (self.tableView) {
-//        if (self.currentFamilyId != nil) {
-////            [self getRoomList:self.currentFamilyId];
-//        }
-//
-//        //保持天气动画位置，跟随滚动区域是否显示
-////        [self scrollViewDidScroll:self.tableView];
-//
-//    }
-    
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
-            [self clearCMTitleView];
-            [self getRoomList:[TIoTCoreUserManage shared].familyId];
-            [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
+            
+            if (self.isFreshRoomList == NO) {
+                //保持天气动画位置，跟随滚动区域是否显示
+                [self scrollViewDidScroll:self.devicesTableView];
+            }else {
+                [self clearCMTitleView];
+                [self getRoomList:[TIoTCoreUserManage shared].familyId];
+            }
+            
+//            [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
         }
-
-        //保持天气动画位置，跟随滚动区域是否显示
-//        [self scrollViewDidScroll:self.devicesTableView];
     }
 }
 
@@ -151,8 +147,8 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewWillDisappear:animated];
     self.weatherAnimationView.hidden = YES;
     self.isHideWeatherView = YES;
+    self.isFreshRoomList = NO;
     self.currentRoomId = @"";
-//    self.currentFamilyId = @"";
 }
 
 - (void)dealloc{
@@ -183,7 +179,7 @@ static CGFloat kHeaderViewHeight = 162;
     [HXYNotice addSocketConnectSucessListener:self reaction:@selector(socketConnected)];
     [HXYNotice addUpdateDeviceListListener:self reaction:@selector(updateDevice:)];
     [HXYNotice addUpdateFamilyListListener:self reaction:@selector(getFamilyList)];
-
+    [HXYNotice addUpdateRoomListListener:self reaction:@selector(getRoomList)];
     //进入前台需要轮训下trtc状态，防止漏接现象
     [HXYNotice addAPPEnterForegroundLister:self reaction:@selector(appEnterForeground)];
     
@@ -701,7 +697,7 @@ static CGFloat kHeaderViewHeight = 162;
                 
                 if (self.isHideWeatherView == NO) {
                     
-                    CGFloat offSetY = self.tableHeaderView.contentOffset.y;
+                    CGFloat offSetY = self.tableViewScrollOffset;
                     CGFloat kOrigionY = 162 - 44+1;
                     CGFloat kWeatherOriY = [TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 150/2 -12;
                     CGFloat kWeatherOriX = kScreenWidth - 150/2 + 5;
@@ -709,7 +705,7 @@ static CGFloat kHeaderViewHeight = 162;
                         if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
                             self.weatherBottomBtn.enabled = NO;
                             self.weatherAnimationView.hidden = NO;
-                            self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
+                            self.weatherAnimationView.center = CGPointMake(kWeatherOriX, self.weatherScrollOffsetY);
                             self.weatherAnimationView.alpha = (kOrigionY - offSetY)/kOrigionY;
                         }else {
                             self.weatherBottomBtn.enabled = YES;
@@ -877,6 +873,10 @@ static CGFloat kHeaderViewHeight = 162;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
+}
+
+- (void)getRoomList {
+    self.isFreshRoomList = YES;
 }
 
 - (void)getRoomList:(NSString *)familyId
@@ -1642,6 +1642,7 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat offSetY = scrollView.contentOffset.y;
+    self.tableViewScrollOffset = offSetY;
     NSLog(@"offsetY==%f",offSetY);
     CGFloat limit = 44 + weatherHeight;
     if (offSetY <= -(limit + [TIoTUIProxy shareUIProxy].statusHeight)) {
@@ -1720,6 +1721,7 @@ static CGFloat kHeaderViewHeight = 162;
             self.weatherAnimationView.hidden = NO;
             self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
             self.weatherAnimationView.alpha = (kOrigionY - offSetY)/kOrigionY;
+            self.weatherScrollOffsetY = self.weatherAnimationView.center.y;
         }else {
             self.weatherBottomBtn.enabled = YES;
             self.weatherAnimationView.hidden = YES;
