@@ -137,12 +137,13 @@ static CGFloat kHeaderViewHeight = 162;
     
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
+            [self clearCMTitleView];
             [self getRoomList:[TIoTCoreUserManage shared].familyId];
             [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
         }
 
         //保持天气动画位置，跟随滚动区域是否显示
-        [self scrollViewDidScroll:self.devicesTableView];
+//        [self scrollViewDidScroll:self.devicesTableView];
     }
 }
 
@@ -312,7 +313,6 @@ static CGFloat kHeaderViewHeight = 162;
         self.tableHeaderView.hidden = NO;
         [self addTableHeaderView];
         [self.deviceConfigArray removeAllObjects];
-        
         
         [self.devicesTableView reloadData];
         
