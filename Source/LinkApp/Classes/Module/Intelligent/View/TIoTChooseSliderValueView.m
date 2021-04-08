@@ -282,6 +282,10 @@
     {
         self.slider.value = self.slider.value - self.model.define.step.floatValue;
 
+        NSString *sliderValue = [NSString stringWithFormat:@"%f",self.slider.value];
+        NSString *result = [NSString getPrecisionStringWithOriginValue:sliderValue precisionString:self.model.define.step];
+        self.slider.value = result.floatValue;
+
     }
     [self sliderValueChanged:self.slider];
 }
@@ -293,6 +297,9 @@
     else
     {
         self.slider.value = self.slider.value + self.model.define.step.floatValue;
+        NSString *sliderValue = [NSString stringWithFormat:@"%f",self.slider.value];
+        NSString *result = [NSString getPrecisionStringWithOriginValue:sliderValue precisionString:self.model.define.step];
+        self.slider.value = result.floatValue;
     }
     [self sliderValueChanged:self.slider];
 }
@@ -304,7 +311,12 @@
     }
     else
     {
-        self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", slider.value ,self.model.define.unit?:@""];
+        
+        NSString *sliderValue = [NSString stringWithFormat:@"%f",slider.value];
+        NSString *result = [NSString getPrecisionStringWithOriginValue:sliderValue precisionString:self.model.define.step];
+        self.valueLab.text = [NSString stringWithFormat:@"%@%@", result ,self.model.define.unit?:@""];
+        
+//        self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", slider.value ,self.model.define.unit?:@""];
     }
     
     CGFloat KSliderValueX = 0;
@@ -395,16 +407,23 @@
         
         _bottomView.secondBlock = ^{
             if (weakSelf.sliderTaskValueBlock) {
+                
+                NSString *sliderValue = [NSString stringWithFormat:@"%f",weakSelf.slider.value];
+                NSString *result = [NSString getPrecisionStringWithOriginValue:sliderValue precisionString:weakSelf.model.define.step];
+                
                 NSString *valueString = @"";
                 if ([weakSelf.model.define.type isEqualToString:@"int"]) {
                     valueString = [NSString stringWithFormat:@"%@%@", @(roundf(weakSelf.slider.value)) ,weakSelf.model.define.unit?:@""];
                 }
                 else if ([weakSelf.model.define.type isEqualToString:@"float"])
                 {
-                    valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
+//                    valueString = [NSString stringWithFormat:@"%.1f%@", weakSelf.slider.value ,weakSelf.model.define.unit?:@""];
+                    valueString = [NSString stringWithFormat:@"%@%@", result ,weakSelf.model.define.unit?:@""];
+                    
                 }
                 
-                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%.1f",weakSelf.slider.value],weakSelf.compareValueString);
+//                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%.1f",weakSelf.slider.value],weakSelf.compareValueString);
+                weakSelf.sliderTaskValueBlock(valueString,weakSelf.model,[NSString stringWithFormat:@"%@",result],weakSelf.compareValueString);
             }
             
             [weakSelf dismissView];
@@ -474,11 +493,13 @@
     }
     else
     {
+        NSString *result = [NSString getPrecisionStringWithOriginValue:self.model.status.Value precisionString:self.model.define.step];
+        
         if (![NSString isNullOrNilWithObject:self.model.status.Value]) {
-            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", self.model.status.Value.floatValue ,self.model.define.unit?:@""];
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", result ,self.model.define.unit?:@""];
             self.slider.value = self.model.status.Value.floatValue;
         }else {
-            self.valueLab.text = [NSString stringWithFormat:@"%.1f%@", self.model.define.start.floatValue ,self.model.define.unit?:@""];
+            self.valueLab.text = [NSString stringWithFormat:@"%@%@", result ,self.model.define.unit?:@""];
             self.slider.value = self.model.define.start.floatValue;
         }
         self.slider.minimumValue = self.model.define.min.floatValue?:0;// 设置最小值

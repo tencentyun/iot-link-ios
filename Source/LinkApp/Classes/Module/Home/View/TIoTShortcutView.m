@@ -305,7 +305,12 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
             if ([model[@"define"][@"type"] isEqualToString:@"int"]) {
                 valueString = [NSString stringWithFormat:@"%d",valueString.intValue];
             }else if ([model[@"define"][@"type"] isEqualToString:@"float"]) {
-                valueString = [NSString stringWithFormat:@"%.1f",valueString.floatValue];
+                
+                NSString *stepString = model[@"define"][@"step"]?:@".1";
+                NSString *sliderValue = [NSString stringWithFormat:@"%f",valueString.floatValue];
+                NSString *result = [NSString getPrecisionStringWithOriginValue:sliderValue precisionString:stepString];
+                
+                valueString = [NSString stringWithFormat:@"%@",result];
             }
             cell.propertyValue = [NSString stringWithFormat:@"%@%@",valueString,model[@"define"][@"unit"]?:@""];
             cell.userInteractionEnabled = [weakSelf.deviceDic[@"Online"] boolValue];

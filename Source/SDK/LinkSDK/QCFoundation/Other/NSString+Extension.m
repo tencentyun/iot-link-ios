@@ -403,6 +403,33 @@
     return binaryStr;
 }
 
+/// 字符串精度截取
++ (NSString *)getPrecisionStringWithOriginValue:(NSString *)originString precisionString:(NSString *)precisionString {
+    NSString * result = @"";
+    NSString *stepString = precisionString?:@".1";
+    NSString *stepNumber = [stepString componentsSeparatedByString:@"."].lastObject ?:@"1";
+    
+    NSInteger floatNumber = 0;
+    for (int i = 0; i < stepNumber.length; i++) {
+        NSString * subString = [stepString substringToIndex:i];
+        if (subString.intValue == 0) {
+            floatNumber ++ ;
+        }else if (subString.intValue == 1) {
+            floatNumber ++;
+            break;
+        }
+
+    }
+    
+    NSDecimalNumberHandler *valueHandlar = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundBankers scale:floatNumber raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
+    
+    NSString *sliderValue = originString;
+    
+    NSDecimalNumber *valueNumber =  [NSDecimalNumber decimalNumberWithString:sliderValue?:@""];
+    result = [NSString stringWithFormat:@"%@",[valueNumber decimalNumberByRoundingAccordingToBehavior:valueHandlar]];
+    return result;
+}
+
 ///base64编码
 + (NSString *)base64Encode:(id)object{
     NSError *error = nil;

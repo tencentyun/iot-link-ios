@@ -58,6 +58,11 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 //16进制与2进制互转
 + (NSString *)getBinaryByhexString:(NSString *)hex binaryString:(NSString *)binary;
 
+/**
+ 字符串精度截取
+ */
++ (NSString *)getPrecisionStringWithOriginValue:(NSString *)originString precisionString:(NSString *)precisionString;
+
 /// 字符串是否有数字和字母
 /// @param pwd bool
 + (BOOL)judgePassWordLegal:(NSString*)pwd;
