@@ -76,16 +76,25 @@
         }
         
         UILabel *tipLabel = [[UILabel alloc] init];
-        tipLabel.bounds = CGRectMake(0, 0, kScreenWidth/_titlesArray.count, stepLabelWidth);
-        tipLabel.text = _titlesArray[i];
-        tipLabel.numberOfLines = 0;
-        tipLabel.font = [UIFont wcPfRegularFontOfSize:12];
-        [tipLabel sizeToFit];
-        CGFloat xOffet = stepLabel.center.x;
-        if (i == 0) {
-            xOffet = stepLabel.center.x + 20;
+        if (LanguageIsEnglish) {
+            tipLabel.bounds = CGRectMake(0, 0, kScreenWidth/_titlesArray.count, stepLabelWidth);
+            tipLabel.numberOfLines = 0;
+            CGFloat xOffet = stepLabel.center.x;
+            if (i == 0) {
+                xOffet = stepLabel.center.x + 20;
+            }
+            tipLabel.text = _titlesArray[i];
+            tipLabel.font = [UIFont wcPfRegularFontOfSize:12];
+            [tipLabel sizeToFit];
+            tipLabel.center = CGPointMake(xOffet, CGRectGetMaxY(stepLabel.frame) + 18.0f);
+        }else {
+            tipLabel.bounds = CGRectMake(0, 0, stepLabelWidth, stepLabelWidth);
+            tipLabel.text = _titlesArray[i];
+            tipLabel.font = [UIFont wcPfRegularFontOfSize:12];
+            [tipLabel sizeToFit];
+            tipLabel.center = CGPointMake(stepLabel.center.x, CGRectGetMaxY(stepLabel.frame) + 18.0f);
         }
-        tipLabel.center = CGPointMake(xOffet, CGRectGetMaxY(stepLabel.frame) + 18.0f);
+        
         [self addSubview:tipLabel];
         
         if (self.step < i+1) {
