@@ -246,7 +246,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         }
         [self.deviceInfo zipData:uiInfo baseInfo:baseInfo deviceData:tmpDic];
         
-        self.panelShortcutProperties = [NSMutableArray array];
+        [self.panelShortcutProperties removeAllObjects];
         
         //筛选和快捷属性对应的设备属性列表中的完整值（包括属性值、最大值等）
         
@@ -441,7 +441,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
     }else {
         //云端定时
         TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
-        cell.propertyName = model[@"name"]?:@"";
+        cell.propertyName = @"";
         return cell;
     }
     
@@ -509,6 +509,13 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
         _dataArray = [NSMutableArray new];
     }
     return _dataArray;
+}
+
+- (NSMutableArray *)panelShortcutProperties {
+    if (!_panelShortcutProperties) {
+        _panelShortcutProperties = [NSMutableArray new];
+    }
+    return _panelShortcutProperties;
 }
 
 - (DeviceInfo *)deviceInfo
