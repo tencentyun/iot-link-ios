@@ -62,13 +62,6 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, strong) UILabel *weatherLab;
 @property (nonatomic, strong) UIButton *addBtn;
 
-@property (nonatomic, strong) UIView *navView2;
-@property (nonatomic, strong) UILabel *nick2;
-@property (nonatomic, strong) UILabel *weatherLab2;
-@property (nonatomic, strong) UIButton *addBtn2;
-
-@property (nonatomic, strong) UIView *navView3;
-
 
 @property (nonatomic,strong) NSArray *families;
 @property (nonatomic,strong) NSArray *rooms;
@@ -138,7 +131,6 @@ static CGFloat kHeaderViewHeight = 162;
                 [self getRoomList:[TIoTCoreUserManage shared].familyId];
             }
             
-//            [self getFamilyInfoAddressWithFamilyID:[TIoTCoreUserManage shared].familyId];
         }
     }
 }
@@ -168,8 +160,6 @@ static CGFloat kHeaderViewHeight = 162;
     
     [self registFeedBackRouterController];
     
-    //获取分享设备列表
-//    [self getSharedDevicesList];
 }
 
 #pragma mark - Other
@@ -305,7 +295,6 @@ static CGFloat kHeaderViewHeight = 162;
         }
         
         //房间列表显示
-//        self.tableHeaderView.alpha = 1;
         self.tableHeaderView.hidden = NO;
         [self addTableHeaderView];
         [self.deviceConfigArray removeAllObjects];
@@ -317,24 +306,13 @@ static CGFloat kHeaderViewHeight = 162;
     else{
         
         self.addBtn.hidden = YES;
-        self.addBtn2.hidden = YES;
-        
         
         //房间列表显示
-//        self.tableHeaderView.alpha = 1;
         self.tableHeaderView.hidden = NO;
         self.tableHeaderView2.alpha = 1;
         [self addTableHeaderView];
         [self.devicesTableView hideStatus];
         [self.devicesTableView reloadData];
-        
-//        //配对dataArr 个数，请求每个设备的快捷入口相关数据；数据deviceConfigArray 和原始数据dataArray 相同后 保证一一匹配，才能reload
-//        NSMutableArray *productidArr = [NSMutableArray new];
-//        for (int i = 0; i< self.dataArr.count; i++) {
-//            NSString *productIDString = self.dataArr[i][@"ProductId"] ?:@"";
-//            [productidArr addObject:productIDString];
-//        }
-//        [self requestDeviceEquipmentWithProductID:productidArr isSharedDevice:NO];
         
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
     }
@@ -344,24 +322,8 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)refreshShareUI {
     if (self.shareDevicesArray.count == 0) {
         [self.shareDeviceConfigArray removeAllObjects];
-        
-//        if ([NSString isNullOrNilWithObject:self.currentRoomId]) {
-//            if (self.devicesArray.count == 0) {
-//                [self showEmptyView];
-//            }else {
-//                [self.devicesTableView  hideStatus];
-//            }
-//        }
         [self.devicesTableView reloadData];
         
-    }else {
-//        //共享设备 配对原始请求数据进行拆分
-//        NSMutableArray *shareProductidArr = [NSMutableArray new];
-//        for (int i = 0; i< self.shareDataArr.count; i++) {
-//            NSString *productIDString = self.shareDataArr[i][@"ProductId"] ?:@"";
-//            [shareProductidArr addObject:productIDString];
-//        }
-//        [self requestDeviceEquipmentWithProductID:shareProductidArr isSharedDevice:YES];
     }
 }
 
@@ -374,13 +336,9 @@ static CGFloat kHeaderViewHeight = 162;
         }];
         
         self.addBtn.hidden = YES;
-        self.addBtn2.hidden = YES;
         
         [TIoTCoreUserManage shared].currentRoomId = @"";
         
-        //房间列表隐藏
-//        self.tableHeaderView.alpha = 0;
-//        self.tableHeaderView2.alpha = 0;
     } else {
         [self.devicesTableView showEmpty2:NSLocalizedString(@"addDeveice_immediately", @"立即添加") desc:NSLocalizedString(@"no_device_please_addition", @"当前暂无设备，请添加设备") image:[UIImage imageNamed:@"home_noDevice"] block:^{
             [selfWeak addEquipmentViewController];
@@ -479,31 +437,12 @@ static CGFloat kHeaderViewHeight = 162;
     /// 添加天气UI 要在CMPageTitleContentView完后再添加 达到天气在CMPage上效果
     [self setWeatherUI];
     
-    [self.view addSubview:self.navView3];
-    CMPageTitleConfig *config2 = [CMPageTitleConfig defaultConfig];
-    config2.cm_switchMode = CMPageTitleSwitchMode_Scale;
-    config2.cm_titles = roomNames;
-    config2.cm_font = [UIFont systemFontOfSize:16];
-    config2.cm_selectedFont = [UIFont boldSystemFontOfSize:17];
-    config2.cm_normalColor = kFontColor;
-    config2.cm_selectedColor = kRGBColor(0, 82, 217);
-    
-    self.tableHeaderView2 = [[CMPageTitleContentView alloc] initWithConfig:config2];
-    _tableHeaderView2.frame = CGRectMake(0, [TIoTUIProxy shareUIProxy].statusHeight, kScreenWidth, 44);
-    _tableHeaderView2.cm_selectedIndex = index;
-    _tableHeaderView2.cm_delegate = self;
-    [_navView3 addSubview:_tableHeaderView2];
-    
 }
 
 - (void)setNav{
     //最下层固定
     [self.view addSubview:self.navView];
     
-    //滑动层显示的导航栏
-    [self.tableView addSubview:self.navView2];
-    
-    [self.devicesTableView addSubview:self.navView2];
 }
 
 #pragma mark - 天气动画
@@ -699,7 +638,6 @@ static CGFloat kHeaderViewHeight = 162;
                     
                     CGFloat offSetY = self.tableViewScrollOffset;
                     CGFloat kOrigionY = 162 - 44+1;
-                    CGFloat kWeatherOriY = [TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 150/2 -12;
                     CGFloat kWeatherOriX = kScreenWidth - 150/2 + 5;
                     if (offSetY > 0 && offSetY <= kOrigionY) {
                         if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
@@ -1112,7 +1050,6 @@ static CGFloat kHeaderViewHeight = 162;
 ///MARK:获取分享设备状态
 - (void)updateSharedDeviceStatus{
     NSArray *arr = [self.shareDataArr valueForKey:@"DeviceId"];
-//    NSArray *tempShareDataArr = [NSMutableArray arrayWithArray:self.shareDataArr?:@[]];
     if (arr.count > 0) {
         NSDictionary *dic = @{@"ProductId":self.shareDataArr[0][@"ProductId"],@"DeviceIds":arr};
         
@@ -1276,7 +1213,6 @@ static CGFloat kHeaderViewHeight = 162;
     FamilyModel *model = self.families[index];
     [TIoTCoreUserManage shared].familyId = model.FamilyId;
     self.nick.text = model.FamilyName;
-    self.nick2.text = model.FamilyName;
     self.currentFamilyId = model.FamilyId;
     self.currentFamilyRole = model.Role;
     [TIoTCoreUserManage shared].FamilyType = model.FamilyType;
@@ -1646,24 +1582,18 @@ static CGFloat kHeaderViewHeight = 162;
     NSLog(@"offsetY==%f",offSetY);
     CGFloat limit = 44 + weatherHeight;
     if (offSetY <= -(limit + [TIoTUIProxy shareUIProxy].statusHeight)) {
-        self.navView2.hidden = YES;
         self.navView.hidden = NO;
     }
     else if (offSetY > -(limit + [TIoTUIProxy shareUIProxy].statusHeight))
     {
-        self.navView2.hidden = YES;
         self.navView.hidden = NO;
         if (offSetY > -[TIoTUIProxy shareUIProxy].statusHeight) {
             //向上滑动
             self.slideTitleBackView.hidden = NO;
-//            self.tableHeaderView.hidden = NO;
-            self.navView3.hidden = YES;
         }
         else
         {
             self.slideTitleBackView.hidden = NO;
-//            self.tableHeaderView.hidden = NO;
-            self.navView3.hidden = YES;
         }
     }
     
@@ -1878,91 +1808,6 @@ static CGFloat kHeaderViewHeight = 162;
         
     }
     return _navView;
-}
-
-- (UIView *)navView2
-{
-    if (!_navView2) {
-        _navView2 = [[UIView alloc] initWithFrame:CGRectMake(0, -44 - weatherHeight, kScreenWidth, 44 + weatherHeight)];
-        _navView2.backgroundColor = [UIColor redColor];
-        
-        UILabel *titleLab2 = [[UILabel alloc] init];
-        titleLab2.text = @"";
-        titleLab2.textColor = [UIColor whiteColor];
-        titleLab2.font = [UIFont wcPfRegularFontOfSize:16];
-        [_navView2 addSubview:titleLab2];
-        self.nick2 = titleLab2;
-        [titleLab2 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.mas_equalTo(16);
-            make.height.mas_equalTo(44);
-            make.top.mas_equalTo(0);
-        }];
-        
-        UILabel *titleLab = [[UILabel alloc] init];
-        [titleLab setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
-        [_navView2 addSubview:titleLab];
-        [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(titleLab2);
-            make.centerX.equalTo(_navView2);
-            make.top.equalTo(titleLab2.mas_top);
-        }];
-        
-        UIImageView *imgv = [[UIImageView alloc] init];
-        imgv.image = [[UIImage imageNamed:@"down_arrow"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        imgv.tintColor = [UIColor whiteColor];
-        [_navView2 addSubview:imgv];
-        [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.leading.equalTo(titleLab2.mas_trailing).offset(10);
-//            make.centerY.equalTo(titleLab2);
-//            make.trailing.lessThanOrEqualTo(_navView2.mas_trailing).offset(-60);
-//            make.width.mas_equalTo(18);
-            make.leading.equalTo(titleLab2.mas_trailing);
-            make.centerY.equalTo(titleLab2);
-            make.trailing.lessThanOrEqualTo(titleLab.mas_leading);
-            make.width.height.mas_equalTo(18);
-        }];
-        
-        self.addBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_addBtn2 setImage:[UIImage imageNamed:@"homeAdd"] forState:UIControlStateNormal];
-        [_addBtn2 addTarget:self action:@selector(addClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [_navView2 addSubview:_addBtn2];
-//        [_addBtn2 mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.right.mas_equalTo(-15);
-//            make.centerY.equalTo(titleLab2);
-//            make.width.height.mas_equalTo(24);
-//        }];
-        
-        
-        UIView *weatherView2 = [[UIView alloc] init];
-        [_navView2 addSubview:weatherView2];
-        [weatherView2 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(titleLab2.mas_bottom);
-            make.leading.trailing.mas_equalTo(0);
-            make.height.mas_equalTo(weatherHeight);
-        }];
-        
-        
-        UILabel *wea = [[UILabel alloc] init];
-//        wea.attributedText = [self handleWeather];
-        [weatherView2 addSubview:wea];
-        self.weatherLab2 = wea;
-        [wea mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.mas_equalTo(16);
-            make.top.mas_equalTo(8);
-        }];
-    }
-    return _navView2;
-}
-
-- (UIView *)navView3
-{
-    if (!_navView3) {
-        _navView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, [TIoTUIProxy shareUIProxy].navigationBarHeight)];
-        _navView3.backgroundColor = [UIColor whiteColor];
-        _navView3.hidden = YES;
-        
-    }
-    return _navView3;
 }
 
 - (NSString *)weatherLocation {
