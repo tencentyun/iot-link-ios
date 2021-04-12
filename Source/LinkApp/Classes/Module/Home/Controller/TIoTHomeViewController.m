@@ -52,10 +52,7 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, strong) NSMutableArray *shareDevicesArray; //分享设备原始数据拆分后的数组
 @property (nonatomic, strong) NSMutableArray *shareDeviceConfigArray; //分享设备获取每个配置后数组
 
-@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) CMPageTitleContentView *tableHeaderView;
-@property (nonatomic, strong) CMPageTitleContentView *tableHeaderView2;
-
 
 @property (nonatomic, strong) UIView *navView;
 @property (nonatomic, strong) UILabel *nick;
@@ -224,8 +221,7 @@ static CGFloat kHeaderViewHeight = 162;
     
     
     // 设置自动切换透明度(在导航栏下面自动隐藏)
-    self.tableView.mj_header.automaticallyChangeAlpha = YES;
-    
+    self.devicesTableView.mj_header.automaticallyChangeAlpha = YES;
     
     self.devicesTableView.mj_header = [TIoTRefreshHeader headerWithRefreshingBlock:^{
         [selfWeak getFamilyList];
@@ -241,23 +237,6 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)endRefresh:(BOOL)isFooter total:(NSInteger)total {
     self.offset += 10;
-    if (isFooter) {
-        if (self.offset >= total) {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-        }
-        else
-        {
-            [self.tableView.mj_footer endRefreshing];
-        }
-    }
-    else{
-        [self.tableView.mj_header endRefreshing];
-        if (self.offset >= total) {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-        } else {
-            [self.tableView.mj_footer endRefreshing];
-        }
-    }
     
     if (isFooter) {
         if (self.offset >= total) {
@@ -298,7 +277,6 @@ static CGFloat kHeaderViewHeight = 162;
         self.tableHeaderView.hidden = NO;
         [self addTableHeaderView];
         [self.deviceConfigArray removeAllObjects];
-        
         [self.devicesTableView reloadData];
         
         [self getFamilyInfoAddressWithFamilyID:self.currentFamilyId?:@""];
@@ -306,10 +284,8 @@ static CGFloat kHeaderViewHeight = 162;
     else{
         
         self.addBtn.hidden = YES;
-        
         //房间列表显示
         self.tableHeaderView.hidden = NO;
-        self.tableHeaderView2.alpha = 1;
         [self addTableHeaderView];
         [self.devicesTableView hideStatus];
         [self.devicesTableView reloadData];
@@ -458,7 +434,6 @@ static CGFloat kHeaderViewHeight = 162;
         make.top.equalTo(self.headerView.mas_top).offset(-([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight));
         make.height.mas_equalTo([TIoTUIProxy shareUIProxy].navigationBarHeight + weatherHeight + 162);
     }];
-    self.tableView.tableHeaderView = self.headerView;
     
     self.devicesTableView.tableHeaderView = self.headerView;
     
@@ -1165,12 +1140,6 @@ static CGFloat kHeaderViewHeight = 162;
         NSArray *data = responseObject[@"Data"];
         if (data.count > 0) {
             
-//            for (int i= 0; i<data.count; i++) {
-//                NSDictionary *config = [NSString jsonToObject:data[i][@"Config"]]?:@{};
-//                NSDictionary *shortcutDic = config?:@{};
-//                [self.deviceConfigArray addObject:shortcutDic];
-//            }
-            
             //和devicesArray 组合方式一样，将源数据按照@[@{},@{}] 为一个cellItem重新组装
             for (int i = 0; i < data.count; i+=2) {
                 
@@ -1309,55 +1278,45 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (tableView == self.tableView) {
-        return self.dataArr.count;
-    }else {
-        if ([NSString isNullOrNilWithObject:self.currentRoomId]) {   //【全部】房间
-            if (self.shareDevicesArray.count > 0 && self.devicesArray.count > 0) {
-                if (section == 0) {
-                    return self.devicesArray.count;
-                }else {
-                    return self.shareDevicesArray.count;
-                }
-            }else if (self.shareDevicesArray.count > 0 && self.devicesArray.count == 0){
-                return self.shareDevicesArray.count;
-            }else if (self.shareDevicesArray.count == 0 && self.devicesArray.count > 0) {
+    
+    if ([NSString isNullOrNilWithObject:self.currentRoomId]) {   //【全部】房间
+        if (self.shareDevicesArray.count > 0 && self.devicesArray.count > 0) {
+            if (section == 0) {
                 return self.devicesArray.count;
             }else {
-                return 0;
+                return self.shareDevicesArray.count;
             }
-        }else {
+        }else if (self.shareDevicesArray.count > 0 && self.devicesArray.count == 0){
+            return self.shareDevicesArray.count;
+        }else if (self.shareDevicesArray.count == 0 && self.devicesArray.count > 0) {
             return self.devicesArray.count;
+        }else {
+            return 0;
         }
-        
+    }else {
+        return self.devicesArray.count;
     }
     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (tableView == self.tableView) {
-        TIoTEquipmentTableViewCell *cell = [TIoTEquipmentTableViewCell cellWithTableView:tableView];
-        cell.dataDic = self.dataArr[indexPath.row];
-        return cell;
-    }else {
-        if ([NSString isNullOrNilWithObject:self.currentRoomId]) {   //【全部】房间
-            if (self.shareDevicesArray.count > 0 && self.devicesArray.count > 0) {
-                if (indexPath.section == 0) {
-                    return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
-                }else {
-                    return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.shareDataArr newDeivceData:self.shareDevicesArray configData:self.shareDeviceConfigArray];
-                }
-            }else if (self.shareDevicesArray.count > 0 && self.devicesArray.count == 0){
-                return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.shareDataArr newDeivceData:self.shareDevicesArray configData:self.shareDeviceConfigArray];
-            }else if (self.shareDevicesArray.count == 0 && self.devicesArray.count > 0) {
+    
+    if ([NSString isNullOrNilWithObject:self.currentRoomId]) {   //【全部】房间
+        if (self.shareDevicesArray.count > 0 && self.devicesArray.count > 0) {
+            if (indexPath.section == 0) {
                 return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
             }else {
-                return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
+                return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.shareDataArr newDeivceData:self.shareDevicesArray configData:self.shareDeviceConfigArray];
             }
+        }else if (self.shareDevicesArray.count > 0 && self.devicesArray.count == 0){
+            return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.shareDataArr newDeivceData:self.shareDevicesArray configData:self.shareDeviceConfigArray];
+        }else if (self.shareDevicesArray.count == 0 && self.devicesArray.count > 0) {
+            return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
         }else {
             return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
         }
-    
+    }else {
+        return [self cellForDeviceWithTableView:tableView IndexPath:indexPath sourceData:self.dataArr newDeivceData:self.devicesArray configData:self.deviceConfigArray];
     }
     
 }
@@ -1370,9 +1329,6 @@ static CGFloat kHeaderViewHeight = 162;
     }
     
     [cell setSelectIndexPatch:indexPath];
-//        cell.dataArray = self.devicesArray[indexPath.row];
-//        cell.indexPatch = indexPath;
-    
     
     __weak typeof(self) weakSelf = self;
     cell.clickLeftDeviceBlock = ^(NSIndexPath * _Nonnull leftIndexPath) {
@@ -1387,12 +1343,9 @@ static CGFloat kHeaderViewHeight = 162;
         [cell setDeviceConfigArray:configDataArray[indexPath.row]?:@[]];
     }
     
-//        cell.deviceConfigDataArray = self.deviceConfigArray[indexPath.row]?:@[];
-    
     cell.clickQuickBtnBlock = ^(NSDictionary * _Nonnull productData, NSDictionary * _Nonnull configData, NSArray * _Nonnull shortcutConfigArray){
         
         NSArray *devIds = @[productData[@"DeviceId"]];
-        //    if ([WCWebSocketManage shared].socketReadyState == SR_OPEN) {
         [HXYNotice postHeartBeat:devIds];
         [HXYNotice addActivePushPost:devIds];
         
@@ -1434,10 +1387,6 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-//    if (tableView == self.tableView) {
-//        [self chooseDeviceWith:indexPath];
-//    }
-    //self.dataArr[indexPath.row]  对应原始数据源每个device的配置完整信息
 }
 
 - (void)chooseDeviceWith:(NSIndexPath *)indexPath withDataArr:(NSMutableArray *)dataArr{
@@ -1602,10 +1551,8 @@ static CGFloat kHeaderViewHeight = 162;
     CGFloat kWeatherOriX = kScreenWidth - 150/2 + 5;
     
     if (offSetY <=0) {
-        [self.view insertSubview:self.tableHeaderView aboveSubview:self.tableView];
         [self.view insertSubview:self.tableHeaderView aboveSubview:self.devicesTableView];
         self.tableHeaderView.center = CGPointMake(kScreenWidth/2, kOrigionY -offSetY + kOrigionY);
-        [self.view insertSubview:self.slideTitleBackView aboveSubview:self.tableView];
         [self.view insertSubview:self.slideTitleBackView aboveSubview:self.devicesTableView];
         
         if (![TIoTUIProxy shareUIProxy].iPhoneX) {
@@ -1618,23 +1565,15 @@ static CGFloat kHeaderViewHeight = 162;
             make.right.equalTo(self.slideTitleBackView.mas_right).offset(-7);
         }];
         
+        CGPoint weatherCenter = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY);
+        CGFloat alphaValue = 1;
         
-        if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
-            self.weatherBottomBtn.enabled = NO;
-            self.weatherAnimationView.hidden = NO;
-            self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY);
-            self.weatherAnimationView.alpha = 1;
-        }else {
-            self.weatherBottomBtn.enabled = YES;
-            self.weatherAnimationView.hidden = YES;
-        }
+        [self controlWeatherViewWithCenter:weatherCenter alpha:alphaValue];
         
     }else if (offSetY > 0 && offSetY <= kOrigionY) {
-        [self.view insertSubview:self.tableHeaderView aboveSubview:self.tableView];
         [self.view insertSubview:self.tableHeaderView aboveSubview:self.devicesTableView];
         self.tableHeaderView.center = CGPointMake(kScreenWidth/2, kOrigionY - offSetY + kOrigionY);
         
-        [self.view insertSubview:self.slideTitleBackView aboveSubview:self.tableView];
         [self.view insertSubview:self.slideTitleBackView aboveSubview:self.devicesTableView];
         if (![TIoTUIProxy shareUIProxy].iPhoneX) {
             self.slideTitleBackView.center = CGPointMake(self.tableHeaderView.center.x, self.tableHeaderView.center.y - 24);
@@ -1646,17 +1585,14 @@ static CGFloat kHeaderViewHeight = 162;
             make.right.equalTo(self.slideTitleBackView.mas_right).offset(-7);
         }];
         
-        if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
-            self.weatherBottomBtn.enabled = NO;
-            self.weatherAnimationView.hidden = NO;
-            self.weatherAnimationView.center = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
-            self.weatherAnimationView.alpha = (kOrigionY - offSetY)/kOrigionY;
-            self.weatherScrollOffsetY = self.weatherAnimationView.center.y;
-        }else {
-            self.weatherBottomBtn.enabled = YES;
-            self.weatherAnimationView.hidden = YES;
-        }
+        CGPoint weatherCenter = CGPointMake(kWeatherOriX, kWeatherOriY - offSetY - 3);
+        CGFloat alphaValue = (kOrigionY - offSetY)/kOrigionY;
         
+        [self controlWeatherViewWithCenter:weatherCenter alpha:alphaValue];
+        
+        if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+            self.weatherScrollOffsetY = self.weatherAnimationView.center.y;
+        }
         
     }else if (offSetY > kOrigionY) {
         self.tableHeaderView.center = CGPointMake(kScreenWidth/2, kOrigionY);
@@ -1676,12 +1612,23 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
+- (void)controlWeatherViewWithCenter:(CGPoint)center alpha:(CGFloat)alphaValue {
+    if (![NSString isNullOrNilWithObject:self.weatherTemp]) {
+        self.weatherBottomBtn.enabled = NO;
+        self.weatherAnimationView.hidden = NO;
+        self.weatherAnimationView.center = center;
+        self.weatherAnimationView.alpha = alphaValue;
+    }else {
+        self.weatherBottomBtn.enabled = YES;
+        self.weatherAnimationView.hidden = YES;
+    }
+}
+
 #pragma mark - PageTitle delegate
 
 - (void)cm_pageTitleContentViewClickWithLastIndex:(NSUInteger)LastIndex Index:(NSUInteger)index Repeat:(BOOL)repeat
 {
     self.tableHeaderView.cm_selectedIndex = index;
-    self.tableHeaderView2.cm_selectedIndex = index;
     
     if (index == 0) {
         self.currentRoomId = nil;
@@ -1715,20 +1662,6 @@ static CGFloat kHeaderViewHeight = 162;
     return _devicesTableView;
 }
 
-- (UITableView *)tableView{
-    if (_tableView == nil) {
-        _tableView = [[UITableView alloc] init];
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.rowHeight = 100;
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-//        self.tableView.contentInset = UIEdgeInsetsMake(162, 0, 0, 0);
-    }
-    
-    return _tableView;
-}
-
 - (UIView *)navView
 {
     if (!_navView) {
@@ -1746,10 +1679,8 @@ static CGFloat kHeaderViewHeight = 162;
         [titleLabel setLabelFormateTitle:NSLocalizedString(@"lialian_name", @"腾讯连连") font:[UIFont boldSystemFontOfSize:20] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [_navView addSubview:titleLabel];
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerY.equalTo(titleLab);
             make.height.mas_equalTo(44);
             make.centerX.equalTo(_navView);
-//            make.top.equalTo(titleLab.mas_top);
             make.top.mas_equalTo([TIoTUIProxy shareUIProxy].statusHeight);
         }];
         
@@ -1790,12 +1721,6 @@ static CGFloat kHeaderViewHeight = 162;
         self.addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_addBtn setImage:[UIImage imageNamed:@"homeAdd"] forState:UIControlStateNormal];
         [_addBtn addTarget:self action:@selector(addClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [_navView addSubview:_addBtn];
-//        [_addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.trailing.mas_equalTo(-15);
-//            make.centerY.equalTo(titleLab);
-//            make.width.height.mas_equalTo(24);
-//        }];
         
         
         UIView *weatherView = [[UIView alloc] init];
