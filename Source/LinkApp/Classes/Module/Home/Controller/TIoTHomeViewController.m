@@ -986,7 +986,6 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 ///MARK: 获取分享设备列表设备信息
-
 - (void)getShareDeviceListInfo:(NSArray *)productIDsArray {
     [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDsArray?:@[]} success:^(id responseObject) {
         NSArray *deviceInfoArr = responseObject[@"Products"];
@@ -1008,7 +1007,6 @@ static CGFloat kHeaderViewHeight = 162;
                     
                 }
             }
-            
             
         }
         
@@ -1045,11 +1043,8 @@ static CGFloat kHeaderViewHeight = 162;
                             [tmpArr addObject:dic];
                             break;
                         }
-                        
                     }
                 }
-                
-                
             }
             
             [self.shareDataArr removeAllObjects];
