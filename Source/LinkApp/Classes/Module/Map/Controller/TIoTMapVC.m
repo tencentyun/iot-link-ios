@@ -70,9 +70,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     
     self.mapView.zoomLevel = 15.0;
     [self setupPointAnnotation];
-//        [self searchCurrentLocationWithKeyword:@""];
-//        [self setupSearchView];
-        [self setupKeyboardNotification];
+    [self setupKeyboardNotification];
     [self setupBottomView];
     
     [self setupRefreshView];
@@ -113,8 +111,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 
 - (void)setupPointAnnotation {
     _annotation = [[QPointAnnotation alloc] init];
-    NSLog(@"location----%@",self.mapView.userLocation.location);
-    NSLog(@"_annotation.coordinate.latitude----%f",_annotation.coordinate.latitude);
     [self.mapView addAnnotation:_annotation];
     
 }
@@ -322,7 +318,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
             }
             _isFirstLocatePin = YES;
         }else {
-            NSLog(@"longitude---%f---latitude---%f",self.longitude,self.latitude);
             
             //首次请求定位周围地点列表
             [self resetRequestPragma];
@@ -381,7 +376,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         [self requestLocationList:centerCoord];
         
     }
-    NSLog(@"----!!!___%f",mapView.centerCoordinate.longitude);
     _annotation.coordinate = mapView.centerCoordinate;
 }
 
@@ -424,17 +418,6 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
                         }
                     }
                 }
-                
-                
-//                for (int i = 0; i < tempArray.count; i++) {
-//                    TIoTPoisModel *model = tempArray[i];
-//                    model.address = self.searchLocationModel.address;
-//                    if ([model.title isEqualToString:self.searchLocationModel.title]) {
-//
-//                        [self.searchResultArray exchangeObjectAtIndex:i withObjectAtIndex:0];
-//                        [self.searchResultArray replaceObjectAtIndex:0 withObject:model];
-//                    }
-//                }
             }
         }else {
             NSDictionary *addJsonDic =  [NSString jsonToObject:self.addressString?:@""]?:@{};
@@ -618,12 +601,11 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 
 #pragma mark - QMSSearchDelegate
 - (void)searchWithReverseGeoCodeSearchOption:(QMSReverseGeoCodeSearchOption *)reverseGeoCodeSearchOption didReceiveResult:(QMSReverseGeoCodeSearchResult *)reverseGeoCodeSearchResult {
-    NSLog(@"pois--->%@", reverseGeoCodeSearchResult);
 }
 
 - (void)searchWithSearchOption:(QMSSearchOption *)searchOption didFailWithError:(NSError *)error
 {
-    NSLog(@"%@",error);
+    WCLog(@"%@",error);
 }
 
 
