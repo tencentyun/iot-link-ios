@@ -89,7 +89,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(16);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(5);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(16);
     }];
     
     UITextView *procolTV = [[UITextView alloc] init];

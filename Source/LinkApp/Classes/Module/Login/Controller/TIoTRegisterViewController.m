@@ -16,9 +16,9 @@
 #import "TIoTAlertCustomView.h"
 #import "TIoTOpensourceLicenseViewController.h"
 
-static CGFloat const kLeftRightPadding = 20; //左右边距
+static CGFloat const kLeftRightPadding = 16; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
-static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
+static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 
 @interface TIoTRegisterViewController ()<UITextViewDelegate>
 {
@@ -133,11 +133,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     procolTV.delegate = self;
     procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
     procolTV.scrollEnabled = NO;
+    procolTV.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:procolTV];
     [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38 * kScreenAllHeightScale);
 //        make.centerX.equalTo(self.view).offset(15);
         make.left.equalTo(emailRegisterBtn.mas_left).offset(27);
+        make.right.equalTo(self.view.mas_right).offset(-40);
     }];
     
     self.procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -146,14 +148,14 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.procolBtn setImage:[UIImage imageNamed:@"agree_selected"] forState:UIControlStateSelected];
     [self.view addSubview:self.procolBtn];
     [self.procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(procolTV);
+        make.top.equalTo(procolTV.mas_top).offset(4);
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV.mas_left);
     }];
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"findPassord_get_code_", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -386,7 +388,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view endEditing:YES];
     self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
-    if ([sender.titleLabel.text containsString:@"手机"]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"mobile_phone_register", @"手机注册")]) {
         _emailStyle = NO;
         self.title = NSLocalizedString(@"mobile_phone_register", @"手机注册");
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
@@ -600,9 +602,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         self.phoneTF = [[UITextField alloc] init];
         self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
-        self.phoneTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
-        self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:14];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        self.phoneTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
+        self.phoneTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -717,9 +719,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         self.emailTF = [[UITextField alloc] init];
         self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        self.emailTF.textColor = kFontColor;
-        self.emailTF.font = [UIFont wcPfSemiboldFontOfSize:14];
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        self.emailTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
+        self.emailTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
