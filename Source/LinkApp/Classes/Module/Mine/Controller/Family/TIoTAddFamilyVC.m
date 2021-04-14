@@ -38,7 +38,7 @@
         }
     }];
     
-    CGFloat kLeftPadding = 20;
+    CGFloat kLeftPadding = 16;
     CGFloat kBackViewHeight = 40;
     
     __weak typeof(self)weakSelf = self;
@@ -123,7 +123,7 @@
             [weakSelf.dataArray replaceObjectAtIndex:indexPath.row withObject:addressDic];
             TIoTAddFamilyCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             cell.contentLabel.text = address;
-            cell.contentLabel.textColor = [UIColor colorWithHexString:@"#A1A7B2"];
+            cell.contentLabel.textColor = [UIColor colorWithHexString:kRegionHexColor];
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:mapVC animated:YES];

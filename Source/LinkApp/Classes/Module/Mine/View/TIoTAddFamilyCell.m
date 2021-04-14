@@ -42,7 +42,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CGFloat kLeftRightPadding = 20;
+    CGFloat kLeftRightPadding = 16;
     
     self.titleLabel = [[UILabel alloc]init];
     [self.titleLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
@@ -50,7 +50,7 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
         make.left.equalTo(self.contentView.mas_left).offset(kLeftRightPadding);
-        make.width.mas_equalTo(80);
+        make.width.mas_equalTo(100);
     }];
     
     UIImageView *arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mineArrow"]];
@@ -64,7 +64,7 @@
     
     self.contentTextField = [[UITextField alloc]init];
     self.contentTextField.text = @"";
-    self.contentTextField.textColor = [UIColor colorWithHexString:@"#A1A7B2"];
+    self.contentTextField.textColor = [UIColor colorWithHexString:kRegionHexColor];
     self.contentTextField.textAlignment = NSTextAlignmentLeft;
     self.contentTextField.font = [UIFont wcPfRegularFontOfSize:14];
     self.contentTextField.delegate = self;
