@@ -43,9 +43,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = NSLocalizedString(@"set_password", @"设置密码");
     
-    CGFloat kLeftRightPadding = 20;
+    CGFloat kLeftRightPadding = 16;
     CGFloat kHeightCell = 48;
-    CGFloat kWidthTitle = 90;
+    CGFloat kWidthTitle = 80;
     
     UILabel *passWordLabel = [[UILabel alloc]init];
     [passWordLabel setLabelFormateTitle:NSLocalizedString(@"password", @"密码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];

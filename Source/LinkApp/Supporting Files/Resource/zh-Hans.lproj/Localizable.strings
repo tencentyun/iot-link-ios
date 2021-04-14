@@ -53,6 +53,7 @@
 "register_agree_4" = "隐私政策";
 "register_agree_5" = "开源软件信息";
 "register_get_code" = "获取验证码";
+"findPassord_get_code_" = "获取验证码"; //找回密码中的和登录中的不一致
 "get_mobile_code_sent" = "验证码已经发送到您的手机:";
 "get_email_code_sent" = "验证码已经发送到您的邮箱:";
 "not_wechat_client" = "未安装微信客户端";

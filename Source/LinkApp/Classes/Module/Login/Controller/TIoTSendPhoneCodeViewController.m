@@ -45,7 +45,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = NSLocalizedString(@"verification_code", @"验证码");
     
-    CGFloat kLeftRightPadding = 20;
+    CGFloat kLeftRightPadding = 16;
     CGFloat kBoxWidth = 50;
     JHVCConfig *config     = [[JHVCConfig alloc] init];
     config.inputBoxNumber  = 6;
@@ -105,7 +105,7 @@
 
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(60s)",NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"(60s) %@",NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     [self openCountdown];
@@ -174,7 +174,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 //设置按钮显示读秒效果
-                [selfWeak.sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(%.2ds)", NSLocalizedString(@"resend", @"重新发送"),seconds] forState:UIControlStateNormal];
+                [selfWeak.sendCodeBtn setTitle:[NSString stringWithFormat:@"(%.2ds) %@",seconds, NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
                 selfWeak.sendCodeBtn.userInteractionEnabled = NO;
                 [selfWeak.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateNormal];
             });

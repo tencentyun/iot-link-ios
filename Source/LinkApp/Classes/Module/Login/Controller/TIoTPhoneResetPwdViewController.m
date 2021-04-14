@@ -14,9 +14,9 @@
 #import "UILabel+TIoTExtension.h"
 #import "TIoTOpensourceLicenseViewController.h"
 
-static CGFloat const kLeftRightPadding = 20; //左右边距
+static CGFloat const kLeftRightPadding = 16; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
-static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
+static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 
 @interface TIoTPhoneResetPwdViewController ()<UITextViewDelegate>
 {
@@ -88,8 +88,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(20);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(20);
+        make.left.mas_equalTo(16);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(5);
     }];
     
     UITextView *procolTV = [[UITextView alloc] init];
@@ -128,7 +128,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"findPassord_get_code_", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -406,9 +406,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         self.phoneTF = [[UITextField alloc] init];
         self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
-        self.phoneTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];;
-        self.phoneTF.font = [UIFont wcPfSemiboldFontOfSize:14];
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfSemiboldFontOfSize:14]}];
+        self.phoneTF.textColor = [UIColor colorWithHexString:kRegionHexColor];;
+        self.phoneTF.font = [UIFont wcPfRegularFontOfSize:14];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -453,9 +453,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         self.emailTF = [[UITextField alloc] init];
         
         self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        self.emailTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+        self.emailTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         self.emailTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];

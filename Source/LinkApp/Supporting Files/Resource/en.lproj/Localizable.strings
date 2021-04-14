@@ -48,11 +48,12 @@
 "mobile_phone_register" = "Signup with mobile number";
 "email_register" = "Signup with email";
 "register_agree_1" = "I agree to comply with Tencent Cloud";
-"register_agree_2" = "User Agreement";
-"register_agree_3" = "and";
-"register_agree_4" = "Privacy Policy";
+"register_agree_2" = " User Agreement";
+"register_agree_3" = " and";
+"register_agree_4" = " Privacy Policy";
 "register_agree_5" = "Open source software information";
-"register_get_code" = "Get Code";
+"register_get_code" = "Get code";
+"findPassord_get_code_" = "Get verification code"; //找回密码中的和登录中的不一致
 "get_mobile_code_sent" = "The verification code has been sent to your phone:";
 "get_email_code_sent" = "The verification code has been sent to your email:";
 "not_wechat_client" = "The WeChat app is not installed";
@@ -316,7 +317,7 @@
 "other_login_way" = "Other login methods";
 "wechat" = "WeChat";
 "account_and_safety" = "Account and security";
-"phone_number" = "Mobile number";
+"phone_number" = "Mobile";
 "unbind" = "Mobile number";
 "have_bind" = "Unbound";
 "email" = "Bound";
@@ -641,7 +642,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "write_room_name" = "Please enter the room name";
 "remove_success" = "Removed successfully";    //removeSuccess
 "send_invitation_success" = "Sent invitation successfully";
-"email_account" = "Email address";
+"email_account" = "Email";
 //"" = "XXX个设备";
 "join_success" = "Joined successfully";
 "Processing" = "Processing...";
@@ -827,7 +828,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "contry_region" = "Country";
 "second_confirm_password" = "Confirm Again";
 "phone_email_loginMethod" = "Account";
-"confirm_password" = "Re-enter Password";
+"confirm_password" = "Confirm";
 "new_password" = "New Password";
 "XXX_rooms" = "Room(s)";  //xxx 房间个数
 "living_room" = "Living room";
