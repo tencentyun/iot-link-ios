@@ -71,7 +71,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                 
                 if ([selfWeak.inputTextIsError isEqual:@"1"]) {
                     sendCodeBtn.enabled = NO;
-                    [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
+                    [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                 }else {
                     if (type == YES) {
                         if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgePhoneNumberLegal:inputText withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
@@ -79,7 +79,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                             [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                         }else {
                             sendCodeBtn.enabled = NO;
-                            [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
+                            [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                         }
                     }else {
                         if ((![NSString isNullOrNilWithObject:inputText]) && [NSString judgeEmailLegal:inputText]) {
@@ -87,7 +87,7 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
                             [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                         }else {
                             sendCodeBtn.enabled = NO;
-                            [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
+                            [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                         }
                     }
                 }
@@ -99,9 +99,9 @@ static NSString * const verificationCodeNotification = @"verificationCodeNotific
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 //设置按钮显示读秒效果
-                [sendCodeBtn setTitle:[NSString stringWithFormat:@"%@(%.2ds)", NSLocalizedString(@"resend", @"重新发送"),seconds] forState:UIControlStateNormal];
+                [sendCodeBtn setTitle:[NSString stringWithFormat:@"(%.2ds) %@",seconds, NSLocalizedString(@"resend", @"重新发送")] forState:UIControlStateNormal];
                 sendCodeBtn.enabled = NO;
-                [sendCodeBtn setTitleColor:kRGBColor(204, 204, 204) forState:UIControlStateNormal];
+                [sendCodeBtn setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
             });
             time--;
         }

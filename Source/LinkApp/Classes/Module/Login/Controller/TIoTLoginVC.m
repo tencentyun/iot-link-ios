@@ -359,7 +359,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
         }];
         
         self.loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+        [self.loginBtn setTitle:NSLocalizedString(@"login", @"登录") forState:UIControlStateNormal];
         [self.loginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     //    [self.loginBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
         self.loginBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];

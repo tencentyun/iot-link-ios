@@ -24,8 +24,11 @@
 #import "TIoTAlertCustomView.h"
 
 static CGFloat const kLeftRightPadding = 20; //左右边距
+static CGFloat const kRightRightPadding = 16; //左右边距
 static CGFloat const kHeightCell = 48; //每一项高度
-static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
+static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
+
+static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离右边距
 
 @interface TIoTVCLoginAccountVC ()<UITextViewDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -48,6 +51,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 @property (nonatomic, strong) UITextField *passwordTF;
 
 @property (nonatomic, strong) UIButton *loginAccountButton;
+@property (nonatomic, strong) UIButton *verificationCodeButton;
+@property (nonatomic, strong) UILabel *otherLoginLabel;
 @property (nonatomic, strong) UIButton *weixinLoginButton;
 
 @property (nonatomic, strong) NSString *cancelAccountTimeString;
@@ -121,32 +126,33 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     
     [self.view addSubview:self.loginAccountButton];
     [self.loginAccountButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.scrollView.mas_bottom).offset(40);
-        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
-        make.right.equalTo(self.view.mas_right).offset(-kLeftRightPadding);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
+        make.left.equalTo(self.view.mas_left).offset(kRightRightPadding);
+        make.right.equalTo(self.view.mas_right).offset(-kRightRightPadding);
         make.height.mas_equalTo(40);
     }];
     
-    UIButton *verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [verificationCodeButton setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
-    [verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
-    verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    [verificationCodeButton addTarget:self action:@selector(loginStyleChange:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:verificationCodeButton];
-    [verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.loginAccountButton.mas_left);
-        make.top.equalTo(self.loginAccountButton.mas_bottom).offset(20);
+    self.verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.verificationCodeButton setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
+    [self.verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
+    self.verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    [self.verificationCodeButton addTarget:self action:@selector(loginStyleChange:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.verificationCodeButton];
+    [self.verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.loginAccountButton.mas_left);
+        make.centerX.equalTo(self.loginAccountButton);
+        make.top.equalTo(self.loginAccountButton.mas_bottom).offset(16);
     }];
     
     
-    UILabel *otherLoginLabel = [[UILabel alloc]init];
-    otherLoginLabel.text = @"其他登录方式";
-    otherLoginLabel.textColor = [UIColor colorWithHexString:@"#cccccc"];
-    otherLoginLabel.font = [UIFont wcPfRegularFontOfSize:14];
-    otherLoginLabel.hidden = self.weixinLoginButton.hidden;
-    [self.view addSubview:otherLoginLabel];
-    [otherLoginLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(verificationCodeButton.mas_bottom).offset(40);
+    self.otherLoginLabel = [[UILabel alloc]init];
+    self.otherLoginLabel.text = NSLocalizedString(@"other_login_way", @"其他登录方式");
+    self.otherLoginLabel.textColor = [UIColor colorWithHexString:@"#cccccc"];
+    self.otherLoginLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    self.otherLoginLabel.hidden = self.weixinLoginButton.hidden;
+    [self.view addSubview:self.otherLoginLabel];
+    [self.otherLoginLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(40);
         make.centerX.equalTo(self.view);
     }];
     
@@ -155,8 +161,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     otherLoginLine1.hidden = self.weixinLoginButton.hidden;
     [self.view addSubview:otherLoginLine1];
     [otherLoginLine1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(otherLoginLabel.mas_centerY);
-        make.trailing.equalTo(otherLoginLabel.mas_leading).offset(-10);
+        make.centerY.equalTo(self.otherLoginLabel.mas_centerY);
+        make.trailing.equalTo(self.otherLoginLabel.mas_leading).offset(-10);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(0.5);
     }];
@@ -166,15 +172,15 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     otherLoginLine2.hidden = self.weixinLoginButton.hidden;
     [self.view addSubview:otherLoginLine2];
     [otherLoginLine2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(otherLoginLabel.mas_centerY);
-        make.leading.equalTo(otherLoginLabel.mas_trailing).offset(10);
+        make.centerY.equalTo(self.otherLoginLabel.mas_centerY);
+        make.leading.equalTo(self.otherLoginLabel.mas_trailing).offset(10);
         make.width.height.equalTo(otherLoginLine1);
     }];
     
     [self.view addSubview:self.weixinLoginButton];
     [self.weixinLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
-        make.top.equalTo(otherLoginLabel.mas_bottom).offset(20);
+        make.top.equalTo(self.otherLoginLabel.mas_bottom).offset(20);
         make.height.mas_equalTo(80);
     }];
     [self.weixinLoginButton relayoutButton:XDPButtonLayoutStyleTop];
@@ -184,8 +190,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     self.forgetPasswordButton.hidden = YES;
     [self.view addSubview:self.forgetPasswordButton];
     [self.forgetPasswordButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.trailing.equalTo(self.loginAccountButton.mas_trailing);
-        make.centerY.equalTo(verificationCodeButton.mas_centerY);
+        make.centerX.equalTo(self.loginAccountButton);
+        make.height.mas_equalTo(25);
+        make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(5);
     }];
     
     
@@ -234,11 +241,11 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
             _verificationButton.enabled = YES;
         }else {
-            [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+            [_verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
             _verificationButton.enabled = NO;
         }
     }else {
-        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
         _verificationButton.enabled = NO;
         
         //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
@@ -336,7 +343,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         imgV.image = [UIImage imageNamed:@"mineArrow"];
         [_contentView addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-kLeftRightPadding);
+            make.right.mas_equalTo(-kRightRightPadding);
             make.centerY.equalTo(contryLabel);
             make.width.height.mas_equalTo(18);
         }];
@@ -374,7 +381,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [_contentView addSubview:self.phoneAndEmailTF];
         [self.phoneAndEmailTF mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(phoneOrEmailLabel.mas_trailing);
-            make.trailing.mas_equalTo(-kLeftRightPadding);
+            make.trailing.mas_equalTo(-kRightRightPadding);
             make.top.equalTo(phoneOrEmailLabel);
             make.height.mas_equalTo(kHeightCell);
         }];
@@ -401,7 +408,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         [_contentView addSubview:self.verificationButton];
         [self.verificationButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.trailing.equalTo(self.contentView.mas_trailing).offset(-kLeftRightPadding);
+            make.trailing.equalTo(self.contentView.mas_trailing).offset(-kVerificationBtnRightPadding);
             make.top.equalTo(verificationlabel.mas_top);
             make.height.mas_equalTo(kHeightCell);
         }];
@@ -410,7 +417,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [self.verificationcodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(verificationlabel.mas_top);
             make.leading.equalTo(self.phoneAndEmailTF.mas_leading);
-            make.trailing.equalTo(self.verificationButton.mas_leading);
+//            make.trailing.equalTo(self.verificationButton.mas_leading).offset(-kVerificationcodeTFRight);
+            make.width.mas_equalTo(140);
             make.height.mas_equalTo(kHeightCell);
         }];
 
@@ -468,7 +476,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         imgV.image = [UIImage imageNamed:@"mineArrow"];
         [_contentView2 addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-kLeftRightPadding);
+            make.right.mas_equalTo(-kRightRightPadding);
             make.centerY.equalTo(contryLabel2);
             make.width.height.mas_equalTo(18);
         }];
@@ -506,7 +514,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [_contentView2 addSubview:self.phoneAndEmailTF2];
         [self.phoneAndEmailTF2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(phoneOrEmailLabel.mas_trailing);
-            make.trailing.mas_equalTo(-kLeftRightPadding);
+            make.trailing.mas_equalTo(-kRightRightPadding);
             make.top.equalTo(phoneOrEmailLabel);
             make.height.mas_equalTo(kHeightCell);
         }];
@@ -557,7 +565,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 - (UIButton *)loginAccountButton {
     if (!_loginAccountButton) {
         _loginAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_loginAccountButton setTitle:@"登录" forState:UIControlStateNormal];
+        [_loginAccountButton setTitle:NSLocalizedString(@"login", @"登录") forState:UIControlStateNormal];
         [_loginAccountButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_loginAccountButton setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
         _loginAccountButton.enabled = NO;
@@ -572,7 +580,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if (!_phoneAndEmailTF) {
         _phoneAndEmailTF = [[UITextField alloc] init];
         _phoneAndEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        _phoneAndEmailTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+        _phoneAndEmailTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _phoneAndEmailTF.font = [UIFont wcPfRegularFontOfSize:14];
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneAndEmailTF.attributedPlaceholder = ap;
@@ -588,7 +596,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
-        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
         _verificationButton.enabled = NO;
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -599,9 +607,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if (!_verificationcodeTF) {
         _verificationcodeTF = [[UITextField alloc]init];
         _verificationcodeTF.keyboardType = UIKeyboardTypePhonePad;
-        _verificationcodeTF.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+        _verificationcodeTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _verificationcodeTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"verification_code", @"验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"input_verification_code", @"输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationcodeTF.attributedPlaceholder = apVerification;
         _verificationcodeTF.clearButtonMode = UITextFieldViewModeAlways;
         [_verificationcodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -653,7 +661,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     if (!_weixinLoginButton) {
         _weixinLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_weixinLoginButton setTitle:NSLocalizedString(@"wechat", @"微信") forState:UIControlStateNormal];
-        [_weixinLoginButton setTitleColor:kFontColor forState:UIControlStateNormal];
+        [_weixinLoginButton setTitleColor:[UIColor colorWithHexString:@"#666666"] forState:UIControlStateNormal];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"wxlogin"] forState:UIControlStateNormal];
         _weixinLoginButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:10];
         [_weixinLoginButton addTarget:self action:@selector(wxLoginClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -671,7 +679,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view endEditing:YES];
     self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.loginAccountButton.enabled = NO;
-    if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"verify_code_login", @"验证码登录")]) {
         self.loginStyle = YES;
         self.title = NSLocalizedString(@"verify_code_login", @"验证码登录");
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
@@ -683,6 +691,11 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF2.text;
         self.phoneAndEmailTF.text = self.phoneAndEmailTF2.text;
+        
+        [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(40);
+        }];
+        
     }else {
         self.loginStyle = NO;
         self.title = NSLocalizedString(@"account_passwd_login", @"账号密码登录");
@@ -696,6 +709,9 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF.text;
         self.phoneAndEmailTF2.text = self.phoneAndEmailTF.text;
         
+        [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(80);
+        }];
     }
     
     [self optionUserDefaultActionItems];

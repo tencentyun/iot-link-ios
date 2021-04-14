@@ -56,8 +56,8 @@ static CGFloat kHeightCell = 48+10;
     self.conturyCode2 = @"86";
     self.modifyStyle = YES;
     
-    CGFloat kLeftRightPadding = 20;
-    CGFloat kWidthTitle = 90;
+    CGFloat kLeftRightPadding = 16;
+    CGFloat kWidthTitle = 80;
     
     self.topView = [[UIView alloc]init];
     self.topView.backgroundColor = [UIColor whiteColor];
@@ -477,11 +477,11 @@ static CGFloat kHeightCell = 48+10;
                 [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.contentView.verificationButton.enabled = YES;
             }else {
-                [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                 self.contentView.verificationButton.enabled = NO;
             }
         }else {
-            [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            [self.contentView.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
             self.contentView.verificationButton.enabled = NO;
             
             //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
@@ -497,12 +497,12 @@ static CGFloat kHeightCell = 48+10;
                 [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.contentView2.verificationButton.enabled = YES;
             }else {
-                [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                 self.contentView2.verificationButton.enabled = NO;
             }
             
         }else {
-            [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+            [self.contentView2.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
             self.contentView2.verificationButton.enabled = NO;
             
             //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击

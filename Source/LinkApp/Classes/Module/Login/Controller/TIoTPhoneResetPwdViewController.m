@@ -220,7 +220,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view endEditing:YES];
     self.sendCodeBtn.backgroundColor = kMainColorDisable;
     self.sendCodeBtn.enabled = NO;
-    if ([sender.titleLabel.text containsString:@"手机"]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"phone_forgot", @"使用手机账号")]) {
         _emailStyle = NO;
         self.emailTF.text = @"";
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];

@@ -32,9 +32,9 @@
     self.backgroundColor = [UIColor whiteColor];
     
     CGFloat kSpace = 15;
-    CGFloat kPadding = 20;
+    CGFloat kPadding = 16;
     CGFloat kHeight = 48;
-    CGFloat kWidthTitle = 90;
+    CGFloat kWidthTitle = 80;
     
     [self addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,7 +99,8 @@
     [self.verificationCodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
        make.top.equalTo(verificationlabel.mas_top);
        make.leading.equalTo(verificationlabel.mas_trailing);
-       make.trailing.equalTo(self.verificationButton.mas_leading);
+//       make.trailing.equalTo(self.verificationButton.mas_leading);
+        make.width.mas_equalTo(140);
        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
     }];
     
@@ -277,7 +278,7 @@
         [_verificationButton setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
         [_verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
         _verificationButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
-        [_verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        [_verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
         _verificationButton.selected = NO;
         [_verificationButton addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     }

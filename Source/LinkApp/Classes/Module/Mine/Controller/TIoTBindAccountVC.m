@@ -40,8 +40,8 @@
     
     self.conturyCode = @"86";
     
-    CGFloat kLeftRightPadding = 20;
-    CGFloat kWidthTitle = 90;
+    CGFloat kLeftRightPadding = 16;
+    CGFloat kWidthTitle = 80;
     CGFloat kHeightCell = 48;
     
     UIView *topView = [[UIView alloc]init];
@@ -325,7 +325,7 @@
                 [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = YES;
             }else {
-                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = NO;
             }
         }else if (self.accountType == AccountType_Email) {
@@ -334,13 +334,13 @@
                 [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = YES;
             }else {
-                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+                [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
                 self.bindAccountView.verificationButton.enabled = NO;
             }
         }
         
     }else {
-        [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        [self.bindAccountView.verificationButton setTitleColor:[UIColor colorWithHexString:kPhoneEmailHexColor] forState:UIControlStateNormal];
         self.bindAccountView.verificationButton.enabled = NO;
         
         //在发验证码倒计时过程中，修改手机或邮箱，用来判断【获取验证码按钮】时候有效可点击
