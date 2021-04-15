@@ -36,8 +36,8 @@
    //2.配置IOT_P2P SDK,demoapp作为演示需要配置第二步，客户正式发布的app不建议配置第二步，需通过自建业务服务获取xp2pInfo传入第三步的参数中
    setQcloudApiCred(sec_id, sec_key);   //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
 
-	//3.启动p2p通道,此处id参数传入了dev_name，用户也可以维护一套自己区分不同设备的id
-   startServiceWithXp2pInfo(dev_name, pro_id, dev_name, "_sys_xp2p_info", "");
+	//3.启动p2p通道,此处id参数传入了dev_name，用户也可以维护一套自己区分不同设备的id;最后的参数在正式发布版本中需传xp2p_info，所有接口的参数含义可以参考本文档最底下链接
+   startServiceWithXp2pInfo(dev_name, pro_id, dev_name, "");
 	
 	```
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
@@ -55,7 +55,7 @@
 	```
 	//1.开始接受裸流数据,参数说明:cmd直播传action=live，回放action=playback
 	
-	const char *cmd = "action=live"
+	const char *cmd = "action=live"; false表示音视频数据不加密
 	startAvRecvService(dev_name, cmd, false);
 	
 	//2.通过初始化p2p回调返回
@@ -71,7 +71,7 @@
 * 接收FLV音视频流，使用ijkplayer播放
 
 	```
-	//1.获取httpflv的url,ipc拼接参数说明 直播拼接ipc.flv?action=live；本地回看拼接ipc.flv?action=playback
+	//1.获取httpflv的url,ipc拼接参数说明 直播拼接ipc.flv?action=live；本地回看拼接ipc.flv?action=playback，参数为区分设备id，当前使用dev_name区分不同设备，其他接口需保持统一的区分规则
 	const char *httpflv = delegateHttpFlv(dev_name);
 	NSString *videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",httpflv];
 	
@@ -122,7 +122,7 @@
 	```
 	//type参数请参考头文件里XP2PType的类型表示，此处idd参数为区分不同设备回调
 	char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
-	  if(type == 5){
+	  if(type == XP2PTypeDisconnect){
 	    //断开p2p通道
 	  }
 	}
@@ -200,7 +200,7 @@
 	```
 	//type=XP2PTypeDisconnect 表示p2p通道断开
 	char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
-	  if(type == 5){
+	  if(type == XP2PTypeDisconnect){
 	    //断开p2p通道
 	  }
 	}
