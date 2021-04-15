@@ -12,15 +12,15 @@
 #import "AWSystemAVCapture.h"
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
-    if (type == 1) {
+    if (type == XP2PTypeLog) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
         NSLog(@"%@", nsFormat);
-    }else if (type == 3) {
+    }else if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
         return (isWriteFile?"1":"0");
-    }else if (type == 4) {
+    }else if (type == XP2PTypeSaveFileUrl) {
         
         NSString *fileName = @"video.data";
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
