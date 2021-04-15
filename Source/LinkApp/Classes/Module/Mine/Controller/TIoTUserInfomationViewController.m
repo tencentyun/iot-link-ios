@@ -29,6 +29,9 @@
 #import "TIoTCustomSheetView.h"
 #import "TIoTModifyNameVC.h"
 
+static CGFloat const kLeftPadding = 16; //左边距
+static CGFloat const kRightPadding = 16; //右边距
+
 @interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -186,8 +189,8 @@
     deleteEquipmentBtn.layer.cornerRadius = 20;
     [footerView addSubview:deleteEquipmentBtn];
     [deleteEquipmentBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(footerView).offset(20);
-        make.right.equalTo(footerView).offset(-20);
+        make.left.equalTo(footerView).offset(kLeftPadding);
+        make.right.equalTo(footerView).offset(-kRightPadding);
         if ([TIoTUIProxy shareUIProxy].iPhoneX) {
             make.bottom.equalTo(footerView).offset(-20 * kScreenAllHeightScale);
         }else {
@@ -412,7 +415,7 @@
             [[TIoTCoreUserManage shared] saveUserInfo:userInfoDic];
             [HXYNotice addModifyUserInfoPost];
             
-            NSMutableDictionary *nickDic = self.dataArr[0][1];
+            NSMutableDictionary *nickDic = self.dataArr[0][2];
             [nickDic setValue:name?:@"" forKey:@"value"];
             [self.tableView reloadSections:[[NSIndexSet alloc]initWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
         };
@@ -639,9 +642,9 @@
         
         //国际化版本
         _dataArr = [NSMutableArray arrayWithArray:@[
-            @[@{@"title":NSLocalizedString(@"avatar", @"头像"),@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
+            @[@{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+              @{@"title":NSLocalizedString(@"avatar", @"头像"),@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
               [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"nick", @"昵称"),@"value":[TIoTCoreUserManage shared].nickName?:@"",@"vc":@"",@"haveArrow":@"1"}],
-              @{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
             ],
             @[@{@"title":NSLocalizedString(@"account_and_safety", @"账号与安全"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
             @[[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"the_unit_of_temperature", @"温度单位"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],

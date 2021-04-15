@@ -241,7 +241,7 @@
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
         self.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
     }
-    NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+    NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
     self.phoneOrEmailTF.attributedPlaceholder = attriStr;
     
 }
@@ -260,10 +260,10 @@
 - (UITextField *)phoneOrEmailTF {
     if (!_phoneOrEmailTF) {
         _phoneOrEmailTF = [[UITextField alloc]init];
-        _phoneOrEmailTF.textColor = [UIColor blackColor];
+        _phoneOrEmailTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _phoneOrEmailTF.font = [UIFont wcPfRegularFontOfSize:14];
         _phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneOrEmailTF.attributedPlaceholder = ap;
         _phoneOrEmailTF.clearButtonMode = UITextFieldViewModeAlways;
         [_phoneOrEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -289,9 +289,9 @@
     if (!_verificationCodeTF) {
         _verificationCodeTF = [[UITextField alloc]init];
         _verificationCodeTF.keyboardType = UIKeyboardTypeNumberPad;
-        _verificationCodeTF.textColor = [UIColor blackColor];
+        _verificationCodeTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _verificationCodeTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_verifycode", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"input_verification_code", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationCodeTF.attributedPlaceholder = apVerification;
         _verificationCodeTF.clearButtonMode = UITextFieldViewModeAlways;
         [_verificationCodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -303,10 +303,10 @@
     if (!_passwordTF) {
         _passwordTF = [[UITextField alloc]init];
         _passwordTF.keyboardType = UITextFieldViewModeAlways;
-        _passwordTF.textColor = [UIColor blackColor];
+        _passwordTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _passwordTF.secureTextEntry = YES;
         _passwordTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_set_passwd", @"请设置您的密码")  attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_set_passwd", @"请设置您的密码")  attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
         _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -319,10 +319,10 @@
         _passwordConfirmTF = [[UITextField alloc]init];
         _passwordConfirmTF = [[UITextField alloc]init];
         _passwordConfirmTF.keyboardType = UITextFieldViewModeAlways;
-        _passwordConfirmTF.textColor = [UIColor blackColor];
+        _passwordConfirmTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _passwordConfirmTF.secureTextEntry = YES;
         _passwordConfirmTF.font = [UIFont wcPfRegularFontOfSize:14];
-        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_confirm_passwd", @"请再次确认您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_confirm_passwd", @"请再次确认您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordConfirmTF.attributedPlaceholder = passwordAttStr;
         _passwordConfirmTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordConfirmTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -333,9 +333,9 @@
 - (UILabel *)tipLabel {
     if (!_tipLabel) {
         _tipLabel = [[UILabel alloc] init];
-        _tipLabel.font = [UIFont systemFontOfSize:12];
+        _tipLabel.font = [UIFont wcPfRegularFontOfSize:12];
         _tipLabel.text = @"";
-        _tipLabel.textColor = UIColor.redColor;
+        _tipLabel.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
         _tipLabel.hidden = YES;
     }
     return _tipLabel;
@@ -344,9 +344,9 @@
 - (UILabel *)passTipLabel {
     if (!_passTipLabel) {
         _passTipLabel = [[UILabel alloc] init];
-        _passTipLabel.font = [UIFont systemFontOfSize:12];
+        _passTipLabel.font = [UIFont wcPfRegularFontOfSize:12];
         _passTipLabel.text = @"";
-        _passTipLabel.textColor = UIColor.redColor;
+        _passTipLabel.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
         _passTipLabel.hidden = YES;
     }
     return _passTipLabel;
@@ -357,7 +357,7 @@
         _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_confirmButton setTitle:NSLocalizedString(@"confirm_to_bind", @"确认绑定")  forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_confirmButton setBackgroundColor:kMainColorDisable];
+        [_confirmButton setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
         _confirmButton.enabled = NO;
         _confirmButton.layer.cornerRadius = 20;
         _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];

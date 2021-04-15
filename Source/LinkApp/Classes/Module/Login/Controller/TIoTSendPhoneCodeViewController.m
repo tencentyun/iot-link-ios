@@ -122,7 +122,7 @@
 //    [self.registerBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.registerBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.registerBtn addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.registerBtn.backgroundColor = kMainColorDisable;
+    self.registerBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.registerBtn.enabled = NO;
     self.registerBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.registerBtn];
@@ -141,7 +141,7 @@
         self.registerBtn.enabled = YES;
     }
     else{
-        self.registerBtn.backgroundColor = kMainColorDisable;
+        self.registerBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.registerBtn.enabled = NO;
     }
 }

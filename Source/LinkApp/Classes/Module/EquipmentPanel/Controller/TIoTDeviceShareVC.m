@@ -273,7 +273,7 @@ static NSString *cellId = @"sd0679";
     if (!_addShareDeviceButton) {
         _addShareDeviceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _addShareDeviceButton.layer.borderWidth = 1;
-        _addShareDeviceButton.layer.borderColor = [UIColor colorWithHexString:@"#0066FF"].CGColor;
+        _addShareDeviceButton.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
         _addShareDeviceButton.layer.cornerRadius = 18;
         [_addShareDeviceButton setTitle:NSLocalizedString(@"add_device_share", @"添加分享") forState:UIControlStateNormal];
         [_addShareDeviceButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];

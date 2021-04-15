@@ -68,7 +68,7 @@
         }];
         
         self.valueLab = [[UILabel alloc] init];
-        self.valueLab.textColor = kRGBColor(136, 136, 136);
+        self.valueLab.textColor = [UIColor colorWithHexString:kPhoneEmailHexColor];
         self.valueLab.font = [UIFont wcPfRegularFontOfSize:14];
         [self.contentView addSubview:self.valueLab];
         [self.valueLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -113,6 +113,10 @@
         [self.iconImageView setImageWithURLStr:[TIoTCoreUserManage shared].avatar placeHolder:@"icon-avatar_man"];
         self.iconImageView.hidden = NO;
         self.valueLab.hidden = YES;
+    }
+    
+    if ([dic[@"title"]?:@"" isEqualToString: NSLocalizedString(@"user_ID", @"用户ID")]) {
+        self.valueLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
     }
 }
 

@@ -141,7 +141,7 @@
     [self.sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.sureBtn.titleLabel.font = [UIFont systemFontOfSize:20];
     [self.sureBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.sureBtn.backgroundColor = kMainColorDisable;
+    self.sureBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sureBtn.enabled = NO;
     self.sureBtn.layer.cornerRadius = 3;
     [self.view addSubview:self.sureBtn];
@@ -287,7 +287,7 @@
         self.sureBtn.enabled = YES;
     }
     else{
-        self.sureBtn.backgroundColor = kMainColorDisable;
+        self.sureBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.sureBtn.enabled = NO;
     }
 }

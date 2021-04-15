@@ -131,7 +131,7 @@
 //    [self.downBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.downBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.downBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.downBtn.backgroundColor = kMainColorDisable;
+    self.downBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.downBtn.enabled = NO;
     self.downBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.downBtn];
@@ -151,7 +151,7 @@
     }
     else
     {
-        self.downBtn.backgroundColor = kMainColorDisable;
+        self.downBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.downBtn.enabled = NO;
     }
 //    BOOL isPass = [NSString judgePassWordLegal:textField.text];

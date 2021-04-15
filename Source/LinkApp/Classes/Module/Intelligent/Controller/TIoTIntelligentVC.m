@@ -603,7 +603,7 @@
     if (!_addIntelligentButton) {
         _addIntelligentButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _addIntelligentButton.layer.borderWidth = 1;
-        _addIntelligentButton.layer.borderColor = [UIColor colorWithHexString:@"#0066FF"].CGColor;
+        _addIntelligentButton.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
         _addIntelligentButton.layer.cornerRadius = 18;
         [_addIntelligentButton setTitle:NSLocalizedString(@"addDeveice_immediately", @"立即添加") forState:UIControlStateNormal];
         [_addIntelligentButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];

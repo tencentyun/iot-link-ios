@@ -39,7 +39,7 @@
     self.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
     self.errorDetail = [[UILabel alloc]init];
-    [self.errorDetail setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#FA5151" textAlignment:NSTextAlignmentRight];
+    [self.errorDetail setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:kSignoutHexColor textAlignment:NSTextAlignmentRight];
     [self.contentView addSubview:self.errorDetail];
     [self.errorDetail mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.contentView);

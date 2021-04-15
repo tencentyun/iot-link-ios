@@ -247,10 +247,10 @@ static CGFloat kHeightCell = 48+10;
         _comfirmModifyButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_comfirmModifyButton setTitle:NSLocalizedString(@"confirm_to_modify", @"确认修改") forState:UIControlStateNormal];
         [_comfirmModifyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_comfirmModifyButton setBackgroundColor:kMainColorDisable];
+        [_comfirmModifyButton setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
         _comfirmModifyButton.enabled = NO;
         _comfirmModifyButton.layer.cornerRadius = 20;
-        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _comfirmModifyButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_comfirmModifyButton addTarget:self action:@selector(modifySure) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmModifyButton;;
@@ -282,7 +282,7 @@ static CGFloat kHeightCell = 48+10;
 - (void)modifyStyleChange:(UIButton *)sender {
     [self.view endEditing:YES];
     
-    self.comfirmModifyButton.backgroundColor = kMainColorDisable;
+    self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.comfirmModifyButton.enabled = NO;
     if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
         self.modifyStyle = YES;
@@ -294,7 +294,7 @@ static CGFloat kHeightCell = 48+10;
         self.contentView.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         self.contentView.phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kNoSelectedHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
         
@@ -320,7 +320,7 @@ static CGFloat kHeightCell = 48+10;
         self.contentView2.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         self.contentView2.phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#cccccc"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kNoSelectedHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView2.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView2.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
         
@@ -450,7 +450,7 @@ static CGFloat kHeightCell = 48+10;
             self.comfirmModifyButton.enabled = YES;
         }else {
             
-            self.comfirmModifyButton.backgroundColor = kMainColorDisable;
+            self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.comfirmModifyButton.enabled = NO;
             
         }
@@ -461,7 +461,7 @@ static CGFloat kHeightCell = 48+10;
             self.comfirmModifyButton.enabled = YES;
         }else {
             
-            self.comfirmModifyButton.backgroundColor = kMainColorDisable;
+            self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.comfirmModifyButton.enabled = NO;
         }
     }
