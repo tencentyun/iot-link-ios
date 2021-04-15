@@ -192,7 +192,7 @@
     
     [self.contentView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line4.mas_bottom).offset(60 * kScreenAllHeightScale);
+        make.top.equalTo(line4.mas_bottom).offset(24);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(40);
@@ -209,7 +209,7 @@
         confirmPasswordLabel.hidden = YES;
         passwordLabel.hidden = YES;
         [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(line2.mas_bottom).offset(60 * kScreenAllHeightScale);
+            make.top.equalTo(line2.mas_bottom).offset(24);
         }];
     }else {
         
@@ -222,7 +222,7 @@
         confirmPasswordLabel.hidden = NO;
         passwordLabel.hidden = NO;
         [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(line4.mas_bottom).offset(60 * kScreenAllHeightScale);
+            make.top.equalTo(line4.mas_bottom).offset(24);
         }];
     }
 
@@ -360,7 +360,7 @@
         [_confirmButton setBackgroundColor:[UIColor colorWithHexString:kNoSelectedHexColor]];
         _confirmButton.enabled = NO;
         _confirmButton.layer.cornerRadius = 20;
-        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _confirmButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_confirmButton addTarget:self action:@selector(confirmClickButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;

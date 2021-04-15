@@ -136,7 +136,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     procolTV.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:procolTV];
     [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38 * kScreenAllHeightScale);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
 //        make.centerX.equalTo(self.view).offset(15);
         make.left.equalTo(emailRegisterBtn.mas_left).offset(27);
         make.right.equalTo(self.view.mas_right).offset(-40);
@@ -166,7 +166,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(procolTV.mas_bottom).offset(16 * kScreenAllHeightScale);
+        make.top.equalTo(procolTV.mas_bottom).offset(16);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(kHeightCell - 8);
     }];

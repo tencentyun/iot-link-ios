@@ -101,7 +101,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(60 * kScreenAllHeightScale);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(24);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(40);
     }];

@@ -177,6 +177,8 @@ static CGFloat const kRightPadding = 16; //右边距
         kSignoutBtnHeight = kScreenHeight - 348 *kScreenAllHeightScale - [TIoTUIProxy shareUIProxy].navigationBarHeight;
     }
     
+    CGFloat kTopPadding = 24;
+    CGFloat kViewHeight = 40;
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
     footerView.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     
@@ -192,12 +194,13 @@ static CGFloat const kRightPadding = 16; //右边距
         make.left.equalTo(footerView).offset(kLeftPadding);
         make.right.equalTo(footerView).offset(-kRightPadding);
         if ([TIoTUIProxy shareUIProxy].iPhoneX) {
-            make.bottom.equalTo(footerView).offset(-20 * kScreenAllHeightScale);
+//            make.bottom.equalTo(footerView).offset(-20 * kScreenAllHeightScale);
+            make.bottom.equalTo(footerView).offset(-(120 - kTopPadding - kViewHeight));
         }else {
-            make.bottom.equalTo(footerView).offset(-40 * kScreenAllHeightScale);
+            make.bottom.equalTo(footerView).offset(-(120 - kTopPadding - kViewHeight));
         }
         
-        make.height.mas_equalTo(40);
+        make.height.mas_equalTo(kViewHeight);
     }];
     
     self.tableView.tableFooterView = footerView;

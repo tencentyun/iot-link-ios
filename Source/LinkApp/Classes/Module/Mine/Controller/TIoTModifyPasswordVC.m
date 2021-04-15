@@ -18,7 +18,7 @@
 #import "UILabel+TIoTExtension.h"
 
 static CGFloat kHeightCell = 48+10;
-
+static CGFloat kBtnMargin = 6; //系统按钮内文字上下内边距
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -164,12 +164,12 @@ static CGFloat kHeightCell = 48+10;
     [self.view addSubview:verificationCodeButton];
     [verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding * kScreenAllWidthScale);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(10 * kScreenAllWidthScale);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(16-kBtnMargin);
     }];
     
     [self.view addSubview:self.comfirmModifyButton];
     [self.comfirmModifyButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(verificationCodeButton.mas_bottom).offset(60 *kScreenAllHeightScale);
+        make.top.equalTo(verificationCodeButton.mas_bottom).offset(24-kBtnMargin);
         make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
         make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
         make.height.mas_equalTo(40);
@@ -284,7 +284,7 @@ static CGFloat kHeightCell = 48+10;
     
     self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.comfirmModifyButton.enabled = NO;
-    if ([sender.titleLabel.text containsString:NSLocalizedString(@"verification_code", @"验证码")]) {
+    if ([sender.titleLabel.text containsString:NSLocalizedString(@"phone_verify_code_modify", @"手机验证码修改")]) {
         self.modifyStyle = YES;
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
         [sender setTitle:NSLocalizedString(@"email_verify_mofify", @"邮箱验证修改") forState:UIControlStateNormal];
@@ -294,7 +294,7 @@ static CGFloat kHeightCell = 48+10;
         self.contentView.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"please_input_phonenumber", @"请输入手机号");
         self.contentView.phoneOrEmailTF.keyboardType = UIKeyboardTypeNumberPad;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kNoSelectedHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView.phoneOrEmailLabel.text = NSLocalizedString(@"phone_number", @"手机号码");
         
@@ -320,7 +320,7 @@ static CGFloat kHeightCell = 48+10;
         self.contentView2.passwordConfirmTF.text = @"";
         NSString *placeHoldString = placeHoldString = NSLocalizedString(@"write_email_address", @"请输入邮箱");
         self.contentView2.phoneOrEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
-        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kNoSelectedHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
+        NSAttributedString *attriStr = [[NSAttributedString alloc] initWithString:placeHoldString attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.contentView2.phoneOrEmailTF.attributedPlaceholder = attriStr;
         self.contentView2.phoneOrEmailLabel.text = NSLocalizedString(@"email_account", @"邮箱账号");
         

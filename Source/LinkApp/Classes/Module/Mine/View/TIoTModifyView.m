@@ -123,7 +123,7 @@
     
     [self.contentView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line2.mas_bottom).offset(24 * kScreenAllHeightScale);
+        make.top.equalTo(line2.mas_bottom).offset(24);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(40);

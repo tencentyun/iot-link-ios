@@ -127,7 +127,7 @@ static NSString *const kAutoCollectionViewCellID = @"kAutoCollectionViewCellID";
     [self.saveButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(40);
-        make.top.equalTo(self.collectionView.mas_bottom).offset(30);
+        make.top.equalTo(self.collectionView.mas_bottom).offset(36);
     }];
     
     [self judgeAddRoomWithType:self.modifyType];

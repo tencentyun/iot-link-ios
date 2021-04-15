@@ -25,6 +25,7 @@
     self.title = NSLocalizedString(@"add_family", @"添加家庭");
     
     CGFloat kTopPadding = 20;
+    CGFloat kConfimBtnTop = 24;
     
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     [self.view addSubview:self.tableView];
@@ -62,7 +63,7 @@
     [self.singleButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(kBackViewHeight);
-        make.top.equalTo(self.tableView.mas_bottom).offset(kTopPadding*2);
+        make.top.equalTo(self.tableView.mas_bottom).offset(kConfimBtnTop);
     }];
 }
 

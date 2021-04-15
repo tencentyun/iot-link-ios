@@ -117,7 +117,7 @@
     
     UILabel *tipLab = [[UILabel alloc] init];
     tipLab.text = NSLocalizedString(@"password_format", @"密码8～16位需包含字母和数字");
-    tipLab.textColor = kRGBColor(153, 153, 153);
+    tipLab.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
     tipLab.font = [UIFont wcPfRegularFontOfSize:12];
     [self.view addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {

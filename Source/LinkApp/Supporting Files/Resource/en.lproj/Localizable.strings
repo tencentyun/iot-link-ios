@@ -72,7 +72,7 @@
 "new_password_equals_old" = "The new password cannot be the same as the old password";
 "verify_password" = "Enter the password again";
 "forgot_password" = "Forgot password";
-"find_bank_the_password" = "Reset password";
+"find_bank_the_password" = "Retrieve password";
 "set_password" = "Set password";
 "set_password_success" = "Set password successfully";
 "country_code" = "Select country/region";

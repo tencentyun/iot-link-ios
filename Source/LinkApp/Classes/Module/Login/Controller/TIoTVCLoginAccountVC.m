@@ -135,7 +135,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     self.verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.verificationCodeButton setTitle:NSLocalizedString(@"account_passwd_login", @"账号密码登录") forState:UIControlStateNormal];
     [self.verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
-    self.verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    self.verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.verificationCodeButton addTarget:self action:@selector(loginStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.verificationCodeButton];
     [self.verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -630,7 +630,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         _forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_forgetPasswordButton setTitle:NSLocalizedString(@"forgot_password", @"忘记密码") forState:UIControlStateNormal];
         [_forgetPasswordButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
-        _forgetPasswordButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+        _forgetPasswordButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [_forgetPasswordButton addTarget:self action:@selector(forgetPasswordClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _forgetPasswordButton;
@@ -671,7 +671,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         [_weixinLoginButton setTitle:NSLocalizedString(@"wechat", @"微信") forState:UIControlStateNormal];
         [_weixinLoginButton setTitleColor:[UIColor colorWithHexString:@"#666666"] forState:UIControlStateNormal];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"wxlogin"] forState:UIControlStateNormal];
-        _weixinLoginButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:10];
+        _weixinLoginButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         [_weixinLoginButton addTarget:self action:@selector(wxLoginClick:) forControlEvents:UIControlEventTouchUpInside];
         [_weixinLoginButton relayoutButton:XDPButtonLayoutStyleTop];
         // 对未安装的用户隐藏微信登录按钮，只提供其他登录方式（比如手机号注册登录、游客登录等）。

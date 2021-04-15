@@ -85,7 +85,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [emailRegisterBtn setTitle:NSLocalizedString(@"email_forgot", @"使用邮箱账号") forState:UIControlStateNormal];
     [emailRegisterBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [emailRegisterBtn addTarget:self action:@selector(registStyleChange:) forControlEvents:UIControlEventTouchUpInside];
-    emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    emailRegisterBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(16);
@@ -101,7 +101,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     procolTV.scrollEnabled = NO;
     [self.view addSubview:procolTV];
     [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
         make.centerX.equalTo(self.view).offset(15);
         if (LanguageIsEnglish) {
             make.left.equalTo(self.view.mas_left).offset(40);
@@ -131,7 +131,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
-    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
@@ -139,7 +139,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(procolTV.mas_bottom).offset(40 * kScreenAllHeightScale);
+        make.top.equalTo(procolTV.mas_bottom).offset(16);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(40);
     }];
