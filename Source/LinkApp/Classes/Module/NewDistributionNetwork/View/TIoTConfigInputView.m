@@ -50,12 +50,12 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.left.equalTo(self).offset(15);
-        make.width.mas_equalTo(68);
+        make.width.mas_equalTo(80);
     }];
     
     self.textField = [[UITextField alloc] init];
     self.textField.font = [UIFont wcPfRegularFontOfSize:17];
-    self.textField.textColor = [UIColor blackColor];
+    self.textField.textColor = [UIColor colorWithHexString:kRegionHexColor];
     [self.textField addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self addSubview:self.textField];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {

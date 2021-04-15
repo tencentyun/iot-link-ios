@@ -60,19 +60,20 @@
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(20 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.width.equalTo(self.view);
-        make.height.mas_equalTo(54);
+        make.height.mas_equalTo(54+8);
     }];
     
     UILabel *topicLabel = [[UILabel alloc] init];
-    topicLabel.textColor = kRGBColor(51, 51, 51);
-    topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
+    topicLabel.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+    topicLabel.font = [UIFont wcPfMediumFontOfSize:16];
+    topicLabel.numberOfLines = 0;
     topicLabel.text = (self.step == 3 ? NSLocalizedString(@"soft_ap_hotspot_set", @"将手机WiFi连接设备热点") : [_dataDic objectForKey:@"topic"]);
     [self.view addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(16);
-        make.right.equalTo(self.view).offset(-16);
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
         make.top.equalTo(self.stepTipView.mas_bottom).offset(20);
-        make.height.mas_equalTo(24);
+//        make.height.mas_equalTo(24);
     }];
     
     self.wifiInputView = [[TIoTConfigInputView alloc] initWithTitle:[_dataDic objectForKey:@"wifiInputTitle"] placeholder:[_dataDic objectForKey:@"wifiInputPlaceholder"] haveButton:[[_dataDic objectForKey:@"wifiInputHaveButton"] boolValue]];

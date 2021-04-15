@@ -590,6 +590,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         _phoneAndEmailTF.keyboardType = UIKeyboardTypeEmailAddress;
         _phoneAndEmailTF.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _phoneAndEmailTF.font = [UIFont wcPfRegularFontOfSize:14];
+//        _phoneAndEmailTF. text_clear
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneAndEmailTF.attributedPlaceholder = ap;
         _phoneAndEmailTF.clearButtonMode = UITextFieldViewModeAlways;

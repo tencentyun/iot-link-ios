@@ -76,6 +76,8 @@
 #define kAddDeviceEntrance @"#E1E2E5"
 //输入框错误红色提示
 #define kInputErrorTipHexColor @"#FF0000"
+//添加设备页面深蓝色
+#define kAddDeviceSignHexColor @"#0052D9"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;

@@ -33,14 +33,14 @@
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:_imgView];
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(68 * kScreenAllWidthScale);
+        make.height.mas_equalTo(48);
         make.left.right.equalTo(self.contentView);
         make.top.centerX.equalTo(self.contentView);
     }];
     
     self.titleLab = [[UILabel alloc] init];
     self.titleLab.font = [UIFont wcPfRegularFontOfSize:12];
-    self.titleLab.textColor = kRGBColor(68, 68, 68);
+    self.titleLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
     self.titleLab.numberOfLines = 0;
     self.titleLab.textAlignment = NSTextAlignmentCenter;
     self.titleLab.text = @"客厅灯泡\n(其他）";

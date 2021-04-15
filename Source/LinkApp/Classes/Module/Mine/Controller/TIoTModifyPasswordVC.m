@@ -18,7 +18,6 @@
 #import "UILabel+TIoTExtension.h"
 
 static CGFloat kHeightCell = 48+10;
-static CGFloat kBtnMargin = 6; //系统按钮内文字上下内边距
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -159,17 +158,17 @@ static CGFloat kBtnMargin = 6; //系统按钮内文字上下内边距
     UIButton *verificationCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [verificationCodeButton setTitle:NSLocalizedString(@"email_verify_mofify", @"邮箱验证修改") forState:UIControlStateNormal];
     [verificationCodeButton setTitleColor:[UIColor colorWithHexString:@"006EFF"] forState:UIControlStateNormal];
-    verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
+    verificationCodeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [verificationCodeButton addTarget:self action:@selector(modifyStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:verificationCodeButton];
     [verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding * kScreenAllWidthScale);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(16-kBtnMargin);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(16);
     }];
     
     [self.view addSubview:self.comfirmModifyButton];
     [self.comfirmModifyButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(verificationCodeButton.mas_bottom).offset(24-kBtnMargin);
+        make.top.equalTo(verificationCodeButton.mas_bottom).offset(24);
         make.leading.mas_equalTo(kLeftRightPadding * kScreenAllWidthScale);
         make.trailing.mas_equalTo(-kLeftRightPadding * kScreenAllWidthScale);
         make.height.mas_equalTo(40);

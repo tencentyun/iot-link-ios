@@ -34,7 +34,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.lineView = [[UIView alloc] init];
-        self.lineView.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+        self.lineView.backgroundColor = [UIColor colorWithHexString:kAddDeviceSignHexColor];
         [self.contentView addSubview:self.lineView];
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.centerY.equalTo(self.contentView);
@@ -43,8 +43,8 @@
         }];
         
         self.titleLab = [[UILabel alloc] init];
-        self.titleLab.font = [UIFont wcPfRegularFontOfSize:16];
-        self.titleLab.textColor = [UIColor blackColor];
+        self.titleLab.font = [UIFont wcPfRegularFontOfSize:12];
+        self.titleLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
         [self.contentView addSubview:self.titleLab];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView).offset(15);
@@ -71,11 +71,11 @@
     if (selected) {
         self.backgroundColor = [UIColor whiteColor];
         self.lineView.hidden = NO;
-        self.titleLab.textColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+        self.titleLab.textColor = [UIColor colorWithHexString:kAddDeviceSignHexColor];
     } else {
         self.backgroundColor = kRGBColor(242, 242, 242);
         self.lineView.hidden = YES;
-        self.titleLab.textColor = [UIColor blackColor];
+        self.titleLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
     }
 }
 

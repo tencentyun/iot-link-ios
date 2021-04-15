@@ -133,13 +133,16 @@
 - (void)setupNotFoundProductUI{
     
     UILabel *tipLab = [[UILabel alloc] init];
-    tipLab.font = [UIFont wcPfRegularFontOfSize:16];
+    tipLab.font = [UIFont wcPfRegularFontOfSize:14];
     tipLab.textColor = [UIColor blackColor];
+    tipLab.numberOfLines = 0;
     tipLab.text = NSLocalizedString(@"current_bluetooth_disabled", @"当前蓝牙适配器不可用");
     [self addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self).offset(16.8);
         make.centerY.equalTo(self).offset(-3.25);
+        make.left.equalTo(self.mas_left).offset(72);
+        make.right.equalTo(self.mas_right).offset(-40);
     }];
     
     UIImageView *loadView = [[UIImageView alloc] init];
@@ -172,13 +175,18 @@
 
     UIButton *retryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [retryBtn setTitle:NSLocalizedString(@"scanning_retry", @"重试") forState:UIControlStateNormal];
-    [retryBtn setTitleColor:kRGBColor(0, 110, 255) forState:UIControlStateNormal];
-    retryBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [retryBtn setTitleColor:[UIColor colorWithHexString:kAddDeviceSignHexColor] forState:UIControlStateNormal];
+    retryBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:12];
     [retryBtn addTarget:self action:@selector(retry) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:retryBtn];
     [retryBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(tipLab.mas_bottom);
-        make.centerX.equalTo(self).offset(-0.75);
+//        make.centerX.equalTo(self).offset(-0.75);
+        CGFloat offsetX = -14;
+        if (!LanguageIsEnglish) {
+            offsetX = -16;
+        }
+        make.left.equalTo(tipLab.mas_left).offset(offsetX);
         make.width.mas_equalTo(60);
         make.height.mas_equalTo(34);
     }];

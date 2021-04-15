@@ -80,7 +80,7 @@
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(20 + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.width.equalTo(self.view);
-        make.height.mas_equalTo(54);
+        make.height.mas_equalTo(54+8);
     }];
     
     

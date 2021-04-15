@@ -56,19 +56,20 @@
     [self.stepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.scrollView).offset(20);
         make.width.equalTo(self.scrollView);
-        make.height.mas_equalTo(54);
+        make.height.mas_equalTo(54+8);
     }];
     
     UILabel *topicLabel = [[UILabel alloc] init];
-    topicLabel.textColor = kRGBColor(51, 51, 51);
-    topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
+    topicLabel.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+    topicLabel.numberOfLines = 0;
+    topicLabel.font = [UIFont wcPfMediumFontOfSize:16];
     topicLabel.text = [_dataDic objectForKey:@"topic"];
     [self.scrollView addSubview:topicLabel];
     [topicLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.scrollView).offset(16);
-        make.right.equalTo(self.scrollView).offset(-16);
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
         make.top.equalTo(self.stepTipView.mas_bottom).offset(20);
-        make.height.mas_equalTo(24);
+//        make.height.mas_equalTo(24);
     }];
     
     
