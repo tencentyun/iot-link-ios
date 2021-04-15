@@ -127,7 +127,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     [self.view addSubview:self.loginAccountButton];
     [self.loginAccountButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.scrollView.mas_bottom).offset(30);
-        make.left.equalTo(self.view.mas_left).offset(kRightRightPadding);
+        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
         make.right.equalTo(self.view.mas_right).offset(-kRightRightPadding);
         make.height.mas_equalTo(40);
     }];
@@ -139,8 +139,11 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     [self.verificationCodeButton addTarget:self action:@selector(loginStyleChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.verificationCodeButton];
     [self.verificationCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.loginAccountButton.mas_left);
-        make.centerX.equalTo(self.loginAccountButton);
+        if (LanguageIsEnglish) {
+            make.centerX.equalTo(self.loginAccountButton);
+        }else {
+            make.left.equalTo(self.loginAccountButton.mas_left);
+        }
         make.top.equalTo(self.loginAccountButton.mas_bottom).offset(16);
     }];
     
@@ -190,9 +193,14 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     self.forgetPasswordButton.hidden = YES;
     [self.view addSubview:self.forgetPasswordButton];
     [self.forgetPasswordButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.loginAccountButton);
-        make.height.mas_equalTo(25);
-        make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(5);
+        if (LanguageIsEnglish) {
+            make.centerX.equalTo(self.loginAccountButton);
+            make.height.mas_equalTo(25);
+            make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(5);
+        }else {
+            make.trailing.equalTo(self.loginAccountButton.mas_trailing);
+            make.centerY.equalTo(self.verificationCodeButton.mas_centerY);
+        }
     }];
     
     
@@ -632,7 +640,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     if (!_phoneAndEmailTF2) {
         _phoneAndEmailTF2 = [[UITextField alloc] init];
         _phoneAndEmailTF2.keyboardType = UIKeyboardTypeEmailAddress;
-        _phoneAndEmailTF2.textColor = [UIColor colorWithHexString:kTemperatureHexColor];
+        _phoneAndEmailTF2.textColor = [UIColor colorWithHexString:kRegionHexColor];
         _phoneAndEmailTF2.font = [UIFont wcPfRegularFontOfSize:14];
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneAndEmailTF2.attributedPlaceholder = ap;
@@ -692,9 +700,11 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF2.text;
         self.phoneAndEmailTF.text = self.phoneAndEmailTF2.text;
         
-        [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(40);
-        }];
+        if (LanguageIsEnglish) {
+            [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(40);
+            }];
+        }
         
     }else {
         self.loginStyle = NO;
@@ -709,9 +719,12 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         [TIoTCoreUserManage shared].login_Code_Text = self.phoneAndEmailTF.text;
         self.phoneAndEmailTF2.text = self.phoneAndEmailTF.text;
         
-        [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(80);
-        }];
+        if (LanguageIsEnglish) {
+            [self.otherLoginLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.verificationCodeButton.mas_bottom).offset(80);
+            }];
+        }
+        
     }
     
     [self optionUserDefaultActionItems];
