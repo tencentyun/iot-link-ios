@@ -252,13 +252,13 @@
             
         }else {
             
-            self.bindAccountView.confirmButton.backgroundColor = kMainColorDisable;
+            self.bindAccountView.confirmButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.bindAccountView.confirmButton.enabled = NO;
         }
         
         
     }else {
-        self.bindAccountView.confirmButton.backgroundColor = kMainColorDisable;
+        self.bindAccountView.confirmButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.bindAccountView.confirmButton.enabled = NO;
     }
 }

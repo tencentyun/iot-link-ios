@@ -322,17 +322,17 @@
 "have_bind" = "Unbound";
 "email" = "Bound";
 "account_logout" = "Account deletion";
-"please_input_phonenumber" = "Please enter your mobile number";
-"please_input_email" = "Please enter your email address";
+"please_input_phonenumber" = "Enter your mobile number";
+"please_input_email" = "Enter your email address";
 "please_input_verifycode" = "Please enter the verification code";
 "please_set_passwd" = "Please set your password";
-"please_confirm_passwd" = "Please confirm your password again";
+"please_confirm_passwd" = "Please confirm your password";
 "confirm_to_bind" = "Confirm binding";
 "bind_phone_number" = "Bind mobile number";
 "bind_email_number" = "Bind email address";
 "confirm_to_modify" = "Confirm change";
-"modify_phone" = "Change mobile number";
-"modify_email" = "Change email address";
+"modify_phone" = "Modity mobile number";
+"modify_email" = "Modify email address";
 "email_verify_code_modify" = "Change with email verification code";
 "phone_verify_code_modify" = "Change with SMS verification code";
 
@@ -631,7 +631,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "bind_phonenumber" = "Bind mobile number";
 "bind_email_address" = "Bind email address";
 "email_verify_mofify" = "Change with email address";
-"write_email_address" = "Please enter your email address";
+"write_email_address" = "Enter your email address";
 //"" = "XXX年XXX月XXX日";
 //"" = "如果您确定“注销账号”，账号将注销于 2020年8月3日 00:00:00";
 "Complete_supplementary_information" = "Please enter complete information";
@@ -642,7 +642,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "write_room_name" = "Please enter the room name";
 "remove_success" = "Removed successfully";    //removeSuccess
 "send_invitation_success" = "Sent invitation successfully";
-"email_account" = "Email";
+"email_account" = "E-mail";
 //"" = "XXX个设备";
 "join_success" = "Joined successfully";
 "Processing" = "Processing...";

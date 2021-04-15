@@ -332,7 +332,7 @@
 "bind_email_number" = "绑定邮箱号";
 "confirm_to_modify" = "确认修改";
 "modify_phone" = "修改手机号";
-"modify_email" = "修改邮箱号";
+"modify_email" = "修改邮箱";
 "email_verify_code_modify" = "邮箱验证码修改";
 "phone_verify_code_modify" = "手机验证码修改";
 

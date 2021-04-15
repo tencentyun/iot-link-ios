@@ -95,7 +95,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [self.sendCodeBtn addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
-    self.sendCodeBtn.backgroundColor = kMainColorDisable;
+    self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
     self.sendCodeBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.sendCodeBtn];
@@ -117,7 +117,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             self.sendCodeBtn.enabled = YES;
         }
         else{
-            self.sendCodeBtn.backgroundColor = kMainColorDisable;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.sendCodeBtn.enabled = NO;
         }
     }
@@ -128,7 +128,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
             self.sendCodeBtn.enabled = YES;
         }
         else{
-            self.sendCodeBtn.backgroundColor = kMainColorDisable;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.sendCodeBtn.enabled = NO;
         }
     }
@@ -139,7 +139,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 - (void)registStyleChange:(UIButton *)sender
 {
     [self.view endEditing:YES];
-    self.sendCodeBtn.backgroundColor = kMainColorDisable;
+    self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
     if ([sender.titleLabel.text containsString:@"手机"]) {
         _emailStyle = NO;

@@ -648,7 +648,7 @@
     if (!_addManualTaskButton) {
         _addManualTaskButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _addManualTaskButton.layer.borderWidth = 1;
-        _addManualTaskButton.layer.borderColor = [UIColor colorWithHexString:@"#0066FF"].CGColor;
+        _addManualTaskButton.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
         _addManualTaskButton.layer.cornerRadius = 18;
         [_addManualTaskButton setTitle:NSLocalizedString(@"addDeveice_immediately", @"立即添加") forState:UIControlStateNormal];
         [_addManualTaskButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];

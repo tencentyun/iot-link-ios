@@ -57,7 +57,7 @@
 //背景颜色
 #define kBackgroundHexColor @"#F5F5F5"
 //红色
-#define kSignoutHexColor @"#FF584C"
+#define kSignoutHexColor @"#FA5151"
 //温度字体颜色
 #define kTemperatureHexColor @"#15161A"
 //时区地区字体颜色
@@ -74,6 +74,8 @@
 #define kPhoneEmailHexColor @"#A1A7B2"
 //tabbar自定义视图添加设备入口按钮背景色
 #define kAddDeviceEntrance @"#E1E2E5"
+//输入框错误红色提示
+#define kInputErrorTipHexColor @"#FF0000"
 
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;

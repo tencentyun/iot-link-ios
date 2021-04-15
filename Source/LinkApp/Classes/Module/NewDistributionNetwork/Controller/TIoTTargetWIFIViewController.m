@@ -130,7 +130,7 @@
                 selfWeak.nextBtn.enabled = YES;
             }
             else{
-                selfWeak.nextBtn.backgroundColor = kMainColorDisable;
+                selfWeak.nextBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
                 selfWeak.nextBtn.enabled = NO;
             }
         }
@@ -183,7 +183,7 @@
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.layer.cornerRadius = 2;
     if (self.step == 2) {
-        nextBtn.backgroundColor = kMainColorDisable;
+        nextBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         nextBtn.enabled = NO;
     } else {
         nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];

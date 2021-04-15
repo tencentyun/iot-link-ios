@@ -128,12 +128,12 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.sendCodeBtn setTitle:NSLocalizedString(@"findPassord_get_code_", @"获取验证码") forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:NSLocalizedString(@"register_get_code", @"获取验证码") forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [self.sendCodeBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
     self.sendCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
     [self.sendCodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
-    self.sendCodeBtn.backgroundColor = kMainColorDisable;
+    self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
     self.sendCodeBtn.layer.cornerRadius = 20;
     [self.view addSubview:self.sendCodeBtn];
@@ -174,7 +174,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             self.sendCodeBtn.enabled = YES;
         }
         else{
-            self.sendCodeBtn.backgroundColor = kMainColorDisable;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.sendCodeBtn.enabled = NO;
         }
     }
@@ -185,7 +185,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             self.sendCodeBtn.enabled = YES;
         }
         else{
-            self.sendCodeBtn.backgroundColor = kMainColorDisable;
+            self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.sendCodeBtn.enabled = NO;
         }
     }
@@ -218,7 +218,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 - (void)registStyleChange:(UIButton *)sender
 {
     [self.view endEditing:YES];
-    self.sendCodeBtn.backgroundColor = kMainColorDisable;
+    self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.sendCodeBtn.enabled = NO;
     if ([sender.titleLabel.text containsString:NSLocalizedString(@"phone_forgot", @"使用手机账号")]) {
         _emailStyle = NO;

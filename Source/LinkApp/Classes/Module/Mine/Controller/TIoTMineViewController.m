@@ -161,7 +161,7 @@
     TIoTUserInfomationViewController *vc = [[TIoTUserInfomationViewController alloc] init];
 //    vc.title = @"个人信息";
     //国际化版本
-    vc.title = NSLocalizedString(@"account", @"账号");
+    vc.title = NSLocalizedString(@"personal_info", @"个人信息");
     [self.navigationController pushViewController:vc animated:YES];
 }
 

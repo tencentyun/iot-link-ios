@@ -32,9 +32,9 @@
 - (void)setUpUI {
     self.view.backgroundColor = [UIColor colorWithHexString:kBackgroundHexColor];
     if (self.accountType == AccountModifyType_Phone) {
-        self.title = @"修改手机号";
+        self.title = NSLocalizedString(@"modify_phone", @"修改手机号");
     }else if (self.accountType == AccountModifyType_Email) {
-        self.title = @"修改邮箱";
+        self.title = NSLocalizedString(@"modify_email", @"修改邮箱");
     }
     
     self.conturyCode = @"86";
@@ -237,7 +237,7 @@
         self.modifyView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
         self.modifyView.confirmButton.enabled = YES;
     }else {
-        self.modifyView.confirmButton.backgroundColor = kMainColorDisable;
+        self.modifyView.confirmButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.modifyView.confirmButton.enabled = NO;
     }
 }

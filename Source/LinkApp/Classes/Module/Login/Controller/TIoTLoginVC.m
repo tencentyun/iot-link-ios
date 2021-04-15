@@ -364,7 +364,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
     //    [self.loginBtn setTitleColor:kRGBColor(153, 153, 153) forState:UIControlStateDisabled];
         self.loginBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
         [self.loginBtn addTarget:self action:@selector(sureClick:) forControlEvents:UIControlEventTouchUpInside];
-        self.loginBtn.backgroundColor = kMainColorDisable;
+        self.loginBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         self.loginBtn.enabled = NO;
         self.loginBtn.layer.cornerRadius = 3;
         [contentView addSubview:self.loginBtn];
@@ -436,7 +436,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             
         }
         else{
-            self.loginBtn.backgroundColor = kMainColorDisable;
+            self.loginBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.loginBtn.enabled = NO;
             
         }
@@ -450,7 +450,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             
         }
         else{
-            self.loginBtn.backgroundColor = kMainColorDisable;
+            self.loginBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.loginBtn.enabled = NO;
             
         }
@@ -571,7 +571,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 - (void)contentChange:(UIButton *)btn
 {
     [self.view endEditing:YES];
-    self.loginBtn.backgroundColor = kMainColorDisable;
+    self.loginBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
     self.loginBtn.enabled = NO;
     if ([@"手机登录" isEqualToString:btn.titleLabel.text]) {
         self.loginStyle = WCLoginStylePhone;
