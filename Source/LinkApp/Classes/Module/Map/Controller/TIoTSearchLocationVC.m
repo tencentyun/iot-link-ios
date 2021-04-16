@@ -511,6 +511,8 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
     
         self.seachTextFild.leftViewMode = UITextFieldViewModeNever;
         self.seachTextFild.clearButtonMode = UITextFieldViewModeNever;
+        UIButton *clearButton = [self.seachTextFild valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         
     }
     return _searchBar;

@@ -124,12 +124,24 @@
        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
     }];
     
+    CGFloat kPassWordBtnWidth = 18;
+    
     [self.contentView addSubview:self.passwordTF];
     [self.passwordTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(passwordLabel.mas_trailing);
-        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding - kPassWordBtnWidth*2);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
         make.top.equalTo(passwordLabel.mas_top);
+    }];
+    
+    UIButton *passwordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [passwordButton addTarget:self action:@selector(changePasswordTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [passwordButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.contentView addSubview:passwordButton];
+    [passwordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kPassWordBtnWidth);
+        make.centerY.equalTo(self.passwordTF);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
     }];
     
     [self.contentView addSubview:self.passTipLabel];
@@ -162,9 +174,19 @@
     [self.contentView addSubview:self.passwordConfirmTF];
     [self.passwordConfirmTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(confirmPasswordLabel.mas_trailing);
-        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding - kPassWordBtnWidth*2);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
         make.top.equalTo(confirmPasswordLabel.mas_top);
+    }];
+    
+    UIButton *passwordConfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [passwordConfirmButton addTarget:self action:@selector(changePasswordConfirmTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [passwordConfirmButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.contentView addSubview:passwordConfirmButton];
+    [passwordConfirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kPassWordBtnWidth);
+        make.centerY.equalTo(self.passwordConfirmTF);
+        make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
     }];
     
     UIView *line4 = [[UIView alloc]init];
@@ -206,6 +228,8 @@
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneOrEmailTF.attributedPlaceholder = ap;
         _phoneOrEmailTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_phoneOrEmailTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_phoneOrEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneOrEmailTF;
@@ -257,6 +281,8 @@
         NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"input_verification_code", @"请输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationCodeTF.attributedPlaceholder = apVerification;
         _verificationCodeTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_verificationCodeTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_verificationCodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _verificationCodeTF;
@@ -271,7 +297,7 @@
         _passwordTF.font = [UIFont wcPfRegularFontOfSize:14];
         NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_set_passwd", @"请设置您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
-        _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
+//        _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _passwordTF;
@@ -287,7 +313,7 @@
         _passwordConfirmTF.font = [UIFont wcPfRegularFontOfSize:14];
         NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_confirm_passwd", @"请再次确认您的密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordConfirmTF.attributedPlaceholder = passwordAttStr;
-        _passwordConfirmTF.clearButtonMode = UITextFieldViewModeAlways;
+//        _passwordConfirmTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordConfirmTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _passwordConfirmTF;;
@@ -304,6 +330,34 @@
         [_confirmButton addTarget:self action:@selector(confirmClickButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;
+}
+
+- (void)changePasswordTextShow:(UIButton *)button {
+    
+    if (button.selected) {
+        self.passwordTF.secureTextEntry = YES;
+        [button setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    }else {
+        self.passwordTF.secureTextEntry = NO;
+        [button setImage:[UIImage imageNamed:@"password_show"] forState:UIControlStateNormal];
+    }
+    
+    button.selected = !button.selected;
+    
+}
+
+- (void)changePasswordConfirmTextShow:(UIButton *)button {
+    
+    if (button.selected) {
+        self.passwordConfirmTF.secureTextEntry = YES;
+        [button setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    }else {
+        self.passwordConfirmTF.secureTextEntry = NO;
+        [button setImage:[UIImage imageNamed:@"password_show"] forState:UIControlStateNormal];
+    }
+    
+    button.selected = !button.selected;
+    
 }
 
 - (void)confirmClickButton {

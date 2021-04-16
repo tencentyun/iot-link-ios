@@ -56,10 +56,12 @@
         make.width.mas_equalTo(kWidthTitle);
     }];
     
+    CGFloat kPassWordBtnWidth = 18;
+    
     self.passWordTF = [[UITextField alloc] init];
     self.passWordTF.placeholder = NSLocalizedString(@"password", @"密码");
     self.passWordTF.textColor = kFontColor;
-    self.passWordTF.clearButtonMode = UITextFieldViewModeAlways;
+//    self.passWordTF.clearButtonMode = UITextFieldViewModeAlways;
     self.passWordTF.secureTextEntry = YES;
     self.passWordTF.font = [UIFont wcPfRegularFontOfSize:14];
     [self.passWordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
@@ -67,8 +69,18 @@
     [self.passWordTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(passWordLabel.mas_trailing);
         make.centerY.equalTo(passWordLabel);
-        make.trailing.equalTo(self.view).offset(-kLeftRightPadding);
+        make.trailing.equalTo(self.view).offset(-kLeftRightPadding - kPassWordBtnWidth*2);
         make.height.mas_equalTo(kHeightCell);
+    }];
+    
+    UIButton *passwordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [passwordButton addTarget:self action:@selector(changePasswordTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [passwordButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.view addSubview:passwordButton];
+    [passwordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kPassWordBtnWidth);
+        make.centerY.equalTo(self.passWordTF);
+        make.trailing.equalTo(self.view.mas_trailing).offset(-kLeftRightPadding);
     }];
     
     UIView *lineView = [[UIView alloc] init];
@@ -94,15 +106,25 @@
     self.passWordTF2.placeholder = NSLocalizedString(@"inport_Password_again", @"请再次输入密码");
     self.passWordTF2.textColor = kFontColor;
     self.passWordTF2.secureTextEntry = YES;
-    self.passWordTF2.clearButtonMode = UITextFieldViewModeAlways;
+//    self.passWordTF2.clearButtonMode = UITextFieldViewModeAlways;
     self.passWordTF2.font = [UIFont wcPfRegularFontOfSize:14];
     [self.passWordTF2 addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.passWordTF2];
     [self.passWordTF2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(passWordLabel2.mas_trailing);
         make.centerY.equalTo(passWordLabel2);
-        make.trailing.equalTo(self.view).offset(-kLeftRightPadding);
+        make.trailing.equalTo(self.view).offset(-kLeftRightPadding - kPassWordBtnWidth*2);
         make.height.mas_equalTo(kHeightCell);
+    }];
+    
+    UIButton *passwordConfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [passwordConfirmButton addTarget:self action:@selector(changePasswordConfirmTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [passwordConfirmButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.view addSubview:passwordConfirmButton];
+    [passwordConfirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(kPassWordBtnWidth);
+        make.centerY.equalTo(self.passWordTF2);
+        make.trailing.equalTo(self.view.mas_trailing).offset(-kLeftRightPadding);
     }];
     
     UIView *lineView2 = [[UIView alloc] init];
@@ -117,7 +139,7 @@
     
     UILabel *tipLab = [[UILabel alloc] init];
     tipLab.text = NSLocalizedString(@"password_format", @"密码8～16位需包含字母和数字");
-    tipLab.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+    tipLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
     tipLab.font = [UIFont wcPfRegularFontOfSize:12];
     [self.view addSubview:tipLab];
     [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -229,6 +251,33 @@
     }
 }
 
+- (void)changePasswordTextShow:(UIButton *)button {
+    
+    if (button.selected) {
+        self.passWordTF.secureTextEntry = YES;
+        [button setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    }else {
+        self.passWordTF.secureTextEntry = NO;
+        [button setImage:[UIImage imageNamed:@"password_show"] forState:UIControlStateNormal];
+    }
+    
+    button.selected = !button.selected;
+    
+}
+
+- (void)changePasswordConfirmTextShow:(UIButton *)button {
+    
+    if (button.selected) {
+        self.passWordTF2.secureTextEntry = YES;
+        [button setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    }else {
+        self.passWordTF2.secureTextEntry = NO;
+        [button setImage:[UIImage imageNamed:@"password_show"] forState:UIControlStateNormal];
+    }
+    
+    button.selected = !button.selected;
+    
+}
 
 
 @end

@@ -110,9 +110,8 @@
     NSDate *appointDate = [now initWithTimeIntervalSinceNow: oneDay * days];
     NSString *appointDataString = [NSString converDataToFormat:@"yyyy-MM-dd" withData:appointDate];
     NSArray *dateArray = [appointDataString componentsSeparatedByString:@"-"];
-    NSString *tempString = [NSString stringWithFormat:@"%@年%@月%@日 00:00:00",dateArray[0],dateArray[1],dateArray[2]];
-    [self setContentLabelFormatWithLabel:self.cancelTimePart contentString:[NSString stringWithFormat:@"如果您确定“注销账号”，账号将注销于\n%@",tempString] textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
-    
+    NSString *tempString = [NSString stringWithFormat:@"%@%@%@%@%@%@ 00:00:00",dateArray[0],NSLocalizedString(@"delete_acccount_year", @"年"),dateArray[1],NSLocalizedString(@"delete_acccount_month", @"M"),dateArray[2],NSLocalizedString(@"delete_acccount_day", @"D")];
+    [self setContentLabelFormatWithLabel:self.cancelTimePart contentString:[NSString stringWithFormat:@"%@\n%@",NSLocalizedString(@"logout_text_will_logout_at", @"如果您确定“注销账号”，账号将注销于"),tempString] textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
 }
 
 - (UILabel *)cancelTitle {
@@ -145,7 +144,7 @@
     if (!_withdrawApplicationPart) {
         _withdrawApplicationPart = [[UILabel alloc]init];
         _withdrawApplicationPart.numberOfLines = 0;
-        [self setContentLabelFormatWithLabel:_withdrawApplicationPart contentString:@"若您在注销日期前登录腾讯连连，则自动撤销“注销账号”申请。" textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
+        [self setContentLabelFormatWithLabel:_withdrawApplicationPart contentString:NSLocalizedString(@"logout_text_for_attention2", @"若您在注销日期前登录腾讯连连，则自动撤销“注销账号”申请。") textColour:nil textFont:[UIFont wcPfSemiboldFontOfSize:14]];
     }
     return _withdrawApplicationPart;
 }
