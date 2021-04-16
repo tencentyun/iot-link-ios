@@ -95,7 +95,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
     procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
-    procolTV.textColor = kFontColor;
+    procolTV.textColor = [UIColor colorWithHexString:kRegionHexColor];
     procolTV.delegate = self;
     procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
     procolTV.scrollEnabled = NO;
@@ -411,6 +411,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [self.phoneTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
         [_contentView addSubview:self.phoneTF];
         [self.phoneTF mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -458,6 +460,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [self.emailTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
         [_contentView2 addSubview:self.emailTF];
         [self.emailTF mas_makeConstraints:^(MASConstraintMaker *make) {

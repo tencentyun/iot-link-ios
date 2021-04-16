@@ -168,6 +168,8 @@
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneOrEmailTF.attributedPlaceholder = ap;
         _phoneOrEmailTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_phoneOrEmailTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_phoneOrEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneOrEmailTF;
@@ -207,6 +209,8 @@
         NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"input_verification_code", @"输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationCodeTF.attributedPlaceholder = apVerification;
         _verificationCodeTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_verificationCodeTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_verificationCodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _verificationCodeTF;

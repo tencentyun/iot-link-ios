@@ -330,6 +330,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"please_input_phonenumber", @"请输入手机号") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.phoneTF.attributedPlaceholder = ap;
         self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [self.phoneTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [self.phoneTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
         [_contentView addSubview:self.phoneTF];
         [self.phoneTF mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -436,6 +438,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         NSAttributedString *as = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"email_null", @"请输入邮箱地址") attributes:@{NSForegroundColorAttributeName:kRGBColor(224, 224, 224),NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         self.emailTF.attributedPlaceholder = as;
         self.emailTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [self.emailTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [self.emailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
         [_contentView2 addSubview:self.emailTF];
         [self.emailTF mas_makeConstraints:^(MASConstraintMaker *make) {

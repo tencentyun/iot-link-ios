@@ -547,12 +547,24 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
             make.width.mas_equalTo(kWidthTitle);
         }];
         
+        CGFloat kPassWordBtnWidth = 18;
+
         [_contentView2 addSubview:self.passwordTF];
         [self.passwordTF mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lineView2.mas_bottom);
             make.leading.equalTo(self.phoneAndEmailTF2.mas_leading);
-            make.trailing.equalTo(self.phoneAndEmailTF2.mas_trailing);
+            make.trailing.equalTo(self.phoneAndEmailTF2.mas_trailing).offset(-kPassWordBtnWidth*2);
             make.height.mas_equalTo(kHeightCell);
+        }];
+        
+        UIButton *passwordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [passwordButton addTarget:self action:@selector(changePasswordTextShow:) forControlEvents:UIControlEventTouchUpInside];
+        [passwordButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+        [_contentView2 addSubview:passwordButton];
+        [passwordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(kPassWordBtnWidth);
+            make.centerY.equalTo(self.passwordTF);
+            make.trailing.equalTo(self.phoneAndEmailTF2.mas_trailing);
         }];
 
         UIView *passwordLineView = [[UIView alloc] init];
@@ -594,6 +606,8 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneAndEmailTF.attributedPlaceholder = ap;
         _phoneAndEmailTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_phoneAndEmailTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_phoneAndEmailTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneAndEmailTF;
@@ -621,6 +635,8 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         NSAttributedString *apVerification = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"input_verification_code", @"输入验证码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _verificationcodeTF.attributedPlaceholder = apVerification;
         _verificationcodeTF.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_verificationcodeTF valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_verificationcodeTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _verificationcodeTF;
@@ -646,6 +662,8 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         NSAttributedString *ap = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"mobile_or_email", @"手机号码/邮箱地址") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _phoneAndEmailTF2.attributedPlaceholder = ap;
         _phoneAndEmailTF2.clearButtonMode = UITextFieldViewModeAlways;
+        UIButton *clearButton = [_phoneAndEmailTF2 valueForKey:@"_clearButton"];
+        [clearButton setImage:[UIImage imageNamed:@"text_clear"] forState:UIControlStateNormal];
         [_phoneAndEmailTF2 addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneAndEmailTF2;
@@ -660,7 +678,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         _passwordTF.font = [UIFont wcPfRegularFontOfSize:14];
         NSAttributedString *passwordAttStr = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"smart_config_second_hint", @"请输入密码") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:kPhoneEmailHexColor],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14]}];
         _passwordTF.attributedPlaceholder = passwordAttStr;
-        _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
+//        _passwordTF.clearButtonMode = UITextFieldViewModeAlways;
         [_passwordTF addTarget:self action:@selector(changedTextField:) forControlEvents:UIControlEventEditingChanged];
     }
     return _passwordTF;
@@ -859,6 +877,21 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
+
+- (void)changePasswordTextShow:(UIButton *)button {
+    
+    if (button.selected) {
+        self.passwordTF.secureTextEntry = YES;
+        [button setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    }else {
+        self.passwordTF.secureTextEntry = NO;
+        [button setImage:[UIImage imageNamed:@"password_show"] forState:UIControlStateNormal];
+    }
+    
+    button.selected = !button.selected;
+    
+}
+
 
 #pragma mark - 发送验证码
 - (void)sendCode:(UIButton *)button {

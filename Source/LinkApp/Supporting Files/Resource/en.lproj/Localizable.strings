@@ -340,9 +340,9 @@
 "logout_account" = "Delete account";
 "logout_must_know" = "Note on deletion";
 "logout_text_for_attention1" = "Please make sure that your account is in a secure state and that you yourself are requesting for deletion. Account deletion is irreversible, and once the account is deleted, all information and data under it will be permanently deleted and cannot be recovered. To avoid losses, please be cautious about account deletion.";
-//"logout_text_will_logout_at" = "If you confirm "account deletion", the account will be deleted at";
+"logout_text_will_logout_at" = "If you confirm \"account deletion\", the account will be deleted at";
 "logout_text_logout_time" = "August 3, 2020, 00:00:00";
-//"logout_text_for_attention2" = "若您在注销日期前登录腾讯连连，则自动撤销“注销账号”申请。";
+"logout_text_for_attention2" = "若您在注销日期前登录腾讯连连，则自动撤销\“注销账号\”申请。";
 "logout_text_for_attention3" = "Note: if your Tencent Lianlian account is logged in to through a third-party app (WeChat), deleting the account will affect only the account and data in Tencent Lianlian but not your WeChat account information.";
 "tencentll_account_logout_agreement" = "<<Tencent Lianlian Account Deletion Agreement>>";
 "tencentll_account_logout_agreement2" = "Tencent Lianlian Account Deletion Agreement";
@@ -904,3 +904,6 @@ If the problem still persists, we recommend you remove the device and add it aga
 "please_input_search_conent" = "请输入搜索内容";
 "more_operation" = "更多操作";
 "shared_devices" = "共享设备";
+"delete_acccount_year" = "Y";
+"delete_acccount_month" = "M";
+"delete_acccount_day" = "D";

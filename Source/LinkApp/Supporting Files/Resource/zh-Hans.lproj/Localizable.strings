@@ -895,3 +895,6 @@
 "please_input_search_conent" = "请输入搜索内容";
 "more_operation" = "更多操作";
 "shared_devices" = "共享设备";
+"delete_acccount_year" = "年";
+"delete_acccount_month" = "月";
+"delete_acccount_day" = "日";
