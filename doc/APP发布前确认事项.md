@@ -12,12 +12,15 @@
     "XgAccessId": "",
     "XgAccessKey": "",
     "TencentMapSDKValue": "",
-    "TencentIotLinkSDKDemoAppkey": ""
+    "TencentIotLinkSDKDemoAppkey": "",
+    "HEweatherKey": "",
   }
   ```
   * 用户需要使用从物联网平台自建应用所获得的 **TencentIotLinkAppkey** 和 **TencentIotLinkAppSecret**，来替换 APP 中对应的字符串。
   * 用户需要使用从腾讯推送平台自建应用所获得的 **XgAccessId** 和 **XgAccessKey**，来替换 APP 中对应的字符串。
   * 用户需要使用从微信开发平台自建应用所获得的 **WXAccessAppId**，来替换 APP 中对应的字符串。
+  * 用户需要使用从腾讯地址服务平台自建应用所获的 key 来替换APP中对应的字符串。   
+    * 用户需要使用从和风天气开发平台自建应用获得对应的 key 来替换 APP 中对应字符串，并接入 key 类型匹配的 SDK。	
 
 * 如果用户确认接入 Firebase，用户需要使用从 Firebase 官网自建应用获得 **GoogleService-Info.plist**，替换 APP 中 /LinkApp/Supporting Files 目录下的 **GoogleService-Info.plist** 文件。   
 

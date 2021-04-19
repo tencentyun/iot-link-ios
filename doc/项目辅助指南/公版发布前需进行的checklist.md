@@ -1,5 +1,5 @@
 # 连连公版发布前需要进行的check list：
-### 1.release发布后，查看包配置的各id是否已经替换（含微信id、信鸽id、信鸽美东id）
+### 1.release发布后，查看包配置的各id是否已经替换（含微信id、信鸽id、信鸽美东id、腾讯地图id、和风天气id）
 ### 2.检查TencentIotLinkAppkey项为空，表示开源版和公版
 ### 3.检查包名是否为com.tencent.iot.explorer.link
 ### 4.安装app后，获取本机uin

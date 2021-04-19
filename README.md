@@ -31,7 +31,9 @@
   "XgAccessId": "",
   "XgAccessKey": "",
   "XgUSAAccessId": "",
-  "XgUSAAccessKey": ""
+  "XgUSAAccessKey": "",
+  "TencentMapSDKValue":"",
+  "HEweatherKey":""
 }
 ```   
 
@@ -53,7 +55,9 @@
   "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
   "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
   "XgAccessId": "请输入从信鸽推送平台申请的AccessID",
-  "XgAccessKey": "请输入从信鸽推送平台申请的AccessKey"
+  "XgAccessKey": "请输入从信鸽推送平台申请的AccessKey",
+  "TencentMapSDKValue":"请输入从腾讯位置服务申请的key",
+  "HEweatherKey":"请输入从和风天气开发平台申请的key"
 }
 ```     
 
@@ -78,7 +82,9 @@
         "XgAccessId": "",
         "XgAccessKey": "",
         "XgUSAAccessId": "",
-        "XgUSAAccessKey": ""
+        "XgUSAAccessKey": "",
+        "TencentMapSDKValue":"",
+        "HEweatherKey":""
       }
    ```   
 
@@ -96,6 +102,51 @@
    ```   
 
 * 若不使用微信授权登录功能，**WXAccessAppId** 设置为**长度为0字符串**即可。​    
+
+**5、 腾讯位置服务 （可选）**   
+
+&emsp;&emsp;腾讯连连开源体验版集成了腾讯地图位置服务，用于定位选址和搜索周边地点。   
+
+* 若使用自定义接入的腾讯位置服务，需要在[腾讯位置服务](https://lbs.qq.com/)注册开发者账号，创建移动应用，即可获取应用对的key，[申请步骤](https://lbs.qq.com/faq/accountQuota/faqKey)，**在编辑key时需要启用产品的 WebServiceAPI 和地图 SDK**；将申请的 key 写入 app-config.json 文件中对应位置。
+	
+```json
+{
+  "WXAccessAppId": "",
+  "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+  "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+  "XgAccessId": "请输入从信鸽推送平台申请的AccessID",
+  "XgAccessKey": "请输入从信鸽推送平台申请的AccessKey",
+  "TencentMapSDKValue":"请输入从腾讯位置服务申请的key",
+  "HEweatherKey":"请输入从和风天气开发平台申请的key"
+}
+```        
+
+* 若不使用腾讯位置服务，**TencentMapSDKValue** 设置为**长度为0字符串**即可。
+
+**6、 和风天气 （可选）**    
+
+&emsp;&emsp;腾讯连连开源体验版集成了和风天气开发平台，用于设置和显示天气。   
+
+* 若使用自定义的和风天气服务，需要在[和风天气开发平台](https://dev.qweather.com/)注册开发者账号，创建移动应用，获取应用对应key ，[申请步骤](https://dev.qweather.com/docs/start)。      
+
+* **腾讯连连开源体验版集成和风天气对应的 key 类型为 Web API**，若创建应用对应 key 类型非 Web API，需要单独接入对应平台的 SDK，[SDK 接入和配置](https://dev.qweather.com/docs/)。   
+
+* 将和风天气开发平台申请的 key 写入 app-config.json 文件中对应位置。   
+
+```json
+{
+  "WXAccessAppId": "",
+  "TencentIotLinkAppkey": "请输入从物联网开发平台申请的Appkey, 正式发布前务必填写",
+  "TencentIotLinkAppSecret": "请输入从物联网开发平台申请的AppSecrect, AppSecrect请保存在服务端，此处仅为演示，如有泄露概不负责",
+  "XgAccessId": "请输入从信鸽推送平台申请的AccessID",
+  "XgAccessKey": "请输入从信鸽推送平台申请的AccessKey",
+  "TencentMapSDKValue":"请输入从腾讯位置服务申请的key",
+  "HEweatherKey":"请输入从和风天气开发平台申请的key"
+}
+```
+
+* 若不适用和风天气服务，**HEweatherKey** 设置为**长度为0字符串**即可。   
+
 
 完成上述配置后，依赖 Xcode 的构建，即可在手机上运行。
 
