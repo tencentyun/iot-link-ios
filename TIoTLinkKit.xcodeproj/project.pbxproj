@@ -100,6 +100,7 @@
 		6DC7F8D92552E394009508EE /* TIoTSettingIntelligentImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8D82552E394009508EE /* TIoTSettingIntelligentImageVC.m */; };
 		6DC7F8DD2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8DC2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m */; };
 		6DC7F8E1255326DF009508EE /* TIoTSettingIntelligentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */; };
+		6DC960C2262EC68F00F4C245 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DC960C0262EC68F00F4C245 /* LaunchScreen.storyboard */; };
 		6DCB3587259CD908003E03DF /* TIoTWiredDistributionNetVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DCB3586259CD908003E03DF /* TIoTWiredDistributionNetVC.m */; };
 		6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D2A251B4449004FC023 /* Localizable.strings */; };
 		6DCC3D3D251BB1DD004FC023 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC3D3F251BB1DD004FC023 /* InfoPlist.strings */; };
@@ -213,7 +214,6 @@
 		D2B29EE6235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B29EE5235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m */; };
 		D2C7A9F4232F6AA4005E8006 /* TIoTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */; };
 		D2C7A9FC232F6AA5005E8006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */; };
-		D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */; };
 		D2C7AA02232F6AA5005E8006 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7AA01232F6AA5005E8006 /* main.m */; };
 		D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7EF2330B43200C97A04 /* UIView+StatusCoast.m */; };
 		D2C7D7F42330B76500C97A04 /* TIoTEquipmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7F32330B76500C97A04 /* TIoTEquipmentTableViewCell.m */; };
@@ -630,6 +630,7 @@
 		6DC7F8DC2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSettingIntelligentNameVC.m; sourceTree = "<group>"; };
 		6DC7F8DF255326DF009508EE /* TIoTSettingIntelligentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSettingIntelligentCell.h; sourceTree = "<group>"; };
 		6DC7F8E0255326DF009508EE /* TIoTSettingIntelligentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSettingIntelligentCell.m; sourceTree = "<group>"; };
+		6DC960C1262EC68F00F4C245 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DCB3585259CD908003E03DF /* TIoTWiredDistributionNetVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWiredDistributionNetVC.h; sourceTree = "<group>"; };
 		6DCB3586259CD908003E03DF /* TIoTWiredDistributionNetVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTWiredDistributionNetVC.m; sourceTree = "<group>"; };
 		6DCC3D2B251B4449004FC023 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -797,8 +798,6 @@
 		D2310491232F872F0003069D /* TIoTMineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMineViewController.m; sourceTree = "<group>"; };
 		D2310498232F88040003069D /* TIoTHomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTHomeViewController.h; sourceTree = "<group>"; };
 		D2310499232F88040003069D /* TIoTHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTHomeViewController.m; sourceTree = "<group>"; };
-		D23104A5232F91040003069D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		D23104A7232F917A0003069D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		D23104B6233066810003069D /* UUIDUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDUntil.m; sourceTree = "<group>"; };
 		D23104B7233066810003069D /* KeyChainUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChainUntil.m; sourceTree = "<group>"; };
 		D23104B8233066810003069D /* UIDevice+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Until.m"; sourceTree = "<group>"; };
@@ -857,7 +856,6 @@
 		D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppDelegate.h; sourceTree = "<group>"; };
 		D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppDelegate.m; sourceTree = "<group>"; };
 		D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D2C7A9FE232F6AA5005E8006 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2C7AA00232F6AA5005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2C7AA01232F6AA5005E8006 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D2C7AA25232F6EBC005E8006 /* TIoTLinkKit.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTLinkKit.pch; sourceTree = "<group>"; };
@@ -2238,7 +2236,7 @@
 				D23104B0233066530003069D /* Classes */,
 				D2C7AA24232F6D83005E8006 /* Supporting Files */,
 				D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */,
-				D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */,
+				6DC960C0262EC68F00F4C245 /* LaunchScreen.storyboard */,
 			);
 			path = LinkApp;
 			sourceTree = "<group>";
@@ -2792,7 +2790,6 @@
 				6D48A9EC25E4DF3E00523636 /* SnowImg0.png in Resources */,
 				6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */,
 				6D48A9DE25E4DCD200523636 /* CloudImg1.png in Resources */,
-				D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */,
 				ED6D120723C8598400A7A333 /* TIoTTimerListCell.xib in Resources */,
 				F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */,
 				ED9C49B323B1BB46005D537F /* 腾讯连连用户服务协议V1.0(1).docx in Resources */,
@@ -2819,6 +2816,7 @@
 				6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */,
 				6D48A9F725E4DFEF00523636 /* SunnyImg0.png in Resources */,
 				D210C7D92341D7EB00A53B08 /* sortedNameCH.plist in Resources */,
+				6DC960C2262EC68F00F4C245 /* LaunchScreen.storyboard in Resources */,
 				ED6BA5A423C57DD100BE9EC9 /* TIoTFamilyInfoCell.xib in Resources */,
 				6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */,
 				6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */,
@@ -3394,6 +3392,14 @@
 			name = TIoTAboutVC.xib;
 			sourceTree = "<group>";
 		};
+		6DC960C0262EC68F00F4C245 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DC960C1262EC68F00F4C245 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		6DCC3D2A251B4449004FC023 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3440,16 +3446,6 @@
 				6DCC3D5A251BB8A3004FC023 /* zh-Hans */,
 			);
 			name = TIoTAddRoomVC.xib;
-			sourceTree = "<group>";
-		};
-		D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D2C7A9FE232F6AA5005E8006 /* Base */,
-				D23104A5232F91040003069D /* zh-Hans */,
-				D23104A7232F917A0003069D /* en */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 		F4F3D53424935BD3005D3396 /* Main.storyboard */ = {

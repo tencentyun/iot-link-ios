@@ -40,7 +40,8 @@
             make.top.equalTo(self.view).offset(64 + 100 * kScreenAllHeightScale);
         }
         make.centerX.equalTo(self.view);
-        make.width.height.mas_equalTo(100 * kScreenAllHeightScale);
+        make.width.mas_equalTo(180 * kScreenAllWidthScale);
+        make.height.mas_equalTo(100* kScreenAllHeightScale);
     }];
     
     [self.view addSubview:self.welcomeLalel];

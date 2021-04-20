@@ -25,10 +25,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="aboutMe_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="GFr-pu-XOU">
-                    <rect key="frame" x="157" y="104" width="100" height="80.5"/>
+                    <rect key="frame" x="127" y="104" width="160" height="100"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="80.5" id="DTC-jP-jtV"/>
-                        <constraint firstAttribute="width" constant="100" id="Yca-X6-9N9"/>
+                        <constraint firstAttribute="height" constant="100" id="DTC-jP-jtV"/>
+                        <constraint firstAttribute="width" constant="160" id="Yca-X6-9N9"/>
                     </constraints>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TMS-hz-BTH">
@@ -48,7 +48,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mineArrow" translatesAutoresizingMaskIntoConstraints="NO" id="O5U-1u-a5B">
-                            <rect key="frame" x="367" y="16.5" width="27" height="27"/>
+                            <rect key="frame" x="376" y="21" width="18" height="18"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -81,7 +81,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mineArrow" translatesAutoresizingMaskIntoConstraints="NO" id="EPV-ft-eb9">
-                            <rect key="frame" x="367" y="16.5" width="27" height="27"/>
+                            <rect key="frame" x="376" y="21" width="18" height="18"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -128,7 +128,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mineArrow" translatesAutoresizingMaskIntoConstraints="NO" id="m4t-AM-OYS">
-                            <rect key="frame" x="367" y="16.5" width="27" height="27"/>
+                            <rect key="frame" x="376" y="21" width="18" height="18"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -182,7 +182,7 @@
                 <constraint firstAttribute="trailing" secondItem="N0o-ho-60P" secondAttribute="trailing" constant="20" id="3nK-Hs-Mq1"/>
                 <constraint firstItem="PQ2-BY-jni" firstAttribute="top" secondItem="N0o-ho-60P" secondAttribute="bottom" id="3yx-NM-F3K"/>
                 <constraint firstItem="xoS-AO-T26" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="61J-mK-hcJ"/>
-                <constraint firstItem="TMS-hz-BTH" firstAttribute="top" secondItem="GFr-pu-XOU" secondAttribute="bottom" constant="86" id="6cm-ye-tmy"/>
+                <constraint firstItem="TMS-hz-BTH" firstAttribute="top" secondItem="GFr-pu-XOU" secondAttribute="bottom" constant="66.5" id="6cm-ye-tmy"/>
                 <constraint firstItem="dDm-hF-tNj" firstAttribute="top" secondItem="xoS-AO-T26" secondAttribute="bottom" id="6iN-f0-5eE"/>
                 <constraint firstItem="PxG-9z-Lci" firstAttribute="leading" secondItem="aWU-4F-E2K" secondAttribute="leading" id="FTD-Dj-KnV"/>
                 <constraint firstItem="aWU-4F-E2K" firstAttribute="top" secondItem="dDm-hF-tNj" secondAttribute="bottom" id="FqO-XI-16m"/>
@@ -231,8 +231,8 @@
         </tapGestureRecognizer>
     </objects>
     <resources>
-        <image name="aboutMe_logo.png" width="300" height="242"/>
-        <image name="mineArrow" width="27" height="27"/>
+        <image name="aboutMe_logo.png" width="480" height="300"/>
+        <image name="mineArrow" width="18" height="18"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
