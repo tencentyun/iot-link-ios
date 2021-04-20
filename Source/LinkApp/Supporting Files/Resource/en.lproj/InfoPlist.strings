@@ -6,7 +6,7 @@
   Copyright © 2020 Tencent. All rights reserved.
 */
 
-CFBundleName = "Lianlian";
+CFBundleName = "Tencent LLink (OSS)";
 NSBluetoothAlwaysUsageDescription = "打开蓝牙用于扫描硬件";
 NSBluetoothPeripheralUsageDescription = "打开蓝牙用于扫描硬件";
 NSCameraUsageDescription = "获取相机权限用于扫描设备二维码";

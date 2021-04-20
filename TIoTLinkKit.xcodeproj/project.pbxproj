@@ -30,7 +30,6 @@
 		6D48A9FB25E4DFFB00523636 /* WeatherTypeSunny.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D48A9FA25E4DFFB00523636 /* WeatherTypeSunny.json */; };
 		6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E81251899ED003BE1D9 /* aboutMe_logo.png */; };
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
-		6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
 		6D51BD5225E8FBAA00F96E69 /* TIoTChooseLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D51BD5125E8FBAA00F96E69 /* TIoTChooseLocationCell.m */; };
 		6D5995AF25C41EF600E2BDD8 /* TIoTPlayBackListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5995AC25C419F700E2BDD8 /* TIoTPlayBackListModel.m */; };
@@ -78,6 +77,8 @@
 		6DA086FC256CFDCB00938CF4 /* TIoTIntelligentLogModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA086FB256CFDCB00938CF4 /* TIoTIntelligentLogModel.m */; };
 		6DA0881C256D865400938CF4 /* TIoTDeviceDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA0881B256D865400938CF4 /* TIoTDeviceDetailModel.m */; };
 		6DA08870256E307700938CF4 /* TIoTLogErrorDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA0886F256E307600938CF4 /* TIoTLogErrorDetailCell.m */; };
+		6DA91859262F0158005D9654 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DA91858262F0157005D9654 /* LaunchScreen.storyboard */; };
+		6DA918AD262F044D005D9654 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DA918AF262F044D005D9654 /* AppLaunch.png */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
 		6DB4F9A625FF54C50025EF25 /* TIoTShortcutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB4F9A525FF54C50025EF25 /* TIoTShortcutView.m */; };
@@ -213,7 +214,6 @@
 		D2B29EE6235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B29EE5235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m */; };
 		D2C7A9F4232F6AA4005E8006 /* TIoTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */; };
 		D2C7A9FC232F6AA5005E8006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */; };
-		D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */; };
 		D2C7AA02232F6AA5005E8006 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7AA01232F6AA5005E8006 /* main.m */; };
 		D2C7D7F12330B43200C97A04 /* UIView+StatusCoast.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7EF2330B43200C97A04 /* UIView+StatusCoast.m */; };
 		D2C7D7F42330B76500C97A04 /* TIoTEquipmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7D7F32330B76500C97A04 /* TIoTEquipmentTableViewCell.m */; };
@@ -490,9 +490,6 @@
 		6D4E1E8B25189BC5003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/Main_logo.png; sourceTree = "<group>"; };
 		6D4E1E8E25189BC9003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/Main_logo.png; sourceTree = "<group>"; };
 		6D4E1E8F25189BCB003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/Main_logo.png"; sourceTree = "<group>"; };
-		6D4E1ED92518ADD7003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/AppLaunch.png; sourceTree = "<group>"; };
-		6D4E1EDC2518ADDB003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/AppLaunch.png; sourceTree = "<group>"; };
-		6D4E1EDD2518ADDD003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/AppLaunch.png"; sourceTree = "<group>"; };
 		6D4E1EE22518AE40003BE1D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/ConfigHardware_WiFi.png; sourceTree = "<group>"; };
 		6D4E1EE52518AE44003BE1D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/ConfigHardware_WiFi.png; sourceTree = "<group>"; };
 		6D4E1EE62518AE45003BE1D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/ConfigHardware_WiFi.png"; sourceTree = "<group>"; };
@@ -589,6 +586,10 @@
 		6DA0881B256D865400938CF4 /* TIoTDeviceDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceDetailModel.m; sourceTree = "<group>"; };
 		6DA0886E256E307600938CF4 /* TIoTLogErrorDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTLogErrorDetailCell.h; sourceTree = "<group>"; };
 		6DA0886F256E307600938CF4 /* TIoTLogErrorDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTLogErrorDetailCell.m; sourceTree = "<group>"; };
+		6DA91858262F0157005D9654 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6DA918AE262F044D005D9654 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/AppLaunch.png"; sourceTree = "<group>"; };
+		6DA918B1262F0453005D9654 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/AppLaunch.png; sourceTree = "<group>"; };
+		6DA918B2262F045A005D9654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/AppLaunch.png; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DB4F9A425FF54C50025EF25 /* TIoTShortcutView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTShortcutView.h; sourceTree = "<group>"; };
 		6DB4F9A525FF54C50025EF25 /* TIoTShortcutView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTShortcutView.m; sourceTree = "<group>"; };
@@ -797,8 +798,6 @@
 		D2310491232F872F0003069D /* TIoTMineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMineViewController.m; sourceTree = "<group>"; };
 		D2310498232F88040003069D /* TIoTHomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTHomeViewController.h; sourceTree = "<group>"; };
 		D2310499232F88040003069D /* TIoTHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTHomeViewController.m; sourceTree = "<group>"; };
-		D23104A5232F91040003069D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		D23104A7232F917A0003069D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		D23104B6233066810003069D /* UUIDUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDUntil.m; sourceTree = "<group>"; };
 		D23104B7233066810003069D /* KeyChainUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChainUntil.m; sourceTree = "<group>"; };
 		D23104B8233066810003069D /* UIDevice+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Until.m"; sourceTree = "<group>"; };
@@ -857,7 +856,6 @@
 		D2C7A9F2232F6AA4005E8006 /* TIoTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppDelegate.h; sourceTree = "<group>"; };
 		D2C7A9F3232F6AA4005E8006 /* TIoTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppDelegate.m; sourceTree = "<group>"; };
 		D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D2C7A9FE232F6AA5005E8006 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2C7AA00232F6AA5005E8006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2C7AA01232F6AA5005E8006 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D2C7AA25232F6EBC005E8006 /* TIoTLinkKit.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTLinkKit.pch; sourceTree = "<group>"; };
@@ -1342,8 +1340,8 @@
 			isa = PBXGroup;
 			children = (
 				6D48A9C625E4DA1700523636 /* Weather */,
+				6DA918AF262F044D005D9654 /* AppLaunch.png */,
 				6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */,
-				6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */,
 				6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */,
 				6D4E1E81251899ED003BE1D9 /* aboutMe_logo.png */,
 				6DCC3D2A251B4449004FC023 /* Localizable.strings */,
@@ -2238,7 +2236,7 @@
 				D23104B0233066530003069D /* Classes */,
 				D2C7AA24232F6D83005E8006 /* Supporting Files */,
 				D2C7A9FB232F6AA5005E8006 /* Assets.xcassets */,
-				D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */,
+				6DA91858262F0157005D9654 /* LaunchScreen.storyboard */,
 			);
 			path = LinkApp;
 			sourceTree = "<group>";
@@ -2792,10 +2790,10 @@
 				6D48A9EC25E4DF3E00523636 /* SnowImg0.png in Resources */,
 				6DD4E82F248927830056A162 /* GoogleService-Info.plist in Resources */,
 				6D48A9DE25E4DCD200523636 /* CloudImg1.png in Resources */,
-				D2C7A9FF232F6AA5005E8006 /* LaunchScreen.storyboard in Resources */,
 				ED6D120723C8598400A7A333 /* TIoTTimerListCell.xib in Resources */,
 				F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */,
 				ED9C49B323B1BB46005D537F /* 腾讯连连用户服务协议V1.0(1).docx in Resources */,
+				6DA918AD262F044D005D9654 /* AppLaunch.png in Resources */,
 				ED6BA5A923C57DED00BE9EC9 /* TIoTFamilyMemberCell.xib in Resources */,
 				D2C7A9FC232F6AA5005E8006 /* Assets.xcassets in Resources */,
 				6D48A9E325E4DEAB00523636 /* WeatherTypeRain.json in Resources */,
@@ -2816,9 +2814,9 @@
 				ED932E4523BB286000F73F35 /* TIoTEnumItem.xib in Resources */,
 				ED67E58D23C30B1E00BE7628 /* TIoTLongCell.xib in Resources */,
 				ED8D76C6237CEE5B00E358C9 /* wifi_type.html in Resources */,
-				6D4E1ED82518ADD7003BE1D9 /* AppLaunch.png in Resources */,
 				6D48A9F725E4DFEF00523636 /* SunnyImg0.png in Resources */,
 				D210C7D92341D7EB00A53B08 /* sortedNameCH.plist in Resources */,
+				6DA91859262F0158005D9654 /* LaunchScreen.storyboard in Resources */,
 				ED6BA5A423C57DD100BE9EC9 /* TIoTFamilyInfoCell.xib in Resources */,
 				6DCC3D2C251B4449004FC023 /* Localizable.strings in Resources */,
 				6D4E1E7F251899ED003BE1D9 /* aboutMe_logo.png in Resources */,
@@ -3364,16 +3362,6 @@
 			name = Main_logo.png;
 			sourceTree = "<group>";
 		};
-		6D4E1EDA2518ADD7003BE1D9 /* AppLaunch.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6D4E1ED92518ADD7003BE1D9 /* Base */,
-				6D4E1EDC2518ADDB003BE1D9 /* en */,
-				6D4E1EDD2518ADDD003BE1D9 /* zh-Hans */,
-			);
-			name = AppLaunch.png;
-			sourceTree = "<group>";
-		};
 		6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3392,6 +3380,16 @@
 				6D9AD463251C7B82004D968A /* zh-Hans */,
 			);
 			name = TIoTAboutVC.xib;
+			sourceTree = "<group>";
+		};
+		6DA918AF262F044D005D9654 /* AppLaunch.png */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DA918AE262F044D005D9654 /* zh-Hans */,
+				6DA918B1262F0453005D9654 /* en */,
+				6DA918B2262F045A005D9654 /* Base */,
+			);
+			name = AppLaunch.png;
 			sourceTree = "<group>";
 		};
 		6DCC3D2A251B4449004FC023 /* Localizable.strings */ = {
@@ -3440,16 +3438,6 @@
 				6DCC3D5A251BB8A3004FC023 /* zh-Hans */,
 			);
 			name = TIoTAddRoomVC.xib;
-			sourceTree = "<group>";
-		};
-		D2C7A9FD232F6AA5005E8006 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D2C7A9FE232F6AA5005E8006 /* Base */,
-				D23104A5232F91040003069D /* zh-Hans */,
-				D23104A7232F917A0003069D /* en */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 		F4F3D53424935BD3005D3396 /* Main.storyboard */ = {
