@@ -308,7 +308,7 @@
 //"toast_password_not_verify" = "两次输入的密码不一致";
 //"toast_login" = "密码修改成功，请重新登录";
 
-"welcome_to_use_tencent_ll" = "Welcome to Tencent Lianlian";
+"welcome_to_use_tencent_ll" = "Welcome to Tencent LLink";
 "create_new_account" = "Create account";
 "use_existed_account_to_login" = "Login with existing account";
 "account_passwd_login" = "Login with account and password";
@@ -343,15 +343,15 @@
 "logout_text_will_logout_at" = "If you confirm \"account deletion\", the account will be deleted at";
 "logout_text_logout_time" = "August 3, 2020, 00:00:00";
 "logout_text_for_attention2" = "若您在注销日期前登录腾讯连连，则自动撤销\“注销账号\”申请。";
-"logout_text_for_attention3" = "Note: if your Tencent Lianlian account is logged in to through a third-party app (WeChat), deleting the account will affect only the account and data in Tencent Lianlian but not your WeChat account information.";
-"tencentll_account_logout_agreement" = "<<Tencent Lianlian Account Deletion Agreement>>";
-"tencentll_account_logout_agreement2" = "Tencent Lianlian Account Deletion Agreement";
-"tencentll_account_logout_agreement3" = "Please read and agree to the Tencent Lianlian Account Deletion Agreement";
+"logout_text_for_attention3" = "Note: if your Tencent LLink account is logged in to through a third-party app (WeChat), deleting the account will affect only the account and data in Tencent LLink but not your WeChat account information.";
+"tencentll_account_logout_agreement" = "<<Tencent LLink Account Deletion Agreement>>";
+"tencentll_account_logout_agreement2" = "Tencent LLink Account Deletion Agreement";
+"tencentll_account_logout_agreement3" = "Please read and agree to the Tencent LLink Account Deletion Agreement";
 "already_known" = "I understand";
 "confirm_to_cancel_account_title" = "Are you sure you want to delete your account?";
 "confirm_to_cancel_account_content" = "After account deletion, all user data under this account will also be permanently deleted";
 "cancel_account_request_success_title" = "You have requested to delete your account";
-"cancel_account_request_success_content" = "If you need to withdraw the request, please log in to your Tencent Lianlian account within 7 days";
+"cancel_account_request_success_content" = "If you need to withdraw the request, please log in to your Tencent LLink account within 7 days";
 "have_known" = "Got it";
 "cancel_account_stopped_title" = "Account deletion has been terminated";
 //"cancel_account_stopped_content" = "由于你在申请“账号注销”后的7天内重新登录，该账号在date提交的“账号注销”申请已被撤销";
@@ -812,7 +812,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "please_add_condition" = "Add a condition first";
 "no_intelligent_device" = "No feature of the current device can serve as an intelligent task. Try another device.";
 "donot_setDelay_atLeast" = "A delay cannot be set as the last task";
-"lialian_name" = "Tencent LianLian";
+"lialian_name" = "Tencent LLink";
 "no_candidate_model" = "No Thing Specification Language (TSL) is defined. Define the TSL first.";
 "please_input_devicename" = "Enter a device name";
 "please_input_nickName" = "Enter an alias";
@@ -862,7 +862,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "video_call" = "Making video call";
 "call" = "Call";
 "please_setting_birthday" = "To have better experience, please set your date of birth";
-"sorry_we_cannot_support_service" = "Sorry. Tencent LianLian is not available";
+"sorry_we_cannot_support_service" = "Sorry. Tencent LLink is not available";
 "device_share" = "Share Devices";
 "privacy_policy_lower_case" = "privacy policy";
 "device_shared_agree_1" = "By connecting the device with Tencent LLink, you agree to share information about your device and device logs, and the third party can use the device in accordance with its terms and policies.\nFor more information, please read our ";
