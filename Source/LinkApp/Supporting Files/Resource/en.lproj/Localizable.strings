@@ -342,7 +342,7 @@
 "logout_text_for_attention1" = "Please make sure that your account is in a secure state and that you yourself are requesting for deletion. Account deletion is irreversible, and once the account is deleted, all information and data under it will be permanently deleted and cannot be recovered. To avoid losses, please be cautious about account deletion.";
 "logout_text_will_logout_at" = "If you confirm \"account deletion\", the account will be deleted at";
 "logout_text_logout_time" = "August 3, 2020, 00:00:00";
-"logout_text_for_attention2" = "若您在注销日期前登录腾讯连连，则自动撤销\“注销账号\”申请。";
+"logout_text_for_attention2" = "If you log in to Tencent Lianlian before the logout date, the \"logout account\" application will be automatically cancelled.";
 "logout_text_for_attention3" = "Note: if your Tencent LLink account is logged in to through a third-party app (WeChat), deleting the account will affect only the account and data in Tencent LLink but not your WeChat account information.";
 "tencentll_account_logout_agreement" = "<<Tencent LLink Account Deletion Agreement>>";
 "tencentll_account_logout_agreement2" = "Tencent LLink Account Deletion Agreement";
@@ -655,7 +655,8 @@ If the problem still persists, we recommend you remove the device and add it aga
 //"" = "长按复位键(开关)5秒";
 //"" = "长按复位键(开关)5秒，指示灯快闪时，再次长按复位键3秒";
 //"" = "指示灯进入慢闪状态";
-//"" = "[前往：设置 - 隐私 - 定位服务 - XXX ] 允许应用访问";
+"introduce_wifiInfo" = "[Go to: Settings - Privacy - Location Services - ";
+"allow_app_access" = "Allow app access";
 "phoenWIFI_connectHot" = "Connect your phone to the Wi-Fi hotspot of the device";
 //"" = "1、手机WIFI连接到如下图所示的设备热点";     delete
 //"" = "2、返回APP,添加设备";     delete
@@ -866,8 +867,8 @@ If the problem still persists, we recommend you remove the device and add it aga
 "device_share" = "Share Devices";
 "privacy_policy_lower_case" = "privacy policy";
 "device_shared_agree_1" = "By connecting the device with Tencent LLink, you agree to share information about your device and device logs, and the third party can use the device in accordance with its terms and policies.\nFor more information, please read our ";
-"Are you sure you want to switch the time zone?" = "确定切换时区吗？";
-"If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!" = "您切换时区将会同步更改您为家里的智能设备设置的定时、场景等任务时区，请知悉！";
+"Are you sure you want to switch the time zone?" = "Are you sure to switch time zone?";
+"If you switch the time zone, you will change the time zone for tasks such as timing and scenes that you set for the smart device at home. Please be aware!" = "If you switch the time zone, the time zone for tasks such as the timing and scenes you set for the smart device at home will be changed synchronously. Please be aware!";
 
 
 //v1.4.0首页重构
@@ -875,8 +876,8 @@ If the problem still persists, we recommend you remove the device and add it aga
 "intelligent_addDevice" = "Add Intelligence";
 "relative_humidity" = "Relative Humidity";
 "now_windDirection" = "Wind Direction";
-"no_weather_info" = "暂无天气信息";
-"please_set_location" = "请先设置当前家庭位置";
+"no_weather_info" = "No weather information";
+"please_set_location" = "Please set the current home location first";
 //天气部分已翻译
 "day_sunny" = "Sunny";    // 白天-晴
 "night_clear" = "Clear"; //晚上-晴
@@ -888,22 +889,22 @@ If the problem still persists, we recommend you remove the device and add it aga
 "Sleet" = "Sleet";
 "Thundershower" = "Thundershower"; //雷阵雨
 
-"weatherType_dry" = "干燥";
-"weatherType_comfort" = "舒适";
-"weatherType_moist" = "潮湿";
+"weatherType_dry" = "Dry";
+"weatherType_comfort" = "Comfort";
+"weatherType_moist" = "Moist";
 "no_device_please_addition" = "No devices are found. Add one";
-"family_location" = "家庭位置";
+"family_location" = "Family positioning ";
 "set_location" = "Set Location";
-"choose_location" = "地图选点";
-"all__" = "全部";
-"search_location" = "搜索地点";
-"search_text" = "搜索";
-"no_search_history" = "还没有历史记录哦~";
-"search_no_result" = "没有找到匹配结果";
-"clear_history" = "清空历史记录";
-"please_input_search_conent" = "请输入搜索内容";
-"more_operation" = "更多操作";
-"shared_devices" = "共享设备";
+"choose_location" = "Map selection";
+"all__" = "All";
+"search_location" = "Search place";
+"search_text" = "Search";
+"no_search_history" = "No history yet~";
+"search_no_result" = "No match found";
+"clear_history" = "Clear history";
+"please_input_search_conent" = "Enter search content";
+"more_operation" = "More operation";
+"shared_devices" = "Share device";
 "delete_acccount_year" = "Y";
 "delete_acccount_month" = "M";
 "delete_acccount_day" = "D";

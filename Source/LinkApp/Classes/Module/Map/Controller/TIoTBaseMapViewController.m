@@ -138,8 +138,8 @@
         if (app_Name == nil) {
             app_Name = [infoDict objectForKey:@"CFBundleName"];
         }
-        
-        NSString *messageString = [NSString stringWithFormat:@"[前往：设置 - 隐私 - 定位服务 - %@] 允许应用访问", app_Name];
+//        NSString *messageString = [NSString stringWithFormat:@"[前往：设置 - 隐私 - 定位服务 - %@] 允许应用访问", app_Name];
+        NSString *messageString = [NSString stringWithFormat:@"%@%@]%@",NSLocalizedString(@"introduce_wifiInfo", @"[前往：设置 - 隐私 - 定位服务 - "),app_Name,NSLocalizedString(@"allow_app_access", @"允许应用访问")];
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireLocation", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             
