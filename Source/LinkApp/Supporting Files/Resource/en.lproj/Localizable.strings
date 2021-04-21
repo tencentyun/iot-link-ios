@@ -382,7 +382,7 @@
 "cancel_account" = "Delete account";
 //"country_china" = "中国大陆";
 "country_china_en" = "Chinese Mainland";
-"country_usa" = "United States";
+"country_usa" = "U.S.A";
 "select_timezone" = "Choose time zone";
 "success_set" = "Set successfully";
 "failed_set_with_error_code" = "Failed to set. Error code:";

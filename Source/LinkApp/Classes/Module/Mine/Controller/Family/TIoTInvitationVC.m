@@ -34,6 +34,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 @property (nonatomic, strong) UILabel *phoneAreaLabel2;
 @property (nonatomic, copy) NSString *conturyCode2;
 
+@property (nonatomic, strong) NSMutableArray *regionListDataArray;
 @end
 
 @implementation TIoTInvitationVC
@@ -42,6 +43,10 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupUI];
+    
+    [self requestAreaList];
+    
+    [self setDefaultAreaInfo];
 }
 
 - (void)setupUI{
@@ -134,6 +139,59 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     }
 }
 
+#pragma mark - request area list
+- (void)requestAreaList {
+    
+    /*时区列表接口 和 地区列表接口为同一个
+    * RegionListCN 中文区域列表， RegionListEN 英文区域列表;
+    * RegisterRegionListEN 英文注册区域列表，RegisterRegionListCN 中文注册区域列表
+    */
+    
+    [[TIoTRequestObject shared] get:TIoTAPPConfig.regionlistString isNormalRequest:NO success:^(id responseObject) {
+
+        NSArray *regionListArray = (NSArray *)responseObject;
+        
+        if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
+                    
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    
+                    TIoTLog(@"timeListArray====%@",regionListArray);
+                    self.regionListDataArray = [NSMutableArray arrayWithArray:regionListArray];
+                    
+                    [self setDefaultAccountAreaWithRegionDic:regionDic];
+                }
+            }];
+        }else if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"1"]){
+            [regionListArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *regionDic = obj;
+                if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
+                    
+                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+                    
+                    TIoTLog(@"timeListArray====%@",regionListArray);
+                    self.regionListDataArray = [NSMutableArray arrayWithArray:regionListArray];
+                    
+                    [self setDefaultAccountAreaWithRegionDic:regionDic];
+                }
+            }];
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+
+    }];
+}
+
+- (void)setDefaultAreaInfo {
+//    setDefaultAccountAreaWithAreaCode
+    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"1"]) {  //国内
+        [self setDefaultAccountAreaWithRegionDic:@{@"CountryCode":@"86",@"Title":@"中国大陆",@"TitleEN" :@"Chinese Mainland"}];
+    }else if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) { //美东
+        [self setDefaultAccountAreaWithRegionDic:@{@"CountryCode":@"1",@"Title":@"美国",@"TitleEN" :@"U.S.A"}];
+    }
+}
+
 #pragma mark - action
 
 - (void)registStyleChange:(UIButton *)sender
@@ -158,10 +216,20 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 
 - (void)done:(UIButton *)btn
 {
+    __block NSString *conturyCodeText = self.conturyCode;
+    
+    [self.regionListDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *regionDic = obj;
+        if ([regionDic[@"RegionID"] isEqualToString:@"22"]) { //美东
+            conturyCodeText = regionDic[@"CountryCode"]?:@"1";
+        }else if ([regionDic[@"RegionID"] isEqualToString:@"1"]) { //国内
+            conturyCodeText = regionDic[@"CountryCode"]?:@"86";
+        }
+    }];
     
     NSDictionary *param;
     if (_emailStyle) param = @{@"Type":@"email",@"Email":self.emailTF.text};
-    else param = @{@"Type":@"phone",@"CountryCode":self.conturyCode,@"PhoneNumber":self.phoneTF.text};
+    else param = @{@"Type":@"phone",@"CountryCode":conturyCodeText,@"PhoneNumber":self.phoneTF.text};
     
     [[TIoTRequestObject shared] post:AppFindUser Param:param success:^(id responseObject) {
         NSDictionary *data = responseObject[@"Data"];
@@ -235,6 +303,39 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
 }
 
 
+- (void)setDefaultAccountAreaWithRegionDic:(NSDictionary *)regionDic {
+    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"1"]) { //国内
+        
+        self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",regionDic[@"CountryCode"]?:@"86"];
+        self.phoneAreaLabel2.text = [NSString stringWithFormat:@"(+%@)",regionDic[@"CountryCode"]?:@"86"];
+        NSString *regionText = NSLocalizedString(@"china_main_land", @"中国大陆");
+        
+        if (LanguageIsEnglish) {
+            regionText = regionDic[@"TitleEN"]?:NSLocalizedString(@"china_main_land", @"中国大陆");
+        }else {
+            regionText = regionDic[@"Title"]?:NSLocalizedString(@"china_main_land", @"中国大陆");
+        }
+        
+        [self.areaCodeBtn setTitle:regionText forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitle:regionText forState:UIControlStateNormal];
+        
+    }else if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) { //美东
+        self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",regionDic[@"CountryCode"]?:@"1"];
+        self.phoneAreaLabel2.text = [NSString stringWithFormat:@"(+%@)",regionDic[@"CountryCode"]?:@"1"];
+        NSString *regionText = NSLocalizedString(@"country_usa", @"美国");
+        
+        if (LanguageIsEnglish) {
+            regionText = regionDic[@"TitleEN"]?:NSLocalizedString(@"country_usa", @"美国");
+        }else {
+            regionText = regionDic[@"Title"]?:NSLocalizedString(@"country_usa", @"美国");
+        }
+        [self.areaCodeBtn setTitle:regionText forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitle:regionText forState:UIControlStateNormal];
+    }
+    
+    
+}
+
 #pragma mark - getter
 
 - (UIScrollView *)scrollView{
@@ -263,12 +364,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:@"" forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         //    self.areaCodeBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 13, 0, 13);
         [self.areaCodeBtn addTarget:self action:@selector(selectAreaCode) forControlEvents:UIControlEventTouchUpInside];
+        self.areaCodeBtn.enabled = NO;
         [_contentView addSubview:self.areaCodeBtn];
         [self.areaCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(contryLabel);
@@ -277,7 +379,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel = [[UILabel alloc]init];
-        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+        [self.phoneAreaLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:self.phoneAreaLabel];
         [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
@@ -286,7 +388,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         UIImageView *imgV = [UIImageView new];
-        imgV.image = [UIImage imageNamed:@"mineArrow"];
+//        imgV.image = [UIImage imageNamed:@"mineArrow"];
         [_contentView addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(-kLeftRightPadding);
@@ -306,6 +408,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         UIButton *chooseContryAreaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [chooseContryAreaBtn addTarget:self action:@selector(selectAreaCode) forControlEvents:UIControlEventTouchUpInside];
+        chooseContryAreaBtn.enabled = NO;
         [_contentView addSubview:chooseContryAreaBtn];
         [chooseContryAreaBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.left.mas_equalTo(0);
@@ -371,12 +474,13 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        [self.areaCodeBtn2 setTitle:@"" forState:UIControlStateNormal];
         [self.areaCodeBtn2 setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
         //    self.areaCodeBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 13, 0, 13);
         [self.areaCodeBtn2 addTarget:self action:@selector(selectAreaCode) forControlEvents:UIControlEventTouchUpInside];
+        self.areaCodeBtn2.enabled = NO;
         [_contentView2 addSubview:self.areaCodeBtn2];
         [self.areaCodeBtn2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(contryLabel);
@@ -385,7 +489,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel2 = [[UILabel alloc]init];
-        [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+        [self.phoneAreaLabel2 setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:self.phoneAreaLabel2];
         [self.phoneAreaLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn2.mas_right).offset(5);
@@ -394,7 +498,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         }];
         
         UIImageView *imgV = [UIImageView new];
-        imgV.image = [UIImage imageNamed:@"mineArrow"];
+//        imgV.image = [UIImage imageNamed:@"mineArrow"];
         [_contentView2 addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(-kLeftRightPadding);
@@ -414,6 +518,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
         
         UIButton *chooseContryAreaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [chooseContryAreaBtn addTarget:self action:@selector(selectAreaCode) forControlEvents:UIControlEventTouchUpInside];
+        chooseContryAreaBtn.enabled = NO;
         [_contentView2 addSubview:chooseContryAreaBtn];
         [chooseContryAreaBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.left.mas_equalTo(0);
