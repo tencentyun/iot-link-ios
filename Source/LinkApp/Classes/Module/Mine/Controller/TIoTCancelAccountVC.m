@@ -14,6 +14,7 @@
 #import "TIoTMainVC.h"
 @import TrueTime;
 #import "TIoTAppDelegate.h"
+#import "TIoTOpensourceLicenseViewController.h"
 
 @interface TIoTCancelAccountVC ()
 @property (nonatomic, strong) UILabel   *cancelTitle;
@@ -280,10 +281,20 @@
 }
 
 - (void)cancelProtocolClick {
-    TIoTWebVC *vc = [TIoTWebVC new];
-    vc.title = @"腾讯连连账号注销协议";
-    vc.urlPath = CancelAccountURL;
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    if (LanguageIsEnglish) {
+        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+        vc.title = NSLocalizedString(@"tencentll_account_logout_agreement2", @"腾讯连连账号注销协议");
+        vc.urlPath = TIoTAPPConfig.logoffAccountEnglisthString;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else {
+        TIoTWebVC *vc = [TIoTWebVC new];
+        vc.title = NSLocalizedString(@"tencentll_account_logout_agreement2", @"腾讯连连账号注销协议");//@"腾讯连连账号注销协议";
+        vc.urlPath = CancelAccountURL;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    
 }
 
 - (void)cancelAccountClick {

@@ -89,8 +89,13 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         
         TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
         vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
-        vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+        if (LanguageIsEnglish) {
+            vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+        }else {
+            vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
+        }
         [self.navigationController pushViewController:vc animated:YES];
+        
     };
 }
 

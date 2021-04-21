@@ -91,6 +91,21 @@
     }else if ([URL hasPrefix:TIoTAPPConfig.serviceAgreementEnglishString]) {
         // 服务协议(英文)
         return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.logoffAccountEnglisthString]) {
+        //英文-注销协议 （注销协议不分地区，根据系统语言切换中英文）
+        return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.userProtocolUSChineseString]) {
+        //美国地区-用户协议中文
+        return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.userPrivacyPolicyUSChineseString]) {
+        //美国地区-隐私政策中文
+        return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.userPrivacyPolicyChEnglishString]) {
+        //中国区-隐私政策英文
+        return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.userProtocolChEnglishString]) {
+        //中国区-用户协议英文
+        return YES;
     }
     return NO;
 }
