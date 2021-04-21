@@ -16,6 +16,8 @@
 @property (nonatomic, strong) UILabel *passTipLabel;
 @property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic, strong) UILabel *phoneOrEmailLabel;
+@property (nonatomic, strong) UIButton *passwordButton;
+@property (nonatomic, strong) UIButton *passwordConfirmButton;
 @end
 
 @implementation TIoTBindAccountView
@@ -136,11 +138,11 @@
         make.top.equalTo(passwordLabel.mas_top);
     }];
     
-    UIButton *passwordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [passwordButton addTarget:self action:@selector(changePasswordTextShow:) forControlEvents:UIControlEventTouchUpInside];
-    [passwordButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
-    [self.contentView addSubview:passwordButton];
-    [passwordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.passwordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.passwordButton addTarget:self action:@selector(changePasswordTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [self.passwordButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.contentView addSubview:self.passwordButton];
+    [self.passwordButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kPassWordBtnWidth);
         make.centerY.equalTo(self.passwordTF);
         make.trailing.equalTo(self.contentView.mas_trailing);
@@ -182,11 +184,11 @@
         make.top.equalTo(confirmPasswordLabel.mas_top);
     }];
     
-    UIButton *passwordConfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [passwordConfirmButton addTarget:self action:@selector(changePasswordConfirmTextShow:) forControlEvents:UIControlEventTouchUpInside];
-    [passwordConfirmButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
-    [self.contentView addSubview:passwordConfirmButton];
-    [passwordConfirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.passwordConfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.passwordConfirmButton addTarget:self action:@selector(changePasswordConfirmTextShow:) forControlEvents:UIControlEventTouchUpInside];
+    [self.passwordConfirmButton setImage:[UIImage imageNamed:@"password_hide"] forState:UIControlStateNormal];
+    [self.contentView addSubview:self.passwordConfirmButton];
+    [self.passwordConfirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kPassWordBtnWidth);
         make.centerY.equalTo(self.passwordConfirmTF);
         make.trailing.equalTo(self.contentView.mas_trailing);
@@ -231,6 +233,8 @@
         self.passwordConfirmTF.hidden = YES;
         confirmPasswordLabel.hidden = YES;
         passwordLabel.hidden = YES;
+        self.passwordButton.hidden = YES;
+        self.passwordConfirmButton.hidden = YES;
         [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(line2.mas_bottom).offset(24);
         }];
@@ -244,6 +248,8 @@
         self.passwordConfirmTF.hidden = NO;
         confirmPasswordLabel.hidden = NO;
         passwordLabel.hidden = NO;
+        self.passwordButton.hidden = NO;
+        self.passwordConfirmButton.hidden = NO;
         [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(line4.mas_bottom).offset(24);
         }];
