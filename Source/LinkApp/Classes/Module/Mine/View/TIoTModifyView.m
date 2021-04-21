@@ -90,7 +90,7 @@
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.top.equalTo(verificationlabel.mas_top);
         make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
-        make.width.mas_equalTo(100);
+//        make.width.mas_equalTo(100);
     }];
     
     [self.contentView addSubview:self.verificationCodeTF];
