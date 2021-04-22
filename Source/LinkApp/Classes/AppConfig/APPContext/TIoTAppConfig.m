@@ -25,7 +25,9 @@
     NSString *localPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"app-config.json"];
     
     NSData *data = [NSData dataWithContentsOfFile:localPath];
-
+    
+    NSAssert(localPath != nil, @">>>>>配置文件解析失败!!!>>>>>");
+    
     if (!data) {
         return nil;
     }
