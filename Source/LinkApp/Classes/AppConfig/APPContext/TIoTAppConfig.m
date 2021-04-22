@@ -25,8 +25,12 @@
     NSString *localPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"app-config.json"];
     
     NSData *data = [NSData dataWithContentsOfFile:localPath];
-
+    
     if (!data) {
+        if ([UIApplication sharedApplication].delegate.window) {
+            [MBProgressHUD showError:NSLocalizedString(@"configFile_fail", @"配置文件解析失败!") toView:[UIApplication sharedApplication].delegate.window];
+        }
+        NSLog(@">>>>>配置文件解析失败!!!>>>>>");
         return nil;
     }
     

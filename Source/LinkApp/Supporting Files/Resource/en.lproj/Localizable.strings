@@ -908,3 +908,6 @@ If the problem still persists, we recommend you remove the device and add it aga
 "delete_acccount_year" = "Y";
 "delete_acccount_month" = "M";
 "delete_acccount_day" = "D";
+
+//v1.5.0
+"configFile_fail" = "配置文件解析失败!";
