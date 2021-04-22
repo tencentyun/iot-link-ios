@@ -90,6 +90,8 @@
     // 4.显示窗口
     [self.window makeKeyAndVisible];
     
+    if (!model) [MBProgressHUD showError:NSLocalizedString(@"configFile_fail", @"配置文件解析失败!") toView:[UIApplication sharedApplication].delegate.window];
+    
     return YES;
 }
 

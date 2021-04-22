@@ -899,3 +899,6 @@
 "delete_acccount_year" = "年";
 "delete_acccount_month" = "月";
 "delete_acccount_day" = "日";
+
+//v1.5.0
+"configFile_fail" = "配置文件解析失败!";
