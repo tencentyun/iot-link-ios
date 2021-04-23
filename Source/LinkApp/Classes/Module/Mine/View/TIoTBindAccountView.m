@@ -420,7 +420,7 @@
                 self.tipLabel.hidden = YES;
             }else{ //手机号不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
+                self.tipLabel.text = @"";//NSLocalizedString(@"phoneNumber_error", "号码错误");
             }
             
         }else { //邮箱改密码
@@ -429,7 +429,7 @@
                 self.tipLabel.hidden = YES;
             }else{ //邮箱合格不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
+                self.tipLabel.text = @"";NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
             }
         }
         
