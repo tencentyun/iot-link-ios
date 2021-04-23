@@ -6,7 +6,7 @@
 
 * 库git地址：
   
-   https://github.com/tonychanchen/TIoTThridSDK/tree/master/TIoTThridSDK/XP2P-iOS
+   https://github.com/tencentyun/iot-thirdparty-ios/tree/master/Source/XP2P-iOS
 
 * 工程如何引用： 
  
@@ -216,4 +216,4 @@
 
 ### Video SDK接口参数说明
 
-*  [各接口参数说明指引](https://github.com/tonychanchen/TIoTThridSDK/blob/master/TIoTThridSDK/XP2P-iOS/Classes/AppWrapper.h)
+*  [各接口参数说明指引](https://github.com/tencentyun/iot-thirdparty-ios/blob/master/Source/XP2P-iOS/Classes/AppWrapper.h)

@@ -109,7 +109,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.14.0)
+  - Protobuf (3.15.8)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -128,17 +128,14 @@ PODS:
     - MBProgressHUD (= 1.1.0)
   - TIoTLinkKit/LinkVideo (1.0.0):
     - TIoTLinkKit/LinkSDK
-    - TIoTThridSDK/Faac-iOS
-    - TIoTThridSDK/IJKPlayer-iOS
-    - TIoTThridSDK/XP2P-iOS
-  - TIoTThridSDK (1.0.6-beta.202104020847):
-    - TIoTThridSDK/Default (= 1.0.6-beta.202104020847)
-  - TIoTThridSDK/Default (1.0.6-beta.202104020847)
-  - TIoTThridSDK/Faac-iOS (1.0.6-beta.202104020847)
-  - TIoTThridSDK/IJKPlayer-iOS (1.0.6-beta.202104020847)
-  - TIoTThridSDK/TPNS-iOS (1.0.6-beta.202104020847)
-  - TIoTThridSDK/WechatOpenSDK_NoPay (1.0.6-beta.202104020847)
-  - TIoTThridSDK/XP2P-iOS (1.0.6-beta.202104020847)
+    - TIoTLinkThirdPartyKit/Faac-iOS
+    - TIoTLinkThirdPartyKit/IJKPlayer-iOS
+    - TIoTLinkThirdPartyKit/XP2P-iOS
+  - TIoTLinkThirdPartyKit/Faac-iOS (1.0.0)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (1.0.0)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (1.0.0)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (1.0.0)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (1.0.0)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -162,9 +159,8 @@ DEPENDENCIES:
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
   - TIoTLinkKit/LinkVideo (from `./`)
-  - TIoTThridSDK (~> 1.0.6-beta.1)
-  - TIoTThridSDK/TPNS-iOS (~> 1.0.6-beta.1)
-  - TIoTThridSDK/WechatOpenSDK_NoPay (~> 1.0.6-beta.1)
+  - TIoTLinkThirdPartyKit/TPNS-iOS
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
   - YYModel (= 1.0.4)
@@ -201,7 +197,7 @@ SPEC REPOS:
     - SDWebImage
     - SocketRocket
     - Tencent-MapSDK
-    - TIoTThridSDK
+    - TIoTLinkThirdPartyKit
     - TrueTime
     - TXLiteAVSDK_TRTC
     - TZImagePickerController
@@ -236,19 +232,19 @@ SPEC CHECKSUMS:
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  Protobuf: adb85cd18a15bd1a777c158af9fd6e612a0e6d69
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 8d8ce502e94c41a5c7f9f2ea43e82c9d1483810e
-  TIoTThridSDK: 36ef8ef919db390064c85e8b0ac77ff71c905dce
+  TIoTLinkKit: 8cc25f98274f71c62429d483454f222f44c00d6e
+  TIoTLinkThirdPartyKit: 94b68755af0abf17541f85d7ede23400d2484ca8
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: e1b41adf9d335798ba6b212d045fdbdb28ed999c
+PODFILE CHECKSUM: eb9dbc70905ae553cf552ed3757ab6e4d8b6efee
 
 COCOAPODS: 1.9.3
