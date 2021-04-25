@@ -520,10 +520,12 @@ static CGFloat kHeightCell = 48+10;
     if (self.countdownTimerPhone) {
         [self.countdownTimerPhone closeTimer];
         [self.countdownTimerPhone clearObserver];
+        [self.contentView.passwordErrorTipView removeFromSuperview];
     }
     if (self.countdownTimerEmail) {
         [self.countdownTimerEmail closeTimer];
         [self.countdownTimerEmail clearObserver];
+        [self.contentView2.passwordErrorTipView removeFromSuperview];
     }
 }
 

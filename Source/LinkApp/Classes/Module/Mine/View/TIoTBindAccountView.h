@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TIoTPasswordTipView.h"
 typedef NS_ENUM(NSInteger, BindAccountType) {
     BindAccountPhoneType,
     BindAccountEmailType
@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITextField   *passwordTF;
 @property (nonatomic, strong) UITextField   *passwordConfirmTF;
 @property (nonatomic, strong) UIButton      *confirmButton;
+@property (nonatomic, strong) TIoTPasswordTipView *passwordErrorTipView;
 
 /**
   初始化对象时候，枚举必须要赋值

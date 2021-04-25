@@ -362,6 +362,7 @@
 - (void)dealloc {
     [self.countdownTimer closeTimer];
     [self.countdownTimer clearObserver];
+    [self.bindAccountView.passwordErrorTipView removeFromSuperview];
 }
 
 @end

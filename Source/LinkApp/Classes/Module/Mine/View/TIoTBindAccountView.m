@@ -254,6 +254,23 @@
             make.top.equalTo(line4.mas_bottom).offset(24);
         }];
     }
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:self.passwordErrorTipView];
+    [self.passwordErrorTipView mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.left.right.equalTo([UIApplication sharedApplication].delegate.window);
+        if (@available(iOS 11.0, *)) {
+            if ([TIoTUIProxy shareUIProxy].iPhoneX) {
+                make.top.equalTo([UIApplication sharedApplication].delegate.window.mas_safeAreaLayoutGuideTop).offset([TIoTUIProxy shareUIProxy].navigationBarHeight);
+            }else {
+                make.top.equalTo([UIApplication sharedApplication].delegate.window.mas_top).offset(64);
+            }
+        }else {
+            make.top.equalTo([UIApplication sharedApplication].delegate.window.mas_top).offset(64);
+        }
+        make.height.mas_equalTo(40);
+    }];
+    self.passwordErrorTipView.hidden = YES;
 
 }
 
@@ -399,6 +416,13 @@
     return _confirmButton;
 }
 
+- (TIoTPasswordTipView *)passwordErrorTipView {
+    if (!_passwordErrorTipView) {
+        _passwordErrorTipView = [[TIoTPasswordTipView alloc]init];
+    }
+    return _passwordErrorTipView;
+}
+
 - (void)confirmClickButton {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountConfirmClickButtonWithAccountType:)]) {
         [self.delegate bindAccountConfirmClickButtonWithAccountType:self.bindAccoutType];
@@ -429,7 +453,7 @@
                 self.tipLabel.hidden = YES;
             }else{ //邮箱合格不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = @"";NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
+                self.tipLabel.text = @"";//NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
             }
         }
         
@@ -438,9 +462,11 @@
     if (textField == self.passwordTF) {
         if ([NSString judgePassWordLegal:self.passwordTF.text]) {
             self.passTipLabel.hidden = YES;
+            self.passwordErrorTipView.hidden = YES;
         }else {
             self.passTipLabel.hidden = NO;
-            self.passTipLabel.text = NSLocalizedString(@"password_style", @"密码支持8-16位，必须包含字母和数字");
+            self.passTipLabel.text = @"";//NSLocalizedString(@"password_style", @"密码支持8-16位，必须包含字母和数字");
+            self.passwordErrorTipView.hidden = NO;
         }
     }
 }

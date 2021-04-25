@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TIoTPasswordTipView.h"
 @protocol TIoTModifyPasswordViewDelegate  <NSObject>
 @optional
 - (void)modifyPasswordSendCode;
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITextField   *passwordConfirmTF;
 @property (nonatomic, strong) UIButton      *confirmButton;
 @property (nonatomic, strong) UILabel       *phoneOrEmailLabel;
-
+@property (nonatomic, strong) TIoTPasswordTipView *passwordErrorTipView;
 @property (nonatomic, weak) id<TIoTModifyPasswordViewDelegate>delegate;
 
 @end
