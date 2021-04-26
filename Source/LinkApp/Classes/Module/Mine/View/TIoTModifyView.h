@@ -16,12 +16,14 @@ typedef NS_ENUM(NSInteger, ModifyAccountType) {
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol TIoTModifyAccountViewDelegate <NSObject>
-
+@optional
 - (void)modifyAccountSendCodeWithAccountType:(ModifyAccountType)accountType;
 
 - (void)modifyAccountChangedTextFieldWithAccountType:(ModifyAccountType)accountType;
 
 - (void)modifyAccountConfirmClickButtonWithAccountType:(ModifyAccountType)accountType;
+
+- (void)modifyAccountConentIncreaseInterval:(CGFloat)interval accountType:(ModifyAccountType)accountType;
 
 @end
 

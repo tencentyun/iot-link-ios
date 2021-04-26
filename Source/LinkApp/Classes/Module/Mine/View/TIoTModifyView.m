@@ -9,10 +9,13 @@
 #import "TIoTModifyView.h"
 #import "UILabel+TIoTExtension.h"
 
+static CGFloat kSpace = 0;
 @interface TIoTModifyView ()
 @property (nonatomic, strong) UIView        *contentView;
 @property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic, strong) UILabel *phoneOrEmailLabel;
+@property (nonatomic, strong) UIView *line1;
+@property (nonatomic, strong) UILabel *verificationlabel;
 @end
 
 @implementation TIoTModifyView
@@ -28,7 +31,7 @@
 - (void)setUpUI {
     self.backgroundColor = [UIColor whiteColor];
     
-    CGFloat kSpace = 15;
+    
     CGFloat kPadding = 16;
     CGFloat kHeight = 48;
     CGFloat kWidthTitle = 80;
@@ -44,9 +47,9 @@
     [self.phoneOrEmailLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.phoneOrEmailLabel];
     [self.phoneOrEmailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(kSpace * kScreenAllHeightScale);
+        make.top.equalTo(self.contentView.mas_top).offset(kSpace);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
-        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        make.height.mas_equalTo(kHeight);
         make.width.mas_equalTo(kWidthTitle);
     }];
     
@@ -55,7 +58,7 @@
         make.leading.equalTo(self.phoneOrEmailLabel.mas_trailing);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.centerY.equalTo(self.phoneOrEmailLabel);
-        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        make.height.mas_equalTo(kHeight);
     }];
     
     [self.contentView addSubview:self.tipLabel];
@@ -64,48 +67,48 @@
         make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
     }];
     
-    UIView *line1 = [[UIView alloc]init];
-    line1.backgroundColor = kLineColor;
-    [self.contentView addSubview:line1];
-    [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.line1 = [[UIView alloc]init];
+    self.line1.backgroundColor = kLineColor;
+    [self.contentView addSubview:self.line1];
+    [self.line1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.phoneOrEmailLabel.mas_leading);
         make.trailing.equalTo(self.contentView.mas_trailing);
         make.height.mas_equalTo(1);
         make.top.equalTo(self.phoneOrEmailTF.mas_bottom);
     }];
     
-    UILabel *verificationlabel = [[UILabel alloc]init];
-    [verificationlabel setLabelFormateTitle:NSLocalizedString(@"verification_code", @"验证码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
-    [self.contentView addSubview:verificationlabel];
-    [verificationlabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line1.mas_bottom).offset(kSpace*kScreenAllHeightScale);
+    self.verificationlabel = [[UILabel alloc]init];
+    [self.verificationlabel setLabelFormateTitle:NSLocalizedString(@"verification_code", @"验证码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.contentView addSubview:self.verificationlabel];
+    [self.verificationlabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.line1.mas_bottom).offset(kSpace);
        make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.width.mas_equalTo(kWidthTitle);
-       make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+       make.height.mas_equalTo(kHeight);
         
     }];
     
     [self.contentView addSubview:self.verificationButton];
     [self.verificationButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
-        make.top.equalTo(verificationlabel.mas_top);
-        make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+        make.top.equalTo(self.verificationlabel.mas_top);
+        make.height.mas_equalTo(kHeight);
     }];
     
     [self.contentView addSubview:self.verificationCodeTF];
     [self.verificationCodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
-       make.top.equalTo(verificationlabel.mas_top);
+       make.top.equalTo(self.verificationlabel.mas_top);
        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
 //       make.trailing.equalTo(self.verificationButton.mas_leading);
         make.width.mas_equalTo(140);
-       make.height.mas_equalTo(kHeight * kScreenAllHeightScale);
+       make.height.mas_equalTo(kHeight);
     }];
     
     UIView *line2 = [[UIView alloc]init];
     line2.backgroundColor = kLineColor;
     [self.contentView addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(line1.mas_leading);
+        make.leading.equalTo(self.line1.mas_leading);
         make.trailing.equalTo(self.contentView.mas_trailing);
         make.height.mas_equalTo(1);
         make.top.equalTo(self.verificationCodeTF.mas_bottom);
@@ -241,6 +244,8 @@
         [self.delegate modifyAccountChangedTextFieldWithAccountType:self.modifyAccoutType];
     }
     
+    CGFloat intervalSpace = 18;
+    
     //优化提示文案
     if (textField == self.phoneOrEmailTF) {
         
@@ -248,22 +253,34 @@
             
             if ([NSString judgePhoneNumberLegal:self.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) { //手机号合格
                 self.tipLabel.hidden = YES;
+                intervalSpace = 0;
             }else{ //手机号不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = @"";//NSLocalizedString(@"phoneNumber_error", "号码错误");
+                self.tipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
+                intervalSpace = 18;
             }
             
         }else { //邮箱改密码
             
             if ([NSString judgeEmailLegal:self.phoneOrEmailTF.text]) { //邮箱合格
                 self.tipLabel.hidden = YES;
+                intervalSpace = 0;
             }else{ //邮箱合格不合格
                 self.tipLabel.hidden = NO;
-                self.tipLabel.text = @"";//NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
+                self.tipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
+                intervalSpace = 18;
             }
         }
         
+        [self.verificationlabel mas_updateConstraints:^(MASConstraintMaker *make) {
+           make.top.equalTo(self.line1.mas_bottom).offset(kSpace+intervalSpace);
+        }];
     }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(modifyAccountConentIncreaseInterval:accountType:)]) {
+        [self.delegate modifyAccountConentIncreaseInterval:intervalSpace accountType:self.modifyAccoutType];
+    }
+
 }
 
 - (void)sendCode:(UIButton *)button {

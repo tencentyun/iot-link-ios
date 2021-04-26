@@ -14,12 +14,14 @@ typedef NS_ENUM(NSInteger, BindAccountType) {
 };
 
 @protocol TIoTBindAccountViewDelegate <NSObject>
-
+@optional
 - (void)bindAccountSendCodeWithAccountType:(BindAccountType)accountType;
 
 - (void)bindAccountChangedTextFieldWithAccountType:(BindAccountType)accountType;
 
 - (void)bindAccountConfirmClickButtonWithAccountType:(BindAccountType)accountType;
+
+- (void)bindAccountConentIncreaseInterval:(CGFloat)interval accountType:(BindAccountType)accountType;
 
 @end
 
