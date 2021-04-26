@@ -338,7 +338,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         self.phoneTipLabel.hidden = YES;
     }else{ //手机号不合格
         self.phoneTipLabel.hidden = NO;
-        self.phoneTipLabel.text = @"";//NSLocalizedString(@"phoneNumber_error", "号码错误");
+        self.phoneTipLabel.text = NSLocalizedString(@"phoneNumber_error", "号码错误");
     }
 }
 
@@ -347,7 +347,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         self.emailTipLabel.hidden = YES;
     }else{ //邮箱合格不合格
         self.emailTipLabel.hidden = NO;
-        self.emailTipLabel.text = @"";//NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
+        self.emailTipLabel.text = NSLocalizedString(@"email_invalid", @"邮箱地址格式不正确");
     }
 }
 
