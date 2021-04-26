@@ -18,6 +18,8 @@
 #import "UILabel+TIoTExtension.h"
 
 static CGFloat kHeightCell = 48+10;
+static CGFloat kScorllViewHeight = 4*48+4;
+
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -130,7 +132,7 @@ static CGFloat kHeightCell = 48+10;
         make.left.right.equalTo(self.view);
         make.top.equalTo(self.topView.mas_bottom);
         
-        make.height.mas_equalTo(256 * kScreenAllHeightScale);
+        make.height.mas_equalTo(kScorllViewHeight);
     }];
     
     self.bottomView = [[UIView alloc]init];
@@ -463,6 +465,25 @@ static CGFloat kHeightCell = 48+10;
             self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.comfirmModifyButton.enabled = NO;
         }
+    }
+}
+
+- (void)modifyPasswordConentIncreaseInterval:(CGFloat)interval {
+    
+    if (self.modifyStyle == YES) {
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kScorllViewHeight+interval);
+        }];
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kScorllViewHeight+interval);
+        }];
+    }else {
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kScorllViewHeight+interval);
+        }];
+        [self.contentView2 mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kScorllViewHeight+interval);
+        }];
     }
 }
 
