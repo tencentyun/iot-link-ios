@@ -18,6 +18,8 @@
 #import "UILabel+TIoTExtension.h"
 
 static CGFloat kHeightCell = 48+10;
+static CGFloat kScorllViewHeight = 4*48+4;
+
 @interface TIoTModifyPasswordVC ()<TIoTModifyPasswordViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -37,6 +39,9 @@ static CGFloat kHeightCell = 48+10;
 
 @property (nonatomic, strong) TIoTCountdownTimer *countdownTimerPhone;
 @property (nonatomic, strong) TIoTCountdownTimer *countdownTimerEmail;
+
+@property (nonatomic, assign) CGFloat phoneScrollHeight;
+@property (nonatomic, assign) CGFloat enmailScrollHeight;
 @end
 
 @implementation TIoTModifyPasswordVC
@@ -54,6 +59,9 @@ static CGFloat kHeightCell = 48+10;
     self.conturyCode = @"86";
     self.conturyCode2 = @"86";
     self.modifyStyle = YES;
+    
+    self.phoneScrollHeight = kScorllViewHeight;
+    self.enmailScrollHeight = kScorllViewHeight;
     
     CGFloat kLeftRightPadding = 16;
     CGFloat kWidthTitle = 80;
@@ -130,7 +138,7 @@ static CGFloat kHeightCell = 48+10;
         make.left.right.equalTo(self.view);
         make.top.equalTo(self.topView.mas_bottom);
         
-        make.height.mas_equalTo(256 * kScreenAllHeightScale);
+        make.height.mas_equalTo(kScorllViewHeight);
     }];
     
     self.bottomView = [[UIView alloc]init];
@@ -307,6 +315,11 @@ static CGFloat kHeightCell = 48+10;
             }else {
                 make.top.equalTo(self.view.mas_top).offset(64 + 16 + kHeightCell);
             }
+            make.height.mas_equalTo(self.phoneScrollHeight);
+        }];
+        
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.phoneScrollHeight);
         }];
         
     }else {
@@ -333,7 +346,11 @@ static CGFloat kHeightCell = 48+10;
             }else {
                 make.top.equalTo(self.view.mas_top).offset(64 + 16 * kScreenAllHeightScale);
             }
-            
+            make.height.mas_equalTo(self.enmailScrollHeight);
+        }];
+        
+        [self.contentView2 mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.enmailScrollHeight);
         }];
     }
 }
@@ -463,6 +480,30 @@ static CGFloat kHeightCell = 48+10;
             self.comfirmModifyButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
             self.comfirmModifyButton.enabled = NO;
         }
+    }
+}
+
+- (void)modifyPasswordConentIncreaseInterval:(CGFloat)interval {
+    
+    if (self.modifyStyle == YES) {
+        self.phoneScrollHeight = kScorllViewHeight+interval;
+        
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.phoneScrollHeight);
+        }];
+        [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.phoneScrollHeight);
+        }];
+        
+    }else {
+        self.enmailScrollHeight = kScorllViewHeight+interval;
+        
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.enmailScrollHeight);
+        }];
+        [self.contentView2 mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.enmailScrollHeight);
+        }];
     }
 }
 

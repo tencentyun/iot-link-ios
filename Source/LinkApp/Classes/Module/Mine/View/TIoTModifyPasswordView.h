@@ -16,6 +16,7 @@
 
 - (void)modifyPasswordConfirmClickButton;
 
+- (void)modifyPasswordConentIncreaseInterval:(CGFloat)interval;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
