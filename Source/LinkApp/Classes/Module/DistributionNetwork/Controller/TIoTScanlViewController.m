@@ -255,7 +255,7 @@
                                                                       @"ConnId":qrData.connId,
                                                                       @"Signature":qrData.signature,
                                                                       @"SignMethod":qrData.signMethod,
-                                                                      @"BindType":@"bluetooth_sign",
+                                                                      @"BindType":@"other_sign",
                                                                       @"FamilyId":[TIoTCoreUserManage shared].familyId,
                                                                       @"RoomId":[TIoTCoreUserManage shared].currentRoomId,
     } success:^(id responseObject) {
