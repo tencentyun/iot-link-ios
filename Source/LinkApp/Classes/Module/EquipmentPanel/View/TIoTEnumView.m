@@ -20,7 +20,7 @@ static NSString *itemId = @"gggddd";
 
 @property (nonatomic,strong) NSArray *dataArray;
 @property (nonatomic,copy) NSString *currentValue;
-@property (nonatomic,weak) NSIndexPath *currentIndexPath;
+@property (nonatomic,strong) NSIndexPath *currentIndexPath;
 @end
 
 @implementation TIoTEnumView
@@ -116,7 +116,9 @@ static NSString *itemId = @"gggddd";
 {
     if (![self.currentValue isEqualToString:self.dataArray[indexPath.row][@"value"]]) {
         self.currentValue = self.dataArray[indexPath.row][@"value"];
-        [collectionView reloadItemsAtIndexPaths:@[self.currentIndexPath,indexPath]];
+        if (self.currentIndexPath) {
+            [collectionView reloadItemsAtIndexPaths:@[self.currentIndexPath,indexPath]];
+        }
         if (self.update) {
             self.update(@{self.info[@"id"]:@([self.currentValue integerValue])});
         }
