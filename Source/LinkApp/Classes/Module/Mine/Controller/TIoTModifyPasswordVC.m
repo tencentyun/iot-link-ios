@@ -443,13 +443,13 @@ static CGFloat kScorllViewHeight = 4*48+4;
 - (void)checkPasswordWithPassword:(NSString *)password confimPassword:(NSString *)confimPassword {
     
     if (![password isEqualToString:confimPassword]) {
-        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
+//        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:password];
     if (!isPass) {
-        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
+//        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
 }
@@ -461,7 +461,8 @@ static CGFloat kScorllViewHeight = 4*48+4;
     //需要验证手机号、验证码、密码
 
     if (self.modifyStyle == YES) {
-        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8)) {
+        if ([NSString judgePhoneNumberLegal:self.contentView.phoneOrEmailTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && ![NSString isNullOrNilWithObject:self.contentView.verificationCodeTF.text] && self.contentView.verificationCodeTF.text.length == 6 && (self.contentView.passwordTF.text.length >= 8 && self.contentView.passwordConfirmTF.text.length >= 8) && ([NSString judgePassWordLegal:self.contentView.passwordTF.text]&&[NSString judgePassWordLegal:self.contentView.passwordConfirmTF.text]&&[self.contentView.passwordTF.text isEqualToString:self.contentView.passwordConfirmTF.text])) {
+            
             self.comfirmModifyButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.comfirmModifyButton.enabled = YES;
         }else {
@@ -472,7 +473,7 @@ static CGFloat kScorllViewHeight = 4*48+4;
         }
         
     }else {
-        if ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView2.verificationCodeTF.text] && self.contentView2.verificationCodeTF.text.length == 6 && (self.contentView2.passwordTF.text.length >= 8 && self.contentView2.passwordConfirmTF.text.length >= 8)) {
+        if ([NSString judgeEmailLegal:self.contentView2.phoneOrEmailTF.text] && ![NSString isNullOrNilWithObject:self.contentView2.verificationCodeTF.text] && self.contentView2.verificationCodeTF.text.length == 6 && (self.contentView2.passwordTF.text.length >= 8 && self.contentView2.passwordConfirmTF.text.length >= 8)&& ([NSString judgePassWordLegal:self.contentView2.passwordTF.text]&&[NSString judgePassWordLegal:self.contentView2.passwordConfirmTF.text]&&[self.contentView2.passwordTF.text isEqualToString:self.contentView2.passwordConfirmTF.text])) {
             self.comfirmModifyButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.comfirmModifyButton.enabled = YES;
         }else {

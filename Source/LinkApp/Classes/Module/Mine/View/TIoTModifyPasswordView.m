@@ -15,13 +15,17 @@ static CGFloat kSpace = 0;
 @property (nonatomic, strong) UIView        *contentView;
 @property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic, strong) UILabel *passTipLabel;
+@property (nonatomic, strong) UILabel *passConfirmTipLabel;
 
 @property (nonatomic, strong) UIView *line1;
 @property (nonatomic, strong) UILabel *verificationlabel;
 @property (nonatomic, strong) UIView *line3;
 @property (nonatomic, strong) UILabel *confirmPasswordLabel;
+@property (nonatomic, strong) UIView *line4;
+
 @property (nonatomic, assign) CGFloat kPhoneOrEmailFormatError;
 @property (nonatomic, assign) CGFloat kPasswordConfirmError;
+@property (nonatomic, assign) CGFloat kPassConfirmError;
 @end
 
 @implementation TIoTModifyPasswordView
@@ -40,6 +44,7 @@ static CGFloat kSpace = 0;
     
     self.kPhoneOrEmailFormatError = 0;
     self.kPasswordConfirmError = 0;
+    self.kPassConfirmError = 0;
     
     CGFloat kPadding = 16;
     CGFloat kHeight = 48;
@@ -198,19 +203,25 @@ static CGFloat kSpace = 0;
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
     }];
     
-    UIView *line4 = [[UIView alloc]init];
-    line4.backgroundColor = kLineColor;
-    [self.contentView addSubview:line4];
-    [line4 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.contentView.mas_leading).offset(kSpace);
+    self.line4 = [[UIView alloc]init];
+    self.line4.backgroundColor = kLineColor;
+    [self.contentView addSubview:self.line4];
+    [self.line4 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing);
         make.height.mas_equalTo(1);
         make.top.equalTo(self.passwordConfirmTF.mas_bottom);
     }];
     
+    [self.contentView addSubview:self.passConfirmTipLabel];
+    [self.passConfirmTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.line4.mas_bottom).offset(3);
+        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
+    }];
+    
     [self.contentView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line4.mas_bottom).offset(24);
+        make.top.equalTo(self.line4.mas_bottom).offset(24);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(40);
@@ -266,6 +277,18 @@ static CGFloat kSpace = 0;
         _passTipLabel.hidden = YES;
     }
     return _passTipLabel;
+}
+
+- (UILabel *)passConfirmTipLabel {
+    if (!_passConfirmTipLabel) {
+        _passConfirmTipLabel = [[UILabel alloc] init];
+        _passConfirmTipLabel.font = [UIFont wcPfRegularFontOfSize:12];
+        _passConfirmTipLabel.text = @"";
+        _passConfirmTipLabel.numberOfLines = 0;
+        _passConfirmTipLabel.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+        _passConfirmTipLabel.hidden = YES;
+    }
+    return _passConfirmTipLabel;
 }
 
 - (UIButton *)verificationButton {
@@ -383,6 +406,7 @@ static CGFloat kSpace = 0;
     }
     
     CGFloat intervalSpace = 18;
+    CGFloat intervalConfirmSpace = 22;
     
     //优化提示文案
     if (textField == self.phoneOrEmailTF) {
@@ -430,8 +454,23 @@ static CGFloat kSpace = 0;
         }];
     }
     
+    if (textField == self.passwordConfirmTF) {
+        if ([self.passwordTF.text isEqualToString:self.passwordConfirmTF.text] && [NSString judgePassWordLegal:self.passwordConfirmTF.text]) {
+            self.passConfirmTipLabel.hidden = YES;
+            self.kPassConfirmError = 0;
+        }else {
+            self.passConfirmTipLabel.hidden = NO;
+            self.kPassConfirmError = intervalConfirmSpace;
+            if (![self.passwordTF.text isEqualToString:self.passwordConfirmTF.text]) {
+                self.passConfirmTipLabel.text = NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致");
+            }else if (![NSString judgePassWordLegal:self.passwordConfirmTF.text]) {
+                self.passConfirmTipLabel.text = NSLocalizedString(@"password_irregularity", @"密码不合规");
+            }
+        }
+    }
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(modifyPasswordConentIncreaseInterval:)]) {
-        [self.delegate modifyPasswordConentIncreaseInterval:(self.kPhoneOrEmailFormatError + self.kPasswordConfirmError)];
+        [self.delegate modifyPasswordConentIncreaseInterval:(self.kPhoneOrEmailFormatError + self.kPasswordConfirmError + self.kPassConfirmError)];
     }
 }
 

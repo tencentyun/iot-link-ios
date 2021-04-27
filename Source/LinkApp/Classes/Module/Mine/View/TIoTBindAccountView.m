@@ -17,6 +17,7 @@ static CGFloat kSpace = 0;
 @property (nonatomic, strong) UILabel *passTipLabel;
 @property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic, strong) UILabel *phoneOrEmailLabel;
+@property (nonatomic, strong) UILabel *passConfirmTipLabel;
 @property (nonatomic, strong) UIButton *passwordButton;
 @property (nonatomic, strong) UIButton *passwordConfirmButton;
 
@@ -24,8 +25,11 @@ static CGFloat kSpace = 0;
 @property (nonatomic, strong) UILabel *verificationlabel;
 @property (nonatomic, strong) UIView *line3;
 @property (nonatomic, strong) UILabel *confirmPasswordLabel;
+@property (nonatomic, strong) UIView *line4;
+@property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, assign) CGFloat kPhoneOrEmailFormatError;
 @property (nonatomic, assign) CGFloat kPasswordConfirmError;
+@property (nonatomic, assign) CGFloat kPassConfirmError;
 @end
 
 @implementation TIoTBindAccountView
@@ -43,6 +47,7 @@ static CGFloat kSpace = 0;
     
     self.kPhoneOrEmailFormatError = 0;
     self.kPasswordConfirmError = 0;
+    self.kPassConfirmError = 0;
     
     CGFloat kPadding = 16;
     CGFloat kHeight = 48;
@@ -205,37 +210,44 @@ static CGFloat kSpace = 0;
     }];
 
     
-    UIView *line4 = [[UIView alloc]init];
-    line4.backgroundColor = kLineColor;
-    [self.contentView addSubview:line4];
-    [line4 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.contentView.mas_leading).offset(kSpace);
+    self.line4 = [[UIView alloc]init];
+    self.line4.backgroundColor = kLineColor;
+    [self.contentView addSubview:self.line4];
+    [self.line4 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing);
         make.height.mas_equalTo(1);
         make.top.equalTo(self.passwordConfirmTF.mas_bottom);
     }];
     
-    UIView *bottomView = [[UIView alloc]init];
-    bottomView.backgroundColor = [UIColor whiteColor];
-    [self.contentView addSubview:bottomView];
-    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.contentView);
-        make.bottom.equalTo(line4.mas_top);
+    [self.contentView addSubview:self.passConfirmTipLabel];
+    [self.passConfirmTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.line4.mas_bottom).offset(0.1);
+        make.leading.equalTo(self.phoneOrEmailTF.mas_leading);
+        make.height.mas_equalTo(18);
     }];
-    [self.contentView sendSubviewToBack:bottomView];
+    
+    self.bottomView = [[UIView alloc]init];
+    self.bottomView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.contentView);
+        make.bottom.equalTo(self.passConfirmTipLabel.mas_bottom);
+    }];
+    [self.contentView sendSubviewToBack:self.bottomView];
     
     
     [self.contentView addSubview:self.confirmButton];
     [self.confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(line4.mas_bottom).offset(24);
+        make.top.equalTo(self.line4.mas_bottom).offset(24);
         make.leading.equalTo(self.contentView.mas_leading).offset(kPadding);
         make.trailing.equalTo(self.contentView.mas_trailing).offset(-kPadding);
         make.height.mas_equalTo(40);
     }];
     
     if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"1"]) {
-        
-        [bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+        self.passConfirmTipLabel.hidden = YES;
+        [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(line2.mas_top);
         }];
         
@@ -249,9 +261,9 @@ static CGFloat kSpace = 0;
             make.top.equalTo(line2.mas_bottom).offset(24);
         }];
     }else {
-        
-        [bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(line4.mas_top);
+        self.passConfirmTipLabel.hidden = NO;
+        [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.passConfirmTipLabel.mas_bottom);
         }];
         
         self.passwordTF.hidden = NO;
@@ -261,7 +273,7 @@ static CGFloat kSpace = 0;
         self.passwordButton.hidden = NO;
         self.passwordConfirmButton.hidden = NO;
         [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(line4.mas_bottom).offset(24);
+            make.top.equalTo(self.bottomView.mas_bottom).offset(24);
         }];
     }
 
@@ -395,6 +407,18 @@ static CGFloat kSpace = 0;
     return _passTipLabel;
 }
 
+- (UILabel *)passConfirmTipLabel {
+    if (!_passConfirmTipLabel) {
+        _passConfirmTipLabel = [[UILabel alloc] init];
+        _passConfirmTipLabel.font = [UIFont wcPfRegularFontOfSize:12];
+        _passConfirmTipLabel.text = @"";
+        _passConfirmTipLabel.numberOfLines = 0;
+        _passConfirmTipLabel.textColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+        _passConfirmTipLabel.hidden = YES;
+    }
+    return _passConfirmTipLabel;
+}
+
 - (UIButton *)confirmButton {
     if (!_confirmButton) {
         _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -422,6 +446,7 @@ static CGFloat kSpace = 0;
     }
     
     CGFloat intervalSpace = 18;
+    CGFloat intervalConfirmSpace = 22;
     
     //优化提示文案
     if (textField == self.phoneOrEmailTF) {
@@ -469,8 +494,31 @@ static CGFloat kSpace = 0;
         }];
     }
     
+    if (textField == self.passwordConfirmTF) {
+        if ([self.passwordTF.text isEqualToString:self.passwordConfirmTF.text] && [NSString judgePassWordLegal:self.passwordConfirmTF.text]) {
+            self.passConfirmTipLabel.hidden = YES;
+            self.kPassConfirmError = 0;
+        }else {
+            self.passConfirmTipLabel.hidden = NO;
+            self.kPassConfirmError = intervalConfirmSpace;
+            if (![self.passwordTF.text isEqualToString:self.passwordConfirmTF.text]) {
+                self.passConfirmTipLabel.text = NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致");
+            }else if (![NSString judgePassWordLegal:self.passwordConfirmTF.text]) {
+                self.passConfirmTipLabel.text = NSLocalizedString(@"password_irregularity", @"密码不合规");
+            }
+        }
+        
+        [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.passConfirmTipLabel.mas_bottom);
+        }];
+        
+        [self.confirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.bottomView.mas_bottom).offset(24);
+        }];
+    }
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(bindAccountConentIncreaseInterval:accountType:)]) {
-        [self.delegate bindAccountConentIncreaseInterval:(self.kPhoneOrEmailFormatError + self.kPasswordConfirmError) accountType:self.bindAccoutType];
+        [self.delegate bindAccountConentIncreaseInterval:(self.kPhoneOrEmailFormatError + self.kPasswordConfirmError + self.kPassConfirmError) accountType:self.bindAccoutType];
     }
 }
 
