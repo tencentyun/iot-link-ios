@@ -245,7 +245,7 @@
             self.bindAccountView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.bindAccountView.confirmButton.enabled = YES;
             
-        }else if (self.bindAccountView.passwordTF.text.length >= 1 && self.bindAccountView.passwordConfirmTF.text.length >= 1) {
+        }else if (([NSString judgePassWordLegal:self.bindAccountView.passwordTF.text] && [NSString judgePassWordLegal:self.bindAccountView.passwordConfirmTF.text])&& ([self.bindAccountView.passwordTF.text isEqualToString:self.bindAccountView.passwordConfirmTF.text])) {
             
             self.bindAccountView.confirmButton.backgroundColor =[UIColor colorWithHexString:kIntelligentMainHexColor];
             self.bindAccountView.confirmButton.enabled = YES;
@@ -266,13 +266,13 @@
 - (void)bindAccountConfirmClickButtonWithAccountType:(BindAccountType)accountType {
     
     if (![self.bindAccountView.passwordTF.text isEqualToString:self.bindAccountView.passwordConfirmTF.text]) {
-        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
+//        [MBProgressHUD showMessage:NSLocalizedString(@"two_password_not_same", @"两次输入的密码不一致") icon:@"" toView:self.view];
         return;
     }
     
     BOOL isPass = [NSString judgePassWordLegal:self.bindAccountView.passwordTF.text];
     if (!isPass) {
-        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
+//        [MBProgressHUD showMessage:NSLocalizedString(@"password_irregularity", @"密码不合规") icon:@"" toView:self.view];
         return;
     }
     
