@@ -719,7 +719,11 @@
         //MARK: enum 、bool 列表选择值 ; int float 滑动选择值
         NSArray *propertiesArray = nil;
         if (self.isEdited == YES) {
-            propertiesArray = @[self.editedModel];
+            if (self.editedModel) {
+                propertiesArray = @[self.editedModel];
+            }else {
+                propertiesArray = @[];
+            }
         }else {
             propertiesArray = [NSArray arrayWithArray:self.templateModel.properties];
         }
