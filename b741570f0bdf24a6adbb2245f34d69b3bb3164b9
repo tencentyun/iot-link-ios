@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e32bef0e_0d74163a",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTEnumView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-27T09:04:23Z",
+      "side": 1,
+      "message": "self.currentIndexPath 逻辑待确认， crash场景尽可能明确原因后修改",
+      "revId": "b741570f0bdf24a6adbb2245f34d69b3bb3164b9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
