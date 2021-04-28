@@ -302,7 +302,7 @@ static CGFloat const kRightPadding = 16; //右边距
     [[TIoTRequestObject shared] post:AppLogoutUser Param:@{} success:^(id responseObject) {
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
-        self.view.window.rootViewController = nav;
+        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];

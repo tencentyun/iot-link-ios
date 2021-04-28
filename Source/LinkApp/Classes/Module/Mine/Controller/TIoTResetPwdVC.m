@@ -67,7 +67,7 @@
         [MBProgressHUD showSuccess:NSLocalizedString(@"modifiedSuccess_relogin", @"修改成功，请重新登录")];
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
-        self.view.window.rootViewController = nav;
+        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];

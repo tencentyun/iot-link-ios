@@ -952,7 +952,8 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
             [MBProgressHUD dismissInView:self.view];
         }];
     } else {
-        self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+//        self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+        [UIApplication sharedApplication].delegate.window.rootViewController = [[TIoTTabBarViewController alloc] init];
         [self judgeCancelAccountTip];
     }
 }

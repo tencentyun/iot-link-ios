@@ -396,7 +396,7 @@ static CGFloat kScorllViewHeight = 4*48+4;
     modifyAlertView.doneAction = ^(NSString * _Nonnull text) {
         [[TIoTAppEnvironment shareEnvironment] loginOut];
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
-        self.view.window.rootViewController = nav;
+        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     };
     [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
 }

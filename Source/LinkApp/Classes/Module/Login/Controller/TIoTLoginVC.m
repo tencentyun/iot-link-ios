@@ -604,7 +604,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
             [MBProgressHUD dismissInView:self.view];
         }];
     } else {
-        self.view.window.rootViewController = [[TIoTTabBarViewController alloc] init];
+        [UIApplication sharedApplication].delegate.window.rootViewController = [[TIoTTabBarViewController alloc] init];
     }
 }
 

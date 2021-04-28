@@ -320,7 +320,7 @@
             
             [[TIoTAppEnvironment shareEnvironment] loginOut];
             TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
-            self.view.window.rootViewController = nav;
+            [UIApplication sharedApplication].delegate.window.rootViewController = nav;
         };
         [modifyAlertView showInView:[[UIApplication sharedApplication] delegate].window];
         
