@@ -16,6 +16,24 @@
       "revId": "b741570f0bdf24a6adbb2245f34d69b3bb3164b9",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1030b1e7_6aa505c5",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTEnumView.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-28T11:15:41Z",
+      "side": 1,
+      "message": "好的,复现场景:设备面板详情页面，顶部的大按钮类型是enum，平台没有设值点击时，currentIndexPath有可能为空，会crash",
+      "parentUuid": "e32bef0e_0d74163a",
+      "revId": "b741570f0bdf24a6adbb2245f34d69b3bb3164b9",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
