@@ -82,7 +82,7 @@
 
 - (void)deleteDevice
 {
-    [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"]?:@"",@"ProductID":self.deviceDic[@"ProductId"]?:@"",@"DeviceName":self.deviceDic[@"DeviceName"]?:@""} success:^(id responseObject) {
         
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
