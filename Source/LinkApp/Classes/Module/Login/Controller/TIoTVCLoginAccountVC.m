@@ -269,6 +269,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     if (self.loginStyle == YES) {   //验证码
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_CountryCode]) {
             self.conturyCode = [TIoTCoreUserManage shared].login_CountryCode;
+            self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",[TIoTCoreUserManage shared].login_CountryCode];
         }
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Title]) {
             [self.areaCodeBtn setTitle:[TIoTCoreUserManage shared].login_Title forState:UIControlStateNormal];
@@ -276,6 +277,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     }else {                         //密码登录
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_CountryCode]) {
             self.conturyCode2 = [TIoTCoreUserManage shared].login_CountryCode;
+            self.phoneAreaLabel2.text = [NSString stringWithFormat:@"(+%@)",[TIoTCoreUserManage shared].login_CountryCode];
         }
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].login_Title]) {
             [self.areaCodeBtn2 setTitle:[TIoTCoreUserManage shared].login_Title forState:UIControlStateNormal];

@@ -211,6 +211,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_countryCode]) {
             self.conturyCode2 = [TIoTCoreUserManage shared].signIn_countryCode;
+            self.phoneAreaLabel2.text = [NSString stringWithFormat:@"(+%@)",[TIoTCoreUserManage shared].signIn_countryCode];
         }
         
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Title]) {
@@ -220,6 +221,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     }else {
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_countryCode]) {
             self.conturyCode = [TIoTCoreUserManage shared].signIn_countryCode;
+            self.phoneAreaLabel.text = [NSString stringWithFormat:@"(+%@)",[TIoTCoreUserManage shared].signIn_countryCode];
         }
         
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].signIn_Title]) {
