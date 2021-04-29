@@ -342,7 +342,9 @@ static NSString *itemId3 = @"i_ooo454";
             NSDictionary *map = self.deviceInfo.bigProp[@"define"][@"mapping"];
             NSMutableArray *source = [NSMutableArray arrayWithCapacity:map.count];
             for (int i = 0; i < map.count; i ++) {
-                [source addObject:map[[NSString stringWithFormat:@"%i",i]]];
+                if (map[[NSString stringWithFormat:@"%i",i]]) {
+                    [source addObject:map[[NSString stringWithFormat:@"%i",i]]];
+                }
             }
             TIoTEnumView *ev = [[TIoTEnumView alloc] init];
             ev.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
