@@ -121,7 +121,11 @@
     
     TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
     vc.title = NSLocalizedString(@"register_agree_5", @"开源软件信息");
-    vc.urlPath = TIoTAPPConfig.opensourceLicenseString;
+    if (LanguageIsEnglish) {
+        vc.urlPath = TIoTAPPConfig.opensourceLicenseString;
+    }else {
+        vc.urlPath = TIoTAPPConfig.opensourceLicenseChineseString;
+    }
     [self.navigationController pushViewController:vc animated:YES];
 }
 

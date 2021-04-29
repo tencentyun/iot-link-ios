@@ -59,6 +59,11 @@ class TIoTAPPConfig: NSObject {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config5.js"
     }
     
+    // static config 美国地区中文-开源软件信息 （开源软件信息只有美国区有）
+    public static var opensourceLicenseChineseString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config11.js"
+    }
+    
     // static config 美国地区-隐私政策英文
     public static var privacyPolicyEnglishString: NSString {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config4.js"

@@ -85,6 +85,9 @@
     if ([URL hasPrefix:TIoTAPPConfig.opensourceLicenseString]) {
         // 开源协议信息(英文)
         return YES;
+    }else if ([URL hasPrefix:TIoTAPPConfig.opensourceLicenseChineseString]) {
+        // 开源协议信息(中文)
+        return YES;
     }else if ([URL hasPrefix:TIoTAPPConfig.privacyPolicyEnglishString]) {
         // 隐私政策(英文)
         return YES;
