@@ -232,8 +232,8 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
     else param = @{@"Type":@"phone",@"CountryCode":conturyCodeText,@"PhoneNumber":self.phoneTF.text};
     
     [[TIoTRequestObject shared] post:AppFindUser Param:param success:^(id responseObject) {
-        NSDictionary *data = responseObject[@"Data"];
-        NSString *userId = data[@"UserID"];
+        NSDictionary *data = responseObject[@"Data"]?:@{};
+        NSString *userId = data[@"UserID"]?:@"";
         
         [self sendMessageToUser:userId];
         
