@@ -410,7 +410,9 @@
     if (self.dataArray.count == 0) {
         model = [TIoTAutoIntelligentModel new];
     }else {
-        model = self.dataArray[indexPath.row];
+        if (indexPath.row < self.dataArray.count) {
+            model = self.dataArray[indexPath.row];
+        }
     }
     
     if (tableView == self.tableView) {
