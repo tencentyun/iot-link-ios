@@ -349,7 +349,7 @@ static CGFloat kHeaderViewHeight = 162;
     
     NSMutableArray *roomNames = [NSMutableArray array];
     [roomNames addObject:NSLocalizedString(@"all__", @"全部")];
-    [roomNames addObjectsFromArray:[self.rooms valueForKey:@"RoomName"]];
+    [roomNames addObjectsFromArray:[self.rooms valueForKey:@"RoomName"]?:@[]];
     
     NSInteger index = 0;
     for (int i = 0; i < self.rooms.count; i ++) {
