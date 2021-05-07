@@ -13,6 +13,7 @@
 #import "TIoTIntelligentSceneCell.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAddAutoIntelligentVC.h"
+#import "UITableView+TIoTCustomMoveCell.h"
 
 @interface TIoTIntelligentVC ()<UITableViewDelegate,UITableViewDataSource,TIoTIntelligentSceneCellDelegate>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
@@ -100,6 +101,13 @@
     [[TIoTRequestObject shared] post:AppGetSceneList Param:dic success:^(id responseObject) {
         
         self.dataArray = [NSMutableArray arrayWithArray:responseObject[@"SceneList"]?:@[]];
+        
+//        //手动智能添加
+//        __weak typeof(self)weakSelf = self;
+//        [_tableView setupDataArray:weakSelf.dataArray moveBlock:^(NSMutableArray * _Nonnull newDataArray) {
+//            weakSelf.dataArray = newDataArray;
+//        }];
+        
         [self.deviceNumberArray removeAllObjects];
         
         for (int i = 0; i <self.dataArray.count ; i++) {
