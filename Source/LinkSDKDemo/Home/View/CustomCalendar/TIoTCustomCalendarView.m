@@ -142,7 +142,7 @@
 }
 
 - (TIoTCustomCalendarScrollView *)setupCalendarScrollViewWithFrame:(CGRect)frame {
-    TIoTCustomCalendarScrollView *scrollView = [[TIoTCustomCalendarScrollView alloc] initWithFrame:frame withDateArray:@[@"2021-1-20",@"2021-2-2"]];
+    TIoTCustomCalendarScrollView *scrollView = [[TIoTCustomCalendarScrollView alloc] initWithFrame:frame withDateArray:self.dateArray?:@[@"2021-1-20",@"2021-2-2"]];
     scrollView.calendarThemeColor = self.calendarColor;
     return scrollView;
 }
