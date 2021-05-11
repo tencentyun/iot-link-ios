@@ -10,8 +10,13 @@
 #include <string.h>
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
+#import "TIoTCoreAppEnvironment.h"
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
+    if (idd == nullptr) {
+        return nullptr;
+    }
+    
     if (type == XP2PTypeLog) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
@@ -27,7 +32,24 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         NSString *documentDirectory = paths.firstObject;
         NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
         return saveFilePath.UTF8String;
-    }else {
+        
+    }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
+        printf("XP2P log: disconnect %s\n", msg);
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *DeviceName = [NSString stringWithUTF8String:idd];
+            [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+            
+            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                     dev_name:DeviceName];
+            
+        });
+    }else if (type == XP2PTypeDetectReady) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil];
+    }
+    else {
         printf("XP2P log: %s\n", msg);
     }
 
@@ -44,6 +66,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 
 @interface TIoTCoreXP2PBridge ()<AWAVCaptureDelegate>
+@property (nonatomic, strong) NSString *dev_name;
+@property (nonatomic, assign) BOOL isSending;
 @end
 
 @implementation TIoTCoreXP2PBridge {
@@ -93,9 +117,11 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //注册回调
+//    setStunServerToXp2p("11.11.11.11", 111);
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
     
     //1.配置IOT_P2P SDK
+    self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
     startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], "");
 }
@@ -103,7 +129,10 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
     const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
     NSLog(@"httpflv---%s",httpflv);
-    return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
+    if (httpflv) {
+        return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
+    }
+    return @"";
 }
 
 - (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
@@ -115,7 +144,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
         getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion) {
+            if (completion && buf) {
                 completion([NSString stringWithUTF8String:buf]);
             }
         });
@@ -131,6 +160,9 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name {
+    self.isSending = YES;
+    
+    self.dev_name = dev_name;
     
     _serverHandle = runSendService(dev_name.UTF8String, "", false); //发送数据前需要告知http proxy
     
@@ -142,9 +174,12 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)stopVoiceToServer {
-
+    self.isSending = NO;
+    
     [systemAvCapture stopCapture];
     systemAvCapture.delegate = nil;
+    
+    stopSendService(self.dev_name.UTF8String, nullptr);
 }
 
 - (void)stopService:(NSString *)dev_name {
@@ -154,7 +189,9 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
-    dataSend("dev_name", data, size);
+    if (self.isSending) {
+        dataSend(self.dev_name.UTF8String, data, size);
+    }
 }
 
 

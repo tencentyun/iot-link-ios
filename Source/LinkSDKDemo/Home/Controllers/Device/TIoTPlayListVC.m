@@ -150,7 +150,7 @@
             video.deviceName = nameNameString;
             video.playType = TIotPLayTypeLive;
             video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-            [self presentViewController:video animated:NO completion:nil];
+            [self presentViewController:video animated:YES completion:nil];
     };
     
     cell.playLocalPlaybackBlock = ^{
@@ -163,7 +163,7 @@
             video.modalPresentationStyle = UIModalPresentationFullScreen;
             video.deviceName = nameNameString;
             video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback",urlString];
-            [self presentViewController:video animated:NO completion:nil];
+            [self presentViewController:video animated:YES completion:nil];
     };
     
     cell.playCloudStorageBlock = ^{

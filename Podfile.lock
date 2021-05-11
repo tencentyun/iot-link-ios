@@ -109,7 +109,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.15.8)
+  - Protobuf (3.16.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -131,11 +131,11 @@ PODS:
     - TIoTLinkThirdPartyKit/Faac-iOS
     - TIoTLinkThirdPartyKit/IJKPlayer-iOS
     - TIoTLinkThirdPartyKit/XP2P-iOS
-  - TIoTLinkThirdPartyKit/Faac-iOS (1.0.0)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (1.0.0)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (1.0.0)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (1.0.0)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (1.0.0)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.2)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.2)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -232,19 +232,19 @@ SPEC CHECKSUMS:
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: adb85cd18a15bd1a777c158af9fd6e612a0e6d69
+  Protobuf: 8e78b4aabb47d17f379fb10b0d22ed5439e69b95
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 8cc25f98274f71c62429d483454f222f44c00d6e
-  TIoTLinkThirdPartyKit: 94b68755af0abf17541f85d7ede23400d2484ca8
+  TIoTLinkThirdPartyKit: 25bc25b9b1fcb08d44a45d274db19ff5d07bd279
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: eb9dbc70905ae553cf552ed3757ab6e4d8b6efee
+PODFILE CHECKSUM: ba1741fa0f1c96e9f51c4b68b66427f5b2bfb4d3
 
 COCOAPODS: 1.9.3
