@@ -97,6 +97,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 ///字符串转时间戳
 + (NSString *)getTimeStampWithString:(NSString *)timeString withFormatter:(NSString *)formatter withTimezone:(NSString *)timezone;
 
+///一天内秒转特定时间格式（xx:xx:xx）
++(NSString *)getDayFormatTimeFromSecond:(NSString *)secondTime;
+
 ///时间转时区
 + (NSString *)convertTimestampToTimeZone:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone;
 

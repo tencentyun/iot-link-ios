@@ -26,6 +26,8 @@ typedef void(^TIoTRemoveViewBlock)(void);
 /// 基础色调
 @property (nonatomic, strong) UIColor *calendarColor;
 
+@property (nonatomic, strong) NSArray *dateArray;
+
 /// 点击日期block，返回选中日期: year-month-day
 @property (nonatomic, copy) TIoTSelectedDayBlcok selectedDayBlcok;
 

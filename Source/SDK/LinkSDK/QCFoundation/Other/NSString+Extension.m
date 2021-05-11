@@ -156,6 +156,24 @@
     return timeStr;
 }
 
++ (NSString *)getDayFormatTimeFromSecond:(NSString *)secondTime{
+    
+    NSInteger seconds = [secondTime integerValue];
+    
+    NSString *hourString = [NSString stringWithFormat:@"%02ld",seconds/3600];
+    
+    NSString *minuteString = [NSString stringWithFormat:@"%02ld",(seconds%3600)/60];
+    
+    NSString *secondString = [NSString stringWithFormat:@"%02ld",seconds%60];
+    
+    NSString *formatTimeString = [NSString stringWithFormat:@"%@:%@:%@",hourString,minuteString,secondString];
+    
+    if (seconds == 0 || seconds == 86400) {
+        return formatTimeString = @"00:00:00";
+    }
+    return formatTimeString;
+}
+
 + (NSString *)convertTimestampToTimeZone:(id)timestamp byDataFormat:(NSString *)format timezone:(NSString *)timezone {
     
     long long time=[timestamp longLongValue];
