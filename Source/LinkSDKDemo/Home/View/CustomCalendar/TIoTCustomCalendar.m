@@ -33,12 +33,14 @@
     
     customCalendar.calendarColor = [UIColor brownColor];
     
+//    customCalendar.dateArray = @[@"2021-1-20",@"2021-2-2"];
+    customCalendar.dateArray = @[];
     [self addSubview:customCalendar];
     
     customCalendar.selectedDayBlcok = ^(NSInteger year, NSInteger month, NSInteger day) {
         
         if (self.selectedDateBlock) {
-            self.selectedDateBlock([NSString stringWithFormat:@"%ld:%ld:%ld", (long)year, (long)month, (long)day]);
+            self.selectedDateBlock([NSString stringWithFormat:@"%ld-%ld-%ld", (long)year, (long)month, (long)day]);
             [self removeView];
         }
         
