@@ -30,7 +30,8 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    [self installMovieNotificationObservers];
+
     [self initializedVideo];
     
     [self setupUIViews:self.playType];
@@ -45,9 +46,6 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
 
 - (void)initializedVideo {
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.width * 9 / 16)];
@@ -70,6 +68,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         
         [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName cmd:@"action=live"];
     }else {
+        [self stopPlayMovie];
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
         [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
@@ -142,13 +141,16 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self installMovieNotificationObservers];
-
-    [self.player prepareToPlay];
-    [self.player play];
+- (void)refushVideo {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+        
+        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+        
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
+    });
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -377,6 +379,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
                                              selector:@selector(moviePlayBackStateDidChange:)
                                                  name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
                                                object:_player];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refushVideo)
+                                                 name:@"rerereconnect"
+                                               object:nil];
 }
 
 #pragma mark Remove Movie Notification Handlers
@@ -388,13 +395,15 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"rerereconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc
 {
+    [self stopPlayMovie];
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName];
     
-    [self stopPlayMovie];
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 @end
