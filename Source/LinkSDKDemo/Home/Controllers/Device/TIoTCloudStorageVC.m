@@ -10,14 +10,17 @@
 #import "TIoTCustomCalendar.h"
 #import "NSString+Extension.h"
 #import "TIoTCustomTimeSlider.h"
+#import <IJKMediaFramework/IJKMediaFramework.h>
 
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
-//@property (nonatomic, strong) UISlider *slider;
 @property (nonatomic, strong) UIButton *calendarBtn;
 @property (nonatomic, strong) UIView *sliderBottomView;
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *timeLabel;
+@property (atomic, retain) IJKFFMoviePlayerController *player;
+@property (nonatomic, strong) NSString *videoUrl;
+
 @property (nonatomic, assign) CGFloat kTopPadding; //距离日历间距
 @property (nonatomic, assign) CGFloat kLeftPadding; //左边距
 @property (nonatomic, assign) CGFloat kItemWith; //每一天长度
@@ -36,6 +39,12 @@
     [self setupUIViews];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.player shutdown];
+}
+
 - (void)initializaVariable {
     self.dayDateString = @"";
     self.kTopPadding = 15; //距离日历间距
@@ -43,6 +52,7 @@
     self.kItemWith = kScreenWidth/2; //每一天长度
     self.kScrollContentWidth = self.kItemWith * 24 + self.kLeftPadding*2; // 总长度
     self.kSliderHeight = 30; //自定义slider高度
+    self.videoUrl = @"";
 }
 
 - (void)setupUIViews {
@@ -108,6 +118,14 @@
         CGFloat sliderValue= [[change objectForKey:NSKeyValueChangeNewKey] floatValue];
         NSInteger secondTime = roundf(sliderValue);
         NSString *timeStr = [self getStampDateStringWithSecond:secondTime];
+        
+        //选择时间
+//        [self stopPlayMovie];
+//        self.videoUrl = @"";
+//        [self configVideo];
+//        [self.player prepareToPlay];
+//        [self.player play];
+        
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -137,6 +155,52 @@
     NSLog(@"%@",stampDate);
     self.timeLabel.text = secondString;
     return stampDate;
+}
+
+- (void)dealloc
+{
+    [self stopPlayMovie];
+    
+    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
+}
+
+- (void)configVideo {
+    
+        [self stopPlayMovie];
+#ifdef DEBUG
+        [IJKFFMoviePlayerController setLogReport:YES];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+#else
+        [IJKFFMoviePlayerController setLogReport:NO];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+#endif
+        
+        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
+        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
+        
+        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+        
+        self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+        self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.player.view.frame = self.imageView.bounds;
+        self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
+        self.player.shouldAutoplay = YES;
+        
+        self.view.autoresizesSubviews = YES;
+        [self.imageView addSubview:self.player.view];
+        
+        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+
+}
+
+- (void)stopPlayMovie {
+    [self.player stop];
+    self.player = nil;
 }
 
 #pragma mark - ScrollView Delegate
