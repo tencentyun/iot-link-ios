@@ -40,6 +40,11 @@
 @end
 
 
+typedef NS_ENUM(NSInteger,TIotApiHost) {
+    TIotApiHostVideo,
+    TIotApiHostExplore,
+};
+
 @interface TIoTCoreDeviceSet : NSObject
 
 
@@ -173,4 +178,12 @@
 /// explore 获取设备列表
 - (void)getExploreDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId success:(SRHandler)success failure:(FRHandler)failure;
 
+/// 网络请求获取数据
+- (void)requestVideoOrExploreDataWithParam:(NSMutableDictionary *)param action:(NSString *)action  vidowOrExploreHost:(TIotApiHost)hostType success:(SRHandler)success failure:(FRHandler)failure;
+
+/// 获取具有云存日期
+- (void)getCloudStorageDateVersion:(NSString *)version productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure;
+
+/// 获取某一天云存时间轴
+- (void)getCloudStorageDayDateVersion:(NSString *)version productId:(NSString *)productId deviceName:(NSString *)deviceName dateString:(NSString *)date success:(SRHandler)success failure:(FRHandler)failure;
 @end

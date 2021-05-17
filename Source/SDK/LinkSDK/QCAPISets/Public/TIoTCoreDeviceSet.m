@@ -1162,6 +1162,50 @@
     
 }
 
+/// 网络请求获取数据
+- (void)requestVideoOrExploreDataWithParam:(NSMutableDictionary *)param action:(NSString *)action  vidowOrExploreHost:(TIotApiHost)hostType success:(SRHandler)success failure:(FRHandler)failure {
+    
+    NSMutableDictionary *thisInterfaceParams = param ?: [NSMutableDictionary new];
+    
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:action?:@"" withVersioinData:param[@"Version"]?:@""];
+    
+    NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
+    [allParams addEntriesFromDictionary:commonParams];
+    [allParams addEntriesFromDictionary:thisInterfaceParams];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
+    
+    NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+    switch (hostType) {
+        case TIotApiHostVideo: {
+            urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+            break;
+        }
+        case TIotApiHostExplore: {
+            urlString = [TIoTCoreAppEnvironment shareEnvironment].exploreHostApi;
+            break;
+        }
+        default:
+            break;
+    }
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *urlDomain = [url host];
+    NSString *firstDomainString = [urlDomain componentsSeparatedByString:@"."].firstObject?:@"";
+    
+    //V3签名
+    NSString *authorization = [TIoTCoreUtil generateSignature:thisInterfaceParams params:allParams server:firstDomainString];
+    allParams[@"Authorization"] = authorization;
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:action?:@"" params:allParams useToken:YES];
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
+        failure(reason,error,dic);
+    }];
+}
+
+
 #pragma mark - params function
 
 - (NSDictionary *)commonParamsForV3AuthenticationWithAction:(NSString *)actionString withVersioinData:(NSString *)dataString

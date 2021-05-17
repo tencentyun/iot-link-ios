@@ -147,6 +147,12 @@ FOUNDATION_EXPORT NSString *const DescribeDevices;//Video 设备列表
 //MARK: Explore
 FOUNDATION_EXPORT NSString *const GetDeviceList;//Explore 设备列表
 
+//MARK:CloudStorage
+FOUNDATION_EXPORT NSString *const DescribeCloudStorageDate;//获取具有云存的日期
+
+//MARK:获取云存某一天时间轴
+FOUNDATION_EXPORT NSString *const DescribeCloudStorageTime;//获取云存某一天时间轴
+
 //MARK: TRTC
 FOUNDATION_EXPORT NSString *const AppIotRTCInviteDevice;//1.手机请求设备通话
 FOUNDATION_EXPORT NSString *const AppIotRTCCallDevice;//5. 手机请求加入房间参数
