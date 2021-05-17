@@ -11,6 +11,11 @@
 #import "NSString+Extension.h"
 #import "TIoTCustomTimeSlider.h"
 
+#import "TIoTCoreAppEnvironment.h"
+#import <YYModel.h>
+#import "TIoTCloudStorageDateModel.h"
+#import "TIoTCloudStorageDayTimeListModel.h"
+
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
 //@property (nonatomic, strong) UISlider *slider;
 @property (nonatomic, strong) UIButton *calendarBtn;
@@ -99,15 +104,35 @@
     }
 }
 
+#pragma mark - network request
+
+//MARK: 获取具有云存日期
+- (void)requestCloudStorageDateList {
+    [[TIoTCoreDeviceSet shared] getCloudStorageDateVersion:@"2020-12-15" productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId deviceName:@"" success:^(id  _Nonnull responseObject) {
+        
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        
+    }];
+}
+
+//MARK:获取某一天云存时间轴
+- (void)requestCloudStorageDayDate {
+    [[TIoTCoreDeviceSet shared] getCloudStorageDayDateVersion:@"2020-12-15" productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId deviceName:@"" dateString:@"" success:^(id  _Nonnull responseObject) {
+        
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        
+    }];
+}
+
 #pragma mark - responsed method
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == nil) {
-        NSLog(@"----%f",[[change objectForKey:NSKeyValueChangeNewKey] floatValue]);
         CGFloat sliderValue= [[change objectForKey:NSKeyValueChangeNewKey] floatValue];
         NSInteger secondTime = roundf(sliderValue);
         NSString *timeStr = [self getStampDateStringWithSecond:secondTime];
+        NSLog(@"value----%f---time:%@--",[[change objectForKey:NSKeyValueChangeNewKey] floatValue],timeStr);
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -125,7 +150,7 @@
     TIoTCustomCalendar *view = [[TIoTCustomCalendar alloc] initCalendarFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 470)];
     [self.view addSubview:view];
     view.selectedDateBlock = ^(NSString *dateString) {
-        NSLog(@"%@",dateString);
+        NSLog(@"日历选择日期---%@",dateString);
         self.dayDateString = dateString;
     };
 }
