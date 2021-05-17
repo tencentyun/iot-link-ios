@@ -1162,6 +1162,73 @@
     
 }
 
+/// 获取具有云存日期
+- (void)getCloudStorageDateVersion:(NSString *)version productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure {
+    
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeCloudStorageDate withVersioinData:version?:@"2020-12-15"];
+    NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
+    thisInterfaceParams[@"ProductId"] = productId?:@"";
+    thisInterfaceParams[@"DeviceName"] = deviceName?:@"";
+    
+    NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
+    [allParams addEntriesFromDictionary:commonParams];
+    [allParams addEntriesFromDictionary:thisInterfaceParams];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
+    
+    NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *urlDomain = [url host];
+    NSString *firstDomainString = [urlDomain componentsSeparatedByString:@"."].firstObject?:@"";
+    
+    //V3签名
+    NSString *authorization = [TIoTCoreUtil generateSignature:thisInterfaceParams params:allParams server:firstDomainString];
+    allParams[@"Authorization"] = authorization;
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:DescribeCloudStorageDate params:allParams useToken:YES];
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
+        failure(reason,error,dic);
+    }];
+    
+}
+
+/// 获取某一天云存时间轴
+- (void)getCloudStorageDayDateVersion:(NSString *)version productId:(NSString *)productId deviceName:(NSString *)deviceName dateString:(NSString *)date success:(SRHandler)success failure:(FRHandler)failure {
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeCloudStorageTime withVersioinData:version?:@"2020-12-15"];
+    NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
+    thisInterfaceParams[@"ProductId"] = productId?:@"";
+    thisInterfaceParams[@"DeviceName"] = deviceName?:@"";
+    thisInterfaceParams[@"Date"] = date?:@""; //2020-01-05
+  
+    NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
+    [allParams addEntriesFromDictionary:commonParams];
+    [allParams addEntriesFromDictionary:thisInterfaceParams];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
+    
+    NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *urlDomain = [url host];
+    NSString *firstDomainString = [urlDomain componentsSeparatedByString:@"."].firstObject?:@"";
+    
+    //V3签名
+    NSString *authorization = [TIoTCoreUtil generateSignature:thisInterfaceParams params:allParams server:firstDomainString];
+    allParams[@"Authorization"] = authorization;
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:DescribeCloudStorageTime params:allParams useToken:YES];
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
+        failure(reason,error,dic);
+    }];
+    
+}
+
+
 #pragma mark - params function
 
 - (NSDictionary *)commonParamsForV3AuthenticationWithAction:(NSString *)actionString withVersioinData:(NSString *)dataString
