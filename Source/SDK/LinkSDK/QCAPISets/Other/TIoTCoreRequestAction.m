@@ -139,6 +139,12 @@ NSString *const DescribeDevices = @"DescribeDevices";//Video 设备列表
 //MARK:Explore
 NSString *const GetDeviceList = @"GetDeviceList";//Explore 设备列表 
 
+//MARK:CloudStorage
+NSString *const DescribeCloudStorageDate = @"DescribeCloudStorageDate";// 获取具有云存的日期
+
+//MARK:云存某一天时间轴
+NSString *const DescribeCloudStorageTime = @"DescribeCloudStorageTime";// 获取云存某一天时间轴
+
 //MARK: TRTC
 NSString *const AppIotRTCInviteDevice = @"App::IotRTC::InviteDevice";//1.手机请求设备通话
 NSString *const AppIotRTCCallDevice = @"App::IotRTC::CallDevice";//5. 手机请求加入房间参数
