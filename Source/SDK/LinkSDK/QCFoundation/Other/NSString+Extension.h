@@ -124,6 +124,7 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 /// HmacSha1->base64
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
++ (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data;
 
 /// 获取网关
 + (NSString *)getGateway;

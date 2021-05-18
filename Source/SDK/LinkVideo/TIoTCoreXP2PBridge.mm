@@ -47,7 +47,8 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             
         });
     }else if (type == XP2PTypeDetectReady) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil];
+        NSString *DeviceName = [NSString stringWithUTF8String:idd];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
     }
     else {
         printf("XP2P log: %s\n", msg);
@@ -90,10 +91,6 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (instancetype)init {
     self =  [super init];
     if (self) {
-        
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-        [audioSession setActive:YES error:nil];
 #ifndef DEBUG
         [TIoTCoreXP2PBridge redirectNSLog];
 #endif
@@ -160,6 +157,9 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
     self.isSending = YES;
     
     self.dev_name = dev_name;
