@@ -16,6 +16,24 @@
       "revId": "3898d5abaa5819326ee9befbad4a67aeab862737",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8da317ac_39693c5b",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTCloudStorageVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-05-18T03:35:46Z",
+      "side": 1,
+      "message": "好的，已在最新patch中删除",
+      "parentUuid": "61687bf2_39adc21e",
+      "revId": "3898d5abaa5819326ee9befbad4a67aeab862737",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
