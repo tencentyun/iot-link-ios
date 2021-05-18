@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61687bf2_39adc21e",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTCloudStorageVC.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-18T01:45:07Z",
+      "side": 1,
+      "message": "不需要通知话，建议删除通知相关的代码",
+      "revId": "3898d5abaa5819326ee9befbad4a67aeab862737",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
