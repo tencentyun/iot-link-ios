@@ -208,6 +208,10 @@
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
 
 
+### App Video SDK 与 Device Video SDK 版本对应说明
+*  v1.0.2.BuildID, BuildID可省略。前2个数字不一致,  app 就会提示不兼容
+
+
 ### Video SDK 多路视频观看接口说明
 
 *  多路视频可通过各接口的id区分不同设备。当前的 iOS 层接口采用设备名称（dev_name）区分不同的设备通道。
