@@ -14,8 +14,8 @@
 		6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */; };
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
 		6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */; };
-		6D20480E26528199007F6F27 /* TIoTCloudStorageDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20480D26528199007F6F27 /* TIoTCloudStorageDateModel.m */; };
-		6D20483E26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20483D26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m */; };
+		6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20483D26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m */; };
+		6D2049EE2653C18D007F6F27 /* TIoTCloudStorageDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20480D26528199007F6F27 /* TIoTCloudStorageDateModel.m */; };
 		6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */; };
 		6D42390C261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390B261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m */; };
 		6D423910261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390F261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m */; };
@@ -3192,7 +3192,6 @@
 				D20621BB23559E5600142DAC /* TYCyclePagerView.m in Sources */,
 				ED729062238E669600175739 /* TIoTUploadObj.m in Sources */,
 				D2038BBA23321EA80036F6B9 /* TIoTAddTimeView.m in Sources */,
-				6D20483E26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,
 				6D6489B1257D37C7000B340F /* TIoTSingleCustomButton.m in Sources */,
 				EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */,
 				ED93D98D23CBFDD000E3FD7D /* TIoTLoginVC.m in Sources */,
@@ -3238,7 +3237,6 @@
 				EDF126FE23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m in Sources */,
 				D23104D52330678F0003069D /* NSObject+SwizzlingMethod.m in Sources */,
 				ED6BA5C323C5DF8500BE9EC9 /* TIoTAlertView.m in Sources */,
-				6D20480E26528199007F6F27 /* TIoTCloudStorageDateModel.m in Sources */,
 				A43FCE69247E63E900A7CEF3 /* TIoTProductCell.m in Sources */,
 				D210C7DA2341D7EB00A53B08 /* XWCountryCodeController.m in Sources */,
 				D210C7D22340A25800A53B08 /* UIImageView+TIoTWebImageView.m in Sources */,
@@ -3313,9 +3311,11 @@
 				F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				6D98FE1625C2E6AA00518AC7 /* TIoTCustomCalendarScrollView.m in Sources */,
+				6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,
 				F4F3D7B924938EBE005D3396 /* TIoTCoreRoomInfoVC.m in Sources */,
 				6D98FE8125C2EA1A00518AC7 /* TIoTCloudStorageVC.m in Sources */,
 				F4F3D7CD24938EBE005D3396 /* ChangeWifiVC.m in Sources */,
+				6D2049EE2653C18D007F6F27 /* TIoTCloudStorageDateModel.m in Sources */,
 				F4F325E325919A1200A4CAAB /* AppUtils.swift in Sources */,
 				6D98FE1925C2E6AF00518AC7 /* TIoTCustomCalendarMonth.m in Sources */,
 				F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */,

@@ -25,6 +25,8 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (atomic, retain) IJKFFMoviePlayerController *player;
 @property (nonatomic, strong) NSString *videoUrl;
+@property (nonatomic, strong) NSArray *timeList; //原始时间
+@property (nonatomic, strong) NSMutableArray *modelArray; //重组后存放时间数组
 
 @property (nonatomic, assign) CGFloat kTopPadding; //距离日历间距
 @property (nonatomic, assign) CGFloat kLeftPadding; //左边距
@@ -91,10 +93,7 @@
     
     //自定义slider
     TIoTCustomTimeSlider *customTimeSlider = [[TIoTCustomTimeSlider alloc]initWithFrame:CGRectMake(0, 0, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    TIoTTimeModel *timeModel = [[TIoTTimeModel alloc]init];
-    timeModel.startTime = 0;
-    timeModel.endTime = 0;
-    customTimeSlider.timeSegmentArray = @[timeModel];
+    customTimeSlider.timeSegmentArray = self.modelArray;
     [self.sliderBottomView addSubview:customTimeSlider];
     [customTimeSlider addObserver:self forKeyPath:@"currentValue" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -141,6 +140,13 @@
     paramDic[@"Version"] = @"2020-12-15";
     
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageTime vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTCloudStorageDayTimeListModel *data = [TIoTCloudStorageDayTimeListModel yy_modelWithJSON:responseObject[@"Response"][@"Data"]];
+        
+        //data.VideoURL 需要拼接
+
+        self.timeList = [NSArray arrayWithArray:data.TimeList?:@[]];
+        
+        [self recombineTimeSegmentWithTimeArray:self.timeList];
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
@@ -194,6 +200,79 @@
     return stampDate;
 }
 
+- (void)recombineTimeSegmentWithTimeArray:(NSArray *)timeArray {
+    
+    if (self.modelArray.count != 0) {
+        [self.modelArray removeAllObjects];
+    }
+    
+    [timeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        TIoTCloudStorageTimeDataModel *model = obj;
+        
+        if (idx == 0) {
+            TIoTTimeModel *timeModel = [[TIoTTimeModel alloc]init];
+            timeModel.startTime = model.StartTime.doubleValue;
+            timeModel.endTime = model.EndTime.doubleValue;
+            
+            [self.modelArray addObject:timeModel];
+            
+        }else {
+            TIoTTimeModel *timeModel = [[TIoTTimeModel alloc]init];
+            timeModel.startTime = model.StartTime.doubleValue;
+            timeModel.endTime = model.EndTime.doubleValue;
+            
+            NSMutableArray *tempModelArray = [[NSMutableArray alloc]initWithArray:self.modelArray];
+            TIoTTimeModel *lastModel = tempModelArray.lastObject;
+            if (timeModel.startTime - lastModel.endTime <= 60) {
+                
+                lastModel.endTime = timeModel.endTime;
+                
+                [self.modelArray replaceObjectAtIndex:(tempModelArray.count - 1) withObject:lastModel];
+            }else {
+                [self.modelArray addObject:timeModel];
+            }
+            
+        }
+    }];
+    
+    [self convertTimeArrayItemParam];
+}
+
+- (void)convertTimeArrayItemParam{
+    if (self.modelArray.count != 0) {
+        [self.modelArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTTimeModel *itemModel = obj;
+            
+            TIoTTimeModel *timeModel = [[TIoTTimeModel alloc]init];
+            timeModel.startTime = [self captureTimestampWithOutDaySecound:itemModel.startTime];
+            timeModel.endTime = [self captureTimestampWithOutDaySecound:itemModel.endTime];
+            
+            [self.modelArray replaceObjectAtIndex:idx withObject:timeModel];
+        }];
+    }
+}
+
+- (NSInteger )captureTimestampWithOutDaySecound:(CGFloat)stamp {
+    
+    CGFloat timeStamp = stamp;
+    NSString *dateString = [NSString convertTimestampToTime:@(timeStamp) byDateFormat:@"YYYY-MM-dd HH:mm:ss"]?:@"";
+    
+    NSArray *dateTempArray = [dateString componentsSeparatedByString:@" "];
+    NSString *dayTime = dateTempArray.lastObject;
+    NSArray *dayTempTime = [dayTime componentsSeparatedByString:@":"];
+    NSString *hourString = dayTempTime.firstObject;
+    NSString *mitString = dayTempTime[1];
+    NSString *secString = dayTempTime.lastObject;
+        
+    NSInteger hour = hourString.intValue;
+    NSInteger minute = mitString.intValue;
+    NSInteger second = secString.intValue;
+    
+    NSInteger totalSecond = second + minute*60 + hour*3600;
+    
+    return totalSecond;
+}
+
 - (void)dealloc
 {
     [self stopPlayMovie];
@@ -244,6 +323,14 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     self.sliderBottomView.frame = CGRectMake(-scrollView.contentOffset.x + self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight);
+}
+
+#pragma mark - lazy loading
+- (NSMutableArray *)modelArray {
+    if (!_modelArray) {
+        _modelArray = [[NSMutableArray alloc]init];
+    }
+    return _modelArray;
 }
 
 /*
