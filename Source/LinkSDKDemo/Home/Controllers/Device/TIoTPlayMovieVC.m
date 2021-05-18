@@ -141,7 +141,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     }
 }
 
-- (void)refushVideo {
+- (void)refushVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    if (![DeviceName isEqualToString:self.deviceName]) {
+        return;
+    }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
         
@@ -381,7 +385,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
                                                object:_player];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refushVideo)
+                                             selector:@selector(refushVideo:)
                                                  name:@"xp2preconnect"
                                                object:nil];
 }

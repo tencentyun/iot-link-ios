@@ -562,6 +562,26 @@
     return hash;
 }
 
+//方法是将加密结果转成了十六进制字符串了
++ (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data
+{
+    if ([NSString matchSinogram:data]) {
+        return @"";
+    }
+    
+    const char *cKey  = [key cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cData = [data cStringUsingEncoding:NSUTF8StringEncoding];
+
+    //sha1
+    unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
+
+    NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:sizeof(cHMAC)];
+    NSString *hexString = [self hexStringFromData:HMAC];
+    
+    return hexString;
+}
+
 + (NSString *)getGateway {
     NSString *ipString = nil;
     struct in_addr gatewayaddr;
