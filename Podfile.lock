@@ -127,17 +127,17 @@ PODS:
     - YYModel
   - TIoTLinkKit/LinkSDK (1.0.0):
     - CocoaAsyncSocket
-    - MBProgressHUD
+    - MBProgressHUD (= 1.1.0)
   - TIoTLinkKit/LinkVideo (1.0.0):
     - TIoTLinkKit/LinkSDK
     - TIoTLinkThirdPartyKit/Faac-iOS
     - TIoTLinkThirdPartyKit/IJKPlayer-iOS
     - TIoTLinkThirdPartyKit/XP2P-iOS
-  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.3.1)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.3.1)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.3.1)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.3.1)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.3.1)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.2)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.2)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -152,8 +152,8 @@ DEPENDENCIES:
   - IQKeyboardManager (= 6.1.1)
   - KeychainAccess (= 4.2.0)
   - lottie-ios (= 3.1.8)
-  - Masonry (= 1.1.0)
   - MBProgressHUD (= 1.1.0)
+  - Masonry (= 1.1.0)
   - MGJRouter (= 0.10.0)
   - MJRefresh (= 3.2.0)
   - QCloudCOSXML/Transfer (= 5.5.2)
