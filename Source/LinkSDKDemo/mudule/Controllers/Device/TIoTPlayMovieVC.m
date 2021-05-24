@@ -11,6 +11,7 @@
 #import <YYModel.h>
 #import "TIoTPlayBackListModel.h"
 #import "NSString+Extension.h"
+#import "TIoTCoreUtil.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
@@ -189,6 +190,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (IBAction)dismiss:(id)sender {
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
