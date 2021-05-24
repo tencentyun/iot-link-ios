@@ -26,6 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)generateSignature:(NSDictionary *)allParams params:(NSDictionary *)params server:(NSString *)serverHost;
 
 + (NSString *)qcloudasrutil_sortedJSONTypeQueryParams:(NSDictionary *)params;
+
+/**
+ 截屏
+ */
++ (void)screenshotWithView:(UIView *)view;
+
 @end
 
 NS_ASSUME_NONNULL_END
