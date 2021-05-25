@@ -1,8 +1,8 @@
 //
-//  TIoTPlayListVC.h
-//  LinkSDKDemo
+//  TIoTDemoNavController.h
+//  LinkApp
 //
-//  Created by ccharlesren on 2021/1/13.
+//  Created by ccharlesren on 2021/5/25.
 //  Copyright © 2021 Tencent. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TIoTPlayListVC : UIViewController
+@interface TIoTDemoNavController : UINavigationController
 
 @end
 

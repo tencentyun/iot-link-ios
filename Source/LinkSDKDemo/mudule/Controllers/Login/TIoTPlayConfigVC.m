@@ -14,6 +14,9 @@
 #import "TIoTPlayListVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTLoginCustomView.h"
+#import "TIoTHomeViewController.h"
+#import "TIoTDemoNavController.h"
+#import "TIoTDemoTabBarController.h"
 
 @interface TIoTPlayConfigVC ()<UITextFieldDelegate>
 
@@ -89,13 +92,23 @@
         environment.cloudSecretKey = self.loginView.secretKeyString;
         environment.cloudProductId = self.loginView.productIDString;
         
-        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-        [self.navigationController pushViewController:playListVC animated:YES];
+        //原播放列表
+//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+//        [self.navigationController pushViewController:playListVC animated:YES];
         
+        TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc]init];
+        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
+        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
         
     }else {
-        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-        [self.navigationController pushViewController:playListVC animated:YES];
+        //原播放列表
+//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+//        [self.navigationController pushViewController:playListVC animated:YES];
+        
+        TIoTHomeViewController *homeVC = [[TIoTHomeViewController alloc]init];
+        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
+//        TIoTDemoTabBarController *tabbarVC = [[TIoTDemoTabBarController alloc]init];
+        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     }
     
 }
