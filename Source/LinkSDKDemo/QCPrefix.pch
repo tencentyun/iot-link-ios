@@ -17,6 +17,9 @@
 #import "TIoTCoreRequestAction.h"
 #import "TIoTCoreAPISets.h"
 #import "TIoTCoreQMacros.h"
+#import "UIColor+Color.h"
+#import "UIButton+TIoTButtonFormatter.h"
+#import "UILabel+TIoTLableFormatter.h"
 
 #import "LinkSDKDemo-Swift.h"
 #endif
