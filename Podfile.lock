@@ -1,4 +1,5 @@
 PODS:
+  - CocoaAsyncSocket (7.6.5)
   - FDFullscreenPopGesture (1.1)
   - Firebase/Analytics (6.31.1):
     - Firebase/Core
@@ -125,23 +126,25 @@ PODS:
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel
   - TIoTLinkKit/LinkSDK (1.0.0):
-    - MBProgressHUD (= 1.1.0)
+    - CocoaAsyncSocket
+    - MBProgressHUD
   - TIoTLinkKit/LinkVideo (1.0.0):
     - TIoTLinkKit/LinkSDK
     - TIoTLinkThirdPartyKit/Faac-iOS
     - TIoTLinkThirdPartyKit/IJKPlayer-iOS
     - TIoTLinkThirdPartyKit/XP2P-iOS
-  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.2)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.2)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.2)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.2)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.2)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.3.1)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.3.1)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.3.1)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.3.1)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.3.1)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - CocoaAsyncSocket (= 7.6.5)
   - FDFullscreenPopGesture (= 1.1)
   - Firebase/Analytics (= 6.31.1)
   - Firebase/Crashlytics (= 6.31.1)
@@ -150,6 +153,7 @@ DEPENDENCIES:
   - KeychainAccess (= 4.2.0)
   - lottie-ios (= 3.1.8)
   - Masonry (= 1.1.0)
+  - MBProgressHUD (= 1.1.0)
   - MGJRouter (= 0.10.0)
   - MJRefresh (= 3.2.0)
   - QCloudCOSXML/Transfer (= 5.5.2)
@@ -167,6 +171,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CocoaAsyncSocket
     - FDFullscreenPopGesture
     - Firebase
     - FirebaseABTesting
@@ -208,6 +213,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   Firebase: 658370fa0181826a74b7cfca8d68c5856ca749ae
   FirebaseABTesting: 8a9d8df3acc2b43f4a22014ddf9f601bca6af699
@@ -238,13 +244,13 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 8cc25f98274f71c62429d483454f222f44c00d6e
-  TIoTLinkThirdPartyKit: 25bc25b9b1fcb08d44a45d274db19ff5d07bd279
+  TIoTLinkKit: f8f5becbaa33b337f06b6f5e25d57c4216bc60eb
+  TIoTLinkThirdPartyKit: ca3e09d0cd6273ef650c9c661b15f02682aeaa16
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 98971f9c2c79d2926003a7d5996a923988f16335
+PODFILE CHECKSUM: 2b3ca1dddebcf18e106340d1a358d296383c422d
 
 COCOAPODS: 1.9.3

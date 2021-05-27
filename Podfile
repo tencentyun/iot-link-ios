@@ -1,9 +1,10 @@
-platform :ios, '10.0'
+platform :ios, '9.0'
 #inhibit_all_warnings!
 use_frameworks!
 
 def common_all_pods
   pod 'Masonry', '1.1.0'
+  pod 'MBProgressHUD', '1.1.0'
   pod 'SDWebImage', '4.4.2'
   pod 'YYModel', '1.0.4'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
@@ -27,8 +28,9 @@ target 'LinkApp' do
   pod 'KeychainAccess', '4.2.0'
   pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
-  pod 'TIoTLinkThirdPartyKit/TPNS-iOS'#, '~> 2.0.0-beta.1'
-  pod 'TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay'#, '~> 2.0.0-beta.1'
+  pod 'CocoaAsyncSocket', '7.6.5'
+  pod 'TIoTLinkThirdPartyKit/TPNS-iOS'#, '~> 2.0.3-beta.202105271750'
+  pod 'TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay'#, '~> 2.0.3-beta.202105271750'
 end
 
 target 'LinkSDKDemo' do
