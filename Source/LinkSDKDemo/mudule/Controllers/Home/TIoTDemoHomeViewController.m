@@ -14,6 +14,7 @@
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTCoreDeviceSet.h"
 #import "TIoTCoreXP2PBridge.h"
+#import "TIoTDemoSameScreenVC.h"
 
 #import "TIoTExploreDeviceListModel.h"
 #import "TIoTVideoDeviceListModel.h"
@@ -26,6 +27,8 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 @interface TIoTDemoHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, assign) BOOL isShowSameScreenChoiceIcon;
+@property (nonatomic, strong) NSMutableArray *selectedArray;
 @end
 
 @implementation TIoTDemoHomeViewController
@@ -46,6 +49,9 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 }
 
 - (void)setupUIViews {
+    
+    self.isShowSameScreenChoiceIcon = NO;
+    
     self.view.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
     
     [self.view addSubview:self.collectionView];
@@ -84,10 +90,22 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
     TIoTDemoVideoDeviceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kVideoDeviceListCellID forIndexPath:indexPath];
     
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+    
+    cell.isShowChoiceDeviceIcon = self.isShowSameScreenChoiceIcon;
+    
+    cell.chooseDeviceBlock = ^NSMutableArray *(BOOL isSelected) {
+        if (isSelected) {
+            model.isSelected = @"1";
+            [self.selectedArray addObject:model];
+        }else {
+            model.isSelected = @"0";
+            [self.selectedArray removeObject:model];
+        }
+        return self.selectedArray;
+    };
     cell.model = model;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
-    __weak typeof(self) weakSelf = self;
     cell.moreActionBlock = ^{
         NSArray *actionTitleArray = @[@"预览",@"回放",@"取消"];
         
@@ -131,6 +149,66 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoDeviceHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kVIdeoDeviceListHeaderID forIndexPath:indexPath];
+    
+    //编辑操作
+    headerView.editBlock = ^(TIoTDemoDeviceHeaderView *headerView,BOOL isEditPartten){
+        
+        if (isEditPartten) {
+            TIoTDemoCustomSheetView *editSheet = [[TIoTDemoCustomSheetView alloc]init];
+            
+            NSArray *actionTitleArray = @[@"编辑同屏摄像机",@"取消"];
+            //选择同频摄像机
+            ChooseFunctionBlock editSameScreen = ^(TIoTDemoCustomSheetView *view) {
+                
+                self.isShowSameScreenChoiceIcon = YES;
+                
+                [collectionView reloadData];
+                
+                [headerView enterEditPattern];
+                [editSheet removeFromSuperview];
+            };
+            //取消
+            ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
+                [headerView exitEditPattern];
+                [view removeFromSuperview];
+            };
+            
+            NSArray *actionBlockArray = @[editSameScreen,cancelBlock];
+            
+            [editSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
+            [[UIApplication sharedApplication].delegate.window addSubview:editSheet];
+            [editSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+            }];
+        }else {
+            self.isShowSameScreenChoiceIcon = NO;
+            [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                TIoTExploreOrVideoDeviceModel *model = obj;
+                model.isSelected = @"0";
+            }];
+            if (self.selectedArray.count != 0) {
+                [self.selectedArray removeAllObjects];
+            }
+            [collectionView reloadData];
+            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+            [self.navigationController pushViewController:sameScreenVC animated:YES];
+        }
+        
+    };
+    
+    //取消操作
+    headerView.cancelEditBlock = ^{
+        self.isShowSameScreenChoiceIcon = NO;
+        [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            model.isSelected = @"0";
+        }];
+        if (self.selectedArray.count != 0) {
+            [self.selectedArray removeAllObjects];
+        }
+        [collectionView reloadData];
+    };
+    
     return headerView;
     
 }
@@ -152,6 +230,13 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
         [_collectionView registerClass:[TIoTDemoDeviceHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kVIdeoDeviceListHeaderID];
     }
     return _collectionView;
+}
+
+- (NSMutableArray *)selectedArray {
+    if (!_selectedArray) {
+        _selectedArray = [[NSMutableArray alloc]init];
+    }
+    return _selectedArray;
 }
 
 /*

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class TIoTVideoDeviceModel;
 
 @interface TIoTVideoDeviceListModel : NSObject
-@property (nonatomic, strong) NSArray <TIoTVideoDeviceModel *> * Data;
+@property (nonatomic, strong) NSArray <TIoTExploreOrVideoDeviceModel *> * Data;
 @property (nonatomic, assign) NSInteger TotalCount;
 @end
 
