@@ -20,6 +20,7 @@
 #define kVideoDemoMainThemeColor @"#0052D9"
 #define kVideoDemoPlaceColor @"#BBBBBB"
 #define KActionSheetBackgroundColor @"#F5F5F5"
+#define kVideoDemoTextContentColor @"#A1A7B2"
 
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height

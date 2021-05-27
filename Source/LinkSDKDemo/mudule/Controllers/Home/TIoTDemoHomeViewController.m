@@ -39,6 +39,7 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
     
     [self setupNavBarStyle];
     [self setupUIViews];
+    [self addRefreshControl];
     [self requestDeviceList];
 }
 
@@ -66,6 +67,21 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
     
 }
 
+- (void)addRefreshControl {
+    if (@available(iOS 10.0,*)) {
+        
+        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.tintColor = [UIColor colorWithHexString:kVideoDemoTextContentColor];
+        refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新" attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor colorWithHexString:kVideoDemoMainThemeColor]}];
+        [refreshControl addTarget:self action:@selector(refreshDeviceList:) forControlEvents:UIControlEventValueChanged];
+        self.collectionView.refreshControl = refreshControl;
+    }
+}
+
+- (void)refreshDeviceList:(UIRefreshControl *)sender {
+    [self requestDeviceList];
+}
+
 #pragma mark - 请求设备列表
 - (void)requestDeviceList {
     [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId returnModel:YES success:^(id  _Nonnull responseObject) {
@@ -74,7 +90,8 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
         [self.dataArray removeAllObjects];
         self.dataArray = [NSMutableArray arrayWithArray:model.Data];
         [self.collectionView reloadData];
-
+        [self.collectionView.refreshControl endRefreshing];
+        
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
 
     }];
