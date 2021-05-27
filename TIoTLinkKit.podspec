@@ -13,14 +13,15 @@ Pod::Spec.new do |s|
   s.author           = { 'iot-ios-sdk' => 'dev@goodow.com' }
   s.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => "v#{s.version}" }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '9.0'
   s.static_framework = true
 
   s.default_subspec = 'LinkSDK'
   
   s.subspec 'LinkSDK' do |ss|
     ss.source_files  = 'Source/SDK/LinkSDK/**/*.{h,m,c}'
-    ss.dependency 'MBProgressHUD', '1.1.0'
+    ss.dependency 'MBProgressHUD'
+    ss.dependency 'CocoaAsyncSocket'
   end
   
   #实时音视频，引入则开启
