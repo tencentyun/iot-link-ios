@@ -8,13 +8,14 @@
 
 #import "TIoTDemoVideoDeviceCell.h"
 
+static NSInteger const maxLimitDeviceNumber = 4;
+
 @interface TIoTDemoVideoDeviceCell ()
-@property (nonatomic, strong) UIImageView *deviceIcon;
-@property (nonatomic, strong) UIButton *moreFuncBtn;
-@property (nonatomic, strong) UILabel *deviceNameLabel;
-@property (nonatomic, strong) UILabel *onlineTipLabel;
-@property (nonatomic, strong) UIButton *chooseDeviceBtn;
-@property (nonatomic, strong) UIImageView *maskView;
+@property (nonatomic, strong) UIImageView *deviceIcon;   //设备icon
+@property (nonatomic, strong) UIButton *moreFuncBtn;     //更多按钮
+@property (nonatomic, strong) UILabel *deviceNameLabel;  //设备名称
+@property (nonatomic, strong) UILabel *onlineTipLabel;   //离线/在线  显示
+@property (nonatomic, strong) UIImageView *maskView;     //离线遮罩
 @end
 
 @implementation TIoTDemoVideoDeviceCell
@@ -73,14 +74,16 @@
     }];
     
     self.chooseDeviceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.chooseDeviceBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-    [self.chooseDeviceBtn addTarget:self action:@selector(chooseDevice) forControlEvents:UIControlEventTouchUpInside];
+    [self.chooseDeviceBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
+    [self.chooseDeviceBtn addTarget:self action:@selector(chooseDevice:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.chooseDeviceBtn];
     [self.chooseDeviceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.contentView.mas_right).offset(-kPadding);
         make.bottom.equalTo(self.onlineTipLabel.mas_bottom);
         make.width.height.mas_equalTo(kMoreFuncBtnSize);
     }];
+    
+    self.chooseDeviceBtn.hidden = YES;
     
     self.maskView = [[UIImageView alloc]init];
     self.maskView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.7];
@@ -94,7 +97,7 @@
 
 - (void)setModel:(TIoTExploreOrVideoDeviceModel *)model {
     _model = model;
-    self.deviceNameLabel.text = model.DeviceName;
+    self.deviceNameLabel.text = model.DeviceName?:@"";
     if ([model.Online isEqualToString:@"1"]) { //在线
         self.onlineTipLabel.text = @"在线";
         self.onlineTipLabel.textColor = [UIColor colorWithHexString:@"#29CC85"];
@@ -103,6 +106,12 @@
         self.onlineTipLabel.text = @"离线";
         self.onlineTipLabel.textColor = [UIColor colorWithHexString:@"#000000"];
         self.maskView.hidden = NO;
+    }
+    
+    if ([model.isSelected isEqualToString:@"1"]) { //选中
+        [self.chooseDeviceBtn setImage:[UIImage imageNamed:@"device_select"] forState:UIControlStateNormal];
+    }else if ([model.isSelected isEqualToString:@"0"]) { //没选中
+        [self.chooseDeviceBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
     }
     
 }
@@ -114,10 +123,33 @@
     
 }
 
-- (void)chooseDevice {
-//    device_unselect  device_select
+- (void)chooseDevice:(UIButton *)button {
     if (self.chooseDeviceBlock) {
-        self.chooseDeviceBlock();
+        
+       NSMutableArray *selectedArray = self.chooseDeviceBlock(!button.selected);
+        
+        if (selectedArray.count <= maxLimitDeviceNumber) {
+            if (!button.selected) {
+                [button setImage:[UIImage imageNamed:@"device_select"] forState:UIControlStateNormal];
+            }else {
+                [button setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
+            }
+            button.selected = !button.selected;
+        }else {
+            [MBProgressHUD showMessage:[NSString stringWithFormat:@"最多选择%ld台摄像机",(long)maxLimitDeviceNumber] icon:@"overstep_device"];
+        }
+        
+    }
+}
+
+- (void)setIsShowChoiceDeviceIcon:(BOOL)isShowChoiceDeviceIcon {
+    _isShowChoiceDeviceIcon = isShowChoiceDeviceIcon;
+    if (isShowChoiceDeviceIcon) {
+        self.chooseDeviceBtn.hidden = NO;
+        [self.chooseDeviceBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
+    }else {
+        [self.chooseDeviceBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        self.chooseDeviceBtn.hidden = YES;
     }
 }
 @end

@@ -11,7 +11,9 @@
 @interface TIoTDemoDeviceHeaderView ()
 @property (nonatomic, strong) UILabel *headerTitle;
 @property (nonatomic, strong) UIButton *editBtn; //编辑按钮
+@property (nonatomic, strong) UIButton *cancelBtn; //取消按钮
 @property (nonatomic, strong) UIImageView *editImage; //编辑图标
+@property (nonatomic, assign) BOOL isEdit;
 @end
 
 @implementation TIoTDemoDeviceHeaderView
@@ -27,6 +29,7 @@
 - (void)setupHeaderViews {
     self.backgroundColor = [UIColor clearColor];
     
+    self.isEdit = NO;
     CGFloat kWidthPadding = 16;
     
     self.headerTitle = [[UILabel alloc]init];
@@ -55,21 +58,57 @@
         make.centerY.equalTo(self);
         make.width.height.mas_equalTo(kImageWidthHeight);
     }];
+    
+    self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.cancelBtn setButtonFormateWithTitlt:@"取消" titleColorHexString:@"#0066FF" font:[UIFont wcPfRegularFontOfSize:15]];
+    [self.cancelBtn addTarget:self action:@selector(cancelEnit:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.cancelBtn];
+    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.right.equalTo(self.editBtn.mas_left).offset(-30);
+    }];
+    
+    self.cancelBtn.hidden = YES;
 }
 
 - (void)editDevice:(UIButton *)button {
     
-    if (!button.selected) {
-        [self.editBtn setTitle:@"完成" forState:UIControlStateNormal];
-        self.editImage.hidden = YES;
-    }else {
-        [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-        self.editImage.hidden = NO;
-    }
-    button.selected = !button.selected;
-    
     if (self.editBlock) {
-        self.editBlock();
+        
+        if (self.isEdit == NO) {
+            if (!button.selected) {
+                self.editBlock(self,YES);
+            }
+        }else {
+            NSLog(@"进入同屏模式");
+            [self exitEditPattern];
+            self.editBlock(self,NO);
+        }
     }
+    
+}
+
+- (void)cancelEnit:(UIButton *)button {
+    
+    [self exitEditPattern];
+    
+    if (self.cancelEditBlock) {
+        
+        self.cancelEditBlock();
+    }
+}
+
+- (void)enterEditPattern {
+    [self.editBtn setTitle:@"完成" forState:UIControlStateNormal];
+    self.editImage.hidden = YES;
+    self.cancelBtn.hidden = NO;
+    self.isEdit = YES;
+}
+
+- (void)exitEditPattern {
+    [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    self.editImage.hidden = NO;
+    self.cancelBtn.hidden = YES;
+    self.isEdit = NO;
 }
 @end
