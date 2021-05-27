@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *OtaVersion;
 @property (nonatomic, copy) NSString *StreamStatus;
 @property (nonatomic, copy) NSString *Tid;
-
+@property (nonatomic, strong) NSString *isSelected; //本地维护
 
 /// ExploreDeviceListModel
 @property (nonatomic, copy) NSString *AppKey;
