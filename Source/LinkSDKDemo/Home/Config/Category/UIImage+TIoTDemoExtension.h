@@ -1,5 +1,5 @@
 //
-//  UIImage+TIoTDemoExtensioni.h
+//  UIImage+TIoTDemoExtension.h
 //  LinkApp
 //
 //  Created by ccharlesren on 2021/5/25.
