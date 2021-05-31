@@ -2593,7 +2593,7 @@
 				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
 				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
 				F4F3D79524938EBD005D3396 /* Base.lproj */,
-				F4F3D73524938EBD005D3396 /* mudule */,
+				F4F3D73524938EBD005D3396 /* Home */,
 				F4F3D79424938EBD005D3396 /* QCPrefix.pch */,
 				F4F3D53424935BD3005D3396 /* Main.storyboard */,
 				F4F3D53724935BD3005D3396 /* Assets.xcassets */,
@@ -2615,7 +2615,7 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		F4F3D73524938EBD005D3396 /* mudule */ = {
+		F4F3D73524938EBD005D3396 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				6D204AB9265B9086007F6F27 /* Config */,
@@ -2624,7 +2624,7 @@
 				F4F3D73924938EBD005D3396 /* View */,
 				F4F3D74E24938EBD005D3396 /* Controllers */,
 			);
-			path = mudule;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		F4F3D73624938EBD005D3396 /* Model */ = {
