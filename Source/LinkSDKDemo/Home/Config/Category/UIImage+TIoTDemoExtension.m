@@ -1,12 +1,12 @@
 //
-//  UIImage+TIoTDemoExtensioni.m
+//  UIImage+TIoTDemoExtension.m
 //  LinkApp
 //
 //  Created by ccharlesren on 2021/5/25.
 //  Copyright © 2021 Tencent. All rights reserved.
 //
 
-#import "UIImage+TIoTDemoExtensioni.h"
+#import "UIImage+TIoTDemoExtension.h"
 
 @implementation UIImage (TIoTDemoExtensioni)
 

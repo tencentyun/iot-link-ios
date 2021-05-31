@@ -7,7 +7,7 @@
 //
 
 #import "TIoTDemoTabBarController.h"
-#import "UIImage+TIoTDemoExtensioni.h"
+#import "UIImage+TIoTDemoExtension.h"
 #import "TIoTDemoHomeViewController.h"
 #import "TIoTDemoNavController.h"
 
