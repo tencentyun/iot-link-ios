@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class TIoTDemoVideoDeviceCell;
 
-typedef NSMutableArray *(^TIoTDemoChooseDeviceBlcok)(BOOL isSelected);
+typedef NSMutableArray *_Nullable(^TIoTDemoChooseDeviceBlcok)(BOOL isSelected);
 typedef void(^TIoTDemoShowMoreActionBlock)(void);
 
 @interface TIoTDemoVideoDeviceCell : UICollectionViewCell

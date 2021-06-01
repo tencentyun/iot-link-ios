@@ -97,18 +97,45 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 
 #pragma mark - 请求设备列表
 - (void)requestDeviceList {
-    [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId returnModel:YES success:^(id  _Nonnull responseObject) {
-        TIoTVideoDeviceListModel *model = [TIoTVideoDeviceListModel yy_modelWithJSON:responseObject];
-
-        [self.dataArray removeAllObjects];
-        self.dataArray = [NSMutableArray arrayWithArray:model.Data];
-        [self.collectionView reloadData];
-        [self.collectionView.refreshControl endRefreshing];
-        
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
-    }];
     
+    //video 设备列表
+//    [self requestVideoList];
+    
+    //explore 设备列表
+    [self requestExploreList];
+    
+}
+
+///MARK: video 设备列表
+- (void)requestVideoList {
+        [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId returnModel:YES success:^(id  _Nonnull responseObject) {
+            TIoTVideoDeviceListModel *model = [TIoTVideoDeviceListModel yy_modelWithJSON:responseObject];
+            
+            [self.dataArray removeAllObjects];
+            self.dataArray = [NSMutableArray arrayWithArray:model.Data];
+            [self.collectionView reloadData];
+            [self.collectionView.refreshControl endRefreshing];
+            
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+    
+        }];
+}
+
+
+///MARK: explore 设备列表
+- (void)requestExploreList {
+        [[TIoTCoreDeviceSet shared] getExploreDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId success:^(id  _Nonnull responseObject) {
+    
+            TIoTExploreDeviceListModel *model = [TIoTExploreDeviceListModel yy_modelWithJSON:responseObject];
+            
+            [self.dataArray removeAllObjects];
+            self.dataArray = [NSMutableArray arrayWithArray:model.Devices];
+            [self.collectionView reloadData];
+            [self.collectionView.refreshControl endRefreshing];
+    
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+    
+        }];
 }
 
 #pragma mark - UICollectionViewDataSource And UICollectionViewDelegate
@@ -122,16 +149,16 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
     
     cell.isShowChoiceDeviceIcon = self.isShowSameScreenChoiceIcon;
-    
+    __weak typeof(self) weakSelf = self;
     cell.chooseDeviceBlock = ^NSMutableArray *(BOOL isSelected) {
         if (isSelected) {
             model.isSelected = @"1";
-            [self.selectedArray addObject:model];
+            [weakSelf.selectedArray addObject:model];
         }else {
             model.isSelected = @"0";
-            [self.selectedArray removeObject:model];
+            [weakSelf.selectedArray removeObject:model];
         }
-        return self.selectedArray;
+        return weakSelf.selectedArray;
     };
     cell.model = model;
     
@@ -212,9 +239,10 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
                 make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
             }];
         }else {
-            [weakSelf resetDeviceListStatus];
             TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+            [sameScreenVC setupSameScreenArray:self.selectedArray];
             [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+            [weakSelf resetDeviceListStatus];
         }
         
     };

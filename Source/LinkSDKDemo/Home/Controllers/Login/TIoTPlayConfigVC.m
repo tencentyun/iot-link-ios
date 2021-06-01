@@ -64,6 +64,11 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+}
+
 - (void)hideKeyBoard {
     [self.loginView.accessID resignFirstResponder];
     [self.loginView.accessToken resignFirstResponder];
@@ -97,8 +102,10 @@
 //        [self.navigationController pushViewController:playListVC animated:YES];
         
         TIoTDemoHomeViewController *homeVC = [[TIoTDemoHomeViewController alloc]init];
-        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
-        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
+        [self.navigationController pushViewController:homeVC animated:YES];
+//        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
+//        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
+        
         
     }else {
         //原播放列表
@@ -106,9 +113,10 @@
 //        [self.navigationController pushViewController:playListVC animated:YES];
         
         TIoTDemoHomeViewController *homeVC = [[TIoTDemoHomeViewController alloc]init];
-        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
+        [self.navigationController pushViewController:homeVC animated:YES];
+//        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
 //        TIoTDemoTabBarController *tabbarVC = [[TIoTDemoTabBarController alloc]init];
-        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
+//        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     }
     
 }

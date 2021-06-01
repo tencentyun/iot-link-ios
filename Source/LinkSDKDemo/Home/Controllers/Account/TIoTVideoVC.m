@@ -41,6 +41,8 @@
 
 - (void)initVideoUI {
     
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
     CGFloat kTopPadding = 90;
     CGFloat kLogoWidthOrHeight = 128;
     CGFloat kWidthPadding = 30;

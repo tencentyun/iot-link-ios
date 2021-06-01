@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
-    
+    self.title = @"IoT Video Demo";
     [self addRotateNotification];
 }
 
