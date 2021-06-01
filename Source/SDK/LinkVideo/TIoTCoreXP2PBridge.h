@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTCoreXP2PBridge : NSObject
 @property (nonatomic, weak)id<TIoTCoreXP2PBridgeDelegate> delegate;
 @property (nonatomic, assign)BOOL writeFile; //是否将数据帧写入文档
+@property (nonatomic, assign) BOOL isRecording; //开始录屏
+@property (nonatomic, assign) FILE *file_fp;
 
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
