@@ -63,6 +63,11 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
         [delegate getVideoPacket:recv_buf len:recv_len];
     }
+    
+    TIoTCoreXP2PBridge *bridge = [TIoTCoreXP2PBridge sharedInstance];
+    if (bridge.isRecording) {
+        fwrite(recv_buf, 1, recv_len, bridge.file_fp);
+    }
 }
 
 
@@ -113,6 +118,12 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
+    //保存本地视频测试
+    NSString *fileName = @"TTVideo.flv";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths.firstObject;
+    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+    _file_fp = fopen(saveFilePath.UTF8String, "wb");
 //注册回调
 //    setStunServerToXp2p("11.11.11.11", 111);
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
@@ -157,29 +168,31 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name {
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    
-    self.isSending = YES;
-    
-    self.dev_name = dev_name;
-    
-    _serverHandle = runSendService(dev_name.UTF8String, "", false); //发送数据前需要告知http proxy
-    
-    AWAudioConfig *config = [[AWAudioConfig alloc] init];
-    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];
-    systemAvCapture.delegate = self;
-    systemAvCapture.audioEncoderType = AWAudioEncoderTypeSWFAAC;
-    [systemAvCapture startCapture];
+    self.isRecording = YES;
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//
+//    self.isSending = YES;
+//
+//    self.dev_name = dev_name;
+//
+//    _serverHandle = runSendService(dev_name.UTF8String, "", false); //发送数据前需要告知http proxy
+//
+//    AWAudioConfig *config = [[AWAudioConfig alloc] init];
+//    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];
+//    systemAvCapture.delegate = self;
+//    systemAvCapture.audioEncoderType = AWAudioEncoderTypeSWFAAC;
+//    [systemAvCapture startCapture];
 }
 
 - (void)stopVoiceToServer {
-    self.isSending = NO;
-    
-    [systemAvCapture stopCapture];
-    systemAvCapture.delegate = nil;
-    
-    stopSendService(self.dev_name.UTF8String, nullptr);
+    self.isRecording = NO;
+//    self.isSending = NO;
+//
+//    [systemAvCapture stopCapture];
+//    systemAvCapture.delegate = nil;
+//
+//    stopSendService(self.dev_name.UTF8String, nullptr);
 }
 
 - (void)stopService:(NSString *)dev_name {
