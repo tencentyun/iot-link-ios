@@ -16,6 +16,12 @@
     return components.day;
 }
 
+- (NSInteger)lundarDateDay {
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierChinese];
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay fromDate:self];
+    return components.day;
+}
+
 - (NSInteger)dateMonth {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSCalendarUnitMonth fromDate:self];
@@ -32,7 +38,7 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self];
-    components.day = 15; // 定位到当月中间日子
+//    components.day = 15; // 定位到当月中间日子
     
     if (components.month == 1) {
         components.month = 12;
@@ -50,7 +56,7 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self];
-    components.day = 15; // 定位到当月中间日子
+//    components.day = 15; // 定位到当月中间日子
     
     if (components.month == 12) {
         components.month = 1;

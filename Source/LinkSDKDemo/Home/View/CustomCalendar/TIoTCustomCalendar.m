@@ -29,31 +29,37 @@
 
 - (void)setupCalendarViewWithFrame:(CGRect)frame {
     
-    TIoTCustomCalendarView *customCalendar = [[TIoTCustomCalendarView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    self.customCalendar = [[TIoTCustomCalendarView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     
-    customCalendar.calendarColor = [UIColor brownColor];
+    self.customCalendar.calendarColor = [UIColor whiteColor];
     
-//    customCalendar.dateArray = @[@"2021-1-20",@"2021-2-2"];
-    customCalendar.dateArray = @[];
-    [self addSubview:customCalendar];
+    self.customCalendar.dateArray = @[@"2021-5-20",@"2021-7-5"];
+//    self.customCalendar.dateArray = @[];
+    [self addSubview:self.customCalendar];
     
-    customCalendar.selectedDayBlcok = ^(NSInteger year, NSInteger month, NSInteger day) {
+    __weak typeof(self) weakSelf = self;
+    self.customCalendar.selectedDayBlcok = ^(NSInteger year, NSInteger month, NSInteger day) {
         
-        if (self.selectedDateBlock) {
-            self.selectedDateBlock([NSString stringWithFormat:@"%ld-%ld-%ld", (long)year, (long)month, (long)day]);
-            [self removeView];
+        if (weakSelf.selectedDateBlock) {
+            weakSelf.selectedDateBlock([NSString stringWithFormat:@"%ld-%ld-%ld", (long)year, (long)month, (long)day]);
+//            [self removeView];
         }
         
     };
     
-    customCalendar.removeViewBlock = ^{
-        [self removeView];
+    self.customCalendar.removeViewBlock = ^{
+        [weakSelf removeView];
     };
 }
 
 -(void)removeView {
     
     [self removeFromSuperview];
+}
+
+- (void)setDateArray:(NSArray *)dateArray {
+    _dateArray = dateArray;
+//    self.customCalendar.dateArray = dateArray?:@[];
 }
 /*
 // Only override drawRect: if you perform custom drawing.
