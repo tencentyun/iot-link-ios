@@ -16,7 +16,7 @@
         
         [self addSubview:self.todayBackCircle];
         [self addSubview:self.todayLabel];
-        
+        [self addSubview:self.lunarLabel];
     }
     
     return self;
@@ -24,21 +24,33 @@
 
 - (UIView *)todayBackCircle {
     if (_todayBackCircle == nil) {
-        _todayBackCircle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.8 * self.bounds.size.height, 0.8 * self.bounds.size.height)];
+        _todayBackCircle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height, self.bounds.size.height)];
         _todayBackCircle.center = CGPointMake(self.bounds.size.width/2,self.bounds.size.height/2);
-        _todayBackCircle.layer.cornerRadius = _todayBackCircle.frame.size.width/2;
+        _todayBackCircle.layer.cornerRadius = 8;
+        _todayBackCircle.layer.masksToBounds = YES;
     }
     return _todayBackCircle;
 }
 
 - (UILabel *)todayLabel {
     if (_todayLabel == nil) {
-        _todayLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _todayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 12, self.bounds.size.width, 22)];
         _todayLabel.textAlignment = NSTextAlignmentCenter;
-        _todayLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        _todayLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+        _todayLabel.textColor = [UIColor blackColor];
         _todayLabel.backgroundColor = [UIColor clearColor];
     }
     return _todayLabel;
 }
 
+- (UILabel *)lunarLabel {
+    if (!_lunarLabel) {
+        _lunarLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.todayLabel.frame), self.bounds.size.width, 14)];
+        _lunarLabel.text = @"";
+        _lunarLabel.textColor = [UIColor colorWithRed:127/255.0 green:127/255.0 blue:127/255.0 alpha:1];
+        _lunarLabel.textAlignment = NSTextAlignmentCenter;
+        _lunarLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:10];
+    }
+    return _lunarLabel;
+}
 @end

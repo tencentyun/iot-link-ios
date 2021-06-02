@@ -10,6 +10,7 @@
 #import "TIoTCustomCalendarCell.h"
 #import "TIoTCustomCalendarMonth.h"
 #import "NSDate+TIoTCustomCalendar.h"
+#import "TIoTDemoDateTool.h"
 
 @interface TIoTCustomCalendarScrollView() <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -83,7 +84,7 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
 - (void)setupCollectionViews {
         
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.itemSize = CGSizeMake(self.bounds.size.width / 7.0, self.bounds.size.width / 7.0 * 0.85);
+    flowLayout.itemSize = CGSizeMake(self.bounds.size.width / 7.0, 61);
     flowLayout.minimumLineSpacing = 0.0;
     flowLayout.minimumInteritemSpacing = 0.0;
     
@@ -172,7 +173,8 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
         // 当前月
         if (indexPath.row >= firstWeekday && indexPath.row < firstWeekday + totalDays) {
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday + 1];
-            cell.todayLabel.textColor = [UIColor darkTextColor];
+            cell.todayLabel.textColor = [UIColor blackColor];
+            cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:monthInfo.month year:monthInfo.year];
             
             for (NSString *dateString in self.dateArray) {
                 NSArray *dateTemp = [dateString componentsSeparatedByString:@"-"];
@@ -200,10 +202,20 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", totalDaysOflastMonth - (firstWeekday - indexPath.row) + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            if (monthInfo.month == 1) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:12 year:(monthInfo.year - 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month - 1) year:monthInfo.year];
+            }
         } else if (indexPath.row >= firstWeekday + totalDays) {
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday - totalDays + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            if (monthInfo.month == 12) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:1 year:(monthInfo.year + 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month + 1) year:monthInfo.year];
+            }
         }
         
         cell.userInteractionEnabled = NO;
@@ -218,7 +230,8 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
         // 当前月
         if (indexPath.row >= firstWeekday && indexPath.row < firstWeekday + totalDays) {
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday + 1];
-            cell.todayLabel.textColor = [UIColor darkTextColor];
+            cell.todayLabel.textColor = [UIColor blackColor];
+            cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:monthInfo.month year:monthInfo.year];
             cell.userInteractionEnabled = YES;
             
             for (NSString *dateString in self.dateArray) {
@@ -251,11 +264,22 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", totalDaysOflastMonth - (firstWeekday - indexPath.row) + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            
+            if (monthInfo.month == 1) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:12 year:(monthInfo.year - 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month - 1) year:monthInfo.year];
+            }
             cell.userInteractionEnabled = NO;
         } else if (indexPath.row >= firstWeekday + totalDays) {
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday - totalDays + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            if (monthInfo.month == 12) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:1 year:(monthInfo.year + 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month + 1) year:monthInfo.year];
+            }
             cell.userInteractionEnabled = NO;
         }
         
@@ -270,8 +294,8 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
         if (indexPath.row >= firstWeekday && indexPath.row < firstWeekday + totalDays) {
             
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday + 1];
-            cell.todayLabel.textColor = [UIColor darkTextColor];
-            
+            cell.todayLabel.textColor = [UIColor blackColor];
+            cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:monthInfo.month year:monthInfo.year];
             for (NSString *dateString in self.dateArray) {
                 NSArray *dateTemp = [dateString componentsSeparatedByString:@"-"];
                 NSString *yearString = dateTemp.firstObject;
@@ -299,10 +323,20 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", totalDaysOflastMonth - (firstWeekday - indexPath.row) + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            if (monthInfo.month == 1) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:12 year:(monthInfo.year - 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month - 1) year:monthInfo.year];
+            }
         } else if (indexPath.row >= firstWeekday + totalDays) {
             cell.todayLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row - firstWeekday - totalDays + 1];
             cell.todayLabel.textColor = [UIColor colorWithWhite:0.85 alpha:1.0];
             cell.todayBackCircle.backgroundColor = [UIColor clearColor];
+            if (monthInfo.month == 12) {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:1 year:(monthInfo.year + 1)];
+            }else {
+                cell.lunarLabel.text = [TIoTDemoDateTool getLunarCalendarWithDay:cell.todayLabel.text.integerValue month:(monthInfo.month + 1) year:monthInfo.year];
+            }
         }
         
         cell.userInteractionEnabled = NO;

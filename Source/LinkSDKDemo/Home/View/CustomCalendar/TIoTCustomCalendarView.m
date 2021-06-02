@@ -9,6 +9,7 @@
 #import "TIoTCustomCalendarView.h"
 #import "TIoTCustomCalendarScrollView.h"
 #import "NSDate+TIoTCustomCalendar.h"
+#import "UILabel+TIoTLableFormatter.h"
 
 @interface TIoTCustomCalendarView()
 
@@ -34,14 +35,14 @@
 
 - (void)setCalendarViewFrame:(CGRect)frame {
     // 根据宽度计算日历view内容部分高度
-    CGFloat kDayLineHight = 0.85 * (frame.size.width / 7.0);
+    CGFloat kDayLineHight = 61;//0.85 * (frame.size.width / 7.0);
     CGFloat kMonthScrollViewHeight = 6 * kDayLineHight;
     
     // 星期栏顶部高度
-    CGFloat kWeekHeaderViewHeight = 0.6 * kDayLineHight;
+    CGFloat kWeekHeaderViewHeight = 33;
     
     // 日历顶部高度
-    CGFloat kHeaderViewHeight = 0.8 * kDayLineHight;
+    CGFloat kHeaderViewHeight = 62;
     
     CGFloat kButtonHeight = 40;
     
@@ -70,7 +71,7 @@
     leftScrollBtn.layer.borderWidth = 1;
     leftScrollBtn.layer.borderColor = self.calendarColor.CGColor;
     [leftScrollBtn addTarget:self action:@selector(clickLastMonthBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:leftScrollBtn];
+    [self.calendarHeaderLabel addSubview:leftScrollBtn];
     
     UIButton *rightScrollBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     rightScrollBtn.frame = CGRectMake(kScreenWidth/2 + 50, CGRectGetMaxY(self.scrollView.frame) + 20, kButtonWidth, kButtonHeight);
@@ -80,7 +81,7 @@
     rightScrollBtn.layer.borderWidth = 1;
     rightScrollBtn.layer.borderColor = self.calendarColor.CGColor;
     [rightScrollBtn addTarget:self action:@selector(clickNextMonthBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:rightScrollBtn];
+    [self.self addSubview:rightScrollBtn];
     
     // 注册监听
     [self addNotificationObserver];
@@ -111,8 +112,8 @@
     UILabel *label = [[UILabel alloc]initWithFrame:frame];
     label.backgroundColor = self.calendarColor;
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize:16.0];
-    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont wcPfRegularFontOfSize:16];
+    label.textColor = [UIColor blackColor];
     return label;
 }
 
