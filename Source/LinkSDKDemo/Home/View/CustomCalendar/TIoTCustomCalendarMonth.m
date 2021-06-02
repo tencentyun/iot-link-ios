@@ -19,6 +19,8 @@
         self.firstWeekday = [self.monthDate firstWeekDayInMonth];
         self.year = [self.monthDate dateYear];
         self.month = [self.monthDate dateMonth];
+        self.day = [self.monthDate dateDay];
+        self.lundarDay = [self.monthDate lundarDateDay];
     }
     return self;
 }

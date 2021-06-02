@@ -9,6 +9,7 @@
 #import "TIoTCustomCalendarView.h"
 #import "TIoTCustomCalendarScrollView.h"
 #import "NSDate+TIoTCustomCalendar.h"
+#import "UILabel+TIoTLableFormatter.h"
 
 @interface TIoTCustomCalendarView()
 
@@ -34,20 +35,20 @@
 
 - (void)setCalendarViewFrame:(CGRect)frame {
     // 根据宽度计算日历view内容部分高度
-    CGFloat kDayLineHight = 0.85 * (frame.size.width / 7.0);
+    CGFloat kDayLineHight = 61;//0.85 * (frame.size.width / 7.0);
     CGFloat kMonthScrollViewHeight = 6 * kDayLineHight;
     
     // 星期栏顶部高度
-    CGFloat kWeekHeaderViewHeight = 0.6 * kDayLineHight;
+    CGFloat kWeekHeaderViewHeight = 33;
     
     // 日历顶部高度
-    CGFloat kHeaderViewHeight = 0.8 * kDayLineHight;
+    CGFloat kHeaderViewHeight = 62;
     
-    CGFloat kButtonHeight = 40;
+    CGFloat kWidthPaddin = 10;
+    CGFloat kBtnWidth = 65;
+    CGFloat kBtnHeight = 24;
     
-    CGFloat kButtonWidth = 120;
-    
-    self.calendarColor = [UIColor brownColor];
+    self.calendarColor = [UIColor whiteColor];
     
     self.calendarHeaderLabel = [self setupCalendarHeaderLabelWithFrame:CGRectMake(0.0, 0.0, frame.size.width, kHeaderViewHeight)];
     
@@ -63,25 +64,20 @@
     
     
     UIButton *leftScrollBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftScrollBtn.frame = CGRectMake(kScreenWidth/2 - 50 - kButtonWidth, CGRectGetMaxY(self.scrollView.frame) + 20, kButtonWidth, kButtonHeight);
-    [leftScrollBtn setTitle:@"上个月" forState:UIControlStateNormal];
-    [leftScrollBtn setTitleColor:self.calendarColor forState:UIControlStateNormal];
-    leftScrollBtn.layer.cornerRadius = 10;
-    leftScrollBtn.layer.borderWidth = 1;
-    leftScrollBtn.layer.borderColor = self.calendarColor.CGColor;
+    leftScrollBtn.frame = CGRectMake(kWidthPaddin, CGRectGetHeight(self.calendarHeaderLabel.frame)/2-kBtnHeight/2, kBtnWidth, kBtnHeight);
+    [leftScrollBtn setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
+    [leftScrollBtn setButtonFormateWithTitlt:@"上个月" titleColorHexString:kVideoDemoMainThemeColor font:[UIFont wcPfRegularFontOfSize:14]];
     [leftScrollBtn addTarget:self action:@selector(clickLastMonthBtn) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:leftScrollBtn];
     
     UIButton *rightScrollBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightScrollBtn.frame = CGRectMake(kScreenWidth/2 + 50, CGRectGetMaxY(self.scrollView.frame) + 20, kButtonWidth, kButtonHeight);
-    [rightScrollBtn setTitle:@"下个月" forState:UIControlStateNormal];
-    [rightScrollBtn setTitleColor:self.calendarColor forState:UIControlStateNormal];
-    rightScrollBtn.layer.cornerRadius = 10;
-    rightScrollBtn.layer.borderWidth = 1;
-    rightScrollBtn.layer.borderColor = self.calendarColor.CGColor;
+    rightScrollBtn.frame = CGRectMake(CGRectGetWidth(self.calendarHeaderLabel.frame)-kBtnWidth-kWidthPaddin, CGRectGetHeight(self.calendarHeaderLabel.frame)/2-kBtnHeight/2, kBtnWidth, kBtnHeight);
+    [rightScrollBtn setImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
+    [rightScrollBtn setButtonFormateWithTitlt:@"下个月" titleColorHexString:kVideoDemoMainThemeColor font:[UIFont wcPfRegularFontOfSize:14]];
+    [rightScrollBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -rightScrollBtn.imageView.image.size.width, 0, rightScrollBtn.imageView.image.size.width)];
+    [rightScrollBtn setImageEdgeInsets:UIEdgeInsetsMake(0, rightScrollBtn.titleLabel.bounds.size.width, 0, -rightScrollBtn.titleLabel.bounds.size.width)];
     [rightScrollBtn addTarget:self action:@selector(clickNextMonthBtn) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:rightScrollBtn];
-    
     // 注册监听
     [self addNotificationObserver];
 }
@@ -111,8 +107,8 @@
     UILabel *label = [[UILabel alloc]initWithFrame:frame];
     label.backgroundColor = self.calendarColor;
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize:16.0];
-    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont wcPfRegularFontOfSize:16];
+    label.textColor = [UIColor blackColor];
     return label;
 }
 
@@ -128,11 +124,12 @@
     for (int i = 0; i < 7; ++i) {
         
         UILabel *weekLabel = [[UILabel alloc] initWithFrame:CGRectMake(i * width, 0.0, width, height)];
-        weekLabel.backgroundColor = [UIColor clearColor];
+        weekLabel.backgroundColor = [UIColor colorWithHexString:kVideoDemoBackgoundColor];
         weekLabel.text = weekArray[i];
-        weekLabel.textColor = [UIColor whiteColor];
-        weekLabel.font = [UIFont systemFontOfSize:13.5];
-        weekLabel.textAlignment = NSTextAlignmentCenter;
+        [weekLabel setLabelFormateTitle: weekArray[i] font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:kVideoDemoWeekLabelColor textAlignment:NSTextAlignmentCenter];
+        if (i == 0 || i == 6) {
+            weekLabel.textColor = [UIColor colorWithHexString:kVideoDemoGreenColor];
+        }
         [view addSubview:weekLabel];
         
     }
@@ -142,11 +139,15 @@
 }
 
 - (TIoTCustomCalendarScrollView *)setupCalendarScrollViewWithFrame:(CGRect)frame {
-    TIoTCustomCalendarScrollView *scrollView = [[TIoTCustomCalendarScrollView alloc] initWithFrame:frame withDateArray:self.dateArray?:@[@"2021-1-20",@"2021-2-2"]];
+    TIoTCustomCalendarScrollView *scrollView = [[TIoTCustomCalendarScrollView alloc] initWithFrame:frame];
     scrollView.calendarThemeColor = self.calendarColor;
     return scrollView;
 }
 
+- (void)setDateArray:(NSArray *)dateArray {
+    _dateArray = dateArray;
+    self.scrollView.inputDateArray = dateArray;
+}
 - (void)setCalendarColor:(UIColor *)calendarColor {
     _calendarColor = calendarColor;
     self.calendarHeaderLabel.backgroundColor = calendarColor;

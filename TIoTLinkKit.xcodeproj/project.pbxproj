@@ -35,6 +35,7 @@
 		6D204EB82664C4E1007F6F27 /* UIBarButtonItem+TIoTDemoCustomUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D204EB72664C4E1007F6F27 /* UIBarButtonItem+TIoTDemoCustomUI.m */; };
 		6D204EBE2664C53A007F6F27 /* UIDevice+TIoTDemoRotateScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D204EBD2664C53A007F6F27 /* UIDevice+TIoTDemoRotateScreen.m */; };
 		6D204EC32664C584007F6F27 /* TIoTDemoBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D204EC22664C584007F6F27 /* TIoTDemoBaseViewController.m */; };
+		6D204FD426668B82007F6F27 /* TIoTDemoDateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D204FD326668B81007F6F27 /* TIoTDemoDateTool.m */; };
 		6D257FFD25DFC330005208C2 /* TIoTTabBarCenterCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */; };
 		6D42390C261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390B261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.m */; };
 		6D423910261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D42390F261F5FCD00C3A5A7 /* TIoTSecureAddDeviceModel.m */; };
@@ -103,6 +104,7 @@
 		6DA918AD262F044D005D9654 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DA918AF262F044D005D9654 /* AppLaunch.png */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
 		6DADCDBF24C18CD800B95D83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */; };
+		6DAF875A26675D2900CD0328 /* TIoTDemoCalendarCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DAF875926675D2900CD0328 /* TIoTDemoCalendarCustomView.m */; };
 		6DB4F9A625FF54C50025EF25 /* TIoTShortcutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB4F9A525FF54C50025EF25 /* TIoTShortcutView.m */; };
 		6DB4F9AA25FF5F290025EF25 /* TIoTShortcutViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB4F9A925FF5F290025EF25 /* TIoTShortcutViewCell.m */; };
 		6DBC4FEA25547AA700169D5C /* TIoTIntelligentProductConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC4FE925547AA700169D5C /* TIoTIntelligentProductConfigModel.m */; };
@@ -528,6 +530,8 @@
 		6D204EBD2664C53A007F6F27 /* UIDevice+TIoTDemoRotateScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+TIoTDemoRotateScreen.m"; sourceTree = "<group>"; };
 		6D204EC12664C583007F6F27 /* TIoTDemoBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoBaseViewController.h; sourceTree = "<group>"; };
 		6D204EC22664C584007F6F27 /* TIoTDemoBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoBaseViewController.m; sourceTree = "<group>"; };
+		6D204FD226668B81007F6F27 /* TIoTDemoDateTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoDateTool.h; sourceTree = "<group>"; };
+		6D204FD326668B81007F6F27 /* TIoTDemoDateTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoDateTool.m; sourceTree = "<group>"; };
 		6D257FFB25DFC330005208C2 /* TIoTTabBarCenterCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTTabBarCenterCustomView.h; sourceTree = "<group>"; };
 		6D257FFC25DFC330005208C2 /* TIoTTabBarCenterCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTTabBarCenterCustomView.m; sourceTree = "<group>"; };
 		6D42390A261F5F8500C3A5A7 /* TIoTGateWayBindDeviceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTGateWayBindDeviceModel.h; sourceTree = "<group>"; };
@@ -654,6 +658,8 @@
 		6DA918B1262F0453005D9654 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/AppLaunch.png; sourceTree = "<group>"; };
 		6DA918B2262F045A005D9654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = Base.lproj/AppLaunch.png; sourceTree = "<group>"; };
 		6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DAF875826675D2900CD0328 /* TIoTDemoCalendarCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoCalendarCustomView.h; sourceTree = "<group>"; };
+		6DAF875926675D2900CD0328 /* TIoTDemoCalendarCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoCalendarCustomView.m; sourceTree = "<group>"; };
 		6DB4F9A425FF54C50025EF25 /* TIoTShortcutView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTShortcutView.h; sourceTree = "<group>"; };
 		6DB4F9A525FF54C50025EF25 /* TIoTShortcutView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTShortcutView.m; sourceTree = "<group>"; };
 		6DB4F9A825FF5F290025EF25 /* TIoTShortcutViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTShortcutViewCell.h; sourceTree = "<group>"; };
@@ -1368,6 +1374,10 @@
 				6D204CA0265DF586007F6F27 /* TIoTDemoCustomSheetView.m */,
 				6D204EC12664C583007F6F27 /* TIoTDemoBaseViewController.h */,
 				6D204EC22664C584007F6F27 /* TIoTDemoBaseViewController.m */,
+				6D204FD226668B81007F6F27 /* TIoTDemoDateTool.h */,
+				6D204FD326668B81007F6F27 /* TIoTDemoDateTool.m */,
+				6DAF875826675D2900CD0328 /* TIoTDemoCalendarCustomView.h */,
+				6DAF875926675D2900CD0328 /* TIoTDemoCalendarCustomView.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -3452,6 +3462,7 @@
 				6D98FE7D25C2E8F000518AC7 /* NSDate+TIoTCustomCalendar.m in Sources */,
 				6D204C87265CBDBC007F6F27 /* UIImage+TIoTDemoExtension.m in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
+				6DAF875A26675D2900CD0328 /* TIoTDemoCalendarCustomView.m in Sources */,
 				6D204EAE2664C3C4007F6F27 /* UINavigationController+TIoTDemoCustomUI.m in Sources */,
 				6D204B3B265BCDEC007F6F27 /* TIoTAccessIDPickerView.m in Sources */,
 				6DDC6E9E25AFFD0D00CF75F4 /* TIoTPlayConfigVC.m in Sources */,
@@ -3518,6 +3529,7 @@
 				6D98FE1E25C2E6B700518AC7 /* TIoTCustomCalendar.m in Sources */,
 				F4F3D7CC24938EBE005D3396 /* TIoTCoreAddTimerVC.m in Sources */,
 				6D204DB426623671007F6F27 /* NSObject+TIoTDemoSwizzlingMethod.m in Sources */,
+				6D204FD426668B82007F6F27 /* TIoTDemoDateTool.m in Sources */,
 				F4F3D7A324938EBE005D3396 /* SelectView.m in Sources */,
 				F4F325E725919A1200A4CAAB /* TRTCCallingCell.swift in Sources */,
 				F4F3D7C824938EBE005D3396 /* TIoTCoreRepeatVC.m in Sources */,

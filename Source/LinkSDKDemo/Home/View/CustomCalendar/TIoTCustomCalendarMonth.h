@@ -19,7 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger firstWeekday; // 标示第一天是星期几（0代表周日，1代表周一，以此类推）
 @property (nonatomic, assign) NSInteger year; // 所属年
 @property (nonatomic, assign) NSInteger month; // 当前月
-
+@property (nonatomic, assign) NSInteger day; //当前天
+@property (nonatomic, assign) NSInteger lundarDay; // 农历当期天
 @end
 
 NS_ASSUME_NONNULL_END
