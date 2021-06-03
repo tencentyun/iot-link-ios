@@ -26,6 +26,7 @@
 #define kVideoDemoBackgoundColor @"#F5F5F5"
 #define kVideoDemoGreenColor @"#29CC85"
 #define kVideoDemoBorderColor @"#DDDDDD"
+#define kVideoDemoDateTipTextColor @"#15161A"
 
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height

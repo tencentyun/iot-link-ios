@@ -17,6 +17,8 @@
 #import "TIoTCloudStorageDateModel.h"
 #import "TIoTCloudStorageDayTimeListModel.h"
 
+#import "TIoTDemoCustomChoiceDateView.h"
+
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIButton *calendarBtn;
 @property (nonatomic, strong) UIView *sliderBottomView;
@@ -55,8 +57,8 @@
 - (void)initializaVariable {
     self.dayDateString = @"";
     self.kTopPadding = 15; //距离日历间距
-    self.kLeftPadding = 50; //左边距
-    self.kItemWith = kScreenWidth/2; //每一天长度
+    self.kLeftPadding = 65; //左边距
+    self.kItemWith = 60; //每一小时长度
     self.kScrollContentWidth = self.kItemWith * 24 + self.kLeftPadding*2; // 总长度
     self.kSliderHeight = 30; //自定义slider高度
     self.videoUrl = @"";
@@ -86,9 +88,10 @@
     self.timeLabel.text = @"00:00:00";
     [self.view addSubview:self.timeLabel];
     
+    /*
     //滑动控件底层view
     self.sliderBottomView = [[UIView alloc]initWithFrame:CGRectMake(self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    self.sliderBottomView.backgroundColor = [UIColor clearColor];
+    self.sliderBottomView.backgroundColor = [UIColor redColor];
     [self.view addSubview:self.sliderBottomView];
     
     //自定义slider
@@ -99,6 +102,7 @@
     
     //刻度scrollview
     UIScrollView *dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.sliderBottomView.frame), kScreenWidth, 50)];
+    dateScrollView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:dateScrollView];
     dateScrollView.delegate = self;
     dateScrollView.contentSize = CGSizeMake(self.kScrollContentWidth, 50);
@@ -111,6 +115,48 @@
         timeLabel.text = [NSString stringWithFormat:@"%d",i];
         [dateScrollView addSubview:timeLabel];
     }
+    */
+    
+//    //滑动控件底层view
+//    self.sliderBottomView = [[UIView alloc]initWithFrame:CGRectMake(self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
+//    self.sliderBottomView.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:self.sliderBottomView];
+//
+//    //自定义slider
+//    TIoTCustomTimeSlider *customTimeSlider = [[TIoTCustomTimeSlider alloc]initWithFrame:CGRectMake(0, 0, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
+//    customTimeSlider.timeSegmentArray = self.modelArray;
+//    [self.sliderBottomView addSubview:customTimeSlider];
+//    [customTimeSlider addObserver:self forKeyPath:@"currentValue" options:NSKeyValueObservingOptionNew context:nil];
+    
+    
+    CGFloat kWidthMargin = 16;
+    CGFloat kButtonSize = 28;
+    CGFloat kScrollViewWidth = kScreenWidth-2*kWidthMargin-2*kButtonSize;
+    CGFloat kScrollViewHeight = 72;
+    
+    //刻度scrollview
+    UIScrollView *dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(kWidthMargin+kButtonSize, CGRectGetMaxY(self.calendarBtn.frame) + 80, kScrollViewWidth, kScrollViewHeight)];
+    dateScrollView.backgroundColor = [UIColor greenColor];
+//    [self.view addSubview:dateScrollView];
+    dateScrollView.delegate = self;
+    dateScrollView.contentSize = CGSizeMake(self.kItemWith*24 + kScrollViewWidth, 50);
+    
+    UIView *midLine = [[UIView alloc]init];
+    
+    [dateScrollView addSubview:midLine];
+    
+    for (int i = 0; i < 25; i++) {
+        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(i*self.kItemWith + kScrollViewWidth/2, 0, 1, 20)];
+        lineView.backgroundColor = [UIColor blackColor];
+        [dateScrollView addSubview:lineView];
+        UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame), 0, 25, 20)];
+        timeLabel.text = [NSString stringWithFormat:@"%d",i];
+        [dateScrollView addSubview:timeLabel];
+    }
+    
+    
+    TIoTDemoCustomChoiceDateView *choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarBtn.frame)+80, kScreenWidth, 116)];
+    [self.view addSubview:choiceDateView];
 }
 
 #pragma mark - network request
