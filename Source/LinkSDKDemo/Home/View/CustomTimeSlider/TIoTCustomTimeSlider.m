@@ -8,7 +8,7 @@
 
 #import "TIoTCustomTimeSlider.h"
 
-@implementation TIoTTimeModel
+@implementation TIoTTimeSetmentModel
 
 @end
 
@@ -99,7 +99,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
         }
     }
     
-    for (TIoTTimeModel *timeSegment in self.timeSegmentArray) {
+    for (TIoTTimeSetmentModel *timeSegment in self.timeSegmentArray) {
         CGFloat x1 = timeSegment.startTime/secondsNumber*(self.frame.size.width-2*self.padding)+self.padding;
         CGFloat x2 = timeSegment.endTime/secondsNumber*(self.frame.size.width-2*self.padding)+self.padding;
         UIView *view = [UIView new];

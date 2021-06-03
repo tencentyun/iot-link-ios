@@ -7,12 +7,32 @@
 //
 
 #import "TIoTDemoCustomChoiceDateView.h"
+#import "NSDate+TIoTCustomCalendar.h"
+#import "NSString+Extension.h"
 
 static CGFloat const kDateViewHeight = 44;
 static CGFloat const kDateScrollHeight = 72;
+static CGFloat const kWidthMargin = 16; //左右边距
+static CGFloat const kButtonSize = 28; //按钮宽搞
+static CGFloat const kScrollViewHeight = 72; //scrollview高度
+static CGFloat const kItemWith = 60; //每小时长度
+static CGFloat const kMinItemWidth = (60 - 5)/6;
+static CGFloat const kTipLabelWidth = 38;
+static CGFloat const kTopPadding = 4; //长刻度距离scrollview 高度
+static CGFloat const kMinTopPadding = 10; //段刻度距离scrollview 高度
+static CGFloat const kMinLineHeight = 20;
+
+static NSInteger secondsNumber = 86400;  //24*60*60
+
+@implementation TIoTTimeModel
+
+@end
 
 @interface TIoTDemoCustomChoiceDateView ()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIButton *dateButton;
+@property (nonatomic, strong) UIScrollView *dateScrollView;
+@property (nonatomic, assign) CGFloat kScrollViewWidth;
+@property (nonatomic, strong) UIView *midLine;
 @end
 
 @implementation TIoTDemoCustomChoiceDateView
@@ -29,63 +49,57 @@ static CGFloat const kDateScrollHeight = 72;
 - (void)setupScrollSubViews {
     
     //顶部选择时间底层View
-    UIView *topDateView = [[UIView alloc]init];
+    UIView *topDateView = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, kDateViewHeight)];
     topDateView.backgroundColor = [UIColor whiteColor];
     [self addSubview:topDateView];
-    [topDateView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self);
-        make.height.mas_equalTo(kDateViewHeight);
-    }];
     
-    CGFloat kDaateButtonWidth = 120;
+    CGFloat kDaateButtonWidth = kDateViewHeight + kDateScrollHeight;
     CGFloat kIntervalSapce = 4;
+    
+    //默认当前日期
+    NSDate *date = [NSDate date];
+    NSInteger year = [date dateYear];
+    NSInteger month = [date dateMonth];
+    NSInteger day = [date dateDay];
+    NSString *defaultDateString = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)year,(long)month,(long)day];
     
     self.dateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.dateButton.frame = CGRectMake(kScreenWidth/2-kDaateButtonWidth/2, 10, kDaateButtonWidth, 24);
-    [self.dateButton setButtonFormateWithTitlt:@"2020-08-29" titleColorHexString:kVideoDemoDateTipTextColor font:[UIFont wcPfRegularFontOfSize:17]];
+    [self.dateButton setButtonFormateWithTitlt:defaultDateString titleColorHexString:kVideoDemoDateTipTextColor font:[UIFont wcPfRegularFontOfSize:17]];
     [self.dateButton setImage:[UIImage imageNamed:@"choiceDate_tip"] forState:UIControlStateNormal];
     [self.dateButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.dateButton.imageView.frame.size.width-kIntervalSapce, 0, self.dateButton.imageView.frame.size.width+kIntervalSapce)];
     [self.dateButton setImageEdgeInsets:UIEdgeInsetsMake(0, self.dateButton.titleLabel.bounds.size.width+kIntervalSapce, 0, -self.dateButton.titleLabel.bounds.size.width - kIntervalSapce)];
     [self.dateButton addTarget:self action:@selector(chooseDate:) forControlEvents:UIControlEventTouchUpInside];
     [topDateView addSubview:self.dateButton];
     
-    CGFloat kWidthMargin = 16; //左右边距
-    CGFloat kButtonSize = 28; //按钮宽搞
-    CGFloat kScrollViewWidth = kScreenWidth-2*kWidthMargin-2*kButtonSize; //scrollView 总长度
-    CGFloat kScrollViewHeight = 72; //scrollview高度
-    CGFloat kItemWith = 60; //每小时长度
-    CGFloat kMinItemWidth = (60 - 5)/6;
-    CGFloat kTipLabelWidth = 38;
-    CGFloat kTopPadding = 4; //长刻度距离scrollview 高度
-    CGFloat kMinTopPadding = 10; //段刻度距离scrollview 高度
-    CGFloat kMinLineHeight = 20;
+    self.kScrollViewWidth = kScreenWidth-2*kWidthMargin-2*kButtonSize; //scrollView 长度
     
     //刻度scrollview
-    UIScrollView *dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(kWidthMargin+kButtonSize, CGRectGetMaxY(self.dateButton.frame), kScrollViewWidth, kScrollViewHeight)];
-    dateScrollView.backgroundColor = [UIColor greenColor];
-    [self addSubview:dateScrollView];
-    dateScrollView.delegate = self;
-    dateScrollView.contentSize = CGSizeMake(kItemWith*24 + kScrollViewWidth, 50);
+    self.dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(kWidthMargin+kButtonSize, CGRectGetMaxY(topDateView.frame), self.kScrollViewWidth, kScrollViewHeight)];
+    self.dateScrollView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.dateScrollView];
+    self.dateScrollView.delegate = self;
+    self.dateScrollView.contentSize = CGSizeMake(kItemWith*24 + self.kScrollViewWidth, 50);
     
     for (int i = 0; i < 25; i++) {
         //小时刻度
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(i*kItemWith + kScrollViewWidth/2, kTopPadding, 1, 32)];
+        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(i*kItemWith + self.kScrollViewWidth/2, kTopPadding, 1, 32)];
         lineView.backgroundColor = [UIColor colorWithHexString:kVideoDemoTextContentColor];
-        [dateScrollView addSubview:lineView];
+        [self.dateScrollView addSubview:lineView];
         
         UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame) - kTipLabelWidth/2, CGRectGetMaxY(lineView.frame)+8, kTipLabelWidth, 18)];
         [timeLabel setLabelFormateTitle:[NSString stringWithFormat:@"%d:00",i] font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kVideoDemoTextContentColor textAlignment:NSTextAlignmentCenter];
         if (i<10) {
             timeLabel.text = [NSString stringWithFormat:@"0%d:00",i];
         }
-        [dateScrollView addSubview:timeLabel];
+        [self.dateScrollView addSubview:timeLabel];
         
         if (i < 24) {
             //每小时内6等分刻度线
             for (int j = 1; j <= 5; j++) {
-                UIView *minLine = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame)+j*kMinItemWidth, kMinTopPadding, 1, kMinLineHeight)];
+                UIView *minLine = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame)+j*(kMinItemWidth + 1), kMinTopPadding, 1, kMinLineHeight)];
                 minLine.backgroundColor = [UIColor colorWithHexString:kVideoDemoTextContentColor];
-                [dateScrollView addSubview:minLine];
+                [self.dateScrollView addSubview:minLine];
             }
         }
     }
@@ -95,10 +109,10 @@ static CGFloat const kDateScrollHeight = 72;
     midLine.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
     [self addSubview:midLine];
     [midLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(1);
+        make.width.mas_equalTo(2);
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.mas_centerX);
-        make.top.equalTo(dateScrollView.mas_top).offset(kTopPadding);
+        make.top.equalTo(self.dateScrollView.mas_top);
     }];
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -130,17 +144,81 @@ static CGFloat const kDateScrollHeight = 72;
 }
 
 - (void)choosePreviousDate {
-    
+    if (self.previousDateBlcok) {
+        self.previousDateBlcok();
+    }
 }
 
 - (void)chooseNextDate {
+    if (self.nextDateBlcok) {
+        self.nextDateBlcok();
+    }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
     
 }
 
+#pragma mark - setting getting
+
+- (void)setVideoTimeSegmentArray:(NSArray *)videoTimeSegmentArray {
+    _videoTimeSegmentArray = videoTimeSegmentArray;
+//    [self setNeedsLayout];
+    
+    CGFloat kTopPlaceHoldViewPadding = 10;
+    CGFloat kPlaceHoldViewHeight = 20;
+    
+    if (videoTimeSegmentArray.count != 0) {
+        for (TIoTTimeModel *timeSegment in videoTimeSegmentArray) {
+            CGFloat x1 = timeSegment.startTime/(secondsNumber/(kItemWith*24))+self.kScrollViewWidth/2;
+            CGFloat x2 = timeSegment.endTime/(secondsNumber/(kItemWith*24))+self.kScrollViewWidth/2;
+            UIView *view = [UIView new];
+            view.backgroundColor = [[UIColor colorWithHexString:kVideoDemoMainThemeColor]colorWithAlphaComponent:0.06];
+            view.frame = CGRectMake(x1, kTopPlaceHoldViewPadding, x2-x1, kPlaceHoldViewHeight);
+            [self.dateScrollView addSubview:view];
+        }
+    }
+}
+
+
 #pragma mark - ScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"--offsetX--%f",scrollView.contentOffset.x);
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self getTimeDataScorllEnd:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (decelerate == NO) {
+        [self getTimeDataScorllEnd:scrollView];
+    }
+}
+
+- (void)getTimeDataScorllEnd:(UIScrollView *)scrollView {
+    CGFloat xOffset = scrollView.contentOffset.x;
+    NSInteger tempStartTime = xOffset * secondsNumber/(kItemWith*24);
     
-//    self.sliderBottomView.frame = CGRectMake(-scrollView.contentOffset.x + self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight);
+    NSInteger hour = tempStartTime / (60*60);
+    NSInteger mintue = tempStartTime % (60*60) / 60;
+    NSInteger second = tempStartTime % (60*60) % 60;
+    
+    NSString *partTime = [NSString stringWithFormat:@"%ld:%ld:%ld",(long)hour,(long)mintue,(long)second];
+    NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.dateButton.titleLabel.text,partTime];
+    
+    NSString *startTimestampString = [NSString getTimeStampWithString:dateString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+    
+    __weak typeof(self) weakSelf = self;
+    [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        TIoTTimeModel *model = obj;
+        if (tempStartTime >= model.startTime && tempStartTime <= model.endTime) {
+            if (weakSelf.timeModelBlock) {
+                weakSelf.timeModelBlock(model, startTimestampString.floatValue);
+            }
+        }
+    }];
 }
 
 /*
