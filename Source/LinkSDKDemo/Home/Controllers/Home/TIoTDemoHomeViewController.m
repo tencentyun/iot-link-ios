@@ -21,8 +21,6 @@
 #import "TIoTExploreOrVideoDeviceModel.h"
 #import <YYModel.h>
 
-#import "TIoTDemoCalendarCustomView.h"
-
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
 static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 

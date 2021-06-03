@@ -18,6 +18,7 @@
 #import "TIoTCloudStorageDayTimeListModel.h"
 
 #import "TIoTDemoCustomChoiceDateView.h"
+#import "TIoTDemoCalendarCustomView.h"
 
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIButton *calendarBtn;
@@ -35,6 +36,8 @@
 @property (nonatomic, assign) CGFloat kItemWith; //每一天长度
 @property (nonatomic, assign) CGFloat kScrollContentWidth; // 总长度
 @property (nonatomic, assign) CGFloat kSliderHeight; //自定义slider高度
+
+@property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceDateView;
 @end
 
 @implementation TIoTCloudStorageVC
@@ -46,6 +49,8 @@
     [self initializaVariable];
     
     [self setupUIViews];
+    
+    [self requestCloudStorageDayDate];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -88,7 +93,7 @@
     self.timeLabel.text = @"00:00:00";
     [self.view addSubview:self.timeLabel];
     
-    
+    /*
     //滑动控件底层view
     self.sliderBottomView = [[UIView alloc]initWithFrame:CGRectMake(self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
     self.sliderBottomView.backgroundColor = [UIColor redColor];
@@ -115,7 +120,37 @@
         timeLabel.text = [NSString stringWithFormat:@"%d",i];
         [dateScrollView addSubview:timeLabel];
     }
-     
+    */
+    
+    __weak typeof(self) weakSelf = self;
+    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarBtn.frame)+80, kScreenWidth, 116)];
+    //从日历中选日期
+    self.choiceDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
+        
+        TIoTDemoCalendarCustomView *calendarView = [[TIoTDemoCalendarCustomView alloc]init];
+        calendarView.calendarDateArray = @[button.titleLabel.text?:@""];
+        calendarView.choickDayDateBlock = ^(NSString * _Nonnull dayDateString) {
+            [weakSelf.choiceDateView resetSelectedDate:dayDateString];
+        };
+        [[UIApplication sharedApplication].delegate.window addSubview:calendarView];
+        [calendarView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+        }];
+        
+    };
+    //选择之前事件，获取开始/结束时间戳
+    self.choiceDateView.previousDateBlcok = ^(TIoTTimeModel * _Nonnull preTimeModel) {
+        
+    };
+    //选择下一个事件，获取开始/结束时间戳
+    self.choiceDateView.nextDateBlcok = ^(TIoTTimeModel * _Nonnull nextTimeModel) {
+        
+    };
+    //滑动停止后，获取当前值所在事件开始/结束时间戳
+    self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
+        NSLog(@"--%f--%f",startTimestamp,selectedTimeModel.startTime);
+    };
+    [self.view addSubview:self.choiceDateView];
 }
 
 #pragma mark - network request
@@ -152,6 +187,8 @@
         self.timeList = [NSArray arrayWithArray:data.TimeList?:@[]];
         
         [self recombineTimeSegmentWithTimeArray:self.timeList];
+        
+        self.choiceDateView.videoTimeSegmentArray = self.modelArray;
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         

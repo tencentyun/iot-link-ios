@@ -9,13 +9,15 @@
 #import "TIoTDemoCalendarCustomView.h"
 #import "UIView+TIoTViewExtension.h"
 #import "TIoTCustomCalendar.h"
+#import "NSDate+TIoTCustomCalendar.h"
 
 @interface TIoTDemoCalendarCustomView ()
-@property (nonatomic, strong, readwrite) NSString *dayDateString;
+@property (nonatomic, strong) NSString *dayDateString;
 @property (nonatomic, strong) UIView *maskView; //背景遮罩
 @property (nonatomic, strong) UIView *contentView; //背景view
 @property (nonatomic, strong) TIoTCustomCalendar *calendarView; //日历控件view
 @property (nonatomic, assign) CGFloat kActionBottonHeight;
+@property (nonatomic, strong) NSString *defaultDateString;
 @end
 
 @implementation TIoTDemoCalendarCustomView
@@ -29,6 +31,12 @@
 }
 
 - (void)setupCustomSubViews {
+    
+    NSDate *date = [NSDate date];
+    NSInteger year = [date dateYear];
+    NSInteger month = [date dateMonth];
+    NSInteger day = [date dateDay];
+    self.defaultDateString = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)year,(long)month,(long)day];
     
     CGFloat kDayLineHight = 61;
     CGFloat kMonthScrollViewHeight = 6 * kDayLineHight;
@@ -145,7 +153,17 @@
 }
 
 - (void)comfirmChooseDate {
-    [self dismissView];
+    if (![NSString isNullOrNilWithObject:self.dayDateString] && self.calendarDateArray.count != 0) {
+        if ([self.calendarDateArray containsObject:self.dayDateString]) {
+            [self dismissView];
+            if (self.choickDayDateBlock) {
+                self.choickDayDateBlock(self.dayDateString?:self.defaultDateString);
+            }
+        }else {
+            [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
+        }
+    }
+    
 }
 
 #pragma mark - setting or getting
