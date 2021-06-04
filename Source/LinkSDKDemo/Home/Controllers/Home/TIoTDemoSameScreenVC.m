@@ -9,7 +9,7 @@
 #import "TIoTDemoSameScreenVC.h"
 #import "UIDevice+TIoTDemoRotateScreen.h"
 #import "AppDelegate.h"
-
+#import "UIImage+TIoTDemoExtension.h"
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
@@ -68,6 +68,12 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     [self recoverNavigationBar];
     
     [self ratetePortrait];
+}
+
+- (void)setupNavBar {
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)setupSameScreenSubviews {

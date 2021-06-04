@@ -135,6 +135,7 @@ NSString *const AppGetSceneAndAutomationLogs = @"AppGetSceneAndAutomationLogs";/
 
 //MARK:Video
 NSString *const DescribeDevices = @"DescribeDevices";//Video 设备列表
+NSString *const DescribeCloudStorageEvents = @"DescribeCloudStorageEvents";//云存事件列表
 
 //MARK:Explore
 NSString *const GetDeviceList = @"GetDeviceList";//Explore 设备列表 

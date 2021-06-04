@@ -22,11 +22,24 @@
 
 
 - (void)setupNavPattarn {
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#000000"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
 }
 
+- (CGFloat )getTopMaiginWithNavigationBar {
+    
+    CGFloat kNaviBarHeight = self.navigationController.navigationBar.frame.size.height;
+    CGFloat kTopMargin = kNaviBarHeight;
+    CGFloat kSafeTop = [UIApplication sharedApplication].delegate.window.safeAreaInsets.top;
+//    CGFloat kSafeBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+    if (@available(iOS 11.0,*)) {
+        kTopMargin += kSafeTop;
+    }else{
+        kTopMargin = kNaviBarHeight + [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+    return kTopMargin;
+}
 /*
 #pragma mark - Navigation
 

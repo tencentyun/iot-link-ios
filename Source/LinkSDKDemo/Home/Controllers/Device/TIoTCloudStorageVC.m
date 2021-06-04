@@ -19,10 +19,14 @@
 
 #import "TIoTDemoCustomChoiceDateView.h"
 #import "TIoTDemoCalendarCustomView.h"
+#import "TIoTDemoPlaybackCustomCell.h"
+#import "TIoTExploreDeviceListModel.h"
 
-@interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
-@property (nonatomic, strong) UIButton *calendarBtn;
-@property (nonatomic, strong) UIView *sliderBottomView;
+static CGFloat const kPadding = 16;
+static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
+static NSInteger const kLimit = 20;
+
+@interface TIoTCloudStorageVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *timeLabel;
@@ -37,7 +41,9 @@
 @property (nonatomic, assign) CGFloat kScrollContentWidth; // 总长度
 @property (nonatomic, assign) CGFloat kSliderHeight; //自定义slider高度
 
-@property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceDateView;
+@property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceDateView; //自定义滚动条
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *dataArray; //云存事件列表数组
 @end
 
 @implementation TIoTCloudStorageVC
@@ -51,6 +57,9 @@
     [self setupUIViews];
     
     [self requestCloudStorageDayDate];
+    
+    //云存事件列表
+    [self requestCloudStoreVideoList];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -73,57 +82,12 @@
     
     [self initializedVideo];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"回放";
     
-    CGFloat kTopSpace = CGRectGetMaxY(self.imageView.frame) + 10;
-    CGFloat kTimeLabelWidth = 230;
-    
-    self.calendarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.calendarBtn.frame = CGRectMake(10, kTopSpace,100, 40);
-    [self.calendarBtn setTitle:@"日历" forState:UIControlStateNormal];
-    self.calendarBtn.layer.borderColor = [UIColor blueColor].CGColor;
-    self.calendarBtn.layer.borderWidth = 1;
-    self.calendarBtn.layer.cornerRadius = 10;
-    [self.calendarBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [self.calendarBtn addTarget:self action:@selector(chooseDate) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.calendarBtn];
-    
-    self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth - kTimeLabelWidth - 10, kTopSpace, kTimeLabelWidth, 40)];
-    self.timeLabel.textAlignment = NSTextAlignmentRight;
-    self.timeLabel.text = @"00:00:00";
-    [self.view addSubview:self.timeLabel];
-    
-    /*
-    //滑动控件底层view
-    self.sliderBottomView = [[UIView alloc]initWithFrame:CGRectMake(self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    self.sliderBottomView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:self.sliderBottomView];
-    
-    //自定义slider
-    TIoTCustomTimeSlider *customTimeSlider = [[TIoTCustomTimeSlider alloc]initWithFrame:CGRectMake(0, 0, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    customTimeSlider.timeSegmentArray = self.modelArray;
-    [self.sliderBottomView addSubview:customTimeSlider];
-    [customTimeSlider addObserver:self forKeyPath:@"currentValue" options:NSKeyValueObservingOptionNew context:nil];
-    
-    //刻度scrollview
-    UIScrollView *dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.sliderBottomView.frame), kScreenWidth, 50)];
-    dateScrollView.backgroundColor = [UIColor greenColor];
-    [self.view addSubview:dateScrollView];
-    dateScrollView.delegate = self;
-    dateScrollView.contentSize = CGSizeMake(self.kScrollContentWidth, 50);
-    
-    for (int i = 0; i < 25; i++) {
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(i*self.kItemWith + self.kLeftPadding, 0, 1, 20)];
-        lineView.backgroundColor = [UIColor blackColor];
-        [dateScrollView addSubview:lineView];
-        UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame), 0, 25, 20)];
-        timeLabel.text = [NSString stringWithFormat:@"%d",i];
-        [dateScrollView addSubview:timeLabel];
-    }
-    */
+    self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     __weak typeof(self) weakSelf = self;
-    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarBtn.frame)+80, kScreenWidth, 116)];
+    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.imageView.frame), kScreenWidth, 116)];
     //从日历中选日期
     self.choiceDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
         
@@ -151,6 +115,19 @@
         NSLog(@"--%f--%f",startTimestamp,selectedTimeModel.startTime);
     };
     [self.view addSubview:self.choiceDateView];
+    
+    self.tableView = [[UITableView alloc]init];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.rowHeight = 76;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.tableView registerClass:[TIoTDemoPlaybackCustomCell class] forCellReuseIdentifier:kPlaybackCustomCellID];
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.choiceDateView.mas_bottom).offset(kPadding);
+        make.left.right.bottom.equalTo(self.view);
+    }];
 }
 
 #pragma mark - network request
@@ -195,6 +172,32 @@
     }];
 }
 
+///MARK: 云存事件列表
+- (void)requestCloudStoreVideoList {
+    
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Limit"] = [NSNumber numberWithInteger:kLimit];
+    paramDic[@"Offset"] = [NSNumber numberWithInteger:0];
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+
+    }];
+}
+
+#pragma mark - UITableViewDelegate UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TIoTDemoPlaybackCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlaybackCustomCellID forIndexPath:indexPath];
+    return cell;
+}
+
 #pragma mark - responsed method
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -217,7 +220,10 @@
 }
 
 - (void)initializedVideo {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64+40, self.view.frame.size.width, self.view.frame.size.width * 9 / 16)];
+    
+//    CGFloat kTopPadding = [self getTopMaiginWithNavigationBar];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, kPadding, self.view.frame.size.width, self.view.frame.size.width * 9 / 16)];
     imageView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:imageView];
     self.imageView = imageView;
@@ -359,12 +365,6 @@
 - (void)stopPlayMovie {
     [self.player stop];
     self.player = nil;
-}
-
-#pragma mark - ScrollView Delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    self.sliderBottomView.frame = CGRectMake(-scrollView.contentOffset.x + self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight);
 }
 
 #pragma mark - lazy loading

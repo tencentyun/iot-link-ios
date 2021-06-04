@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTDemoBaseViewController.h"
+#import "TIoTExploreOrVideoDeviceModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TIoTCloudStorageVC : UIViewController
-
+@interface TIoTCloudStorageVC : TIoTDemoBaseViewController
+@property (nonatomic, strong) TIoTExploreOrVideoDeviceModel *eventModel;
 @end
 
 NS_ASSUME_NONNULL_END

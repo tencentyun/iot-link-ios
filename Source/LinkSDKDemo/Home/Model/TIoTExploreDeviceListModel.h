@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class TIoTExploreDeviceModel;
 
 @interface TIoTExploreDeviceListModel : NSObject
-@property (nonatomic, strong) NSArray <TIoTExploreDeviceModel *> * Devices;
+@property (nonatomic, strong) NSArray <TIoTExploreOrVideoDeviceModel *> * Devices;
 @property (nonatomic, assign) NSInteger Total;
 @end
 

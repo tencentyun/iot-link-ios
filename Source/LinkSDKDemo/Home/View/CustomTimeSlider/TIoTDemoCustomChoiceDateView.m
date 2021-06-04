@@ -50,6 +50,8 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 
 - (void)setupScrollSubViews {
     
+    self.backgroundColor = [UIColor whiteColor];
+    
     //顶部选择时间底层View
     UIView *topDateView = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, kDateViewHeight)];
     topDateView.backgroundColor = [UIColor whiteColor];

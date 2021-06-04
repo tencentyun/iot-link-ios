@@ -20,9 +20,11 @@
 #import "TIoTVideoDeviceListModel.h"
 #import "TIoTExploreOrVideoDeviceModel.h"
 #import <YYModel.h>
+#import "TIoTCloudStorageVC.h"
 
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
 static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
+static NSInteger const kLimit = 100;
 
 @interface TIoTDemoHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -37,36 +39,44 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupNavBarStyle];
+    [self setupNavBar];
     [self setupUIViews];
     [self addRefreshControl];
     [self requestDeviceList];
 }
 
-- (void)setupNavBarStyle {
+- (void)setupNavBar {
     self.title = @"IoT Video Demo";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
-    
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self setupNavBarStyleWithNormal:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+    [self setupNavBarStyleWithNormal:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+    [self setupNavBarStyleWithNormal:YES];
 }
 
+- (void)setupNavBarStyleWithNormal:(BOOL)isNormal {
+    
+    if (isNormal) {
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+    }else {
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    }
+    
+}
 
 - (void)setupUIViews {
     
     self.isShowSameScreenChoiceIcon = NO;
     
-    self.view.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
+    self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,26 +109,32 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 - (void)requestDeviceList {
     
     //video 设备列表
-//    [self requestVideoList];
+    [self requestVideoList];
     
     //explore 设备列表
-    [self requestExploreList];
+//    [self requestExploreList];
     
 }
 
 ///MARK: video 设备列表
 - (void)requestVideoList {
-        [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId returnModel:YES success:^(id  _Nonnull responseObject) {
-            TIoTVideoDeviceListModel *model = [TIoTVideoDeviceListModel yy_modelWithJSON:responseObject];
-            
-            [self.dataArray removeAllObjects];
-            self.dataArray = [NSMutableArray arrayWithArray:model.Data];
-            [self.collectionView reloadData];
-            [self.collectionView.refreshControl endRefreshing];
-            
-        } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
     
-        }];
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Limit"] = [NSNumber numberWithInteger:kLimit];
+    paramDic[@"Offset"] = [NSNumber numberWithInteger:0];
+
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDevices vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTExploreDeviceListModel *model = [TIoTExploreDeviceListModel yy_modelWithJSON:responseObject];
+
+        [self.dataArray removeAllObjects];
+        self.dataArray = [NSMutableArray arrayWithArray:model.Devices];
+        [self.collectionView reloadData];
+        [self.collectionView.refreshControl endRefreshing];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+
+    }];
 }
 
 
@@ -173,6 +189,9 @@ static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
         
         ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"回放");
+            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
+            [self.navigationController pushViewController:cloudStorageVC animated:YES];
             [customActionSheet removeFromSuperview];
         };
         

@@ -143,6 +143,7 @@ FOUNDATION_EXPORT NSString *const AppGetSceneAndAutomationLogs;//智能联动执
 
 //MARK: Video
 FOUNDATION_EXPORT NSString *const DescribeDevices;//Video 设备列表
+FOUNDATION_EXPORT NSString *const DescribeCloudStorageEvents;//云存事件列表
 
 //MARK: Explore
 FOUNDATION_EXPORT NSString *const GetDeviceList;//Explore 设备列表
