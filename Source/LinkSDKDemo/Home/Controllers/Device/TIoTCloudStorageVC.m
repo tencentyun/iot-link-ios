@@ -20,9 +20,9 @@
 #import "TIoTDemoCustomChoiceDateView.h"
 #import "TIoTDemoCalendarCustomView.h"
 
+static CGFloat const kPadding = 16;
+
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate>
-@property (nonatomic, strong) UIButton *calendarBtn;
-@property (nonatomic, strong) UIView *sliderBottomView;
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *timeLabel;
@@ -73,57 +73,12 @@
     
     [self initializedVideo];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"回放";
     
-    CGFloat kTopSpace = CGRectGetMaxY(self.imageView.frame) + 10;
-    CGFloat kTimeLabelWidth = 230;
-    
-    self.calendarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.calendarBtn.frame = CGRectMake(10, kTopSpace,100, 40);
-    [self.calendarBtn setTitle:@"日历" forState:UIControlStateNormal];
-    self.calendarBtn.layer.borderColor = [UIColor blueColor].CGColor;
-    self.calendarBtn.layer.borderWidth = 1;
-    self.calendarBtn.layer.cornerRadius = 10;
-    [self.calendarBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [self.calendarBtn addTarget:self action:@selector(chooseDate) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.calendarBtn];
-    
-    self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth - kTimeLabelWidth - 10, kTopSpace, kTimeLabelWidth, 40)];
-    self.timeLabel.textAlignment = NSTextAlignmentRight;
-    self.timeLabel.text = @"00:00:00";
-    [self.view addSubview:self.timeLabel];
-    
-    /*
-    //滑动控件底层view
-    self.sliderBottomView = [[UIView alloc]initWithFrame:CGRectMake(self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    self.sliderBottomView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:self.sliderBottomView];
-    
-    //自定义slider
-    TIoTCustomTimeSlider *customTimeSlider = [[TIoTCustomTimeSlider alloc]initWithFrame:CGRectMake(0, 0, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight)];
-    customTimeSlider.timeSegmentArray = self.modelArray;
-    [self.sliderBottomView addSubview:customTimeSlider];
-    [customTimeSlider addObserver:self forKeyPath:@"currentValue" options:NSKeyValueObservingOptionNew context:nil];
-    
-    //刻度scrollview
-    UIScrollView *dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.sliderBottomView.frame), kScreenWidth, 50)];
-    dateScrollView.backgroundColor = [UIColor greenColor];
-    [self.view addSubview:dateScrollView];
-    dateScrollView.delegate = self;
-    dateScrollView.contentSize = CGSizeMake(self.kScrollContentWidth, 50);
-    
-    for (int i = 0; i < 25; i++) {
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(i*self.kItemWith + self.kLeftPadding, 0, 1, 20)];
-        lineView.backgroundColor = [UIColor blackColor];
-        [dateScrollView addSubview:lineView];
-        UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lineView.frame), 0, 25, 20)];
-        timeLabel.text = [NSString stringWithFormat:@"%d",i];
-        [dateScrollView addSubview:timeLabel];
-    }
-    */
+    self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     __weak typeof(self) weakSelf = self;
-    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarBtn.frame)+80, kScreenWidth, 116)];
+    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.imageView.frame)+80, kScreenWidth, 116)];
     //从日历中选日期
     self.choiceDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
         
@@ -217,7 +172,7 @@
 }
 
 - (void)initializedVideo {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64+40, self.view.frame.size.width, self.view.frame.size.width * 9 / 16)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, kPadding, self.view.frame.size.width, self.view.frame.size.width * 9 / 16)];
     imageView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:imageView];
     self.imageView = imageView;
@@ -359,12 +314,6 @@
 - (void)stopPlayMovie {
     [self.player stop];
     self.player = nil;
-}
-
-#pragma mark - ScrollView Delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    self.sliderBottomView.frame = CGRectMake(-scrollView.contentOffset.x + self.kLeftPadding, CGRectGetMaxY(self.calendarBtn.frame)+self.kTopPadding, self.kScrollContentWidth - self.kLeftPadding*2, self.kSliderHeight);
 }
 
 #pragma mark - lazy loading

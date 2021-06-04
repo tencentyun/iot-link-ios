@@ -1167,7 +1167,11 @@
     
     NSMutableDictionary *thisInterfaceParams = param ?: [NSMutableDictionary new];
     
-    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:action?:@"" withVersioinData:param[@"Version"]?:@""];
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:action?:@"" withVersioinData:thisInterfaceParams[@"Version"]?:@""];
+    
+    if ([thisInterfaceParams.allKeys containsObject:@"Version"]) {
+        [thisInterfaceParams removeObjectForKey:@"Version"];
+    }
     
     NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
     [allParams addEntriesFromDictionary:commonParams];

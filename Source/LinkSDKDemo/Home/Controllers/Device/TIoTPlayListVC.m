@@ -99,7 +99,7 @@
             TIoTVideoDeviceListModel *model = [TIoTVideoDeviceListModel yy_modelWithJSON:responseObject];
             
             [self.dataArray removeAllObjects];
-            self.dataArray = [NSMutableArray arrayWithArray:model.Data];
+            self.dataArray = [NSMutableArray arrayWithArray:model.Devices];
             [self.tableView reloadData];
     
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {

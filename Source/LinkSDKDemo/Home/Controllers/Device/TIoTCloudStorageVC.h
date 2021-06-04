@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTDemoBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TIoTCloudStorageVC : UIViewController
+@interface TIoTCloudStorageVC : TIoTDemoBaseViewController
 
 @end
 
