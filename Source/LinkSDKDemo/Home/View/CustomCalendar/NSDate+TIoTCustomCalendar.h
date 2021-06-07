@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获得当前 NSDate 对应月份当月第一天的所在星期
 - (NSInteger)firstWeekDayInMonth;
 
+/// 获取当天是星期几
+- (NSString *)getWeekDayWithDate;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -21,6 +21,7 @@
 #import "TIoTExploreOrVideoDeviceModel.h"
 #import <YYModel.h>
 #import "TIoTCloudStorageVC.h"
+#import "TIoTDemoPreviewDeviceVC.h"
 
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
 static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
@@ -212,7 +213,9 @@ static NSInteger const kLimit = 100;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    //预览页
+    TIoTDemoPreviewDeviceVC *test = [[TIoTDemoPreviewDeviceVC alloc]init];
+    [self.navigationController pushViewController:test animated:YES];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
