@@ -98,25 +98,14 @@
         environment.cloudProductId = self.loginView.productIDString;
         
         //原播放列表
-//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-//        [self.navigationController pushViewController:playListVC animated:YES];
-        
-        TIoTDemoHomeViewController *homeVC = [[TIoTDemoHomeViewController alloc]init];
-        [self.navigationController pushViewController:homeVC animated:YES];
-//        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
-//        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
+        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+        [self.navigationController pushViewController:playListVC animated:YES];
         
         
     }else {
         //原播放列表
-//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-//        [self.navigationController pushViewController:playListVC animated:YES];
-        
-        TIoTDemoHomeViewController *homeVC = [[TIoTDemoHomeViewController alloc]init];
-        [self.navigationController pushViewController:homeVC animated:YES];
-//        TIoTDemoNavController *nav = [[TIoTDemoNavController alloc]initWithRootViewController:homeVC];
-//        TIoTDemoTabBarController *tabbarVC = [[TIoTDemoTabBarController alloc]init];
-//        [UIApplication sharedApplication].delegate.window.rootViewController = nav;
+        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+        [self.navigationController pushViewController:playListVC animated:YES];
     }
     
 }
