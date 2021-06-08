@@ -33,15 +33,13 @@
     
     self.customCalendar.calendarColor = [UIColor whiteColor];
     
-    self.customCalendar.dateArray = @[@"2021-5-20",@"2021-7-5"];
-//    self.customCalendar.dateArray = @[];
     [self addSubview:self.customCalendar];
     
     __weak typeof(self) weakSelf = self;
     self.customCalendar.selectedDayBlcok = ^(NSInteger year, NSInteger month, NSInteger day) {
         
         if (weakSelf.selectedDateBlock) {
-            weakSelf.selectedDateBlock([NSString stringWithFormat:@"%ld-%ld-%ld", (long)year, (long)month, (long)day]);
+            weakSelf.selectedDateBlock([NSString stringWithFormat:@"%02ld-%02ld-%02ld", (long)year, (long)month, (long)day]);
 //            [self removeView];
         }
         
@@ -59,8 +57,14 @@
 
 - (void)setDateArray:(NSArray *)dateArray {
     _dateArray = dateArray;
-//    self.customCalendar.dateArray = dateArray?:@[];
+    [self layoutIfNeeded];
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.customCalendar.dateArray = self.dateArray?:@[];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
