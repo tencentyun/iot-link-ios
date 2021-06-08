@@ -64,7 +64,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     NSInteger year = [date dateYear];
     NSInteger month = [date dateMonth];
     NSInteger day = [date dateDay];
-    self.defaultDateString = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)year,(long)month,(long)day];
+    self.defaultDateString = [NSString stringWithFormat:@"%02ld-%02ld-%02ld",(long)year,(long)month,(long)day];
     
     self.dateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.dateButton.frame = CGRectMake(kScreenWidth/2-kDaateButtonWidth/2, 10, kDaateButtonWidth, 24);
@@ -169,58 +169,60 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     __block TIoTTimeModel *scrollModel = [TIoTTimeModel new];
     __block NSInteger tempDisValue = 0;
     
-    [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        TIoTTimeModel *model = obj;
-        
-        if (isLeft == YES) {
+    if (self.videoTimeSegmentArray.count != 0) {
+        [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTTimeModel *model = obj;
+            
+            if (isLeft == YES) {
 
-                if (weakSelf.currentTime >= model.endTime) {
-                    if (minDistanceValue >= tempDisValue) {
-                        tempDisValue = minDistanceValue;
-                        modelIdx = idx;
-                    }
-                    minDistanceValue = weakSelf.currentTime - model.endTime;
+                    if (weakSelf.currentTime >= model.endTime) {
+                        if (minDistanceValue >= tempDisValue) {
+                            tempDisValue = minDistanceValue;
+                            modelIdx = idx;
+                        }
+                        minDistanceValue = weakSelf.currentTime - model.endTime;
 
-                }else {
-                    if (idx == 0) {
-                        scrollModel = nil;
-                        modelIdx = -1;
-                        *stop = YES;
                     }else {
-                        modelIdx = idx - 1;
+                        if (idx == 0) {
+                            scrollModel = nil;
+                            modelIdx = -1;
+                            *stop = YES;
+                        }else {
+                            modelIdx = idx - 1;
+                        }
+
                     }
-
-                }
-
-        }else {
-
-            if (weakSelf.currentTime <= model.startTime) {
-                if (minDistanceValue >= tempDisValue) {
-                    minDistanceValue = tempDisValue;
-                    modelIdx = idx;
-                }
-                tempDisValue = model.startTime - weakSelf.currentTime;
 
             }else {
-                    if (idx == weakSelf.videoTimeSegmentArray.count - 1) {
-                        scrollModel = nil;
-                        modelIdx = -1;
-                        *stop = YES;
-                    }else {
-                        modelIdx = idx + 1;
-                        
+
+                if (weakSelf.currentTime <= model.startTime) {
+                    if (minDistanceValue >= tempDisValue) {
+                        minDistanceValue = tempDisValue;
+                        modelIdx = idx;
                     }
+                    tempDisValue = model.startTime - weakSelf.currentTime;
+
+                }else {
+                        if (idx == weakSelf.videoTimeSegmentArray.count - 1) {
+                            scrollModel = nil;
+                            modelIdx = -1;
+                            *stop = YES;
+                        }else {
+                            modelIdx = idx + 1;
+                            
+                        }
+                }
             }
-        }
+            
+        }];
         
-    }];
-    
-    if (modelIdx != -1) {
-        scrollModel = self.videoTimeSegmentArray[modelIdx];
-        CGFloat offsetx = scrollModel.startTime/(secondsNumber/(kItemWith*24));
-        scrollOffsetX = offsetx;
-        weakSelf.currentTime = scrollModel.startTime;
-        [self.dateScrollView setContentOffset:CGPointMake(scrollOffsetX, 0) animated:YES];
+        if (modelIdx != -1) {
+            scrollModel = self.videoTimeSegmentArray[modelIdx];
+            CGFloat offsetx = scrollModel.startTime/(secondsNumber/(kItemWith*24));
+            scrollOffsetX = offsetx;
+            weakSelf.currentTime = scrollModel.startTime;
+            [self.dateScrollView setContentOffset:CGPointMake(scrollOffsetX, 0) animated:YES];
+        }
     }
     return scrollModel;
 }
@@ -282,7 +284,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     NSInteger mintue = tempStartTime % (60*60) / 60;
     NSInteger second = tempStartTime % (60*60) % 60;
     
-    NSString *partTime = [NSString stringWithFormat:@"%ld:%ld:%ld",(long)hour,(long)mintue,(long)second];
+    NSString *partTime = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)hour,(long)mintue,(long)second];
     NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.dateButton.titleLabel.text,partTime];
     
     NSString *startTimestampString = [NSString getTimeStampWithString:dateString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];

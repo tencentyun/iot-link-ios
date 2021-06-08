@@ -185,6 +185,8 @@ static NSInteger const kLimit = 100;
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"预览");
+            TIoTDemoPreviewDeviceVC *test = [[TIoTDemoPreviewDeviceVC alloc]init];
+            [self.navigationController pushViewController:test animated:YES];
             [customActionSheet removeFromSuperview];
         };
         
@@ -192,6 +194,7 @@ static NSInteger const kLimit = 100;
             NSLog(@"回放");
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
             TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
+            cloudStorageVC.eventModel = model;
             [self.navigationController pushViewController:cloudStorageVC animated:YES];
             [customActionSheet removeFromSuperview];
         };

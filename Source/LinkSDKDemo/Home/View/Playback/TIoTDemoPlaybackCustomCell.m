@@ -7,12 +7,15 @@
 //
 
 #import "TIoTDemoPlaybackCustomCell.h"
+#import "UIImageView+TIoTWebImageView.h"
+#import "NSString+Extension.h"
 
 @interface TIoTDemoPlaybackCustomCell ()
 @property (nonatomic, strong) UIView *contentCustomView;
 @property (nonatomic, strong) UILabel *eventTimeabel;
 @property (nonatomic, strong) UILabel *eventDescribe;
 @property (nonatomic, strong) UIImageView *eventThumb;
+@property (nonatomic, strong) UIImageView *thumbActionImage;
 @end
 
 @implementation TIoTDemoPlaybackCustomCell
@@ -74,7 +77,25 @@
         make.height.mas_equalTo(kThumbHeight);
     }];
     
+    self.thumbActionImage = [[UIImageView alloc]init];
+    self.thumbActionImage.image = [UIImage imageNamed:@"thumbImage_action"];
+    [self.eventThumb addSubview:self.thumbActionImage];
+    [self.thumbActionImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.eventThumb);
+        make.width.height.mas_equalTo(32);
+    }];
     
+}
+
+- (void)setModel:(TIoTDemoCloudEventModel *)model {
+    _model = model;
+    NSString *timeString = [NSString convertTimestampToTime:model.StartTime?:@"" byDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSString *dayTime = [timeString componentsSeparatedByString:@" "].lastObject;
+    NSString *hourString = [dayTime componentsSeparatedByString:@":"].firstObject;
+    NSString *minuteString = [dayTime componentsSeparatedByString:@":"][1];
+    self.eventTimeabel.text = [NSString stringWithFormat:@"%@:%@",hourString,minuteString];
+    self.eventDescribe.text = model.EventId?:@"";
+//    [self.eventThumb setImageWithURLStr:@""];
 }
 
 - (void)awakeFromNib {

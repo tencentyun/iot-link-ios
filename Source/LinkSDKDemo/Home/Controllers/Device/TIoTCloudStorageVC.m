@@ -11,6 +11,7 @@
 #import "NSString+Extension.h"
 #import "TIoTCustomTimeSlider.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
+#import "NSDate+TIoTCustomCalendar.h"
 
 #import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
@@ -21,10 +22,11 @@
 #import "TIoTDemoCalendarCustomView.h"
 #import "TIoTDemoPlaybackCustomCell.h"
 #import "TIoTExploreDeviceListModel.h"
+#import "TIoTDemoCloudEventListModel.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
-static NSInteger const kLimit = 20;
+static NSInteger const kLimit = 999;
 
 @interface TIoTCloudStorageVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
@@ -44,6 +46,8 @@ static NSInteger const kLimit = 20;
 @property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceDateView; //自定义滚动条
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray; //云存事件列表数组
+
+@property (nonatomic, copy) NSString *currentDayTime; //当天时间 2020-1-1
 @end
 
 @implementation TIoTCloudStorageVC
@@ -56,6 +60,7 @@ static NSInteger const kLimit = 20;
     
     [self setupUIViews];
     
+    //获取某一天云存时间轴
     [self requestCloudStorageDayDate];
     
     //云存事件列表
@@ -76,6 +81,12 @@ static NSInteger const kLimit = 20;
     self.kScrollContentWidth = self.kItemWith * 24 + self.kLeftPadding*2; // 总长度
     self.kSliderHeight = 30; //自定义slider高度
     self.videoUrl = @"";
+    
+    NSDate *date = [NSDate date];
+    NSInteger year = [date dateYear];
+    NSInteger month = [date dateMonth];
+    NSInteger day = [date dateDay];
+    self.currentDayTime = [NSString stringWithFormat:@"%02ld-%02ld-%02ld",(long)year,(long)month,(long)day];
 }
 
 - (void)setupUIViews {
@@ -120,7 +131,7 @@ static NSInteger const kLimit = 20;
     self.tableView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 76;
+    self.tableView.rowHeight = 84;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[TIoTDemoPlaybackCustomCell class] forCellReuseIdentifier:kPlaybackCustomCellID];
     [self.view addSubview:self.tableView];
@@ -152,10 +163,9 @@ static NSInteger const kLimit = 20;
   
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"DeviceName"] = @"";
-    paramDic[@"Date"] = @"";
+    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"Date"] = @"2021-06-03";//self.currentDayTime?:@"";
     paramDic[@"Version"] = @"2020-12-15";
-    
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageTime vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTCloudStorageDayTimeListModel *data = [TIoTCloudStorageDayTimeListModel yy_modelWithJSON:responseObject[@"Response"][@"Data"]];
         
@@ -175,13 +185,27 @@ static NSInteger const kLimit = 20;
 ///MARK: 云存事件列表
 - (void)requestCloudStoreVideoList {
     
+    NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",self.currentDayTime?:@""];
+    NSString *endString = [NSString stringWithFormat:@"%@ 23:59:59",self.currentDayTime?:@""];
+    NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+    NSString *endTimesstampString = [NSString getTimeStampWithString:endString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+    
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2020-12-15";
-    paramDic[@"Limit"] = [NSNumber numberWithInteger:kLimit];
-    paramDic[@"Offset"] = [NSNumber numberWithInteger:0];
-    
+    paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
+    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"StartTime"] = [NSNumber numberWithInteger:1622649600];//[NSNumber numberWithInteger:startTimestampString.integerValue];
+    paramDic[@"EndTime"] = [NSNumber numberWithInteger:1622735999];//[NSNumber numberWithInteger:endTimesstampString.integerValue];
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        
+        TIoTDemoCloudEventListModel *listModel = [TIoTDemoCloudEventListModel yy_modelWithJSON:responseObject];
+        
+        if (listModel.Events.count != 0) {
+            self.dataArray = [NSMutableArray arrayWithArray:listModel.Events?:@[]];
+            self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
+            [self.tableView reloadData];
+        }
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
 
@@ -195,6 +219,7 @@ static NSInteger const kLimit = 20;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoPlaybackCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlaybackCustomCellID forIndexPath:indexPath];
+    cell.model = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -228,15 +253,14 @@ static NSInteger const kLimit = 20;
     [self.view addSubview:imageView];
     self.imageView = imageView;
     self.imageView.userInteractionEnabled = YES;
-}
-
-- (void)chooseDate {
-    TIoTCustomCalendar *view = [[TIoTCustomCalendar alloc] initCalendarFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 470)];
-    [self.view addSubview:view];
-    view.selectedDateBlock = ^(NSString *dateString) {
-        NSLog(@"日历选择日期---%@",dateString);
-        self.dayDateString = dateString;
-    };
+    
+    UIImageView *videoPlayImage = [[UIImageView alloc]init];
+    videoPlayImage.image = [UIImage imageNamed:@"video_play"];
+    [self.imageView addSubview:videoPlayImage];
+    [videoPlayImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.imageView);
+        make.width.height.mas_equalTo(60);
+    }];
 }
 
 - (NSString *)getStampDateStringWithSecond:(NSInteger )secondTime {
