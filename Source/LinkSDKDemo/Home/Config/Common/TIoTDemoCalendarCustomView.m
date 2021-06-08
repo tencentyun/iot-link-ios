@@ -36,7 +36,7 @@
     NSInteger year = [date dateYear];
     NSInteger month = [date dateMonth];
     NSInteger day = [date dateDay];
-    self.defaultDateString = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)year,(long)month,(long)day];
+    self.defaultDateString = [NSString stringWithFormat:@"%02ld-%02ld-%02ld",(long)year,(long)month,(long)day];
     
     CGFloat kDayLineHight = 61;
     CGFloat kMonthScrollViewHeight = 6 * kDayLineHight;

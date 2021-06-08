@@ -28,6 +28,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 @end
 
 @interface TIoTDemoCustomChoiceDateView ()<UIScrollViewDelegate>
+@property (nonatomic, strong) UIView *topDateView;
 @property (nonatomic, strong) UIButton *dateButton;
 @property (nonatomic, strong) UIScrollView *dateScrollView;
 @property (nonatomic, assign) CGFloat kScrollViewWidth;
@@ -35,6 +36,9 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 @property (nonatomic, strong) NSString *defaultDateString;
 @property (nonatomic, assign) NSInteger currentTime;
 @property (nonatomic, strong) NSMutableArray *dateAllSegmentArrray;
+
+@property (nonatomic, assign) NSInteger minDistanceValue;
+@property (nonatomic, assign) NSInteger tempDisValue;
 @end
 
 @implementation TIoTDemoCustomChoiceDateView
@@ -42,7 +46,9 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setupTopDateChoiceViews];
         [self setupScrollSubViews];
+        [self setupAroundView];
     }
     return self;
     
@@ -50,38 +56,12 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 
 - (void)setupScrollSubViews {
     
-    self.backgroundColor = [UIColor whiteColor];
-    
-    //顶部选择时间底层View
-    UIView *topDateView = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, kDateViewHeight)];
-    topDateView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:topDateView];
-    
-    CGFloat kDaateButtonWidth = kDateViewHeight + kDateScrollHeight;
-    
-    //默认当前日期
-    NSDate *date = [NSDate date];
-    NSInteger year = [date dateYear];
-    NSInteger month = [date dateMonth];
-    NSInteger day = [date dateDay];
-    self.defaultDateString = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)year,(long)month,(long)day];
-    
-    self.dateButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.dateButton.frame = CGRectMake(kScreenWidth/2-kDaateButtonWidth/2, 10, kDaateButtonWidth, 24);
-    [self.dateButton setButtonFormateWithTitlt:self.defaultDateString titleColorHexString:kVideoDemoDateTipTextColor font:[UIFont wcPfRegularFontOfSize:17]];
-    [self.dateButton setImage:[UIImage imageNamed:@"choiceDate_tip"] forState:UIControlStateNormal];
-    [self.dateButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.dateButton.imageView.frame.size.width-kIntervalSapce, 0, self.dateButton.imageView.frame.size.width+kIntervalSapce)];
-    [self.dateButton setImageEdgeInsets:UIEdgeInsetsMake(0, self.dateButton.titleLabel.bounds.size.width+kIntervalSapce, 0, -self.dateButton.titleLabel.bounds.size.width - kIntervalSapce)];
-    [self.dateButton addTarget:self action:@selector(chooseDate:) forControlEvents:UIControlEventTouchUpInside];
-    [topDateView addSubview:self.dateButton];
-    
-    self.kScrollViewWidth = kScreenWidth-2*kWidthMargin-2*kButtonSize; //scrollView 长度
-    
     //刻度scrollview
-    self.dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(kWidthMargin+kButtonSize, CGRectGetMaxY(topDateView.frame), self.kScrollViewWidth, kDateScrollHeight)];
+    self.dateScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(kWidthMargin+kButtonSize, CGRectGetMaxY(self.topDateView.frame), self.kScrollViewWidth, kDateScrollHeight)];
     self.dateScrollView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.dateScrollView];
     self.dateScrollView.delegate = self;
+    self.dateScrollView.showsHorizontalScrollIndicator = NO;
     self.dateScrollView.contentSize = CGSizeMake(kItemWith*24 + self.kScrollViewWidth, 50);
     
     for (int i = 0; i < 25; i++) {
@@ -106,16 +86,48 @@ static NSInteger secondsNumber = 86400;  //24*60*60
             }
         }
     }
+
+}
+
+- (void)setupTopDateChoiceViews {
+    self.backgroundColor = [UIColor whiteColor];
     
+    //顶部选择时间底层View
+    self.topDateView = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, kDateViewHeight)];
+    self.topDateView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.topDateView];
+    
+    CGFloat kDaateButtonWidth = kDateViewHeight + kDateScrollHeight;
+    
+    //默认当前日期
+    NSDate *date = [NSDate date];
+    NSInteger year = [date dateYear];
+    NSInteger month = [date dateMonth];
+    NSInteger day = [date dateDay];
+    self.defaultDateString = [NSString stringWithFormat:@"%02ld-%02ld-%02ld",(long)year,(long)month,(long)day];
+    
+    self.dateButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.dateButton.frame = CGRectMake(kScreenWidth/2-kDaateButtonWidth/2, 10, kDaateButtonWidth, 24);
+    [self.dateButton setButtonFormateWithTitlt:self.defaultDateString titleColorHexString:kVideoDemoDateTipTextColor font:[UIFont wcPfRegularFontOfSize:17]];
+    [self.dateButton setImage:[UIImage imageNamed:@"choiceDate_tip"] forState:UIControlStateNormal];
+    [self.dateButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.dateButton.imageView.frame.size.width-kIntervalSapce, 0, self.dateButton.imageView.frame.size.width+kIntervalSapce)];
+    [self.dateButton setImageEdgeInsets:UIEdgeInsetsMake(0, self.dateButton.titleLabel.bounds.size.width+kIntervalSapce, 0, -self.dateButton.titleLabel.bounds.size.width - kIntervalSapce)];
+    [self.dateButton addTarget:self action:@selector(chooseDate:) forControlEvents:UIControlEventTouchUpInside];
+    [self.topDateView addSubview:self.dateButton];
+    
+    self.kScrollViewWidth = kScreenWidth-2*kWidthMargin-2*kButtonSize; //scrollView 长度
+}
+
+- (void)setupAroundView {
     //中间刻度标记
-    UIView *midLine = [[UIView alloc]init];
-    midLine.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
-    [self addSubview:midLine];
-    [midLine mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.midLine = [[UIView alloc]init];
+    self.midLine.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
+    [self addSubview:self.midLine];
+    [self.midLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(2);
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.mas_centerX);
-        make.top.equalTo(self.dateScrollView.mas_top);
+        make.top.equalTo(self.topDateView.mas_bottom);
     }];
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -125,7 +137,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     [leftButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.mas_left).offset(kWidthMargin);
         make.width.height.mas_equalTo(kButtonSize);
-        make.top.equalTo(topDateView.mas_bottom).offset(kIntervalSapce);
+        make.top.equalTo(self.topDateView.mas_bottom).offset(kIntervalSapce);
     }];
     
     UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -134,10 +146,9 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     [self addSubview:rightButton];
     [rightButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kButtonSize);
-        make.top.equalTo(topDateView.mas_bottom).offset(kIntervalSapce);;
+        make.top.equalTo(self.topDateView.mas_bottom).offset(kIntervalSapce);
         make.right.equalTo(self.mas_right).offset(-kWidthMargin);
     }];
-
 }
 
 - (void)chooseDate:(UIButton *)button {
@@ -163,64 +174,67 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 /// MARK: 选择距离当前值最近的model
 - (TIoTTimeModel *)filterLatestTimeModelWithAction:(BOOL)isLeft {
     __weak typeof(self) weakSelf = self;
-    __block NSInteger minDistanceValue = 0;
+    self.minDistanceValue = 0;
     __block NSInteger modelIdx = 0;
     __block CGFloat scrollOffsetX = 0;
     __block TIoTTimeModel *scrollModel = [TIoTTimeModel new];
-    __block NSInteger tempDisValue = 0;
+    self.tempDisValue = 0;
     
-    [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        TIoTTimeModel *model = obj;
-        
-        if (isLeft == YES) {
+    if (self.videoTimeSegmentArray.count != 0) {
+        [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTTimeModel *model = obj;
+            
+            if (isLeft == YES) {
 
-                if (weakSelf.currentTime >= model.endTime) {
-                    if (minDistanceValue >= tempDisValue) {
-                        tempDisValue = minDistanceValue;
-                        modelIdx = idx;
-                    }
-                    minDistanceValue = weakSelf.currentTime - model.endTime;
+                    if (weakSelf.currentTime >= model.endTime) {
+                        
+                        if (self.minDistanceValue <= self.tempDisValue) {
+                            self.tempDisValue = self.minDistanceValue;
+                            modelIdx = idx;
+                            NSLog(@"--!!!!-%ld~~~~~%ld",(long)self.tempDisValue,self.minDistanceValue);
+                        }else {
+                            
+                            self.tempDisValue = self.minDistanceValue;
+                            modelIdx = idx;
+                        }
+                        self.minDistanceValue = fabs(weakSelf.currentTime - model.endTime);
 
-                }else {
-                    if (idx == 0) {
-                        scrollModel = nil;
-                        modelIdx = -1;
-                        *stop = YES;
                     }else {
-                        modelIdx = idx - 1;
+                        if (idx == 0) {
+                            scrollModel = nil;
+                            modelIdx = -1;
+                            *stop = YES;
+                        }
+
                     }
-
-                }
-
-        }else {
-
-            if (weakSelf.currentTime <= model.startTime) {
-                if (minDistanceValue >= tempDisValue) {
-                    minDistanceValue = tempDisValue;
-                    modelIdx = idx;
-                }
-                tempDisValue = model.startTime - weakSelf.currentTime;
 
             }else {
-                    if (idx == weakSelf.videoTimeSegmentArray.count - 1) {
-                        scrollModel = nil;
-                        modelIdx = -1;
-                        *stop = YES;
-                    }else {
-                        modelIdx = idx + 1;
-                        
+
+                if (weakSelf.currentTime <= model.startTime) {
+                    if (self.minDistanceValue <= self.tempDisValue) {
+                        self.tempDisValue = self.minDistanceValue;
+                        modelIdx = idx;
                     }
+                    self.minDistanceValue = fabs(model.startTime - weakSelf.currentTime);
+
+                }else {
+                        if (idx == weakSelf.videoTimeSegmentArray.count - 1) {
+                            scrollModel = nil;
+                            modelIdx = -1;
+                            *stop = YES;
+                        }
+                }
             }
-        }
+            
+        }];
         
-    }];
-    
-    if (modelIdx != -1) {
-        scrollModel = self.videoTimeSegmentArray[modelIdx];
-        CGFloat offsetx = scrollModel.startTime/(secondsNumber/(kItemWith*24));
-        scrollOffsetX = offsetx;
-        weakSelf.currentTime = scrollModel.startTime;
-        [self.dateScrollView setContentOffset:CGPointMake(scrollOffsetX, 0) animated:YES];
+        if (modelIdx != -1) {
+            scrollModel = self.videoTimeSegmentArray[modelIdx];
+            CGFloat offsetx = scrollModel.startTime/(secondsNumber/(kItemWith*24));
+            scrollOffsetX = offsetx;
+            weakSelf.currentTime = scrollModel.startTime;
+            [self.dateScrollView setContentOffset:CGPointMake(scrollOffsetX, 0) animated:YES];
+        }
     }
     return scrollModel;
 }
@@ -237,9 +251,15 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     _videoTimeSegmentArray = videoTimeSegmentArray;
 //    [self setNeedsLayout];
     
+    if (self.dateScrollView.subviews.count != 0) {
+        [self.dateScrollView removeFromSuperview];
+        [self setupScrollSubViews];
+        [self bringSubviewToFront:self.midLine];
+    }
+
     CGFloat kTopPlaceHoldViewPadding = 10;
     CGFloat kPlaceHoldViewHeight = 20;
-    
+
     if (videoTimeSegmentArray.count != 0) {
         for (TIoTTimeModel *timeSegment in videoTimeSegmentArray) {
             CGFloat x1 = timeSegment.startTime/(secondsNumber/(kItemWith*24))+self.kScrollViewWidth/2;
@@ -282,7 +302,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     NSInteger mintue = tempStartTime % (60*60) / 60;
     NSInteger second = tempStartTime % (60*60) % 60;
     
-    NSString *partTime = [NSString stringWithFormat:@"%ld:%ld:%ld",(long)hour,(long)mintue,(long)second];
+    NSString *partTime = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)hour,(long)mintue,(long)second];
     NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.dateButton.titleLabel.text,partTime];
     
     NSString *startTimestampString = [NSString getTimeStampWithString:dateString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
