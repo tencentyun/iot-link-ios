@@ -185,8 +185,11 @@ static NSInteger const kLimit = 100;
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"预览");
-            TIoTDemoPreviewDeviceVC *test = [[TIoTDemoPreviewDeviceVC alloc]init];
-            [self.navigationController pushViewController:test animated:YES];
+            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+            [sameScreenVC setupSameScreenArray:@[model]];
+            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+            [weakSelf resetDeviceListStatus];
             [customActionSheet removeFromSuperview];
         };
         
@@ -217,8 +220,10 @@ static NSInteger const kLimit = 100;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     //预览页
-    TIoTDemoPreviewDeviceVC *test = [[TIoTDemoPreviewDeviceVC alloc]init];
-    [self.navigationController pushViewController:test animated:YES];
+    TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+    TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
+    previewDeviceVC.selectedModel = model;
+    [self.navigationController pushViewController:previewDeviceVC animated:YES];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -264,10 +269,14 @@ static NSInteger const kLimit = 100;
                 make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
             }];
         }else {
-            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
-            [sameScreenVC setupSameScreenArray:self.selectedArray];
-            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
-            [weakSelf resetDeviceListStatus];
+            if (self.selectedArray.count != 0) {
+                TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+                [sameScreenVC setupSameScreenArray:self.selectedArray];
+                [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+                [weakSelf resetDeviceListStatus];
+            }else {
+                [weakSelf resetDeviceListStatus];
+            }
         }
         
     };

@@ -244,6 +244,8 @@
         make.left.equalTo(fileSwitch.mas_right).offset(20);
         make.right.equalTo(self.mas_right);
     }];
+    fileSwitch.hidden = YES;
+    fileSwitchTip.hidden = YES;
     
     self.secretIDString = @"";
     self.secretKeyString = @"";

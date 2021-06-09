@@ -12,6 +12,10 @@
 #import "AppDelegate.h"
 #import "UIDevice+TIoTDemoRotateScreen.h"
 #import "NSDate+TIoTCustomCalendar.h"
+#import "TIoTCoreXP2PBridge.h"
+#import "NSString+Extension.h"
+#import <IJKMediaFramework/IJKMediaFramework.h>
+#import "TIoTCoreAppEnvironment.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -35,6 +39,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, strong) UIButton *standardDef; //横屏-切换清晰度按钮
 @property (nonatomic, strong) UIButton *highDef;
 @property (nonatomic, strong) UIButton *supperDef;
+
+@property(atomic, retain) IJKFFMoviePlayerController *player;
+@property (nonatomic, strong) NSString *videoUrl;
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -43,11 +50,27 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:self.selectedModel.DeviceName?:@""];
+    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
+    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+    
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
+    
+    [self installMovieNotificationObservers];
+
+    [self initializedVideo];
     
     [self addRotateNotification];
     
     [self setupPreViewViews];
+    
+    [self configVideo];
+    
+    //云存事件列表
+    [self requestCloudStoreVideoList];
     
 }
 
@@ -70,6 +93,11 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    
+    [self stopPlayMovie];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    
+    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 
 - (void)addRotateNotification {
@@ -86,8 +114,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.view.backgroundColor = [UIColor colorWithHexString:kVideoDemoBackgoundColor];
     
     [self initializedVideo];
-    
-    [self initVideoParamView];
     
     CGFloat actionViewHeight = 160;
     
@@ -359,6 +385,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     //调节video参数 按钮
     self.rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateBtn setImage:[UIImage imageNamed:@"rotate_icon"] forState:UIControlStateNormal];
+    self.rotateBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    self.rotateBtn.layer.cornerRadius = kBrnSize/2;
     [self.rotateBtn addTarget:self action:@selector(rotateScreen) forControlEvents:UIControlEventTouchUpInside];
     [self.imageView addSubview:self.rotateBtn];
     [self.rotateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -370,6 +398,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     self.voiceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.voiceBtn setImage:[UIImage imageNamed:@"voice_open"] forState:UIControlStateNormal];
+    self.voiceBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    self.voiceBtn.layer.cornerRadius = kBrnSize/2;
     [self.voiceBtn addTarget:self action:@selector(controlVoice:) forControlEvents:UIControlEventTouchUpInside];
     [self.imageView addSubview:self.voiceBtn];
     [self.voiceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -379,8 +409,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }];
 
     self.definitionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.definitionBtn setButtonFormateWithTitlt:@"test" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:12]];
+    [self.definitionBtn setButtonFormateWithTitlt:@"超清" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:12]];
     self.definitionBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    self.definitionBtn.layer.cornerRadius = kBrnSize/2;
     [self.definitionBtn addTarget:self action:@selector(changeVideoDefinitaion) forControlEvents:UIControlEventTouchUpInside];
     [self.imageView addSubview:self.definitionBtn];
     [self.definitionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -596,6 +627,11 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [self.navigationController.navigationBar setShadowImage:nil];
 }
 
+#pragma mark - request network
+///MARK: 云存事件列表
+- (void)requestCloudStoreVideoList {
+}
+
 #pragma mark - UITableViewdelegate and UITableViewDataSrouce
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataArray.count;
@@ -604,6 +640,124 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoPlaybackCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPreviewDeviceCellID forIndexPath:indexPath];
     return cell;
+}
+
+#pragma mark -IJKPlayer
+- (void)loadStateDidChange:(NSNotification*)notification
+{
+    //    MPMovieLoadStateUnknown        = 0,
+    //    MPMovieLoadStatePlayable       = 1 << 0,
+    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
+    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
+
+    IJKMPMovieLoadState loadState = _player.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        [self initVideoParamView];
+    } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
+    } else {
+        NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
+    }
+}
+
+#pragma mark Install Movie Notifications
+-(void)installMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadStateDidChange:)
+                                                 name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refushVideo:)
+                                                 name:@"xp2preconnect"
+                                               object:nil];
+}
+
+#pragma mark Remove Movie Notification Handlers
+
+/* Remove the movie notification observers from the movie object. */
+-(void)removeMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)refushVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    if (![DeviceName isEqualToString:self.selectedModel.DeviceName]) {
+        return;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
+        
+        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+        
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
+    });
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.player shutdown];
+    [self removeMovieNotificationObservers];
+    
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.selectedModel.DeviceName];
+    }
+}
+
+- (void)stopPlayMovie {
+    [self.player stop];
+    self.player = nil;
+}
+
+- (void)configVideo {
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+        fileTip.text = @"数据帧写文件中...";
+        fileTip.textAlignment = NSTextAlignmentCenter;
+        fileTip.textColor = [UIColor whiteColor];
+        [self.imageView addSubview:fileTip];
+        
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.selectedModel.DeviceName cmd:@"action=live"];
+    }else {
+        [self stopPlayMovie];
+#ifdef DEBUG
+        [IJKFFMoviePlayerController setLogReport:YES];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+#else
+        [IJKFFMoviePlayerController setLogReport:NO];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+#endif
+        
+        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
+        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
+        
+        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+        
+        self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+        self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.player.view.frame = self.imageView.bounds;
+        self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
+        self.player.shouldAutoplay = YES;
+        
+        self.view.autoresizesSubviews = YES;
+        [self.imageView addSubview:self.player.view];
+        
+        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+    }
 }
 
 #pragma mark - lazy loading

@@ -10,6 +10,11 @@
 #import "UIDevice+TIoTDemoRotateScreen.h"
 #import "AppDelegate.h"
 #import "UIImage+TIoTDemoExtension.h"
+#import "TIoTCoreXP2PBridge.h"
+#import "NSString+Extension.h"
+#import <IJKMediaFramework/IJKMediaFramework.h>
+#import "TIoTCoreAppEnvironment.h"
+
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
@@ -27,6 +32,15 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 @property (nonatomic, strong) UIView *viewFour;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+@property(atomic, retain) IJKFFMoviePlayerController *playerOne;
+@property (nonatomic, strong) NSString *videoUrlOne;
+@property(atomic, retain) IJKFFMoviePlayerController *playerTwo;
+@property (nonatomic, strong) NSString *videoUrlTwo;
+@property(atomic, retain) IJKFFMoviePlayerController *playerThree;
+@property (nonatomic, strong) NSString *videoUrlThree;
+@property(atomic, retain) IJKFFMoviePlayerController *playerFour;
+@property (nonatomic, strong) NSString *videoUrlFour;
+
 @property (nonatomic, strong) UIButton *rotateScreenBtn;
 @property (nonatomic, assign) CGRect screenRect; //屏幕竖屏尺寸
 @end
@@ -39,11 +53,20 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     self.title = @"IoT Video Demo";
     [self addRotateNotification];
+    
+    [self installMovieNotificationObservers];
 }
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    
+    [self stopPlayMovie];
+    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            [[TIoTCoreXP2PBridge sharedInstance] stopService:model.DeviceName?:@""];
+    }];
+    
 }
 
 - (void)addRotateNotification {
@@ -315,6 +338,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     }
     
     [self setupSameScreenSubviews];
+
+    // 初始化播放器
+    [self initVideoPlayer];
+    
+    [self configVideo];
 }
 
 ///MARK: viewarray 约束更新适配屏幕
@@ -503,6 +531,396 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 break;
         }
     }
+}
+
+#pragma mark -设置 play
+///MARK: 初始化播放器
+- (void)initVideoPlayer {
+    
+    if (self.videoArray.count != 0) {
+        [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                     dev_name:model.DeviceName?:@""];
+        }];
+        
+        switch (self.videoArray.count) {
+            case TIoTDemoSameScreenOne: {
+                TIoTExploreOrVideoDeviceModel *model = self.videoArray[0];
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                break;
+            }
+            case TIoTDemoSameScreenTwo: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[0];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[1];
+                
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                
+                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                break;
+            }
+            case TIoTDemoSameScreenThree: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[0];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[1];
+                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[2];
+                
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                
+                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                
+                NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
+                self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
+                
+                break;
+            }
+            case TIoTDemoSameScreenFour: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[0];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[1];
+                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[2];
+                TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[3];
+                
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                
+                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                
+                NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
+                self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
+                
+                NSString *urlStringFour = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelFour.DeviceName]?:@"";
+                self.videoUrlFour = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringFour];
+                
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+#pragma mark Install Movie Notifications
+-(void)installMovieNotificationObservers
+{
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refushVideo:)
+                                                 name:@"xp2preconnect"
+                                               object:nil];
+}
+
+#pragma mark Remove Movie Notification Handlers
+
+/* Remove the movie notification observers from the movie object. */
+-(void)removeMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)refushVideo:(NSNotification *)notify {
+    
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    
+    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        TIoTExploreOrVideoDeviceModel *model = obj;
+        if ([DeviceName isEqualToString:model.DeviceName]) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+                switch (idx+1) {
+                    case TIoTDemoSameScreenOne: {
+                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        [self configVideo];
+                        [self.playerOne prepareToPlay];
+                        [self.playerOne play];
+                        break;
+                    }
+                    case TIoTDemoSameScreenTwo: {
+                        self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        [self configVideo];
+                        [self.playerTwo prepareToPlay];
+                        [self.playerTwo play];
+                        break;
+                    }
+                    case TIoTDemoSameScreenThree: {
+                        self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        [self configVideo];
+                        [self.playerThree prepareToPlay];
+                        [self.playerThree play];
+                        break;
+                    }
+                    case TIoTDemoSameScreenFour: {
+                        self.videoUrlFour = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        [self configVideo];
+                        [self.playerFour prepareToPlay];
+                        [self.playerFour play];
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            });
+        }
+    }];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    switch (self.videoArray.count) {
+        case TIoTDemoSameScreenOne: {
+            [self.playerOne shutdown];
+            break;
+        }
+        case TIoTDemoSameScreenTwo: {
+            [self.playerOne shutdown];
+            [self.playerTwo shutdown];
+            break;
+        }
+        case TIoTDemoSameScreenThree: {
+            [self.playerOne shutdown];
+            [self.playerTwo shutdown];
+            [self.playerThree shutdown];
+            break;
+        }
+        case TIoTDemoSameScreenFour: {
+            [self.playerOne shutdown];
+            [self.playerTwo shutdown];
+            [self.playerThree shutdown];
+            [self.playerFour shutdown];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    [self removeMovieNotificationObservers];
+    
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:model.DeviceName];
+        }];
+        
+    }
+}
+
+- (void)stopPlayMovie {
+    
+    switch (self.videoArray.count) {
+        case TIoTDemoSameScreenOne: {
+            [self.playerOne stop];
+            self.playerOne = nil;
+            break;
+        }
+        case TIoTDemoSameScreenTwo: {
+            [self.playerOne stop];
+            self.playerOne = nil;
+            [self.playerTwo stop];
+            self.playerTwo = nil;
+            break;
+        }
+        case TIoTDemoSameScreenThree: {
+            [self.playerOne stop];
+            self.playerOne = nil;
+            [self.playerTwo stop];
+            self.playerTwo = nil;
+            [self.playerThree stop];
+            self.playerThree = nil;
+            break;
+        }
+        case TIoTDemoSameScreenFour: {
+            [self.playerOne stop];
+            self.playerOne = nil;
+            [self.playerTwo stop];
+            self.playerTwo = nil;
+            [self.playerThree stop];
+            self.playerThree = nil;
+            [self.playerFour stop];
+            self.playerFour = nil;
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)configVideo {
+    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+
+        switch (self.videoArray.count) {
+            case TIoTDemoSameScreenOne: {
+                UILabel *fileTip = [[UILabel alloc] initWithFrame:self.viewOne.bounds];
+                [fileTip setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewOne addSubview:fileTip];
+                break;
+            }
+            case TIoTDemoSameScreenTwo: {
+                UILabel *fileTipOne = [[UILabel alloc] initWithFrame:self.viewOne.bounds];
+                [fileTipOne setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewOne addSubview:fileTipOne];
+                UILabel *fileTipTwo = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipTwo setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipTwo];
+                break;
+            }
+            case TIoTDemoSameScreenThree: {
+                UILabel *fileTipOne = [[UILabel alloc] initWithFrame:self.viewOne.bounds];
+                [fileTipOne setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewOne addSubview:fileTipOne];
+                UILabel *fileTipTwo = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipTwo setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipTwo];
+                UILabel *fileTipThree = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipThree setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipThree];
+                break;
+            }
+            case TIoTDemoSameScreenFour: {
+                UILabel *fileTipOne = [[UILabel alloc] initWithFrame:self.viewOne.bounds];
+                [fileTipOne setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewOne addSubview:fileTipOne];
+                UILabel *fileTipTwo = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipTwo setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipTwo];
+                UILabel *fileTipThree = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipThree setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipThree];
+                UILabel *fileTipFour = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
+                [fileTipFour setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+                [self.viewTwo addSubview:fileTipFour];
+                break;
+            }
+            default:
+                break;
+        }
+        
+        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+        }];
+        
+    }else {
+        [self stopPlayMovie];
+#ifdef DEBUG
+        [IJKFFMoviePlayerController setLogReport:YES];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+#else
+        [IJKFFMoviePlayerController setLogReport:NO];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+#endif
+        
+        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
+        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
+        
+        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+        
+        
+        switch (self.videoArray.count) {
+            case TIoTDemoSameScreenOne: {
+                self.playerOne = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlOne] withOptions:options];
+                self.playerOne.view.frame = self.viewOne.bounds;
+                [self setupPlayerPropertyWith:self.playerOne];
+                [self.viewOne addSubview:self.playerOne.view];
+                [self setupPlayerParamWith:self.playerOne];
+                break;
+            }
+            case TIoTDemoSameScreenTwo: {
+                self.playerOne = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlOne] withOptions:options];
+                self.playerOne.view.frame = self.viewOne.bounds;
+                [self setupPlayerPropertyWith:self.playerOne];
+                [self.viewOne addSubview:self.playerOne.view];
+                [self setupPlayerParamWith:self.playerOne];
+                
+                self.playerTwo = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlTwo] withOptions:options];
+                self.playerTwo.view.frame = self.viewTwo.bounds;
+                [self setupPlayerPropertyWith:self.playerTwo];
+                self.view.autoresizesSubviews = YES;
+                [self.viewTwo addSubview:self.playerTwo.view];
+                [self setupPlayerParamWith:self.playerTwo];
+                
+                break;
+            }
+            case TIoTDemoSameScreenThree: {
+                self.playerOne = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlOne] withOptions:options];
+                self.playerOne.view.frame = self.viewOne.bounds;
+                [self setupPlayerPropertyWith:self.playerOne];
+                [self.viewOne addSubview:self.playerOne.view];
+                [self setupPlayerParamWith:self.playerOne];
+                
+                self.playerTwo = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlTwo] withOptions:options];
+                self.playerTwo.view.frame = self.viewTwo.bounds;
+                [self setupPlayerPropertyWith:self.playerTwo];
+                [self.viewTwo addSubview:self.playerTwo.view];
+                [self setupPlayerParamWith:self.playerTwo];
+                
+                self.playerThree = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlThree] withOptions:options];
+                self.playerThree.view.frame = self.viewThree.bounds;
+                [self setupPlayerPropertyWith:self.playerThree];
+                [self.viewThree addSubview:self.playerThree.view];
+                [self setupPlayerParamWith:self.playerThree];
+                
+                break;
+            }
+            case TIoTDemoSameScreenFour: {
+                
+                self.playerOne = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlOne] withOptions:options];
+                self.playerOne.view.frame = self.viewOne.bounds;
+                [self setupPlayerPropertyWith:self.playerOne];
+                [self.viewOne addSubview:self.playerOne.view];
+                [self setupPlayerParamWith:self.playerOne];
+                
+                self.playerTwo = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlTwo] withOptions:options];
+                self.playerTwo.view.frame = self.viewTwo.bounds;
+                [self setupPlayerPropertyWith:self.playerTwo];
+                [self.viewTwo addSubview:self.playerTwo.view];
+                [self setupPlayerParamWith:self.playerTwo];
+                
+                self.playerThree = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlThree] withOptions:options];
+                self.playerThree.view.frame = self.viewThree.bounds;
+                [self setupPlayerPropertyWith:self.playerThree];
+                [self.viewThree addSubview:self.playerThree.view];
+                [self setupPlayerParamWith:self.playerThree];
+                
+                self.playerFour = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrlFour] withOptions:options];
+                self.playerFour.view.frame = self.viewFour.bounds;
+                [self setupPlayerPropertyWith:self.playerFour];
+                [self.viewFour addSubview:self.playerFour.view];
+                [self setupPlayerParamWith:self.playerFour];
+                break;
+            }
+            default:
+                break;
+        }
+        
+    }
+}
+
+- (void)setupPlayerPropertyWith:(IJKFFMoviePlayerController *)player {
+    player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    player.scalingMode = IJKMPMovieScalingModeAspectFit;
+    player.shouldAutoplay = YES;
+    self.view.autoresizesSubviews = YES;
+}
+
+- (void)setupPlayerParamWith:(IJKFFMoviePlayerController *)player {
+    [player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+    [player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+    [player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+    [player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+    [player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+    [player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
 }
 
 #pragma mark - 添加设备名
