@@ -209,7 +209,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"Version"] = @"2020-12-15";
     
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageDate vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
@@ -227,7 +227,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
   
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"Date"] = self.currentDayTime?:@"";
     paramDic[@"Version"] = @"2020-12-15";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageTime vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
@@ -282,7 +282,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2020-12-15";
     paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
-    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
     paramDic[@"EndTime"] = [NSNumber numberWithInteger:endTimesstampString.integerValue];
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
@@ -314,7 +314,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2020-12-15";
-    paramDic[@"DeviceName"] = self.eventModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudEventModel *tuumbnailModel = [TIoTDemoCloudEventModel yy_modelWithJSON:responseObject];
@@ -639,6 +639,13 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         _cloudStoreDateList = [[NSArray alloc]init];
     }
     return _cloudStoreDateList;
+}
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [[NSMutableArray alloc]init];
+    }
+    return _dataArray;
 }
 /*
 #pragma mark - Navigation
