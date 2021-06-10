@@ -12,7 +12,7 @@
 #import "TIoTPlayBackListModel.h"
 #import "NSString+Extension.h"
 #import "TIoTCoreUtil.h"
-#import <IJKMediaFramework/IJKMediaFramework.h>
+#import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 

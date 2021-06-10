@@ -12,7 +12,7 @@
 #import "UIImage+TIoTDemoExtension.h"
 #import "TIoTCoreXP2PBridge.h"
 #import "NSString+Extension.h"
-#import <IJKMediaFramework/IJKMediaFramework.h>
+#import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 #import "TIoTCoreAppEnvironment.h"
 
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
