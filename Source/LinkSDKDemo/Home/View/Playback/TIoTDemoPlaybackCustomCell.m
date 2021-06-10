@@ -2,8 +2,6 @@
 //  TIoTDemoPlaybackCustomCell.m
 //  LinkSDKDemo
 //
-//  Created by ccharlesren on 2021/6/5.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTDemoPlaybackCustomCell.h"

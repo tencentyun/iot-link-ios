@@ -2,8 +2,6 @@
 //  QCDeviceManager.m
 //  QCAccount
 //
-//  Created by Wp on 2019/12/6.
-//  Copyright © 2019 Reo. All rights reserved.
 //
 
 #import "TIoTCoreDeviceSet.h"

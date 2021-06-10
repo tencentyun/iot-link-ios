@@ -2,8 +2,6 @@
 //  TIoTDeviceModel.swift
 //  LinkApp
 //
-//  Created by eagleychen on 2020/10/22.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 import Foundation

@@ -2,8 +2,6 @@
 //  TIoTNetConfigViewController.m
 //  LinkSDKDemo
 //
-//  Created by eagleychen on 2020/12/2.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTNetConfigViewController.h"

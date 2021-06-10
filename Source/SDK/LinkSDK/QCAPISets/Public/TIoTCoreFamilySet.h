@@ -2,8 +2,6 @@
 //  QCFamilyManager.h
 //  QCAccount
 //
-//  Created by Wp on 2020/2/27.
-//  Copyright © 2020 Reo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

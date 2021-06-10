@@ -2,8 +2,6 @@
 //  TRTCCallingAudioContactViewController.swift
 //  TXLiteAVDemo_Enterprise
 //
-//  Created by abyyxwang on 2020/8/5.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 import UIKit

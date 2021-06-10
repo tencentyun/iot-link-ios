@@ -2,8 +2,6 @@
 //  QCDDebugtools.swift
 //  LinkApp
 //
-//  Created by eagleychen on 2020/8/7.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 import UIKit

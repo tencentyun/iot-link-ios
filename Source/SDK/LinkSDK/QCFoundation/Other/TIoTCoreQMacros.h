@@ -2,8 +2,6 @@
 //  QCMacros.h
 //  QCAccount
 //
-//  Created by Wp on 2019/12/5.
-//  Copyright © 2019 Reo. All rights reserved.
 //
 
 #ifndef QCMacros_h

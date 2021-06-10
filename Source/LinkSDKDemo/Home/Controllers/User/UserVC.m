@@ -2,8 +2,6 @@
 //  UserVC.m
 //  QCFrameworkDemo
 //
-//  Created by Wp on 2020/3/4.
-//  Copyright © 2020 Reo. All rights reserved.
 //
 
 #import "UserVC.h"

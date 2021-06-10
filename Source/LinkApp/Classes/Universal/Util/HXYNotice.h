@@ -2,8 +2,6 @@
 //  HXYNotice.h
 //  zhipuzi
 //
-//  Created by 侯兴宇 on 2017/11/8.
-//  Copyright © 2017年 迅享科技. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

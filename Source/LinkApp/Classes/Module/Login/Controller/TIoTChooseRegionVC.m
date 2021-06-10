@@ -2,8 +2,6 @@
 //  TIoTChooseRegionVC.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/8/18.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTChooseRegionVC.h"

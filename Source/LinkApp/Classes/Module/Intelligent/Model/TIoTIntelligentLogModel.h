@@ -2,8 +2,6 @@
 //  TIoTIntelligentLogModel.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/11/24.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

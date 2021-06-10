@@ -2,8 +2,6 @@
 //  SGQRCodeObtain.m
 //  SGQRCodeExample
 //
-//  Created by kingsic on 2016/8/16.
-//  Copyright © 2016年 kingsic. All rights reserved.
 //
 
 #import "SGQRCodeObtain.h"

@@ -2,8 +2,6 @@
 //  TIoTWebSocketManage+TRTC.m
 //  LinkApp
 //
-//  Created by eagleychen on 2020/11/25.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTTRTCUIManage.h"

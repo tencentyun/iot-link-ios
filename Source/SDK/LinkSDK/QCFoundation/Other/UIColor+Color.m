@@ -2,8 +2,6 @@
 //  UIColor+Color.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/7/28.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "UIColor+Color.h"

@@ -2,8 +2,6 @@
 //  LinkApp.xcconfig
 //  LinkApp
 //
-//  Created by eagleychen on 2020/6/22.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 #include "LinkAppCommon.xcconfig"
 

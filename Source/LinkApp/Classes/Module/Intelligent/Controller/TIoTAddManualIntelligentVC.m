@@ -2,8 +2,6 @@
 //  TIoTAddManualIntelligentVC.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/11/2.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTAddManualIntelligentVC.h"

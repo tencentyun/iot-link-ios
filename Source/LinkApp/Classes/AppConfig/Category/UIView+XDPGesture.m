@@ -2,8 +2,6 @@
 //  UIView+XDPGesture.m
 //  TestGesture
 //
-//  Created by cievon on 2017/9/8.
-//  Copyright © 2017年 cievon. All rights reserved.
 //
 
 #import "UIView+XDPGesture.h"

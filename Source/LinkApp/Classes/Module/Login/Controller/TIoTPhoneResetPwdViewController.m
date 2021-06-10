@@ -2,8 +2,6 @@
 //  WCPhoneResetPwdViewController.m
 //  TenextCloud
 //
-//  Created by 侯兴宇 on 2019/10/8.
-//  Copyright © 2019 Winext. All rights reserved.
 //
 
 #import "TIoTPhoneResetPwdViewController.h"

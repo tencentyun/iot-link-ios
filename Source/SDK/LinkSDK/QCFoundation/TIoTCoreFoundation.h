@@ -2,8 +2,6 @@
 //  QCFoundation.h
 //  QCFoundation
 //
-//  Created by Wp on 2020/3/12.
-//  Copyright © 2020 Reo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

@@ -2,8 +2,6 @@
 //  TIoTTabBarCenterCustomView.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/2/19.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -2,8 +2,6 @@
 //  WCModifyRoomVC.m
 //  TenextCloud
 //
-//  Created by Wp on 2020/3/11.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "TIoTModifyRoomVC.h"

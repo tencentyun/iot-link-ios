@@ -2,8 +2,6 @@
 //  UIView+Extension.m
 //  TenextCloud
 //
-//  Created by ccharlesren on 2020/6/3.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "UIView+Extension.h"

@@ -2,8 +2,6 @@
 //  TRTCCallingVideoViewController.swift
 //  trtcScenesDemo
 //
-//  Created by xcoderliu on 1/17/20.
-//  Copyright © 2020 xcoderliu. All rights reserved.
 //
 
 import Foundation

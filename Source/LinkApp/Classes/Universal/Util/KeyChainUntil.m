@@ -2,8 +2,6 @@
 //  KeyChainUntil.m
 //  SEEXiaodianpu
 //
-//  Created by 黄锐灏 on 2019/3/15.
-//  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
 #import "KeyChainUntil.h"

@@ -2,8 +2,6 @@
 //  TIoTAutoIntelligentModel.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/11/16.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

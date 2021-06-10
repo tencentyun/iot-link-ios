@@ -2,7 +2,6 @@
 //  TUIUtils.h
 //  TXIMSDK_TUIKit_iOS
 //
-//  Created by xiangzhang on 2020/7/3.
 //
 
 #import <Foundation/Foundation.h>

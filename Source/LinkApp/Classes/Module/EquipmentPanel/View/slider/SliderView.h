@@ -2,7 +2,6 @@
 //  SliderView.h
 //  SliderView
 //
-//  Created by Wp on 2018/4/11.
 
 
 #import <UIKit/UIKit.h>

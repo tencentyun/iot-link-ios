@@ -1,7 +1,6 @@
 //
 //  File.swift
 //
-//  Created by chenying
 //
 
 import UIKit

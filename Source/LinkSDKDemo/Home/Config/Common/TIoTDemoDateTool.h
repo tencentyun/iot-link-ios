@@ -2,8 +2,6 @@
 //  TIoTDemoDateTool.h
 //  LinkSDKDemo
 //
-//  Created by ccharlesren on 2021/6/1.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

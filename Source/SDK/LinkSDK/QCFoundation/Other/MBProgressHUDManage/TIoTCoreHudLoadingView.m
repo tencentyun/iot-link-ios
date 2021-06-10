@@ -2,8 +2,6 @@
 //  XDPHudLoadingView.m
 //  SEEXiaodianpu
 //
-//  Created by houxingyu on 2019/2/21.
-//  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
 #import "TIoTCoreHudLoadingView.h"

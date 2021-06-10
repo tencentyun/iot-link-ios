@@ -2,8 +2,6 @@
 //  TIoTCustomTabBar.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/2/18.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

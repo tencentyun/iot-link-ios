@@ -2,8 +2,6 @@
 //  TIoTAppConfig.h
 //  LinkApp
 //
-//  Created by eagleychen on 2020/6/18.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

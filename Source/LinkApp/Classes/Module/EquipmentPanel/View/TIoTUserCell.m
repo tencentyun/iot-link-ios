@@ -2,8 +2,6 @@
 //  WCUserCell.m
 //  TenextCloud
 //
-//  Created by Wp on 2020/1/11.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "TIoTUserCell.h"

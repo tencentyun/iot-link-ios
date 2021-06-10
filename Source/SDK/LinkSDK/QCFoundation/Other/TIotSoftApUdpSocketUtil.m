@@ -2,7 +2,6 @@
 //  TIotSoftApUdpSocketUtil.m
 //  TIoTLinkKit
 //
-//  Created by ccharlesren on 2020/12/17.
 //
 
 #import "TIotSoftApUdpSocketUtil.h"

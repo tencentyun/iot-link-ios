@@ -2,7 +2,6 @@
 //  ESPAES.m
 //  EspTouchDemo
 //
-//  Created by AE on 2018/4/5.
 //
 
 #import "ESPAES.h"

@@ -2,8 +2,6 @@
 //  WCProductTableViewCell.m
 //  TenextCloud
 //
-//  Created by Sun on 2020/5/27.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTProductTableViewCell.h"

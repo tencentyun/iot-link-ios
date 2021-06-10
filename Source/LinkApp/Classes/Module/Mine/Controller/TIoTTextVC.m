@@ -2,8 +2,6 @@
 //  WCTextVC.m
 //  TenextCloud
 //
-//  Created by Wp on 2019/11/12.
-//  Copyright © 2019 Winext. All rights reserved.
 //
 
 #import "TIoTTextVC.h"

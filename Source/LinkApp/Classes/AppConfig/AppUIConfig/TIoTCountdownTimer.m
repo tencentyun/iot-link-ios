@@ -2,8 +2,6 @@
 //  TIoTCountdownTimer.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/10/14.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTCountdownTimer.h"

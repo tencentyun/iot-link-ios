@@ -2,8 +2,6 @@
 //  UIView+XDPExtension.m
 //  SEEXiaodianpu
 //
-//  Created by 黄锐灏 on 2019/3/3.
-//  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
 #import "UIView+XDPExtension.h"
