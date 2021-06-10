@@ -2,8 +2,6 @@
 //  TIoTPlayMovieVC.m
 //  LinkSDKDemo
 //
-//  Created by eagleychen on 2021/1/19.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTPlayMovieVC.h"

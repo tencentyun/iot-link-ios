@@ -2,8 +2,6 @@
 //  SYPaneView.m
 //  SYPanView
 //
-//  Created by Yunis on 2017/8/18.
-//  Copyright © 2017年 Yunis. All rights reserved.
 //
 
 #import "SYPaneView.h"

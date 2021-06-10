@@ -2,8 +2,6 @@
 //  WCRequestObj.h
 //  TenextCloud
 //
-//  Created by Wp on 2019/12/25.
-//  Copyright © 2019 Winext. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

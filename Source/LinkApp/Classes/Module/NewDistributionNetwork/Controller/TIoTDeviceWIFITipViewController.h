@@ -2,8 +2,6 @@
 //  TIoTDeviceWIFITipViewController.h
 //  LinkApp
 //
-//  Created by Sun on 2020/8/12.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

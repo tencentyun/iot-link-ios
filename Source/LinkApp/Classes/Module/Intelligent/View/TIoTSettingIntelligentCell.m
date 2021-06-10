@@ -2,8 +2,6 @@
 //  TIoTSettingIntelligentCell.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/11/5.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTSettingIntelligentCell.h"

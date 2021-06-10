@@ -2,8 +2,6 @@
 //  TIoTH5CallResultModel.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/10/28.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

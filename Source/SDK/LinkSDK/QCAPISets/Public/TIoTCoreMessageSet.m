@@ -2,8 +2,6 @@
 //  QCMessagePart.m
 //  QCAccount
 //
-//  Created by Wp on 2020/3/2.
-//  Copyright © 2020 Reo. All rights reserved.
 //
 
 #import "TIoTCoreMessageSet.h"

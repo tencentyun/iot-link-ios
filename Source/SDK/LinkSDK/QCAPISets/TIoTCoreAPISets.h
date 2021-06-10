@@ -2,8 +2,6 @@
 //  QCAPISets.h
 //  QCAPISets
 //
-//  Created by Wp on 2020/3/11.
-//  Copyright © 2020 Reo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

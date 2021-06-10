@@ -2,8 +2,6 @@
 //  WCSoftapWaitVC.m
 //  TenextCloud
 //
-//  Created by Wp on 2019/11/11.
-//  Copyright © 2019 Winext. All rights reserved.
 //
 
 #import "TIoTSoftapWaitVC.h"

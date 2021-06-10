@@ -2,8 +2,6 @@
 //  TIoTCoreXP2PBridge.m
 //  TIoTLinkKitDemo
 //
-//  Created by eagleychen on 2020/12/14.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTCoreXP2PBridge.h"

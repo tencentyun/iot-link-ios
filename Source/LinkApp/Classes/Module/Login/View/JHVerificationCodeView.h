@@ -2,12 +2,9 @@
 //  JHVerificationCodeView.h
 //  JHKit
 //
-//  Created by HaoCold on 2017/8/21.
-//  Copyright © 2017年 HaoCold. All rights reserved.
 //
 //  MIT License
 //
-//  Copyright (c) 2017 xjh093
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal

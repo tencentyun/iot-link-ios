@@ -2,8 +2,6 @@
 //  NSAttributedString+XDPAdd.h
 //  SEEXiaodianpu
 //
-//  Created by seeweiting on 2019/3/6.
-//  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

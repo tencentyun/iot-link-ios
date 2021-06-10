@@ -2,8 +2,6 @@
 //  WCHelpCell.m
 //  TenextCloud
 //
-//  Created by Wp on 2019/10/30.
-//  Copyright © 2019 Winext. All rights reserved.
 //
 
 #import "TIoTHelpCell.h"

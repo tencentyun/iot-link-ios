@@ -2,8 +2,6 @@
 //  LinkAppCommon.xcconfig
 //  LinkApp
 //
-//  Created by eagleychen on 2020/6/24.
-//  Copyright © 2020 Winext. All rights reserved.
 
 LinkAPP_VERSION = local
 LinkAPP_BUILD_VERSION = 1

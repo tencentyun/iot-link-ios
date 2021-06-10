@@ -2,8 +2,6 @@
 //  SGQRCodeScanView.h
 //  SGQRCodeExample
 //
-//  Created by kingsic on 2017/8/23.
-//  Copyright © 2017年 kingsic All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

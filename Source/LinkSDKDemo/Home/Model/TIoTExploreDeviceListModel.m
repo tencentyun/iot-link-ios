@@ -2,8 +2,6 @@
 //  TIoTExploreDeviceListModel.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/1/22.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTExploreDeviceListModel.h"

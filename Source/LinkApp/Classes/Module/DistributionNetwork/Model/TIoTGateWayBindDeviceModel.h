@@ -2,8 +2,6 @@
 //  TIoTGateWayBindDeviceModel.h
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/4/8.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

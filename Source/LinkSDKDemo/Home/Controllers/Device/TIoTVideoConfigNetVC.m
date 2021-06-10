@@ -2,8 +2,6 @@
 //  TIoTVideoConfigNetVC.m
 //  TIoTLinkKitDemo
 //
-//  Created by ccharlesren on 2020/12/16.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTVideoConfigNetVC.h"

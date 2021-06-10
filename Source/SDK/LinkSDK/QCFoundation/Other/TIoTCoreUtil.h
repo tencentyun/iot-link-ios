@@ -2,7 +2,6 @@
 //  TIoTCoreUtil.h
 //  Pods
 //
-//  Created by eagleychen on 2020/8/27.
 //
 
 #import <Foundation/Foundation.h>

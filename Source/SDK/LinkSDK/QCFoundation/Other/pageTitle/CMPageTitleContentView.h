@@ -5,8 +5,6 @@
 //  GitHub 下载地址：https://github.com/CrabMen/CMPageTitleView
 //
 
-//  Created by CrabMan on 2018/1/15.
-//  Copyright © 2018年 CrabMan. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

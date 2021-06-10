@@ -2,8 +2,6 @@
 //  TIoTWIFITableViewCell.m
 //  LinkApp
 //
-//  Created by Sun on 2020/7/29.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTWIFITableViewCell.h"

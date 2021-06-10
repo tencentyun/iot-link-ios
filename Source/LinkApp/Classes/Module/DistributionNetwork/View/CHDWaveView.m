@@ -2,8 +2,6 @@
 //  WaveView.m
 //  MemoryProgress
 //
-//  Created by xiongan on 2017/11/15.
-//  Copyright © 2017年 xiongan. All rights reserved.
 //
 
 #define LXDefaultFirstWaveColor [UIColor colorWithRed:65/255.0 green:169/255.0 blue:253/255.0 alpha:1]

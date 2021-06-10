@@ -2,8 +2,6 @@
 //  TIoTDemoCustomChoiceDateView.m
 //  LinkSDKDemo
 //
-//  Created by ccharlesren on 2021/6/3.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTDemoCustomChoiceDateView.h"

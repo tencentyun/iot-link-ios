@@ -2,8 +2,6 @@
 //  appUtil.swift
 //  trtcScenesDemo
 //
-//  Created by xcoderliu on 12/24/19.
-//  Copyright © 2019 xcoderliu. All rights reserved.
 //
 // 用于TRTC_SceneDemo
 

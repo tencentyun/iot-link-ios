@@ -2,7 +2,6 @@
 //  TIoTVideoDistributionNetModel.h
 //  Alamofire
 //
-//  Created by ccharlesren on 2020/12/17.
 //
 
 #import <Foundation/Foundation.h>

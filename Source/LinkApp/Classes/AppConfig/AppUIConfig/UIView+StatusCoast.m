@@ -2,8 +2,6 @@
 //  UIView+StatusCoast.m
 //  SEEXiaodianpu
 //
-//  Created by 黄锐灏 on 2019/2/13.
-//  Copyright © 2019 黄锐灏. All rights reserved.
 //
 
 #import "UIView+StatusCoast.h"

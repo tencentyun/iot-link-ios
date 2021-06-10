@@ -2,8 +2,6 @@
 //  TIoTModifyPasswordView.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/8/1.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "TIoTModifyPasswordView.h"

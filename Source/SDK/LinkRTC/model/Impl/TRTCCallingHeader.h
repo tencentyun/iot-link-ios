@@ -2,8 +2,6 @@
 //  TRTCCallingHeader.h
 //  TXLiteAVDemo
 //
-//  Created by abyyxwang on 2020/8/4.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #ifndef TRTCCallingHeader_h

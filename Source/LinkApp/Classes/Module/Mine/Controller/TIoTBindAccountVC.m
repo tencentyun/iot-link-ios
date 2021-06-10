@@ -2,8 +2,6 @@
 //  TIoTBindAccountVC.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2020/7/30.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "TIoTBindAccountVC.h"

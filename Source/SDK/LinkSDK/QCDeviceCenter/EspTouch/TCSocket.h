@@ -2,7 +2,6 @@
 //  TCSocket.h
 //  TCLinkModule
 //
-//  Created by erichmzhang(张恒铭) on 2018/9/12.
 //
 
 #import <Foundation/Foundation.h>

@@ -2,8 +2,6 @@
 //  WCMacros.h
 //  QCDeviceCenter
 //
-//  Created by Wp on 2019/12/9.
-//  Copyright © 2019 Reo. All rights reserved.
 //
 
 #ifndef WCMacros_h

@@ -2,7 +2,6 @@
 //  TIoTTRTCSessionManager.h
 //  TIoTLinkKit.default-TRTC
 //
-//  Created by eagleychen on 2020/11/19.
 //
 
 #import <Foundation/Foundation.h>

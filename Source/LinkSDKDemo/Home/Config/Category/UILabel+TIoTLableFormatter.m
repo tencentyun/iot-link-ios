@@ -2,8 +2,6 @@
 //  UILabel+TIoTLableFormatter.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/5/24.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "UILabel+TIoTLableFormatter.h"

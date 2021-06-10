@@ -2,8 +2,6 @@
 //  TIoTDemoCalendarCustomView.m
 //  LinkSDKDemo
 //
-//  Created by ccharlesren on 2021/6/2.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTDemoCalendarCustomView.h"

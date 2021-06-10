@@ -2,8 +2,6 @@
 //  TIoTAppUtil.m
 //  LinkApp
 //
-//  Created by eagleychen on 2020/11/5.
-//  Copyright © 2020 Tencent. All rights reserved.
 //
 
 #import "TIoTAppUtilOC.h"

@@ -2,8 +2,6 @@
 //  TIoTOpensourceContentModel.h
 //  LinkApp
 //
-//  Created by Sun on 2021/1/27.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

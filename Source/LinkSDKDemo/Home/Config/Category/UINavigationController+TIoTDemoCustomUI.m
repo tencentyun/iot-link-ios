@@ -2,8 +2,6 @@
 //  UINavigationController+TIoTDemoCustomUI.m
 //  LinkSDKDemo
 //
-//  Created by ccharlesren on 2021/5/31.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "UINavigationController+TIoTDemoCustomUI.h"

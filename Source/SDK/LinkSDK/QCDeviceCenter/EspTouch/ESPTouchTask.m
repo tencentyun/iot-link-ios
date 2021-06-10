@@ -2,8 +2,6 @@
 //  ESPTouchTask.m
 //  EspTouchDemo
 //
-//  Created by 白 桦 on 4/14/15.
-//  Copyright (c) 2015 白 桦. All rights reserved.
 //
 
 //  The usage of NSCondition refer to: https://gist.github.com/prachigauriar/8118909

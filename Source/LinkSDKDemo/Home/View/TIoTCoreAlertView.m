@@ -2,8 +2,6 @@
 //  WCAlertView.m
 //  TenextCloud
 //
-//  Created by Wp on 2020/1/8.
-//  Copyright © 2020 Winext. All rights reserved.
 //
 
 #import "TIoTCoreAlertView.h"

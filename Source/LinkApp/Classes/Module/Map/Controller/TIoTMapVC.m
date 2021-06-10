@@ -2,8 +2,6 @@
 //  TIoTMapVC.m
 //  LinkApp
 //
-//  Created by ccharlesren on 2021/3/1.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTMapVC.h"
