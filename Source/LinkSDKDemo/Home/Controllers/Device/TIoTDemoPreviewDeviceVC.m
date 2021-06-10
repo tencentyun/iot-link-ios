@@ -17,10 +17,29 @@
 #import <YYModel.h>
 #import "TIoTDemoCloudEventListModel.h"
 #import "TIoTCloudStorageVC.h"
+#import "TIoTCoreUtil.h"
+#import "NSObject+additions.h"
+
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 static NSInteger const kLimit = 999;
+
+static NSString *const action_left = @"action=user_define&cmd=ballhead_left";
+static NSString *const action_right = @"action=user_define&cmd=ballhead_right";
+static NSString *const action_up = @"action=user_define&cmd=ballhead_top";
+static NSString *const action_Down = @"action=user_define&cmd=ballhead_bottom";
+static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
+static NSString *const quality_high = @"ipc.flv?action=live&quality=high";
+static NSString *const quality_super = @"ipc.flv?action=live&quality=super";
+
+
+typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
+    TIotDemoDeviceDirectionLeft,
+    TIotDemoDeviceDirectionRight,
+    TIotDemoDeviceDirectionUp,
+    TIotDemoDeviceDirectionDown,
+};
 
 @interface TIoTDemoPreviewDeviceVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, assign) CGRect screenRect;
@@ -34,8 +53,8 @@ static NSInteger const kLimit = 999;
 @property (nonatomic, strong) UIView *landscapeChangeDefinition; //横屏时清晰度选择视图
 
 @property (nonatomic, strong) UIButton *definitionBtn; //竖屏-切换清晰度按钮
-@property (nonatomic, strong) UIButton *voiceBtn;
-@property (nonatomic, strong) UIButton *rotateBtn;
+@property (nonatomic, strong) UIButton *voiceBtn; //音量-是否静音
+@property (nonatomic, strong) UIButton *rotateBtn;//转屏
 
 @property (nonatomic, strong) UIButton *standardDef; //横屏-切换清晰度按钮
 @property (nonatomic, strong) UIButton *highDef;
@@ -57,7 +76,7 @@ static NSInteger const kLimit = 999;
                                                pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                              dev_name:self.selectedModel.DeviceName?:@""];
     NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
-    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+    self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,quality_super];
     
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
@@ -429,8 +448,10 @@ static NSInteger const kLimit = 999;
 - (void)clickTalkback:(UIButton *)button {
     if (!button.selected) {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_select"];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.selectedModel.DeviceName?:@""];
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
+        [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
     }
     
     button.selected = !button.selected;
@@ -448,16 +469,29 @@ static NSInteger const kLimit = 999;
     if (!button.selected) {
         self.videoIcon.image = [UIImage imageNamed:@"video_select"];
         self.videoingView.hidden = NO;
+        
+        //开启录像
+        NSString *fileName = @"TTVideo11.mp4";
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentDirectory = paths.firstObject;
+        NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+        [[NSFileManager defaultManager] removeItemAtPath:saveFilePath error:nil];
+        
+        [self.player startRecordWithFileName:saveFilePath];
+        
     }else {
         self.videoIcon.image = [UIImage imageNamed:@"video_unselect"];
         self.videoingView.hidden = YES;
+        
+        //结束录像
+        [self.player stopRecord];
     }
     
     button.selected = !button.selected;
 }
 ///MARK: 拍照
 - (void)clickPhotograph {
-    
+    [TIoTCoreUtil screenshotWithView:self.player.view];
 }
 
 #pragma mark - 控制video 显示
@@ -476,8 +510,10 @@ static NSInteger const kLimit = 999;
 - (void)controlVoice:(UIButton *)button {
     if (!button.selected) {
         [button setImage:[UIImage imageNamed:@"voice_close"] forState:UIControlStateNormal];
+        self.player.playbackVolume = 0;
     }else {
         [button setImage:[UIImage imageNamed:@"voice_open"] forState:UIControlStateNormal];
+        self.player.playbackVolume = 1;
     }
     button.selected = !button.selected;
 }
@@ -490,16 +526,19 @@ static NSInteger const kLimit = 999;
         TIoTDemoCustomSheetView *definitaionSheet = [[TIoTDemoCustomSheetView alloc]init];
         NSArray *actionTitleArray = @[@"超清 720P",@"高清 480P",@"标清 270P",@"取消"];
         ChooseFunctionBlock superDefinitaionBlock = ^(TIoTDemoCustomSheetView *view){
+            [self setVieoPlayerStartPlayWith:quality_super];
             [weakSelf.definitionBtn setTitle:@"超清" forState:UIControlStateNormal];
             [definitaionSheet removeFromSuperview];
         };
         
         ChooseFunctionBlock highDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
             [weakSelf.definitionBtn setTitle:@"高清" forState:UIControlStateNormal];
+            [self setVieoPlayerStartPlayWith:quality_high];
             [definitaionSheet removeFromSuperview];
         };
         
         ChooseFunctionBlock standardDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
+            [self setVieoPlayerStartPlayWith:quality_standard];
             [weakSelf.definitionBtn setTitle:@"标清" forState:UIControlStateNormal];
             [definitaionSheet removeFromSuperview];
         };
@@ -530,19 +569,52 @@ static NSInteger const kLimit = 999;
 
 #pragma mark - dirention action
 - (void)turnUpDirection {
-    
+    [self turnDirectionWithDirection:TIotDemoDeviceDirectionUp];
 }
 
 - (void)turnLeftDirection {
-    
+    [self turnDirectionWithDirection:TIotDemoDeviceDirectionLeft];
 }
 
 - (void)turnDownDirection {
-    
+    [self turnDirectionWithDirection:TIotDemoDeviceDirectionDown];
 }
 
 - (void)turnRightDirection {
-    
+    [self turnDirectionWithDirection:TIotDemoDeviceDirectionRight];
+}
+
+- (void)turnDirectionWithDirection:(TIotDemoDeviceDirection )directionType {
+    switch (directionType) {
+        case TIotDemoDeviceDirectionLeft: {
+            [self sendDeivecWithSignalling:action_left];
+            break;
+        }
+        case TIotDemoDeviceDirectionRight: {
+            [self sendDeivecWithSignalling:action_right];
+            break;
+        }
+        case TIotDemoDeviceDirectionUp: {
+            [self sendDeivecWithSignalling:action_up];
+            break;
+        }
+        case TIotDemoDeviceDirectionDown: {
+            [self sendDeivecWithSignalling:action_Down];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+///MARK:根据方向发送设备信令
+- (void)sendDeivecWithSignalling:(NSString *)singleText {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        if (![NSString isNullOrNilWithObject:jsonList] || ![NSString isFullSpaceEmpty:jsonList]) {
+            [MBProgressHUD showMessage:jsonList icon:@""];
+        }
+        
+    }];
 }
 
 #pragma mark - handler orientation event
@@ -762,18 +834,18 @@ static NSInteger const kLimit = 999;
 
 - (void)refushVideo:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    if (![DeviceName isEqualToString:self.selectedModel.DeviceName]) {
+    if (![DeviceName isEqualToString:self.selectedModel.DeviceName?:@""]) {
         return;
     }
     
-    [self setVieoPlayerStartPlay];
+    [self setVieoPlayerStartPlayWith:quality_super];
 }
 
-- (void)setVieoPlayerStartPlay {
+- (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
         
-        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityString?:@""];
         
         [self configVideo];
         [self.player prepareToPlay];
@@ -788,14 +860,14 @@ static NSInteger const kLimit = 999;
     [self removeMovieNotificationObservers];
     
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.selectedModel.DeviceName];
+        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.selectedModel.DeviceName?:@""];
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if (self.player) {
-        [self setVieoPlayerStartPlay];
+        [self setVieoPlayerStartPlayWith:quality_super];
     }
 }
 
@@ -812,7 +884,7 @@ static NSInteger const kLimit = 999;
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.selectedModel.DeviceName cmd:@"action=live"];
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.selectedModel.DeviceName?:@"" cmd:@"action=live"];
     }else {
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -971,6 +1043,8 @@ static NSInteger const kLimit = 999;
 }
 
 - (void)switchStandardDef {
+    
+    [self setVieoPlayerStartPlayWith:quality_standard];
     self.standardDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
     self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
@@ -979,6 +1053,8 @@ static NSInteger const kLimit = 999;
 }
 
 - (void)switchHighDef {
+    
+    [self setVieoPlayerStartPlayWith:quality_high];
     self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.highDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
     self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
@@ -987,6 +1063,8 @@ static NSInteger const kLimit = 999;
 }
 
 - (void)switchSupperDef {
+    
+    [self setVieoPlayerStartPlayWith:quality_super];
     self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.supperDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
