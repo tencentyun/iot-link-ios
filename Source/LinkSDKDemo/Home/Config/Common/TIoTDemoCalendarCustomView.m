@@ -160,6 +160,8 @@
         }else {
             [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
         }
+    }else {
+        [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
     }
     
 }

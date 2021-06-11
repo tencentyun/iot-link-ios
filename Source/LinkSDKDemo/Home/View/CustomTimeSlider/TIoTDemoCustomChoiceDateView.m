@@ -158,7 +158,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 - (void)choosePreviousDate {
     if (self.previousDateBlcok) {
         TIoTTimeModel *model = [self filterLatestTimeModelWithAction:YES];
-        self.nextDateBlcok(model);
+        self.previousDateBlcok(model);
     }
 }
 
@@ -275,6 +275,11 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     [self.dateButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.dateButton.imageView.frame.size.width-kIntervalSapce, 0, self.dateButton.imageView.frame.size.width+kIntervalSapce)];
     [self.dateButton setImageEdgeInsets:UIEdgeInsetsMake(0, self.dateButton.titleLabel.bounds.size.width+kIntervalSapce, 0, -self.dateButton.titleLabel.bounds.size.width - kIntervalSapce)];
     
+}
+
+///MARK:设置滑动条滚动偏移量
+- (void)setScrollViewContentOffsetX:(CGFloat)offsetX {
+    [self.dateScrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
 }
 
 #pragma mark - ScrollView Delegate

@@ -41,6 +41,10 @@ typedef void(^TIoTDemoSelectedTimeModelBlock)(TIoTTimeModel *selectedTimeModel, 
 /// @param dayDateString 日期字符串:格式 "2020-1-1"
 - (void)resetSelectedDate:(NSString *)dayDateString;
 
+/// 设置滑动条滚动偏移量
+/// @param offsetX 横向偏移坐标
+- (void)setScrollViewContentOffsetX:(CGFloat)offsetX;
+
 @end
 
 NS_ASSUME_NONNULL_END
