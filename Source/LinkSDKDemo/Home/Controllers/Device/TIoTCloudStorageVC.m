@@ -9,7 +9,6 @@
 #import "NSString+Extension.h"
 #import "TIoTCustomTimeSlider.h"
 #import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
-#import <AVFoundation/AVFoundation.h>
 #import "NSDate+TIoTCustomCalendar.h"
 
 #import "TIoTCoreAppEnvironment.h"
@@ -38,11 +37,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *timeLabel;
-//@property (atomic, retain) IJKFFMoviePlayerController *player;
-//@property (strong, nonatomic)AVPlayer *avPlayer;
-//@property (strong, nonatomic)AVPlayerItem *avItem;
-//@property (strong, nonatomic)AVPlayerLayer *avPlayerLayer;
+@property (atomic, retain) IJKFFMoviePlayerController *player;
 
+@property (nonatomic, strong) UIButton *videoPlayBtn; //player 开始时中间的播放按钮
 @property (nonatomic, strong) UIButton *rotateBtn;
 @property (nonatomic, strong) NSString *videoUrl;
 @property (nonatomic, strong) NSArray *timeList; //原始时间
@@ -73,6 +70,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     [self addRotateNotification];
+    
+    [self installMovieNotificationObservers];
     
     [self initializaVariable];
     
@@ -107,12 +106,18 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-//    [self.player shutdown];
+    [self.player shutdown];
+    [self removeMovieNotificationObservers];
+    
 }
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    
+    [self stopPlayMovie];
+
+    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 
 - (void)addRotateNotification {
@@ -165,6 +170,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [weakSelf requestCloudStorageDayDate];
             [weakSelf requestCloudStoreVideoList];
             
+            
         };
         [[UIApplication sharedApplication].delegate.window addSubview:calendarView];
         [calendarView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -174,15 +180,52 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     };
     //选择之前事件，获取开始/结束时间戳
     self.choiceDateView.previousDateBlcok = ^(TIoTTimeModel * _Nonnull preTimeModel) {
+        TIoTDemoCloudEventModel *previousModel = [[TIoTDemoCloudEventModel alloc]init];
+        
+        NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
+        NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+        CGFloat startStamp = startTimestampString.floatValue + preTimeModel.startTime;
+        CGFloat endStamp = startTimestampString.floatValue + preTimeModel.endTime;
+        previousModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
+        previousModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
+        
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel];
+        
+        [weakSelf setScrollOffsetWith:previousModel];
         
     };
     //选择下一个事件，获取开始/结束时间戳
     self.choiceDateView.nextDateBlcok = ^(TIoTTimeModel * _Nonnull nextTimeModel) {
+        TIoTDemoCloudEventModel *nextModel = [[TIoTDemoCloudEventModel alloc]init];
         
+        NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
+        NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+        CGFloat startStamp = startTimestampString.floatValue + nextTimeModel.startTime;
+        CGFloat endStamp = startTimestampString.floatValue + nextTimeModel.endTime;
+        nextModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
+        nextModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
+        
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel];
+        
+        [weakSelf setScrollOffsetWith:nextModel];
     };
     //滑动停止后，获取当前值所在事件开始/结束时间戳
     self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
         NSLog(@"--%f--%f",startTimestamp,selectedTimeModel.startTime);
+        
+        TIoTDemoCloudEventModel *currentModel = [[TIoTDemoCloudEventModel alloc]init];
+        
+        NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
+        NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+        CGFloat startStamp = startTimestamp;
+        CGFloat endStamp = startTimestampString.floatValue + selectedTimeModel.endTime;
+        currentModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
+        currentModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
+        
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel];
+        
+        [weakSelf setScrollOffsetWith:currentModel];
+        
     };
     [self.view addSubview:self.choiceDateView];
     
@@ -256,12 +299,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
         NSLog(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
         
-        //播放
-//        [self stopPlayMovie];
-//        self.videoUrl = fullVideoURl.SignedVideoURL?:@"";
-//        [self configVideo];
-//        [self.player prepareToPlay];
-//        [self.player play];
+        //视频播放
+        [self stopPlayMovie];
+        self.videoUrl = fullVideoURl.SignedVideoURL?:@"";
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
@@ -291,6 +334,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
             [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0]];
+            [self setScrollOffsetWith:self.dataArray[0]];
+            
             [self.tableView reloadData];
             
             [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -338,6 +383,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
     [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel];
+    [self setScrollOffsetWith:selectedModel];
 }
 
 #pragma mark - handler orientation event
@@ -456,14 +502,21 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }
     }];
     
-    UIImageView *videoPlayImage = [[UIImageView alloc]init];
-    videoPlayImage.image = [UIImage imageNamed:@"video_play"];
-    [self.imageView addSubview:videoPlayImage];
-    [videoPlayImage mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIButton *videoPlayBtn = [[UIButton alloc]init];
+    [videoPlayBtn setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateNormal];
+    [self.imageView addSubview:videoPlayBtn];
+    [videoPlayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.imageView);
         make.width.height.mas_equalTo(60);
     }];
     
+    ///设置播放器样式
+    [self setupPlayerCustomControlView];
+    
+}
+
+///MARK: 设置播放器样式
+- (void)setupPlayerCustomControlView {
     self.rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateBtn setImage:[UIImage imageNamed:@"play_rotate_icon"] forState:UIControlStateNormal];
     [self.rotateBtn addTarget:self action:@selector(rotateScreen) forControlEvents:UIControlEventTouchUpInside];
@@ -473,15 +526,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         make.width.height.mas_equalTo(16);
         make.bottom.equalTo(self.imageView.mas_bottom).offset(-14);
     }];
-    
-
-//    NSURL *mediaURL = [NSURL URLWithString:self.videoUrl];
-//    self.avItem = [AVPlayerItem playerItemWithURL:mediaURL];
-//    self.avPlayer = [AVPlayer playerWithPlayerItem:self.avItem];
-//    self.avPlayerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-//    self.avPlayerLayer.frame = self.imageView.bounds;
-//    [self.imageView.layer addSublayer:self.avPlayerLayer];
-//    [self.avPlayer play];
 }
 
 - (void)rotateScreen {
@@ -578,51 +622,93 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     return totalSecond;
 }
 
-//- (void)dealloc
-//{
-//    [self stopPlayMovie];
-//
-//    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
-//}
-//
-//- (void)configVideo {
-//
-//        [self stopPlayMovie];
-//#ifdef DEBUG
-//        [IJKFFMoviePlayerController setLogReport:YES];
-//        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
-//#else
-//        [IJKFFMoviePlayerController setLogReport:NO];
-//        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
-//#endif
-//
-//        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
-//        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
-//
-//        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-//
-//        self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
-//        self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-//        self.player.view.frame = self.imageView.bounds;
-//        self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
-//        self.player.shouldAutoplay = YES;
-//
-//        self.view.autoresizesSubviews = YES;
-//        [self.imageView addSubview:self.player.view];
-//
-//        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
-//        [self.player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
-//        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
-//        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
-//        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
-//        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-//
-//}
-//
-//- (void)stopPlayMovie {
-//    [self.player stop];
-//    self.player = nil;
-//}
+#pragma mark - 滚动条偏移
+- (void)setScrollOffsetWith:(TIoTDemoCloudEventModel *)timeModel {
+    //滚动条移动对应位置
+    NSInteger secondsNumber = 86400;
+    NSInteger kItemWith = 60;
+    NSInteger startSecondNum = [self captureTimestampWithOutDaySecound:timeModel.StartTime.floatValue];
+    CGFloat scrollOffsetX = (startSecondNum)/(secondsNumber/(kItemWith*24));
+    [self.choiceDateView  setScrollViewContentOffsetX:scrollOffsetX];
+}
+
+#pragma mark -IJKPlayer
+- (void)loadStateDidChange:(NSNotification*)notification
+{
+    //    MPMovieLoadStateUnknown        = 0,
+    //    MPMovieLoadStatePlayable       = 1 << 0,
+    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
+    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
+
+    IJKMPMovieLoadState loadState = _player.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        
+    } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
+    } else {
+        NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
+    }
+}
+
+#pragma mark Install Movie Notifications
+-(void)installMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadStateDidChange:)
+                                                 name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
+
+}
+
+#pragma mark Remove Movie Notification Handlers
+
+/* Remove the movie notification observers from the movie object. */
+-(void)removeMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)configVideo {
+
+        [self stopPlayMovie];
+#ifdef DEBUG
+        [IJKFFMoviePlayerController setLogReport:YES];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+#else
+        [IJKFFMoviePlayerController setLogReport:NO];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+#endif
+
+        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
+        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
+
+        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+
+        self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+        self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.player.view.frame = self.imageView.bounds;
+        self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
+        self.player.shouldAutoplay = YES;
+
+        self.view.autoresizesSubviews = YES;
+        [self.imageView addSubview:self.player.view];
+
+        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+
+}
+
+- (void)stopPlayMovie {
+    [self.player stop];
+    self.player = nil;
+}
 
 #pragma mark - lazy loading
 - (NSMutableArray *)modelArray {
