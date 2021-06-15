@@ -10,7 +10,7 @@
 
 #import <arpa/inet.h>
 #import <ifaddrs.h>
-#import "getgateway.h"
+#import "TIoTGetgateway.h"
 
 @implementation NSString (Extension)
 

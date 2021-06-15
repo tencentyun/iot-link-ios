@@ -2,15 +2,12 @@
 //  getgateway.c
 //  MSTEnterprise
 //
-//  Created by chuting  on 13-4-24.
-//  Copyright (c) 2013年 chuting . All rights reserved.
-//
 
 #include <stdio.h>
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <sys/sysctl.h>
-#include "getgateway.h" 
+#include "TIoTGetgateway.h" 
 #include <net/if.h>
 #include <string.h>
 #include <TargetConditionals.h>
