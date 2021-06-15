@@ -713,6 +713,7 @@ static NSInteger const kLimit = 999;
     TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
     TIoTCloudStorageVC *cloudStoreVC = [[TIoTCloudStorageVC alloc]init];
     cloudStoreVC.eventItemModel = itemModel;
+    cloudStoreVC.deviceModel = self.selectedModel;
     [self.navigationController pushViewController:cloudStoreVC animated:YES];
 }
 

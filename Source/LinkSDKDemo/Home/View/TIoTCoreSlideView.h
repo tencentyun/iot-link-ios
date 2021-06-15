@@ -1,5 +1,5 @@
 //
-//  WCSlideView.h
+//  TIoTCoreSlideView.h
 //  TenextCloud
 //
 //
