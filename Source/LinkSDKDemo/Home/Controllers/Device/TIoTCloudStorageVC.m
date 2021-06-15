@@ -10,6 +10,7 @@
 #import "TIoTCustomTimeSlider.h"
 #import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 #import "NSDate+TIoTCustomCalendar.h"
+#import "UIImage+TIoTDemoExtension.h"
 
 #import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
@@ -39,8 +40,16 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (atomic, retain) IJKFFMoviePlayerController *player;
 
+@property (nonatomic, strong) UIView *playView; //player 开始播放按钮背景遮罩
+@property (nonatomic, strong) UIView *pauseTipView; //暂停提示View
+@property (nonatomic, strong) UIButton *playPauseBtn; //video 等尺寸Btn
 @property (nonatomic, strong) UIButton *videoPlayBtn; //player 开始时中间的播放按钮
-@property (nonatomic, strong) UIButton *rotateBtn;
+@property (nonatomic, strong) UIButton *rotateBtn; //控制栏中旋转按钮
+@property (nonatomic, strong) UIButton *playBtn; //控制栏中播放按钮
+@property (nonatomic, strong) UIView *customControlVidwoView; //video 自定义控制栏
+@property (nonatomic, strong) UISlider *slider;
+@property (nonatomic, strong) UILabel *currentLabel; //当期时间
+@property (nonatomic, strong) UILabel *totalLabel; //总时间
 @property (nonatomic, strong) NSString *videoUrl;
 @property (nonatomic, strong) NSArray *timeList; //原始时间
 @property (nonatomic, strong) NSMutableArray *modelArray; //重组后存放时间数组
@@ -59,6 +68,14 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, copy) NSString *currentDayTime; //当天时间 2020-1-1
 @property (nonatomic, strong) TIoTDemoCloudStoreFullVideoUrl *fullVideoURl;
 @property (nonatomic, strong) TIoTDemoCloudEventListModel *listModel;
+
+@property (nonatomic, strong) TIoTDemoCloudEventModel *videoTimeModel;
+@property (nonatomic, assign) NSInteger currentTime;
+@property (nonatomic, strong) dispatch_source_t timer; //进度条计时器
+@property (nonatomic, strong) dispatch_source_t controlTimer; //控制栏隐藏计时器
+
+@property (nonatomic, assign) BOOL isHidePlayBtn; //播放按钮
+@property (nonatomic, assign) BOOL isTimerSuspend;
 @end
 
 @implementation TIoTCloudStorageVC
@@ -67,6 +84,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.isHidePlayBtn = NO;
+    self.isTimerSuspend = NO;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     [self addRotateNotification];
@@ -116,8 +135,29 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     
     [self stopPlayMovie];
-
+    
+    [self closeTime];
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
+}
+
+///MARK: 关闭定时器
+- (void)closeTime {
+    
+    if (self.timer) {
+        if (self.isTimerSuspend == YES) {
+            dispatch_resume(self.timer);
+        }
+    }
+    
+    if (self.timer != nil) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    
+    if (self.controlTimer != nil) {
+        dispatch_source_cancel(self.controlTimer);
+        self.controlTimer = nil;
+    }
 }
 
 - (void)addRotateNotification {
@@ -127,6 +167,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleOrientationChange:)
                                                 name:UIDeviceOrientationDidChangeNotification object:nil];
     
+}
+
+- (void)setEventItemModel:(TIoTDemoCloudEventModel *)eventItemModel {
+    _eventItemModel = eventItemModel;
 }
 
 - (void)initializaVariable {
@@ -167,6 +211,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [weakSelf.choiceDateView resetSelectedDate:dayDateString];
             weakSelf.currentDayTime = dayDateString?:weakSelf.currentDayTime;
             //刷新云存事件列表和一天时间抽
+            weakSelf.currentTime = 0;
+            weakSelf.isHidePlayBtn = YES;
             [weakSelf requestCloudStorageDayDate];
             [weakSelf requestCloudStoreVideoList];
             
@@ -180,6 +226,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     };
     //选择之前事件，获取开始/结束时间戳
     self.choiceDateView.previousDateBlcok = ^(TIoTTimeModel * _Nonnull preTimeModel) {
+        
+        //关闭定时器
+        [weakSelf closeTime];
+        
         TIoTDemoCloudEventModel *previousModel = [[TIoTDemoCloudEventModel alloc]init];
         
         NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
@@ -188,14 +238,19 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + preTimeModel.endTime;
         previousModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         previousModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel];
+        weakSelf.currentTime = 0;
+        weakSelf.isHidePlayBtn = YES;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:previousModel];
         
     };
     //选择下一个事件，获取开始/结束时间戳
     self.choiceDateView.nextDateBlcok = ^(TIoTTimeModel * _Nonnull nextTimeModel) {
+        
+        //关闭定时器
+        [weakSelf closeTime];
+        
         TIoTDemoCloudEventModel *nextModel = [[TIoTDemoCloudEventModel alloc]init];
         
         NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
@@ -204,14 +259,18 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + nextTimeModel.endTime;
         nextModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         nextModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel];
+        weakSelf.currentTime = 0;
+        weakSelf.isHidePlayBtn = YES;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:nextModel];
     };
     //滑动停止后，获取当前值所在事件开始/结束时间戳
     self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
         NSLog(@"--%f--%f",startTimestamp,selectedTimeModel.startTime);
+        
+        //关闭定时器
+        [weakSelf closeTime];
         
         TIoTDemoCloudEventModel *currentModel = [[TIoTDemoCloudEventModel alloc]init];
         
@@ -221,8 +280,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + selectedTimeModel.endTime;
         currentModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         currentModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel];
+        weakSelf.currentTime = 0;
+        weakSelf.isHidePlayBtn = YES;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:currentModel];
         
@@ -281,13 +341,42 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         
         self.choiceDateView.videoTimeSegmentArray = self.modelArray;
         
+        if (self.eventItemModel != nil) {
+            self.currentTime = 0;
+            [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:self.eventItemModel isChangeModel:YES];
+        }else {
+            if (self.modelArray.count != 0) {
+                TIoTTimeModel *timeModel = self.modelArray[0]?:[[TIoTTimeModel alloc]init];
+                TIoTDemoCloudEventModel *model = [[TIoTDemoCloudEventModel alloc]init];
+
+                NSString *startString = [self getDeytimeFormat:round(timeModel.startTime?:0)];
+                NSString *endString = [self getDeytimeFormat:round(timeModel.endTime?:0)];
+                model.StartTime = [NSString getTimeStampWithString:startString?:@"" withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+                model.EndTime = [NSString getTimeStampWithString:endString?:@"" withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+                
+                self.currentTime = 0;
+                [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:model isChangeModel:YES];
+        //        [self setScrollOffsetWith:timeModel];
+            }
+        }
+        
+        
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
     }];
 }
 
+- (NSString *)getDeytimeFormat:(NSInteger)timestamp {
+    NSInteger hour = timestamp / (60*60);
+    NSInteger mintue = timestamp % (60*60) / 60;
+    NSInteger second = timestamp % (60*60) % 60;
+    
+    NSString *partTime = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)hour,(long)mintue,(long)second];
+    NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.currentDayTime,partTime];
+    return dateString;
+}
 ///MARK: 获取视频防盗链播放URL
-- (void)getFullVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel
+- (void)getFullVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange
 {
     NSString *currentStamp = [NSString getNowTimeString];
     
@@ -298,13 +387,22 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
         NSLog(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
+ 
+        if (isChange == YES) {
+            self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+            self.videoTimeModel.StartTime = timeModel.StartTime;
+            self.videoTimeModel.EndTime = timeModel.EndTime;
+        }
         
         //视频播放
-        [self stopPlayMovie];
         self.videoUrl = fullVideoURl.SignedVideoURL?:@"";
-        [self configVideo];
-        [self.player prepareToPlay];
-        [self.player play];
+        if (self.isHidePlayBtn == YES) {
+            [self stopPlayMovie];
+            [self configVideo];
+            [self.player prepareToPlay];
+            [self.player play];
+            [self autoHideControlView];
+        }
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
@@ -333,7 +431,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         if (self.listModel.Events.count != 0) {
             self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
-            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0]];
+            self.currentTime = 0;
+//            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0] isChangeModel:YES];
             [self setScrollOffsetWith:self.dataArray[0]];
             
             [self.tableView reloadData];
@@ -381,8 +480,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.currentTime = 0;
+    self.isHidePlayBtn = YES;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
-    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel];
+    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
     [self setScrollOffsetWith:selectedModel];
 }
 
@@ -491,6 +592,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     self.imageView = [[UIImageView alloc] init];
     self.imageView.backgroundColor = [UIColor blackColor];
+    self.imageView.userInteractionEnabled = YES;
     [self.view addSubview:self.imageView];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.screenRect.size.width);
@@ -502,33 +604,251 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }
     }];
     
-    UIButton *videoPlayBtn = [[UIButton alloc]init];
-    [videoPlayBtn setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateNormal];
-    [self.imageView addSubview:videoPlayBtn];
-    [videoPlayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.imageView);
+    self.playView = [[UIView alloc]init];
+    [self.imageView addSubview:self.playView];
+    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.imageView);
+    }];
+    
+    self.videoPlayBtn = [[UIButton alloc]init];
+    [self.videoPlayBtn setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateNormal];
+    [self.videoPlayBtn addTarget:self action:@selector(playVideo:) forControlEvents:UIControlEventTouchUpInside];
+    [self.playView addSubview:self.videoPlayBtn];
+    [self.videoPlayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.playView);
         make.width.height.mas_equalTo(60);
     }];
     
-    ///设置播放器样式
-    [self setupPlayerCustomControlView];
+}
+
+///MARK: 控制栏隐藏状态下tap Video时响应
+- (void)tapVideoView:(UIButton *)button {
     
+    if (self.customControlVidwoView.hidden == YES ) {
+        
+        if (!button.selected) {
+            [self pauseVideo];
+        }
+        button.selected = !button.selected;
+        
+    }else if (self.customControlVidwoView.hidden == NO) {
+        
+        if (!button.selected) {
+            [self pauseVideo];
+        }else {
+            
+            [self resumeVideo];
+        }
+        
+        button.selected = !button.selected;
+    }
+}
+
+- (void)pauseVideo {
+    if (self.controlTimer != nil) {
+        dispatch_source_cancel(self.controlTimer);
+        self.controlTimer = nil;
+    }
+    self.customControlVidwoView.hidden = NO;
+    self.playPauseBtn.hidden = NO;
+    self.pauseTipView.hidden = NO;
+    [self.playBtn setImage:[UIImage imageNamed:@"play_pause"] forState:UIControlStateNormal];
+    [self.player pause];
+    if (self.timer) {
+        dispatch_suspend(self.timer);
+        self.isTimerSuspend = YES;
+    }
+    self.currentTime = self.slider.value;
+}
+
+- (void)resumeVideo {
+    [self autoHideControlView];
+    self.playPauseBtn.hidden = YES;
+    self.pauseTipView.hidden = YES;
+    [self.playBtn setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
+    [self.player play];
+    if (self.timer) {
+        dispatch_resume(self.timer);
+        self.isTimerSuspend = NO;
+    }
+}
+///MARK:播放视频按钮方法
+- (void)playVideo:(UIButton *)button {
+    self.videoPlayBtn.hidden = YES;
+    if (self.isHidePlayBtn == NO) {
+        [self stopPlayMovie];
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
+        [self autoHideControlView];
+        
+        self.isHidePlayBtn = YES;
+        
+    }
 }
 
 ///MARK: 设置播放器样式
 - (void)setupPlayerCustomControlView {
+    
+    if (self.customControlVidwoView != nil) {
+        [self.customControlVidwoView removeFromSuperview];
+    }
+    if (self.playPauseBtn != nil) {
+        [self.playPauseBtn removeFromSuperview];
+    }
+    
+    //播放时长 时间戳差值
+    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
+    
+    NSInteger minuteValue = durationValue / 60;
+    NSInteger secondValue = durationValue % 60;
+    
+    self.customControlVidwoView = [[UIView alloc]init];
+    self.customControlVidwoView.backgroundColor = [UIColor clearColor];
+    [self.imageView addSubview:self.customControlVidwoView];
+    [self.customControlVidwoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.imageView);
+    }];
+    
+    self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.playBtn setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
+    [self.playBtn addTarget:self action:@selector(controlVidePlay:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customControlVidwoView addSubview:self.playBtn];
+    [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(16);
+        make.bottom.equalTo(self.imageView.mas_bottom).offset(-14);
+        make.left.equalTo(self.customControlVidwoView.mas_left).offset(16);
+    }];
+    
     self.rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateBtn setImage:[UIImage imageNamed:@"play_rotate_icon"] forState:UIControlStateNormal];
     [self.rotateBtn addTarget:self action:@selector(rotateScreen) forControlEvents:UIControlEventTouchUpInside];
-    [self.imageView addSubview:self.rotateBtn];
+    [self.customControlVidwoView addSubview:self.rotateBtn];
     [self.rotateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.imageView.mas_right).offset(-kPadding);
+        make.right.equalTo(self.customControlVidwoView.mas_right).offset(-kPadding);
         make.width.height.mas_equalTo(16);
-        make.bottom.equalTo(self.imageView.mas_bottom).offset(-14);
+        make.bottom.equalTo(self.customControlVidwoView.mas_bottom).offset(-14);
     }];
+    
+    self.currentLabel = [[UILabel alloc]init];
+    [self.currentLabel setLabelFormateTitle:@"00:00" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+    [self.customControlVidwoView addSubview:self.currentLabel];
+    [self.currentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.centerY.equalTo(self.playBtn.mas_centerY);
+        make.left.equalTo(self.playBtn.mas_right).offset(10);
+    }];
+    
+    self.totalLabel = [[UILabel alloc]init];
+    [self.totalLabel setLabelFormateTitle:[NSString stringWithFormat:@"%02ld:%02ld",(long)minuteValue,(long)secondValue] font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+    [self.customControlVidwoView addSubview:self.totalLabel];
+    [self.totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.centerY.equalTo(self.rotateBtn.mas_centerY);
+        make.right.equalTo(self.rotateBtn.mas_left).offset(-10);
+    }];
+    
+    
+    self.slider = [[UISlider alloc]init];
+    self.slider.minimumTrackTintColor = [UIColor colorWithHexString:kVideoDemoSignGreenColor];
+    UIImage *thumbImage = [UIImage imageWithColor:[UIColor colorWithHexString:kVideoDemoSignGreenColor] size:CGSizeMake(12, 12)];
+    [self.slider setThumbImage:[UIImage makeRoundCornersWithRadius:6 withImage:thumbImage] forState:UIControlStateNormal];
+//    self.slider.minimumValue = self.videoTimeModel.StartTime.floatValue;
+//    self.slider.maximumValue = self.videoTimeModel.EndTime.floatValue;
+    self.slider.minimumValue = 0;
+    self.slider.maximumValue = durationValue;
+    
+    [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customControlVidwoView addSubview:self.slider];
+    [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.currentLabel.mas_right).offset(10);
+        make.right.equalTo(self.totalLabel.mas_left).offset(-10);
+        make.height.mas_equalTo(20);
+        make.centerY.equalTo(self.rotateBtn);
+    }];
+    
+    if (self.isHidePlayBtn == NO) {
+        [self.imageView bringSubviewToFront:self.playView];
+
+    }else {
+        self.playPauseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.playPauseBtn.backgroundColor = [UIColor clearColor];
+        [self.playPauseBtn addTarget:self action:@selector(tapVideoView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.imageView addSubview:self.playPauseBtn];
+        [self.playPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(self.imageView);
+            make.bottom.equalTo(self.imageView.mas_bottom).offset(-50);
+        }];
+        
+        [self.playPauseBtn addSubview:self.pauseTipView];
+        [self.pauseTipView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(102);
+            make.height.mas_equalTo(42);
+            make.centerX.equalTo(self.playPauseBtn);
+            make.centerY.equalTo(self.playPauseBtn.mas_centerY);
+        }];
+        self.pauseTipView.hidden = YES;
+        
+        UIImageView *pauseTipImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"play_control"]];
+        [self.pauseTipView addSubview:pauseTipImage];
+        [pauseTipImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.pauseTipView.mas_left).offset(16);
+            make.centerY.equalTo(self.pauseTipView);
+            make.width.height.mas_equalTo(16);
+        }];
+        
+        UILabel *pauseTipLabel = [[UILabel alloc]init];
+        [pauseTipLabel setLabelFormateTitle:@"已暂停" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentLeft];
+        [self.pauseTipView addSubview:pauseTipLabel];
+        [pauseTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(pauseTipImage.mas_right).offset(12);
+            make.centerY.equalTo(pauseTipImage.mas_centerY);
+        }];
+    }
+    
+}
+
+///MARK: 进度条滚动响应方法
+- (void)sliderValueChanged:(id)sender {
+    
+    [self autoHideControlView];
+    
+    UISlider *slider = (UISlider *)sender;
+    self.currentTime = round(slider.value);
+    NSLog(@"-!!!!!!!~~~~~~--%f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
+    
+    TIoTDemoCloudEventModel *currentTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+    currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.videoTimeModel.StartTime.integerValue + self.currentTime];
+    currentTimeModel.EndTime = self.videoTimeModel.EndTime;
+    
+    if (self.timer) {
+        if (self.isTimerSuspend == YES) {
+            dispatch_resume(self.timer);
+        }
+    }
+    
+    //关闭定时器
+    if (self.timer != nil) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    
+    self.isHidePlayBtn = YES;
+    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
+    [self setScrollOffsetWith:currentTimeModel];
+    
+}
+
+///MARK: 控制栏播放按钮响应方法
+- (void)controlVidePlay:(UIButton *)button {
+    
+    [self tapVideoView:self.playPauseBtn];
 }
 
 - (void)rotateScreen {
+    
+    [self autoHideControlView];
+    
     AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.isRotation == YES) {
         appDelegate.isRotation = NO;
@@ -547,6 +867,47 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSLog(@"%@",stampDate);
     self.timeLabel.text = secondString;
     return stampDate;
+}
+
+/// MARK: video控制栏自动隐藏
+- (void)autoHideControlView {
+    
+    if (self.controlTimer != nil) {
+        dispatch_source_cancel(self.controlTimer);
+        self.controlTimer = nil;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    __block NSInteger time = 3; //计时开始
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    weakSelf.controlTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    
+    dispatch_source_set_timer(weakSelf.controlTimer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
+    
+    dispatch_source_set_event_handler(weakSelf.controlTimer, ^{
+        
+        if(time <= 0){ //计时结束，关闭
+            self.videoPlayBtn.hidden = NO;
+            
+            dispatch_source_cancel(weakSelf.controlTimer);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.playPauseBtn.hidden = NO;
+                self.customControlVidwoView.hidden = YES;
+            });
+            
+        }else{
+            self.videoPlayBtn.hidden = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.customControlVidwoView.hidden = NO;
+                self.playPauseBtn.hidden = NO;
+            });
+            time--;
+            
+        }
+    });
+    dispatch_resume(weakSelf.controlTimer);
 }
 
 - (void)recombineTimeSegmentWithTimeArray:(NSArray *)timeArray {
@@ -644,6 +1005,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
         NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        ///设置播放器样式
+        [self setupPlayerCustomControlView];
         
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
         NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
@@ -652,12 +1015,114 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }
 }
 
+- (void)moviePlayBackStateDidChange:(NSNotification*)notification
+{
+    //    MPMoviePlaybackStateStopped,
+    //    MPMoviePlaybackStatePlaying,
+    //    MPMoviePlaybackStatePaused,
+    //    MPMoviePlaybackStateInterrupted,
+    //    MPMoviePlaybackStateSeekingForward,
+    //    MPMoviePlaybackStateSeekingBackward
+
+    switch (_player.playbackState)
+    {
+        case IJKMPMoviePlaybackStateStopped: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStatePlaying: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            
+            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+            break;
+        }
+        case IJKMPMoviePlaybackStatePaused: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateInterrupted: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateSeekingForward:
+        case IJKMPMoviePlaybackStateSeekingBackward: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            break;
+        }
+        default: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            break;
+        }
+    }
+}
+
+//计时器
+- (void)startPlayVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
+    
+    if (self.timer) {
+        if (self.isTimerSuspend == YES) {
+            dispatch_resume(self.timer);
+        }
+    }
+    
+    if (self.timer != nil) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    //播放时长 时间戳差值
+    
+    __weak typeof(self) weakSelf = self;
+    
+    __block NSInteger time = sliderValue; //计时开始
+    
+    NSInteger durationValue = 0;
+    durationValue = endTime - startTime;
+    
+    NSInteger minuteValue = durationValue / 60;
+    NSInteger secondValue = durationValue % 60;
+    
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    weakSelf.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    
+    dispatch_source_set_timer(weakSelf.timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
+    
+    dispatch_source_set_event_handler(weakSelf.timer, ^{
+        
+        if(time >= durationValue){ //计时结束，关闭
+            
+            dispatch_source_cancel(weakSelf.timer);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf stopPlayMovie];
+                //起始时间等于duration
+                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
+                weakSelf.currentLabel.text = weakSelf.totalLabel.text;
+            });
+            
+        }else{
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
+                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
+                weakSelf.slider.value = time;
+            });
+            time++;
+            
+        }
+    });
+    dispatch_resume(weakSelf.timer);
+}
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
                                                object:_player];
 
 }
@@ -667,6 +1132,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -730,6 +1196,15 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         _dataArray = [[NSMutableArray alloc]init];
     }
     return _dataArray;
+}
+
+- (UIView *)pauseTipView {
+    if (!_pauseTipView) {
+        _pauseTipView = [[UIView alloc]init];
+        _pauseTipView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.7];
+        _pauseTipView.layer.cornerRadius = 8;
+    }
+    return _pauseTipView;
 }
 /*
 #pragma mark - Navigation
