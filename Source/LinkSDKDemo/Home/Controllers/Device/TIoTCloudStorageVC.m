@@ -10,6 +10,7 @@
 #import "TIoTCustomTimeSlider.h"
 #import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 #import "NSDate+TIoTCustomCalendar.h"
+#import "UIImage+TIoTDemoExtension.h"
 
 #import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
@@ -40,7 +41,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (atomic, retain) IJKFFMoviePlayerController *player;
 
 @property (nonatomic, strong) UIButton *videoPlayBtn; //player 开始时中间的播放按钮
-@property (nonatomic, strong) UIButton *rotateBtn;
+@property (nonatomic, strong) UIButton *rotateBtn; //控制栏中旋转按钮
+@property (nonatomic, strong) UIButton *playBtn; //控制栏中播放按钮
+@property (nonatomic, strong) UIView *customControlVidwoView; //video 自定义控制栏
+@property (nonatomic, strong) UISlider *slider;
+@property (nonatomic, strong) UILabel *currentLabel; //当期时间
+@property (nonatomic, strong) UILabel *totalLabel; //总时间
 @property (nonatomic, strong) NSString *videoUrl;
 @property (nonatomic, strong) NSArray *timeList; //原始时间
 @property (nonatomic, strong) NSMutableArray *modelArray; //重组后存放时间数组
@@ -59,6 +65,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, copy) NSString *currentDayTime; //当天时间 2020-1-1
 @property (nonatomic, strong) TIoTDemoCloudStoreFullVideoUrl *fullVideoURl;
 @property (nonatomic, strong) TIoTDemoCloudEventListModel *listModel;
+
+@property (nonatomic, strong) TIoTDemoCloudEventModel *videoTimeModel;
+@property (nonatomic, assign) NSInteger currentTime;
+@property (nonatomic, strong) dispatch_source_t timer;
 @end
 
 @implementation TIoTCloudStorageVC
@@ -167,6 +177,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [weakSelf.choiceDateView resetSelectedDate:dayDateString];
             weakSelf.currentDayTime = dayDateString?:weakSelf.currentDayTime;
             //刷新云存事件列表和一天时间抽
+            weakSelf.currentTime = 0;
             [weakSelf requestCloudStorageDayDate];
             [weakSelf requestCloudStoreVideoList];
             
@@ -188,8 +199,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + preTimeModel.endTime;
         previousModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         previousModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel];
+        weakSelf.currentTime = 0;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:previousModel];
         
@@ -204,8 +215,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + nextTimeModel.endTime;
         nextModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         nextModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel];
+        weakSelf.currentTime = 0;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:nextModel];
     };
@@ -221,8 +232,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         CGFloat endStamp = startTimestampString.floatValue + selectedTimeModel.endTime;
         currentModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
         currentModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel];
+        weakSelf.currentTime = 0;
+        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
         
         [weakSelf setScrollOffsetWith:currentModel];
         
@@ -287,7 +298,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 ///MARK: 获取视频防盗链播放URL
-- (void)getFullVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel
+- (void)getFullVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange
 {
     NSString *currentStamp = [NSString getNowTimeString];
     
@@ -298,6 +309,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
         NSLog(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
+ 
+        if (isChange == YES) {
+            self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+            self.videoTimeModel.StartTime = timeModel.StartTime;
+            self.videoTimeModel.EndTime = timeModel.EndTime;
+        }
         
         //视频播放
         [self stopPlayMovie];
@@ -333,7 +350,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         if (self.listModel.Events.count != 0) {
             self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
-            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0]];
+            self.currentTime = 0;
+            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0] isChangeModel:YES];
             [self setScrollOffsetWith:self.dataArray[0]];
             
             [self.tableView reloadData];
@@ -381,8 +399,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.currentTime = 0;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
-    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel];
+    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
     [self setScrollOffsetWith:selectedModel];
 }
 
@@ -491,6 +510,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     self.imageView = [[UIImageView alloc] init];
     self.imageView.backgroundColor = [UIColor blackColor];
+    self.imageView.userInteractionEnabled = YES;
     [self.view addSubview:self.imageView];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.screenRect.size.width);
@@ -510,22 +530,114 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         make.width.height.mas_equalTo(60);
     }];
     
-    ///设置播放器样式
-    [self setupPlayerCustomControlView];
-    
 }
 
 ///MARK: 设置播放器样式
 - (void)setupPlayerCustomControlView {
+    
+    if (self.customControlVidwoView != nil) {
+        [self.customControlVidwoView removeFromSuperview];
+    }
+    
+    //播放时长 时间戳差值
+    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
+    
+    NSInteger minuteValue = durationValue / 60;
+    NSInteger secondValue = durationValue % 60;
+    
+    self.customControlVidwoView = [[UIView alloc]init];
+    self.customControlVidwoView.backgroundColor = [UIColor clearColor];
+    [self.imageView addSubview:self.customControlVidwoView];
+    [self.customControlVidwoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.imageView);
+    }];
+    
+    self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.playBtn setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
+    [self.playBtn addTarget:self action:@selector(controlVidePlay:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customControlVidwoView addSubview:self.playBtn];
+    [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(16);
+        make.bottom.equalTo(self.imageView.mas_bottom).offset(-14);
+        make.left.equalTo(self.customControlVidwoView.mas_left).offset(16);
+    }];
+    
     self.rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateBtn setImage:[UIImage imageNamed:@"play_rotate_icon"] forState:UIControlStateNormal];
     [self.rotateBtn addTarget:self action:@selector(rotateScreen) forControlEvents:UIControlEventTouchUpInside];
-    [self.imageView addSubview:self.rotateBtn];
+    [self.customControlVidwoView addSubview:self.rotateBtn];
     [self.rotateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.imageView.mas_right).offset(-kPadding);
+        make.right.equalTo(self.customControlVidwoView.mas_right).offset(-kPadding);
         make.width.height.mas_equalTo(16);
-        make.bottom.equalTo(self.imageView.mas_bottom).offset(-14);
+        make.bottom.equalTo(self.customControlVidwoView.mas_bottom).offset(-14);
     }];
+    
+    self.currentLabel = [[UILabel alloc]init];
+    [self.currentLabel setLabelFormateTitle:@"00:00" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+    [self.customControlVidwoView addSubview:self.currentLabel];
+    [self.currentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.centerY.equalTo(self.playBtn.mas_centerY);
+        make.left.equalTo(self.playBtn.mas_right).offset(10);
+    }];
+    
+    self.totalLabel = [[UILabel alloc]init];
+    [self.totalLabel setLabelFormateTitle:[NSString stringWithFormat:@"%02ld:%02ld",(long)minuteValue,(long)secondValue] font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+    [self.customControlVidwoView addSubview:self.totalLabel];
+    [self.totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.centerY.equalTo(self.rotateBtn.mas_centerY);
+        make.right.equalTo(self.rotateBtn.mas_left).offset(-10);
+    }];
+    
+    
+    self.slider = [[UISlider alloc]init];
+    self.slider.minimumTrackTintColor = [UIColor colorWithHexString:kVideoDemoSignGreenColor];
+    UIImage *thumbImage = [UIImage imageWithColor:[UIColor colorWithHexString:kVideoDemoSignGreenColor] size:CGSizeMake(12, 12)];
+    [self.slider setThumbImage:[UIImage makeRoundCornersWithRadius:6 withImage:thumbImage] forState:UIControlStateNormal];
+//    self.slider.minimumValue = self.videoTimeModel.StartTime.floatValue;
+//    self.slider.maximumValue = self.videoTimeModel.EndTime.floatValue;
+    self.slider.minimumValue = 0;
+    self.slider.maximumValue = durationValue;
+    
+    [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customControlVidwoView addSubview:self.slider];
+    [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.currentLabel.mas_right).offset(10);
+        make.right.equalTo(self.totalLabel.mas_left).offset(-10);
+        make.height.mas_equalTo(20);
+        make.centerY.equalTo(self.rotateBtn);
+    }];
+}
+
+///MARK: 进度条滚动响应方法
+- (void)sliderValueChanged:(id)sender {
+    UISlider *slider = (UISlider *)sender;
+    self.currentTime = round(slider.value);
+    NSLog(@"-!!!!!!!~~~~~~--%f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
+    
+    TIoTDemoCloudEventModel *currentTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+    currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.videoTimeModel.StartTime.integerValue + self.currentTime];
+    currentTimeModel.EndTime = self.videoTimeModel.EndTime;
+    
+    if (self.timer != nil) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    
+    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
+    [self setScrollOffsetWith:currentTimeModel];
+    
+}
+
+///MARK: 控制栏播放按钮响应方法
+- (void)controlVidePlay:(UIButton *)button {
+    if (!button.selected) {
+        [button setImage:[UIImage imageNamed:@"play_pause"] forState:UIControlStateNormal];
+    }else {
+        [button setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
+    }
+    button.selected = !button.selected;
 }
 
 - (void)rotateScreen {
@@ -644,6 +756,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
         NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        ///设置播放器样式
+        [self setupPlayerCustomControlView];
         
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
         NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
@@ -652,12 +766,108 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }
 }
 
+- (void)moviePlayBackStateDidChange:(NSNotification*)notification
+{
+    //    MPMoviePlaybackStateStopped,
+    //    MPMoviePlaybackStatePlaying,
+    //    MPMoviePlaybackStatePaused,
+    //    MPMoviePlaybackStateInterrupted,
+    //    MPMoviePlaybackStateSeekingForward,
+    //    MPMoviePlaybackStateSeekingBackward
+
+    switch (_player.playbackState)
+    {
+        case IJKMPMoviePlaybackStateStopped: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStatePlaying: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            
+            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+            break;
+        }
+        case IJKMPMoviePlaybackStatePaused: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateInterrupted: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateSeekingForward:
+        case IJKMPMoviePlaybackStateSeekingBackward: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            break;
+        }
+        default: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            break;
+        }
+    }
+}
+
+//计时器
+- (void)startPlayVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
+    
+    if (self.timer != nil) {
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    //播放时长 时间戳差值
+    
+    __weak typeof(self) weakSelf = self;
+    
+    __block NSInteger time = sliderValue; //计时开始
+    
+    NSInteger durationValue = 0;
+    durationValue = endTime - startTime;
+    
+    NSInteger minuteValue = durationValue / 60;
+    NSInteger secondValue = durationValue % 60;
+    
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    weakSelf.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    
+    dispatch_source_set_timer(weakSelf.timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
+    
+    dispatch_source_set_event_handler(weakSelf.timer, ^{
+        
+        if(time >= durationValue){ //计时结束，关闭
+            
+            dispatch_source_cancel(weakSelf.timer);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf stopPlayMovie];
+                //起始时间等于duration
+                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
+                weakSelf.currentLabel.text = weakSelf.totalLabel.text;
+            });
+            
+        }else{
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
+                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
+                weakSelf.slider.value = time;
+            });
+            time++;
+            
+        }
+    });
+    dispatch_resume(weakSelf.timer);
+}
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
                                                object:_player];
 
 }
@@ -667,6 +877,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
