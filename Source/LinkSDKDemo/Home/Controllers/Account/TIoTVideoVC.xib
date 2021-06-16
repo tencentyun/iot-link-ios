@@ -11,7 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TIoTVideoVC">
             <connections>
-                <outlet property="versionLB" destination="yIN-7U-eb1" id="W92-iv-Lnj"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,55 +18,14 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dai-DH-NVA">
-                    <rect key="frame" x="157" y="325" width="100" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="100" id="22X-Ug-sVa"/>
-                        <constraint firstAttribute="height" constant="50" id="JZF-Jm-X8g"/>
-                    </constraints>
-                    <state key="normal" title="配网"/>
-                    <connections>
-                        <action selector="jumpDistributeNet:" destination="-1" eventType="touchUpInside" id="jui-YW-M0O"/>
-                    </connections>
-                </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="videolocal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIN-7U-eb1">
-                    <rect key="frame" x="168.5" y="832" width="77" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" systemColor="systemGray2Color"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQb-Vi-B6R">
-                    <rect key="frame" x="157" y="550" width="100" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="50" id="rF2-VE-71S"/>
-                    </constraints>
-                    <state key="normal" title="播放"/>
-                    <connections>
-                        <action selector="jumpPlaying:" destination="-1" eventType="touchUpInside" id="NEM-1q-gOU"/>
-                    </connections>
-                </button>
-            </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-            <constraints>
-                <constraint firstItem="dai-DH-NVA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="0Ul-O7-Tm3"/>
-                <constraint firstItem="MQb-Vi-B6R" firstAttribute="trailing" secondItem="dai-DH-NVA" secondAttribute="trailing" id="Rcm-1t-Mmn"/>
-                <constraint firstItem="MQb-Vi-B6R" firstAttribute="top" secondItem="dai-DH-NVA" secondAttribute="bottom" constant="175" id="UIh-cJ-Ko3"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="MQb-Vi-B6R" secondAttribute="bottom" constant="262" id="WNM-au-cul"/>
-                <constraint firstItem="MQb-Vi-B6R" firstAttribute="leading" secondItem="dai-DH-NVA" secondAttribute="leading" id="f7u-oq-S73"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="yIN-7U-eb1" secondAttribute="bottom" constant="9" id="nGg-TV-VNG"/>
-                <constraint firstItem="yIN-7U-eb1" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="y1y-fE-zF9"/>
-            </constraints>
             <point key="canvasLocation" x="-393" y="71"/>
         </view>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
