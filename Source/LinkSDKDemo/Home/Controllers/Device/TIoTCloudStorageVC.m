@@ -831,17 +831,19 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.videoTimeModel.StartTime.integerValue + self.currentTime];
     currentTimeModel.EndTime = self.videoTimeModel.EndTime;
     
-    if (self.timer) {
-        if (self.isTimerSuspend == YES) {
-            dispatch_resume(self.timer);
-            self.isTimerSuspend = NO;
+    if (self.isTimerSuspend == YES) {
+        if (self.timer) {
+            if (self.isTimerSuspend == YES) {
+                dispatch_resume(self.timer);
+                self.isTimerSuspend = NO;
+            }
         }
-    }
-    
-    //关闭定时器
-    if (self.timer != nil) {
-        dispatch_source_cancel(self.timer);
-        self.timer = nil;
+        
+        //关闭定时器
+        if (self.timer != nil) {
+            dispatch_source_cancel(self.timer);
+            self.timer = nil;
+        }
     }
     
     self.isHidePlayBtn = YES;
