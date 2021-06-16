@@ -65,6 +65,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) TIoTDemoCloudEventListModel *listModel;
 
 @property (nonatomic, strong) NSString *qualityString; //保存选择video清晰度
+
+@property (nonatomic, strong) NSString *saveFilePath; //视频保存路径
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -484,10 +486,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSString *fileName = @"TTVideo11.mp4";
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentDirectory = paths.firstObject;
-        NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-        [[NSFileManager defaultManager] removeItemAtPath:saveFilePath error:nil];
+        self.saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+        [[NSFileManager defaultManager] removeItemAtPath:self.saveFilePath error:nil];
         
-        [self.player startRecordWithFileName:saveFilePath];
+        [self.player startRecordWithFileName:self.saveFilePath];
         
     }else {
         self.videoIcon.image = [UIImage imageNamed:@"video_unselect"];
@@ -495,6 +497,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         //结束录像
         [self.player stopRecord];
+        [TIoTCoreUtil saveVideoToPhotoAlbum:self.saveFilePath];
     }
     
     button.selected = !button.selected;

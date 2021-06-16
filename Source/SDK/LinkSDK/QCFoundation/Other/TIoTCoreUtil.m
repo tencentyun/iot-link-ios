@@ -328,4 +328,38 @@
     
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
 }
+
+/**
+ 视频存入相册
+ */
+
++ (void)saveVideoToPhotoAlbum:(NSString *)videoPathString {
+    if (videoPathString) {
+            NSURL *videoUrl = [NSURL URLWithString:videoPathString];
+            BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([videoUrl path]);
+            if (compatible)
+            {
+                UISaveVideoAtPathToSavedPhotosAlbum([videoUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+            }
+        }
+}
+
++ (void)savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    NSString *msg = nil ;
+    if(error != NULL){
+        msg = @"保存视频失败" ;
+    }else{
+        msg = @"保存视频成功" ;
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
+        [self.topViewController presentViewController:alert animated:YES completion:nil];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        });
+    });
+}
 @end

@@ -31,6 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)screenshotWithView:(UIView *)view;
 
+/**
+ 视频存入相册
+ */
+
++ (void)saveVideoToPhotoAlbum:(NSString *)videoPathString;
+
 @end
 
 NS_ASSUME_NONNULL_END
