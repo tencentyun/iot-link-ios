@@ -11,19 +11,15 @@
 #import "NSString+Extension.h"
 #import "TIoTPlayListVC.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "TIoTLoginCustomView.h"
 #import "TIoTDemoHomeViewController.h"
 #import "TIoTDemoNavController.h"
 #import "TIoTDemoTabBarController.h"
-#import "TIoTCoreXP2PBridge.h"
+
 @interface TIoTPlayConfigVC ()<UITextFieldDelegate>
 
-@property (nonatomic, strong) UITextField *secretID;
-@property (nonatomic, strong) UITextField *secretKey;
-@property (nonatomic, strong) UITextField *productID;
-
-@property (nonatomic, strong) NSString *secretIDString;
-@property (nonatomic, strong) NSString *secretKeyString;
-@property (nonatomic, strong) NSString *productIDString;
+@property (nonatomic, strong) TIoTLoginCustomView *loginView;
+@property (nonatomic, strong) UIButton *loginBtn;
 @end
 
 @implementation TIoTPlayConfigVC
@@ -34,183 +30,77 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    CGFloat kTopPadding = 40 + kNavBarAndStatusBarHeight;
-    CGFloat kLeftPadding = 30;
-    CGFloat kWidth = kScreenWidth - kLeftPadding*2;
-    CGFloat kHeight = 40;
-    CGFloat kInterval = 10;
+    CGFloat kTopSpace = 30;
+    CGFloat kWidthPadding = 16;
     
-    self.secretID = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, kTopPadding, kWidth,kHeight)];
-    self.secretID.textColor = [UIColor colorWithHexString:kMainThemeColor];
-    self.secretID.font = [UIFont systemFontOfSize:18];
-    self.secretID.placeholder = @"请输入SecretID";
-    self.secretID.textAlignment = NSTextAlignmentCenter;
-    self.secretID.returnKeyType = UIReturnKeyDone;
-    self.secretID.delegate = self;
-    self.secretID.layer.cornerRadius = 10;
-    self.secretID.layer.borderWidth = 1;
-    self.secretID.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.secretID];
+    self.loginView = [[TIoTLoginCustomView alloc]init];
+    [self.view addSubview:self.loginView];
+    [self.loginView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(kTopSpace);
+        }else {
+            make.top.equalTo(self.view);
+        }
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(56*3 + 3 + 35 + 21);
+    }];
     
-    self.secretKey = [[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretID.frame)+kInterval, kWidth, kHeight)];
-    self.secretKey.textColor = [UIColor colorWithHexString:kMainThemeColor];
-    self.secretKey.font = [UIFont systemFontOfSize:18];
-    self.secretKey.placeholder = @"请输入SecretKey";
-    self.secretKey.textAlignment = NSTextAlignmentCenter;
-    self.secretKey.returnKeyType = UIReturnKeyDone;
-    self.secretKey.delegate = self;
-    self.secretKey.layer.cornerRadius = 10;
-    self.secretKey.layer.borderWidth = 1;
-    self.secretKey.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.secretKey];
-    
-    self.productID =[[UITextField alloc]initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(self.secretKey.frame)+kInterval, kWidth, kHeight)];
-    self.productID.textColor = [UIColor colorWithHexString:kMainThemeColor];
-    self.productID.font = [UIFont systemFontOfSize:18];
-    self.productID.placeholder = @"请输入ProductID";
-    self.productID.textAlignment = NSTextAlignmentCenter;
-    self.productID.returnKeyType = UIReturnKeyDone;
-    self.productID.delegate = self;
-    self.productID.layer.cornerRadius = 10;
-    self.productID.layer.borderWidth = 1;
-    self.productID.layer.borderColor = [UIColor blueColor].CGColor;
-    [self.view addSubview:self.productID];
-    
-    UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    requestButton.frame = CGRectMake(kLeftPadding, CGRectGetMaxY(self.productID.frame)+kInterval, kWidth, kHeight);
-    [requestButton setTitle:@"获取PRODUCTIF下的设备列表" forState:UIControlStateNormal];
-    [requestButton setTitleColor:[UIColor colorWithHexString:kMainThemeColor] forState:UIControlStateNormal];
-    requestButton.titleLabel.font = [UIFont systemFontOfSize:18];
-    [requestButton addTarget:self action:@selector(requestDeviceList) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:requestButton];
+    self.loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.loginBtn.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
+    [self.loginBtn setButtonFormateWithTitlt:@"登录" titleColorHexString:@"#FFFFFF" font:[UIFont wcPfRegularFontOfSize:17]];
+    [self.loginBtn addTarget:self action:@selector(requestDeviceList) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.loginBtn];
+    [self.loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(kWidthPadding);
+        make.right.equalTo(self.view.mas_right).offset(-kWidthPadding);
+        make.top.equalTo(self.loginView.mas_bottom).offset(40);
+        make.height.mas_equalTo(45);
+    }];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyBoard)];
     [self.view addGestureRecognizer:tap];
     
-    [self.secretID becomeFirstResponder];
-    
-    self.secretIDString = @"";
-    self.secretKeyString = @"";
-    self.productIDString = @"";
-    
-    
-    UISwitch *fileSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(kScreenWidth-80, CGRectGetMaxY(requestButton.frame)+100, 55, 35)];
-    [fileSwitch addTarget:self action:@selector(changeWriteFileSwitch:) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:fileSwitch];
-    
-    UILabel *fileSwitchTip = [[UILabel alloc] initWithFrame:CGRectMake(kLeftPadding, CGRectGetMaxY(requestButton.frame)+100, kWidth-65, 35)];
-    fileSwitchTip.text = @"数据帧写入文件:";
-    fileSwitchTip.textAlignment = NSTextAlignmentRight;
-    fileSwitchTip.textColor = [UIColor grayColor];
-    [self.view addSubview:fileSwitchTip];
 }
 
-
-- (void)changeWriteFileSwitch:(UISwitch *)sender {
-    [TIoTCoreXP2PBridge sharedInstance].writeFile = sender.on;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
 }
 
 - (void)hideKeyBoard {
-    
-    [self.secretKey resignFirstResponder];
-    [self.secretID resignFirstResponder];
-    [self.productID resignFirstResponder];
-
-}
-
-#pragma mark - UITextField delegate
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    
-    if (textField == self.secretID) {
-        self.secretIDString = textField.text;
-    }
-    if (textField == self.secretKey) {
-        self.secretKeyString = textField.text;
-    }
-    if (textField == self.productID) {
-        self.productIDString = textField.text;
-    }
-    
-    [self hideKeyBoard];
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == self.secretID) {
-        self.secretIDString = textField.text;
-    }
-    if (textField == self.secretKey) {
-        self.secretKeyString = textField.text;
-    }
-    if (textField == self.productID) {
-        self.productIDString = textField.text;
-    }
-
-    [self hideKeyBoard];
-    return YES;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    NSString *inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    NSInteger kMaxLength = 10;
-    NSString *toBeString = inputString;
-    NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage;
-    if ([lang isEqualToString:@"zh-Hans"]) { //中文输入
-        UITextRange *selectedRange = [textField markedTextRange];
-        //获取高亮部分
-        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
-        if (!position) {// 没有高亮选择的字，则对已输入的文字进行字数统计和限制
-            if (toBeString.length > kMaxLength) {
-                inputString = [toBeString substringToIndex:kMaxLength];
-            }
-
-        }
-        else{//有高亮选择的字符串，则暂不对文字进行统计和限制
-
-        }
-
-    }else{//中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
-        if (toBeString.length > kMaxLength) {
-            inputString = [toBeString substringToIndex:kMaxLength];
-        }
-
-    }
-    
-    if (textField == self.secretID) {
-        self.secretIDString = inputString;
-    }
-    if (textField == self.secretKey) {
-        self.secretKeyString = inputString;
-    }
-    if (textField == self.productID) {
-        self.productIDString = inputString;
-    }
-    return YES;
+    [self.loginView.accessID resignFirstResponder];
+    [self.loginView.accessToken resignFirstResponder];
+    [self.loginView.productID resignFirstResponder];
 }
 
 #pragma mark - event
 
-- (void)setLabelFormateTitle:(NSString *)title font:(UIFont *)font titleColorHexString:(NSString *)titleColorString textAlignment:(NSTextAlignment)alignment label:(UILabel *)label {
-    label.text = title;
-    label.textColor = [UIColor colorWithHexString:titleColorString];
-    label.font = font;
-    label.textAlignment = alignment;
-}
-
 - (void)requestDeviceList {
     
-    if ((![NSString isNullOrNilWithObject:self.secretIDString] && ![NSString isFullSpaceEmpty:self.secretIDString]) && (![NSString isNullOrNilWithObject:self.secretKeyString] && ![NSString isFullSpaceEmpty:self.secretKeyString]) && (![NSString isNullOrNilWithObject:self.productIDString] && ![NSString isFullSpaceEmpty:self.productIDString])) {
+    if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString])) {
+        
+        NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *accessIDArray = [NSMutableArray arrayWithArray:[defaluts objectForKey:@"AccessIDArrayKey"]];
+        if (accessIDArray != nil) {
+            [accessIDArray addObject:self.loginView.secretIDString];
+            [defaluts setValue:accessIDArray forKey:@"AccessIDArrayKey"];
+        }else {
+            NSMutableArray *IDArray = [[NSMutableArray alloc]init];
+            [IDArray addObject:self.loginView.secretIDString];
+            [defaluts setValue:IDArray forKey:@"AccessIDArrayKey"];
+        }
         
         TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
-        environment.cloudSecretId = self.secretIDString;
-        environment.cloudSecretKey = self.secretKeyString;
-        environment.cloudProductId = self.productIDString;
+        environment.cloudSecretId = self.loginView.secretIDString;
+        environment.cloudSecretKey = self.loginView.secretKeyString;
+        environment.cloudProductId = self.loginView.productIDString;
         
+        //原播放列表
         TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
         [self.navigationController pushViewController:playListVC animated:YES];
+        
     }else {
+        //原播放列表
         TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
         [self.navigationController pushViewController:playListVC animated:YES];
     }
