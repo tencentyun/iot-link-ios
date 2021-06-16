@@ -20,3 +20,7 @@
     return @{@"params":[TIOTtrtcPayloadParamModel class]};
 }
 @end
+
+@implementation TIOTtrtcRejectModel
+
+@end

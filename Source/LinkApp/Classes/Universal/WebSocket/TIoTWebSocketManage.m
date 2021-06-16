@@ -189,6 +189,20 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     if ([model.method isEqualToString:@"report"]) {
+        
+        NSString *extrainfo = model.params._sys_extra_info;
+        if (extrainfo) {
+            //被拒绝就退出房间
+            TIOTtrtcRejectModel *rejectModel = [TIOTtrtcRejectModel yy_modelWithJSON:extrainfo];
+            if ([rejectModel.rejectUserId isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                    [MBProgressHUD showError:reason];
+                    return;
+                }];
+            }
+        }
+        
+        
         if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
             
             
@@ -239,6 +253,7 @@ static NSString *heartBeatReqID = @"5002";
             }
             
         }else if (model.params._sys_audio_call_status.intValue == 0 || model.params._sys_video_call_status.intValue == 0) {
+            
             NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
             for (NSString *userIdString in userIdArray) {
 
