@@ -76,6 +76,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 @property (nonatomic, assign) BOOL isHidePlayBtn; //播放按钮
 @property (nonatomic, assign) BOOL isTimerSuspend;
+@property (nonatomic, assign) NSInteger scrollDuraionTime;
+@property (nonatomic, assign) NSInteger startStamp;
+@property (nonatomic, assign) BOOL isInnerScroll;
+@property (nonatomic, assign) BOOL isPause; //是否暂停
 @end
 
 @implementation TIoTCloudStorageVC
@@ -213,7 +217,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             weakSelf.currentDayTime = dayDateString?:weakSelf.currentDayTime;
             //刷新云存事件列表和一天时间抽
             weakSelf.currentTime = 0;
+            weakSelf.scrollDuraionTime = weakSelf.currentTime;
+            weakSelf.isInnerScroll = NO;
             weakSelf.isHidePlayBtn = YES;
+            weakSelf.isPause = NO;
             [weakSelf requestCloudStorageDayDate];
             [weakSelf requestCloudStoreVideoList];
             
@@ -240,7 +247,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             previousModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
             previousModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
             weakSelf.currentTime = 0;
+            weakSelf.scrollDuraionTime = weakSelf.currentTime;
+            weakSelf.isInnerScroll = NO;
             weakSelf.isHidePlayBtn = YES;
+            weakSelf.isPause = NO;
             [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
             
             [weakSelf setScrollOffsetWith:previousModel];
@@ -262,7 +272,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             nextModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
             nextModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
             weakSelf.currentTime = 0;
+            weakSelf.scrollDuraionTime = weakSelf.currentTime;
+            weakSelf.isInnerScroll = NO;
             weakSelf.isHidePlayBtn = YES;
+            weakSelf.isPause = NO;
             [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
             
             [weakSelf setScrollOffsetWith:nextModel];
@@ -270,30 +283,56 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     };
     //滑动停止后，获取当前值所在事件开始/结束时间戳
     self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
-        NSLog(@"--%f--%f",startTimestamp,selectedTimeModel.startTime);
+        NSLog(@"startStamp--%f----%f",startTimestamp,selectedTimeModel.startTime);
         
         //关闭定时器
         [weakSelf closeTime];
-        
+
         TIoTDemoCloudEventModel *currentModel = [[TIoTDemoCloudEventModel alloc]init];
-        
+
         NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
         NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-        
-        CGFloat startValue = startTimestampString.floatValue + selectedTimeModel.startTime;
-        
-        CGFloat startStamp = startTimestamp;
-        CGFloat endStamp = startTimestampString.floatValue + selectedTimeModel.endTime + startTimestamp - startValue;
-        currentModel.StartTime = [NSString stringWithFormat:@"%f",startStamp];
-        currentModel.EndTime = [NSString stringWithFormat:@"%f",endStamp];
-        weakSelf.currentTime = startTimestamp - startValue;
-        weakSelf.slider.value = startTimestamp - startValue;
+
+        NSInteger startValue = startTimestampString.integerValue + selectedTimeModel.startTime;
+        NSInteger startDurationValue = startTimestamp - startValue;
+
+        NSInteger endStamp = startTimestampString.integerValue + selectedTimeModel.endTime ;
+        currentModel.StartTime = [NSString stringWithFormat:@"%ld",(long)startValue];
+        currentModel.EndTime = [NSString stringWithFormat:@"%ld",(long)endStamp];
+        weakSelf.currentTime = startDurationValue;
+        weakSelf.slider.value = startDurationValue;
+        weakSelf.player.currentPlaybackTime = startDurationValue;
+        weakSelf.scrollDuraionTime = weakSelf.currentTime;
+        weakSelf.startStamp = startValue;
+        weakSelf.isInnerScroll = YES;
         weakSelf.isHidePlayBtn = YES;
-        [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+        weakSelf.isPause = NO;
+        
+        if (weakSelf.videoTimeModel.StartTime.integerValue <= startTimestamp && weakSelf.videoTimeModel.EndTime.integerValue >=startTimestamp ) {
+            if (weakSelf.isTimerSuspend == YES) {
+                if (weakSelf.timer) {
+                    if (weakSelf.isTimerSuspend == YES) {
+                        dispatch_resume(weakSelf.timer);
+                        weakSelf.isTimerSuspend = NO;
+                    }
+                }
+                
+                //关闭定时器
+                if (weakSelf.timer != nil) {
+                    dispatch_source_cancel(weakSelf.timer);
+                    weakSelf.timer = nil;
+                }
+            }
+            if (weakSelf.player.isPlaying == NO) {
+                [weakSelf tapVideoView:weakSelf.playPauseBtn];
+            }
+            [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
+        }else {
+            [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+        }
         
         TIoTDemoCloudEventModel *scorllCurrentModel = [[TIoTDemoCloudEventModel alloc]init];
         scorllCurrentModel.StartTime = [NSString stringWithFormat:@"%f",startTimestamp];
-        scorllCurrentModel.EndTime = [NSString stringWithFormat:@"%f",startTimestampString.floatValue + selectedTimeModel.endTime];
         [weakSelf setScrollOffsetWith:scorllCurrentModel];
         
     };
@@ -353,6 +392,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         
         if (self.eventItemModel != nil) {
             self.currentTime = 0;
+            self.scrollDuraionTime = self.currentTime;
+            self.isInnerScroll = NO;
+            self.isPause = NO;
             [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:self.eventItemModel isChangeModel:YES];
         }else {
             if (self.modelArray.count != 0) {
@@ -365,6 +407,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 model.EndTime = [NSString getTimeStampWithString:endString?:@"" withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
                 
                 self.currentTime = 0;
+                self.scrollDuraionTime = self.currentTime;
+                self.isInnerScroll = NO;
+                self.isPause = NO;
                 [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:model isChangeModel:YES];
         //        [self setScrollOffsetWith:timeModel];
             }
@@ -442,6 +487,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
             self.currentTime = 0;
+            self.scrollDuraionTime = self.currentTime;
+            self.isInnerScroll = NO;
+            self.isPause = NO;
 //            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0] isChangeModel:YES];
             [self setScrollOffsetWith:self.dataArray[0]];
             
@@ -492,6 +540,9 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.currentTime = 0;
     self.isHidePlayBtn = YES;
+    self.scrollDuraionTime = self.currentTime;
+    self.isInnerScroll = NO;
+    self.isPause = NO;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
     [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
     [self setScrollOffsetWith:selectedModel];
@@ -669,6 +720,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         self.isTimerSuspend = YES;
     }
     self.currentTime = self.slider.value;
+    self.isPause = NO;
 }
 
 - (void)resumeVideo {
@@ -681,9 +733,14 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         dispatch_resume(self.timer);
         self.isTimerSuspend = NO;
     }
+    self.isPause = YES;
 }
 ///MARK:播放视频按钮方法
 - (void)playVideo:(UIButton *)button {
+    self.currentTime = 0;
+    self.isPause = NO;
+    self.scrollDuraionTime = self.currentTime;
+    
     self.videoPlayBtn.hidden = YES;
     if (self.isHidePlayBtn == NO) {
         [self stopPlayMovie];
@@ -694,6 +751,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         
         self.isHidePlayBtn = YES;
         
+    }else {
+        [self stopPlayMovie];
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
+        [self autoHideControlView];
     }
 }
 
@@ -708,8 +771,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }
     
     //播放时长 时间戳差值
-    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
-    
+//    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
+    NSInteger durationValue = self.player.duration; //+ self.scrollDuraionTime;
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
     
@@ -765,8 +828,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [self.slider setThumbImage:[UIImage makeRoundCornersWithRadius:6 withImage:thumbImage] forState:UIControlStateNormal];
 //    self.slider.minimumValue = self.videoTimeModel.StartTime.floatValue;
 //    self.slider.maximumValue = self.videoTimeModel.EndTime.floatValue;
-    self.slider.minimumValue = 0;
-    self.slider.maximumValue = durationValue;
+//    self.slider.minimumValue = 0;
+//    self.slider.maximumValue = durationValue;
     
     [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventTouchUpInside];
     [self.customControlVidwoView addSubview:self.slider];
@@ -828,7 +891,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSLog(@"-!!!!!!!~~~~~~--%f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
     
     TIoTDemoCloudEventModel *currentTimeModel = [[TIoTDemoCloudEventModel alloc]init];
-    currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.videoTimeModel.StartTime.integerValue + self.currentTime];
+    if (self.isInnerScroll == YES) {
+        currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.startStamp + self.currentTime];
+    }else {
+        currentTimeModel.StartTime = [NSString stringWithFormat:@"%ld",self.videoTimeModel.StartTime.integerValue + self.currentTime];
+    }
+    
     currentTimeModel.EndTime = self.videoTimeModel.EndTime;
     
     if (self.isTimerSuspend == YES) {
@@ -845,9 +913,15 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             self.timer = nil;
         }
     }
-    
+    self.scrollDuraionTime = self.currentTime;
     self.isHidePlayBtn = YES;
-    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
+    if (self.player.isPlaying == NO) {
+        [self tapVideoView:self.playPauseBtn];
+    }
+    self.isPause = NO;
+    self.player.currentPlaybackTime = self.currentTime;
+    [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.player.currentPlaybackTime];
+//    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
     [self setScrollOffsetWith:currentTimeModel];
     
 }
@@ -902,19 +976,19 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     dispatch_source_set_event_handler(weakSelf.controlTimer, ^{
         
         if(time <= 0){ //计时结束，关闭
-            self.videoPlayBtn.hidden = NO;
+            weakSelf.videoPlayBtn.hidden = NO;
             
             dispatch_source_cancel(weakSelf.controlTimer);
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.playPauseBtn.hidden = NO;
-                self.customControlVidwoView.hidden = YES;
+                weakSelf.playPauseBtn.hidden = NO;
+                weakSelf.customControlVidwoView.hidden = YES;
             });
             
         }else{
-            self.videoPlayBtn.hidden = YES;
+            weakSelf.videoPlayBtn.hidden = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.customControlVidwoView.hidden = NO;
-                self.playPauseBtn.hidden = NO;
+                weakSelf.customControlVidwoView.hidden = NO;
+                weakSelf.playPauseBtn.hidden = NO;
             });
             time--;
             
@@ -1003,7 +1077,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSInteger kItemWith = 60;
     NSInteger startSecondNum = [self captureTimestampWithOutDaySecound:timeModel.StartTime.floatValue];
     CGFloat scrollOffsetX = (startSecondNum)/(secondsNumber/(kItemWith*24));
-    [self.choiceDateView  setScrollViewContentOffsetX:scrollOffsetX];
+    [self.choiceDateView  setScrollViewContentOffsetX:scrollOffsetX currtentSecond:startSecondNum];
 }
 
 #pragma mark -IJKPlayer
@@ -1045,12 +1119,15 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }
         case IJKMPMoviePlaybackStatePlaying: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
-            
+            if (self.isPause == NO) {
+                self.player.currentPlaybackTime = self.currentTime;
+            }
             [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            self.isPause = YES;
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
@@ -1089,12 +1166,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     __block NSInteger time = sliderValue; //计时开始
     
-    NSInteger durationValue = 0;
-    durationValue = endTime - startTime;
-    
+    NSInteger durationValue = self.player.duration;
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
     
+    self.slider.minimumValue = 0;
+    self.slider.maximumValue = durationValue;
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     weakSelf.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -1111,14 +1188,16 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 //起始时间等于duration
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
                 weakSelf.currentLabel.text = weakSelf.totalLabel.text;
+                NSLog(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
             });
             
         }else{
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
+                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)self.player.currentPlaybackTime/60,(NSInteger)self.player.currentPlaybackTime%60];
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
                 weakSelf.slider.value = time;
+                NSLog(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
             });
             time++;
             
@@ -1126,9 +1205,41 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     });
     dispatch_resume(weakSelf.timer);
 }
+
+- (void)moviePlayBackDidFinish:(NSNotification*)notification
+{
+    int reason = [[[notification userInfo] valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+
+    switch (reason)
+    {
+        case IJKMPMovieFinishReasonPlaybackEnded:
+            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackEnded: %d\n", reason);
+            [self.imageView bringSubviewToFront:self.playView];
+            self.videoPlayBtn.hidden = NO;
+            break;
+
+        case IJKMPMovieFinishReasonUserExited:
+            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonUserExited: %d\n", reason);
+            break;
+
+        case IJKMPMovieFinishReasonPlaybackError:
+            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
+            break;
+
+        default:
+            NSLog(@"playbackPlayBackDidFinish: ???: %d\n", reason);
+            break;
+    }
+}
+
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackDidFinish:)
+                                                 name:IJKMPMoviePlayerPlaybackDidFinishNotification
+                                               object:_player];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
@@ -1146,6 +1257,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
