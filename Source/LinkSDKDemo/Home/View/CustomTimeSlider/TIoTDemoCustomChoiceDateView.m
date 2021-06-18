@@ -278,8 +278,9 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 }
 
 ///MARK:设置滑动条滚动偏移量
-- (void)setScrollViewContentOffsetX:(CGFloat)offsetX {
+- (void)setScrollViewContentOffsetX:(CGFloat)offsetX currtentSecond:(NSInteger)currentSecond {
     [self.dateScrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
+    self.currentTime = currentSecond;
 }
 
 #pragma mark - ScrollView Delegate

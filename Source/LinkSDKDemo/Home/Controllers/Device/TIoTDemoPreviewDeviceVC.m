@@ -138,6 +138,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.view.backgroundColor = [UIColor colorWithHexString:kVideoDemoBackgoundColor];
     
+    self.title = self.selectedModel.DeviceName?:@"";
+    
     [self initializedVideo];
     
     CGFloat actionViewHeight = 160;
