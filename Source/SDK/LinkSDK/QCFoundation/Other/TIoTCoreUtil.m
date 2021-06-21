@@ -337,9 +337,18 @@
     if (videoPathString) {
             NSURL *videoUrl = [NSURL URLWithString:videoPathString];
             BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([videoUrl path]);
-            if (compatible)
-            {
+            if (compatible) {
                 UISaveVideoAtPathToSavedPhotosAlbum([videoUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+            }else {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"视频格式不支持，请从文件 App 从获取" preferredStyle:UIAlertControllerStyleAlert];
+                    [self.topViewController presentViewController:alert animated:YES completion:nil];
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [alert dismissViewControllerAnimated:YES completion:nil];
+                    });
+                });
             }
         }
 }
