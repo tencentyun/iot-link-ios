@@ -134,13 +134,17 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        char *buf = nullptr;
+        unsigned char *bbuf = nullptr;
         size_t len = 0;
-        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
+        NSString *tempCmd = cmd?:@"";
+        NSData *data = [tempCmd dataUsingEncoding:NSUTF8StringEncoding];
+        size_t cmdLen = data.length;
         
+//        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
+        postCommandRequestSync(dev_name.UTF8String, (const unsigned char *)cmd.UTF8String, cmdLen, &bbuf, &len, timeout);
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion && buf) {
-                completion([NSString stringWithUTF8String:buf]);
+            if (completion && bbuf) {
+                completion([NSString stringWithUTF8String:(char *)bbuf]);
             }
         });
     });

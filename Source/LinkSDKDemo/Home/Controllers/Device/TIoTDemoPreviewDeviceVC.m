@@ -79,8 +79,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                               sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
                                                pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                              dev_name:self.selectedModel.DeviceName?:@""];
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
-    self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,quality_super];
     self.qualityString = quality_super;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
@@ -91,8 +89,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self addRotateNotification];
     
     [self setupPreViewViews];
-    
-    [self configVideo];
     
     //云存事件列表
     [self requestCloudStoreVideoList];
@@ -485,7 +481,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.videoingView.hidden = NO;
         
         //开启录像
-        NSString *fileName = @"TTVideo11.mp4";
+        NSString *fileName = @"TTVideo.mp4";
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentDirectory = paths.firstObject;
         self.saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
@@ -879,20 +875,21 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
-    [self.player shutdown];
-    [self removeMovieNotificationObservers];
-    
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.selectedModel.DeviceName?:@""];
-    }
+    [self.player pause];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (self.player) {
-        [self setVieoPlayerStartPlayWith:quality_super];
+    if (!self.player.isPlaying && self.player != nil) {
+        [self.player play];
     }
+}
+
+- (void)nav_customBack {
+    [self stopPlayMovie];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    [self removeMovieNotificationObservers];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)stopPlayMovie {
@@ -1115,8 +1112,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self.player shutdown];
     [self.player stop];
-    [self removeMovieNotificationObservers];
-    [self.player.view removeFromSuperview];
     self.player = nil;
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
     
@@ -1130,8 +1125,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                              dev_name:self.selectedModel.DeviceName?:@""];
     NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
     self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityString?:@""];
-    [self installMovieNotificationObservers];
-    [self addRotateNotification];
     [self configVideo];
     
     [self.player prepareToPlay];
