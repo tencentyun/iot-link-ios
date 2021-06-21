@@ -314,7 +314,7 @@
 "other_login_way" = "Other login methods";
 "wechat" = "WeChat";
 "account_and_safety" = "Account and security";
-"phone_number" = "Mobile number";
+"phone_number" = "Mobile";
 "unbind" = "Unbound";
 "have_bind" = "Bound";
 "email" = "Email";
