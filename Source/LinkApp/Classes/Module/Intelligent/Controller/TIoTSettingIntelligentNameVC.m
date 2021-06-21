@@ -49,7 +49,11 @@
      [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
          make.left.equalTo(nameView.mas_left).offset(16);
          make.centerY.equalTo(nameView);
-         make.width.mas_equalTo(60);
+         if (LanguageIsEnglish) {
+             make.width.mas_equalTo(120);
+         }else {
+             make.width.mas_equalTo(60);
+         }
     }];
     
     self.nameTextTield = [[UITextField alloc]init];
