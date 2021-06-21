@@ -3,10 +3,10 @@
 "Bww-BU-0fF.text" = "v1.0.0";
 
 /* Class = "UILabel"; text = "版本号"; ObjectID = "X03-RV-BeC"; */
-"X03-RV-BeC.text" = "版本号";
+"X03-RV-BeC.text" = "Version number";
 
 /* Class = "UILabel"; text = "隐私政策"; ObjectID = "cQU-UZ-TKR"; */
-"cQU-UZ-TKR.text" = "隐私政策";
+"cQU-UZ-TKR.text" = "Privacy Policy";
 
 /* Class = "UILabel"; text = "服务协议"; ObjectID = "nld-jm-mdM"; */
-"nld-jm-mdM.text" = "服务协议";
+"nld-jm-mdM.text" = "User Agreement";
