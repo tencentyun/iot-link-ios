@@ -314,10 +314,10 @@
 "other_login_way" = "Other login methods";
 "wechat" = "WeChat";
 "account_and_safety" = "Account and security";
-"phone_number" = "Mobile";
-"unbind" = "Mobile number";
-"have_bind" = "Unbound";
-"email" = "Bound";
+"phone_number" = "Mobile number";
+"unbind" = "Unbound";
+"have_bind" = "Bound";
+"email" = "Email";
 "account_logout" = "Account deletion";
 "please_input_phonenumber" = "Enter your mobile number";
 "please_input_email" = "Enter your email address";
