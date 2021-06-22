@@ -193,15 +193,23 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
 
     //回放功能
+    UIImageView *playbackImage = [[UIImageView alloc]init];
+    playbackImage.userInteractionEnabled = YES;
+    playbackImage.image = [UIImage imageNamed:@"playback"];
+    [self.actionBottomView addSubview:playbackImage];
+    [playbackImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.actionBottomView);
+        make.left.equalTo(talkbackBtn);
+        make.height.width.equalTo(talkbackBtn);
+    }];
+    
     UIButton *playbackBtn = [[UIButton alloc]init];
     [playbackBtn setImage:[UIImage imageNamed:@"playback"] forState:UIControlStateNormal];
     [playbackBtn setImage:[UIImage imageNamed:@"playback"] forState:UIControlStateHighlighted];
     [playbackBtn addTarget:self action:@selector(clickPlayback:) forControlEvents:UIControlEventTouchUpInside];
-    [self.actionBottomView addSubview:playbackBtn];
+    [playbackImage addSubview:playbackBtn];
     [playbackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.actionBottomView);
-        make.left.equalTo(talkbackBtn);
-        make.height.width.equalTo(talkbackBtn);
+        make.left.right.top.bottom.equalTo(playbackImage);
     }];
     
     UIImageView *playbackIcon = [[UIImageView alloc]init];
@@ -256,29 +264,36 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
 
     //拍照
-    UIButton *photographImage = [[UIButton alloc]init];
-    [photographImage setImage:[UIImage imageNamed:@"photograph"] forState:UIControlStateNormal];
-    [photographImage setImage:[UIImage imageNamed:@"photograph"] forState:UIControlStateHighlighted];
-    [photographImage addTarget:self action:@selector(clickPhotograph) forControlEvents:UIControlEventTouchUpInside];
-    [self.actionBottomView addSubview:photographImage];
-    [photographImage mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIImageView *photographImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"photograph"]];
+    photographImageView.userInteractionEnabled = YES;
+    [self.actionBottomView addSubview:photographImageView];
+    [photographImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.actionBottomView.mas_bottom);
         make.right.equalTo(videoBtn.mas_right);
         make.height.width.equalTo(talkbackBtn);
     }];
     
+    UIButton *photographBtn = [[UIButton alloc]init];
+    [photographBtn setImage:[UIImage imageNamed:@"photograph"] forState:UIControlStateNormal];
+    [photographBtn setImage:[UIImage imageNamed:@"photograph"] forState:UIControlStateHighlighted];
+    [photographBtn addTarget:self action:@selector(clickPhotograph) forControlEvents:UIControlEventTouchUpInside];
+    [photographImageView addSubview:photographBtn];
+    [photographBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(photographImageView);
+    }];
+    
     UIImageView *photographIcon = [[UIImageView alloc]init];
     photographIcon.image = [UIImage imageNamed:@"picture_icon"];
-    [photographImage addSubview:photographIcon];
+    [photographBtn addSubview:photographIcon];
     [photographIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(kActionIconSize);
-        make.bottom.equalTo(photographImage.mas_centerY);
+        make.bottom.equalTo(photographBtn.mas_centerY);
         make.right.equalTo(videoBtn.mas_right).offset(-kActionIconLeftPadding);
     }];
     
     UILabel *photographLabel = [[UILabel alloc]init];
     [photographLabel setLabelFormateTitle:@"拍照" font:[UIFont wcPfRegularFontOfSize:12] titleColorHexString:kVideoDemoDateTipTextColor textAlignment:NSTextAlignmentCenter];
-    [photographImage addSubview:photographLabel];
+    [photographBtn addSubview:photographLabel];
     [photographLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(photographIcon);
         make.top.equalTo(photographIcon.mas_bottom).offset(kActionIconTopPadding);
@@ -667,9 +682,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (rotation == YES) { //横屏
         self.actionBottomView.hidden = YES;
         self.tableView.hidden = YES;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
         [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(self.screenRect.size.width/kScreenScale);
+            make.width.mas_equalTo(self.screenRect.size.width);
             make.top.bottom.equalTo(self.view);
         }];
         [self controlLandScapeDefaultQuality];
@@ -679,6 +695,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         }
         self.actionBottomView.hidden = NO;
         self.tableView.hidden = NO;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
         [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.screenRect.size.width);
@@ -1066,18 +1083,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 ///MARK: 横屏时候默认选中清晰度
 - (void)controlLandScapeDefaultQuality {
     if ([self.qualityString isEqualToString:quality_standard]) {
-        [self switchStandardDef];
+        [self standarDefUI];
     }else if ([self.qualityString isEqualToString:quality_high]) {
-        [self switchHighDef];
+        [self highDefUI];
     }else if ([self.qualityString isEqualToString:quality_super]) {
-        [self switchSupperDef];
+        [self supperDefUI];
     }
 }
 
 - (void)switchStandardDef {
     
-    self.qualityString = quality_standard;
+    [self standarDefUI];
     [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)standarDefUI {
+    self.qualityString = quality_standard;
     self.standardDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
     self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
@@ -1087,8 +1108,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)switchHighDef {
     
-    self.qualityString = quality_high;
+    [self highDefUI];
     [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)highDefUI {
+    self.qualityString = quality_high;
     self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.highDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
     self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
@@ -1098,8 +1123,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)switchSupperDef {
     
-    self.qualityString = quality_super;
+    [self supperDefUI];
     [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)supperDefUI {
+    self.qualityString = quality_super;
     self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
     self.supperDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
