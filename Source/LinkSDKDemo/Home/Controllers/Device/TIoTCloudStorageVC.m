@@ -584,14 +584,16 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     if (rotation == YES) { //横屏
         self.choiceDateView.hidden = YES;
         self.tableView.hidden = YES;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
         [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(self.screenRect.size.width/kScreenScale);
+            make.width.mas_equalTo(self.screenRect.size.width);
             make.top.bottom.equalTo(self.view);
         }];
     }else { //竖屏
         self.choiceDateView.hidden = NO;
         self.tableView.hidden = NO;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
         [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.screenRect.size.width);

@@ -232,7 +232,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                     make.height.mas_equalTo(self.screenRect.size.width*kScreenScale);
                     make.top.equalTo(self.viewOne.mas_bottom);
                 }];
-                
+                [self setupOffLineTipWithView:self.viewOne];
                 [self setupOffLineTipWithView:self.viewTwo];
                 break;
             }
@@ -347,27 +347,27 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 ///MARK: viewarray 约束更新适配屏幕
 - (void)resetScreenSubviewsWithLandscape:(BOOL)rotation viewArray:(NSArray *)viewArray{
     if (rotation == YES) { //横屏
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         [self.rotateScreenBtn setTitle:@"切换竖屏" forState:UIControlStateNormal];
         switch (self.videoArray.count) {
             case TIoTDemoSameScreenOne: {
                 [self.viewOne mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width);
-                    make.width.mas_equalTo(self.screenRect.size.width/kScreenScale);
+                    make.width.mas_equalTo(self.screenRect.size.height/kScreenScale);
+                    make.height.mas_equalTo(self.screenRect.size.height);
                     make.center.equalTo(self.view);
                 }];
                 break;
             }
             case TIoTDemoSameScreenTwo: {
                 [self.viewOne mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.width.mas_equalTo(self.screenRect.size.height/2);
-                    make.height.mas_equalTo(self.screenRect.size.height/2*kScreenScale);
+                    make.width.mas_offset(self.screenRect.size.width/2);
+                    make.height.mas_equalTo(self.screenRect.size.width/2*kScreenScale);
                     make.right.equalTo(self.view.mas_centerX);
                     make.centerY.equalTo(self.view);
                 }];
                 
                 [self.viewTwo mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.width.mas_equalTo(self.screenRect.size.height/2);
-                    make.height.mas_equalTo(self.screenRect.size.height/2*kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.left.equalTo(self.viewOne.mas_right);
                     make.centerY.equalTo(self.viewOne);
                 }];
@@ -376,20 +376,18 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             case TIoTDemoSameScreenThree: {
                 
                 [self.viewOne mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.height.mas_equalTo(self.screenRect.size.height/2);
+                    make.width.mas_equalTo(self.screenRect.size.height/2/kScreenScale);
                     make.right.equalTo(self.view.mas_centerX);
                 }];
                 
                 [self.viewTwo mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.left.equalTo(self.viewOne.mas_right);
                 }];
                 
                 [self.viewThree mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.top.equalTo(self.viewOne.mas_bottom);
                     make.centerX.equalTo(self.view);
                 }];
@@ -404,8 +402,8 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 }
                 
                 [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.width.mas_equalTo(self.screenRect.size.height);
-                    make.height.mas_equalTo(self.screenRect.size.width);
+                    make.height.mas_equalTo(self.screenRect.size.height);
+                    make.width.mas_equalTo(self.screenRect.size.width);
                     make.center.equalTo(self.view);
                     make.top.equalTo(self.view.mas_top).offset(-self.navigationController.navigationBar.frame.size.height);
                 }];
@@ -413,27 +411,26 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 self.scrollView.contentSize = CGSizeMake(self.screenRect.size.height, self.screenRect.size.width);
                 
                 [self.viewOne mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.height.mas_equalTo(self.screenRect.size.height/2);
+                    make.width.mas_equalTo(self.screenRect.size.height/2/kScreenScale);
                     make.right.equalTo(self.scrollView.mas_centerX);
+                    make.top.equalTo(self.scrollView.mas_top);
                 }];
                 
                 [self.viewTwo mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.left.equalTo(self.viewOne.mas_right);
+                    make.top.equalTo(self.viewOne.mas_top);
                 }];
                 
                 [self.viewThree mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.right.equalTo(self.scrollView.mas_centerX);
                     make.top.equalTo(self.viewOne.mas_bottom);
                 }];
                 
                 [self.viewFour mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.height.mas_equalTo(self.screenRect.size.width/2);
-                    make.width.mas_equalTo(self.screenRect.size.width/2/kScreenScale);
+                    make.width.height.equalTo(self.viewOne);
                     make.left.equalTo(self.viewThree.mas_right);
                     make.top.equalTo(self.viewTwo.mas_bottom);
                 }];
@@ -443,6 +440,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 break;
         }
     }else { //竖屏
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         [self.rotateScreenBtn setTitle:@"切换横屏" forState:UIControlStateNormal];
         switch (self.videoArray.count) {
             case TIoTDemoSameScreenOne: {

@@ -306,11 +306,13 @@ static NSInteger const kLimit = 100;
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
-        CGFloat itemWidth = 165;
-        CGFloat itemHeight = 138;
+        CGFloat scale = 138.0/165.0;
+        CGFloat itemWidth = (kScreenWidth - 16*2 - 13)/2;
+        CGFloat itemHeight = itemWidth*scale;
+        CGFloat padding = 16;
 //        flowLayout.sectionHeadersPinToVisibleBounds = YES;
         flowLayout.itemSize = CGSizeMake(itemWidth, itemHeight);
-        flowLayout.sectionInset = UIEdgeInsetsMake(4, 16, 4, 16);
+        flowLayout.sectionInset = UIEdgeInsetsMake(4, padding, 4, padding);
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
