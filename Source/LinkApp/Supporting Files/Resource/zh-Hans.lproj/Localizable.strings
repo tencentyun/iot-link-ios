@@ -507,6 +507,7 @@
 "now_loading" = "正在加载中...";
 //"" = "详细是否水电费水电费水电费第三方第三方所发生的丰富的非"
 "setDevice_softAP_distributionNetwork" = "将设备设置为热点配网模式";
+"default_softAp_tip" = "1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。";
 //"" = "2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。";
 //"" = "3. 指示灯慢闪即进入热点配网模式";
 "smartConf_distributionNetwork" = "一键配网";
@@ -514,6 +515,7 @@
 "chooseTargetWiFi" = "选择目标WiFi";
 "start_distributionNetwork" = "开始配网";
 "setupDevoice_SmartConfig_distributionNetwork" = "将设备设置为一键配网模式";
+"default_smartConfig_tip" = "1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
 //"" = "2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。";
 //"" = "3. 指示灯快闪即进入一键配网模式";
 "inportPassword_unnecessary" = "请输入密码（非必填）";
@@ -542,6 +544,8 @@
 //"" = "4. 确认路由设备是否为2.4G WiFi频段"
 //"" = "1. 确认设备处于一键配网模式（指示灯快闪）2. 核对家庭WiFi密码是否正确"
 //"" = "3. 确认路由设备是否为2.4G WiFi频段"
+"softAp_connected_failure" = "1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段";
+"config_connected_failure" = "1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段";
 "continue_addDevice" = "继续添加其他设备";
 "changeTo" = "切换到";
 "addDevicing_confirmSignout" = "当前正在添加设备，是否确认退出";

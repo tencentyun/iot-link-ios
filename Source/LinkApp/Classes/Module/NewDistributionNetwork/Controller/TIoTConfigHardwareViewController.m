@@ -156,13 +156,13 @@
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
-    nextBtn.layer.cornerRadius = 2;
+    nextBtn.layer.cornerRadius = 20;
     [self.scrollView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.scrollView).offset(40);
+        make.left.equalTo(self.scrollView).offset(16);
         make.top.equalTo(self.stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
-        make.width.mas_equalTo(kScreenWidth - 80);
-        make.height.mas_equalTo(45);
+        make.width.mas_equalTo(kScreenWidth - 32);
+        make.height.mas_equalTo(40);
     }];
     
 }
@@ -242,7 +242,7 @@
             
             NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
             if ([NSString isNullOrNilWithObject:softAPExploreString]) {
-                softAPExploreString = @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。";
+                softAPExploreString = NSLocalizedString(@"default_softAp_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。");
             }
             
             _dataDic = @{@"title": NSLocalizedString(@"softAP_distributionNetwork", @"热点配网"),
@@ -257,7 +257,7 @@
         {
             NSString *smartExploreString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"message"];
             if ([NSString isNullOrNilWithObject:smartExploreString]) {
-                smartExploreString = @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。";
+                smartExploreString = NSLocalizedString(@"default_smartConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。");
             }
             _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
                          @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],

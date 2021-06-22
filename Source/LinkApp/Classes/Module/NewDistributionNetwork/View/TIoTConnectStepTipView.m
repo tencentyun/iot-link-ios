@@ -34,9 +34,12 @@
         CGFloat edgeSpace = 10.0f;
         CGFloat activityIndicatorWidth = 24.0f;
         CGFloat tipLabelWidth = 135;
+        if (LanguageIsEnglish) {
+            tipLabelWidth = 300;
+        }
         
         UIView *bgLeftView = [[UIView alloc] init];
-        bgLeftView.frame = CGRectMake(0, 0+(edgeSpace + activityIndicatorWidth)*i, activityIndicatorWidth, activityIndicatorWidth);
+        bgLeftView.frame = CGRectMake(kScreenWidth/2-tipLabelWidth/2-activityIndicatorWidth/2, 0+(edgeSpace + activityIndicatorWidth)*i, activityIndicatorWidth, activityIndicatorWidth);
         [self addSubview:bgLeftView];
         
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyleGray)];

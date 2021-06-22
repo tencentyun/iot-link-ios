@@ -128,14 +128,14 @@
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.layer.cornerRadius = 2;
+    nextBtn.layer.cornerRadius = 20;
     nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
     [self.scrollView addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.scrollView).offset(40);
+        make.left.equalTo(self.scrollView).offset(16);
         make.top.equalTo(self.stepLabel.mas_bottom).offset(40 * kScreenAllHeightScale);
-        make.width.mas_equalTo(kScreenWidth - 80);
-        make.height.mas_equalTo(45);
+        make.width.mas_equalTo(kScreenWidth - 32);
+        make.height.mas_equalTo(40);
     }];
     
 }

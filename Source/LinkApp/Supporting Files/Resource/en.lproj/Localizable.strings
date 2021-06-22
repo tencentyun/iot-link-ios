@@ -506,6 +506,7 @@
 "now_loading" = "Loading...";
 //"" = "详细是否水电费水电费水电费第三方第三方所发生的丰富的非"
 "setDevice_softAP_distributionNetwork" = "Put the device into hotspot network configuration mode";
+"default_softAp_tip" = "1. Power on the device. 2. Press and hold the Reset key to set the device to the hotspot connection mode. This step may vary based on devices. 3. When the LED indicator slowly blinks, the device has entered the hotspot connection mode.";
 //"" = "2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。";
 //"" = "3. 指示灯慢闪即进入热点配网模式";
 "smartConf_distributionNetwork" = "Quick network configuration";
@@ -513,6 +514,7 @@
 "chooseTargetWiFi" = "Select target Wi-Fi network";
 "start_distributionNetwork" = "Start network configuration";
 "setupDevoice_SmartConfig_distributionNetwork" = "Put the device into quick network configuration mode";
+"default_smartConfig_tip" = "1. Power on the device. \n2. Press and hold the Reset key to set the device to the quick network connection mode. This step may vary based on devices. \n3. When the LED indicator quickly blinks, the device has entered the quick network connection mode.";
 //"" = "2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。";
 //"" = "3. 指示灯快闪即进入一键配网模式";
 "inportPassword_unnecessary" = "Please enter the password (optional)";
@@ -541,6 +543,8 @@
 //"" = "4. 确认路由设备是否为2.4G WiFi频段"
 //"" = "1. 确认设备处于一键配网模式（指示灯快闪）2. 核对家庭WiFi密码是否正确"
 //"" = "3. 确认路由设备是否为2.4G WiFi频段"
+"softAp_connected_failure" = "1. Ensure that the device is in the hotspot connection mode, where the LED indicator slowly blinks. \n2. Ensure that it is connected to the device's hotspot. \n3. Ensure that the password you enter for the family's Wi-Fi is correct. \n4. Ensure that the router uses the 2.4G band.";
+"config_connected_failure" = "1. Ensure that the device is in the quick network connection mode, where the LED indicator slowly blinks. \n2. Ensure that the password you enter for the family's Wi-Fi is correct. \n3. Ensure that the router uses the 2.4G band.";
 "continue_addDevice" = "Add another device";
 "changeTo" = "Switch to";
 "addDevicing_confirmSignout" = "The device is currently being added. Exit?";

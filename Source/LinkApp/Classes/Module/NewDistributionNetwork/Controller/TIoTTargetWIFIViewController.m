@@ -180,7 +180,7 @@
     [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.layer.cornerRadius = 2;
+    nextBtn.layer.cornerRadius = 20;
     if (self.step == 2) {
         nextBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
         nextBtn.enabled = NO;
@@ -190,10 +190,10 @@
     [self.view addSubview:nextBtn];
     self.nextBtn = nextBtn;
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(40);
+        make.left.equalTo(self.view).offset(16);
         make.top.equalTo(self.pwdInputView.mas_bottom).offset(264 * kScreenAllHeightScale);
-        make.width.mas_equalTo(kScreenWidth - 80);
-        make.height.mas_equalTo(45);
+        make.width.mas_equalTo(kScreenWidth - 32);
+        make.height.mas_equalTo(40);
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];

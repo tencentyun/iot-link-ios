@@ -59,7 +59,7 @@
     [self.view addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view).offset(105.3*kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].navigationBarHeight);
+        make.top.equalTo(self.view).offset(30*kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].navigationBarHeight);
         make.width.height.mas_equalTo(53.3);
     }];
     
@@ -91,7 +91,7 @@
     }];
     
     UILabel *stepLabel = [[UILabel alloc] init];
-    NSString *stepLabelText = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? @"1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段" : @"1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段";
+    NSString *stepLabelText = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAp_connected_failure", @"1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段") :  NSLocalizedString(@"config_connected_failure", @"1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段");
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     paragraph.lineSpacing = 6.0;
     // 字体: 大小 颜色 行间距
@@ -127,9 +127,14 @@
     [changeButton addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:changeButton];
     [changeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(describeLabel.mas_bottom).offset(291*kScreenAllHeightScale);
+        if (_success) {
+            make.top.equalTo(describeLabel.mas_bottom).offset(291*kScreenAllHeightScale);
+        }else {
+            make.top.equalTo(describeLabel.mas_bottom).offset(320*kScreenAllHeightScale);
+        }
+        
         make.centerX.equalTo(self.view);
-        make.width.mas_equalTo(150);
+        make.left.right.equalTo(self.view);
         make.height.mas_equalTo(72);
     }];
     

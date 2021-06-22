@@ -97,7 +97,8 @@
     [self.connectStepTipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(imageView.mas_bottom).offset(50);
         make.centerX.equalTo(self.view);
-        make.width.mas_equalTo(166);
+//        make.width.mas_equalTo(166);
+        make.left.right.equalTo(self.view);
         make.height.mas_equalTo(114);
     }];
     
