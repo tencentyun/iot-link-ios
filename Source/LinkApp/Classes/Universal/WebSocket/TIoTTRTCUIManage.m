@@ -523,7 +523,8 @@
 }
 
 - (void)exitRoom:(NSString *)remoteUserID {
-    
+    [TIoTCoreUserManage shared].sys_call_status = @"-1";
+
     _isEnterError = NO;
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
