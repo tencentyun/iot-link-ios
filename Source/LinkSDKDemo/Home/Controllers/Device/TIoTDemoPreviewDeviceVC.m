@@ -12,7 +12,7 @@
 #import "NSDate+TIoTCustomCalendar.h"
 #import "TIoTCoreXP2PBridge.h"
 #import "NSString+Extension.h"
-#import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
+#import <IJKMediaFramework/IJKMediaFramework.h>
 #import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
 #import "TIoTDemoCloudEventListModel.h"

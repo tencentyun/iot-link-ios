@@ -8,7 +8,7 @@
 #import "TIoTCustomCalendar.h"
 #import "NSString+Extension.h"
 #import "TIoTCustomTimeSlider.h"
-#import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
+#import <IJKMediaFramework/IJKMediaFramework.h>
 #import "NSDate+TIoTCustomCalendar.h"
 #import "UIImage+TIoTDemoExtension.h"
 

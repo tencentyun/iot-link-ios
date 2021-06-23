@@ -39,5 +39,5 @@ target 'LinkSDKDemo' do
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/LinkRTC', :path => './'
   pod 'TIoTLinkKit/LinkVideo', :path => './'
-  pod 'TIoTLinkThirdPartyKit/IJKPlayerSSL-iOS', '~> 2.0.4-beta.1'
+  pod 'TIoTLinkThirdPartyKit/IJKPlayer-iOS', '~> 2.0.4-beta.1'
 end
