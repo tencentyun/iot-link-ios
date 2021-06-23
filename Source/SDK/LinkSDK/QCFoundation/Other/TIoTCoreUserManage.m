@@ -244,13 +244,9 @@
 
 - (void)setSys_call_status:(NSString *)sys_call_status {
     _sys_call_status = sys_call_status;
-    [[NSUserDefaults standardUserDefaults] setValue:sys_call_status forKey:@"_sys_call_status"];
 }
 
 - (NSString *)sys_call_status {
-    if (!_sys_call_status) {
-        _sys_call_status = [[NSUserDefaults standardUserDefaults] valueForKey:@"_sys_call_status"];
-    }
     if ([NSString isNullOrNilWithObject:_sys_call_status]) {
         _sys_call_status = @"-1";
     }
