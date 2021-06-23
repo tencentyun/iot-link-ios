@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d53a241_0303bec2",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2021-06-23T09:25:14Z",
+      "side": 1,
+      "message": "一些硬编码后面可以优化下，",
+      "revId": "2921a2afe1fba862b58da0f5bb90b4cc69a45d3d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
