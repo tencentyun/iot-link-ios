@@ -581,6 +581,23 @@ static NSString *itemId3 = @"i_ooo454";
     }
     
     
+    if ([dic.allKeys containsObject:@"SubType"] && [dic.allKeys containsObject:@"DeviceId"]) {
+        
+        NSString *device_Id = dic[@"DeviceId"];
+        if (![[NSString stringWithFormat:@"%@/%@",self.productId , self.deviceName] isEqualToString:device_Id]) {
+            return;
+        }
+        
+        NSString *line_status = dic[@"SubType"];
+        if ([line_status isEqualToString:@"Offline"]) {
+            //下线
+            self.coll.allowsSelection = NO;
+            [MBProgressHUD showError:@"设备已下线"];
+        }else if ([line_status isEqualToString:@"Online"]) {
+            
+            self.coll.allowsSelection = YES;
+        }
+    }
 }
 
 
