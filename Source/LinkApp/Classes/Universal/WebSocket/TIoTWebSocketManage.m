@@ -197,9 +197,30 @@ static NSString *heartBeatReqID = @"5002";
             if ([rejectModel.rejectUserId isEqualToString:[TIoTCoreUserManage shared].userId]) {
                 [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                     [MBProgressHUD showError:reason];
-                    return;
                 }];
             }
+            return;
+        }
+        
+        //异常
+        if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
+            
+            NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
+            for (NSString *userIdString in userIdArray) {
+
+                model.params._sys_userid = userIdString?:@"";
+                if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+                        [MBProgressHUD showError:reason];
+                    }];
+                }
+
+            }
+        }
+        
+        if (!model.params._sys_audio_call_status && !model.params._sys_video_call_status) {
+            //防止没上报status时候，走到了status=0的情况，新增if需要加在次前面，后面的status避免新增加判断
+            return;
         }
         
         
@@ -285,21 +306,6 @@ static NSString *heartBeatReqID = @"5002";
     }
     
     
-    //异常
-    if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
-        
-        NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-        for (NSString *userIdString in userIdArray) {
-
-            model.params._sys_userid = userIdString?:@"";
-            if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
-            }
-
-        }
-    }
 
 }
 
