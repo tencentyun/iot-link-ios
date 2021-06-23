@@ -25,10 +25,10 @@ static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 static NSInteger const kLimit = 999;
 
-static NSString *const action_left = @"action=user_define&cmd=ballhead_left";
-static NSString *const action_right = @"action=user_define&cmd=ballhead_right";
-static NSString *const action_up = @"action=user_define&cmd=ballhead_top";
-static NSString *const action_Down = @"action=user_define&cmd=ballhead_bottom";
+static NSString *const action_left = @"action=user_define&cmd=ptz_left";
+static NSString *const action_right = @"action=user_define&cmd=ptz_right";
+static NSString *const action_up = @"action=user_define&cmd=ptz_top";
+static NSString *const action_Down = @"action=user_define&cmd=ptz_bottom";
 static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
 static NSString *const quality_high = @"ipc.flv?action=live&quality=high";
 static NSString *const quality_super = @"ipc.flv?action=live&quality=super";
