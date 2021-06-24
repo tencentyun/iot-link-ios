@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TIoTVideoVC">
             <connections>
+                <outlet property="versionLB" destination="DsZ-AA-npf" id="BVR-I4-kSA"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -18,14 +19,52 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cYe-5z-2ny" userLabel="配网">
+                    <rect key="frame" x="157" y="379" width="100" height="30"/>
+                    <state key="normal" title="配网"/>
+                    <connections>
+                        <action selector="jumpDistributeNet:" destination="-1" eventType="touchUpInside" id="XBp-rT-zT0"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="videolocal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsZ-AA-npf">
+                    <rect key="frame" x="168.5" y="856" width="77" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" systemColor="systemGray2Color"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="COt-YP-3bA" userLabel="播放">
+                    <rect key="frame" x="157" y="584" width="100" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="nbK-Dd-MEs"/>
+                        <constraint firstAttribute="width" constant="100" id="tJ6-Oh-FKm"/>
+                    </constraints>
+                    <state key="normal" title="播放"/>
+                    <connections>
+                        <action selector="jumpPlaying:" destination="-1" eventType="touchUpInside" id="PwT-Kj-iZM"/>
+                    </connections>
+                </button>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-            <point key="canvasLocation" x="-393" y="71"/>
+            <constraints>
+                <constraint firstItem="COt-YP-3bA" firstAttribute="leading" secondItem="cYe-5z-2ny" secondAttribute="leading" id="AUT-1T-vvs"/>
+                <constraint firstItem="DsZ-AA-npf" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="I9d-gr-IWI"/>
+                <constraint firstItem="COt-YP-3bA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="LRU-dq-b26"/>
+                <constraint firstItem="COt-YP-3bA" firstAttribute="top" secondItem="cYe-5z-2ny" secondAttribute="bottom" constant="175" id="NGq-Wv-gsB"/>
+                <constraint firstAttribute="bottom" secondItem="COt-YP-3bA" secondAttribute="bottom" constant="262" id="QMz-4i-JOW"/>
+                <constraint firstItem="DsZ-AA-npf" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" constant="15" id="TcF-qg-Lf0"/>
+                <constraint firstItem="COt-YP-3bA" firstAttribute="trailing" secondItem="cYe-5z-2ny" secondAttribute="trailing" id="zIs-1O-k4W"/>
+            </constraints>
+            <point key="canvasLocation" x="-636" y="33"/>
         </view>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

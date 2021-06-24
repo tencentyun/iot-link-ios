@@ -96,7 +96,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Core (1.6.1)
   - IQKeyboardManager (6.1.1)
   - KeychainAccess (4.2.0)
   - lottie-ios (3.1.8)
@@ -228,7 +228,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleToolboxForMac: 471e0c05d39506e50e6398f46fa9a12ae0efeff9
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
-  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
   IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
