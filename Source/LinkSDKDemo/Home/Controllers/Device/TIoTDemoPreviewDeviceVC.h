@@ -8,6 +8,9 @@
 #import "TIoTExploreOrVideoDeviceModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ 预览页
+ */
 @interface TIoTDemoPreviewDeviceVC : TIoTDemoBaseViewController
 @property (nonatomic, strong) TIoTExploreOrVideoDeviceModel *selectedModel;
 @end

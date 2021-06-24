@@ -308,15 +308,7 @@
         msg = @"保存图片成功" ;
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
-        [self.topViewController presentViewController:alert animated:YES completion:nil];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [alert dismissViewControllerAnimated:YES completion:nil];
-        });
-    });
+    [self showAlertViewWithText:msg];
 }
 
 + (void)screenshotWithView:(UIView *)view {
@@ -340,15 +332,7 @@
             if (compatible) {
                 UISaveVideoAtPathToSavedPhotosAlbum([videoUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
             }else {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"视频格式不支持，请从文件 App 从获取" preferredStyle:UIAlertControllerStyleAlert];
-                    [self.topViewController presentViewController:alert animated:YES completion:nil];
-                    
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [alert dismissViewControllerAnimated:YES completion:nil];
-                    });
-                });
+                [self showAlertViewWithText:@"视频格式不支持，请从文件 App 从获取"];
             }
         }
 }
@@ -360,10 +344,13 @@
     }else{
         msg = @"保存视频成功" ;
     }
-    
+    [self showAlertViewWithText:msg];
+}
+
++ (void)showAlertViewWithText:(NSString *)alertText {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:alertText?:@"" preferredStyle:UIAlertControllerStyleAlert];
         [self.topViewController presentViewController:alert animated:YES completion:nil];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
