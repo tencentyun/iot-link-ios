@@ -7,6 +7,7 @@
 #import "TIoTMainVC.h"
 #import "LoginVC.h"
 #import "TIoTVideoVC.h"
+#import "TIoTDemoVideoVC.h"
 
 @interface TIoTMainVC ()
 @property (weak, nonatomic) IBOutlet UILabel *versionLB;
@@ -27,7 +28,7 @@
 }
 
 - (IBAction)jumpVideo:(id)sender {
-    TIoTVideoVC *videoVC = [[TIoTVideoVC alloc]init];
+    TIoTDemoVideoVC *videoVC = [[TIoTDemoVideoVC alloc]init];
     [self.navigationController pushViewController:videoVC animated:YES];
 }
 
