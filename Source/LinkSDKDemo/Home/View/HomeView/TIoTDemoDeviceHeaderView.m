@@ -11,6 +11,7 @@
 @property (nonatomic, strong) UIButton *editBtn; //编辑按钮
 @property (nonatomic, strong) UIButton *cancelBtn; //取消按钮
 @property (nonatomic, strong) UIImageView *editImage; //编辑图标
+@property (nonatomic, strong) UILabel *choosedTipLabel;//选中设备提示
 @property (nonatomic, assign) BOOL isEdit;
 @end
 
@@ -66,7 +67,16 @@
         make.right.equalTo(self.editBtn.mas_left).offset(-30);
     }];
     
+    self.choosedTipLabel = [[UILabel alloc]init];
+    [self.choosedTipLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kVideoDemoTextContentColor textAlignment:NSTextAlignmentCenter];
+    [self addSubview:self.choosedTipLabel];
+    [self.choosedTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.cancelBtn.mas_left).offset(-10);
+        make.centerY.equalTo(self);
+    }];
+    
     self.cancelBtn.hidden = YES;
+    self.choosedTipLabel.hidden = YES;
 }
 
 - (void)editDevice:(UIButton *)button {
@@ -100,6 +110,7 @@
     [self.editBtn setTitle:@"完成" forState:UIControlStateNormal];
     self.editImage.hidden = YES;
     self.cancelBtn.hidden = NO;
+    self.choosedTipLabel.hidden = NO;
     self.isEdit = YES;
 }
 
@@ -107,6 +118,13 @@
     [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     self.editImage.hidden = NO;
     self.cancelBtn.hidden = YES;
+    self.choosedTipLabel.hidden = YES;
     self.isEdit = NO;
+}
+
+- (void)setChoosedDeviceNumber:(NSArray *)array {
+    if (array != nil) {
+        self.choosedTipLabel.text = [NSString stringWithFormat:@"已选择%lu台设备",(unsigned long)array.count];
+    }
 }
 @end
