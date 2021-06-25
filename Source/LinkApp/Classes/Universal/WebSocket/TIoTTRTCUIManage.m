@@ -114,6 +114,8 @@
 
 - (void)leaveRoomWith:(TIOTtrtcPayloadParamModel *)deviceParam {
     
+    _deviceParam = nil;
+    
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC) {
         
