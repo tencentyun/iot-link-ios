@@ -136,6 +136,7 @@ NSString *const DescribeDevices = @"DescribeDevices";//Video 设备列表
 NSString *const DescribeCloudStorageEvents = @"DescribeCloudStorageEvents";//云存事件列表
 NSString *const DescribeCloudStorageThumbnail = @"DescribeCloudStorageThumbnail";//云存缩略图
 NSString *const GenerateSignedVideoURL = @"GenerateSignedVideoURL";//获取视频防盗链播放URL
+NSString *const DescribeProduct = @"DescribeProduct";//获取产品详情
 
 //MARK:Explore
 NSString *const GetDeviceList = @"GetDeviceList";//Explore 设备列表 

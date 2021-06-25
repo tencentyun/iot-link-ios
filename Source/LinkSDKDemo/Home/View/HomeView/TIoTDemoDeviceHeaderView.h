@@ -19,6 +19,7 @@ typedef void(^TIoTDemoCanceEditlBlock)(void);
 @property (nonatomic, copy) TIotDemoDeviceEditBlock editBlock;
 @property (nonatomic, copy) TIoTDemoCanceEditlBlock cancelEditBlock;
 
+- (void)setChoosedDeviceNumber:(NSArray *)array;
 - (void)enterEditPattern;
 - (void)exitEditPattern;
 @end

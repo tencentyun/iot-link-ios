@@ -123,20 +123,7 @@ static NSInteger const maxLimitDeviceNumber = 4;
 
 - (void)chooseDevice:(UIButton *)button {
     if (self.chooseDeviceBlock) {
-        
-       NSMutableArray *selectedArray = self.chooseDeviceBlock(!button.selected);
-        
-        if (selectedArray.count <= maxLimitDeviceNumber) {
-            if (!button.selected) {
-                [button setImage:[UIImage imageNamed:@"device_select"] forState:UIControlStateNormal];
-            }else {
-                [button setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
-            }
-            button.selected = !button.selected;
-        }else {
-            [MBProgressHUD showMessage:[NSString stringWithFormat:@"最多选择%ld台摄像机",(long)maxLimitDeviceNumber] icon:@"overstep_device"];
-        }
-        
+        self.chooseDeviceBlock(button);
     }
 }
 

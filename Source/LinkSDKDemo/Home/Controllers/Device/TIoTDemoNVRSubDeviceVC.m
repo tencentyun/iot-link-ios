@@ -1,78 +1,83 @@
 //
-//  TIoTDemoHomeViewController.m
-//  LinkApp
-//
+//  TIoTDemoNVRSubDeviceVC.m
+//  LinkSDKDemo
 //
 
-#import "TIoTDemoHomeViewController.h"
+#import "TIoTDemoNVRSubDeviceVC.h"
 #import "UIImage+TIoTDemoExtension.h"
 #import "TIoTDemoVideoDeviceCell.h"
 #import "TIoTDemoDeviceHeaderView.h"
 #import "TIoTDemoCustomSheetView.h"
-#import "TIoTCoreAppEnvironment.h"
-#import "TIoTCoreDeviceSet.h"
+#import <YYModel.h>
 #import "TIoTCoreXP2PBridge.h"
 #import "TIoTDemoSameScreenVC.h"
-
-#import "TIoTExploreDeviceListModel.h"
-#import "TIoTVideoDeviceListModel.h"
-#import "TIoTExploreOrVideoDeviceModel.h"
-#import <YYModel.h>
-#import "TIoTCloudStorageVC.h"
 #import "TIoTDemoPreviewDeviceVC.h"
-#import "TIoTDemoProductDetailModel.h"
-#import "TIoTDemoNVRSubDeviceVC.h"
+#import "TIoTCoreAppEnvironment.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
-static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
-static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
-static NSInteger const kLimit = 100;
+static NSString *const kNVRSubdeviceListCellID = @"kNVRSubdeviceListCellID";
+static NSString *const kNVRSubdeviceListHeaderID = @"kNVRSubdeviceListHeaderID";
+static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_nvr_list";
 
-@interface TIoTDemoHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface TIoTDemoNVRSubDeviceVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) TIoTDemoDeviceHeaderView *headerView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) BOOL isShowSameScreenChoiceIcon;
 @property (nonatomic, strong) NSMutableArray *selectedArray;
-@property (nonatomic, assign) BOOL isNVR;
+
 @end
 
-@implementation TIoTDemoHomeViewController
+@implementation TIoTDemoNVRSubDeviceVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupNavBar];
     [self setupUIViews];
     [self addRefreshControl];
-    [self requestDeviceList];
-}
-
-- (void)setupNavBar {
-    self.title = @"IoT Video Demo";
-    [self setupNavBarStyleWithNormal:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self setupNavBarStyleWithNormal:NO];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self setupNavBarStyleWithNormal:YES];
-}
-
-- (void)setupNavBarStyleWithNormal:(BOOL)isNormal {
+    [self requestNVRSubdeviceList];
     
-    if (isNormal) {
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
-    }else {
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+}
+
+- (void)dealloc{
+    [self stopSrviceRemoveObserver];
+}
+
+///MARK: 结束连接
+- (void)stopSrviceRemoveObserver {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+}
+
+///MARK: 开启连接
+- (void)startP2PConnect {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PConnect:)
+                                                 name:@"xp2preconnect"
+                                               object:nil];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:self.selectedModel.DeviceName?:@""];
+}
+
+
+- (void)responseP2PConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    if (![DeviceName isEqualToString:self.selectedModel.DeviceName?:@""]) {
+        return;
     }
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            
+            NSArray<TIoTExploreOrVideoDeviceModel *> *subdeviceList = [NSArray yy_modelArrayWithClass:TIoTExploreOrVideoDeviceModel.class json:jsonList];
+            [self.dataArray removeAllObjects];
+            self.dataArray = [NSMutableArray arrayWithArray:subdeviceList];
+            [self.collectionView reloadData];
+            [self.collectionView.refreshControl endRefreshing];
     
+        }];
 }
 
 - (void)setupUIViews {
@@ -80,6 +85,8 @@ static NSInteger const kLimit = 100;
     self.isShowSameScreenChoiceIcon = NO;
     
     self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
+    
+    self.title = self.selectedModel.DeviceName;
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,65 +106,23 @@ static NSInteger const kLimit = 100;
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
         refreshControl.tintColor = [UIColor colorWithHexString:kVideoDemoTextContentColor];
         refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新" attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor colorWithHexString:kVideoDemoMainThemeColor]}];
-        [refreshControl addTarget:self action:@selector(refreshDeviceList:) forControlEvents:UIControlEventValueChanged];
+        [refreshControl addTarget:self action:@selector(refreshNVRSubdeviceList:) forControlEvents:UIControlEventValueChanged];
         self.collectionView.refreshControl = refreshControl;
     }
 }
 
-- (void)refreshDeviceList:(UIRefreshControl *)sender {
-    [self requestDeviceList];
+- (void)refreshNVRSubdeviceList:(UIRefreshControl *)sender {
+    [self requestNVRSubdeviceList];
 }
 
 #pragma mark - 请求设备列表
-- (void)requestDeviceList {
+- (void)requestNVRSubdeviceList {
+    [self stopSrviceRemoveObserver];
+    [self startP2PConnect];
     
-    //获取产品详情、区分NVR
-    [self requestProductDetail];
+    [self.headerView exitEditPattern];
+    [self resetDeviceListStatus];
     
-}
-
-- (void)requestProductDetail {
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeProduct vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        
-        TIoTDemoProductDetailModel *model = [TIoTDemoProductDetailModel yy_modelWithJSON:responseObject];
-        if (![NSString isNullOrNilWithObject:model.Data.DeviceType]) {
-            if ([model.Data.DeviceType isEqualToString:@"1"]) { //IPC
-                self.isNVR = NO;
-            }else if ([model.Data.DeviceType isEqualToString:@"2"]){ //NVR
-                self.isNVR = YES;
-            }
-            //video 设备列表
-            [self requestVideoList];
-        }
-        
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        
-    }];
-    
-}
-
-///MARK: video 设备列表
-- (void)requestVideoList {
-    
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
-    paramDic[@"Limit"] = [NSNumber numberWithInteger:kLimit];
-    paramDic[@"Offset"] = [NSNumber numberWithInteger:0];
-
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDevices vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        TIoTExploreDeviceListModel *model = [TIoTExploreDeviceListModel yy_modelWithJSON:responseObject];
-
-        [self.dataArray removeAllObjects];
-        self.dataArray = [NSMutableArray arrayWithArray:model.Devices];
-        [self.collectionView reloadData];
-        [self.collectionView.refreshControl endRefreshing];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
-    }];
 }
 
 #pragma mark - UICollectionViewDataSource And UICollectionViewDelegate
@@ -166,13 +131,15 @@ static NSInteger const kLimit = 100;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTDemoVideoDeviceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kVideoDeviceListCellID forIndexPath:indexPath];
+    TIoTDemoVideoDeviceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kNVRSubdeviceListCellID forIndexPath:indexPath];
     
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
     
     cell.isShowChoiceDeviceIcon = self.isShowSameScreenChoiceIcon;
     __weak typeof(self) weakSelf = self;
+    
     cell.chooseDeviceBlock = ^(UIButton * _Nonnull itemBtn) {
+        
         if (weakSelf.selectedArray.count <= maxLimitDeviceNumber - 1) {
             if ([itemBtn.currentImage isEqual:[UIImage imageNamed:@"device_unselect"]]) {
                 model.isSelected = @"1";
@@ -183,6 +150,7 @@ static NSInteger const kLimit = 100;
                 [weakSelf.selectedArray removeObject:model];
                 [itemBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
             }
+            [weakSelf.headerView setChoosedDeviceNumber:weakSelf.selectedArray];
             itemBtn.selected = !itemBtn.selected;
         }else {
             if ([itemBtn.currentImage isEqual:[UIImage imageNamed:@"device_unselect"]]) {
@@ -192,6 +160,7 @@ static NSInteger const kLimit = 100;
                 [weakSelf.selectedArray removeObject:model];
                 [itemBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
                 itemBtn.selected = !itemBtn.selected;
+                [weakSelf.headerView setChoosedDeviceNumber:weakSelf.selectedArray];
             }
         }
     };
@@ -199,7 +168,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"预览",@"回放",@"取消"];
+        NSArray *actionTitleArray = @[@"预览",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"预览");
@@ -211,20 +180,11 @@ static NSInteger const kLimit = 100;
             [customActionSheet removeFromSuperview];
         };
         
-        ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            NSLog(@"回放");
-            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-            cloudStorageVC.deviceModel = model;
-            [self.navigationController pushViewController:cloudStorageVC animated:YES];
-            [customActionSheet removeFromSuperview];
-        };
-        
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
             NSLog(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock,cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
@@ -237,18 +197,12 @@ static NSInteger const kLimit = 100;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //预览页
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-    if (self.isNVR == YES) {
-        //NVR 子设备页面
-        TIoTDemoNVRSubDeviceVC *NVRDeviceVC = [[TIoTDemoNVRSubDeviceVC alloc]init];
-        NVRDeviceVC.selectedModel = model;
-        [self.navigationController pushViewController:NVRDeviceVC animated:YES];
-    }else {
-        //预览页
-        TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
-        previewDeviceVC.selectedModel = model;
-        [self.navigationController pushViewController:previewDeviceVC animated:YES];
-    }
+    TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
+    previewDeviceVC.selectedModel = model;
+    [self.navigationController pushViewController:previewDeviceVC animated:YES];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -260,23 +214,23 @@ static NSInteger const kLimit = 100;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    TIoTDemoDeviceHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kVIdeoDeviceListHeaderID forIndexPath:indexPath];
+    self.headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kNVRSubdeviceListHeaderID forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
-    
+
     //编辑操作
-    headerView.editBlock = ^(TIoTDemoDeviceHeaderView *headerView,BOOL isEditPartten){
-        
+    weakSelf.headerView.editBlock = ^(TIoTDemoDeviceHeaderView *headerView,BOOL isEditPartten){
+
         if (isEditPartten) {
             TIoTDemoCustomSheetView *editSheet = [[TIoTDemoCustomSheetView alloc]init];
-            
+
             NSArray *actionTitleArray = @[@"编辑同屏摄像机",@"取消"];
             //选择同频摄像机
             ChooseFunctionBlock editSameScreen = ^(TIoTDemoCustomSheetView *view) {
-                
+
                 weakSelf.isShowSameScreenChoiceIcon = YES;
-                
+
                 [collectionView reloadData];
-                
+
                 [headerView enterEditPattern];
                 [editSheet removeFromSuperview];
             };
@@ -285,9 +239,9 @@ static NSInteger const kLimit = 100;
                 [headerView exitEditPattern];
                 [view removeFromSuperview];
             };
-            
+
             NSArray *actionBlockArray = @[editSameScreen,cancelBlock];
-            
+
             [editSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
             [[UIApplication sharedApplication].delegate.window addSubview:editSheet];
             [editSheet mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -303,15 +257,15 @@ static NSInteger const kLimit = 100;
                 [weakSelf resetDeviceListStatus];
             }
         }
-        
+
     };
-    
+
     //取消操作
-    headerView.cancelEditBlock = ^{
+    weakSelf.headerView.cancelEditBlock = ^{
         [weakSelf resetDeviceListStatus];
     };
     
-    return headerView;
+    return weakSelf.headerView;
     
 }
 
@@ -337,15 +291,15 @@ static NSInteger const kLimit = 100;
         CGFloat itemWidth = (kScreenWidth - 16*2 - 13)/2;
         CGFloat itemHeight = itemWidth*scale;
         CGFloat padding = 16;
-        flowLayout.sectionHeadersPinToVisibleBounds = YES;
+//        flowLayout.sectionHeadersPinToVisibleBounds = YES;
         flowLayout.itemSize = CGSizeMake(itemWidth, itemHeight);
         flowLayout.sectionInset = UIEdgeInsetsMake(4, padding, 4, padding);
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor colorWithHexString:@"#F5F5F5"];
-        [_collectionView registerClass:[TIoTDemoVideoDeviceCell class] forCellWithReuseIdentifier:kVideoDeviceListCellID];
-        [_collectionView registerClass:[TIoTDemoDeviceHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kVIdeoDeviceListHeaderID];
+        [_collectionView registerClass:[TIoTDemoVideoDeviceCell class] forCellWithReuseIdentifier:kNVRSubdeviceListCellID];
+        [_collectionView registerClass:[TIoTDemoDeviceHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kNVRSubdeviceListHeaderID];
     }
     return _collectionView;
 }
