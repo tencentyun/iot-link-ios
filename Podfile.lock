@@ -132,11 +132,11 @@ PODS:
     - TIoTLinkKit/LinkSDK
     - TIoTLinkThirdPartyKit/Faac-iOS
     - TIoTLinkThirdPartyKit/XP2P-iOS
-  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.4-beta.202106221657)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.4-beta.202106221657)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.4-beta.202106221657)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.4-beta.202106221657)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.4-beta.202106221657)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.4-beta.202106280847)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.4-beta.202106280847)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.4-beta.202106280847)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.4-beta.202106280847)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.4-beta.202106280847)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -245,7 +245,7 @@ SPEC CHECKSUMS:
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 0aceefa698584b975e058a0d9b8036f18d5d2c0a
-  TIoTLinkThirdPartyKit: ecc9fbc0d9f69b4cf02f4481d575a365613d6c5c
+  TIoTLinkThirdPartyKit: 2b6b0cd9029051b43c7201f2ec9f85a7922fce60
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
