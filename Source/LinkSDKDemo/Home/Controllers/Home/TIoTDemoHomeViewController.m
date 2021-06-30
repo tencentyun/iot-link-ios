@@ -247,6 +247,7 @@ static NSInteger const kLimit = 100;
         //预览页
         TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
         previewDeviceVC.selectedModel = model;
+        previewDeviceVC.isNVR = NO;
         [self.navigationController pushViewController:previewDeviceVC animated:YES];
     }
 }
