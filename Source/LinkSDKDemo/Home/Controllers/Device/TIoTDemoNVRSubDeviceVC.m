@@ -40,14 +40,21 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     
 }
 
-- (void)dealloc{
+- (void)dealloc {
     [self stopSrviceRemoveObserver];
+}
+
+- (void)nav_customBack {
+    [self stopSrviceRemoveObserver];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 ///MARK: 结束连接
 - (void)stopSrviceRemoveObserver {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 ///MARK: 开启连接
@@ -202,6 +209,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
     TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
     previewDeviceVC.selectedModel = model;
+    previewDeviceVC.isNVR = YES;
+    previewDeviceVC.deviceNameNVR = self.selectedModel.DeviceName;
     [self.navigationController pushViewController:previewDeviceVC animated:YES];
 }
 

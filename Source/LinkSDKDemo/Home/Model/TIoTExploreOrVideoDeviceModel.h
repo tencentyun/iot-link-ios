@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *isSelected; //本地维护
 
 /// NVR 子设备model
-@property (nonatomic, copy) NSString *channel;
+@property (nonatomic, copy) NSString *Channel;
 
 /// ExploreDeviceListModel
 @property (nonatomic, copy) NSString *AppKey;

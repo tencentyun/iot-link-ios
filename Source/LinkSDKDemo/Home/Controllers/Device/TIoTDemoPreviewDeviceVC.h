@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface TIoTDemoPreviewDeviceVC : TIoTDemoBaseViewController
 @property (nonatomic, strong) TIoTExploreOrVideoDeviceModel *selectedModel;
+@property (nonatomic, assign) BOOL isNVR; //区分是NVR、IPC
+@property (nonatomic, strong) NSString *deviceNameNVR;
 @end
 
 NS_ASSUME_NONNULL_END

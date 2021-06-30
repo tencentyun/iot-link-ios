@@ -13,6 +13,7 @@
 		6D06B07825616720006361B5 /* TIoTAutoConditionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07725616720006361B5 /* TIoTAutoConditionsView.m */; };
 		6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */; };
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
+		6D127BC9268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D127BC8268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m */; };
 		6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */; };
 		6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20483D26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m */; };
 		6D2049EE2653C18D007F6F27 /* TIoTCloudStorageDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20480D26528199007F6F27 /* TIoTCloudStorageDateModel.m */; };
@@ -502,6 +503,8 @@
 		6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntelliListVC.m; sourceTree = "<group>"; };
 		6D06B07E2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoAddManualIntellListCell.h; sourceTree = "<group>"; };
 		6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoAddManualIntellListCell.m; sourceTree = "<group>"; };
+		6D127BC7268C8A3A0081542D /* TIoTDemoDeviceStatusModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoDeviceStatusModel.h; sourceTree = "<group>"; };
+		6D127BC8268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoDeviceStatusModel.m; sourceTree = "<group>"; };
 		6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTWeatherVC.swift; sourceTree = "<group>"; };
 		6D20480C26528199007F6F27 /* TIoTCloudStorageDateModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCloudStorageDateModel.h; sourceTree = "<group>"; };
 		6D20480D26528199007F6F27 /* TIoTCloudStorageDateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCloudStorageDateModel.m; sourceTree = "<group>"; };
@@ -2741,6 +2744,8 @@
 				6DAF8E0D266F9AEC00CD0328 /* TIoTDemoCloudStoreFullVideoUrl.m */,
 				6D9D97E826857FA50085BCC2 /* TIoTDemoProductDetailModel.h */,
 				6D9D97E926857FA50085BCC2 /* TIoTDemoProductDetailModel.m */,
+				6D127BC7268C8A3A0081542D /* TIoTDemoDeviceStatusModel.h */,
+				6D127BC8268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3623,6 +3628,7 @@
 				6DDC6E9425AFFBDF00CF75F4 /* TIoTMainVC.m in Sources */,
 				6D9D97EE2685B30A0085BCC2 /* TIoTDemoNVRSubDeviceVC.m in Sources */,
 				F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */,
+				6D127BC9268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m in Sources */,
 				F4F3265725919C6D00A4CAAB /* TIoTVideoConfigNetVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
