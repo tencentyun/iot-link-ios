@@ -116,7 +116,7 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)showOfflineTip
 {
-    if (![self.deviceDic[@"Online"] boolValue]) {
+    
 //        TIoTTipView *vc = [[TIoTTipView alloc] init];
         __weak typeof(self)WeakSelf = self;
         self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
@@ -136,8 +136,7 @@ static NSString *itemId3 = @"i_ooo454";
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
         [self.backMaskView addGestureRecognizer:tap];
-        
-    }
+     
 }
 
 - (void)hideAlertView {
@@ -175,7 +174,9 @@ static NSString *itemId3 = @"i_ooo454";
         self.bottomBarHeight = make.height.mas_equalTo(0);
     }];
     
-    [self showOfflineTip];
+    if (![self.deviceDic[@"Online"] boolValue]) {
+        [self showOfflineTip];
+    }
 }
 
 - (void)layoutHeader
@@ -591,11 +592,12 @@ static NSString *itemId3 = @"i_ooo454";
         NSString *line_status = dic[@"SubType"];
         if ([line_status isEqualToString:@"Offline"]) {
             //下线
-            self.coll.allowsSelection = NO;
-            [MBProgressHUD showError:@"设备已下线"];
+//            [MBProgressHUD showError:@"设备已下线"];
+            [self showOfflineTip];
+            
         }else if ([line_status isEqualToString:@"Online"]) {
             
-            self.coll.allowsSelection = YES;
+//            self.coll.allowsSelection = YES;
         }
     }
 }
