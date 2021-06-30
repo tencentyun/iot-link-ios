@@ -372,6 +372,11 @@
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
                     if (product._sys_userid.Value.length > 0) {
                         payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
+                        
+                        if (![payloadParam._sys_userid containsString:[TIoTCoreUserManage shared].userId]) {
+                            //没给你打，目前正在跟别人打呢
+                            return;
+                        }
                     }else {
                         payloadParam._sys_userid = device.DeviceId;
                     }
