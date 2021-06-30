@@ -546,6 +546,10 @@
     _callVideoVC = nil;
     
     [self cancelTimer];
+    
+    if (remoteUserID.length > 0) {
+        [MBProgressHUD showError:@"对方已挂断"];
+    }
 }
 
 - (void)cancelTimer {
