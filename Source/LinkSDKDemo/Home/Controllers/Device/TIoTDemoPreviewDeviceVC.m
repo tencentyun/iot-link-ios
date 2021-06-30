@@ -19,6 +19,7 @@
 #import "TIoTCloudStorageVC.h"
 #import "TIoTCoreUtil.h"
 #import "NSObject+additions.h"
+#import "TIoTDemoDeviceStatusModel.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -32,7 +33,8 @@ static NSString *const action_Down = @"action=user_define&cmd=ptz_bottom";
 static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
 static NSString *const quality_high = @"ipc.flv?action=live&quality=high";
 static NSString *const quality_super = @"ipc.flv?action=live&quality=super";
-
+static NSString *const action_live = @"live";
+static NSString *const action_voice = @"voice";
 
 typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIotDemoDeviceDirectionLeft,
@@ -67,6 +69,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) NSString *qualityString; //保存选择video清晰度
 
 @property (nonatomic, strong) NSString *saveFilePath; //视频保存路径
+@property (nonatomic, strong) NSString *deviceName; //设备名称 NVR 和 IPC model有区别
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -75,12 +78,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                             dev_name:self.selectedModel.DeviceName?:@""];
+//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+//                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+//                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+//                                             dev_name:self.deviceNameNVR?:@""];
+    
     self.qualityString = quality_super;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
+    
+    if (self.isNVR == NO) {
+        self.deviceName = self.selectedModel.DeviceName?:@"";
+        
+    }else {
+        self.deviceName = self.deviceNameNVR?:@"";
+    }
     
     [self installMovieNotificationObservers];
 
@@ -90,8 +101,17 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupPreViewViews];
     
-    //云存事件列表
-    [self requestCloudStoreVideoList];
+    if (self.isNVR == NO) {
+        //云存事件列表
+        [self requestCloudStoreVideoList];
+        
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                 dev_name:self.deviceName?:@""];
+    }else {
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+    }
     
 }
 
@@ -103,7 +123,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    
+    if (self.isNVR == YES) {
+        [self.player shutdown];
+    }
     [self recoverNavigationBar];
     
     [self ratetePortrait];
@@ -112,11 +134,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     
     [self stopPlayMovie];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    if (self.isNVR == NO) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    }
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -130,11 +154,38 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
 }
 
+///MARK: 获取ipc/nvr设备状态，是否可以推流（type 参数区分直播和对讲）
+- (void)getDeviceStatusWithType:(NSString *)singleType qualityType:(NSString *)qualityType{
+    
+    NSString *actionString = @"";
+    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
+    if (self.isNVR == YES) {
+        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=%@&%@",self.selectedModel.Channel,singleType?:@"",qualityTypeString?:@""];
+    }else {
+        actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+        if ([responseModel.status isEqualToString:@"0"]) {
+            if ([singleType isEqualToString:action_live]) {
+                //直播
+                [self setVieoPlayerStartPlayWith:qualityType];
+            }else if ([singleType isEqualToString:action_voice]) {
+                //对讲
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@""];
+            }
+            
+        }
+    }];
+}
+
 - (void)setupPreViewViews {
     
     self.view.backgroundColor = [UIColor colorWithHexString:kVideoDemoBackgoundColor];
     
-    self.title = self.selectedModel.DeviceName?:@"";
+    self.title = self.deviceName?:@"";
     
     [self initializedVideo];
     
@@ -473,7 +524,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)clickTalkback:(UIButton *)button {
     if (!button.selected) {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_select"];
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.selectedModel.DeviceName?:@""];
+        [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
         [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
@@ -638,7 +689,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 ///MARK:根据方向发送设备信令
 - (void)sendDeivecWithSignalling:(NSString *)singleText {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    NSString *singleString  = @"";
+    if (self.isNVR == YES) {
+        singleString = [NSString stringWithFormat:@"%@&channel=%@",singleText,self.selectedModel.Channel];
+    }else {
+        singleString = [NSString stringWithFormat:@"%@&channel=0",singleText];
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         if (![NSString isNullOrNilWithObject:jsonList] || ![NSString isFullSpaceEmpty:jsonList]) {
             [MBProgressHUD showMessage:jsonList icon:@""];
         }
@@ -761,7 +819,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2020-12-15";
     paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
-    paramDic[@"DeviceName"] = self.selectedModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceName?:@"";
     paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
     paramDic[@"EndTime"] = [NSNumber numberWithInteger:endTimesstampString.integerValue];
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
@@ -793,7 +851,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2020-12-15";
-    paramDic[@"DeviceName"] = self.selectedModel.DeviceName?:@"";
+    paramDic[@"DeviceName"] = self.deviceName?:@"";
     paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudEventModel *tuumbnailModel = [TIoTDemoCloudEventModel yy_modelWithJSON:responseObject];
@@ -852,11 +910,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                object:_player];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refushVideo:)
-                                                 name:@"xp2preconnect"
-                                               object:nil];
+    if (self.isNVR == NO) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refushVideo:)
+                                                     name:@"xp2preconnect"
+                                                   object:nil];
+    }
 }
 
 #pragma mark Remove Movie Notification Handlers
@@ -871,7 +930,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)refushVideo:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    if (![DeviceName isEqualToString:self.selectedModel.DeviceName?:@""]) {
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
         return;
     }
     
@@ -880,9 +941,18 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
         
-        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityString?:@""];
+        NSString *qualityID = @"";
+        if (self.isNVR == YES) {
+            qualityID = [NSString stringWithFormat:@"%@&channel=%@",qualityString,self.selectedModel.Channel];
+            
+        }else {
+            qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
+        }
+        
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        
+        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         
         [self configVideo];
         [self.player prepareToPlay];
@@ -904,13 +974,17 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)nav_customBack {
     [self stopPlayMovie];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    if (self.isNVR == NO) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    }
     [self removeMovieNotificationObservers];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)stopPlayMovie {
     [self.player stop];
+    [self.player shutdown];
+    [self.player.view removeFromSuperview];
     self.player = nil;
 }
 
@@ -922,7 +996,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.selectedModel.DeviceName?:@"" cmd:@"action=live"];
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
     }else {
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -1136,28 +1210,44 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self hideDefinitionView];
 }
 
-///MARK:
+///MARK: 切换live 清晰度
 - (void)resetVideoPlayerWithQuality:(NSString *)qualityString {
     
-    [self.player shutdown];
     [self.player stop];
+    [self.player shutdown];
     self.player = nil;
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
     
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.selectedModel.DeviceName?:@""];
+    //临时注释 需要测ipc
+//    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    
+//    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+//        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+//    }
+    NSString *qualityID = @"";
+    //临时注释 需要测ipc
+//    NSString *deviceName = self.deviceName?:@"";
+    
+    if (self.isNVR == YES) {
+        qualityID = [NSString stringWithFormat:@"%@&channel=%@",qualityString,self.selectedModel.Channel];
+    }else {
+        qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
     }
     
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                             dev_name:self.selectedModel.DeviceName?:@""];
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.selectedModel.DeviceName]?:@"";
-    self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityString?:@""];
-    [self configVideo];
+    //临时注释 需要测ipc
+//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+//                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+//                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+//                                             dev_name:deviceName];
     
-    [self.player prepareToPlay];
-    [self.player play];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
+        [self configVideo];
+
+        [self.player prepareToPlay];
+        [self.player play];
+    });
+    
 }
 
 - (NSMutableArray *)dataArray {
