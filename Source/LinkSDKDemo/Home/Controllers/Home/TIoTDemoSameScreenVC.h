@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface TIoTDemoSameScreenVC : UIViewController
 - (void)setupSameScreenArray:(NSArray <TIoTExploreOrVideoDeviceModel *>*)array;
+@property (nonatomic, assign) BOOL isNVRType;
+@property (nonatomic, copy) NSString *NVRDeviceName;
 @end
 
 NS_ASSUME_NONNULL_END

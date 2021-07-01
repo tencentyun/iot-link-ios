@@ -12,8 +12,11 @@
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import "TIoTCoreAppEnvironment.h"
+#import "TIoTDemoDeviceStatusModel.h"
+#import <YYModel.h>
 
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
+static NSString *const action_live = @"live";
 
 typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     TIoTDemoSameScreenOne = 1,
@@ -61,7 +64,9 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     [self stopPlayMovie];
     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
+        if (self.isNVRType == NO) {
             [[TIoTCoreXP2PBridge sharedInstance] stopService:model.DeviceName?:@""];
+        }
     }];
     
 }
@@ -537,70 +542,133 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     if (self.videoArray.count != 0) {
         [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
-            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                                     dev_name:model.DeviceName?:@""];
+            if (self.isNVRType == NO) {
+                [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                          sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                           pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                         dev_name:model.DeviceName?:@""];
+                switch (self.videoArray.count) {
+                    case TIoTDemoSameScreenOne: {
+                        TIoTExploreOrVideoDeviceModel *model = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
+                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        break;
+                    }
+                    case TIoTDemoSameScreenTwo: {
+                        TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenTwo];
+                        TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
+                        
+                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                        self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                        break;
+                    }
+                    case TIoTDemoSameScreenThree: {
+                        TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenThree];
+                        TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenTwo];
+                        TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
+                        
+                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                        self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                        
+                        NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
+                        self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
+                        
+                        break;
+                    }
+                    case TIoTDemoSameScreenFour: {
+                        TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenFour];
+                        TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenThree];
+                        TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenTwo];
+                        TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
+                        
+                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
+                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                        
+                        NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
+                        self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
+                        
+                        NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
+                        self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
+                        
+                        NSString *urlStringFour = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelFour.DeviceName]?:@"";
+                        self.videoUrlFour = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringFour];
+                        
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                
+            }else {
+                //判断设备状态后 直接推流
+                
+                [self getDeviceStatusWithType:action_live withChannel:model.Channel];
+            }
+            
+        }];
+    }
+}
+
+///MARK: 获取ipc/nvr设备状态，是否可以推流（type 参数区分直播和对讲）
+- (void)getDeviceStatusWithType:(NSString *)singleType withChannel:(NSString *)channel{
+    NSString *actionString = @"";
+    NSString *qualityTypeString = @"quality=high";
+    if (self.isNVRType == YES) {
+        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=%@&%@",channel?:@"",singleType?:@"",qualityTypeString];
+    }else {
+        actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString];
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.NVRDeviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+        if ([responseModel.status isEqualToString:@"0"]) {
+            if ([singleType isEqualToString:action_live]) {
+                //直播
+                [self setVieoPlayerStartPlayWith:qualityTypeString];
+            }
+        }
+    }];
+}
+
+- (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+//        NSString *qualityID = @"";
+//        if (self.isNVRType == YES) {
+//            qualityID = [NSString stringWithFormat:@"%@&channel=%@",qualityString,self.selectedModel.Channel];
+//
+//        }else {
+//            qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
+//        }
+//
+//        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+//
+//        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
+//
+//        [self configVideo];
+//        [self.player prepareToPlay];
+//        [self.player play];
+        
+        
+        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.NVRDeviceName?:@""];
+            NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=%@&quality=high",urlString,model.Channel?:@""];
+            [self playVideoWithIndex:idx deviceName:self.NVRDeviceName withUrlString:urlStringTemp];
+                
         }];
         
-        switch (self.videoArray.count) {
-            case TIoTDemoSameScreenOne: {
-                TIoTExploreOrVideoDeviceModel *model = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
-                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                break;
-            }
-            case TIoTDemoSameScreenTwo: {
-                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenTwo];
-                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
-                
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
-                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                
-                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
-                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
-                break;
-            }
-            case TIoTDemoSameScreenThree: {
-                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenThree];
-                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenTwo];
-                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
-                
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
-                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                
-                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
-                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
-                
-                NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
-                self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
-                
-                break;
-            }
-            case TIoTDemoSameScreenFour: {
-                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenFour];
-                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenThree];
-                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenTwo];
-                TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
-                
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelOne.DeviceName]?:@"";
-                self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                
-                NSString *urlStringTwo = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelTwo.DeviceName]?:@"";
-                self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringTwo];
-                
-                NSString *urlStringThree = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelThree.DeviceName]?:@"";
-                self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringThree];
-                
-                NSString *urlStringFour = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:modelFour.DeviceName]?:@"";
-                self.videoUrlFour = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlStringFour];
-                
-                break;
-            }
-            default:
-                break;
-        }
-    }
+    });
+    
 }
 
 #pragma mark -IJKPlayer
@@ -663,11 +731,12 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
 {
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refushVideo:)
-                                                 name:@"xp2preconnect"
-                                               object:nil];
+    if (self.isNVRType == NO) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refushVideo:)
+                                                     name:@"xp2preconnect"
+                                                   object:nil];
+    }
 }
 
 - (void)addLoadStateDidChangeNotificationScreenNumber:(TIoTDemoSameScreen)screenType {
@@ -774,52 +843,57 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         TIoTExploreOrVideoDeviceModel *model = obj;
         if ([DeviceName isEqualToString:model.DeviceName]) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
-                switch (idx+1) {
-                    case TIoTDemoSameScreenOne: {
-                        self.videoUrlOne = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                        
-                        [self refreshConfig:TIoTDemoSameScreenOne];
-
-                        [self.playerOne prepareToPlay];
-                        [self.playerOne play];
-                        break;
-                    }
-                    case TIoTDemoSameScreenTwo: {
-                        self.videoUrlTwo = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                        
-                        [self refreshConfig:TIoTDemoSameScreenTwo];
-
-                        [self.playerTwo prepareToPlay];
-                        [self.playerTwo play];
-                        break;
-                    }
-                    case TIoTDemoSameScreenThree: {
-                        self.videoUrlThree = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                        
-                        [self refreshConfig:TIoTDemoSameScreenThree];
-                        
-                        [self.playerThree prepareToPlay];
-                        [self.playerThree play];
-                        break;
-                    }
-                    case TIoTDemoSameScreenFour: {
-                        self.videoUrlFour = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                        
-                        [self refreshConfig:TIoTDemoSameScreenFour];
-                        
-                        [self.playerFour prepareToPlay];
-                        [self.playerFour play];
-                        
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            });
+            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
+            NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
+            [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
         }
     }];
+}
+
+- (void)playVideoWithIndex:(NSInteger)idx deviceName:(NSString *)deviceName withUrlString:(NSString *)urlString {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        switch (idx+1) {
+            case TIoTDemoSameScreenOne: {
+                self.videoUrlOne = urlString;
+                
+                [self refreshConfig:TIoTDemoSameScreenOne];
+
+                [self.playerOne prepareToPlay];
+                [self.playerOne play];
+                break;
+            }
+            case TIoTDemoSameScreenTwo: {
+                self.videoUrlTwo = urlString;
+                
+                [self refreshConfig:TIoTDemoSameScreenTwo];
+
+                [self.playerTwo prepareToPlay];
+                [self.playerTwo play];
+                break;
+            }
+            case TIoTDemoSameScreenThree: {
+                self.videoUrlThree = urlString;
+                
+                [self refreshConfig:TIoTDemoSameScreenThree];
+                
+                [self.playerThree prepareToPlay];
+                [self.playerThree play];
+                break;
+            }
+            case TIoTDemoSameScreenFour: {
+                self.videoUrlFour = urlString;
+                
+                [self refreshConfig:TIoTDemoSameScreenFour];
+                
+                [self.playerFour prepareToPlay];
+                [self.playerFour play];
+                
+                break;
+            }
+            default:
+                break;
+        }
+    });
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -857,7 +931,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
         [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
-            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:model.DeviceName];
+            if (self.isNVRType == NO) {
+                [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:model.DeviceName];
+            }
+            
         }];
         
     }
@@ -867,30 +944,40 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     
     switch (self.videoArray.count) {
         case TIoTDemoSameScreenOne: {
-            [self.playerOne stop];
+            [self destoryPlayer:self.playerOne];
             break;
         }
         case TIoTDemoSameScreenTwo: {
-            [self.playerOne stop];
-            [self.playerTwo stop];
+            [self destoryPlayer:self.playerOne];
+            [self destoryPlayer:self.playerTwo];
             break;
         }
         case TIoTDemoSameScreenThree: {
-            [self.playerOne stop];
-            [self.playerTwo stop];
-            [self.playerThree stop];
+            [self destoryPlayer:self.playerOne];
+            [self destoryPlayer:self.playerTwo];
+            [self destoryPlayer:self.playerThree];
             break;
         }
         case TIoTDemoSameScreenFour: {
-            [self.playerOne stop];
-            [self.playerTwo stop];
-            [self.playerThree stop];
-            [self.playerFour stop];
+            [self destoryPlayer:self.playerOne];
+            [self destoryPlayer:self.playerTwo];
+            [self destoryPlayer:self.playerThree];
+            [self destoryPlayer:self.playerFour];
             break;
         }
         default:
             break;
     }
+}
+
+- (void)destoryPlayer:(IJKFFMoviePlayerController *)player {
+    if (player!= nil & player.view != nil) {
+        [player stop];
+        [player shutdown];
+        [player.view removeFromSuperview];
+        player = nil;
+    }
+    
 }
 
 - (void)configVideo {
@@ -943,10 +1030,15 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 break;
         }
         
-        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TIoTExploreOrVideoDeviceModel *model = obj;
-            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
-        }];
+        if (self.isNVRType == NO) {
+            [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                TIoTExploreOrVideoDeviceModel *model = obj;
+                
+                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+            }];
+        }else {
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+        }
         
     }else {
         [self stopPlayMovie];
@@ -1055,10 +1147,16 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 [fileTipOne setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
                 [self.viewOne addSubview:fileTipOne];
                 
-                [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    TIoTExploreOrVideoDeviceModel *model = obj;
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
-                }];
+                if (self.isNVRType == NO) {
+                    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        TIoTExploreOrVideoDeviceModel *model = obj;
+                        
+                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                        
+                    }];
+                }else {
+                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                }
             }else {
                 [self stopPlayerOne];
                 
@@ -1074,10 +1172,16 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 [fileTipTwo setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
                 [self.viewTwo addSubview:fileTipTwo];
                 
-                [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    TIoTExploreOrVideoDeviceModel *model = obj;
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
-                }];
+                if (self.isNVRType == NO) {
+                    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        TIoTExploreOrVideoDeviceModel *model = obj;
+                        
+                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                    }];
+                }else {
+                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                }
+                
                 
             }else {
                 [self stopPlayerTwo];
@@ -1095,10 +1199,15 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 [fileTipThree setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
                 [self.viewThree addSubview:fileTipThree];
                 
-                [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    TIoTExploreOrVideoDeviceModel *model = obj;
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
-                }];
+                if (self.isNVRType == NO) {
+                    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        TIoTExploreOrVideoDeviceModel *model = obj;
+                        
+                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                    }];
+                }else {
+                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                }
                 
             }else {
                 [self stopPlayerThree];
@@ -1117,11 +1226,15 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 [fileTipFour setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
                 [self.viewFour addSubview:fileTipFour];
                 
-                [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    TIoTExploreOrVideoDeviceModel *model = obj;
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
-                }];
-                
+                if (self.isNVRType == NO) {
+                    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        TIoTExploreOrVideoDeviceModel *model = obj;
+                        
+                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                    }];
+                }else {
+                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                }
             }else {
                 [self stopPlayerFour];
                 
