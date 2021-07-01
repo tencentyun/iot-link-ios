@@ -37,6 +37,7 @@
 #import "TIoTTRTCUIManage.h"
 #import "TIoTAlertView.h"
 #import "UIButton+LQRelayout.h"
+#import <QCloudNetEnv.h>
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -831,6 +832,11 @@ static NSString *itemId3 = @"i_ooo454";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (![[QCloudNetEnv shareEnv] isReachable]) {
+        [MBProgressHUD showError:@"当前无网络"];
+        return;
+    }
     
     if (indexPath.row < self.deviceInfo.properties.count) {
         NSDictionary *dic = self.deviceInfo.properties[indexPath.row];
