@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd;
 - (void)stopAvRecvService:(NSString *)dev_name;
 
-- (void)sendVoiceToServer:(NSString *)dev_name;
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
 - (void)stopVoiceToServer;
 
 - (void)stopService:(NSString *)dev_name;

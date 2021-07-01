@@ -158,15 +158,15 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     stopAvRecvService(dev_name.UTF8String, nullptr);
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name {
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
     self.isSending = YES;
     
     self.dev_name = dev_name;
-    
-    _serverHandle = runSendService(dev_name.UTF8String, "", false); //发送数据前需要告知http proxy
+    const char *channel = [channel_number UTF8String];
+    _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
     AWAudioConfig *config = [[AWAudioConfig alloc] init];
     systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];

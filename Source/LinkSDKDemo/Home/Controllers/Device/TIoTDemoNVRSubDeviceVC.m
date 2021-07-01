@@ -181,6 +181,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
             NSLog(@"预览");
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
             TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+            sameScreenVC.isNVRType = YES;
+            sameScreenVC.NVRDeviceName = self.selectedModel.DeviceName;
             [sameScreenVC setupSameScreenArray:@[model]];
             [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
             [weakSelf resetDeviceListStatus];
@@ -259,6 +261,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         }else {
             if (self.selectedArray.count != 0) {
                 TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+                sameScreenVC.isNVRType = YES;
+                sameScreenVC.NVRDeviceName = self.selectedModel.DeviceName;
                 [sameScreenVC setupSameScreenArray:self.selectedArray];
                 [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
                 [weakSelf resetDeviceListStatus];

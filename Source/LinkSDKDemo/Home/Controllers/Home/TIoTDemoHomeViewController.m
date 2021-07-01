@@ -205,6 +205,7 @@ static NSInteger const kLimit = 100;
             NSLog(@"预览");
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
             TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+            sameScreenVC.isNVRType = NO;
             [sameScreenVC setupSameScreenArray:@[model]];
             [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
             [weakSelf resetDeviceListStatus];
@@ -297,6 +298,7 @@ static NSInteger const kLimit = 100;
         }else {
             if (self.selectedArray.count != 0) {
                 TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+                sameScreenVC.isNVRType = NO;
                 [sameScreenVC setupSameScreenArray:self.selectedArray];
                 [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
                 [weakSelf resetDeviceListStatus];

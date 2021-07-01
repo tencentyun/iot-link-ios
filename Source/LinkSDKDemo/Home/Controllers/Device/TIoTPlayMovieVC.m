@@ -177,7 +177,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     if ([sender.currentTitle isEqualToString:@"开始对讲"]) {
         
         [sender setTitle:@"结束对讲" forState:UIControlStateNormal];
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName channel:@"voice?channel=0"];
     
     }else {
         
