@@ -995,8 +995,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         fileTip.textAlignment = NSTextAlignmentCenter;
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
+        if (self.isNVR == NO) {
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
+        }
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
     }else {
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -1217,15 +1219,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self.player shutdown];
     self.player = nil;
     
-    //临时注释 需要测ipc
-//    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    if (self.isNVR == NO) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+        
+        if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+        }
+    }
     
-//    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-//        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
-//    }
     NSString *qualityID = @"";
-    //临时注释 需要测ipc
-//    NSString *deviceName = self.deviceName?:@"";
     
     if (self.isNVR == YES) {
         qualityID = [NSString stringWithFormat:@"%@&channel=%@",qualityString,self.selectedModel.Channel];
@@ -1233,11 +1235,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
     }
     
-    //临时注释 需要测ipc
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-//                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-//                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-//                                             dev_name:deviceName];
+    if (self.isNVR == NO) {
+        NSString *deviceName = self.deviceName?:@"";
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                                 dev_name:deviceName];
+    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
