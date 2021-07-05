@@ -123,9 +123,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    if (self.isNVR == YES) {
-        [self.player shutdown];
-    }
+    
+    [self stopPlayMovie];
     [self recoverNavigationBar];
     
     [self ratetePortrait];
@@ -175,7 +174,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             }else if ([singleType isEqualToString:action_voice]) {
                 //对讲
                 NSString *channel = @"";
-                if (self.isNVR == YES) {
+                if (self.isNVR == NO) {
                     channel = @"voice?channel=0";
                 }else {
                     channel = [NSString stringWithFormat:@"voice?channel=%@",self.selectedModel.Channel?:@""];
@@ -542,6 +541,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)clickPlayback:(UIButton *)button {
     TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
     cloudStorageVC.deviceModel = self.selectedModel;
+    cloudStorageVC.playerReloadBlock = ^{
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+    };
     [self.navigationController pushViewController:cloudStorageVC animated:YES];
     
     
@@ -886,6 +888,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIoTCloudStorageVC *cloudStoreVC = [[TIoTCloudStorageVC alloc]init];
     cloudStoreVC.eventItemModel = itemModel;
     cloudStoreVC.deviceModel = self.selectedModel;
+    cloudStoreVC.playerReloadBlock = ^{
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+    };
     [self.navigationController pushViewController:cloudStoreVC animated:YES];
 }
 
@@ -942,7 +947,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         return;
     }
     
-    [self setVieoPlayerStartPlayWith:self.qualityString];
+    [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
 }
 
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
@@ -964,18 +969,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player prepareToPlay];
         [self.player play];
     });
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.player pause];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    if (!self.player.isPlaying && self.player != nil) {
-        [self.player play];
-    }
 }
 
 - (void)nav_customBack {
