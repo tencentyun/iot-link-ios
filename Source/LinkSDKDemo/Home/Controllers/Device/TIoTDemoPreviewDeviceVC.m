@@ -124,6 +124,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [super viewWillDisappear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     
+    [self.imageView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIView *view = obj;
+        [view removeFromSuperview];
+    }];
+    
     [self stopPlayMovie];
     [self recoverNavigationBar];
     
@@ -145,12 +150,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)addRotateNotification {
-    if (![UIDevice currentDevice].generatesDeviceOrientationNotifications) {
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    }
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleOrientationChange:)
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orientationChange:)
                                                 name:UIDeviceOrientationDidChangeNotification object:nil];
-    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 }
 
 ///MARK: 获取ipc/nvr设备状态，是否可以推流（type 参数区分直播和对讲）
@@ -191,8 +193,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.view.backgroundColor = [UIColor colorWithHexString:kVideoDemoBackgoundColor];
     
     self.title = self.deviceName?:@"";
-    
-    [self initializedVideo];
     
     CGFloat actionViewHeight = 160;
     
@@ -542,6 +542,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
     cloudStorageVC.deviceModel = self.selectedModel;
     cloudStorageVC.playerReloadBlock = ^{
+        
+        [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
     [self.navigationController pushViewController:cloudStorageVC animated:YES];
@@ -589,7 +591,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         appDelegate.isRotation = YES;
         [self rotateLandscapeRight];
     }
-    [self resetScreenSubviewsWithLandscape:appDelegate.isRotation];
+//    [self resetScreenSubviewsWithLandscape:appDelegate.isRotation];
 }
 
 - (void)controlVoice:(UIButton *)button {
@@ -713,7 +715,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 #pragma mark - handler orientation event
-- (void)handleOrientationChange:(NSNotification *)notification {
+- (void)orientationChange:(NSNotification *)notification {
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
     AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     switch (orientation) {
@@ -889,6 +891,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     cloudStoreVC.eventItemModel = itemModel;
     cloudStoreVC.deviceModel = self.selectedModel;
     cloudStoreVC.playerReloadBlock = ^{
+        [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
     [self.navigationController pushViewController:cloudStoreVC animated:YES];
