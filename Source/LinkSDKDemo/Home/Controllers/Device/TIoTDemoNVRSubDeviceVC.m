@@ -13,6 +13,7 @@
 #import "TIoTDemoSameScreenVC.h"
 #import "TIoTDemoPreviewDeviceVC.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "UIImage+TIoTDemoExtension.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kNVRSubdeviceListCellID = @"kNVRSubdeviceListCellID";
@@ -34,9 +35,32 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setupNavBarStyleWithNormal:NO];
     [self setupUIViews];
     [self addRefreshControl];
     [self requestNVRSubdeviceList];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setupNavBarStyleWithNormal:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self setupNavBarStyleWithNormal:YES];
+}
+
+- (void)setupNavBarStyleWithNormal:(BOOL)isNormal {
+    
+    if (isNormal) {
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#ffffff"],[UIColor colorWithHexString:@"#ffffff"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+    }else {
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    }
     
 }
 
