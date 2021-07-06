@@ -197,17 +197,21 @@ static NSInteger const kLimit = 100;
     };
     cell.model = model;
     
+    if (self.isNVR == YES) {
+        cell.isNVRDevice = YES;
+    }
+    
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
         NSArray *actionTitleArray = @[@"预览",@"回放",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"预览");
-            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
-            sameScreenVC.isNVRType = NO;
-            [sameScreenVC setupSameScreenArray:@[model]];
-            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+            
+            TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = NO;
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
             [weakSelf resetDeviceListStatus];
             [customActionSheet removeFromSuperview];
         };

@@ -26,6 +26,8 @@ typedef void(^TIoTDemoShowMoreActionBlock)(void);
 @property (nonatomic, assign) BOOL isShowChoiceDeviceIcon; //选择同屏设备icon
 
 @property (nonatomic, strong) UIButton *chooseDeviceBtn; //选择设备按钮
+
+@property (nonatomic, assign) BOOL isNVRDevice; //只在homeVC 列表中判断 是nvr 隐藏预览按钮
 @end
 
 NS_ASSUME_NONNULL_END

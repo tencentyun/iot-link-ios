@@ -114,6 +114,15 @@ static NSInteger const maxLimitDeviceNumber = 4;
     
 }
 
+- (void)setIsNVRDevice:(BOOL)isNVRDevice {
+    _isNVRDevice = isNVRDevice;
+    if (isNVRDevice == YES) {
+        self.moreFuncBtn.hidden = YES;
+    }else {
+        self.moreFuncBtn.hidden = NO;
+    }
+}
+
 - (void)showMoreFunction {
     if (self.moreActionBlock) {
         self.moreActionBlock();
