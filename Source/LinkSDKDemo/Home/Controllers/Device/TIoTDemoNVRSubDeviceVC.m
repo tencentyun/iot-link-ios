@@ -203,12 +203,21 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             NSLog(@"预览");
+//            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+//            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+//            sameScreenVC.isNVRType = YES;
+//            sameScreenVC.NVRDeviceName = self.selectedModel.DeviceName;
+//            [sameScreenVC setupSameScreenArray:@[model]];
+//            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+//            [weakSelf resetDeviceListStatus];
+//            [customActionSheet removeFromSuperview];
+            
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
-            sameScreenVC.isNVRType = YES;
-            sameScreenVC.NVRDeviceName = self.selectedModel.DeviceName;
-            [sameScreenVC setupSameScreenArray:@[model]];
-            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+            TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = YES;
+            previewDeviceVC.deviceNameNVR = self.selectedModel.DeviceName;
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
             [weakSelf resetDeviceListStatus];
             [customActionSheet removeFromSuperview];
         };
