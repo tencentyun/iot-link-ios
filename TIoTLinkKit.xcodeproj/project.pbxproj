@@ -1772,6 +1772,41 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		6DF4A6D4269C77D80094044A /* TRTC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TRTC;
+			sourceTree = "<group>";
+		};
+		6DF4A6D5269C77E30094044A /* Video */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		6DF4A6D6269C77EC0094044A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		6DF4A808269D44240094044A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
+				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
+				F4F3D79424938EBD005D3396 /* QCPrefix.pch */,
+				F4F3D53C24935BD3005D3396 /* Info.plist */,
+				F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */,
+				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
+				F4F3D53D24935BD3005D3396 /* main.m */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		9172D49D607895D45538B791 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2682,18 +2717,15 @@
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
 			isa = PBXGroup;
 			children = (
-				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
-				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
+				6DF4A808269D44240094044A /* Supporting Files */,
+				6DF4A6D6269C77EC0094044A /* Core */,
+				6DF4A6D5269C77E30094044A /* Video */,
+				6DF4A6D4269C77D80094044A /* TRTC */,
 				F4F3D79524938EBD005D3396 /* Base.lproj */,
 				F4F3D73524938EBD005D3396 /* Home */,
-				F4F3D79424938EBD005D3396 /* QCPrefix.pch */,
 				F4F3D53424935BD3005D3396 /* Main.storyboard */,
 				F4F3D53724935BD3005D3396 /* Assets.xcassets */,
 				F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */,
-				F4F3D53C24935BD3005D3396 /* Info.plist */,
-				F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */,
-				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
-				F4F3D53D24935BD3005D3396 /* main.m */,
 			);
 			path = LinkSDKDemo;
 			sourceTree = "<group>";
@@ -4063,8 +4095,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Source/LinkSDKDemo/Framework",
 				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/QCPrefix.pch";
-				INFOPLIST_FILE = Source/LinkSDKDemo/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
+				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4074,7 +4106,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4096,8 +4128,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Source/LinkSDKDemo/Framework",
 				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/QCPrefix.pch";
-				INFOPLIST_FILE = Source/LinkSDKDemo/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
+				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4107,7 +4139,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
