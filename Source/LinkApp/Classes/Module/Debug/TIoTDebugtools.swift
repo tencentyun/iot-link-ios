@@ -193,12 +193,13 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         
 //        blue.scanNearPerpherals()
+        blue.scanNearLLSyncService()
         
 //        audio.resetWithUserList(users: invitedList, isInit: true)
 //        audio.OCEnterUser(userID: "123")
         
         
-        let vc = TRTCCallingVideoViewController(ocUserID: "me")
+        /*let vc = TRTCCallingVideoViewController(ocUserID: "me")
 //        let vc = TRTCCallingAuidoViewController(ocUserID: "me")
         vc.modalPresentationStyle = .fullScreen
         
@@ -206,7 +207,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+3, execute: {
 //            vc.OCEnterUser(userID: "friend")
-        })
+        })*/
 /*
         let alert = UIAlertController(title: "输入URL", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in

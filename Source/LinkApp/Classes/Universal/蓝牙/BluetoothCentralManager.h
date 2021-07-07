@@ -50,6 +50,9 @@
  */
 - (void)scanNearPerpherals;
 
+// 扫描附近 llsync 设备
+- (void)scanNearLLSyncService;
+
 /** 连接设备 */
 - (void)connectBluetoothPeripheral:(CBPeripheral *)peripheral;
 
