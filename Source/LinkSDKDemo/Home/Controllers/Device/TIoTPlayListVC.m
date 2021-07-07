@@ -68,7 +68,7 @@
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypeLive;
             video.deviceName = model.DeviceName;
-            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0",urlString];
             [contentVC addChildViewController:video];
             [contentVC.view addSubview:video.view];
             [video.view setFrame:CGRectMake(0, yyy, kScreenWidth, 300)];
@@ -147,7 +147,7 @@
             video.modalPresentationStyle = UIModalPresentationFullScreen;
             video.deviceName = nameNameString;
             video.playType = TIotPLayTypeLive;
-            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0",urlString];
             [self presentViewController:video animated:YES completion:nil];
     };
     
@@ -160,12 +160,13 @@
             video.playType = TIotPLayTypePlayback;
             video.modalPresentationStyle = UIModalPresentationFullScreen;
             video.deviceName = nameNameString;
-            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback",urlString];
+            video.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&channel=0",urlString];
             [self presentViewController:video animated:YES completion:nil];
     };
     
     cell.playCloudStorageBlock = ^{
         TIoTCloudStorageVC *cloudStorage = [[TIoTCloudStorageVC alloc]init];
+        cloudStorage.deviceModel = model;
         [self.navigationController pushViewController:cloudStorage animated:YES];
     };
     return cell;
