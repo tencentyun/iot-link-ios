@@ -118,8 +118,10 @@ static NSInteger const maxLimitDeviceNumber = 4;
     _isNVRDevice = isNVRDevice;
     if (isNVRDevice == YES) {
         self.moreFuncBtn.hidden = YES;
+        self.deviceIcon.image = [UIImage imageNamed:@"NVR_Deviceicon"];
     }else {
         self.moreFuncBtn.hidden = NO;
+        self.deviceIcon.image = [UIImage imageNamed:@"camera_shooting"];
     }
 }
 
