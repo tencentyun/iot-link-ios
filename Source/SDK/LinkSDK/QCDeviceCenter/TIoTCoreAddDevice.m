@@ -87,7 +87,7 @@
     dispatch_async(queue, ^{
         
         // execute the task
-        NSArray *esptouchResultArray = [self executeForResultsWithSsid:apSsid bssid:apBssid password:apPwd taskCount:1 broadcast:YES];
+        NSArray *esptouchResultArray = [self executeForResultsWithSsid:apSsid bssid:apBssid password:apPwd taskCount:1 broadcast:true];
         // show the result to the user in UI Main Thread
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -161,14 +161,14 @@
 - (NSArray *) executeForResultsWithSsid:(NSString *)apSsid bssid:(NSString *)apBssid password:(NSString *)apPwd taskCount:(int)taskCount broadcast:(BOOL)broadcast
 {
     [self.condition lock];
-    self.esptouchTask = [[ESPTouchTask alloc]initWithApSsid:apSsid andApBssid:apBssid andApPwd:apPwd andTimeoutMillisecond:30000];
+    self.esptouchTask = [[ESPTouchTask alloc]initWithApSsid:apSsid andApBssid:apBssid andApPwd:apPwd];
     
     // set delegate
     //[self.esptouchTask setEsptouchDelegate:self._esptouchDelegate];
-    [self.esptouchTask setPackageBroadcast:broadcast];
+    [self.esptouchTask setPackageBroadcast:true];
     [self.condition unlock];
     NSArray * esptouchResults = [self.esptouchTask executeForResults:taskCount];
-    QCLog(@"result is: %@",esptouchResults);
+    NSLog(@"result is: %@",esptouchResults);
     return esptouchResults;
 }
 
