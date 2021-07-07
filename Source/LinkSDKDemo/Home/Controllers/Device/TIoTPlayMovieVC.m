@@ -11,6 +11,7 @@
 #import "NSString+Extension.h"
 #import "TIoTCoreUtil.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
+#import "NSDate+TIoTCustomCalendar.h"
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
@@ -36,7 +37,19 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self setupUIViews:self.playType];
     
     if (self.playType ==  TIotPLayTypePlayback) {
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=inner_define&cmd=get_record_index" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        NSDate *date = [NSDate date];
+        NSInteger year = [date dateYear];
+        NSInteger month = [date dateMonth];
+        NSInteger day = [date dateDay];
+        NSString *startTime = [NSString stringWithFormat:@"%02ld-%02ld-%02ld 00:00:00",(long)year,(long)month,(long)day];
+        NSString *endTime = [NSString stringWithFormat:@"%02ld-%02ld-%02ld 23:59:59",(long)year,(long)month,(long)day];
+        
+        NSString *startTimestampString = [NSString getTimeStampWithString:startTime withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+        NSString *endTimestampString = [NSString getTimeStampWithString:endTime withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+        
+        NSString *cmdString = [NSString stringWithFormat:@"action=inner_define&cmd=get_record_index&channel=0&starttime=%@&endtime=%@",startTimestampString,endTimestampString];
+        
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:cmdString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
 
             self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
             [self.tableView reloadData];
@@ -116,7 +129,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)testCustomSignalling {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=user_define&cmd=custom_cmd" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=user_define&cmd=custom_cmd&channel=0" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         [MBProgressHUD showMessage:jsonList icon:@""];
     }];
 }
@@ -148,8 +161,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
         
-        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-        
+        if (self.playType == TIotPLayTypePlayback) {
+            self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&channel=0",urlString];
+        }else if (self.playType == TIotPLayTypeLive) {
+            self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0",urlString];
+        }
         [self configVideo];
         [self.player prepareToPlay];
         [self.player play];
@@ -220,7 +236,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     NSString *startStamp = [NSString getTimeStampWithString:startDate withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     NSString *endStamp = [NSString getTimeStampWithString:endDate withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     
-    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&start_time=%@&end_time=%@",urlString,startStamp,endStamp];
+    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&channel=0&start_time=%@&end_time=%@",urlString,startStamp,endStamp];
     
     [self configVideo];
     [self.player prepareToPlay];
