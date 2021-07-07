@@ -80,5 +80,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>获取组播权限，用于智能产品配网</string>
 </dict>
 </plist>

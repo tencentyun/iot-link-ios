@@ -300,7 +300,16 @@ static dispatch_once_t onceToken;
     //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+    //定时器延迟时间
+    NSTimeInterval delayTime = 2.0f;
+       
+    //定时器间隔时间
+    NSTimeInterval timeInterval = 2.0f;
+       
+    //设置开始时间
+    dispatch_time_t startDelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC));
+       
+    dispatch_source_set_timer(self.timer, startDelayTime, timeInterval * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
     dispatch_source_set_event_handler(self.timer, ^{
         
         if (self.sendCount >= 5) {
