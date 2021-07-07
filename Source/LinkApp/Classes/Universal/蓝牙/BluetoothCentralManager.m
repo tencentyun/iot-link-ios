@@ -7,6 +7,10 @@
 //特征UUID
 #define kCharacteristicUUID    @"FFE1"
 
+// LLSync
+//#define kLLSyncServiceUUID    @"0000fff0-65d0-4e20-b56a-e493541ba4e2"
+#define kLLSyncServiceUUID    @"0000fff0-0000-1000-8000-00805f9b34fb"
+#define kLLSyncCharactUUID    @"0000ffe1-65d0-4e20-b56a-e493541ba4e2"
 
 @interface BluetoothCentralManager ()
 
@@ -96,6 +100,35 @@
         
         // 这里已确认蓝牙已打开才开始扫描周围的外设。第一个参数nil就是扫描周围所有的外设。
         [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+    }
+}
+
+- (void)scanNearLLSyncService {
+    
+    self.maxValue = 0;
+    
+    [self.deviceList removeAllObjects];
+    
+    [self.peripheralArray removeAllObjects];
+    
+    
+    self.deviceServicePeripheral = nil;
+
+    [self.connectPeripheralArray removeAllObjects];
+    
+    self.isScanDevice = self.centralManager.isScanning;
+    /**
+     1.第一个参数为Services的UUID(外设端的UUID) 不能为nil
+     2.第二参数的CBCentralManagerScanOptionAllowDuplicatesKey为已发现的设备是否重复扫描，如果是同一设备会多次回调
+     */
+    
+
+    if (self.centralManager.state == CBManagerStatePoweredOn) {
+        //扫描10秒停止扫描
+        [self performSelector:@selector(stopScan) withObject:nil afterDelay:5.0];
+        
+        // 这里已确认蓝牙已打开才开始扫描周围的外设。第一个参数nil就是扫描周围所有的外设。
+        [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@(YES)}];
     }
 }
 
