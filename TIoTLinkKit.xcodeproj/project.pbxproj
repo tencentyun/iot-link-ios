@@ -1401,8 +1401,6 @@
 			children = (
 				6D204C6C265CB777007F6F27 /* TIoTDemoHomeViewController.h */,
 				6D204C6D265CB777007F6F27 /* TIoTDemoHomeViewController.m */,
-				6D204D4C265F8A2D007F6F27 /* TIoTDemoSameScreenVC.h */,
-				6D204D4D265F8A2D007F6F27 /* TIoTDemoSameScreenVC.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1770,6 +1768,45 @@
 				6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		6DF4A6A1269824B50094044A /* NVRList */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NVRList;
+			sourceTree = "<group>";
+		};
+		6DF4A6A2269824C30094044A /* P2P */ = {
+			isa = PBXGroup;
+			children = (
+				6D204D4C265F8A2D007F6F27 /* TIoTDemoSameScreenVC.h */,
+				6D204D4D265F8A2D007F6F27 /* TIoTDemoSameScreenVC.m */,
+			);
+			path = P2P;
+			sourceTree = "<group>";
+		};
+		6DF4A6A3269824D70094044A /* PlayBack */ = {
+			isa = PBXGroup;
+			children = (
+				6DF4A6A4269824E20094044A /* CloudStorage */,
+				6DF4A6A5269825030094044A /* LocalPlayBack */,
+			);
+			path = PlayBack;
+			sourceTree = "<group>";
+		};
+		6DF4A6A4269824E20094044A /* CloudStorage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CloudStorage;
+			sourceTree = "<group>";
+		};
+		6DF4A6A5269825030094044A /* LocalPlayBack */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LocalPlayBack;
 			sourceTree = "<group>";
 		};
 		9172D49D607895D45538B791 /* Frameworks */ = {
@@ -2788,6 +2825,9 @@
 		F4F3D74E24938EBD005D3396 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6DF4A6A1269824B50094044A /* NVRList */,
+				6DF4A6A2269824C30094044A /* P2P */,
+				6DF4A6A3269824D70094044A /* PlayBack */,
 				6D204AE1265B9904007F6F27 /* Login */,
 				6D204C6B265CB732007F6F27 /* Home */,
 				F4F3D74F24938EBD005D3396 /* User */,
