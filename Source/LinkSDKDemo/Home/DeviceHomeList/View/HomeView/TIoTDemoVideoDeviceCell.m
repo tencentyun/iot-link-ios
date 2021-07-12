@@ -144,7 +144,6 @@ static NSInteger const maxLimitDeviceNumber = 4;
         self.chooseDeviceBtn.hidden = NO;
         [self.chooseDeviceBtn setImage:[UIImage imageNamed:@"device_unselect"] forState:UIControlStateNormal];
     }else {
-        [self.chooseDeviceBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         self.chooseDeviceBtn.hidden = YES;
     }
 }
