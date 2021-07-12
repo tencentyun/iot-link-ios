@@ -950,9 +950,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         return;
     }
     
-    [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    if (appVersion.floatValue < 2.1) {
+        //旧设备直接播放，不用发送信令验证设备状态和添加参数
+        [self setOldVideoPlayerStartPlay];
+    }else {
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+    }
 }
 
+/// MARK:新设备
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
@@ -967,6 +974,19 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
+        
+        [self configVideo];
+        [self.player prepareToPlay];
+        [self.player play];
+    });
+}
+
+///MARK:旧设备 v2.1以下 （旧设备直接播放，不用发送信令验证设备状态和添加参数）
+- (void)setOldVideoPlayerStartPlay {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+        
+        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
         
         [self configVideo];
         [self.player prepareToPlay];

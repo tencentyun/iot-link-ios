@@ -806,24 +806,40 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     
-    [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        TIoTExploreOrVideoDeviceModel *model = obj;
-        if ([DeviceName isEqualToString:model.DeviceName]) {
-            
-            NSString *qualityTypeString = @"quality=high";
-            NSString *actionString = actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
-            
-            [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-                NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-                TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-                if ([responseModel.status isEqualToString:@"0"]) {
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
-                    NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
-                    [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
-                }
-            }];
-        }
-    }];
+    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    if (appVersion.floatValue < 2.1) {
+        
+        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            if ([DeviceName isEqualToString:model.DeviceName]) {
+
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+                
+                NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
+            }
+        }];
+        
+    }else {
+        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TIoTExploreOrVideoDeviceModel *model = obj;
+            if ([DeviceName isEqualToString:model.DeviceName]) {
+                
+                NSString *qualityTypeString = @"quality=high";
+                NSString *actionString = actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
+                
+                [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+                    NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+                    TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+                    if ([responseModel.status isEqualToString:@"0"]) {
+                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
+                        NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
+                        [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
+                    }
+                }];
+            }
+        }];
+    }
 }
 
 - (void)playVideoWithIndex:(NSInteger)idx deviceName:(NSString *)deviceName withUrlString:(NSString *)urlString {
@@ -874,34 +890,6 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (self.isNVRType == NO) {
-        switch (self.videoArray.count) {
-            case TIoTDemoSameScreenOne: {
-                [self.playerOne shutdown];
-                break;
-            }
-            case TIoTDemoSameScreenTwo: {
-                [self.playerOne shutdown];
-                [self.playerTwo shutdown];
-                break;
-            }
-            case TIoTDemoSameScreenThree: {
-                [self.playerOne shutdown];
-                [self.playerTwo shutdown];
-                [self.playerThree shutdown];
-                break;
-            }
-            case TIoTDemoSameScreenFour: {
-                [self.playerOne shutdown];
-                [self.playerTwo shutdown];
-                [self.playerThree shutdown];
-                [self.playerFour shutdown];
-                break;
-            }
-            default:
-                break;
-        }
-    }
     
     [self removeMovieNotificationObservers];
     
