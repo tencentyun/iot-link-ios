@@ -1838,20 +1838,11 @@
 		6DF4A6B526983DC20094044A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				6DDC6E8F25AFFBDF00CF75F4 /* TIoTMainVC.h */,
-				6DDC6E9025AFFBDF00CF75F4 /* TIoTMainVC.m */,
-				6DDC6E9125AFFBDF00CF75F4 /* TIoTMainVC.xib */,
 				6DDC6E8D25AFFBDE00CF75F4 /* TIoTVideoVC.h */,
 				6DDC6E8E25AFFBDE00CF75F4 /* TIoTVideoVC.m */,
 				6DDC6E9225AFFBDF00CF75F4 /* TIoTVideoVC.xib */,
 				6D9D9787268468320085BCC2 /* TIoTDemoVideoVC.h */,
 				6D9D9786268468320085BCC2 /* TIoTDemoVideoVC.m */,
-				F4F3D78C24938EBD005D3396 /* LoginVC.h */,
-				F4F3D78924938EBD005D3396 /* LoginVC.m */,
-				F4F3D78D24938EBD005D3396 /* LoginVC.xib */,
-				F4F3D78E24938EBD005D3396 /* RegistVC.h */,
-				F4F3D78B24938EBD005D3396 /* RegistVC.m */,
-				F4F3D78A24938EBD005D3396 /* RegistVC.xib */,
 				6DDC6E9925AFFD0D00CF75F4 /* TIoTPlayConfigVC.h */,
 				6DDC6E9A25AFFD0D00CF75F4 /* TIoTPlayConfigVC.m */,
 				6D9D978A26846B280085BCC2 /* TIoTDemoPlayConfigVC.h */,
@@ -1883,6 +1874,9 @@
 		6DF4A6B826983E100094044A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6DDC6EA125AFFD2F00CF75F4 /* TIoTPlayListCell.h */,
+				6DDC6EA325AFFD3000CF75F4 /* TIoTPlayListCell.m */,
+				6DDC6EA225AFFD2F00CF75F4 /* TIoTPlayListCell.xib */,
 				6DA526A1264BC912000F9636 /* CustomTimeSlider */,
 				6D98FDEE25C2E16E00518AC7 /* CustomCalendar */,
 			);
@@ -1997,6 +1991,7 @@
 		6DF4A884269D77080094044A /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				6D204AE1265B9904007F6F27 /* Login */,
 				6DF4A6A1269824B50094044A /* NVRList */,
 				6DF4A6A2269824C30094044A /* P2P */,
 				6DF4A6A3269824D70094044A /* PlayBack */,
@@ -2005,18 +2000,95 @@
 			path = Video;
 			sourceTree = "<group>";
 		};
-		6DF4A885269D77080094044A /* TRTC */ = {
+		6DF4A885269D77080094044A /* RTC */ = {
 			isa = PBXGroup;
 			children = (
+				F4F325D325919A1200A4CAAB /* ui */,
 			);
-			path = TRTC;
+			path = RTC;
 			sourceTree = "<group>";
 		};
 		6DF4A886269D77090094044A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				6DF4A8CD269D80F20094044A /* Model */,
+				6DF4A8CC269D80EC0094044A /* Controller */,
+				6DF4A8CB269D80E50094044A /* View */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		6DF4A8C5269D7B910094044A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
+				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
+				F4F3D79424938EBD005D3396 /* QCPrefix.pch */,
+				F4F3D53C24935BD3005D3396 /* Info.plist */,
+				F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */,
+				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
+				F4F3D53D24935BD3005D3396 /* main.m */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6DF4A8CB269D80E50094044A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F4F3D74624938EBD005D3396 /* SelectView.h */,
+				F4F3D73A24938EBD005D3396 /* SelectView.m */,
+				F4F3D74124938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.h */,
+				F4F3D74C24938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.m */,
+				F4F3D74424938EBD005D3396 /* TIoTCoreAlertView.h */,
+				F4F3D74A24938EBD005D3396 /* TIoTCoreAlertView.m */,
+				F4F3D73D24938EBD005D3396 /* TIoTCoreFamilyInfoCell.h */,
+				F4F3D74924938EBD005D3396 /* TIoTCoreFamilyInfoCell.m */,
+				F4F3D74B24938EBD005D3396 /* TIoTCoreFamilyInfoCell.xib */,
+				F4F3D74D24938EBD005D3396 /* TIoTCoreFamilyMemberCell.h */,
+				F4F3D74024938EBD005D3396 /* TIoTCoreFamilyMemberCell.m */,
+				F4F3D74224938EBD005D3396 /* TIoTCoreFamilyMemberCell.xib */,
+				F4F3D73B24938EBD005D3396 /* TIoTCoreSlideView.h */,
+				F4F3D74524938EBD005D3396 /* TIoTCoreSlideView.m */,
+				F4F3D73C24938EBD005D3396 /* TIoTCoreTimerCell.h */,
+				F4F3D74724938EBD005D3396 /* TIoTCoreTimerCell.m */,
+				F4F3D74324938EBD005D3396 /* TIoTCoreTimerCell.xib */,
+				F4F3D73E24938EBD005D3396 /* TIoTCoreTimerListCell.h */,
+				F4F3D74824938EBD005D3396 /* TIoTCoreTimerListCell.m */,
+				F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6DF4A8CC269D80EC0094044A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6DF4A8D2269EBE870094044A /* Login */,
+				F4F3D77524938EBD005D3396 /* Device */,
+				F4F3D74F24938EBD005D3396 /* User */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6DF4A8CD269D80F20094044A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F4F3D73824938EBD005D3396 /* ControlInfo.h */,
+				F4F3D73724938EBD005D3396 /* ControlInfo.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6DF4A8D2269EBE870094044A /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				F4F3D78C24938EBD005D3396 /* LoginVC.h */,
+				F4F3D78924938EBD005D3396 /* LoginVC.m */,
+				F4F3D78D24938EBD005D3396 /* LoginVC.xib */,
+				F4F3D78E24938EBD005D3396 /* RegistVC.h */,
+				F4F3D78B24938EBD005D3396 /* RegistVC.m */,
+				F4F3D78A24938EBD005D3396 /* RegistVC.xib */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		9172D49D607895D45538B791 /* Frameworks */ = {
@@ -2879,14 +2951,6 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-		F4DB24572563A94E006C45CD /* TRTC */ = {
-			isa = PBXGroup;
-			children = (
-				F4F325D325919A1200A4CAAB /* ui */,
-			);
-			path = TRTC;
-			sourceTree = "<group>";
-		};
 		F4F325D325919A1200A4CAAB /* ui */ = {
 			isa = PBXGroup;
 			children = (
@@ -2898,7 +2962,7 @@
 				F4F325DD25919A1200A4CAAB /* TRTCCalling.xcassets */,
 			);
 			name = ui;
-			path = Source/SDK/LinkRTC/ui;
+			path = Source/LinkSDKDemo/RTC/ui;
 			sourceTree = SOURCE_ROOT;
 		};
 		F4F325D425919A1200A4CAAB /* VideoCall */ = {
@@ -2929,21 +2993,15 @@
 		F4F3D52A24935BD3005D3396 /* LinkSDKDemo */ = {
 			isa = PBXGroup;
 			children = (
+				6DF4A8C5269D7B910094044A /* Supporting Files */,
 				6DF4A886269D77090094044A /* Core */,
-				6DF4A885269D77080094044A /* TRTC */,
+				6DF4A885269D77080094044A /* RTC */,
 				6DF4A884269D77080094044A /* Video */,
-				F4F3D52B24935BD3005D3396 /* AppDelegate.h */,
-				F4F3D52C24935BD3005D3396 /* AppDelegate.m */,
 				F4F3D79524938EBD005D3396 /* Base.lproj */,
-				F4F3D73524938EBD005D3396 /* Home */,
-				F4F3D79424938EBD005D3396 /* QCPrefix.pch */,
+				F4F3D73524938EBD005D3396 /* Common */,
 				F4F3D53424935BD3005D3396 /* Main.storyboard */,
 				F4F3D53724935BD3005D3396 /* Assets.xcassets */,
 				F4F3D53924935BD3005D3396 /* LaunchScreen.storyboard */,
-				F4F3D53C24935BD3005D3396 /* Info.plist */,
-				F4DB24582563A981006C45CD /* LinkSDKDemo-Bridging-Header.h */,
-				6DADCDBE24C18CD700B95D83 /* GoogleService-Info.plist */,
-				F4F3D53D24935BD3005D3396 /* main.m */,
 			);
 			path = LinkSDKDemo;
 			sourceTree = "<group>";
@@ -2957,65 +3015,15 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		F4F3D73524938EBD005D3396 /* Home */ = {
+		F4F3D73524938EBD005D3396 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6D204AE1265B9904007F6F27 /* Login */,
+				6DDC6E8F25AFFBDF00CF75F4 /* TIoTMainVC.h */,
+				6DDC6E9025AFFBDF00CF75F4 /* TIoTMainVC.m */,
+				6DDC6E9125AFFBDF00CF75F4 /* TIoTMainVC.xib */,
 				6D204AB9265B9086007F6F27 /* Config */,
-				F4DB24572563A94E006C45CD /* TRTC */,
-				F4F3D73624938EBD005D3396 /* Model */,
-				F4F3D73924938EBD005D3396 /* View */,
-				F4F3D74E24938EBD005D3396 /* Controllers */,
 			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		F4F3D73624938EBD005D3396 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				F4F3D73824938EBD005D3396 /* ControlInfo.h */,
-				F4F3D73724938EBD005D3396 /* ControlInfo.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		F4F3D73924938EBD005D3396 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				6DDC6EA125AFFD2F00CF75F4 /* TIoTPlayListCell.h */,
-				6DDC6EA325AFFD3000CF75F4 /* TIoTPlayListCell.m */,
-				6DDC6EA225AFFD2F00CF75F4 /* TIoTPlayListCell.xib */,
-				F4F3D74624938EBD005D3396 /* SelectView.h */,
-				F4F3D73A24938EBD005D3396 /* SelectView.m */,
-				F4F3D74424938EBD005D3396 /* TIoTCoreAlertView.h */,
-				F4F3D74A24938EBD005D3396 /* TIoTCoreAlertView.m */,
-				F4F3D74124938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.h */,
-				F4F3D74C24938EBD005D3396 /* TIoTCoreEquipmentTableViewCell.m */,
-				F4F3D73D24938EBD005D3396 /* TIoTCoreFamilyInfoCell.h */,
-				F4F3D74924938EBD005D3396 /* TIoTCoreFamilyInfoCell.m */,
-				F4F3D74B24938EBD005D3396 /* TIoTCoreFamilyInfoCell.xib */,
-				F4F3D74D24938EBD005D3396 /* TIoTCoreFamilyMemberCell.h */,
-				F4F3D74024938EBD005D3396 /* TIoTCoreFamilyMemberCell.m */,
-				F4F3D74224938EBD005D3396 /* TIoTCoreFamilyMemberCell.xib */,
-				F4F3D73B24938EBD005D3396 /* TIoTCoreSlideView.h */,
-				F4F3D74524938EBD005D3396 /* TIoTCoreSlideView.m */,
-				F4F3D73C24938EBD005D3396 /* TIoTCoreTimerCell.h */,
-				F4F3D74724938EBD005D3396 /* TIoTCoreTimerCell.m */,
-				F4F3D74324938EBD005D3396 /* TIoTCoreTimerCell.xib */,
-				F4F3D73E24938EBD005D3396 /* TIoTCoreTimerListCell.h */,
-				F4F3D74824938EBD005D3396 /* TIoTCoreTimerListCell.m */,
-				F4F3D73F24938EBD005D3396 /* TIoTCoreTimerListCell.xib */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		F4F3D74E24938EBD005D3396 /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				F4F3D77524938EBD005D3396 /* Device */,
-				F4F3D74F24938EBD005D3396 /* User */,
-			);
-			path = Controllers;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		F4F3D74F24938EBD005D3396 /* User */ = {
@@ -4247,8 +4255,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Source/LinkSDKDemo/Framework",
 				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/QCPrefix.pch";
-				INFOPLIST_FILE = Source/LinkSDKDemo/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
+				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4258,7 +4266,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4280,8 +4288,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Source/LinkSDKDemo/Framework",
 				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/QCPrefix.pch";
-				INFOPLIST_FILE = Source/LinkSDKDemo/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
+				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4291,7 +4299,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
-				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/LinkSDKDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
