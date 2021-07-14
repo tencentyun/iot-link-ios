@@ -29,15 +29,17 @@ target 'LinkApp' do
   pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
   pod 'CocoaAsyncSocket', '7.6.5'
-  pod 'TIoTLinkThirdPartyKit/TPNS-iOS', '~> 2.0.4-beta.1'
-  pod 'TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay', '~> 2.0.4-beta.1'
+  pod 'TIoTLinkThirdPartyKit/TPNS-iOS', '2.2.0'
+  pod 'TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay', '2.2.0'
 end
+
 
 target 'LinkSDKDemo' do
   common_all_pods
   
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/LinkRTC', :path => './'
-  pod 'TIoTLinkKit/LinkVideo', :path => './'
-  pod 'TIoTLinkThirdPartyKit/IJKPlayer-iOS', '~> 2.0.4-beta.1'
+  
+  pod 'TIoTLinkVideo', :path => './'
+  pod 'TIoTLinkThirdPartyKit/IJKPlayer-iOS', '2.2.0'
 end

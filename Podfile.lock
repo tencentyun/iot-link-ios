@@ -128,15 +128,14 @@ PODS:
     - TIoTLinkKit/LinkCore
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel
-  - TIoTLinkKit/LinkVideo (1.0.0):
-    - TIoTLinkKit/LinkCore
-    - TIoTLinkThirdPartyKit/Faac-iOS
-    - TIoTLinkThirdPartyKit/XP2P-iOS
-  - TIoTLinkThirdPartyKit/Faac-iOS (2.0.4-beta.202106280847)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.0.4-beta.202106280847)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (2.0.4-beta.202106280847)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.0.4-beta.202106280847)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.0.4-beta.202106280847)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.2.0)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.2.0)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.2.0)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.2.0)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.2.0)
+  - TIoTLinkVideo (1.0.0):
+    - TIoTLinkThirdPartyKit/Faac-iOS (= 2.2.0)
+    - TIoTLinkThirdPartyKit/XP2P-iOS (= 2.2.0)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -161,10 +160,10 @@ DEPENDENCIES:
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
-  - TIoTLinkKit/LinkVideo (from `./`)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (~> 2.0.4-beta.1)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (~> 2.0.4-beta.1)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (~> 2.0.4-beta.1)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (= 2.2.0)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (= 2.2.0)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (= 2.2.0)
+  - TIoTLinkVideo (from `./`)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
   - YYModel (= 1.0.4)
@@ -211,6 +210,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   TIoTLinkKit:
     :path: "./"
+  TIoTLinkVideo:
+    :path: "./"
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -244,13 +245,14 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 5cf52f5d25a7ebb6fdd468226c83bd178c79dbeb
-  TIoTLinkThirdPartyKit: 2b6b0cd9029051b43c7201f2ec9f85a7922fce60
+  TIoTLinkKit: e9bca68f3e02ae96b49ac1196d63c2a1212eb9f8
+  TIoTLinkThirdPartyKit: 7acaf84f0e2b4135c61bb6863b5499cd915e8223
+  TIoTLinkVideo: c65e9381f433ca1fdcdd8901ea951fb2e774c6fc
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 8f9a6df078e04c7f6466580d740efb37258c42af
+PODFILE CHECKSUM: c97ab7a36a2750f5e0933f4254e81c42f212548c
 
 COCOAPODS: 1.9.3

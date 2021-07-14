@@ -35,15 +35,4 @@ Pod::Spec.new do |s|
     }
   end
 
-  #智能视频服务，引入则开启 TODO
-  s.subspec 'LinkVideo' do |ss|
-    ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
-    ss.dependency 'TIoTLinkKit/LinkCore'
-    ss.dependency 'TIoTLinkThirdPartyKit/XP2P-iOS'
-    ss.dependency 'TIoTLinkThirdPartyKit/Faac-iOS'
-    ss.pod_target_xcconfig = {
-      'VALID_ARCHS'  => 'arm64'
-    }
-  end
-
 end

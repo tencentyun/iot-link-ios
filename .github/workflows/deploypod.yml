@@ -22,7 +22,7 @@ jobs:
         echo $VERSION
         export LIB_VERSION=$VERSION
                 
-        pod lib lint --verbose --allow-warnings --use-libraries
-        pod trunk push --verbose --allow-warnings --use-libraries
+        pod lib lint TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries        
+        pod trunk push TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}

@@ -20,7 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
+// 调试SDK功能可以使用此接口，OEM请使用下面的start xp2pinfo, 以防止sec_id ,sec_key泄露
 - (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;
+
+// OEM 版本推荐使用此接口，sec_id, sec_key 传@""即可。 此接口需传从自建服务获取到的 xp2pinfo .
+- (void)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo;
+
+
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name;
 - (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
 
