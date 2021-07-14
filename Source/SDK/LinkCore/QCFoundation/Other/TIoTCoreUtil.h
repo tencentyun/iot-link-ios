@@ -37,6 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)saveVideoToPhotoAlbum:(NSString *)videoPathString;
 
+/**
+ 提示
+ */
++ (void)showAlertViewWithText:(NSString *)alertText;
 @end
 
 NS_ASSUME_NONNULL_END

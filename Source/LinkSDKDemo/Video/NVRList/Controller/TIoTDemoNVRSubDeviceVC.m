@@ -77,6 +77,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 - (void)stopSrviceRemoveObserver {
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
@@ -88,12 +89,30 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
                                                  name:@"xp2preconnect"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
+    
+
     [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
                                               sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
                                                pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                              dev_name:self.selectedModel.DeviceName?:@""];
 }
 
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    if (![DeviceName isEqualToString:self.selectedModel.DeviceName?:@""]) {
+        return;
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:DeviceName?:@""];
+}
 
 - (void)responseP2PConnect:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];

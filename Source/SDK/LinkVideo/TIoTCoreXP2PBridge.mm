@@ -46,8 +46,10 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             
         });
     }else if (type == XP2PTypeDetectReady) {
-        NSString *DeviceName = [NSString stringWithUTF8String:idd];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *DeviceName = [NSString stringWithUTF8String:idd];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
+        });
     }
     else {
         printf("XP2P log: %s\n", msg);

@@ -20,6 +20,7 @@
 #import "TIoTCoreUtil.h"
 #import "NSObject+additions.h"
 #import "TIoTDemoDeviceStatusModel.h"
+#import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -184,6 +185,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }
             
+        }else {
+            //设备状态异常提示
+            [TIoTCoreUtil showDeviceStatusError:responseModel];
         }
     }];
 }
@@ -929,7 +933,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                                  selector:@selector(refushVideo:)
                                                      name:@"xp2preconnect"
                                                    object:nil];
+        
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
 }
 
 #pragma mark Remove Movie Notification Handlers
@@ -939,6 +948,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -959,6 +969,21 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:DeviceName?:@""];
+
+}
 /// MARK:新设备
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

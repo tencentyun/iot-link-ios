@@ -12,6 +12,7 @@
 #import "TIoTCoreUtil.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import "NSDate+TIoTCustomCalendar.h"
+#import "TIoTCoreAppEnvironment.h"
 
 static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
@@ -170,6 +171,19 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         [self.player prepareToPlay];
         [self.player play];
     });
+}
+
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    if (![DeviceName isEqualToString:self.deviceName]) {
+        return;
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:DeviceName?:@""];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -404,6 +418,12 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
                                              selector:@selector(refushVideo:)
                                                  name:@"xp2preconnect"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
+    
 }
 
 #pragma mark Remove Movie Notification Handlers
@@ -416,6 +436,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

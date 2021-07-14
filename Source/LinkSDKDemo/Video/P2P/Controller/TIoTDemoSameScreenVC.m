@@ -14,6 +14,7 @@
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import <YYModel.h>
+#import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 static NSString *const action_live = @"live";
@@ -548,58 +549,57 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                                                            pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                                          dev_name:model.DeviceName?:@""];
             }
-            
-            switch (self.videoArray.count) {
-                case TIoTDemoSameScreenOne: {
-                    TIoTExploreOrVideoDeviceModel *model = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:model];
-                    
-                    break;
-                }
-                case TIoTDemoSameScreenTwo: {
-                    TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenTwo];
-                    TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
-                    break;
-                }
-                case TIoTDemoSameScreenThree: {
-                    TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenThree];
-                    TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenTwo];
-                    TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenThree model:modelThree];
-                    
-                    break;
-                }
-                case TIoTDemoSameScreenFour: {
-                    TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenFour];
-                    TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenThree];
-                    TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenTwo];
-                    TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenThree model:modelThree];
-                    
-                    [self getDeviceStatusWithIndex:TIoTDemoSameScreenFour model:modelFour];
-                    
-                    break;
-                }
-                default:
-                    break;
-            }
-            
         }];
+        
+        switch (self.videoArray.count) {
+            case TIoTDemoSameScreenOne: {
+                TIoTExploreOrVideoDeviceModel *model = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:model];
+                
+                break;
+            }
+            case TIoTDemoSameScreenTwo: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenTwo];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
+                break;
+            }
+            case TIoTDemoSameScreenThree: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenThree];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenTwo];
+                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenThree model:modelThree];
+                
+                break;
+            }
+            case TIoTDemoSameScreenFour: {
+                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenFour];
+                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenThree];
+                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenTwo];
+                TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenOne model:modelOne];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenTwo model:modelTwo];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenThree model:modelThree];
+                
+                [self getDeviceStatusWithIndex:TIoTDemoSameScreenFour model:modelFour];
+                
+                break;
+            }
+            default:
+                break;
+        }
     }
 }
 
@@ -633,6 +633,9 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 }
                 
             });
+        }else {
+            //设备状态异常提示
+            [TIoTCoreUtil showDeviceStatusError:responseModel];
         }
     }];
 }
@@ -703,6 +706,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                                                      name:@"xp2preconnect"
                                                    object:nil];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
 }
 
 - (void)addLoadStateDidChangeNotificationScreenNumber:(TIoTDemoSameScreen)screenType {
@@ -771,6 +779,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 {
     [self removeStatusChangeNotificationWithScreenNumber:self.videoArray.count];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -802,6 +811,16 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             break;
     }
 }
+
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:DeviceName?:@""];
+}
+
 - (void)refushVideo:(NSNotification *)notify {
     
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
@@ -835,6 +854,9 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
                         NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
                         [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
+                    }else {
+                        //设备状态异常提示
+                        [TIoTCoreUtil showDeviceStatusError:responseModel];
                     }
                 }];
             }
