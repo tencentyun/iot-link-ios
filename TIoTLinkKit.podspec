@@ -16,10 +16,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
   s.static_framework = true
 
-  s.default_subspec = 'LinkSDK'
+  s.default_subspec = 'LinkCore'
   
-  s.subspec 'LinkSDK' do |ss|
-    ss.source_files  = 'Source/SDK/LinkSDK/**/*.{h,m,c}'
+  s.subspec 'LinkCore' do |ss|
+    ss.source_files  = 'Source/SDK/LinkCore/**/*.{h,m,c}'
     ss.dependency 'MBProgressHUD'
     ss.dependency 'CocoaAsyncSocket'
   end
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Source/SDK/LinkRTC/**/*.{h,m,c}'
     ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
     ss.dependency 'YYModel'
-    ss.dependency 'TIoTLinkKit/LinkSDK'
+    ss.dependency 'TIoTLinkKit/LinkCore'
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'  => 'x86_64 armv7 arm64',
     }
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
   #智能视频服务，引入则开启 TODO
   s.subspec 'LinkVideo' do |ss|
     ss.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
-    ss.dependency 'TIoTLinkKit/LinkSDK'
+    ss.dependency 'TIoTLinkKit/LinkCore'
     ss.dependency 'TIoTLinkThirdPartyKit/XP2P-iOS'
     ss.dependency 'TIoTLinkThirdPartyKit/Faac-iOS'
     ss.pod_target_xcconfig = {

@@ -120,16 +120,16 @@ PODS:
   - SocketRocket (0.5.1)
   - Tencent-MapSDK (4.3.9)
   - TIoTLinkKit (1.0.0):
-    - TIoTLinkKit/LinkSDK (= 1.0.0)
-  - TIoTLinkKit/LinkRTC (1.0.0):
-    - TIoTLinkKit/LinkSDK
-    - TXLiteAVSDK_TRTC (= 8.0.9644)
-    - YYModel
-  - TIoTLinkKit/LinkSDK (1.0.0):
+    - TIoTLinkKit/LinkCore (= 1.0.0)
+  - TIoTLinkKit/LinkCore (1.0.0):
     - CocoaAsyncSocket
     - MBProgressHUD
+  - TIoTLinkKit/LinkRTC (1.0.0):
+    - TIoTLinkKit/LinkCore
+    - TXLiteAVSDK_TRTC (= 8.0.9644)
+    - YYModel
   - TIoTLinkKit/LinkVideo (1.0.0):
-    - TIoTLinkKit/LinkSDK
+    - TIoTLinkKit/LinkCore
     - TIoTLinkThirdPartyKit/Faac-iOS
     - TIoTLinkThirdPartyKit/XP2P-iOS
   - TIoTLinkThirdPartyKit/Faac-iOS (2.0.4-beta.202106280847)
@@ -244,7 +244,7 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: 0aceefa698584b975e058a0d9b8036f18d5d2c0a
+  TIoTLinkKit: 5cf52f5d25a7ebb6fdd468226c83bd178c79dbeb
   TIoTLinkThirdPartyKit: 2b6b0cd9029051b43c7201f2ec9f85a7922fce60
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
