@@ -16,6 +16,24 @@
       "revId": "d41c9f2e0dd0b5f4f7e0eef8d35f69624eeab1ac",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee35f17b_aebb0842",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTPlayListVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-14T04:19:31Z",
+      "side": 1,
+      "message": "live 和 playback 打洞前对应请求的URL已删除",
+      "parentUuid": "b3b294dd_a1228a41",
+      "revId": "d41c9f2e0dd0b5f4f7e0eef8d35f69624eeab1ac",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
