@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cc35113_e7803021",
+        "filename": ".github/workflows/opensource.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-14T09:27:26Z",
+      "side": 1,
+      "message": "和上面保持一致 加上\\",
+      "revId": "55a871858860bbac94a5d9681154160ad5092498",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
