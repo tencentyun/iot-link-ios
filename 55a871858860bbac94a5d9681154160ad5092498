@@ -16,6 +16,24 @@
       "revId": "55a871858860bbac94a5d9681154160ad5092498",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0777ea1_04b59c5f",
+        "filename": ".github/workflows/opensource.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-14T09:29:33Z",
+      "side": 1,
+      "message": "好的，已修改添加\\",
+      "parentUuid": "8cc35113_e7803021",
+      "revId": "55a871858860bbac94a5d9681154160ad5092498",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
