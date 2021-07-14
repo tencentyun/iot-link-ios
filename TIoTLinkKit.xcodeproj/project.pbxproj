@@ -2003,7 +2003,7 @@
 		6DF4A885269D77080094044A /* RTC */ = {
 			isa = PBXGroup;
 			children = (
-				F4F325D325919A1200A4CAAB /* ui */,
+				F4F325D325919A1200A4CAAB /* UI */,
 			);
 			path = RTC;
 			sourceTree = "<group>";
@@ -2951,7 +2951,7 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-		F4F325D325919A1200A4CAAB /* ui */ = {
+		F4F325D325919A1200A4CAAB /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				F4F325D425919A1200A4CAAB /* VideoCall */,
@@ -2961,8 +2961,8 @@
 				F4F325DA25919A1200A4CAAB /* Views */,
 				F4F325DD25919A1200A4CAAB /* TRTCCalling.xcassets */,
 			);
-			name = ui;
-			path = Source/LinkSDKDemo/RTC/ui;
+			name = UI;
+			path = Source/LinkSDKDemo/RTC/UI;
 			sourceTree = SOURCE_ROOT;
 		};
 		F4F325D425919A1200A4CAAB /* VideoCall */ = {
