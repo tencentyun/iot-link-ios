@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3b294dd_a1228a41",
+        "filename": "Source/LinkSDKDemo/Home/Controllers/Device/TIoTPlayListVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-14T03:10:39Z",
+      "side": 1,
+      "message": "删掉geturl，需要等ready后，获取",
+      "revId": "d41c9f2e0dd0b5f4f7e0eef8d35f69624eeab1ac",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
