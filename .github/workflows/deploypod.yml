@@ -13,7 +13,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
-    - name: Deploy to CocoapodsPre
+    
+    - name: Get Pod Version
+      run: |
+        rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
+        rt=${rtt#*v}
+        echo "curr_tag=$rt" >> $GITHUB_ENV
+          
+    - name: Deploy Link SDK
+      if: ${{!contains(env.curr_tag, 'video')}}
       run: |
         set -eo pipefail
         
@@ -24,5 +32,24 @@ jobs:
                 
         pod lib lint TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries        
         pod trunk push TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
+
+
+    - name: Deploy Video SDK
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: |
+        set -eo pipefail
+        
+        temptag=$(git describe --tags `git rev-list --tags --max-count=1`)
+        VERSION=${temptag#*v}
+        VERSIONLIST=(${VERSION//-/ })
+        echo ${VERSIONLIST[0]}
+        export LIB_VERSION=${VERSIONLIST[0]}
+        
+        perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" TIoTLinkVideo.podspec
+                
+        pod lib lint TIoTLinkVideo.podspec --verbose --allow-warnings --use-libraries
+        pod trunk push TIoTLinkVideo.podspec --verbose --allow-warnings --use-libraries
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
