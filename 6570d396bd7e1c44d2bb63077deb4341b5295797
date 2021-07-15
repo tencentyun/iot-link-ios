@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9819a953_a9b9fa07",
+        "filename": "Source/LinkSDKDemo/Video/NVRList/Controller/TIoTDemoNVRSubDeviceVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-15T03:30:26Z",
+      "side": 1,
+      "message": "在TIoTCoreXP2PBridge 切换线程",
+      "revId": "6570d396bd7e1c44d2bb63077deb4341b5295797",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
