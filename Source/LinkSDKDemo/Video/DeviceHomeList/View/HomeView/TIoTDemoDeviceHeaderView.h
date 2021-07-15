@@ -22,6 +22,7 @@ typedef void(^TIoTDemoCanceEditlBlock)(void);
 - (void)setChoosedDeviceNumber:(NSArray *)array;
 - (void)enterEditPattern;
 - (void)exitEditPattern;
+- (void)hideEditButton;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -127,4 +127,9 @@
         self.choosedTipLabel.text = [NSString stringWithFormat:@"已选择%lu台设备",(unsigned long)array.count];
     }
 }
+
+- (void)hideEditButton {
+    self.editBtn.hidden = YES;
+    self.editImage.hidden = YES;
+}
 @end
