@@ -91,6 +91,8 @@ jobs:
         zip -q -r -o "LinkSDKDemo.zip" LinkSDKDemo.ipa LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
         gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkSDKDemo.zip
         ls -l
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         
     - name: Upload LinkApp Asset
       if: ${{contains(env.curr_tag, 'video')}}
