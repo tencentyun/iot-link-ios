@@ -16,6 +16,24 @@
       "revId": "6570d396bd7e1c44d2bb63077deb4341b5295797",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9eb00a4_1a42bc13",
+        "filename": "Source/LinkSDKDemo/Video/NVRList/Controller/TIoTDemoNVRSubDeviceVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-15T04:32:39Z",
+      "side": 1,
+      "message": "好的，已经在xp2pbridge文件中添加主线程中执行",
+      "parentUuid": "9819a953_a9b9fa07",
+      "revId": "6570d396bd7e1c44d2bb63077deb4341b5295797",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
