@@ -21,24 +21,32 @@ jobs:
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
     
-    - if: "github.event.release.prerelease"
-      name: Decrypt large secret1
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_12.app && /usr/bin/xcodebuild -version
+
+    - name: Get Product Line
+      run: |
+        rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
+        rt=${rtt#*v}
+        echo "curr_tag=$rt" >> $GITHUB_ENV
+
+############# Link ##################
+    - name: Decrypt Link prerelease keychain
+      if: ${{ !contains(env.curr_tag, 'video') && github.event.release.prerelease }}
       run: sh .github/script/import_provisioning.sh ReleaseBeta
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
         
-    - if: "!github.event.release.prerelease"
-      name: Decrypt large secret2
+    - name: Decrypt Link release keychain
+      if: ${{ !contains(env.curr_tag, 'video') && !github.event.release.prerelease }}
       run: sh .github/script/import_provisioning.sh Release
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
       
-    - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_11.5.app && /usr/bin/xcodebuild -version
-
-    - name: Build archive
+    - name: Build Link archive
+      if: ${{!contains(env.curr_tag, 'video')}}
       run: |
         sh .github/script/archive.sh Release
         zip -q -r -o "LinkApp.zip" LinkApp.ipa LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
@@ -47,6 +55,7 @@ jobs:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
 
     - name: Upload LinkApp Asset
+      if: ${{!contains(env.curr_tag, 'video')}}
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
@@ -57,4 +66,42 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: upload dSYM
+      if: ${{!contains(env.curr_tag, 'video')}}
       run: ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+
+
+############# Video ##################
+    - name: Decrypt Video prerelease keychain
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: sh .github/script/import_provisioning.sh Debug
+      env:
+        PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
+        P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
+    
+    - name: Build archive
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        export GIT_BRANCH_IMAGE_VERSION=$VERSION
+        
+        sh .github/script/sdkDemoArchive.sh Debug
+        zip -q -r -o "LinkSDKDemo.zip" LinkSDKDemo.ipa LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
+        gpg --batch --passphrase "$PROVISIONING_PASSWORD" -c LinkSDKDemo.zip
+        ls -l
+        
+    - name: Upload LinkApp Asset
+      if: ${{contains(env.curr_tag, 'video')}}
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: LinkSDKDemo.zip.gpg
+        asset_name: LinkSDKDemo.zip.gpg
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        
+    - name: upload dSYM
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: |
+        ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkSDKDemo/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
