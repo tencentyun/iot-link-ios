@@ -78,11 +78,14 @@ jobs:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
     
-    - name: Build archive
+    - name: Build Video Archive
       if: ${{contains(env.curr_tag, 'video')}}
       run: |
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         export GIT_BRANCH_IMAGE_VERSION=$VERSION
+        
+        /usr/local/bin/pod --version
+        /usr/local/bin/pod update --verbose
         
         sh .github/script/sdkDemoArchive.sh Debug
         zip -q -r -o "LinkSDKDemo.zip" LinkSDKDemo.ipa LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
