@@ -317,7 +317,9 @@ static NSInteger const kLimit = 100;
     headerView.cancelEditBlock = ^{
         [weakSelf resetDeviceListStatus];
     };
-    
+    if (self.isNVR == YES) {
+        [headerView hideEditButton];
+    }
     return headerView;
     
 }
