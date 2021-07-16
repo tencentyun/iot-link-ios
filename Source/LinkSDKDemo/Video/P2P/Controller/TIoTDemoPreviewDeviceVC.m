@@ -1267,7 +1267,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.player = nil;
     
     if (self.isNVR == NO) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
         
         if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
             [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
