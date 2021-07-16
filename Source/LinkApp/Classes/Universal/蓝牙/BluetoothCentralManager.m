@@ -3,14 +3,17 @@
 //
 #import "BluetoothCentralManager.h"
 //服务UUID
-#define kServiceUUID    @"serviceUUID"
-//特征UUID
-#define kCharacteristicUUID    @"FFE1"
+#define kServiceUUID    @"FFF0"
 
 // LLSync
-//#define kLLSyncServiceUUID    @"0000fff0-65d0-4e20-b56a-e493541ba4e2"
-#define kLLSyncServiceUUID    @"0000fff0-0000-1000-8000-00805f9b34fb"
-#define kLLSyncCharactUUID    @"0000ffe1-65d0-4e20-b56a-e493541ba4e2"
+#define kLLSyncService16    @"0000FFF0-0000-1000-8000-00805F9B34FB"
+#define kLLSyncService128   @"0000FFF0-65D0-4E20-B56A-E493541BA4E2"
+
+//特征UUID
+#define kLLSyncCharactUUID_DEVICE_INFO_WRITE_ID    @"0000FFE1-65D0-4E20-B56A-E493541BA4E2"
+#define kLLSyncCharactUUID_DEVICE_DATA_WRITE_ID    @"0000FFE2-65D0-4E20-B56A-E493541BA4E2"
+#define kLLSyncCharactUUID_DEVICE_EVENT_NOTIFY     @"0000FFE3-65D0-4E20-B56A-E493541BA4E2"
+
 
 @interface BluetoothCentralManager ()
 
@@ -127,8 +130,9 @@
         //扫描10秒停止扫描
         [self performSelector:@selector(stopScan) withObject:nil afterDelay:5.0];
         
-        // 这里已确认蓝牙已打开才开始扫描周围的外设。第一个参数nil就是扫描周围所有的外设。
-        [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@(YES)}];
+        //搜索和获取服务的serviceId不一样，搜索是16bit，服务都是需要128bit的serviceId
+        [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kServiceUUID]] options:nil];
+//        [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@(YES)}];
     }
 }
 
@@ -291,6 +295,20 @@
  @param RSSI 信号强度
  */
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
+    if (!peripheral.name) {
+        return;
+    }
+    
+    if (![advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+        return;
+    }
+    
+    NSArray *kCBAdvDataServiceUUIDs = advertisementData[@"kCBAdvDataServiceUUIDs"];
+//    CBUUID *firstsssuud = kCBAdvDataServiceUUIDs.firstObject;
+    if (![kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kServiceUUID]]) {
+        return;
+    }
+    
     NSMutableString* nsmstring=[NSMutableString stringWithString:@"\n"];
     [nsmstring appendString:@"----发现外设----\n"];
     [nsmstring appendString:@"Peripheral Info:\n"];
@@ -496,7 +514,10 @@
 //        }
         
         //扫描服务中的所有特征
-        [peripheral discoverCharacteristics:nil forService:service];
+        if ([service.UUID isEqual:[CBUUID UUIDWithString:kLLSyncService128]]) {
+            [peripheral discoverCharacteristics:nil forService:service];
+        }
+//        [peripheral discoverCharacteristics:nil forService:service];
     }
     
     if ([self.peripheral.identifier.UUIDString isEqual:peripheral.identifier.UUIDString]) {
@@ -528,18 +549,25 @@
         WCLog(@"------characteristic--->>>%@",nsmstring);
         CBCharacteristicProperties p = characteristic.properties;
         
+        
         if (p & CBCharacteristicPropertyWrite) {
             WCLog(@"Write---扫描服务：%@的特征值为：%@",service.UUID,characteristic.UUID);
             // 订阅, 实时接收
 //            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             
-            /*
+            
             // 获取特征值发送数据（用于测试，正式可以注释下面两行代码）
             // 发送下行指令(发送一条)
-            NSData *data = [@"蓝牙初始化数据" dataUsingEncoding:NSUTF8StringEncoding];
-            // 将指令写入蓝牙
-            [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-              */
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                NSData *data = [NSString convertHexStrToData:@"E0"];
+//                NSData *data = [@"E0" dataUsingEncoding:NSUTF8StringEncoding];
+                // 将指令写入蓝牙
+                [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+            });
+            
+        }else {
+            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
         }
         
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
@@ -585,15 +613,15 @@
 #pragma mark - 中心读取外设实时数据
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
 
-    if (characteristic.isNotifying) {
-        
-    } else {
+//    if (characteristic.isNotifying) {
+//
+//    } else {
         WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
         WCLog(@"%@", characteristic);
 //        [peripheral readValueForCharacteristic:characteristic];
         
         //[self.centralManager cancelPeripheralConnection:peripheral];
-    }
+//    }
 //    [peripheral readValueForCharacteristic:characteristic];
 //    if ([self.deviceServicePeripheral.identifier.UUIDString isEqualToString: peripheral.identifier.UUIDString]) {
 //
