@@ -8,7 +8,7 @@ import UIKit
 import Foundation
 import Lottie
 
-class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
+@objc class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     static let singleTon = TIoTDebugtools()
     
@@ -29,7 +29,7 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
             button.backgroundColor = UIColor.red
             button.setTitle("D", for: UIControl.State.normal)
             button.addTarget(singleTon, action: #selector(showDebugView), for: UIControl.Event.touchUpInside)
-//            singleTon.debugWindow.addSubview(button)
+            singleTon.debugWindow.addSubview(button)
             //LogUI
 //            PTEDashboard.shared().show()
         })
@@ -236,17 +236,23 @@ class TIoTDebugtools: NSObject, UITableViewDataSource, UITableViewDelegate {
 
 
 extension TIoTDebugtools: BluetoothCentralManagerDelegate {
-    func scanPerpheralsUpdatePerpherals(_ perphersArr: [CBPeripheral]!) {
+    @objc public func scanPerpheralsUpdatePerpherals(_ perphersArr: [CBPeripheral]!, peripheralInfo peripheralInfoArray: NSMutableArray!) {
         
-        for onePerpher in perphersArr {
-            
-            if onePerpher.name == "MyLamp" {
-                blue.connectBluetoothPeripheral(onePerpher)
-            }
-        }    
+        print("perfff--%@", perphersArr!);
+        
+        
+//        blue.connectBluetoothPeripheral(perphersArr.first)
+        
+        
+//        for onePerpher in perphersArr {
+//
+//            if onePerpher.name == "MyLamp" {
+//                blue.connectBluetoothPeripheral(onePerpher)
+//            }
+//        }
     }
     
-    public func connectBluetoothDeviceSucess(withPerpheral connectedPerpheral: CBPeripheral!, withConnectedDevArray connectedDevArray: [CBPeripheral]!) {
+    @objc public func connectBluetoothDeviceSucess(withPerpheral connectedPerpheral: CBPeripheral!, withConnectedDevArray connectedDevArray: [CBPeripheral]!) {
         print("sussss")
     }
 }
