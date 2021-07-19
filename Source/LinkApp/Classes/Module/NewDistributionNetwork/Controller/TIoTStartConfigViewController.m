@@ -145,8 +145,10 @@
 
     NSString *apSsid = self.wifiInfo[@"name"];
     NSString *apPwd = self.wifiInfo[@"pwd"];
+    NSString *apBssid = self.wifiInfo[@"bssid"]?:@"";
+    NSString *apToken = self.wifiInfo[@"token"]?:@"";
     
-    self.softAP = [[TIoTCoreSoftAP alloc] initWithSSID:apSsid PWD:apPwd];
+    self.softAP = [[TIoTCoreSoftAP alloc] initWithSSID:apSsid PWD:apPwd BSSID:apBssid Token:apToken distributeNet:TIoTConfigHardwareTypeSoftAp];
     self.softAP.delegate = self;
     self.softAP.gatewayIpString = ip;
     __weak __typeof(self)weakSelf = self;
@@ -179,10 +181,7 @@
 
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
-    if (self.timer) {
-        dispatch_source_cancel(self.timer);
-    }
-    
+//    dispatch_source_cancel(self.timer);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -275,9 +274,9 @@ static dispatch_once_t onceToken;
 
     [self createSmartConfig];
     __weak __typeof(self)weakSelf = self;
-    self.smartConfig.updConnectBlock = ^(NSString * _Nonnull ipaAddrData) {
-        [weakSelf createSoftAPWith:ipaAddrData];
-    };
+//    self.smartConfig.updConnectBlock = ^(NSString * _Nonnull ipaAddrData) {
+//        [weakSelf createSoftAPWith:ipaAddrData];
+//    };
     self.smartConfig.connectFaildBlock = ^{
         [weakSelf connectFaild];
     };
@@ -288,56 +287,19 @@ static dispatch_once_t onceToken;
     NSString *apSsid = self.wifiInfo[@"name"];
     NSString *apPwd = self.wifiInfo[@"pwd"];
     NSString *apBssid = self.wifiInfo[@"bssid"];
-
-    self.smartConfig = [[TIoTCoreSmartConfig alloc]initWithSSID:apSsid PWD:apPwd BSSID:apBssid];
+    NSString *apToken = self.wifiInfo[@"token"]?:@"";
+    
+    self.smartConfig = [[TIoTCoreSmartConfig alloc]initWithSSID:apSsid PWD:apPwd BSSID:apBssid Token:apToken];
     self.smartConfig.delegate = self;
 }
 
 #pragma mark TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
     WCLog(@"连接成功");
-    
-    //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    //定时器延迟时间
-    NSTimeInterval delayTime = 2.0f;
-       
-    //定时器间隔时间
-    NSTimeInterval timeInterval = 2.0f;
-       
-    //设置开始时间
-    dispatch_time_t startDelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC));
-       
-    dispatch_source_set_timer(self.timer, startDelayTime, timeInterval * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-    dispatch_source_set_event_handler(self.timer, ^{
-        
-        if (self.sendCount >= 5) {
-            dispatch_source_cancel(self.timer);
-            dispatch_async(dispatch_get_main_queue(), ^{
-               [self connectFaild];
-            });
-            return ;
-        }
-        
-        if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-            
-            NSString *Ssid = self.wifiInfo[@"name"];
-            NSString *Pwd = self.wifiInfo[@"pwd"];
-            NSString *Token = self.wifiInfo[@"token"];
-            NSString *apBssid = self.wifiInfo[@"bssid"];
-            NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid, @"bssid":apBssid, @"password":Pwd,@"token":Token,@"region":[TIoTCoreUserManage shared].userRegion};
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-        } else {
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"],@"region":[TIoTCoreUserManage shared].userRegion} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-        }
-        self.sendCount ++;
-    });
-    dispatch_resume(self.timer);
 }
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
     WCLog(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -347,15 +309,15 @@ static dispatch_once_t onceToken;
     });
 }
 
-- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
     WCLog(@"发送失败 %@", error);
 }
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
     self.signInfo = dictionary;
-    WCLog(@"嘟嘟嘟 %@",dictionary);
+    WCLog(@"设备成功返回数据: %@",dictionary);
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connectStepTipView.step < 2) {

@@ -42,6 +42,9 @@
     //firebase注册
     [FIRApp configure];
     
+    //开启打印日志
+    [TIoTCoreServices shared].logEnable = true;
+    
     if (![TIoTCoreUserManage shared].isValidToken) {
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"TIoTMainVC") new]];
     }

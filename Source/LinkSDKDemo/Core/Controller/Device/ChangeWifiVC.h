@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString *wName;
 @property (nonatomic,copy) NSString *wPassword;
+@property (nonatomic,copy) NSString *wBssid;
 @property (nonatomic,copy) NSString *wToken;
 @end
 
