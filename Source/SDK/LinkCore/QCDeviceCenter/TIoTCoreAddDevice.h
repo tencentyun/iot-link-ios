@@ -9,6 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger,TIoTConfigHardwareType) {
+    TIoTConfigHardwareTypeSmartConfig,
+    TIoTConfigHardwareTypeSoftAp,
+};
 
 @protocol TIoTCoreAddDeviceProtocol
 
@@ -33,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)smartConfigOnHandleSocketClosed:(TCSocket *)socket;
 ///smartConfig配网 接收消息成功
 - (void)smartConfigOnHandleDataReceived:(TCSocket *)socket data:(NSData *)data;
+/// smartConfig 代替 softAp 接收消息成功代理 (推荐使用)
+- (void)smartConfigOnHandleSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
 /// softAP配网 连接成功
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
@@ -71,6 +77,7 @@ typedef void(^connectFaildBlock)(void);
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
 @property (nonatomic,copy,readonly) NSString *bssid;
+@property (nonatomic,copy,readonly) NSString *token;    /// 当次配网token
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 /*
@@ -89,6 +96,13 @@ typedef void(^connectFaildBlock)(void);
 /// @param bssid 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid;
 
+/// WiFi信息
+/// @param ssid 必填
+/// @param password 必填
+/// @param bssid 必填
+/// @param token 必填  初次配网token
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(NSString *)token;
+
 
 @end
 
@@ -102,7 +116,8 @@ typedef void(^connectUdpFaildBlock)(void);
 
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
-
+@property (nonatomic,copy,readonly) NSString *bssid;
+@property (nonatomic,copy,readonly) NSString *token;
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 @property (nonatomic, assign) NSInteger serverProt;
 /*
@@ -116,11 +131,18 @@ typedef void(^connectUdpFaildBlock)(void);
 /// dup连接失败 block   必须实现
 @property (nonatomic ,copy) connectUdpFaildBlock udpFaildBlock;
 
-
 /// WiFi信息
 /// @param ssid 必填
 /// @param password 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password;
+
+/// WiFi信息
+/// @param ssid 必填
+/// @param password 必填
+/// @param bssid 必填
+/// @param token 必填
+/// @param netType 必填
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(nonnull NSString *)token distributeNet:(TIoTConfigHardwareType)netType;
 
 
 @end

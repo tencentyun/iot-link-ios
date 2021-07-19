@@ -23,13 +23,17 @@
 #import "NSObject+additions.h"
 #import "NSString+Extension.h"
 
+#import "TIoTCoreUserManage.h"
+//#import "TIoTCoreSoftAP.h"
+
 #define SmartConfigPort 8266
 
-@interface TIoTCoreSmartConfig()<TCSocketDelegate>
+@interface TIoTCoreSmartConfig()<TCSocketDelegate,TIoTCoreAddDeviceDelegate>
 @property (atomic, strong) ESPTouchTask *esptouchTask;
 @property (nonatomic, strong) NSCondition *condition;
 @property (nonatomic, strong) TCSocket *socket;
-
+@property (nonatomic, strong) TIoTCoreSoftAP *softAP;
+@property (nonatomic, assign) TIoTConfigHardwareType distributionNet;
 @property (nonatomic) BOOL connecting;
 
 @end
@@ -52,8 +56,29 @@
     return self;
 }
 
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(NSString *)token
+{
+    self = [super init];
+    if (self) {
+        _ssid = ssid;
+        _password = password;
+        _bssid = bssid;
+        _token = token;
+        self.distributionNet = TIoTConfigHardwareTypeSmartConfig;
+    }
+    return self;
+}
+
 
 - (void)startAddDevice {
+    __weak __typeof(self)weakSelf = self;
+    self.updConnectBlock = ^(NSString * _Nonnull ipaAddrData) {
+        [weakSelf createSoftAPWith:ipaAddrData ssid:weakSelf.ssid pwd:weakSelf.password bssid:weakSelf.bssid token:weakSelf.token];
+    };
+//    self.connectFaildBlock = ^{
+//        [weakSelf connectFaild];
+//    };
+    
     _connecting = YES;
     [self tapConfirmForResults];
 }
@@ -71,8 +96,28 @@
         [self.socket close];
         self.socket = nil;
     }
+    [self.softAP stopAddDevice];
 }
 
+- (void)createSoftAPWith:(NSString *)ip ssid:(NSString *)ssid pwd:(NSString *)pwd bssid:(NSString *)bssid token:(NSString *)token {
+
+    NSString *apSsid = ssid;
+    NSString *apPwd = pwd;
+    NSString *apBssid = bssid;
+    NSString *apToken = token;
+    
+    self.softAP = [[TIoTCoreSoftAP alloc]initWithSSID:apSsid PWD:apPwd BSSID:apBssid Token:apToken distributeNet:TIoTConfigHardwareTypeSmartConfig];
+    self.softAP.gatewayIpString = ip;
+    self.softAP.delegate = self;
+    __weak __typeof(self)weakSelf = self;
+    self.softAP.udpFaildBlock = ^{
+//        [weakSelf connectFaild];
+        if (weakSelf.connectFaildBlock) {
+            weakSelf.connectFaildBlock();
+        }
+    };
+    [self.softAP startAddDevice];
+}
 
 #pragma mark - private
 
@@ -179,28 +224,39 @@
     [self.socket openWithIP:ip port:SmartConfigPort];
 }
 
+#pragma mark -  Delegte
+- (void)smartConfigOnHandleSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+    if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
+        [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+    }else {
+        if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocket:didReceiveData:fromAddress:withFilterContext:)]) {
+            [self.delegate smartConfigOnHandleSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+        }
+    }
+}
 
 #pragma mark - TCSocketDelegate
 
 - (void)onHandleSocketOpen:(TCSocket *)socket {
-    QCLog(@"%@ did open",socket);
-    
+    QCLog(@"\n socket did open: %@ \n",socket);
+    WCLog(@"\n socket did open: %@ \n",socket);
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocketOpen:)]) {
         [self.delegate smartConfigOnHandleSocketOpen:socket];
     }
 }
 
 - (void)onHandleSocketClosed:(TCSocket *)socket {
-    QCLog(@"%@ did close",socket);
-    
+    QCLog(@"\n socket did close : %@ \n",socket);
+    WCLog(@"\n socket did close : %@ \n",socket);
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocketClosed:)]) {
         [self.delegate smartConfigOnHandleSocketClosed:socket];
     }
 }
 
 - (void)onHandleDataReceived:(TCSocket *)socket data:(NSData *)data {
-    QCLog(@"%@ did receive data %@",socket,data);
-
+    QCLog(@"\n socket did receive data socket: %@ \n data: %@ \n",socket,data);
+    WCLog(@"\n socket did receive data socket: %@ \n data: %@ \n",socket,data);
+    
     if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleDataReceived:data:)]) {
         [self.delegate smartConfigOnHandleDataReceived:socket data:data];
     }
@@ -230,7 +286,7 @@
 @property (nonatomic) NSUInteger sendCount;
 @property (nonatomic, strong) dispatch_source_t timer2;
 @property (nonatomic) NSUInteger sendCount2;
-
+@property (nonatomic, assign) TIoTConfigHardwareType distributionNet;
 
 @property (nonatomic) BOOL connecting;
 
@@ -249,6 +305,19 @@
     if (self) {
         _ssid = ssid;
         _password = password;
+        self.distributionNet = TIoTConfigHardwareTypeSoftAp;
+    }
+    return self;
+}
+
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(nonnull NSString *)token distributeNet:(TIoTConfigHardwareType)netType {
+    self = [super init];
+    if (self) {
+        _ssid = ssid;
+        _password = password;
+        _bssid = bssid;
+        _token = token;
+        self.distributionNet = netType;
     }
     return self;
 }
@@ -290,8 +359,8 @@
 
 //创建udp连接
 - (void)createudpConnect:(NSString *)ip{
-    
-    QCLog(@"softap==start");
+    QCLog(@"\n softap start: ip: %@\n",ip);
+    WCLog(@"\n softap start: ip: %@\n",ip);
 
     [self creatUdpWithIp:ip connectFaildBlock:^{
        [self connectUdpFaild];
@@ -307,18 +376,21 @@
     
     if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
         QCLog(@"bindToPort: %@", error);
+        WCLog(@"bindToPort: %@", error);
         connectFialdBlock();
         return ;
     }
     if (![self.socket beginReceiving:&error]) {     // 开始监听
         QCLog(@"beginReceiving: %@", error);
+        WCLog(@"beginReceiving: %@", error);
         connectFialdBlock();
         return ;
     }
     
     // 服务端
     if (![self.socket connectToHost:ip onPort:(self.serverProt != 0?self.serverProt:8266) error:&error]) {   // 连接服务器
-        QCLog(@"连接失败：%@", error);
+        QCLog(@"socket 连接服务器失败：%@", error);
+        WCLog(@"socket 连接服务器失败：%@", error);
         connectFialdBlock();
         return ;
     }
@@ -338,7 +410,49 @@
 #pragma mark - GCDAsyncUdpSocketDelegate
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    QCLog(@"连接成功");
+    QCLog(@"\n upd连接成功: \n sock : %@\n address: %@\n",sock,address);
+    WCLog(@"\n upd连接成功: \n sock : %@\n address: %@ \n",sock,address);
+    //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    //定时器延迟时间
+    NSTimeInterval delayTime = 2.0f;
+       
+    //定时器间隔时间
+    NSTimeInterval timeInterval = 2.0f;
+       
+    //设置开始时间
+    dispatch_time_t startDelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC));
+       
+    dispatch_source_set_timer(self.timer, startDelayTime, timeInterval * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+    dispatch_source_set_event_handler(self.timer, ^{
+        
+        if (self.sendCount >= 5) {
+            dispatch_source_cancel(self.timer);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.udpFaildBlock) {
+                    self.udpFaildBlock();
+                }
+                
+            });
+            return ;
+        }
+        
+        if (self.distributionNet == TIoTConfigHardwareTypeSoftAp) {
+            
+            NSString *Ssid = self.ssid?:@"";
+            NSString *Pwd = self.password?:@"";
+            NSString *Token = self.token?:@"";
+            NSString *apBssid = self.bssid?:@"";
+            NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid, @"bssid":apBssid, @"password":Pwd,@"token":Token,@"region":[TIoTCoreUserManage shared].userRegion};
+            [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+        } else {
+            
+            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.token?:@"",@"region":[TIoTCoreUserManage shared].userRegion} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+        }
+        self.sendCount ++;
+    });
+    dispatch_resume(self.timer);
     
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didConnectToAddress:)]) {
         [self.delegate softApUdpSocket:sock didConnectToAddress:address];
@@ -346,23 +460,34 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    QCLog(@"发送成功");
+    QCLog(@"\n upd发送成功: socket: %@\n tag: %ld\n",sock,tag);
+    WCLog(@"\n upd发送成功: socket: %@\n tag: %ld\n",sock,tag);
     if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didSendDataWithTag:)]) {
         [self.delegate softApUdpSocket:sock didSendDataWithTag:tag];
     }
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    QCLog(@"发送失败 %@", error);
+    QCLog(@"\n upd发送失败: socket: %@\n errot: %@ \n tag: %ld\n", sock,error,tag);
+    WCLog(@"\n upd发送失败: socket: %@\n errot: %@ \n tag: %ld\n", sock,error,tag);
     if ([self.delegate respondsToSelector:@selector(softApuUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate softApuUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
     }
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+    QCLog(@"\n upd设备接收消息成功: socket: %@\n data: %@\n addrss: %@\n",sock,data,address);
+    WCLog(@"\n upd设备接收消息成功: socket: %@\n data: %@\n addrss: %@\n",sock,data,address);
+    dispatch_source_cancel(self.timer);
     
-    if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
-        [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+    if (self.distributionNet == TIoTConfigHardwareTypeSoftAp) {
+        if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
+            [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+        }
+    }else {
+        if ([self.delegate respondsToSelector:@selector(smartConfigOnHandleSocket:didReceiveData:fromAddress:withFilterContext:)]) {
+            [self.delegate smartConfigOnHandleSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
+        }
     }
    
 }
@@ -401,14 +526,16 @@
 #pragma mark 代理-GCDAsyncUdpSocketDelegate
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    QCLog(@"--连接成功---udpSocketAddress--%@",address);
+    QCLog(@"\n --连接成功---udpSocketAddress--%@ \n ",address);
+    WCLog(@"\n --连接成功---udpSocketAddress--%@ \n ",address);
     if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didConnectToAddress:)]) {
         [self.delegate wiredDistributionNetUdpSocket:sock didConnectToAddress:address];
     }
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
-    QCLog(@"---连接失败--udp Socket Not Connect--%@",error);
+    QCLog(@"\n ---连接失败--udp Socket Not Connect--%@ \n ",error);
+    WCLog(@"\n ---连接失败--udp Socket Not Connect--%@ \n ",error);
     if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didNotConnect:)]) {
         [self.delegate wiredDistributionNetUdpSocket:sock didNotConnect:error];
     }
@@ -416,7 +543,8 @@
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
 {
-    QCLog(@"--发送消息成功-----Socket Send Data Success");
+    QCLog(@"\n --发送消息成功-----Socket Send Data Success \n ");
+    WCLog(@"\n --发送消息成功-----Socket Send Data Success \n ");
     if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didSendDataWithTag:)]) {
         [self.delegate wiredDistributionNetUdpSocket:sock didSendDataWithTag:tag];
     }
@@ -424,7 +552,8 @@
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
 {
-    QCLog(@"---发送消息失败-----Socket Not Send Data Error--%@",error);
+    QCLog(@"\n ---发送消息失败-----Socket Not Send Data Error--%@ \n",error);
+    WCLog(@"\n ---发送消息失败-----Socket Not Send Data Error--%@ \n",error);
     if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate wiredDistributionNetUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
     }
@@ -436,8 +565,8 @@
     uint16_t port = [GCDAsyncUdpSocket portFromAddress:address];
     NSError *jsonerror = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-    QCLog(@"---接收消息成功---收到设备端的响应 [%@:%d] %@", ip, port, dic);
-    
+    QCLog(@"\n ---接收消息成功---收到设备端的响应 [%@:%d] %@ \n", ip, port, dic);
+    WCLog(@"\n ---接收消息成功---收到设备端的响应 [%@:%d] %@ \n", ip, port, dic);
     if (self.delegate && [self.delegate respondsToSelector:@selector(wiredDistributionNetUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
         [self.delegate wiredDistributionNetUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
     }
