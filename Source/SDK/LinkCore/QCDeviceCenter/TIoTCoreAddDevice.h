@@ -9,6 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger,TIoTConfigHardwareType) {
+    TIoTConfigHardwareTypeSmartConfig,
+    TIoTConfigHardwareTypeSoftAp,
+};
 
 @protocol TIoTCoreAddDeviceProtocol
 
@@ -27,21 +31,54 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol TIoTCoreAddDeviceDelegate <NSObject>
 @optional
-///smartConfig配网 socket open
+
+/**
+ smartConfig配网流程代理
+ */
+
+/**
+  配网流程(将要废弃)
+ */
+
+/// softAP 连接成功
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
+/// softAP 发送消息成功
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag;
+/// softAP 发送消息失败
+- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
+/// softAP 设备接收消息成功
+- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
+
+/**
+ 配网代理 (推荐使用)
+ */
+/// Udp 连接成功
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
+/// Udp 连接失败
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error;
+/// App 发送消息成功
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag;
+/// App 发送消息失败
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
+/// 设备端接收消息或返回数据代理
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
+/// udp 关闭
+- (void)distributionNetudpSocket:(GCDAsyncUdpSocket *)sock withError:(NSError  * _Nullable)error;
+
+/**
+ socket 代理
+ */
+
+///socket open
 - (void)smartConfigOnHandleSocketOpen:(TCSocket *)socket;
-///smartConfig配网 socket closed
+///socket closed
 - (void)smartConfigOnHandleSocketClosed:(TCSocket *)socket;
-///smartConfig配网 接收消息成功
+///socket received data
 - (void)smartConfigOnHandleDataReceived:(TCSocket *)socket data:(NSData *)data;
 
-/// softAP配网 连接成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
-/// softAP配网 发送消息成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag;
-/// softAP配网 发送消息失败
-- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
-/// softAP配网 接收消息成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
+/**
+ TIoTCoreWired 端口监听代理
+ */
 
 /// 连接成功
 - (void)wiredDistributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
@@ -71,23 +108,31 @@ typedef void(^connectFaildBlock)(void);
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
 @property (nonatomic,copy,readonly) NSString *bssid;
+@property (nonatomic,copy,readonly) NSString *token;    /// 当次配网token
 
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 /*
  必须实现
 */
 
-/// 创建udp链接block  必须实现
+/// 创建udp链接block  初始化采用 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(NSString *)token 必须实现
 @property (nonatomic, copy) createUpdBlock updConnectBlock;
 
 /// 链接失败后block   必须实现
 @property (nonatomic, copy) connectFaildBlock connectFaildBlock;
 
-/// WiFi信息
+/// WiFi信息 （将要废弃）
 /// @param ssid 必填
 /// @param password 必填
 /// @param bssid 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid;
+
+/// WiFi信息 （推荐使用）
+/// @param ssid 必填
+/// @param password 必填
+/// @param bssid 必填
+/// @param token 必填  初次配网token
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(NSString *)token;
 
 
 @end
@@ -102,7 +147,8 @@ typedef void(^connectUdpFaildBlock)(void);
 
 @property (nonatomic,copy,readonly) NSString *ssid;
 @property (nonatomic,copy,readonly) NSString *password;
-
+@property (nonatomic,copy,readonly) NSString *bssid;
+@property (nonatomic,copy,readonly) NSString *token;
 @property (nonatomic,weak) id<TIoTCoreAddDeviceDelegate> delegate;
 @property (nonatomic, assign) NSInteger serverProt;
 /*
@@ -116,11 +162,18 @@ typedef void(^connectUdpFaildBlock)(void);
 /// dup连接失败 block   必须实现
 @property (nonatomic ,copy) connectUdpFaildBlock udpFaildBlock;
 
-
-/// WiFi信息
+/// WiFi信息 （将要废弃）
 /// @param ssid 必填
 /// @param password 必填
 - (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password;
+
+/// WiFi信息 （推荐使用）
+/// @param ssid 必填
+/// @param password 必填
+/// @param bssid 必填
+/// @param token 必填
+/// @param netType 必填
+- (instancetype)initWithSSID:(NSString *)ssid PWD:(NSString *)password BSSID:(NSString *)bssid Token:(nonnull NSString *)token distributeNet:(TIoTConfigHardwareType)netType;
 
 
 @end
