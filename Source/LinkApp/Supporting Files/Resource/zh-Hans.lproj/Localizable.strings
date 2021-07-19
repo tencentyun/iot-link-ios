@@ -901,3 +901,6 @@
 "delete_acccount_year" = "年";
 "delete_acccount_month" = "月";
 "delete_acccount_day" = "日";
+
+"llsync_network_title" = "蓝牙辅助配网";
+"llsync_network_tips" = "设备蓝牙";

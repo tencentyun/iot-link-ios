@@ -77,6 +77,11 @@
 //添加设备页面深蓝色
 #define kAddDeviceSignHexColor @"#0052D9"
 
+#define COLOR_F2F2F2 @"#F2F2F2"
+#define COLOR_016EFF @"#016EFF"
+#define COLOR_000000 @"#000000"
+#define COLOR_A1A7B2 @"#A1A7B2"
+
 #define WeakObj(o) __weak typeof(o) o##Weak = o;
 #define StrongObj(o) __strong typeof(o) o##strong = o##Weak;
 
@@ -93,7 +98,8 @@ typedef NS_ENUM(NSInteger,WCThemeStyle) {
 
 typedef NS_ENUM(NSInteger, TIoTConfigHardwareStyle) {
     TIoTConfigHardwareStyleSmartConfig = 0,
-    TIoTConfigHardwareStyleSoftAP = 1
+    TIoTConfigHardwareStyleSoftAP = 1,
+    TIoTConfigHardwareStyleLLsync = 2
 };
 
 

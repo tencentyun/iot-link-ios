@@ -13,6 +13,7 @@
 #import "TIoTWIFITipViewController.h"
 #import "TIoTStartConfigViewController.h"
 #import "TIoTDeviceWIFITipViewController.h"
+#import "TIoTLLSyncDeviceController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <NetworkExtension/NetworkExtension.h>
 
@@ -325,7 +326,26 @@
             vc.connectGuideData = self.configConnentData;
             [self.navigationController pushViewController:vc animated:YES];
         }
-    } else {
+    }else if (self.configHardwareStyle == TIoTConfigHardwareStyleLLsync) {
+        if (self.step == 2) {
+            TIoTLLSyncDeviceController *vc = [[TIoTLLSyncDeviceController alloc] init];
+            vc.configHardwareStyle = _configHardwareStyle;
+            vc.roomId = self.roomId;
+            vc.currentDistributionToken = self.currentDistributionToken;
+            vc.wifiInfo = [self.wifiInfo copy];
+            vc.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
+            vc.configdata = self.configConnentData;
+            [self.navigationController pushViewController:vc animated:YES];
+        } else {
+            TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
+            vc.wifiInfo = [self.softApWifiInfo copy];
+            vc.roomId = self.roomId;
+            vc.configHardwareStyle = self.configHardwareStyle;
+            vc.connectGuideData = self.configConnentData;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
+    else {
         TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
         vc.wifiInfo = [self.wifiInfo copy];
         vc.roomId = self.roomId;
@@ -404,6 +424,23 @@
                          @"pwdInputHaveButton": @(NO),
                          @"make": @"",
                          @"stepDiscribe": @""
+            };
+        }
+            break;
+            
+        case TIoTConfigHardwareStyleLLsync:
+        {
+            _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
+                         @"wifiInputTitle": @"WIFI",
+                         @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
+                         @"wifiInputHaveButton": @(YES),
+                         @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
+                         @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
+                         @"pwdInputHaveButton": @(NO),
+                         @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
+                         @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
             };
         }
             break;

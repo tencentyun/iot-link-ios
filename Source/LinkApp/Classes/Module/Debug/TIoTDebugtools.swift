@@ -29,7 +29,7 @@ import Lottie
             button.backgroundColor = UIColor.red
             button.setTitle("D", for: UIControl.State.normal)
             button.addTarget(singleTon, action: #selector(showDebugView), for: UIControl.Event.touchUpInside)
-            singleTon.debugWindow.addSubview(button)
+//            singleTon.debugWindow.addSubview(button)
             //LogUI
 //            PTEDashboard.shared().show()
         })

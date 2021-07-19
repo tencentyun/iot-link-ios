@@ -12,6 +12,7 @@
 #import "TIoTConfigScanVC.h"
 #import "TIoTSecureAddDeviceModel.h"
 #import "TIoTGateWayBindDeviceModel.h"
+#import "TIoTLLSyncViewController.h"
 
 @interface QRBlueObject : NSObject
 @property (nonatomic, strong)NSString *productId;
@@ -281,7 +282,15 @@
                 if ([configType isEqualToString:@"softap"]) {
                     [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
                     return;
+                }else if  ([configType isEqualToString:@"llsync"]) {
+                    
+                    [self jumpllsyncVC];
+                    return;
                 }
+            }else {
+//调试使用，正常需要删掉
+//                [self jumpllsyncVC];
+//                return;
             }
         }
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
@@ -344,6 +353,15 @@
     } else {
         vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
     }
+    vc.roomId = self.roomId?:@"";
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)jumpllsyncVC {
+    TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
+    vc.configurationData = self.configData;
+//    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+        
     vc.roomId = self.roomId?:@"";
     [self.navigationController pushViewController:vc animated:YES];
 }
