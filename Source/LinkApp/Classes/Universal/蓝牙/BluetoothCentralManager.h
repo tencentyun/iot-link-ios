@@ -8,6 +8,9 @@
 @optional
 //实时扫描外设（目前扫描10s）
 - (void)scanPerpheralsUpdatePerpherals:(NSArray<CBPeripheral *> *)perphersArr peripheralInfo:(NSMutableArray *)peripheralInfoArray;
+//通用回调
+
+- (void)scanPerpheralsUpdatePerpherals:(NSDictionary<CBPeripheral *, NSDictionary<NSString *,id> *> *)perphersArr;
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray;
 //断开外设

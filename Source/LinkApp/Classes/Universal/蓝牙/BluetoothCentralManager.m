@@ -23,6 +23,8 @@
 @property (nonatomic, strong) CBPeripheral *peripheral;
 /** 所有的设备数组 */
 @property (nonatomic, strong) NSMutableArray *deviceList;
+/** 所有的设备数组,包含设备的广播报文 */
+@property (nonatomic, strong) NSMutableDictionary<CBPeripheral *, NSDictionary<NSString *,id> *> *peripherList;
 /** 链接蓝牙设备后 service 特征数组 */
 @property (nonatomic, strong, readwrite) NSMutableArray <CBPeripheral *>*connectPeripheralArray;   //和业务挂钩
 /** 搜索蓝牙设备 peripheral 数组 */
@@ -44,6 +46,7 @@
 /** 特征z */
 @property (nonatomic, strong) CBCharacteristic *characteristic;
 
+@property (nonatomic, assign) BOOL isLLsync;
 @end
 
 @implementation BluetoothCentralManager
@@ -76,8 +79,11 @@
  扫描周周的设备
  */
 - (void)scanNearPerpherals{
+    if ([self.centralManager isScanning]) {
+        return;
+    }
     WCLog(@"开始扫描四周的设备");
-    
+    self.isLLsync = NO;
     self.maxValue = 0;
     
     [self.deviceList removeAllObjects];
@@ -107,7 +113,10 @@
 }
 
 - (void)scanNearLLSyncService {
-    
+    if ([self.centralManager isScanning]) {
+        return;
+    }
+    self.isLLsync = YES;
     self.maxValue = 0;
     
     [self.deviceList removeAllObjects];
@@ -267,7 +276,11 @@
     switch (central.state){
         case CBManagerStatePoweredOn:{
             //蓝牙已打开,开始扫描外设
-            [self scanNearPerpherals];
+            if (self.isLLsync) {
+                [self scanNearLLSyncService];
+            }else {
+                [self scanNearPerpherals];
+            }
         }
             break;
             
@@ -303,10 +316,12 @@
         return;
     }
     
-    NSArray *kCBAdvDataServiceUUIDs = advertisementData[@"kCBAdvDataServiceUUIDs"];
-//    CBUUID *firstsssuud = kCBAdvDataServiceUUIDs.firstObject;
-    if (![kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kServiceUUID]]) {
-        return;
+    if (self.isLLsync) {
+        NSArray *kCBAdvDataServiceUUIDs = advertisementData[@"kCBAdvDataServiceUUIDs"];
+        //    CBUUID *firstsssuud = kCBAdvDataServiceUUIDs.firstObject;
+        if (![kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kServiceUUID]]) {
+            return;
+        }
     }
     
     NSMutableString* nsmstring=[NSMutableString stringWithString:@"\n"];
@@ -430,6 +445,12 @@
         if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:peripheralInfo:)]) {
             [self.delegate scanPerpheralsUpdatePerpherals:self.deviceList.copy peripheralInfo:self.peripheralArray];
         }
+    
+    //设备与广播报文绑定
+    if ([self.delegate respondsToSelector:@selector(scanPerpheralsUpdatePerpherals:)]) {
+        [self.peripherList setObject:advertisementData forKey:peripheral];
+        [self.delegate scanPerpheralsUpdatePerpherals:self.peripherList];
+    }
 //    }
 
 //    NSArray *serviceUUIDArr = advertisementData[@"kCBAdvDataServiceUUIDs"];
@@ -566,7 +587,7 @@
                 [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
             });
             
-        }else {
+        }else if (p & CBCharacteristicPropertyNotify) {
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
         }
         
@@ -655,6 +676,15 @@
 }
 
 #pragma mark setter or getter
+
+- (NSMutableDictionary *)peripherList {
+    if (!_peripherList) {
+        _peripherList = [NSMutableDictionary dictionary];
+    }
+    
+    return _peripherList;
+}
+
 -(NSMutableArray *)deviceList{
     if (!_deviceList) {
         _deviceList = [NSMutableArray array];

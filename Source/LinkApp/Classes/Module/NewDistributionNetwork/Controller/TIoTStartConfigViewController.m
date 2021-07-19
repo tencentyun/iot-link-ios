@@ -421,6 +421,25 @@ static dispatch_once_t onceToken;
         }
             break;
             
+        case TIoTConfigHardwareStyleLLsync:
+        {
+            _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
+                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                         @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
+                         @"wifiInputTitle": @"WIFI",
+                         @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
+                         @"wifiInputHaveButton": @(YES),
+                         @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
+                         @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
+                         @"pwdInputHaveButton": @(NO),
+                         @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
+                         @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
+            };
+            [self setupUI];
+            [self tapConfirm];
+        }
+            break;
+            
         default:
             break;
     }
