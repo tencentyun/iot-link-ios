@@ -78,6 +78,21 @@
     });
 }
 
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+    //去重
+    if (self.sc) {
+        [self.sc stopAddDevice];
+    }
+    if (self.softAp) {
+        [self.softAp stopAddDevice];
+    }
+}
+
+- (void)dealloc {
+    [self releaseAlloc];
+}
 #pragma mark -
 
 - (CLLocationManager *)locationManager
@@ -156,20 +171,14 @@
     
     if ([sender.titleLabel.text isEqualToString:@"开始配网1"]) {
         
-        NSAssert(self.wifiInfo[@"name"] && self.wifiInfo[@"bssid"] && self.password.hasText, @"未获取到必要参数");
+        NSAssert(self.wifiInfo[@"name"] && self.wifiInfo[@"bssid"] && self.password.hasText && ![NSString isNullOrNilWithObject:self.networkToken], @"未获取到必要参数");
         
         sender.enabled = NO;
         
-//        self.sc = [[TIoTCoreSmartConfig alloc] initWithSSID:self.wifiInfo[@"name"] PWD:self.password.text BSSID:self.wifiInfo[@"bssid"]];
-        
         [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@"配网中"];
-        self.sc = [[TIoTCoreSmartConfig alloc] initWithSSID:self.SSID.text PWD:self.password.text BSSID:self.wifiInfo[@"bssid"]];
+        self.sc = [[TIoTCoreSmartConfig alloc] initWithSSID:self.SSID.text PWD:self.password.text BSSID:self.wifiInfo[@"bssid"] Token:self.networkToken?:@""];
         _sc.delegate = self;
         __weak __typeof(self)weakSelf = self;
-        self.sc.updConnectBlock = ^(NSString * _Nonnull ipaAddrData) {
-            [weakSelf createSoftAPWith:ipaAddrData];
-            
-        };
         self.sc.connectFaildBlock = ^{
             [weakSelf connectFaildResult:NSLocalizedString(@"connect_fail", @"连接失败")];
         };
@@ -177,21 +186,6 @@
         
     }
     
-}
-
-- (void)createSoftAPWith:(NSString *)ip {
-
-    NSString *apSsid = self.SSID.text;
-    NSString *apPwd = self.password.text;
-    
-    self.softAp = [[TIoTCoreSoftAP alloc]initWithSSID:apSsid PWD:apPwd];
-    self.softAp.delegate = self;
-    self.softAp.gatewayIpString = ip;
-    __weak __typeof(self)weakSelf = self;
-    self.softAp.udpFaildBlock = ^{
-        [weakSelf connectFaildResult:[NSString stringWithFormat:@"udp%@",NSLocalizedString(@"connect_fail", @"连接失败")]];
-    };
-    [self.softAp startAddDevice];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
@@ -215,6 +209,7 @@
 //    [vc setValue:self.wifiInfo[@"name"] forKey:@"wName"];
     [vc setValue:self.password.text forKey:@"wPassword"];
     [vc setValue:self.networkToken forKey:@"wToken"];
+    [vc setValue:self.wifiInfo[@"bssid"]?:@"" forKey:@"wBssid"];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -286,27 +281,6 @@
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
     NSLog(@"连接成功");
-        
-        //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        self.tokenTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-        dispatch_source_set_timer(self.tokenTimer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
-        dispatch_source_set_event_handler(self.tokenTimer, ^{
-            
-            if (self.sendTokenCount >= 5) {
-                dispatch_source_cancel(self.tokenTimer);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                   [self connectFaildResult:@"模组有问题"];
-                });
-                return ;
-            }
-            
-    //        [socket sendData: [NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.wifiInfo[@"token"]} options:NSJSONWritingPrettyPrinted error:nil]];
-            
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.networkToken} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
-            self.sendTokenCount ++;
-        });
-        dispatch_resume(self.tokenTimer);
 
 }
 
@@ -321,7 +295,7 @@
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-    NSLog(@"嘟嘟嘟 %@",dictionary);
+    NSLog(@"设备成功返回数据 :%@",dictionary);
     
     if ([dictionary[@"cmdType"] integerValue] == 2) {
         //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
@@ -346,9 +320,6 @@
 
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
-    if (self.tokenTimer) {
-        dispatch_source_cancel(self.tokenTimer);
-    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
@@ -409,8 +380,14 @@
 }
 
 - (void)releaseAlloc{
-    self.tokenTimer = nil;
     self.timer2 = nil;
+    //去重
+    if (self.sc) {
+        [self.sc stopAddDevice];
+    }
+    if (self.softAp) {
+        [self.softAp stopAddDevice];
+    }
 }
 
 @end
