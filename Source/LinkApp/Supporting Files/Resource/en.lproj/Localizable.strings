@@ -910,3 +910,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "delete_acccount_month" = "M";
 "delete_acccount_day" = "D";
 
+"llsync_network_title" = "蓝牙辅助配网";
