@@ -100,6 +100,11 @@
         
         CGFloat kImageHeight = bgmImageView.frame.size.height;
         CGFloat kImageWeitht = bgmImageView.frame.size.width;
+        if (kImageHeight == 0 || kImageWeitht == 0) {
+            self.imgView.image = [UIImage imageNamed:@"new_distri_tip"];
+            kImageHeight = self.imgView.frame.size.height;
+            kImageWeitht = self.imgView.frame.size.width;
+        }
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         CGFloat kPadding = 16;
         [self.scrollView addSubview:self.imgView];
