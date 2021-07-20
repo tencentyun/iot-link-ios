@@ -213,6 +213,7 @@
     [self disappearCustomView];
     if (self.addDeviceBlock) {
         self.addDeviceBlock();
+        [self removeFromSuperview];
     }
 }
 
@@ -221,6 +222,7 @@
     [self disappearCustomView];
     if (self.scanDeviceBlock) {
         self.scanDeviceBlock();
+        [self removeFromSuperview];
     }
 }
 
