@@ -47,6 +47,7 @@
 @property (nonatomic, strong) CBCharacteristic *characteristic;
 
 @property (nonatomic, assign) BOOL isLLsync;
+@property (nonatomic, strong) CBCharacteristic *currentLLSyncCharacteristic;
 @end
 
 @implementation BluetoothCentralManager
@@ -161,6 +162,7 @@
 
 /// 连接指定的设备
 - (void)connectBluetoothPeripheral:(CBPeripheral *)peripheral {
+    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].delegate.window withMessage:@"连接蓝牙中"];
     self.peripheral = peripheral;
     WCLog(@"----尝试连接设备----\n%@", peripheral);
     [self.centralManager connectPeripheral:peripheral
@@ -254,6 +256,16 @@
         [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     }
 }
+
+- (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfo:(NSString *)type {
+    if (self.currentLLSyncCharacteristic) {
+        
+        NSData *data = [NSString convertHexStrToData:type];
+        // 将指令写入蓝牙
+        [peripheral writeValue:data forCharacteristic:self.currentLLSyncCharacteristic type:CBCharacteristicWriteWithResponse];
+    }
+}
+
 
 //MARK:设置蓝牙最大传输单元
 - (void)setMacTransValue:(NSInteger)maxValue {
@@ -469,7 +481,7 @@
 #pragma mark ------------------------连接成功、失败、终端
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     [self stopScan];
-    
+    [MBProgressHUD dismissInView:[UIApplication sharedApplication].delegate.window];
     [MBProgressHUD showSuccess:[NSString stringWithFormat:@"%@ %@ %@",NSLocalizedString(@"bluetoothDevice", @"蓝牙设备"),NSLocalizedString(@"connected", @"已连接"),peripheral.name]];
     
     // 设置设备代理
@@ -579,21 +591,28 @@
             
             // 获取特征值发送数据（用于测试，正式可以注释下面两行代码）
             // 发送下行指令(发送一条)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
                 NSData *data = [NSString convertHexStrToData:@"E0"];
 //                NSData *data = [@"E0" dataUsingEncoding:NSUTF8StringEncoding];
                 // 将指令写入蓝牙
                 [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-            });
+            });*/
+            //保存当前llsync LLDeviceInfo
+            self.currentLLSyncCharacteristic = characteristic;
             
         }else if (p & CBCharacteristicPropertyNotify) {
+            //订阅当前llsync LLEvent通知。 通过LLDeviceInfo给设备发送数据，通过LLEvent获取设备返回的数据
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
         }
         
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
     
+    //发现服务后的回调
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didDiscoverCharacteristicsWithperipheral:ForService:)]) {
+        [self.delegate didDiscoverCharacteristicsWithperipheral:peripheral ForService:service];
+    }
 }
 
 // 写入数据后的回调方法

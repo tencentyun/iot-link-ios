@@ -16,6 +16,7 @@
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral;
 
+- (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service;
 //发送数据后，蓝牙回调
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString;
 
@@ -94,4 +95,9 @@
  退出H5页面后，清楚连接设备数据
  */
 - (void)clearConnectedDevices;
+
+/*
+ * 添加LLSync写数据接口
+ */
+- (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfo:(NSString *)type ;
 @end

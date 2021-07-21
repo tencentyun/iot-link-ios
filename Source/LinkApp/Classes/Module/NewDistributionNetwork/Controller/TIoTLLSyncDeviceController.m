@@ -24,10 +24,20 @@
 @property (nonatomic, strong) UICollectionView *collectionView; //推荐房间列表
 @property (nonatomic, copy) NSArray<CBPeripheral *> *blueDevices; //推荐房间列表
 @property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
+
+@property (nonatomic, strong) NSString *currentProductId; //当前连接的产品id
+@property (nonatomic, strong) NSString *currentDevicename; //当前连接的设备名称
+@property (nonatomic, strong) CBPeripheral *currentConnectedPerpheral; //当前连接的设备
 @property (nonatomic, weak)BluetoothCentralManager *blueManager;
+
+@property (nonatomic, strong) TIoTStartConfigViewController *resultvc; //当前连接的设备
 @end
 
 @implementation TIoTLLSyncDeviceController
+
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -184,12 +194,12 @@
 //    vc.configConnentData = self.configdata;
 //    [self.navigationController pushViewController:vc animated:YES];
     
-    TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
-    vc.wifiInfo = [self.wifiInfo copy];
-    vc.roomId = self.roomId;
-    vc.configHardwareStyle = self.configHardwareStyle;
-    vc.connectGuideData = self.configdata;
-    [self.navigationController pushViewController:vc animated:YES];
+    self.resultvc = [[TIoTStartConfigViewController alloc] init];
+    self.resultvc.wifiInfo = [self.wifiInfo copy];
+    self.resultvc.roomId = self.roomId;
+    self.resultvc.configHardwareStyle = self.configHardwareStyle;
+    self.resultvc.connectGuideData = self.configdata;
+    [self.navigationController pushViewController:self.resultvc animated:YES];
     
 }
 
@@ -252,10 +262,10 @@
         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
         NSString *productstr = [NSString stringFromHexString:producthex];
+        self.currentProductId = productstr;
         
         [self.blueManager connectBluetoothPeripheral:device];
-        
-        [self nextClick:nil];
+
     }
 }
 
@@ -277,16 +287,91 @@
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
-    
+    self.currentConnectedPerpheral = connectedPerpheral;
 }
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
-    
+    self.currentConnectedPerpheral = nil;
+}
+
+- (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service {
+    if (self.currentConnectedPerpheral) {
+        
+        [self nextClick:nil];
+        ///设置UI进度
+        self.resultvc.connectStepTipView.step = 1;
+        
+        [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
+    }
 }
 
 //发送数据后，蓝牙回调
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
-    
+    if (self.currentConnectedPerpheral) {
+        NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+        
+        NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
+        if ([cmdtype isEqualToString:@"08"]) {
+            //设备信息返回了，此时需要下一步设置wifi模式
+            NSString *devicenamehex = [hexstr substringWithRange:NSMakeRange(14, hexstr.length-14)];
+            NSString *devicenamestr = [NSString stringFromHexString:devicenamehex];
+            self.currentDevicename = devicenamestr;
+            
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E101"];
+        }else if ([cmdtype isEqualToString:@"E0"] || [cmdtype isEqualToString:@"e0"]) {
+            //设备WIFI设置模式成功了，此时需要下一步设置wifi pass下发给设备
+            NSString *wifiname = self.wifiInfo[@"name"];//@"L-004";
+            NSString *wifipass = self.wifiInfo[@"pwd"];//@"iot2021$";
+            
+            NSString *wifinamehex = [NSString hexStringFromString:wifiname];
+            NSString *wifipasshex = [NSString hexStringFromString:wifipass];
+            
+            NSString *wifinamelength = [NSString getHexByDecimal:wifinamehex.length/2];
+            while ([wifinamelength length]<2) {
+                wifinamelength = [NSString stringWithFormat:@"0%@",wifinamelength];
+            }
+            NSString *wifipasslength = [NSString getHexByDecimal:wifipasshex.length/2];
+            while ([wifipasslength length]<2) {
+                wifipasslength = [NSString stringWithFormat:@"0%@",wifipasslength];
+            }
+            NSString *totallength = [NSString getHexByDecimal:wifinamehex.length/2 + wifipasshex.length/2 + 2];
+            while ([totallength length]<4) {
+                totallength = [NSString stringWithFormat:@"0%@",totallength];
+            }
+            
+            NSString *cmdtype = [NSString stringWithFormat:@"E2%@%@%@%@%@",totallength, wifinamelength, wifinamehex, wifipasslength, wifipasshex];
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:cmdtype];
+            
+            ///设置UI进度
+            self.resultvc.connectStepTipView.step = 2;
+            
+        }else if ([cmdtype isEqualToString:@"E1"] || [cmdtype isEqualToString:@"e1"]) {
+            //已发送给设备WIFI密钥了，此时需要下一步让设备连接Wi-Fi
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+            
+        }else if ([cmdtype isEqualToString:@"E2"] || [cmdtype isEqualToString:@"e2"]) {
+            //设备连好wifi了，此时需要下一步给设备下发Token
+            
+            NSString *bingwifitoken = self.wifiInfo[@"token"];
+            NSString *bingwifitokenhex = [NSString hexStringFromString:bingwifitoken];
+            NSString *totallength = [NSString getHexByDecimal:bingwifitokenhex.length/2];
+            while ([totallength length]<4) {
+                totallength = [NSString stringWithFormat:@"0%@",totallength];
+            }
+            NSString *cmdtype = [NSString stringWithFormat:@"E4%@%@",totallength, bingwifitokenhex];
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:cmdtype];
+            
+        }else if ([cmdtype isEqualToString:@"E3"] || [cmdtype isEqualToString:@"e3"]) {
+            //设备通过token已经绑定，app开始轮训结果
+            
+            NSDictionary *deviceData = @{@"productId": self.currentProductId, @"deviceName": self.currentDevicename};
+            [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
+            
+        }else {
+            //如果有失败的话，获取设备配网日志
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+        }
+    }
 }
 
 @end
