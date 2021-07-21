@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c41aab8_60e6df27",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceCell.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T11:08:33Z",
+      "side": 1,
+      "message": "新添加的文件，作者信息看是否删除",
+      "range": {
+        "startLine": 6,
+        "startChar": 34,
+        "endLine": 6,
+        "endChar": 40
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c10e7c2c_d02338a4",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceCell.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T11:08:33Z",
+      "side": 1,
+      "message": "注释代码调试完可删除",
+      "range": {
+        "startLine": 91,
+        "startChar": 45,
+        "endLine": 91,
+        "endChar": 46
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13aa3bfc_6d729e1c",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T11:08:33Z",
+      "side": 1,
+      "message": "注调试释代码可删除",
+      "range": {
+        "startLine": 96,
+        "startChar": 29,
+        "endLine": 96,
+        "endChar": 30
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b43731_d8cd77ba",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncViewController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T11:08:33Z",
+      "side": 1,
+      "message": "注释代码可删除",
+      "range": {
+        "startLine": 103,
+        "startChar": 29,
+        "endLine": 103,
+        "endChar": 30
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
