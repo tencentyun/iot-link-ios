@@ -57,7 +57,7 @@ static NSString *itemId3 = @"i_ooo454";
 @end
 
 
-@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate>
+@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate,TIoTTRTCUIManageDelegate,TRTCCallingViewDelegate>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentLogTipLabel;
 @property (nonatomic,strong) UIImageView *bgView;//背景
@@ -435,7 +435,7 @@ static NSString *itemId3 = @"i_ooo454";
 //        if (self.configData.allKeys.count == 0) {
 //            [self addEmptyCandidateModelTipView];
 //        }else {
-//            
+//
 //        }
         [self loadData:self.configData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
@@ -555,8 +555,97 @@ static NSString *itemId3 = @"i_ooo454";
     if (isTRTCDevice) {
         
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
-        
+        [TIoTTRTCUIManage sharedManager].delegate = self;
     }
+}
+
+#pragma mark - TIoTTRTCUIManageDelegate 代理方法
+- (void)presentAudioVCWithUserID:(NSString *)userID {
+    TRTCCallingAuidoViewController *callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:userID];
+    callAudioVC.actionDelegate = self;
+    callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:callAudioVC animated:NO completion:^{}];
+}
+
+- (void)presentVideoVCWithUserID:(NSString *)userID {
+    TRTCCallingVideoViewController *callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:userID];
+    callVideoVC.actionDelegate = self;
+    callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:callVideoVC animated:NO completion:^{}];
+}
+
+#pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
+- (void)didAcceptJoinRoom {
+    //2.根据UI决定是否进入房间
+    
+    //开始准备进房间，通话中状态
+    NSDictionary *param = @{@"DeviceId":[TIoTTRTCUIManage sharedManager].deviceParam.deviceName};
+    
+    [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
+        
+        NSDictionary *tempDic = responseObject[@"TRTCParams"];
+        TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
+        [[TIoTTRTCSessionManager sharedManager] configRoom:model];
+        [[TIoTTRTCSessionManager sharedManager] enterRoom];
+        
+        //取消计时器
+        [[TIoTTRTCUIManage sharedManager] cancelTimer];
+        
+         //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
+        [TIoTTRTCUIManage sharedManager].isEnterError = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([TIoTTRTCUIManage sharedManager].isEnterError == YES) {
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if ([TIoTTRTCUIManage sharedManager].callAudioVC == topVC) {
+                    [[TIoTTRTCUIManage sharedManager].callAudioVC beHungUp];
+                }else {
+                    [[TIoTTRTCUIManage sharedManager].callVideoVC beHungUp];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[TIoTTRTCUIManage sharedManager] exitRoom:[TIoTTRTCUIManage sharedManager].deviceParam._sys_userid];
+                });
+            }
+        });
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        UIViewController *topVC = [TIoTCoreUtil topViewController];
+        if ([TIoTTRTCUIManage sharedManager].callAudioVC == topVC) {
+            [[TIoTTRTCUIManage sharedManager].callAudioVC hungUp];
+        }else {
+            [[TIoTTRTCUIManage sharedManager].callVideoVC hungUp];
+        }
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[TIoTTRTCUIManage sharedManager] exitRoom:[TIoTTRTCUIManage sharedManager].deviceParam._sys_userid];
+        });
+    }];
+}
+
+- (void)didRefuseedRoom {
+    
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free) {
+        if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_audio) {
+            if ([TIoTTRTCUIManage sharedManager].tempModel._sys_audio_call_status.intValue != 2) {
+                [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:[TIoTTRTCUIManage sharedManager].deviceIDTempStr];
+            }
+        }else if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_video) {
+            if ([TIoTTRTCUIManage sharedManager].tempModel._sys_video_call_status.intValue != 2) {
+                [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:[TIoTTRTCUIManage sharedManager].deviceIDTempStr];
+            }
+
+        }
+
+        [[TIoTTRTCUIManage sharedManager] cancelTimer];
+    }
+
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+        if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_audio) {
+            [[TIoTTRTCUIManage sharedManager] exitRoom:@""];
+        }else if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_video) {
+            [[TIoTTRTCUIManage sharedManager] exitRoom:@""];
+        }
+    }
+    
 }
 
 //收到上报
