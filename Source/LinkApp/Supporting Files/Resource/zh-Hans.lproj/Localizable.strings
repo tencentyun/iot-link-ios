@@ -904,3 +904,4 @@
 
 "llsync_network_title" = "蓝牙辅助配网";
 "llsync_network_tips" = "设备蓝牙";
+"llsync_network_hud" = "连接蓝牙中";

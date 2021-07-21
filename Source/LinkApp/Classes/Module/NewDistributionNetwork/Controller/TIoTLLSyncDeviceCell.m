@@ -2,8 +2,6 @@
 //  TIoTLLSyncDeviceCell.m
 //  LinkApp
 //
-//  Created by eagleychen on 2021/7/20.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTLLSyncDeviceCell.h"
@@ -86,23 +84,10 @@
 
 - (void)setIsSelected:(BOOL)isSelected {
     _isSelected = isSelected;
-    if (isSelected) {
-//        self.weekLabel.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
-//        self.weekLabel.textColor = [UIColor colorWithHexString:COLOR_A1A7B2];
-    }else {
-//        self.weekLabel.layer.borderColor = [UIColor colorWithHexString:@"#E7E8EB"].CGColor;
-//        self.weekLabel.textColor = [UIColor colorWithHexString:COLOR_A1A7B2];
-    }
 }
 
 - (void)setSelected:(BOOL)selected {
-    if (selected == YES) {
-//        self.weekLabel.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
-//        self.weekLabel.textColor = [UIColor colorWithHexString:COLOR_A1A7B2];
-    }else {
-//        self.weekLabel.layer.borderColor = [UIColor colorWithHexString:@"#E7E8EB"].CGColor;
-//        self.weekLabel.textColor = [UIColor colorWithHexString:COLOR_A1A7B2];
-    }    
+    
 }
 
 @end

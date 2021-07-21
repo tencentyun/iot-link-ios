@@ -2,8 +2,6 @@
 //  TIoTLLSyncDeviceController.h
 //  LinkApp
 //
-//  Created by eagleychen on 2021/7/19.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

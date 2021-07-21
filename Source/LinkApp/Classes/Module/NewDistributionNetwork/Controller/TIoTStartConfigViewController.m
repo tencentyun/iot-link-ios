@@ -6,7 +6,6 @@
 
 #import "TIoTStartConfigViewController.h"
 #import "TIoTStepTipView.h"
-#import "TIoTConnectStepTipView.h"
 #import "TIoTConfigResultViewController.h"
 #import <NetworkExtension/NEHotspotConfigurationManager.h>
 
@@ -18,7 +17,6 @@
 
 @property (nonatomic, strong) TIoTStepTipView *stepTipView;
 
-@property (nonatomic, strong) TIoTConnectStepTipView *connectStepTipView;
 
 @property (nonatomic, strong) NSDictionary *dataDic;
 
@@ -181,7 +179,10 @@
 
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
-    dispatch_source_cancel(self.timer);
+    if (self.timer) {
+        dispatch_source_cancel(self.timer);
+    }
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -426,17 +427,9 @@ static dispatch_once_t onceToken;
             _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
                          @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
                          @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
-                         @"wifiInputTitle": @"WIFI",
-                         @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
-                         @"wifiInputHaveButton": @(YES),
-                         @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
-                         @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
-                         @"pwdInputHaveButton": @(NO),
-                         @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
-                         @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
+                         @"connectStepTipArr": @[NSLocalizedString(@"phone_device_connect", @"手机与设备连接成功"), NSLocalizedString(@"send_DeveceMassge", @"向设备发送信息成功"), NSLocalizedString(@"device_clound_connect", @"设备连接云端成功"), NSLocalizedString(@"init_success", @"初始化成功")]
             };
             [self setupUI];
-            [self tapConfirm];
         }
             break;
             
