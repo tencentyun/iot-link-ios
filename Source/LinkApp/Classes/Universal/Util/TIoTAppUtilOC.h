@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIoTAppUtilOC : NSObject 
 + (void)checkNewVersion;
 + (void)handleOpsenUrl:(NSString *)result;
++ (BOOL)checkLogin;
 @end
 
 NS_ASSUME_NONNULL_END

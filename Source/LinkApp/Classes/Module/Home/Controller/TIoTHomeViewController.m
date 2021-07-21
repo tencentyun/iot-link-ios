@@ -35,6 +35,7 @@
 #import "TIoTFamilyInfoVC.h"
 #import "TIoTEquipmentNewCell.h"
 #import "TIoTShortcutView.h"
+#import "TIoTCoreUtil.h"
 
 @import Lottie;
 

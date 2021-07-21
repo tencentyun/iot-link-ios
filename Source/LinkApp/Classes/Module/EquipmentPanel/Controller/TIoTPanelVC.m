@@ -435,7 +435,7 @@ static NSString *itemId3 = @"i_ooo454";
 //        if (self.configData.allKeys.count == 0) {
 //            [self addEmptyCandidateModelTipView];
 //        }else {
-//            
+//
 //        }
         [self loadData:self.configData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
@@ -555,7 +555,6 @@ static NSString *itemId3 = @"i_ooo454";
     if (isTRTCDevice) {
         
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
-        
     }
 }
 

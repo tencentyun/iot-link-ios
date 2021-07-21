@@ -6,9 +6,7 @@
 
 #import "TIoTWebSocketManage.h"
 #import "TIoTAppEnvironment.h"
-#import "UIViewController+GetController.h"
-#import "TIoTNavigationController.h"
-#import "TIoTMainVC.h"
+#import "TIoTAppUtilOC.h"
 #import "TIoTCoreRequestObj.h"
 #import "ReachabilityManager.h"
 #import "TIoTCoreSocketCover.h"
@@ -16,6 +14,7 @@
 #import "TIOTTRTCModel.h"
 #import "TIoTTRTCSessionManager.h"
 #import "TIoTTRTCUIManage.h"
+#import "TIoTCoreUtil.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -123,7 +122,7 @@ static NSString *heartBeatReqID = @"5002";
 #pragma mark - QCSocketManagerDelegate delegete
 - (void)socketDidOpen:(TIoTCoreSocketManager *)manager {
     
-    WCLog(@"************************** socket 连接成功************************** ");
+    QCLog(@"************************** socket 连接成功************************** ");
     [HXYNotice addHeartBeatListener:self reaction:@selector(initHeartBeat:)];
     [HXYNotice addActivePushListener:self reaction:@selector(registerDevicecActive:)];
     
@@ -131,16 +130,17 @@ static NSString *heartBeatReqID = @"5002";
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error {
-    
+    QCLog(@"************************** socket 连接失败************************** ");
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didReceiveMessage:(id)message {
+    QCLog(@"************************** socket 接收消息成功************************** ");
     [self handleReceivedMessage:message];
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     
-    WCLog(@"************************** socket连接断开************************** ");
+    QCLog(@"************************** socket连接断开************************** ");
     [self SRWebSocketClose];
     
 }
@@ -168,143 +168,7 @@ static NSString *heartBeatReqID = @"5002";
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
     
-    //检测是否TRTC设备，是否在呼叫中
-    NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
-    NSLog(@"----111---%@",payloadDic);
-    NSLog(@"----222---%@",[TIoTCoreUserManage shared].userId);
-    TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
-    model.params.deviceName = deviceInfo[@"DeviceId"];
-    if (model.params._sys_userid.length < 1) {
-        model.params._sys_userid = deviceInfo[@"DeviceId"];
-    }
-
-    
-    if ([payloadDic.allKeys containsObject:@"params"]) {
-        NSDictionary *paramsDic = payloadDic[@"params"];
-        if (paramsDic[@"_sys_audio_call_status"]) {
-            [TIoTCoreUserManage shared].sys_call_status = model.params._sys_audio_call_status;
-        }else if (paramsDic[@"_sys_video_call_status"]) {
-            [TIoTCoreUserManage shared].sys_call_status = model.params._sys_video_call_status;
-        }
-    }
-    
-    if ([model.method isEqualToString:@"report"]) {
-        
-        NSString *extrainfo = model.params._sys_extra_info;
-        if (extrainfo) {
-            //被拒绝就退出房间
-            TIOTtrtcRejectModel *rejectModel = [TIOTtrtcRejectModel yy_modelWithJSON:extrainfo];
-            if ([rejectModel.rejectUserId isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
-            }
-            return;
-        }
-
-        
-        if (!model.params._sys_audio_call_status && !model.params._sys_video_call_status) {
-            //防止没上报status时候，走到了status=0的情况，新增if需要加在次前面，后面的status避免新增加判断
-            return;
-        }
-        
-        
-        if (model.params._sys_audio_call_status.intValue == 1 || model.params._sys_video_call_status.intValue == 1) {
-            
-            
-            if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES && (![NSString isNullOrNilWithObject:[TIoTTRTCUIManage sharedManager].deviceID] && [[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName])) {
-                //用户1和用户2（不同账号）同时呼叫设备,deviceA 接听，则会上报对应callstatus属性为1 和 先接收到的比方说是用户1的userid，对应的用户1会调用App::IotRTC::CallDevice加入房间，另一个用户2收到的上报消息查看userid不是自己，则提示对方正忙…，并退出
-                if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                    //TRTC设备需要通话，开始通话,防止不是trtc设备的通知
-                    [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        
-                        [MBProgressHUD showError:reason];
-                    }];
-                }else {
-                    [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        [MBProgressHUD showError:reason];
-                    }];
-                }
-            }else {
-                
-                if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {
-                    [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
-                        [MBProgressHUD showError:reason];
-                    }];
-                }else {
-                    NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-                    for (NSString *userIdString in userIdArray) {
-                        model.params._sys_userid = userIdString?:@"";
-                        if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                            [[TIoTTRTCUIManage sharedManager] preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
-                                [MBProgressHUD showError:reason];
-                            }];
-                        }
-                        
-                    }
-                }
-                
-            }
-        }else if (model.params._sys_audio_call_status.intValue == 2 || model.params._sys_video_call_status.intValue == 2) {
-            
-            NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-            for (NSString *userIdString in userIdArray) {
-
-                model.params._sys_userid = userIdString?:@"";
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
-            }
-            
-        }else if (model.params._sys_audio_call_status.intValue == 0 || model.params._sys_video_call_status.intValue == 0) {
-            
-            NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-            for (NSString *userIdString in userIdArray) {
-
-                model.params._sys_userid = userIdString?:@"";
-                if ([TIoTTRTCUIManage sharedManager].isEnterError == NO) {
-                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                        
-                        if ([[TIoTTRTCUIManage sharedManager].deviceID isEqualToString:model.params.deviceName]) {
-                            [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                                [MBProgressHUD showError:reason];
-                            }];
-                        }
-                        
-                    }else if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
-                           //防止case 3 中另一个设备 呼叫正在调起通话页面的APP
-                            [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                                [MBProgressHUD showError:reason];
-                            }];
-                        
-                    }
-                    
-                }
-
-            }
-            
-            
-        }
-        
-    }
-    
-    //异常
-    if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
-        
-        NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
-        for (NSString *userIdString in userIdArray) {
-
-            model.params._sys_userid = userIdString?:@"";
-            if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
-                [[TIoTTRTCUIManage sharedManager] preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                    [MBProgressHUD showError:reason];
-                }];
-            }
-
-        }
-    }
+    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
 
 }
 
@@ -423,20 +287,8 @@ static NSString *heartBeatReqID = @"5002";
 
 //判断是否重新登录
 - (BOOL)needLogin{
-    if ([[TIoTCoreUserManage shared].expireAt integerValue] <= [[NSString getNowTimeString] integerValue] && [TIoTCoreUserManage shared].accessToken.length > 0) {
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"warm_prompt", @"温馨提示") message:NSLocalizedString(@"login_timeout", @"登录已过期") preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"relogin", @"重新登录") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-            
-            [[TIoTAppEnvironment shareEnvironment] loginOut];
-            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
-            [UIViewController getCurrentViewController].view.window.rootViewController = nav;
-        }];
-        [alert addAction:alertA];
-        [[UIViewController getCurrentViewController] presentViewController:alert animated:YES completion:nil];
-        return YES;
-    }
-    return NO;
+    
+    return [TIoTAppUtilOC checkLogin];
 }
 
 //设备监听

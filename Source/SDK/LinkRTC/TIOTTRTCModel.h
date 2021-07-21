@@ -36,4 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIOTtrtcRejectModel : NSObject
 @property (nonatomic, strong) NSString *rejectUserId;
 @end
+
+
 NS_ASSUME_NONNULL_END

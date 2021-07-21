@@ -8,6 +8,10 @@
 #import "TIoTCoreParts.h"
 #import "TIOTTRTCModel.h"
 
+/**
+ TRTC 设备状态保存
+ */
+
 NS_ASSUME_NONNULL_BEGIN
 
 //0 表示设备空闲或者不愿意接听
