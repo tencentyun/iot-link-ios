@@ -16,6 +16,24 @@
       "revId": "73c70c84b8f18b9544e371492f4c903b3a981e51",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff5749f_3eafeb42",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/TIoTCoreAddDevice.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T11:45:54Z",
+      "side": 1,
+      "message": "好的，我记录下，合并完后再提一个change用来调整配网SDK接口",
+      "parentUuid": "b869dbc6_2c3fd85f",
+      "revId": "73c70c84b8f18b9544e371492f4c903b3a981e51",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
