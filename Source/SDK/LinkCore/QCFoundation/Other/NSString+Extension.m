@@ -779,7 +779,66 @@
 
 }
 
+//10进制转16进制
++ (NSString *)getHexByDecimal:(NSInteger)decimal {
+    
+    NSString *hex =@"";
+    NSString *letter;
+    NSInteger number;
+    for (int i = 0; i<9; i++) {
+        
+        number = decimal % 16;
+        decimal = decimal / 16;
+        switch (number) {
+                
+            case 10:
+                letter =@"A"; break;
+            case 11:
+                letter =@"B"; break;
+            case 12:
+                letter =@"C"; break;
+            case 13:
+                letter =@"D"; break;
+            case 14:
+                letter =@"E"; break;
+            case 15:
+                letter =@"F"; break;
+            default:
+                letter = [NSString stringWithFormat:@"%ld", number];
+        }
+            
+        hex = [letter stringByAppendingString:hex];
+        if (decimal == 0) {
+            
+            break;
+        }
+    }
+    return hex;
+}
+
+
 // 十六进制转换为普通字符串的。
++ (NSString*)stringFromHexString:(NSString*)hexString
+{
+    NSMutableString *strAscii = [NSMutableString string];
+    for (int i=0;i<hexString.length;i+=2) {
+        NSString *charValue = [hexString substringWithRange:NSMakeRange(i,2)];
+        unsigned int _byte;
+        [[NSScanner scannerWithString:charValue] scanHexInt: &_byte];
+        if (_byte >= 32 && _byte < 127) {
+            [strAscii appendFormat:@"%c", _byte];
+            
+        } else if(_byte == 0) {
+            [strAscii appendString:@"NUL"];
+        } else {
+            [strAscii appendFormat:@"[%d]", _byte];
+        }
+    }
+    NSLog(@"Hex: %@", hexString);
+    NSLog(@"Ascii: %@", strAscii);
+    return strAscii;
+}
+/*
 + (NSString *)stringFromHexString:(NSString *)hexString { //
     
     char *myBuffer = (char *)malloc((int)[hexString length] / 2 + 1);
@@ -796,7 +855,7 @@
     return unicodeString;
     
     
-}
+}*/
 
 //普通字符串转换为十六进制的。
 
