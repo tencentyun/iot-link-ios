@@ -2,8 +2,6 @@
 //  TIoTLLSyncDeviceController.m
 //  LinkApp
 //
-//  Created by eagleychen on 2021/7/19.
-//  Copyright © 2021 Tencent. All rights reserved.
 //
 
 #import "TIoTLLSyncDeviceController.h"
@@ -24,10 +22,20 @@
 @property (nonatomic, strong) UICollectionView *collectionView; //推荐房间列表
 @property (nonatomic, copy) NSArray<CBPeripheral *> *blueDevices; //推荐房间列表
 @property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
+
+@property (nonatomic, strong) NSString *currentProductId; //当前连接的产品id
+@property (nonatomic, strong) NSString *currentDevicename; //当前连接的设备名称
+@property (nonatomic, strong) CBPeripheral *currentConnectedPerpheral; //当前连接的设备
 @property (nonatomic, weak)BluetoothCentralManager *blueManager;
+
+@property (nonatomic, strong) TIoTStartConfigViewController *resultvc; //当前连接的设备
 @end
 
 @implementation TIoTLLSyncDeviceController
+
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,47 +87,8 @@
 //        make.height.mas_equalTo(24);
     }];
 
-    CGFloat kImageScale = 0.866667; //高/宽
     CGFloat kPadding = 20; //image 边距
-    /*self.imageView = [[UIImageView alloc] init];
-    self.imageView.image = [UIImage imageNamed:@"wifieg"];
-    [self.view addSubview:self.imageView];
-    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(topicLabel.mas_bottom).offset(20);
-        make.left.equalTo(self.scrollView).offset(kPadding);
-        make.right.equalTo(self.scrollView).offset(-kPadding);
-        make.height.mas_equalTo(self.imageView.mas_width).multipliedBy(kImageScale);
-    }];
     
-    CGFloat kWiFiNameHeithtScale =  0.5;//0.487179;//380/780   WiFi 距离顶部高度比例
-    CGFloat kWiFiNameWidthtScale = 0.1;//90/900  WiFi 距离左边距比例
-    CGFloat kWiFiNameHeitht = 0.0769230;//60/780 WiFi 高度比例
-    CGFloat kWiFiNameWidth = 0.6666;//200/900; WiFi 宽度比例
-    CGFloat kImageViewWidth = kScreenWidth - kPadding*2;  //imageview 宽度
-    CGFloat kImageViewheight = kImageViewWidth * kImageScale; //image 高度
-    
-    CGFloat kLeftPadding = kWiFiNameWidthtScale * kImageViewWidth; // 转换到image view的左边距
-    CGFloat kTopPadding = kWiFiNameHeithtScale * kImageViewheight; //转换到image view的顶部距离
-    CGFloat kWiFiHeitht =  kWiFiNameHeitht * kImageViewheight; //转换到image view的高度
-    CGFloat kWiFiWidth = kWiFiNameWidth * kImageViewWidth; //转换到image view的宽度
-    
-    self.WiFiName = [[UILabel alloc]init];
-    self.WiFiName.backgroundColor = [UIColor whiteColor];
-    if (![NSString isNullOrNilWithObject:self.connectGuideData[@"apName"]]) {
-        self.WiFiName.text = self.connectGuideData[@"apName"];
-    }else {
-        self.WiFiName.text = @"tcloud_XXX";
-    }
-    
-    self.WiFiName.font = [UIFont systemFontOfSize:18];
-    [self.imageView addSubview:self.WiFiName];
-    [self.WiFiName mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.imageView.mas_left).offset(kLeftPadding);
-        make.top.equalTo(self.imageView.mas_top).offset(kTopPadding);
-        make.height.mas_equalTo(kWiFiHeitht);
-        make.width.mas_equalTo(kWiFiWidth);
-    }];
-     */
     self.stepLabel = [[UILabel alloc] init];
     NSString *stepLabelText = [self.dataDic objectForKey:@"stepDiscribe"];
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
@@ -134,22 +103,6 @@
         make.left.equalTo(self.scrollView).offset(kPadding);
         make.right.equalTo(self.scrollView).offset(-kPadding);
     }];
-    
-    /*UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextBtn setTitle:NSLocalizedString(@"next", @"下一步") forState:UIControlStateNormal];
-    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
-    [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.layer.cornerRadius = 20;
-    nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
-    [self.view addSubview:nextBtn];
-    [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.scrollView).offset(16);
-        make.bottom.equalTo(self.view).offset(-60);
-        make.width.mas_equalTo(kScreenWidth - 32);
-        make.height.mas_equalTo(40);
-    }];*/
-    
     
     [self.scrollView addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -175,21 +128,12 @@
 
 - (void)nextClick:(UIButton *)sender {
     
-//    TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
-//    vc.step = 3;
-//    vc.configHardwareStyle = _configHardwareStyle;
-//    vc.roomId = self.roomId;
-//    vc.currentDistributionToken = self.currentDistributionToken;
-//    vc.softApWifiInfo = [self.wifiInfo copy];
-//    vc.configConnentData = self.configdata;
-//    [self.navigationController pushViewController:vc animated:YES];
-    
-    TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
-    vc.wifiInfo = [self.wifiInfo copy];
-    vc.roomId = self.roomId;
-    vc.configHardwareStyle = self.configHardwareStyle;
-    vc.connectGuideData = self.configdata;
-    [self.navigationController pushViewController:vc animated:YES];
+    self.resultvc = [[TIoTStartConfigViewController alloc] init];
+    self.resultvc.wifiInfo = [self.wifiInfo copy];
+    self.resultvc.roomId = self.roomId;
+    self.resultvc.configHardwareStyle = self.configHardwareStyle;
+    self.resultvc.connectGuideData = self.configdata;
+    [self.navigationController pushViewController:self.resultvc animated:YES];
     
 }
 
@@ -245,6 +189,8 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 //    self.nameField.text = self.dataArray[indexPath.row];
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
+
     CBPeripheral *device = self.blueDevices[indexPath.row];
     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
     if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -252,10 +198,10 @@
         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
         NSString *productstr = [NSString stringFromHexString:producthex];
+        self.currentProductId = productstr;
         
         [self.blueManager connectBluetoothPeripheral:device];
-        
-        [self nextClick:nil];
+
     }
 }
 
@@ -264,11 +210,6 @@
 
 #pragma mark - BluetoothCentralManagerDelegate
 //实时扫描外设（目前扫描10s）
-//- (void)scanPerpheralsUpdatePerpherals:(NSArray<CBPeripheral *> *)perphersArr peripheralInfo:(NSMutableArray *)peripheralInfoArray {
-//    self.blueDevices = perphersArr;
-//    [self.collectionView reloadData];
-//}
-
 - (void)scanPerpheralsUpdatePerpherals:(NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *)perphersArr {
     self.originBlueDevices = perphersArr;
     
@@ -277,16 +218,93 @@
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
+    self.currentConnectedPerpheral = connectedPerpheral;
     
+    [MBProgressHUD dismissInView:self.view];
 }
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
-    
+    self.currentConnectedPerpheral = nil;
+}
+
+- (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service {
+    if (self.currentConnectedPerpheral) {
+        
+        [self nextClick:nil];
+        ///设置UI进度
+        self.resultvc.connectStepTipView.step = 1;
+        
+        [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
+    }
 }
 
 //发送数据后，蓝牙回调
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
-    
+    if (self.currentConnectedPerpheral) {
+        NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+        
+        NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
+        if ([cmdtype isEqualToString:@"08"]) {
+            //设备信息返回了，此时需要下一步设置wifi模式
+            NSString *devicenamehex = [hexstr substringWithRange:NSMakeRange(14, hexstr.length-14)];
+            NSString *devicenamestr = [NSString stringFromHexString:devicenamehex];
+            self.currentDevicename = devicenamestr;
+            
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E101"];
+        }else if ([cmdtype isEqualToString:@"E0"] || [cmdtype isEqualToString:@"e0"]) {
+            //设备WIFI设置模式成功了，此时需要下一步设置wifi pass下发给设备
+            NSString *wifiname = self.wifiInfo[@"name"];
+            NSString *wifipass = self.wifiInfo[@"pwd"];
+            
+            NSString *wifinamehex = [NSString hexStringFromString:wifiname];
+            NSString *wifipasshex = [NSString hexStringFromString:wifipass];
+            
+            NSString *wifinamelength = [NSString getHexByDecimal:wifinamehex.length/2];
+            while ([wifinamelength length]<2) {
+                wifinamelength = [NSString stringWithFormat:@"0%@",wifinamelength];
+            }
+            NSString *wifipasslength = [NSString getHexByDecimal:wifipasshex.length/2];
+            while ([wifipasslength length]<2) {
+                wifipasslength = [NSString stringWithFormat:@"0%@",wifipasslength];
+            }
+            NSString *totallength = [NSString getHexByDecimal:wifinamehex.length/2 + wifipasshex.length/2 + 2];
+            while ([totallength length]<4) {
+                totallength = [NSString stringWithFormat:@"0%@",totallength];
+            }
+            
+            NSString *cmdtype = [NSString stringWithFormat:@"E2%@%@%@%@%@",totallength, wifinamelength, wifinamehex, wifipasslength, wifipasshex];
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:cmdtype];
+            
+            ///设置UI进度
+            self.resultvc.connectStepTipView.step = 2;
+            
+        }else if ([cmdtype isEqualToString:@"E1"] || [cmdtype isEqualToString:@"e1"]) {
+            //已发送给设备WIFI密钥了，此时需要下一步让设备连接Wi-Fi
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+            
+        }else if ([cmdtype isEqualToString:@"E2"] || [cmdtype isEqualToString:@"e2"]) {
+            //设备连好wifi了，此时需要下一步给设备下发Token
+            
+            NSString *bingwifitoken = self.wifiInfo[@"token"];
+            NSString *bingwifitokenhex = [NSString hexStringFromString:bingwifitoken];
+            NSString *totallength = [NSString getHexByDecimal:bingwifitokenhex.length/2];
+            while ([totallength length]<4) {
+                totallength = [NSString stringWithFormat:@"0%@",totallength];
+            }
+            NSString *cmdtype = [NSString stringWithFormat:@"E4%@%@",totallength, bingwifitokenhex];
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:cmdtype];
+            
+        }else if ([cmdtype isEqualToString:@"E3"] || [cmdtype isEqualToString:@"e3"]) {
+            //设备通过token已经绑定，app开始轮训结果
+            
+            NSDictionary *deviceData = @{@"productId": self.currentProductId, @"deviceName": self.currentDevicename};
+            [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
+            
+        }else {
+            //如果有失败的话，获取设备配网日志
+            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+        }
+    }
 }
 
 @end

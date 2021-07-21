@@ -912,3 +912,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 
 "llsync_network_title" = "蓝牙辅助配网";
 "llsync_network_tips" = "设备蓝牙";
+"llsync_network_hud" = "连接蓝牙中";
