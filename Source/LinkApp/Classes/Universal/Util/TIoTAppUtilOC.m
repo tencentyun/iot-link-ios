@@ -7,6 +7,8 @@
 #import "TIoTAppUtilOC.h"
 #import "TIoTNewVersionTipView.h"
 #import "NSString+Extension.h"
+#import "TIoTMainVC.h"
+#import "UIViewController+GetController.h"
 
 @implementation TIoTAppUtilOC
 
@@ -103,5 +105,23 @@
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
     }];
+}
+
+// 判断是否登录
++ (BOOL)checkLogin {
+    if ([[TIoTCoreUserManage shared].expireAt integerValue] <= [[NSString getNowTimeString] integerValue] && [TIoTCoreUserManage shared].accessToken.length > 0) {
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"warm_prompt", @"温馨提示") message:NSLocalizedString(@"login_timeout", @"登录已过期") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"relogin", @"重新登录") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            
+            [[TIoTAppEnvironment shareEnvironment] loginOut];
+            TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
+            [UIViewController getCurrentViewController].view.window.rootViewController = nav;
+        }];
+        [alert addAction:alertA];
+        [[UIViewController getCurrentViewController] presentViewController:alert animated:YES completion:nil];
+        return YES;
+    }
+    return NO;
 }
 @end

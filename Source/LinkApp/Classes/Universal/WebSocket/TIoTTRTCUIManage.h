@@ -7,7 +7,13 @@
 #import <Foundation/Foundation.h>
 #import "TIoTTRTCSessionManager.h"
 
+/**
+ TRTC 根据设备状态处理UI
+ */
+
 NS_ASSUME_NONNULL_BEGIN
+
+typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 
 @interface TIoTTRTCUIManage: NSObject <TIoTTRTCSessionUIDelegate>
 + (instancetype)sharedManager ;
@@ -17,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *deviceID;
 
+
 //面板中主动呼叫设备 0 audio； 1video
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;
 
@@ -24,8 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)preLeaveRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure ;
 
-//轮训设备状态，查看trtc设备是否要呼叫我
+///轮训设备状态，查看trtc设备是否要呼叫我, 必须要实现发送socket通知，触发socket心跳:
+
 - (void)repeatDeviceData:(NSArray *)devices;
+
+/// 监听到的设备上报信息处理
+- (void)receiveDeviceData:(NSDictionary *)deviceInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

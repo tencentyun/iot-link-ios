@@ -421,22 +421,6 @@ static NSString *itemId3 = @"i_ooo454";
     //先获取用户配置信息
     [[TIoTRequestObject shared] post:AppGetUserSetting Param:@{} success:^(id responseObject) {
         self.userConfigDic = [[NSDictionary alloc]initWithDictionary:responseObject[@"UserSetting"]];
-        
-//        [[TIoTRequestObject shared] post:AppGetProductsConfig Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
-//            NSArray *data = responseObject[@"Data"];
-//            if (data.count > 0) {
-//                NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
-//                [self loadData:config];
-//            }
-//        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-//
-//        }];
-        
-//        if (self.configData.allKeys.count == 0) {
-//            [self addEmptyCandidateModelTipView];
-//        }else {
-//            
-//        }
         [self loadData:self.configData];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
@@ -555,7 +539,6 @@ static NSString *itemId3 = @"i_ooo454";
     if (isTRTCDevice) {
         
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
-        
     }
 }
 

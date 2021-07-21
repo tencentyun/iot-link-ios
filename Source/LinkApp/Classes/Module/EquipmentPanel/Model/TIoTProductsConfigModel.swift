@@ -168,5 +168,8 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var UpdateTime: String?
     var UserID: String?
     var Online: String?
-    
+
 }
+
+
+
