@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b869dbc6_2c3fd85f",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/TIoTCoreAddDevice.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-21T11:44:09Z",
+      "side": 1,
+      "message": "废弃class，建议后续删除，以及app和sdkdemo相关的废弃配网代码需要删除",
+      "revId": "73c70c84b8f18b9544e371492f4c903b3a981e51",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
