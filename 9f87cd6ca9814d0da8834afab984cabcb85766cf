@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e76cba8_33726527",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceCell.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-21T11:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c41aab8_60e6df27",
+      "range": {
+        "startLine": 6,
+        "startChar": 34,
+        "endLine": 6,
+        "endChar": 40
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c10e7c2c_d02338a4",
         "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceCell.m",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa4b05c3_433befc6",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceCell.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-21T11:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c10e7c2c_d02338a4",
+      "range": {
+        "startLine": 91,
+        "startChar": 45,
+        "endLine": 91,
+        "endChar": 46
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5e27286b_e4fb7972",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-21T11:13:53Z",
+      "side": 1,
+      "message": "在2632已删除",
+      "parentUuid": "13aa3bfc_6d729e1c",
+      "range": {
+        "startLine": 96,
+        "startChar": 29,
+        "endLine": 96,
+        "endChar": 30
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87b43731_d8cd77ba",
         "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncViewController.m",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89566721_29638837",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncViewController.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-21T11:13:53Z",
+      "side": 1,
+      "message": "在2632已修复",
+      "parentUuid": "87b43731_d8cd77ba",
+      "range": {
+        "startLine": 103,
+        "startChar": 29,
+        "endLine": 103,
+        "endChar": 30
+      },
+      "revId": "9f87cd6ca9814d0da8834afab984cabcb85766cf",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
