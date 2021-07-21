@@ -150,10 +150,6 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var btnText: String?
 }
 
-
-
-
-
 @objcMembers class TIoTDevicedListDataModel: TIoTBaseModel {
     var AliasName: String?
     var CreateTime: String?
@@ -170,3 +166,6 @@ class TIoTProductsConfigModel: TIoTBaseModel {
     var Online: String?
     
 }
+
+
+
