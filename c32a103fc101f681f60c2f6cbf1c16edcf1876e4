@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2599578a_b690068b",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T09:52:09Z",
+      "side": 1,
+      "message": "注释调试代码可删除",
+      "range": {
+        "startLine": 192,
+        "startChar": 9,
+        "endLine": 192,
+        "endChar": 33
+      },
+      "revId": "c32a103fc101f681f60c2f6cbf1c16edcf1876e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "532ef491_da465ce6",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTLLSyncDeviceController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T09:52:09Z",
+      "side": 1,
+      "message": "注释调试代码可删除",
+      "range": {
+        "startLine": 277,
+        "startChar": 10,
+        "endLine": 277,
+        "endChar": 40
+      },
+      "revId": "c32a103fc101f681f60c2f6cbf1c16edcf1876e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0947337_e8a5e18e",
+        "filename": "Source/LinkApp/Classes/Universal/蓝牙/BluetoothCentralManager.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T09:52:09Z",
+      "side": 1,
+      "message": "产品文案确认后 可写入中英文多国.String 文件中，用NSLocalizedString引用",
+      "range": {
+        "startLine": 165,
+        "startChar": 115,
+        "endLine": 165,
+        "endChar": 116
+      },
+      "revId": "c32a103fc101f681f60c2f6cbf1c16edcf1876e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827109c8_c63820ab",
+        "filename": "Source/LinkApp/Classes/Universal/蓝牙/BluetoothCentralManager.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-21T09:52:09Z",
+      "side": 1,
+      "message": "log 日志看是否 统一用QCLog，统一开关",
+      "range": {
+        "startLine": 625,
+        "startChar": 10,
+        "endLine": 625,
+        "endChar": 11
+      },
+      "revId": "c32a103fc101f681f60c2f6cbf1c16edcf1876e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
