@@ -35,6 +35,7 @@
 #import "TIoTFamilyInfoVC.h"
 #import "TIoTEquipmentNewCell.h"
 #import "TIoTShortcutView.h"
+#import "TIoTCoreUtil.h"
 
 @import Lottie;
 
@@ -173,8 +174,14 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
-    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
-    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr addSocketNotifitionBlock:^(NSArray * _Nonnull devIds) {
+        [HXYNotice postHeartBeat:devIds];
+        [HXYNotice addActivePushPost:devIds];
+    }];
+    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr addSocketNotifitionBlock:^(NSArray * _Nonnull devIds) {
+        [HXYNotice postHeartBeat:devIds];
+        [HXYNotice addActivePushPost:devIds];
+    }];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -1104,7 +1111,10 @@ static CGFloat kHeaderViewHeight = 162;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
-        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr addSocketNotifitionBlock:^(NSArray * _Nonnull devIds) {
+            [HXYNotice postHeartBeat:devIds];
+            [HXYNotice addActivePushPost:devIds];
+        }];
     });
 }
 
@@ -1112,7 +1122,10 @@ static CGFloat kHeaderViewHeight = 162;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
-        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr addSocketNotifitionBlock:^(NSArray * _Nonnull devIds) {
+            [HXYNotice postHeartBeat:devIds];
+            [HXYNotice addActivePushPost:devIds];
+        }];
     });
 }
 

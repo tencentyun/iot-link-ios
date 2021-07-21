@@ -154,19 +154,3 @@ class TIoTProductsConfigModel: TIoTBaseModel {
 
 
 
-@objcMembers class TIoTDevicedListDataModel: TIoTBaseModel {
-    var AliasName: String?
-    var CreateTime: String?
-    var DeviceId: String?
-    var DeviceName: String?
-    var DeviceType: String?
-    var FamilyId: String?
-    var IconUrl: String?
-    var IconUrlGrid: String?
-    var ProductId: String?
-    var RoomId: String?
-    var UpdateTime: String?
-    var UserID: String?
-    var Online: String?
-    
-}

@@ -24,3 +24,7 @@
 @implementation TIOTtrtcRejectModel
 
 @end
+
+@implementation TIoTDevicedListDataModel
+
+@end

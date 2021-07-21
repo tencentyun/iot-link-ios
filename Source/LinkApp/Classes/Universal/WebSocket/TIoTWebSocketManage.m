@@ -16,6 +16,7 @@
 #import "TIOTTRTCModel.h"
 #import "TIoTTRTCSessionManager.h"
 #import "TIoTTRTCUIManage.h"
+#import "TIoTCoreUtil.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -29,7 +30,10 @@ dispatch_async(dispatch_get_main_queue(), block);\
 static NSString *registDeviceReqID = @"5001";
 static NSString *heartBeatReqID = @"5002";
 
-@interface TIoTWebSocketManage ()<QCSocketManagerDelegate>
+@interface TIoTWebSocketManage ()<QCSocketManagerDelegate,TIoTTRTCUIManageDelegate,TRTCCallingViewDelegate> {
+    TRTCCallingAuidoViewController *_callAudioVC;
+    TRTCCallingVideoViewController *_callVideoVC;
+}
 
 @property (nonatomic, strong) NSMutableDictionary *reqArray;
 
@@ -67,6 +71,7 @@ static NSString *heartBeatReqID = @"5002";
     
     //TRTC UI Delegate
     [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
+    [TIoTTRTCUIManage sharedManager].delegate = self;
 }
 
 - (void)registerNetworkNotifications{
@@ -472,6 +477,239 @@ static NSString *heartBeatReqID = @"5002";
 -(WCReadyState)socketReadyState{
 
     return [TIoTCoreSocketManager shared].socketReadyState;
+}
+
+#pragma mark - TIoTTRTCUIManageDelegate 代理方法
+- (void)presentAudioVCWithUserID:(NSString *)userID {
+    _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:userID];
+    _callAudioVC.actionDelegate = self;
+    _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
+}
+
+- (void)presentVideoVCWithUserID:(NSString *)userID {
+    _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:userID];
+    _callVideoVC.actionDelegate = self;
+    _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
+}
+
+#pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
+- (void)didAcceptJoinRoom {
+    //2.根据UI决定是否进入房间
+    
+    //开始准备进房间，通话中状态
+    NSDictionary *param = @{@"DeviceId":[TIoTTRTCUIManage sharedManager].deviceParam.deviceName};
+    
+    [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
+        
+        NSDictionary *tempDic = responseObject[@"TRTCParams"];
+        TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
+        [[TIoTTRTCSessionManager sharedManager] configRoom:model];
+        [[TIoTTRTCSessionManager sharedManager] enterRoom];
+        
+        //取消计时器
+        [[TIoTTRTCUIManage sharedManager] cancelTimer];
+        
+         //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
+        [TIoTTRTCUIManage sharedManager].isEnterError = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([TIoTTRTCUIManage sharedManager].isEnterError == YES) {
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if (self->_callAudioVC == topVC) {
+                    [self->_callAudioVC beHungUp];
+                }else {
+                    [self->_callVideoVC beHungUp];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[TIoTTRTCUIManage sharedManager] exitRoom:[TIoTTRTCUIManage sharedManager].deviceParam._sys_userid];
+                });
+            }
+        });
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        UIViewController *topVC = [TIoTCoreUtil topViewController];
+        if (self->_callAudioVC == topVC) {
+            [self->_callAudioVC hungUp];
+        }else {
+            [self->_callVideoVC hungUp];
+        }
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[TIoTTRTCUIManage sharedManager] exitRoom:[TIoTTRTCUIManage sharedManager].deviceParam._sys_userid];
+        });
+    }];
+}
+
+- (void)didRefuseedRoom {
+    
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free) {
+        if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_audio) {
+            if ([TIoTTRTCUIManage sharedManager].tempModel._sys_audio_call_status.intValue != 2) {
+                [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:[TIoTTRTCUIManage sharedManager].deviceIDTempStr];
+            }
+        }else if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_video) {
+            if ([TIoTTRTCUIManage sharedManager].tempModel._sys_video_call_status.intValue != 2) {
+                [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:[TIoTTRTCUIManage sharedManager].deviceIDTempStr];
+            }
+
+        }
+
+        [[TIoTTRTCUIManage sharedManager] cancelTimer];
+    }
+
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+        if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_audio) {
+            [[TIoTTRTCUIManage sharedManager] exitRoom:@""];
+        }else if ([TIoTTRTCUIManage sharedManager].preCallingType == TIoTTRTCSessionCallType_video) {
+            [[TIoTTRTCUIManage sharedManager] exitRoom:@""];
+        }
+    }
+    
+}
+
+- (void)leaveRoomWithPayload:(TIOTtrtcPayloadParamModel *)deviceParam {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callAudioVC == topVC) {
+        
+        if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES) {
+            if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                [_callAudioVC hungUp];
+            }
+            if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+                //单设备主叫 接通后 设备挂断
+                if (deviceParam._sys_audio_call_status.intValue == 0) {
+                    [self->_callAudioVC beHungUp];
+                    
+                }
+            }
+
+        }else {
+            if (deviceParam._sys_audio_call_status.intValue == 2) {
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling)  {
+                    [_callAudioVC otherAnswered];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [TIoTTRTCUIManage sharedManager].tempModel = deviceParam;
+                        [self->_callAudioVC hangupTapped];
+                        [TIoTTRTCUIManage sharedManager].isActiveStatus = NO;
+//                        self->_isActiveStatus = self->_isActiveCall;
+                    });
+                    return;
+                }
+                
+            }else {
+                
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                    [_callAudioVC hungUp];
+                }else {
+                    [_callAudioVC beHungUp];
+                }
+                
+            }
+        }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (!(deviceParam._sys_video_call_status.intValue == 2 || deviceParam._sys_audio_call_status.intValue == 2)) {
+                
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if (self->_callAudioVC == topVC) {
+                    [[TIoTTRTCUIManage sharedManager] exitRoom:deviceParam._sys_userid];
+                }
+            }
+        });
+    }else if (_callVideoVC == topVC) {
+        
+        if ([TIoTTRTCUIManage sharedManager].isActiveStatus == YES) {
+            if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                [_callVideoVC hungUp];
+            }
+            if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+                //单设备主叫 接通后 设备挂断
+                if (deviceParam._sys_video_call_status.intValue == 0) {
+                    [_callVideoVC beHungUp];
+                }
+            }
+            
+        }else {
+            if (deviceParam._sys_video_call_status.intValue == 2) {
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                    [_callVideoVC otherAnswered];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [TIoTTRTCUIManage sharedManager].tempModel = deviceParam;
+                        [self->_callVideoVC hangupTapped];
+                        [TIoTTRTCUIManage sharedManager].isActiveStatus = NO;
+//                        self->_isActiveStatus = self->_isActiveCall;
+                    });
+                    return;
+                }
+                
+            }else {
+                if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                    [_callVideoVC hungUp];
+                }else {
+                    [_callVideoVC beHungUp];
+                }
+                
+            }
+        }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (!(deviceParam._sys_video_call_status.intValue == 2 || deviceParam._sys_audio_call_status.intValue == 2)) {
+                
+                UIViewController *topVC = [TIoTCoreUtil topViewController];
+                if (self->_callVideoVC ==topVC) {
+                    [[TIoTTRTCUIManage sharedManager] exitRoom:deviceParam._sys_userid];
+                }
+            }
+        });
+    }
+}
+
+- (BOOL )isActiveCallingDeviceID:(NSString *_Nullable)deviceID topVC:(UIViewController *_Nullable)topVC {
+    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动,直接进房间
+        
+        if ([TIoTTRTCUIManage sharedManager].isActiveStatus) { //如果是被动呼叫的话，不能自动进入房间
+            [self didAcceptJoinRoom];
+        }else {
+            //当前是被叫空闲或是正在通话，这时需要判断：设备A、B同时呼叫同一个用户1，用户1已经被一台比方说是设备A呼叫，后接到其他设备B的呼叫请求，用户1则调用AppControldeviceData 发送callstatus为0拒绝其他设备B的请求。
+            if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free || [TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+                if ([TIoTTRTCUIManage sharedManager].deviceParam._sys_audio_call_status.intValue == 1) {
+                    [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:deviceID];
+                }else if ([TIoTTRTCUIManage sharedManager].deviceParam._sys_video_call_status.intValue == 1) {
+                    [[TIoTTRTCUIManage sharedManager] refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:deviceID];
+                }
+                
+            }
+        }
+        return  YES;
+    }else {
+        return NO;
+    }
+}
+
+- (void)remoteDismissAndDistoryVC {
+    [_callAudioVC remoteDismiss];
+    [_callVideoVC remoteDismiss];
+    
+    _callAudioVC = nil;
+    _callVideoVC = nil;
+}
+
+- (void)audioNoAnswered {
+    [_callAudioVC noAnswered];
+}
+- (void)videoNoAnswered {
+    [_callVideoVC noAnswered];
+}
+
+- (void)enterUserRemoteUserID:(NSString *_Nullable)userID targetVC:(UIViewController *_Nullable)topVC  {
+    if (_callAudioVC == topVC) {
+        //正在主动呼叫中，或呼叫UI已启动
+        [_callAudioVC OCEnterUserWithUserID:userID];
+    }else {
+        [_callVideoVC OCEnterUserWithUserID:userID];
+    }
 }
 
 #pragma mark - getter
