@@ -56,6 +56,7 @@
         [connBtn setTitleColor:kRGBColor(0, 110, 255) forState:UIControlStateNormal];
         connBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [connBtn addTarget:self action:@selector(connect) forControlEvents:UIControlEventTouchUpInside];
+        connBtn.enabled = NO;
         [bgView addSubview:connBtn];
         [connBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.right.equalTo(bgView);

@@ -203,6 +203,7 @@
 
 - (void)nextClick:(UIButton *)sender {
     TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
+    vc.llsyncDeviceVC = self.llsyncDeviceVC;
     vc.step = 2;
     vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
     vc.currentDistributionToken = self.networkToken;
@@ -226,6 +227,19 @@
                  @"topic": NSLocalizedString(@"setDevice_softAP_distributionNetwork", @"将设备设置为热点配网模式"),
                  @"stepDiscribe":softAPExploreString
     };
+    
+    if (self.llsyncDeviceVC) {
+        NSString *smartExploreString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"message"];
+        if ([NSString isNullOrNilWithObject:smartExploreString]) {
+            smartExploreString = NSLocalizedString(@"default_smartConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。");
+        }
+        
+        _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),
+                     @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                     @"topic": NSLocalizedString(@"setupDevoice_SmartConfig_distributionNetwork", @"将设备设置为一键配网模式"),
+                     @"stepDiscribe": smartExploreString
+        };
+    }
     
     [self setupUI];
     [self getSoftApToken];

@@ -20,6 +20,8 @@
 #import "TIoTConfigHardwareViewController.h"
 #import "TIoTAlertCustomView.h"
 #import "TIoTOpensourceLicenseViewController.h"
+#import "TIoTLLSyncDeviceController.h"
+#import "TIoTLLSyncViewController.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -34,6 +36,8 @@
 @property (nonatomic, strong) NSMutableArray *recommendArr;
 @property (nonatomic, strong) NSDictionary *configData;
 @property (nonatomic, strong) NSString *selectedProducetedID;
+
+@property (nonatomic, strong) TIoTLLSyncDeviceController *llsyncDeviceVC;
 @end
 
 @implementation TIoTNewAddEquipmentViewController
@@ -58,7 +62,14 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     
     [self setupUI];
     [self getCategoryList];
-    [self.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
+//    [self.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.llsyncDeviceVC.originBlueDevices) {
+            self.discoverView.status = DiscoverDeviceStatusDiscovered;
+        }else {
+            self.discoverView.status = DiscoverDeviceStatusNotFound;
+        }
+    });
     
     [HXYNotice changeAddDeviceTypeListener:self reaction:@selector(receiveChangeAddDeviceType:)];
 //    [HXYNotice addUpdateDeviceListListener:self reaction:@selector(popHomeVC)];
@@ -70,6 +81,22 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         
         [TIoTCoreUserManage shared].addDeviceNumber = @"1";
     }
+    
+    [self configLLSyncView];
+}
+
+- (void) configLLSyncView {
+    self.llsyncDeviceVC= [[TIoTLLSyncDeviceController alloc] init];
+    self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+    self.llsyncDeviceVC.roomId = self.roomId;
+//    vc.currentDistributionToken = self.currentDistributionToken;
+//    vc.wifiInfo = [self.wifiInfo copy];
+//    vc.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
+//    vc.configdata = self.configConnentData;
+    [self addChildViewController:self.llsyncDeviceVC];
+    [self.llsyncDeviceVC.view setFrame:CGRectMake(0, 0, kScreenWidth, 300)];
+    [self.discoverView changeTableFooterView:self.llsyncDeviceVC.view];
+    [self.llsyncDeviceVC changeContentArea];
 }
 
 - (void)usserAgreeDeviceSharedClause {
@@ -139,7 +166,9 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     };
     self.discoverView.retryAction = ^{
         selfWeak.discoverView.status = DiscoverDeviceStatusDiscovering;
-        [selfWeak.discoverView performSelector:@selector(setStatus:) withObject:@(DiscoverDeviceStatusNotFound) afterDelay:5];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            selfWeak.discoverView.status = DiscoverDeviceStatusDiscovered;
+        });
     };
     [self.scrollView addSubview:self.discoverView];
     [self.discoverView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -186,6 +215,16 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         vc.configHardwareStyle = TIoTConfigHardwareStyleSoftAP;
     }
     vc.roomId = self.roomId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)jumpllsyncVC {
+    TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
+    vc.configurationData = self.configData;
+    vc.llsyncDeviceVC = nil;
+//    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
+        
+    vc.roomId = self.roomId?:@"";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -332,6 +371,10 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                 NSString *configType = wifiConfTypeList.firstObject;
                 if ([configType isEqualToString:@"softap"]) {
                     [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];  //自助配网
+                    return;
+                }else if  ([configType isEqualToString:@"ble"]) {
+                    
+                    [self jumpllsyncVC];
                     return;
                 }
             }

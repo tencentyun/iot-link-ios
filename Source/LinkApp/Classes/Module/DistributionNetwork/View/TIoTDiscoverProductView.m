@@ -11,7 +11,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *productArr;
-
+@property (nonatomic, strong) UIView *tableFooterView;
 @end
 
 @implementation TIoTDiscoverProductView
@@ -81,6 +81,7 @@
         make.top.width.height.equalTo(helpBtn);
     }];
     
+    [self addSubview:self.tableFooterView];
 }
 
 - (void)setupDiscoveredProductUI{
@@ -90,6 +91,10 @@
         make.edges.equalTo(self);
     }];
     [self addTableHeaderView];
+}
+
+- (void)changeTableFooterView:(UIView *)view {
+    self.tableFooterView = view;
 }
 
 - (void)addTableHeaderView{
@@ -126,6 +131,7 @@
     }];
     
     self.tableView.tableHeaderView = headerView;
+    self.tableView.tableFooterView = self.tableFooterView;
 }
 
 - (void)setupNotFoundProductUI{
@@ -214,7 +220,7 @@
 
 #pragma mark TableViewDelegate && TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;//self.productArr.count;
+    return 0;//self.productArr.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -229,7 +235,9 @@
 //    cell.dic = self.productArr[indexPath.row];
     return cell;
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
 #pragma mark setter or getter
 - (UITableView *)tableView{
     if (_tableView == nil) {

@@ -287,10 +287,6 @@
                     [self jumpllsyncVC];
                     return;
                 }
-            }else {
-//调试使用，正常需要删掉
-//                [self jumpllsyncVC];
-//                return;
             }
         }
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
@@ -360,6 +356,7 @@
 - (void)jumpllsyncVC {
     TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
     vc.configurationData = self.configData;
+    vc.llsyncDeviceVC = nil;
 //    if ([title isEqualToString:NSLocalizedString(@"smart_config", @"智能配网")]) {
         
     vc.roomId = self.roomId?:@"";
