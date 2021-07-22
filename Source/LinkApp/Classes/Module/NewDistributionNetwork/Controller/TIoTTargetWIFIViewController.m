@@ -327,7 +327,7 @@
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if (self.configHardwareStyle == TIoTConfigHardwareStyleLLsync) {
-        if (self.step == 2) {
+        if (self.step == 2 && !self.llsyncDeviceVC) {
             TIoTLLSyncDeviceController *vc = [[TIoTLLSyncDeviceController alloc] init];
             vc.configHardwareStyle = _configHardwareStyle;
             vc.roomId = self.roomId;
@@ -338,11 +338,20 @@
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
-            vc.wifiInfo = [self.softApWifiInfo copy];
+            vc.wifiInfo = [self.wifiInfo copy];
             vc.roomId = self.roomId;
             vc.configHardwareStyle = self.configHardwareStyle;
             vc.connectGuideData = self.configConnentData;
             [self.navigationController pushViewController:vc animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+                self.llsyncDeviceVC.roomId = self.roomId;
+                self.llsyncDeviceVC.currentDistributionToken = self.currentDistributionToken;
+                self.llsyncDeviceVC.wifiInfo = [self.wifiInfo copy];
+                self.llsyncDeviceVC.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
+                self.llsyncDeviceVC.configdata = self.configConnentData;
+                [self.llsyncDeviceVC nextUIStep:vc];
+            });
         }
     }
     else {
@@ -430,6 +439,11 @@
             
         case TIoTConfigHardwareStyleLLsync:
         {
+            NSString *bleExploreString = self.configConnentData[@"WifiBle"][@"hardwareGuide"][@"message"];
+            if ([NSString isNullOrNilWithObject:bleExploreString]) {
+                bleExploreString = NSLocalizedString(@"default_bleConfig_tip", @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。");
+            }
+            
             _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
                          @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"setupTargetWiFi", @"设置目标WiFi"), NSLocalizedString(@"connected_device", @"连接设备"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
                          @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
@@ -440,8 +454,23 @@
                          @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
                          @"pwdInputHaveButton": @(NO),
                          @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
-                         @"stepDiscribe": @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。"
+                         @"stepDiscribe": bleExploreString
             };
+            
+            if (self.llsyncDeviceVC) {
+                _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
+                             @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
+                             @"topic": NSLocalizedString(@"import_WiFiPassword", @"请输入WiFi密码"),
+                             @"wifiInputTitle": @"WIFI",
+                             @"wifiInputPlaceholder": NSLocalizedString(@"clickArrow_choiceWIFI", @"请点击箭头按钮选择WIFI"),
+                             @"wifiInputHaveButton": @(YES),
+                             @"pwdInputTitle": NSLocalizedString(@"password", @"密码"),
+                             @"pwdInputPlaceholder":NSLocalizedString(@"smart_config_second_hint", @"请输入密码"),
+                             @"pwdInputHaveButton": @(NO),
+                             @"make": NSLocalizedString(@"operationMethod", @"操作方式:"),
+                             @"stepDiscribe": bleExploreString
+                };
+            }
         }
             break;
             

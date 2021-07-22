@@ -5,6 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTStartConfigViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSDictionary *configdata; //所有数据
 
+//原始蓝牙扫描数据包含广播报文
+@property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
+- (void)changeContentArea ;
+
+//首页蓝牙搜索头部调用
+- (void)nextUIStep:(TIoTStartConfigViewController *)startconfigVC;
 @end
 
 NS_ASSUME_NONNULL_END

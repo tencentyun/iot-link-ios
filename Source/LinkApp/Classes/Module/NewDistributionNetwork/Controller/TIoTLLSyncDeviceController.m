@@ -6,8 +6,8 @@
 
 #import "TIoTLLSyncDeviceController.h"
 #import "TIoTStepTipView.h"
-#import "TIoTStartConfigViewController.h"
 #import "TIoTLLSyncDeviceCell.h"
+#import "TIoTLLSyncViewController.h"
 
 @interface TIoTLLSyncDeviceController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BluetoothCentralManagerDelegate>
 
@@ -21,7 +21,6 @@
 @property (nonatomic, strong) UILabel *WiFiName; //获取设备WiFi名称
 @property (nonatomic, strong) UICollectionView *collectionView; //推荐房间列表
 @property (nonatomic, copy) NSArray<CBPeripheral *> *blueDevices; //推荐房间列表
-@property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
 
 @property (nonatomic, strong) NSString *currentProductId; //当前连接的产品id
 @property (nonatomic, strong) NSString *currentDevicename; //当前连接的设备名称
@@ -29,6 +28,7 @@
 @property (nonatomic, weak)BluetoothCentralManager *blueManager;
 
 @property (nonatomic, strong) TIoTStartConfigViewController *resultvc; //当前连接的设备
+@property (nonatomic, assign) BOOL isFromHome; //表示从产品页的蓝牙模块来的
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -44,6 +44,18 @@
     self.blueManager = [BluetoothCentralManager shareBluetooth];
     self.blueManager.delegate = self;
     [self.blueManager scanNearLLSyncService];
+}
+
+- (void)changeContentArea {
+    self.isFromHome = YES;
+    self.scrollView.scrollEnabled = NO;
+    [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.scrollView).offset(20);
+        make.width.mas_equalTo(kScreenWidth - 40);
+        make.top.equalTo(self.scrollView).offset(0);
+//        make.bottom.equalTo(nextBtn.mas_top).offset(-20);
+        make.height.mas_equalTo(300);
+    }];
 }
 
 - (void)setupUI{
@@ -127,6 +139,16 @@
 }
 
 - (void)nextClick:(UIButton *)sender {
+    if (self.isFromHome) {
+        //从首页上方蓝牙模块进入的
+        TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
+        vc.llsyncDeviceVC = self;
+        vc.configurationData = self.configdata;
+        vc.roomId = self.roomId?:@"";
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        return;
+    }
     
     self.resultvc = [[TIoTStartConfigViewController alloc] init];
     self.resultvc.wifiInfo = [self.wifiInfo copy];
@@ -189,7 +211,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 //    self.nameField.text = self.dataArray[indexPath.row];
-    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
 
     CBPeripheral *device = self.blueDevices[indexPath.row];
     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
@@ -219,8 +241,6 @@
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
     self.currentConnectedPerpheral = connectedPerpheral;
-    
-    [MBProgressHUD dismissInView:self.view];
 }
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
@@ -228,21 +248,36 @@
 }
 
 - (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service {
+    [MBProgressHUD dismissInView:nil];
     if (self.currentConnectedPerpheral) {
         
         [self nextClick:nil];
-        ///设置UI进度
-        self.resultvc.connectStepTipView.step = 1;
         
-        [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
+        if (!self.isFromHome) {
+            ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
+            [self nextUIStep:nil];
+        }
     }
+}
+
+- (void)nextUIStep:(TIoTStartConfigViewController *)startconfigVC {
+    if (self.resultvc == nil) {
+        self.resultvc = startconfigVC;
+    }
+    ///设置UI进度
+    self.resultvc.connectStepTipView.step = 1;
+    
+    [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
 }
 
 //发送数据后，蓝牙回调
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
     if (self.currentConnectedPerpheral) {
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
-        
+        if (hexstr.length < 2) {
+            NSLog(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
+            return;
+        }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
         if ([cmdtype isEqualToString:@"08"]) {
             //设备信息返回了，此时需要下一步设置wifi模式
@@ -302,7 +337,7 @@
             
         }else {
             //如果有失败的话，获取设备配网日志
-            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+//            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
         }
     }
 }

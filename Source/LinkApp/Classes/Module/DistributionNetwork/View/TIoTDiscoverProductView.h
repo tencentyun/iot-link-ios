@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void (^retryAction)(void);
 @property (nonatomic, assign) DiscoverDeviceStatus status;
 
+- (void)changeTableFooterView:(UIView *)view;
 @end
 
 NS_ASSUME_NONNULL_END
