@@ -841,7 +841,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.listModel = [TIoTDemoCloudEventListModel yy_modelWithJSON:responseObject];
         
         if (self.listModel.Events.count != 0) {
-            self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
+            NSMutableArray *temp = (NSMutableArray *)[[self.listModel.Events?:@[] reverseObjectEnumerator] allObjects];
+            self.dataArray = [NSMutableArray arrayWithArray:temp?:@[]];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
             [self.tableView reloadData];
             
