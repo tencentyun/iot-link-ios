@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1a31ad3_2d2c3a91",
+        "filename": "Source/LinkApp/Classes/Module/DistributionNetwork/Controller/TIoTNewAddEquipmentViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-26T08:43:38Z",
+      "side": 1,
+      "message": "注释调试代码可删除",
+      "range": {
+        "startLine": 93,
+        "startChar": 34,
+        "endLine": 93,
+        "endChar": 35
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dbf5c2d_304b0d2b",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-26T08:43:38Z",
+      "side": 1,
+      "message": "新添加的文案需要在多国的.string 文件中添加，外部用NSLocalizedString 调用",
+      "range": {
+        "startLine": 452,
+        "startChar": 57,
+        "endLine": 452,
+        "endChar": 58
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31e0ccee_e7563ba5",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-26T08:43:38Z",
+      "side": 1,
+      "message": "新添加的文案需要在多国的.string 文件中添加，外部用NSLocalizedString 调用",
+      "range": {
+        "startLine": 466,
+        "startChar": 56,
+        "endLine": 466,
+        "endChar": 58
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
