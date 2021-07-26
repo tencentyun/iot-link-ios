@@ -123,8 +123,8 @@
         self.dataArray = [NSMutableArray arrayWithArray:accessIDArray];
         [self.pickerView reloadAllComponents];
         if (accessIDArray.count != 0) {
-            [self.pickerView selectRow:0 inComponent:0 animated:NO];
-            self.chooseID = self.dataArray[0];
+            [self.pickerView selectRow:accessIDArray.count-1 inComponent:0 animated:NO];
+            self.chooseID = self.dataArray[accessIDArray.count-1];
         }
     }
     
@@ -171,6 +171,23 @@
     [self removeFromSuperview];
 }
 
+- (void)setDefaultAccessID:(NSString *)defaultAccessID {
+    _defaultAccessID = defaultAccessID;
+    if (defaultAccessID != nil) {
+        NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *accessIDArray = [defaluts objectForKey:@"AccessIDArrayKey"];
+        if (accessIDArray != nil) {
+            if (accessIDArray.count != 0) {
+                [accessIDArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj isEqualToString:defaultAccessID]) {
+                        [self.pickerView selectRow:idx inComponent:0 animated:NO];
+                        self.chooseID = self.dataArray[idx];
+                    }
+                }];
+            }
+        }
+    }
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
