@@ -12,6 +12,7 @@ typedef void(^TIotPickerAccessIDBlock)(NSString *accessIDString);
 
 @interface TIoTAccessIDPickerView : UIView
 
+@property (nonatomic, copy) NSString *defaultAccessID;
 @property (nonatomic, copy) TIotPickerAccessIDBlock accessIDStringBlock;
 - (void)removeView;
 @end

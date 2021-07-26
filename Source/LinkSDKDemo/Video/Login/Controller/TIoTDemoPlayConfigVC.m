@@ -12,6 +12,7 @@
 #import "TIoTDemoHomeViewController.h"
 #import "TIoTDemoNavController.h"
 #import "TIoTDemoTabBarController.h"
+#import "TIoTCoreUserManage.h"
 
 @interface TIoTDemoPlayConfigVC ()
 @property (nonatomic, strong) TIoTLoginCustomView *loginView;
@@ -54,6 +55,11 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyBoard)];
     [self.view addGestureRecognizer:tap];
+    
+    // 读取信息
+    [self readAccessID];
+    
+    [self readLoginInfoFromManage];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -71,20 +77,10 @@
 
 - (void)requestDeviceList {
     
+    // 保存信息
+    [self saveDeviceInfo];
+    
     if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString])) {
-        
-        NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *accessIDArray = [NSMutableArray arrayWithArray:[defaluts objectForKey:@"AccessIDArrayKey"]];
-        if (accessIDArray != nil) {
-            if (![accessIDArray containsObject:self.loginView.secretIDString]) {
-                [accessIDArray addObject:self.loginView.secretIDString];
-                [defaluts setValue:accessIDArray forKey:@"AccessIDArrayKey"];
-            }
-        }else {
-            NSMutableArray *IDArray = [[NSMutableArray alloc]init];
-            [IDArray addObject:self.loginView.secretIDString];
-            [defaluts setValue:IDArray forKey:@"AccessIDArrayKey"];
-        }
         
         TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
         environment.cloudSecretId = self.loginView.secretIDString;
@@ -101,6 +97,51 @@
     }
     
 }
+
+- (void)saveDeviceInfo {
+    
+    [self saveLoginViewInfo];
+    
+    [self saveAccessID];
+}
+
+- (void)saveLoginViewInfo {
+    [TIoTCoreUserManage shared].demoAccessID = self.loginView.accessID.text?:@"";
+    [TIoTCoreUserManage shared].demoAccessToken = self.loginView.accessToken.text?:@"";
+    [TIoTCoreUserManage shared].demoProductID = self.loginView.productID.text?:@"";
+}
+
+- (void)saveAccessID {
+    NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *accessIDArray = [NSMutableArray arrayWithArray:[defaluts objectForKey:@"AccessIDArrayKey"]];
+    if (accessIDArray != nil) {
+        if (![accessIDArray containsObject:self.loginView.secretIDString?:@""]) {
+            [accessIDArray addObject:self.loginView.accessID.text?:@""];
+            [defaluts setValue:accessIDArray forKey:@"AccessIDArrayKey"];
+        }
+    }else {
+        NSMutableArray *IDArray = [[NSMutableArray alloc]init];
+        [IDArray addObject:self.loginView.secretIDString?:@""];
+        [defaluts setValue:IDArray forKey:@"AccessIDArrayKey"];
+    }
+}
+
+- (void)readLoginInfoFromManage {
+    self.loginView.accessID.text = [TIoTCoreUserManage shared].demoAccessID?:@"";
+    self.loginView.accessToken.text = [TIoTCoreUserManage shared].demoAccessID?:@"";
+    self.loginView.productID.text = [TIoTCoreUserManage shared].demoProductID?:@"";
+}
+
+- (void)readAccessID {
+    NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *accessIDArray = [NSMutableArray arrayWithArray:[defaluts objectForKey:@"AccessIDArrayKey"]];
+    if (accessIDArray != nil) {
+        if (accessIDArray.count != 0) {
+            self.loginView.accessID.text = accessIDArray.lastObject;
+        }
+    }
+}
+
 /*
 #pragma mark - Navigation
 

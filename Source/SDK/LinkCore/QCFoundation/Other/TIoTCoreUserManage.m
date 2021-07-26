@@ -47,6 +47,10 @@
 
 @synthesize searchHistoryArray = _searchHistoryArray;
 
+@synthesize demoAccessID = _demoAccessID;
+@synthesize demoAccessToken = _demoAccessToken;
+@synthesize demoProductID = _demoProductID;
+
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
     static dispatch_once_t onceToken;
@@ -478,6 +482,45 @@
 - (void)setFamilyType:(NSInteger)FamilyType {
     _FamilyType = FamilyType;
     [[NSUserDefaults standardUserDefaults] setValue:@(FamilyType) forKey:@"FamilyType"];
+}
+
+#pragma mark - SDKDemo
+
+- (NSString *)demoAccessID {
+    if (!_demoAccessID) {
+        _demoAccessID = [[NSUserDefaults standardUserDefaults] valueForKey:@"demoAccessID"];
+    }
+    return _demoAccessID;
+}
+
+- (void)setDemoAccessID:(NSString *)demoAccessID {
+    _demoAccessID = demoAccessID;
+    [[NSUserDefaults standardUserDefaults] setValue:demoAccessID forKey:@"demoAccessID"];
+}
+
+
+- (NSString *)demoAccessToken {
+    if (!_demoAccessToken) {
+        _demoAccessToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"demoAccessToken"];
+    }
+    return _demoAccessToken;
+}
+
+- (void)setDemoAccessToken:(NSString *)demoAccessToken {
+    _demoAccessToken = demoAccessToken;
+    [[NSUserDefaults standardUserDefaults] setValue:demoAccessToken forKey:@"demoAccessToken"];
+}
+
+- (NSString *)demoProductID {
+    if (!_demoProductID) {
+        _demoProductID = [[NSUserDefaults standardUserDefaults] valueForKey:@"demoProductID"];
+    }
+    return _demoProductID;
+}
+
+- (void)setDemoProductID:(NSString *)demoProductID {
+    _demoProductID = demoProductID;
+    [[NSUserDefaults standardUserDefaults] setValue:demoProductID forKey:@"demoProductID"];
 }
 
 //保存用户信息

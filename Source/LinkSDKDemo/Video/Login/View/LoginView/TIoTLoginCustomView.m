@@ -260,6 +260,7 @@
     
     __weak typeof (self) weakSelf = self;
     self.choiceAccessIDView = [[TIoTAccessIDPickerView alloc]init];
+    self.choiceAccessIDView.defaultAccessID = self.accessID.text?:@"";
     self.choiceAccessIDView.accessIDStringBlock = ^(NSString * _Nonnull accessIDString) {
         weakSelf.accessID.text = accessIDString?:@"";
     };
