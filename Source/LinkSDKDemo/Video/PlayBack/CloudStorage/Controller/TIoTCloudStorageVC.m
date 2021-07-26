@@ -488,7 +488,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         self.listModel = [TIoTDemoCloudEventListModel yy_modelWithJSON:responseObject];
         
         if (self.listModel.Events.count != 0) {
-            self.dataArray = [NSMutableArray arrayWithArray:self.listModel.Events?:@[]];
+            NSMutableArray *temp = (NSMutableArray *)[[self.listModel.Events?:@[] reverseObjectEnumerator] allObjects];
+            self.dataArray = [NSMutableArray arrayWithArray:temp];
             self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
             self.currentTime = 0;
             self.scrollDuraionTime = self.currentTime;
