@@ -25,6 +25,7 @@ static NSString * const appEnterBackground   = @"appEnterBackground";
 static NSString * const appEnterForeground   = @"appEnterForeground";
 static NSString * const receiveShareDevice   = @"receiveShareDevice";
 static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
+static NSString * const callingDisconnectNet = @"callingDisconnectNet";
 
 @implementation HXYNotice
 
@@ -226,4 +227,14 @@ static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
 + (void)postBluetoothScanStop {
     [[NSNotificationCenter defaultCenter] postNotificationName:bluetoothStopLister object:nil];
 }
+
+// RTC App端和设备端通话中 断网监听
++ (void)addCallingDisconnectNetLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:callingDisconnectNet object:nil];
+}
+
++ (void)postCallingDisconnectNet {
+    [[NSNotificationCenter defaultCenter] postNotificationName:callingDisconnectNet object:nil];
+}
+
 @end
