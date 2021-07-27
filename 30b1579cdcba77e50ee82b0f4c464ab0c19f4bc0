@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c8727840_a9d8f4ce",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-27T13:17:17Z",
+      "side": 1,
+      "message": "放在进入房间原因：\n1、无网络启动启动APP，websocket会触发无网络单例中post方法，在单例初始化中添加会crash\n2、根据是否进入房间延迟添加notification",
+      "parentUuid": "01860dc5_64e85b6d",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59f146ff_5413d712",
         "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab204ae6_d811cdb6",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-27T13:17:17Z",
+      "side": 1,
+      "message": "已替换成用GCD 计时器管理",
+      "parentUuid": "59f146ff_5413d712",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
