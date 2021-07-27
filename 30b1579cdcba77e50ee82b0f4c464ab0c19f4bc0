@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01860dc5_64e85b6d",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-27T09:16:59Z",
+      "side": 1,
+      "message": "注册通知一般放在初始化中",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59f146ff_5413d712",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-27T09:16:59Z",
+      "side": 1,
+      "message": "设备恢复的话，需要取消掉timer",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
