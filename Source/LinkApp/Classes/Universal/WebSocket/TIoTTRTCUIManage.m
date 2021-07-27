@@ -22,6 +22,9 @@
     
     NSTimer *noAnswerTimer; //主叫
     NSTimer *behungupTimer; //被叫
+    
+    dispatch_source_t disconnectNetTimer;//断网
+    NSUInteger sendCount;
 }
 @end
 
@@ -229,7 +232,10 @@
 
         //取消计时器
         [self cancelTimer];
-
+        
+        // RTC App端和设备端通话中 断网监听
+        [HXYNotice addCallingDisconnectNetLister:self reaction:@selector(startHungupActionTimer)];
+        
          //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
         self->_isEnterError = YES;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -585,18 +591,21 @@
 
 - (void)hungupAction:(NSTimer *)sender {
     if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling)  {
-        
-        if (self->_deviceParam._sys_audio_call_status.intValue == 0 || self->_deviceParam._sys_video_call_status.intValue == 0) {
-            if (preCallingType == TIoTTRTCSessionCallType_audio) {
-                [self->_callAudioVC noAnswered];
+        [self hungupActionUIStatusJudgement];
+    }
+}
 
-            }else if (preCallingType == TIoTTRTCSessionCallType_video) {
-                [self->_callVideoVC noAnswered];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self exitRoom:@""];
-            });
+- (void)hungupActionUIStatusJudgement {
+    if (self->_deviceParam._sys_audio_call_status.intValue == 0 || self->_deviceParam._sys_video_call_status.intValue == 0) {
+        if (preCallingType == TIoTTRTCSessionCallType_audio) {
+            [self->_callAudioVC noAnswered];
+
+        }else if (preCallingType == TIoTTRTCSessionCallType_video) {
+            [self->_callVideoVC noAnswered];
         }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self exitRoom:@""];
+        });
     }
 }
 
@@ -664,6 +673,39 @@
     }
 }
 
+#pragma mark - 断网Timer
+
+- (void)startHungupActionTimer {
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        self->disconnectNetTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+        dispatch_source_set_timer(self->disconnectNetTimer, DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+        dispatch_source_set_event_handler(self->disconnectNetTimer, ^{
+
+            if (self->sendCount >= 60) {
+                dispatch_source_cancel(self->disconnectNetTimer);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //挂断
+                    [self callingHungupAction];
+                });
+                return ;
+            }
+            
+            self->sendCount ++;
+        });
+        dispatch_resume(self->disconnectNetTimer);
+
+    });
+}
+
+- (void)callingHungupAction {
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling)  {
+        [self hungupActionUIStatusJudgement];
+    }
+}
+
 #pragma mark -TIoTTRTCSessionUIDelegate
 //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
 
@@ -712,5 +754,11 @@
         behungupTimer = nil;
     }
     
+    if (disconnectNetTimer) {
+        dispatch_source_cancel(disconnectNetTimer);
+    }
+    disconnectNetTimer = nil;
+    
+    sendCount = 0;
 }
 @end
