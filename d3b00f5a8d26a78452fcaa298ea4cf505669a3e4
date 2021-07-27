@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c27a36ce_98f4139e",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-27T07:43:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63f2ff19_1ee8650d",
+      "revId": "d3b00f5a8d26a78452fcaa298ea4cf505669a3e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec7af8ee_ab7e34a2",
         "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Model/TIoTProductsConfigModel.swift",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "a68bc6e0_6f771f97",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Model/TIoTProductsConfigModel.swift",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-27T07:43:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec7af8ee_ab7e34a2",
+      "revId": "d3b00f5a8d26a78452fcaa298ea4cf505669a3e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d90666ff_2cd36c3c",
         "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
         "patchSetId": 5
@@ -50,6 +86,24 @@
       "revId": "d3b00f5a8d26a78452fcaa298ea4cf505669a3e4",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a20d814_df7cc057",
+        "filename": "Source/LinkApp/Classes/Module/Home/Controller/TIoTHomeViewController.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-27T07:43:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d90666ff_2cd36c3c",
+      "revId": "d3b00f5a8d26a78452fcaa298ea4cf505669a3e4",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
