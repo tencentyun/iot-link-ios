@@ -38,6 +38,8 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 /// 监听到的设备上报信息处理
 - (void)receiveDeviceData:(NSDictionary *)deviceInfo;
 
+/// 关闭断网时候 60超时计时器
+- (void)callingHungupAction;
 @end
 
 NS_ASSUME_NONNULL_END

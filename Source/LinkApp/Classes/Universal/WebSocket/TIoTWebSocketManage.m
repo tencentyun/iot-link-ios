@@ -77,6 +77,8 @@ static NSString *heartBeatReqID = @"5002";
                 break;
             case NetworkReachabilityStatusNotReachable:
                 NSLog(@"没网络");
+                // RTC App端和设备端通话中 断网监听
+                [HXYNotice postCallingDisconnectNet];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
                 NSLog(@"WIFI");
@@ -110,7 +112,7 @@ static NSString *heartBeatReqID = @"5002";
 -(void)SRWebSocketOpen{
     
     [[TIoTCoreSocketManager shared] socketOpen];
-    
+    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
 }
 
 -(void)SRWebSocketClose{
