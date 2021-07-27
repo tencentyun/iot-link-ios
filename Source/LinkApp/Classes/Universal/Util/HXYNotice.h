@@ -95,4 +95,7 @@
 + (void)addBluetoothScanStopLister:(id)listener reaction:(SEL)selector;
 + (void)postBluetoothScanStop;
 
+// RTC App端和设备端通话中 断网监听
++ (void)addCallingDisconnectNetLister:(id)listener reaction:(SEL)selector;
++ (void)postCallingDisconnectNet;
 @end
