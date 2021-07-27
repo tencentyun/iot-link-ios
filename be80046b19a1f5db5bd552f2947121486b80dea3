@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "173fe1b5_3fe4aa8b",
+        "filename": "Source/LinkApp/Classes/Module/DistributionNetwork/Controller/TIoTNewAddEquipmentViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-27T06:44:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1a31ad3_2d2c3a91",
+      "range": {
+        "startLine": 93,
+        "startChar": 34,
+        "endLine": 93,
+        "endChar": 35
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1dbf5c2d_304b0d2b",
         "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "13ebaea9_4b9fd398",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-27T06:44:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dbf5c2d_304b0d2b",
+      "range": {
+        "startLine": 452,
+        "startChar": 57,
+        "endLine": 452,
+        "endChar": 58
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31e0ccee_e7563ba5",
         "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ca17fe9_faef7da5",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTTargetWIFIViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-27T06:44:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31e0ccee_e7563ba5",
+      "range": {
+        "startLine": 466,
+        "startChar": 56,
+        "endLine": 466,
+        "endChar": 58
+      },
+      "revId": "be80046b19a1f5db5bd552f2947121486b80dea3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
