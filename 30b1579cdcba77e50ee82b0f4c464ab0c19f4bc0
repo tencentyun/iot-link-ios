@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "ddd2057e_d556e4c9",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-28T06:15:03Z",
+      "side": 1,
+      "message": "好的，已在最新patch中修改,问题已解决：\n1、执行响应方法前，删除了观察者，导致不会执行\n2、单例中添加观察者对象还未完全初始化导致crash",
+      "parentUuid": "f350cd22_c47f51d8",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59f146ff_5413d712",
         "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
         "patchSetId": 1

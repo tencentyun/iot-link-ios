@@ -16,6 +16,24 @@
       "revId": "39a16c14e3aa61fa3fd8e44cb789cfa6656d1f07",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8196ed9_ca5513fc",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-28T06:15:03Z",
+      "side": 1,
+      "message": "好的，已在最新patch中补充 cancelTimer 方法中 添加移除通知",
+      "parentUuid": "6820885e_2c2d50ce",
+      "revId": "39a16c14e3aa61fa3fd8e44cb789cfa6656d1f07",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
