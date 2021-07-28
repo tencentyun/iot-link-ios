@@ -8,6 +8,7 @@
 #import "TIoTCoreFoundation.h"
 #import "Firebase.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "TIoTDemoWebSocketManager.h"
 
 @interface AppDelegate ()
 
@@ -26,6 +27,8 @@
     
     TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
     [environment setEnvironment];
+    
+    [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
     
     environment.appKey = @"物联网开发平台申请的 App Key";
     environment.appSecret = @"物联网开发平台申请的 App Secret";

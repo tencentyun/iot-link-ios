@@ -7,6 +7,12 @@
 #import "TIoTTRTCUIManage.h"
 #import "TIoTCoreUtil.h"
 #import "TIoTTRTCSessionManager.h"
+#import "HXYNotice.h"
+#import "TIoTCoreUserManage.h"
+//#import "TIoTRequestObject.h"
+#import "YYModel.h"
+#import "NSString+Extension.h"
+#import "TIoTCoreRequestObject.h"
 
 @interface TIoTTRTCUIManage ()<TRTCCallingViewDelegate> {
     TRTCCallingAuidoViewController *_callAudioVC;
@@ -223,7 +229,7 @@
     //开始准备进房间，通话中状态
     NSDictionary *param = @{@"DeviceId":_deviceParam.deviceName};
 
-    [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
 
         NSDictionary *tempDic = responseObject[@"TRTCParams"];
         TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
@@ -310,7 +316,7 @@
         @"DeviceName":[deviceID?:@"" componentsSeparatedByString:@"/"].lastObject?:@"",
         @"Data":[NSString objectToJson:trtcReport]?:@""};
     
-    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         NSLog(@"--!!!--%@",responseObject);
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
@@ -330,7 +336,7 @@
     
     NSArray *productIDs = [devices valueForKey:@"ProductId"];
     NSSet *productIDSet = [NSSet setWithArray:productIDs];//去chong
-    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDSet.allObjects} success:^(id responseObject) {
         
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
@@ -371,7 +377,7 @@
                 continue;
             }
             //2.是trtc设备,查看trtc状态是否为呼叫中1
-            [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"DeviceId":device.DeviceId} success:^(id responseObject) {
+            [[TIoTCoreRequestObject shared] post:AppGetDeviceData Param:@{@"DeviceId":device.DeviceId} success:^(id responseObject) {
                 NSString *tmpStr = (NSString *)responseObject[@"Data"];
                 TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
                 
