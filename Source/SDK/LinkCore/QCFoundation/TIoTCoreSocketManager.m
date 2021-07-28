@@ -64,7 +64,6 @@ static NSString *heartBeatReqID = @"5002";
         return;
     }
     
-    [self socketClose];
     QCLog(@"请求的websocket地址：%@",self.socket.url.absoluteString);
     [self.socket open];
 }
