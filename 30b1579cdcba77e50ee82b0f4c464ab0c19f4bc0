@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f350cd22_c47f51d8",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-28T01:27:53Z",
+      "side": 1,
+      "message": "crash的原因不是因为在单例初始化中，是因为没处理不在通话中的状态。 延迟注册通知也还是会接到后续的post，还会造成多次注册通知",
+      "parentUuid": "c8727840_a9d8f4ce",
+      "revId": "30b1579cdcba77e50ee82b0f4c464ab0c19f4bc0",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59f146ff_5413d712",
         "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
         "patchSetId": 1
