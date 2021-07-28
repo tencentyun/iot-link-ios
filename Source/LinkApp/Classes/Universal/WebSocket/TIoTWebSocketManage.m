@@ -31,7 +31,7 @@ static NSString *heartBeatReqID = @"5002";
 @interface TIoTWebSocketManage ()<QCSocketManagerDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary *reqArray;
-
+@property (nonatomic, strong) NSMutableSet *trtcDeviceIds;
 @end
 
 @implementation TIoTWebSocketManage
@@ -59,7 +59,7 @@ static NSString *heartBeatReqID = @"5002";
 }
 
 - (void)instanceSocketManager {
-    
+    self.trtcDeviceIds = [NSMutableSet set];
 //    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
     [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
     [TIoTCoreSocketManager shared].delegate = self;
@@ -69,7 +69,9 @@ static NSString *heartBeatReqID = @"5002";
 }
 
 - (void)registerNetworkNotifications{
-    
+    [HXYNotice addHeartBeatListener:self reaction:@selector(initHeartBeat:)];
+    [HXYNotice addActivePushListener:self reaction:@selector(registerDevicecActive:)];
+
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
@@ -101,8 +103,14 @@ static NSString *heartBeatReqID = @"5002";
 - (void)registerDevicecActive:(NSNotification *)noti {
     
     NSArray *deviceIds = noti.object;
+    if (deviceIds) {
+        [self.trtcDeviceIds addObjectsFromArray:deviceIds];
+    }
     
-    [[TIoTWebSocketManage shared] sendActiveData:deviceIds withRequestURL:@"ActivePush" complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
+    if (self.trtcDeviceIds.count == 0) {
+        return;
+    }
+    [[TIoTWebSocketManage shared] sendActiveData:self.trtcDeviceIds.allObjects withRequestURL:@"ActivePush" complete:^(BOOL sucess, NSDictionary * _Nonnull data) {
         if (sucess) {
 
         }
@@ -123,11 +131,9 @@ static NSString *heartBeatReqID = @"5002";
 
 #pragma mark - QCSocketManagerDelegate delegete
 - (void)socketDidOpen:(TIoTCoreSocketManager *)manager {
-    
-    QCLog(@"************************** socket 连接成功************************** ");
-    [HXYNotice addHeartBeatListener:self reaction:@selector(initHeartBeat:)];
-    [HXYNotice addActivePushListener:self reaction:@selector(registerDevicecActive:)];
-    
+    WCLog(@"************************** socket 连接成功************************** ");
+    [self registerDevicecActive:nil];
+
     [HXYNotice addSocketConnectSucessPost];
 }
 
@@ -140,11 +146,10 @@ static NSString *heartBeatReqID = @"5002";
     [self handleReceivedMessage:message];
 }
 
-- (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    
-    QCLog(@"************************** socket连接断开************************** ");
-    [self SRWebSocketClose];
-    
+- (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {    
+    WCLog(@"************************** socket连接断开************************** ");
+//    [self SRWebSocketClose];
+    [MBProgressHUD showError:@"socket连接断开"];
 }
 
 
