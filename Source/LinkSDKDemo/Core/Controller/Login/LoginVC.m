@@ -5,6 +5,7 @@
 //
 
 #import "LoginVC.h"
+#import "TIoTCoreUserManage.h"
 
 @interface LoginVC ()
 @property (weak, nonatomic) IBOutlet UITextField *account;
@@ -29,6 +30,8 @@
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
             [UIApplication sharedApplication].keyWindow.rootViewController = vc;
+            
+            [self getUserInfo];
             
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             NSLog(@"登录错==%@",reason);
@@ -58,6 +61,16 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)getUserInfo {
+    [[TIoTCoreAccountSet shared] getUserInfoOnSuccess:^(id  _Nonnull responseObject) {
+        
+        [TIoTCoreUserManage shared].nickName = responseObject[@"Data"][@"NickName"];
+        [TIoTCoreUserManage shared].userId = responseObject[@"Data"][@"UserID"];
+        
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
+        
+    }];
+}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
