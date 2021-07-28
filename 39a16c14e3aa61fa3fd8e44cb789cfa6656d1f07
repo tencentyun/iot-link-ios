@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6820885e_2c2d50ce",
+        "filename": "Source/LinkApp/Classes/Universal/WebSocket/TIoTTRTCUIManage.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-07-28T01:24:06Z",
+      "side": 1,
+      "message": "需要考虑倒计时过程中，退出通话状态",
+      "revId": "39a16c14e3aa61fa3fd8e44cb789cfa6656d1f07",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
