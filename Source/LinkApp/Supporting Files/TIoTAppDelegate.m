@@ -22,7 +22,6 @@
 #import <UserNotifications/UserNotifications.h>
 #import "TIoTScanlViewController.h"
 #import "TIoTAppUtilOC.h"
-#import "TIoTCoreServices.h"
 #import <QMapKit/QMapKit.h>
 #import <QMapKit/QMSSearchKit.h>
 
@@ -51,8 +50,6 @@
     [QMapServices sharedServices].APIKey = model.TencentMapSDKValue;
     [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
     
-    //开启打印日志
-    [TIoTCoreServices shared].logEnable = true;
     
     //firebase注册
     [FIRApp configure];
