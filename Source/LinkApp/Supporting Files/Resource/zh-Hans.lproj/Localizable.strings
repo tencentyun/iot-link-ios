@@ -905,4 +905,7 @@
 "llsync_network_title" = "蓝牙辅助配网";
 "llsync_network_tips" = "设备蓝牙";
 "llsync_network_hud" = "连接蓝牙中";
+
 "default_bleConfig_tip" = "1. 接通设备电源。\n2. 长按复位键（开关），指示灯慢闪。\n3. 点击“下一步”开始蓝牙辅助配网。";
+"openLog" = "开启日志";
+"closeLog" = "关闭日志";

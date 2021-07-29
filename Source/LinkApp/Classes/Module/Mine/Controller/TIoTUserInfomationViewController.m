@@ -26,6 +26,7 @@
 #import "TIoTChooseTimeZoneVC.h"
 #import "TIoTCustomSheetView.h"
 #import "TIoTModifyNameVC.h"
+#import "TIoTCoreServices.h"
 
 static CGFloat const kLeftPadding = 16; //左边距
 static CGFloat const kRightPadding = 16; //右边距
@@ -56,6 +57,11 @@ static CGFloat const kRightPadding = 16; //右边距
     gesture.numberOfTapsRequired = 5;
     [self.view addGestureRecognizer:gesture];
     
+    //给UIView添加6次点击，弹出是否打印并导出日志弹框，用户可选择操作
+    UITapGestureRecognizer *controlLogTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(printLogAlert:)];
+    controlLogTap.numberOfTapsRequired = 6;
+    [self.view addGestureRecognizer:controlLogTap];
+    
     //国际化版本
     [self setupRefreshView];
     [self.tableView.mj_header beginRefreshing];
@@ -64,6 +70,37 @@ static CGFloat const kRightPadding = 16; //右边距
 - (void)tapGesture:(UITapGestureRecognizer *)gesture {
     UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
     pastboard.string = TIoTAPPConfig.GlobalDebugUin;
+}
+
+- (void)printLogAlert:(UITapGestureRecognizer *)tapGesture{
+    
+    TIoTCustomSheetView *printLogSheet = [[TIoTCustomSheetView alloc]init];
+    
+    NSArray *titleArray = @[NSLocalizedString(@"openLog", @"开启日志"),NSLocalizedString(@"closeLog", @"关闭日志"),NSLocalizedString(@"cancel", @"取消")];
+    
+    ChooseFunctionBlock openPrintLog = ^(TIoTCustomSheetView *view) {
+        //开启日志
+        [TIoTCoreServices shared].logEnable = true;
+        [printLogSheet removeFromSuperview];
+    };
+    
+    ChooseFunctionBlock closePrintLog = ^(TIoTCustomSheetView *view) {
+        //关闭日志
+        [TIoTCoreServices shared].logEnable = NO;
+        [printLogSheet removeFromSuperview];
+    };
+    
+    ChooseFunctionBlock cancelBlock = ^(TIoTCustomSheetView *view){
+        [printLogSheet removeFromSuperview];
+    };
+    
+    NSArray *functionArray = @[openPrintLog,closePrintLog,cancelBlock];
+    [printLogSheet sheetViewTopTitleArray:titleArray withMatchBlocks:functionArray];
+    
+    [[UIApplication sharedApplication].delegate.window addSubview:printLogSheet];
+    [printLogSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+    }];
 }
 
 - (void)dealloc{
