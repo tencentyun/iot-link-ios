@@ -205,10 +205,10 @@
     TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
     vc.llsyncDeviceVC = self.llsyncDeviceVC;
     vc.step = 2;
-    vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+    vc.configConnentData = self.configurationData;
     vc.currentDistributionToken = self.networkToken;
     vc.roomId = self.roomId;
-    vc.configConnentData = self.configurationData;
+    vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -217,9 +217,9 @@
 - (void)setConfigHardwareStyle:(TIoTConfigHardwareStyle)configHardwareStyle {
     _configHardwareStyle = configHardwareStyle;
             
-    NSString *softAPExploreString = self.configurationData[@"WifiSoftAP"][@"hardwareGuide"][@"message"];
+    NSString *softAPExploreString = self.configurationData[@"WifiLLSyncBle"][@"hardwareGuide"][@"message"];
     if ([NSString isNullOrNilWithObject:softAPExploreString]) {
-        softAPExploreString = NSLocalizedString(@"default_softAp_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到热点配网（不同设备操作方式有所不同）。\n3. 指示灯慢闪即进入热点配网模式。");
+        softAPExploreString = NSLocalizedString(@"default_bleConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），指示灯慢闪。\n3. 点击“下一步”开始蓝牙辅助配网。");
     }
     
     _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),
@@ -229,9 +229,9 @@
     };
     
     if (self.llsyncDeviceVC) {
-        NSString *smartExploreString = self.configurationData[@"WifiSmartConfig"][@"hardwareGuide"][@"message"];
+        NSString *smartExploreString = self.configurationData[@"WifiLLSyncBle"][@"hardwareGuide"][@"message"];
         if ([NSString isNullOrNilWithObject:smartExploreString]) {
-            smartExploreString = NSLocalizedString(@"default_smartConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），切换设备配网模式到一键配网（不同设备操作方式有所不同）。\n3. 指示灯快闪即进入一键配网模式。");
+            smartExploreString = NSLocalizedString(@"default_bleConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），指示灯慢闪。\n3. 点击“下一步”开始蓝牙辅助配网。");
         }
         
         _dataDic = @{@"title": NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网"),

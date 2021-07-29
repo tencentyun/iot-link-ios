@@ -439,9 +439,9 @@
             
         case TIoTConfigHardwareStyleLLsync:
         {
-            NSString *bleExploreString = self.configConnentData[@"WifiBle"][@"hardwareGuide"][@"message"];
+            NSString *bleExploreString = self.configConnentData[@"WifiLLSyncBle"][@"hardwareGuide"][@"message"];
             if ([NSString isNullOrNilWithObject:bleExploreString]) {
-                bleExploreString = NSLocalizedString(@"default_bleConfig_tip", @"1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。");
+                bleExploreString = NSLocalizedString(@"default_bleConfig_tip", @"1. 接通设备电源。\n2. 长按复位键（开关），指示灯慢闪。\n3. 点击“下一步”开始蓝牙辅助配网。");
             }
             
             _dataDic = @{@"title": NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网"),

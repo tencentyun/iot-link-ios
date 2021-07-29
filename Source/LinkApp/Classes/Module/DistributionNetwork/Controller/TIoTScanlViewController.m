@@ -282,7 +282,7 @@
                 if ([configType isEqualToString:@"softap"]) {
                     [self jumpConfigVC:NSLocalizedString(@"soft_ap", @"自助配网")];
                     return;
-                }else if  ([configType isEqualToString:@"ble"]) {
+                }else if  ([configType isEqualToString:@"llsyncble"]) {
                     
                     [self jumpllsyncVC];
                     return;
