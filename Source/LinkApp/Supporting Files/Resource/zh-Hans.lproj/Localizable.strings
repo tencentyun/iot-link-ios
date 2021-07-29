@@ -906,3 +906,5 @@
 "llsync_network_tips" = "设备蓝牙";
 "llsync_network_hud" = "连接蓝牙中";
 "default_bleConfig_tip" = "1.点击WiFi名称右侧的下拉按钮，前往手机WiFi设置界面选择设备热点后，返回APP。\n2.填写设备密码，若设备热点无密码则无需填写。\n3.点击下一步，开始配网。";
+"openLog" = "开启日志";
+"closeLog" = "关闭日志";
