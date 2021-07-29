@@ -114,7 +114,7 @@
 
 - (void)nav_customBack {
     TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds andStyle:WCAlertViewStyleText];
-    [av alertWithTitle:NSLocalizedString(@"退出添加设备", @"退出添加设备")  message:NSLocalizedString(@"addDevicing_confirmSignout", @"当前正在添加设备，是否确认退出") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
+    [av alertWithTitle:NSLocalizedString(@"exit_toast_title", @"退出添加设备")  message:NSLocalizedString(@"addDevicing_confirmSignout", @"当前正在添加设备，是否确认退出") cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
     av.doneAction = ^(NSString * _Nonnull text) {
         [self releaseAlloc];
         // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
