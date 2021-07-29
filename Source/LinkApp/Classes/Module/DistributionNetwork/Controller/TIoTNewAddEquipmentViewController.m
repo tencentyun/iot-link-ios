@@ -66,6 +66,11 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.llsyncDeviceVC.originBlueDevices) {
             self.discoverView.status = DiscoverDeviceStatusDiscovered;
+            
+            CGFloat discoverHeight = ((self.llsyncDeviceVC.originBlueDevices.allKeys.count - 1)/3 + 1) * 80 + 100;
+            [self.discoverView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(discoverHeight);
+            }];
         }else {
             self.discoverView.status = DiscoverDeviceStatusNotFound;
         }
@@ -83,6 +88,11 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     }
     
     [self configLLSyncView];
+}
+
+- (void)setConfigData:(NSDictionary *)configData {
+    _configData = configData;
+    self.llsyncDeviceVC.configdata = self.configData;
 }
 
 - (void) configLLSyncView {
@@ -162,10 +172,17 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [selfWeak.navigationController pushViewController:vc animated:YES];
     };
     self.discoverView.retryAction = ^{
+        
+        [[BluetoothCentralManager shareBluetooth] scanNearLLSyncService];
         selfWeak.discoverView.status = DiscoverDeviceStatusDiscovering;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (selfWeak.llsyncDeviceVC.originBlueDevices) {
                 selfWeak.discoverView.status = DiscoverDeviceStatusDiscovered;
+                
+                CGFloat discoverHeight = ((selfWeak.llsyncDeviceVC.originBlueDevices.allKeys.count - 1)/3 + 1) * 80 + 100;
+                [selfWeak.discoverView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.height.mas_equalTo(discoverHeight);
+                }];
             }else {
                 selfWeak.discoverView.status = DiscoverDeviceStatusNotFound;
             }
@@ -372,7 +389,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                 if ([configType isEqualToString:@"softap"]) {
                     [self jumpConfigVC:TIoTConfigHardwareStyleSoftAP];  //自助配网
                     return;
-                }else if  ([configType isEqualToString:@"ble"]) {
+                }else if  ([configType isEqualToString:@"llsyncble"]) {
                     
                     [self jumpllsyncVC];
                     return;

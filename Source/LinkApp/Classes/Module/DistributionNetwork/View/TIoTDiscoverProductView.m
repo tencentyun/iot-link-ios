@@ -80,8 +80,6 @@
         make.right.equalTo(helpBtn.mas_left).offset(-10);
         make.top.width.height.equalTo(helpBtn);
     }];
-    
-    [self addSubview:self.tableFooterView];
 }
 
 - (void)setupDiscoveredProductUI{
