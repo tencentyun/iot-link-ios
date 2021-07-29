@@ -410,8 +410,12 @@ static NSUInteger limit = 10; //每次请求数据个数限制
 
     NSDictionary *sectionDic = self.sectionDataArray[section];
     NSString *timeString = sectionDic.allKeys[0]?:@""; //2020-01-01
-    NSString *dayString = [timeString componentsSeparatedByString:@"-"].lastObject;
-    NSString *monthString = [timeString componentsSeparatedByString:@"-"][1]?:@"";
+    NSString *dayString = @"";
+    NSString *monthString = @"";
+    if (![NSString isNullOrNilWithObject:timeString]) {
+        dayString = [timeString componentsSeparatedByString:@"-"].lastObject?:@"";
+        monthString = [timeString componentsSeparatedByString:@"-"][1]?:@"";
+    }
     
     //day
     UILabel *sectionTitle = [[UILabel alloc]initWithFrame:CGRectMake(16, 0, 40, 36)];

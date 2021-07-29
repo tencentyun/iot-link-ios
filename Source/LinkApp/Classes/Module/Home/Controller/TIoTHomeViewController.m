@@ -1521,7 +1521,7 @@ static CGFloat kHeaderViewHeight = 162;
 {
     CGFloat offSetY = scrollView.contentOffset.y;
     self.tableViewScrollOffset = offSetY;
-    NSLog(@"offsetY==%f",offSetY);
+    
     CGFloat limit = 44 + weatherHeight;
     if (offSetY <= -(limit + [TIoTUIProxy shareUIProxy].statusHeight)) {
         self.navView.hidden = NO;
