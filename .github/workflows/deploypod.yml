@@ -42,11 +42,17 @@ jobs:
         set -eo pipefail
         
         temptag=$(git describe --tags `git rev-list --tags --max-count=1`)
-        VERSION=${temptag#*v}
-        VERSIONLIST=(${VERSION//-/ })
-        echo ${VERSIONLIST[0]}
-        export LIB_VERSION=${VERSIONLIST[0]}
-        
+        vtaglist=(${temptag//-/ })
+        beta=${vtaglist[2]}
+        version=${vtaglist[1]}
+        if [ ${#beta} -gt 0 ]
+        then
+            version=${vtaglist[1]}-$beta
+        fi
+        version=${version#*v}
+        echo $version
+
+        export LIB_VERSION=$version
         perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" TIoTLinkVideo.podspec
                 
         pod lib lint TIoTLinkVideo.podspec --verbose --allow-warnings --use-libraries
