@@ -17,8 +17,7 @@ jobs:
     - name: Get Pod Version
       run: |
         rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
-        rt=${rtt#*v}
-        echo "curr_tag=$rt" >> $GITHUB_ENV
+        echo "curr_tag=$rtt" >> $GITHUB_ENV
           
     - name: Deploy Link SDK
       if: ${{!contains(env.curr_tag, 'video')}}
