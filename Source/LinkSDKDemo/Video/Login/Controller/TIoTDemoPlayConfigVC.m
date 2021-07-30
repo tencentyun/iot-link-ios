@@ -108,9 +108,14 @@
 - (void)saveLoginViewInfo {
     [TIoTCoreUserManage shared].demoAccessID = self.loginView.accessID.text?:@"";
     
+    self.loginView.secretIDString = self.loginView.accessID.text?:@"";
+    
     NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
     if (![NSString isNullOrNilWithObject:self.loginView.accessID.text?:@""]) {
         [defaluts setValue:@{@"AccessTokenString":self.loginView.accessToken.text?:@"",@"productIDString":self.loginView.productID.text?:@""} forKey:self.loginView.accessID.text?:@""];
+        self.loginView.secretKeyString = self.loginView.accessToken.text;
+        self.loginView.productIDString = self.loginView.productID.text;
+        
     }
 }
 
@@ -125,6 +130,7 @@
     }else {
         NSMutableArray *IDArray = [[NSMutableArray alloc]init];
         [IDArray addObject:self.loginView.secretIDString?:@""];
+        [defaluts removeObjectForKey:[defaluts objectForKey:@"AccessIDArrayKey"]];
         [defaluts setValue:IDArray forKey:@"AccessIDArrayKey"];
     }
 }
