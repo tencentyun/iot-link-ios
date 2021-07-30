@@ -27,8 +27,7 @@ jobs:
     - name: Get Product Line
       run: |
         rtt=$(git describe --tags `git rev-list --tags --max-count=1`)
-        rt=${rtt#*v}
-        echo "curr_tag=$rt" >> $GITHUB_ENV
+        echo "curr_tag=$rtt" >> $GITHUB_ENV
 
 ############# Link ##################
     - name: Decrypt Link prerelease keychain
