@@ -81,8 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
  SDKDemo
  */
 @property (nonatomic, copy, nullable) NSString *demoAccessID;
-@property (nonatomic, copy, nullable) NSString *demoAccessToken;
-@property (nonatomic, copy, nullable) NSString *demoProductID;
 
 //保存accessToken 和 有效期
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt;

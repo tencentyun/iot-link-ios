@@ -7,6 +7,7 @@
 #import "TIoTLoginCustomView.h"
 #import "TIoTCoreXP2PBridge.h"
 #import "TIoTAccessIDPickerView.h"
+#import "TIoTCoreUserManage.h"
 
 @interface TIoTLoginCustomView ()<UITextFieldDelegate>
 //选择应用端
@@ -150,6 +151,7 @@
     self.accessToken.textColor = [UIColor colorWithHexString:@"#7F7F7F"];
     self.accessToken.placeholder = @"请输入Access Token";
     self.accessToken.delegate = self;
+    self.accessToken.secureTextEntry = YES;
     self.accessToken.textAlignment = NSTextAlignmentLeft;
     self.accessToken.returnKeyType = UIReturnKeyDone;
     [self addSubview:self.accessToken];
@@ -183,6 +185,7 @@
     self.productID.textColor = [UIColor colorWithHexString:@"#7F7F7F"];
     self.productID.placeholder = @"请输入Product ID";
     self.productID.delegate = self;
+    self.productID.secureTextEntry = YES;
     self.productID.textAlignment = NSTextAlignmentLeft;
     self.productID.returnKeyType = UIReturnKeyDone;
     [self addSubview:self.productID];
@@ -263,6 +266,13 @@
     self.choiceAccessIDView.defaultAccessID = self.accessID.text?:@"";
     self.choiceAccessIDView.accessIDStringBlock = ^(NSString * _Nonnull accessIDString) {
         weakSelf.accessID.text = accessIDString?:@"";
+        
+        NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+        NSDictionary *tokenAndProductIDDic = [NSDictionary dictionaryWithDictionary:[defaluts objectForKey:weakSelf.accessID.text?:@""]];
+        if (tokenAndProductIDDic != nil) {
+            weakSelf.accessToken.text = [tokenAndProductIDDic objectForKey:@"AccessTokenString"];
+            weakSelf.productID.text = [tokenAndProductIDDic objectForKey:@"productIDString"];
+        }
     };
     [[UIApplication sharedApplication].delegate.window addSubview:self.choiceAccessIDView];
     [self.choiceAccessIDView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -107,8 +107,11 @@
 
 - (void)saveLoginViewInfo {
     [TIoTCoreUserManage shared].demoAccessID = self.loginView.accessID.text?:@"";
-    [TIoTCoreUserManage shared].demoAccessToken = self.loginView.accessToken.text?:@"";
-    [TIoTCoreUserManage shared].demoProductID = self.loginView.productID.text?:@"";
+    
+    NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+    if (![NSString isNullOrNilWithObject:self.loginView.accessID.text?:@""]) {
+        [defaluts setValue:@{@"AccessTokenString":self.loginView.accessToken.text?:@"",@"productIDString":self.loginView.productID.text?:@""} forKey:self.loginView.accessID.text?:@""];
+    }
 }
 
 - (void)saveAccessID {
@@ -128,8 +131,13 @@
 
 - (void)readLoginInfoFromManage {
     self.loginView.accessID.text = [TIoTCoreUserManage shared].demoAccessID?:@"";
-    self.loginView.accessToken.text = [TIoTCoreUserManage shared].demoAccessID?:@"";
-    self.loginView.productID.text = [TIoTCoreUserManage shared].demoProductID?:@"";
+    
+    NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *tokenAndProductIDDic = [NSDictionary dictionaryWithDictionary:[defaluts objectForKey:self.loginView.accessID.text?:@""]];
+    if (tokenAndProductIDDic != nil) {
+        self.loginView.accessToken.text = [tokenAndProductIDDic objectForKey:@"AccessTokenString"];
+        self.loginView.productID.text = [tokenAndProductIDDic objectForKey:@"productIDString"];
+    }
 }
 
 - (void)readAccessID {
