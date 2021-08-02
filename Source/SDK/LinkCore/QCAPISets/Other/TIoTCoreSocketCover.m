@@ -91,7 +91,7 @@ static NSString *registDeviceReqID = @"5001";
     TIoTCoreRequestObj *obj = [TIoTCoreRequestObj new];
     obj.sucess = success;
     [self.reqArray setObject:obj forKey:registDeviceReqID];
-    QCLog(@"send======%@",dataDic);
+    QCLog(@"\n 注册监听设备,构建发送数据参数 send   :%@\n",dataDic);
     return dataDic;
     
 }
@@ -139,7 +139,7 @@ static NSString *registDeviceReqID = @"5001";
                                 };
 
 
-    QCLog(@"send======%@",dataDic);
+    QCLog(@"\n监听设备状态参数 send======%@\n",dataDic);
     return dataDic;
 }
 
