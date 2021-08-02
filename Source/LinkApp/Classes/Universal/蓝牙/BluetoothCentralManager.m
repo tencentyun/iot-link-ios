@@ -83,7 +83,7 @@
     if ([self.centralManager isScanning]) {
         return;
     }
-    WCLog(@"开始扫描四周的设备");
+    QCLog(@"开始扫描四周的设备");
     self.isLLsync = NO;
     self.maxValue = 0;
     
@@ -150,7 +150,7 @@
  停止扫描设备
  */
 - (void)stopScan{
-    WCLog(@"停止扫描四周的设备");
+    QCLog(@"停止扫描四周的设备");
     [self.centralManager stopScan];
     
     self.isScanDevice = self.centralManager.isScanning;
@@ -163,7 +163,7 @@
 /// 连接指定的设备
 - (void)connectBluetoothPeripheral:(CBPeripheral *)peripheral {
     self.peripheral = peripheral;
-    WCLog(@"----尝试连接设备----\n%@", peripheral);
+    QCLog(@"----尝试连接设备----\n%@", peripheral);
     [self.centralManager connectPeripheral:peripheral
                                    options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey]];
 }
@@ -172,7 +172,7 @@
  断开设备连接
  */
 - (void)disconnectPeripheral{
-    WCLog(@"断开已连接的设备");
+    QCLog(@"断开已连接的设备");
     if (self.peripheral) {
        
         [self.centralManager cancelPeripheralConnection:self.peripheral];
@@ -342,7 +342,7 @@
     [nsmstring appendFormat:@"UUID(identifier): %@\n",peripheral.identifier];
     [nsmstring appendFormat:@"RSSI: %@\n",RSSI];
     [nsmstring appendFormat:@"adverisement:%@\n",advertisementData];
-    WCLog(@"%@",nsmstring);
+    QCLog(@"%@",nsmstring);
     
     NSMutableDictionary *peripheralDic = [NSMutableDictionary new];
     if (![NSString isNullOrNilWithObject:peripheral.name]) {
@@ -504,7 +504,7 @@
 
 ///连接外设失败的代理方法
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    WCLog(@"%@连接失败",peripheral.name);
+    QCLog(@"%@连接失败",peripheral.name);
 }
 
 ///连接外设中断的代理方法
@@ -525,14 +525,14 @@
 /// 获取外设服务的代理
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     if (error) {
-        WCLog(@"%@获取服务失败:%@",peripheral.name,error.localizedDescription);
+        QCLog(@"%@获取服务失败:%@",peripheral.name,error.localizedDescription);
         return;
     }
     
     //这种连接的设备没有服务
     if(peripheral.services.count == 0)
     {
-      WCLog(@"蓝牙设备无服务服务");
+        QCLog(@"蓝牙设备无服务服务");
     }
     
     
@@ -559,7 +559,7 @@
 ///在获取外设服务的代理的方法中如果没有error，可以调用discoverCharacteristics方法请求周边去寻找它的服务所列出的特征，它会响应下面的方法
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     if (error) {
-        WCLog(@"%@获取指定特征失败:%@",peripheral.name,error.localizedDescription);
+        QCLog(@"%@获取指定特征失败:%@",peripheral.name,error.localizedDescription);
         return;
     }
     
@@ -572,17 +572,17 @@
     //这种连接的设备特征值
     if(service.characteristics.count == 0)
     {
-        WCLog(@"蓝牙设备无特征值");
+        QCLog(@"蓝牙设备无特征值");
     }
     for (CBCharacteristic *characteristic in service.characteristics) {
         [nsmstring appendFormat:@"%@\n",characteristic];
         [nsmstring appendFormat:@"\n"];
-        WCLog(@"------characteristic--->>>%@",nsmstring);
+        QCLog(@"------characteristic--->>>%@",nsmstring);
         CBCharacteristicProperties p = characteristic.properties;
         
         
         if (p & CBCharacteristicPropertyWrite) {
-            WCLog(@"Write---扫描服务：%@的特征值为：%@",service.UUID,characteristic.UUID);
+            QCLog(@"Write---扫描服务：%@的特征值为：%@",service.UUID,characteristic.UUID);
             // 订阅, 实时接收
 //            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             
@@ -654,8 +654,8 @@
 //    if (characteristic.isNotifying) {
 //
 //    } else {
-        WCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
-        WCLog(@"%@", characteristic);
+    QCLog(@"Notification stopped on %@.  Disconnecting", characteristic);
+    QCLog(@"%@", characteristic);
 //        [peripheral readValueForCharacteristic:characteristic];
         
         //[self.centralManager cancelPeripheralConnection:peripheral];
@@ -679,15 +679,15 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
-    WCLog(@"特征描述(%@)",descriptor.description);
+    QCLog(@"特征描述(%@)",descriptor.description);
 }
 
 //发现已连接外设的描述特征数组
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
-    WCLog(@"--->%@",characteristic);
+    QCLog(@"--->%@",characteristic);
     // 读取特征数据
     for (CBDescriptor *descriptor in characteristic.descriptors) {
-        WCLog(@"发现外设的特征descriptor(%@)",descriptor);
+        QCLog(@"发现外设的特征descriptor(%@)",descriptor);
         [peripheral readValueForDescriptor:descriptor];
     }
 }
