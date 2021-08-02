@@ -75,19 +75,19 @@ static NSString *heartBeatReqID = @"5002";
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
-                NSLog(@"状态不知道");
+                QCLog(@"\n 未知网络状态 \n");
                 break;
             case NetworkReachabilityStatusNotReachable:
-                NSLog(@"没网络");
+                QCLog(@"\n 无网络状态 \n");
                 // RTC App端和设备端通话中 断网监听
                 [HXYNotice postCallingDisconnectNet];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
-                NSLog(@"WIFI");
+                QCLog(@"\n WIFI 网络\n");
                 [self SRWebSocketOpen];
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
-                NSLog(@"移动网络");
+                QCLog(@"\n 移动网络 \n");
                 [self SRWebSocketOpen];
                 break;
             default:
@@ -121,33 +121,35 @@ static NSString *heartBeatReqID = @"5002";
     
     [[TIoTCoreSocketManager shared] socketOpen];
     [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+    QCLog(@"------开启 socket-------");
 }
 
 -(void)SRWebSocketClose{
     
     [[TIoTCoreSocketManager shared] socketClose];
+    QCLog(@"------关闭 socket-------");
     [self destoryHeartBeat];
 }
 
 #pragma mark - QCSocketManagerDelegate delegete
 - (void)socketDidOpen:(TIoTCoreSocketManager *)manager {
-    WCLog(@"************************** socket 连接成功************************** ");
+    QCLog(@" socket 连接成功 ");
     [self registerDevicecActive:nil];
 
     [HXYNotice addSocketConnectSucessPost];
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error {
-    QCLog(@"************************** socket 连接失败************************** ");
+    QCLog(@"socket 连接失败: manager: %@ \n error: %@",manager,error);
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didReceiveMessage:(id)message {
-    QCLog(@"************************** socket 接收消息成功************************** ");
+    QCLog(@"socket 接收消息成功");
     [self handleReceivedMessage:message];
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {    
-    WCLog(@"************************** socket连接断开************************** ");
+    QCLog(@"socket连接断开");
 //    [self SRWebSocketClose];
     [MBProgressHUD showError:@"socket连接断开"];
 }
@@ -181,7 +183,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)handleReceivedMessage:(id)message{
     NSDictionary *dic = [NSString jsonToObject:message];
-    WCLog(@"message:%@",dic);
+    QCLog(@"socket接收到的消息 message:%@",dic);
     NSString *reqId = [NSString stringWithFormat:@"%@",dic[@"reqId"]];
     if ([NSObject isNullOrNilWithObject:dic[@"reqId"]])
     {
@@ -251,6 +253,7 @@ static NSString *heartBeatReqID = @"5002";
         [self destoryHeartBeat];
         
         [[TIoTCoreSocketManager shared] startHeartBeatWith:deviceIds];
+        QCLog(@"\n ---- 启动心跳 ---- \n");
     })
 }
 
@@ -260,6 +263,7 @@ static NSString *heartBeatReqID = @"5002";
 {
 
     [[TIoTCoreSocketManager shared] stopHeartBeat];
+    QCLog(@"\n ---- 取消心跳 ---- \n");
 }
 
 //ping
