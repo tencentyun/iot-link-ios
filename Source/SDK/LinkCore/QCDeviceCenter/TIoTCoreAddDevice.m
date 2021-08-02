@@ -213,7 +213,7 @@
     [self.esptouchTask setPackageBroadcast:true];
     [self.condition unlock];
     NSArray * esptouchResults = [self.esptouchTask executeForResults:taskCount];
-    QCLog(@"result is: %@",esptouchResults);
+    QCLog(@"\n result is: %@\n",esptouchResults);
     return esptouchResults;
 }
 

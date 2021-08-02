@@ -76,7 +76,6 @@
     [self valueChangeWithFloat:value];
     if (panChange.state == UIGestureRecognizerStateEnded)
     {
-        NSLog(@"结束拖拖");
         if (self.update) {
             self.update(value);
         }
