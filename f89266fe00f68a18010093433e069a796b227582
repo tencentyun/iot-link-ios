@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4be0b22_67d8d9e1",
+        "filename": "Source/LinkSDKDemo/Supporting Files/AppDelegate.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-02T08:44:13Z",
+      "side": 1,
+      "message": "删除掉敏感信息",
+      "revId": "f89266fe00f68a18010093433e069a796b227582",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
