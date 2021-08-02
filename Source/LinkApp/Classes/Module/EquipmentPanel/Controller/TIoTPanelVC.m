@@ -480,7 +480,7 @@ static NSString *itemId3 = @"i_ooo454";
 //    NSNumber *statusValue = self.reportData[@"status"][@"Value"];
     
     if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"-1"]) {
-        NSLog(@"--!!-%@---",[TIoTCoreUserManage shared].sys_call_status);
+        NSLog(@"\n --下发数据状态: %@---\n",[TIoTCoreUserManage shared].sys_call_status);
         if ([key isEqualToString:@"_sys_audio_call_status"]) {
             if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
                 [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self.view];
@@ -552,8 +552,8 @@ static NSString *itemId3 = @"i_ooo454";
     
     
     NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
-    NSLog(@"----8888---%@",payloadDic);
-    NSLog(@"----9999---%@",[TIoTCoreUserManage shared].userId);
+    NSLog(@"\n----上报 payloadDic:---%@\n",payloadDic);
+    NSLog(@"\n----用户ID userid:---%@\n",[TIoTCoreUserManage shared].userId);
     
     if ([payloadDic.allKeys containsObject:@"params"]) {
         NSDictionary *paramsDic = payloadDic[@"params"];

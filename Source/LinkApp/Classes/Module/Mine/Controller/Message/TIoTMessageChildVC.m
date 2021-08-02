@@ -93,7 +93,7 @@ static NSUInteger limit = 20;
         [MBProgressHUD dismissInView:self.view];
         
         [self.tableView showEmpty:@"" desc:NSLocalizedString(@"empty_message", @"暂无消息") image:[UIImage imageNamed:@"noMessage"] block:^{
-            NSLog(@"水电费水电费");
+            WCLog(@"水电费水电费");
         }];
         
         [self.tableView reloadData];

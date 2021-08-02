@@ -147,7 +147,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"value"]) {
-        NSLog(@"%@",change);
+        WCLog(@"滑动: %@",change);
         self.valueLab.text = [NSString stringWithFormat:@"%.f %@",[change[NSKeyValueChangeNewKey] floatValue],self.unit];
     }
 }

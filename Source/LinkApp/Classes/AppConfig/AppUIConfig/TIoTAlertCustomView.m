@@ -267,7 +267,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction{
     if ([[URL scheme] isEqualToString:@"Privacy2"]) {
-        WCLog(@"设备分享隐私");
+        QCLog(@"设备分享隐私");
         
         [self hideAlertView];
         if (self.privatePolicyBlock) {
