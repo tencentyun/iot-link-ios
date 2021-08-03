@@ -18,10 +18,11 @@
 
   https://github.com/tencentyun/iot-link-ios
 
-* 工程如何引用：
+* 工程中如何引用：
 
-  pod 'TIoTLinkKit/LinkVideo
-
+	```
+	pod 'TIoTLinkVideo'
+	```
 
 ### P2P通道传输数据
 

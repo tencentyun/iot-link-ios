@@ -164,3 +164,4 @@
 ## 第三方服务接入指引
 
 * [实时音视频接入指南](Source/SDK/LinkRTC/README.md)
+* [物联网智能视频服务](Source/SDK/LinkVideo/README.md)
