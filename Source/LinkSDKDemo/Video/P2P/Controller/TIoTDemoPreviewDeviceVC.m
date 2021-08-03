@@ -178,9 +178,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 //对讲
                 NSString *channel = @"";
                 if (self.isNVR == NO) {
-                    channel = @"voice?channel=0";
+                    channel = @"channel=0";
                 }else {
-                    channel = [NSString stringWithFormat:@"voice?channel=%@",self.selectedModel.Channel?:@""];
+                    channel = [NSString stringWithFormat:@"channel=%@",self.selectedModel.Channel?:@""];
                 }
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }

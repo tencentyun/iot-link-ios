@@ -203,7 +203,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
             return;
         }
         //flv header  hhhhhhhhhhhhhhhhhhhh
-        aw_write_audio_header();
+//        aw_write_audio_header();
         
         
         //audio specific config tag
