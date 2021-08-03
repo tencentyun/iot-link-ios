@@ -180,7 +180,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 if (self.isNVR == NO) {
                     channel = @"channel=0";
                 }else {
-                    channel = [NSString stringWithFormat:@"channel=%@",self.selectedModel.Channel?:@""];
+                    NSString *channelNum = self.selectedModel.Channel?:@"0";
+                    channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }
@@ -1030,10 +1031,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)stopPlayMovie {
-    [self.player stop];
-    [self.player shutdown];
-    [self.player.view removeFromSuperview];
-    self.player = nil;
+    if (self.player != nil) {
+        [self.player stop];
+        [self.player shutdown];
+        [self.player.view removeFromSuperview];
+        self.player = nil;
+    }
 }
 
 - (void)configVideo {
