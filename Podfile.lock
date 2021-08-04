@@ -71,11 +71,11 @@ PODS:
     - nanopb (~> 1.30906.0)
   - GoogleDataTransport (7.5.1):
     - nanopb (~> 1.30906.0)
-  - GoogleToolboxForMac/Defines (2.3.1)
-  - GoogleToolboxForMac/Logger (2.3.1):
-    - GoogleToolboxForMac/Defines (= 2.3.1)
-  - "GoogleToolboxForMac/NSData+zlib (2.3.1)":
-    - GoogleToolboxForMac/Defines (= 2.3.1)
+  - GoogleToolboxForMac/Defines (2.3.2)
+  - GoogleToolboxForMac/Logger (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSData+zlib (2.3.2)":
+    - GoogleToolboxForMac/Defines (= 2.3.2)
   - GoogleUtilities/AppDelegateSwizzler (6.7.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -128,14 +128,14 @@ PODS:
     - TIoTLinkKit/LinkCore
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel
-  - TIoTLinkThirdPartyKit/Faac-iOS (2.2.0)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.2.0)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (2.2.0)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.2.0)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.2.0)
+  - TIoTLinkThirdPartyKit/Faac-iOS (2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/XP2P-iOS (2.2.1-beta.202108030939)
   - TIoTLinkVideo (1.0.0):
-    - TIoTLinkThirdPartyKit/Faac-iOS (= 2.2.0)
-    - TIoTLinkThirdPartyKit/XP2P-iOS (= 2.2.0)
+    - TIoTLinkThirdPartyKit/Faac-iOS (= 2.2.1-beta.202108030939)
+    - TIoTLinkThirdPartyKit/XP2P-iOS (= 2.2.1-beta.202108030939)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -160,9 +160,9 @@ DEPENDENCIES:
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
-  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (= 2.2.0)
-  - TIoTLinkThirdPartyKit/TPNS-iOS (= 2.2.0)
-  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (= 2.2.0)
+  - TIoTLinkThirdPartyKit/IJKPlayer-iOS (= 2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/TPNS-iOS (= 2.2.1-beta.202108030939)
+  - TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay (= 2.2.1-beta.202108030939)
   - TIoTLinkVideo (from `./`)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
@@ -227,7 +227,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 35a729305f254fb15a2e541d4b36f3a379da7fdc
   GoogleAppMeasurement: ecc30d0ab5b66d7d18e85ce1b8e2b345db60626d
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
-  GoogleToolboxForMac: 471e0c05d39506e50e6398f46fa9a12ae0efeff9
+  GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
   IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
@@ -246,13 +246,13 @@ SPEC CHECKSUMS:
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: e9bca68f3e02ae96b49ac1196d63c2a1212eb9f8
-  TIoTLinkThirdPartyKit: 7acaf84f0e2b4135c61bb6863b5499cd915e8223
-  TIoTLinkVideo: c65e9381f433ca1fdcdd8901ea951fb2e774c6fc
+  TIoTLinkThirdPartyKit: ef3981959a39be0097ce1a123ee3a0267cbf193e
+  TIoTLinkVideo: 05919ba4742e4fce3b880b774f2752593812ff7d
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: df15d43cab30c23563847b5977bfac777ab11f0a
+PODFILE CHECKSUM: 3ef7d6975ec17c8d08bbd41c61c50dd77ba286d4
 
 COCOAPODS: 1.9.3
