@@ -358,4 +358,17 @@
         });
     });
 }
+
++ (void)showSingleActionAlertWithTitle:(NSString *)title content:(NSString *)content confirmText:(NSString *)confirmText {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        NSString *messageString = content?:@"";
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:title?:@"" message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:confirmText?:@"" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        
+        [alertC addAction:alertA];
+        [self.topViewController presentViewController:alertC animated:YES completion:nil];
+    });
+}
 @end

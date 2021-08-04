@@ -13,21 +13,21 @@ typedef NS_ENUM (NSInteger,TIoTDeviceStatus){
 };
 
 @implementation TIoTCoreUtil (TIoTDemoDeviceStatus)
-+ (void)showDeviceStatusError:(TIoTDemoDeviceStatusModel *)responseModel {
++ (void)showDeviceStatusError:(TIoTDemoDeviceStatusModel *)responseModel commandInfo:(NSString *)commandInfo{
     
     NSLog(@"Command Request DeviceStatue error:%@",responseModel.status);
     switch (responseModel.status.intValue) {
         case TIoTDeviceStatus1:
-            [TIoTCoreUtil showAlertViewWithText:@"拒绝请求"];
+            [TIoTCoreUtil showSingleActionAlertWithTitle:@"拒绝请求" content:commandInfo confirmText:@"确定"];
             break;
         case TIoTDeviceStatus404:
-            [TIoTCoreUtil showAlertViewWithText:@"错误请求"];
+            [TIoTCoreUtil showSingleActionAlertWithTitle:@"错误请求" content:commandInfo confirmText:@"确定"];
             break;
         case TIoTDeviceStatus405:
-            [TIoTCoreUtil showAlertViewWithText:@"连接APP数量超过最大连接数"];
+            [TIoTCoreUtil showSingleActionAlertWithTitle:@"连接APP数量超过最大连接数" content:commandInfo confirmText:@"确定"];
             break;
         case TIoTDeviceStatus406:
-            [TIoTCoreUtil showAlertViewWithText:@"信令不支持"];
+            [TIoTCoreUtil showSingleActionAlertWithTitle:@"信令不支持" content:commandInfo confirmText:@"确定"];
             break;
         default:
             break;
