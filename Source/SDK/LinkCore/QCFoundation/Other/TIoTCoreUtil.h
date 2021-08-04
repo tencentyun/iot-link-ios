@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
  提示
  */
 + (void)showAlertViewWithText:(NSString *)alertText;
+
+/**
+ 弹框提示
+ */
++ (void)showSingleActionAlertWithTitle:(NSString *)title content:(NSString *)content confirmText:(NSString *)confirmText;
 @end
 
 NS_ASSUME_NONNULL_END

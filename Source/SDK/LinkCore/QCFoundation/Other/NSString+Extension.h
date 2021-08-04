@@ -86,6 +86,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 /// 获取当前时间时间戳
 + (NSString *)getNowTimeString;
 
+/// 获取当前时间戳 毫秒
++ (NSString *)getNowMillisecondTimeString;
+
 /// 计算两个时间戳的时间差
 + (NSInteger )timeDifferenceInfoWitFormTimeStamp:(NSTimeInterval )fromTimeStamp toTimeStamp:(NSTimeInterval )toTimeStamp dateFormatter:(NSString *)formatter timeType:(TIoTTimeType)timeType;
 

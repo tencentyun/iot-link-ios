@@ -21,6 +21,13 @@
     return timeString;
 }
 
++ (NSString *)getNowMillisecondTimeString {
+    NSDate* date1 = [NSDate date];
+    NSTimeInterval time1 =[date1 timeIntervalSince1970]*1000;
+    NSString *timeString = [NSString stringWithFormat:@"%.0f",time1];
+    return timeString;
+}
+
 + (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)timeFormatter {
     
      NSDate *dateNow = [NSDate date];
