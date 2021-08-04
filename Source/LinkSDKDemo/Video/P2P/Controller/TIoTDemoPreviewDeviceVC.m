@@ -71,6 +71,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 @property (nonatomic, strong) NSString *saveFilePath; //视频保存路径
 @property (nonatomic, strong) NSString *deviceName; //设备名称 NVR 和 IPC model有区别
+
+@property (nonatomic, assign) CFTimeInterval startPlayer;
+@property (nonatomic, assign) CFTimeInterval endPlayer;
+@property (nonatomic, assign) CFTimeInterval startIpcP2P;
+@property (nonatomic, assign) CFTimeInterval endIpcP2P;
+
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -110,6 +116,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                                   sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
                                                    pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                                  dev_name:self.deviceName?:@""];
+        
+        //计算IPC打洞开始时间
+        self.startIpcP2P = CACurrentMediaTime();
+        
     }else {
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
@@ -188,7 +198,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             
         }else {
             //设备状态异常提示
-            [TIoTCoreUtil showDeviceStatusError:responseModel];
+            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
         }
     }];
 }
@@ -923,9 +933,79 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
+
+- (void)moviePlayBackStateDidChange:(NSNotification*)notification
+{
+    //    MPMoviePlaybackStateStopped,
+    //    MPMoviePlaybackStatePlaying,
+    //    MPMoviePlaybackStatePaused,
+    //    MPMoviePlaybackStateInterrupted,
+    //    MPMoviePlaybackStateSeekingForward,
+    //    MPMoviePlaybackStateSeekingBackward
+
+    switch (_player.playbackState)
+    {
+        case IJKMPMoviePlaybackStateStopped: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStatePlaying: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            
+            // 播放器加载完出图时间
+            self.endPlayer = CACurrentMediaTime();
+            //p2p 连接时间
+            NSInteger p2pConnectTime = 0;
+            if (self.isNVR == NO) {
+                p2pConnectTime = (NSInteger)((self.endIpcP2P - self.startIpcP2P)*1000);
+            }else {
+                if (![NSString isNullOrNilWithObject:self.deviceName]) {
+                    NSDictionary *p2pTimeDic = [[NSUserDefaults standardUserDefaults] objectForKey:self.deviceName?:@""];
+                    NSNumber *p2pTime = p2pTimeDic[@"p2pConnectTime"];
+                    p2pConnectTime = p2pTime.integerValue;
+                }
+            }
+            
+            //弹框
+            NSString *messageString = [NSString stringWithFormat: @"P2P连接时间:  %ld(ms)\n画面显示时间: %ld(ms)",(long)p2pConnectTime,(NSInteger)((self.endPlayer - self.startPlayer)*1000)];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+            
+            break;
+        }
+        case IJKMPMoviePlaybackStatePaused: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateInterrupted: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateSeekingForward:
+        case IJKMPMoviePlaybackStateSeekingBackward: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            break;
+        }
+        default: {
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            break;
+        }
+    }
+}
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
 {
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:_player];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
@@ -948,6 +1028,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
@@ -962,13 +1043,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         return;
     }
     
-    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-    if (appVersion.floatValue < 2.1) {
-        //旧设备直接播放，不用发送信令验证设备状态和添加参数
-        [self setOldVideoPlayerStartPlay];
-    }else {
-        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
-    }
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    
+    //计算IPC打洞时间
+    self.endIpcP2P = CACurrentMediaTime();
+    
+    //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
+    /*
+     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+         
+         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+         
+         [self configVideo];
+         [self.player prepareToPlay];
+         [self.player play];
+         
+         self.startPlayer = CACurrentMediaTime();
+     });
+     */
+    
+    [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -978,6 +1074,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (![DeviceName isEqualToString:selectedName]) {
         return;
     }
+    
+    [MBProgressHUD showError:@"通道断开，正在重连"];
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
     [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
@@ -1005,19 +1103,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self configVideo];
         [self.player prepareToPlay];
         [self.player play];
-    });
-}
-
-///MARK:旧设备 v2.1以下 （旧设备直接播放，不用发送信令验证设备状态和添加参数）
-- (void)setOldVideoPlayerStartPlay {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
         
-        self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-        
-        [self configVideo];
-        [self.player prepareToPlay];
-        [self.player play];
+        /// 播放器出图开始时间
+        self.startPlayer = CACurrentMediaTime();
     });
 }
 
@@ -1286,11 +1374,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     if (self.isNVR == NO) {
-        NSString *deviceName = self.deviceName?:@"";
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                                 dev_name:deviceName];
+//        NSString *deviceName = self.deviceName?:@"";
+//        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+//                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+//                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+//                                                 dev_name:deviceName];
     }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1300,6 +1388,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
         [self.player prepareToPlay];
         [self.player play];
+        
+        /// 播放器出图开始时间
+        self.startPlayer = CACurrentMediaTime();
     });
     
 }

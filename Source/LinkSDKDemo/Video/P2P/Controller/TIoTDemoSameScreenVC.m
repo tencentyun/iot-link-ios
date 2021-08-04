@@ -635,7 +635,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             });
         }else {
             //设备状态异常提示
-            [TIoTCoreUtil showDeviceStatusError:responseModel];
+            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
         }
     }];
 }
@@ -650,45 +650,26 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 
     switch (self.videoArray.count) {
         case TIoTDemoSameScreenOne: {
-            IJKMPMovieLoadState loadState = self.playerOne.loadState;
-
-            if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-                NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
-                TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
-                [self setupDeviceOneWithName:modelOne.DeviceName];
-            }
+            [self setupSameScreenOneDeviceName];
             
             break;
         }
         case TIoTDemoSameScreenTwo: {
-            IJKMPMovieLoadState loadState = self.playerTwo.loadState;
-
-            if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-                NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
-                TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
-                [self setupDeviceTwoWithName:modelTwo.DeviceName];
-            }
+            [self setupSameScreenOneDeviceName];
+            [self setupSameScreenTwoDeviceName];
             break;
         }
         case TIoTDemoSameScreenThree: {
-            IJKMPMovieLoadState loadState = self.playerThree.loadState;
-
-            if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-                NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
-                TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
-                [self setupDeviceThreeWithName:modelThree.DeviceName];
-            }
+            [self setupSameScreenOneDeviceName];
+            [self setupSameScreenTwoDeviceName];
+            [self setupSameScreenThreeDeviceName];
             break;
         }
         case TIoTDemoSameScreenFour: {
-            IJKMPMovieLoadState loadState = self.playerFour.loadState;
-
-            if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-                NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
-                TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
-                
-                [self setupDeviceFourWithName:modelFour.DeviceName];
-            }
+            [self setupSameScreenOneDeviceName];
+            [self setupSameScreenTwoDeviceName];
+            [self setupSameScreenThreeDeviceName];
+            [self setupSameScreenFourDeviceName];
             break;
         }
         default:
@@ -696,6 +677,48 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     }
     
 }
+
+- (void)setupSameScreenOneDeviceName {
+    IJKMPMovieLoadState loadState = self.playerOne.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
+        [self setupDeviceOneWithName:modelOne.DeviceName];
+    }
+}
+
+- (void)setupSameScreenTwoDeviceName {
+    IJKMPMovieLoadState loadState = self.playerTwo.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
+        [self setupDeviceTwoWithName:modelTwo.DeviceName];
+    }
+}
+
+- (void)setupSameScreenThreeDeviceName  {
+    IJKMPMovieLoadState loadState = self.playerThree.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
+        [self setupDeviceThreeWithName:modelThree.DeviceName];
+    }
+}
+
+- (void)setupSameScreenFourDeviceName  {
+    IJKMPMovieLoadState loadState = self.playerFour.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
+        
+        [self setupDeviceFourWithName:modelFour.DeviceName];
+    }
+}
+
 
 #pragma mark Install Movie Notifications
 -(void)installMovieNotificationObservers
@@ -845,7 +868,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             if ([DeviceName isEqualToString:model.DeviceName]) {
                 
                 NSString *qualityTypeString = @"quality=high";
-                NSString *actionString = actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
+                NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
                 
                 [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
                     NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
@@ -856,7 +879,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                         [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
                     }else {
                         //设备状态异常提示
-                        [TIoTCoreUtil showDeviceStatusError:responseModel];
+                        [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
                     }
                 }];
             }
@@ -870,6 +893,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             case TIoTDemoSameScreenOne: {
                 self.videoUrlOne = urlString;
                 
+                if (self.isNVRType == NO) {
+                    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",deviceName] icon:@"" view:self.viewOne];
+                }
+                
                 [self refreshConfig:TIoTDemoSameScreenOne];
 
                 [self.playerOne prepareToPlay];
@@ -879,6 +906,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             case TIoTDemoSameScreenTwo: {
                 self.videoUrlTwo = urlString;
                 
+                if (self.isNVRType == NO) {
+                    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",deviceName] icon:@"" view:self.viewTwo];
+                }
+                
                 [self refreshConfig:TIoTDemoSameScreenTwo];
 
                 [self.playerTwo prepareToPlay];
@@ -887,6 +918,9 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             }
             case TIoTDemoSameScreenThree: {
                 self.videoUrlThree = urlString;
+                if (self.isNVRType == NO) {
+                    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",deviceName] icon:@"" view:self.viewThree];
+                }
                 
                 [self refreshConfig:TIoTDemoSameScreenThree];
                 
@@ -896,6 +930,9 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             }
             case TIoTDemoSameScreenFour: {
                 self.videoUrlFour = urlString;
+                if (self.isNVRType == NO) {
+                    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",deviceName] icon:@"" view:self.viewFour];
+                }
                 
                 [self refreshConfig:TIoTDemoSameScreenFour];
                 

@@ -215,7 +215,7 @@
     hud.label.text = text;
     hud.label.font = [UIFont wcPfRegularFontOfSize:15];
     hud.label.textColor = [UIColor whiteColor];
-    
+    hud.label.numberOfLines = 0;
     hud.bezelView.color = kRGBAColor(0, 0, 0, 0.85);
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.bezelView.layer.cornerRadius = 8;

@@ -14,6 +14,8 @@
 #import "TIoTDemoPreviewDeviceVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "UIImage+TIoTDemoExtension.h"
+#import "TIoTCoreUtil.h"
+#import "NSString+Extension.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kNVRSubdeviceListCellID = @"kNVRSubdeviceListCellID";
@@ -27,6 +29,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 @property (nonatomic, assign) BOOL isShowSameScreenChoiceIcon;
 @property (nonatomic, strong) NSMutableArray *selectedArray;
 
+@property (nonatomic, assign) CFTimeInterval startP2P;
+@property (nonatomic, assign) CFTimeInterval endP2P;
 @end
 
 @implementation TIoTDemoNVRSubDeviceVC
@@ -99,6 +103,9 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
                                               sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
                                                pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                              dev_name:self.selectedModel.DeviceName?:@""];
+    CFTimeInterval startP2PTime = CACurrentMediaTime();
+    self.startP2P = startP2PTime;
+    
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -119,6 +126,16 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     if (![DeviceName isEqualToString:self.selectedModel.DeviceName?:@""]) {
         return;
     }
+    
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",DeviceName] icon:@"" view:self.view];
+    
+    //计算打洞时间
+    CFTimeInterval endP2PTime = CACurrentMediaTime();
+    self.endP2P = endP2PTime;
+    [self saveDeviceInfo:self.selectedModel.DeviceName?:@"" time:(self.endP2P - self.startP2P)*1000];
+    
+    NSLog(@"%@", [NSString stringWithFormat:@"****** %@ ended: %f millisecond start: %f interval: %ld ******\n",NSStringFromSelector(_cmd),self.endP2P,self.startP2P,(long)((self.endP2P - self.startP2P)*1000)]);
+    
         [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
             
             NSArray<TIoTExploreOrVideoDeviceModel *> *subdeviceList = [NSArray yy_modelArrayWithClass:TIoTExploreOrVideoDeviceModel.class json:jsonList];
@@ -126,8 +143,15 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
             self.dataArray = [NSMutableArray arrayWithArray:subdeviceList];
             [self.collectionView reloadData];
             [self.collectionView.refreshControl endRefreshing];
-    
+            
         }];
+}
+
+///MARK: NVR设备保存打洞时间
+- (void)saveDeviceInfo:(NSString *)deviceName time:(NSInteger)time {
+    if (![NSString isNullOrNilWithObject:deviceName]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@{@"p2pConnectTime":@(time)} forKey:deviceName];
+    }
 }
 
 - (void)setupUIViews {
