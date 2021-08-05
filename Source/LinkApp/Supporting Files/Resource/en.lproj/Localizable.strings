@@ -915,5 +915,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "llsync_network_hud" = "连接蓝牙中";
 
 "default_bleConfig_tip" = "1. 接通设备电源。\n2. 长按复位键（开关），指示灯慢闪。\n3. 点击“下一步”开始蓝牙辅助配网。";
-"openLog" = "开启日志";
-"closeLog" = "关闭日志";
+"openConsoleLog" = "开启控制台日志";
+"closeConsoleLog" = "关闭控制台日志";
+"open_exportLog" = "开启导出日志，需继续执行目标操作";
+"exportLog" = "导出日志";
