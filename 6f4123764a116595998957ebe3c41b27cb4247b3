@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57bb0919_30190ce9",
+        "filename": "Source/SDK/LinkCore/QCFoundation/Other/NSString+Extension.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T02:42:40Z",
+      "side": 1,
+      "message": "建议采用CACurrentMediaTime()统计事件\n\nCFTimeInterval elapsedTime \u003d CACurrentMediaTime() - PPstartTime;\n\n    NSLog(@\"%@\", [NSString stringWithFormat:@\"****** %@ ended: %g seconds ******\\n\",NSStringFromSelector(_cmd),elapsedTime]);",
+      "revId": "6f4123764a116595998957ebe3c41b27cb4247b3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
