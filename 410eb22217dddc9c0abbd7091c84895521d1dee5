@@ -16,6 +16,24 @@
       "revId": "410eb22217dddc9c0abbd7091c84895521d1dee5",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956414d8_54a66678",
+        "filename": "Source/LinkSDKDemo/Common/Config/Category/TIoTCoreUtil+TIoTDemoDeviceStatus.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T07:05:44Z",
+      "side": 1,
+      "message": "好的，已添加信令异常返回的提示弹框",
+      "parentUuid": "70dc04ce_22e8f5ee",
+      "revId": "410eb22217dddc9c0abbd7091c84895521d1dee5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
