@@ -16,6 +16,24 @@
       "revId": "6f4123764a116595998957ebe3c41b27cb4247b3",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13f81201_8466d058",
+        "filename": "Source/SDK/LinkCore/QCFoundation/Other/NSString+Extension.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T03:29:45Z",
+      "side": 1,
+      "message": "已修改",
+      "parentUuid": "57bb0919_30190ce9",
+      "revId": "6f4123764a116595998957ebe3c41b27cb4247b3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
