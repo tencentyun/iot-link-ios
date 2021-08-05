@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf6e528d_e6092b30",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T12:09:22Z",
+      "side": 1,
+      "message": "已在最新patch中合并",
+      "parentUuid": "eb7e7ff9_fb4bac66",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a73b42f9_1e5d0ad2",
         "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTNumberView.m",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9a4cd1_4d7c2bf8",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTNumberView.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T12:09:22Z",
+      "side": 1,
+      "message": "好的，再详细排查下",
+      "parentUuid": "a73b42f9_1e5d0ad2",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f08c934d_e20d35e3",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/Message/TIoTMessageChildVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T12:09:22Z",
+      "side": 1,
+      "message": "已删除",
+      "parentUuid": "69a0e6ed_bef6e441",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "965919d9_26b38b62",
         "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d0ecde3_d698843b",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T12:09:22Z",
+      "side": 1,
+      "message": "好的，整理一下统一做一次分级，后续再提交一个单独的change",
+      "parentUuid": "965919d9_26b38b62",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
