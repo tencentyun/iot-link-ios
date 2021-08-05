@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70dc04ce_22e8f5ee",
+        "filename": "Source/LinkSDKDemo/Common/Config/Category/TIoTCoreUtil+TIoTDemoDeviceStatus.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T06:59:40Z",
+      "side": 1,
+      "message": "建议加上设备如果不支持此信令，弹框展示出来",
+      "revId": "410eb22217dddc9c0abbd7091c84895521d1dee5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
