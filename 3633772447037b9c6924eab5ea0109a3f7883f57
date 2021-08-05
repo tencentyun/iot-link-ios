@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb7e7ff9_fb4bac66",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/Controller/TIoTPanelVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T11:59:41Z",
+      "side": 1,
+      "message": "这两个合并成一个打印",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a73b42f9_1e5d0ad2",
+        "filename": "Source/LinkApp/Classes/Module/EquipmentPanel/View/TIoTNumberView.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T11:59:41Z",
+      "side": 1,
+      "message": "没必要的log需要减少，加log为了显示业务流程重要节点，最终为了代码纠错做判断",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69a0e6ed_bef6e441",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/Message/TIoTMessageChildVC.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T11:59:41Z",
+      "side": 1,
+      "message": "无效log需删除",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965919d9_26b38b62",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTStartConfigViewController.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-05T11:59:41Z",
+      "side": 1,
+      "message": "是否可将QCLog 带上 logLevel 级别",
+      "revId": "3633772447037b9c6924eab5ea0109a3f7883f57",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
