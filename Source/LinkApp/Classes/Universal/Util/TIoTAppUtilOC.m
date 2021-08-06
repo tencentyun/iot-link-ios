@@ -9,6 +9,7 @@
 #import "NSString+Extension.h"
 #import "TIoTMainVC.h"
 #import "UIViewController+GetController.h"
+#import "Firebase.h"
 
 @implementation TIoTAppUtilOC
 
@@ -123,5 +124,10 @@
         return YES;
     }
     return NO;
+}
+
++ (void)logEvent:(NSString *)eventName params:(NSDictionary *)params {
+    
+    [FIRAnalytics logEventWithName:eventName parameters:params];
 }
 @end

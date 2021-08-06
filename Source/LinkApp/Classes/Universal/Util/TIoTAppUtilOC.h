@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)checkNewVersion;
 + (void)handleOpsenUrl:(NSString *)result;
 + (BOOL)checkLogin;
+
+//统计事件
++ (void)logEvent:(NSString *)eventName params:(NSDictionary *)params;
 @end
 
 NS_ASSUME_NONNULL_END

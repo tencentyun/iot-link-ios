@@ -113,6 +113,9 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [TIoTAppUtilOC logEvent:@"starthome_wef_wefasdg_gsdfg" params:@{@"papame2": @(3)}];
+    
     self.navigationController.tabBarController.tabBar.hidden = NO;
     
     if (self.devicesTableView) {
@@ -155,6 +158,10 @@ static CGFloat kHeaderViewHeight = 162;
     
     [self registFeedBackRouterController];
     
+    [TIoTAppUtilOC logEvent:@"starthome" params:@{@"papame2": @(3)}];
+    [TIoTAppUtilOC logEvent:@"starthome" params:@{@"papame2": @(3)}];
+    [TIoTAppUtilOC logEvent:@"starthome" params:@{@"papame2": @(3)}];
+    [TIoTAppUtilOC logEvent:@"starthome" params:@{@"papame2": @(3)}];
 }
 
 #pragma mark - Other
