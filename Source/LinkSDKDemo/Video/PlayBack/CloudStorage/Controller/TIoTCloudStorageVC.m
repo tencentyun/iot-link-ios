@@ -446,7 +446,11 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
         NSLog(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
- 
+        
+        if (timeModel.EndTime.integerValue == 0 || [NSString isNullOrNilWithObject:timeModel.EndTime]) {
+            [MBProgressHUD showError:@"视频连接有误"];
+        }
+        
         if (isChange == YES) {
             self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
             self.videoTimeModel.StartTime = timeModel.StartTime;
@@ -462,14 +466,16 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [self.player play];
             [self autoHideControlView];
         }
-        
+        [MBProgressHUD dismissInView:self.view];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        
+        [MBProgressHUD dismissInView:self.view];
     }];
 }
 
 ///MARK: 云存事件列表
 - (void)requestCloudStoreVideoList {
+    
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
     
     NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",self.currentDayTime?:@""];
     NSString *endString = [NSString stringWithFormat:@"%@ 23:59:59",self.currentDayTime?:@""];
@@ -496,7 +502,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             self.isInnerScroll = NO;
             self.isPause = NO;
 //            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0] isChangeModel:YES];
-            [self setScrollOffsetWith:self.dataArray[0]];
+            [self setScrollOffsetWith:self.dataArray.lastObject];
             
             [self.tableView reloadData];
             
@@ -510,7 +516,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
+        [MBProgressHUD dismissInView:self.view];
     }];
 }
 
@@ -765,6 +771,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         [self.player play];
         [self autoHideControlView];
     }
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
 }
 
 ///MARK: 设置播放器样式
@@ -1130,6 +1137,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 self.player.currentPlaybackTime = self.currentTime;
             }
             [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+            [MBProgressHUD dismissInView:self.view];
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
