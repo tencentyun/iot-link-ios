@@ -2,6 +2,12 @@
 //  BluetoothCentralManager.m
 //
 #import "BluetoothCentralManager.h"
+#import "TIoTCoreWMacros.h"
+#import "NSString+Extension.h"
+#import "HXYNotice.h"
+#import "MBProgressHUD+XDP.h"
+#import "NSObject+additions.h"
+
 //服务UUID
 #define kServiceUUID    @"FFF0"
 
@@ -83,7 +89,7 @@
     if ([self.centralManager isScanning]) {
         return;
     }
-    WCLog(@"开始扫描四周的设备");
+    QCLog(@"开始扫描四周的设备");
     self.isLLsync = NO;
     self.maxValue = 0;
     
@@ -150,7 +156,7 @@
  停止扫描设备
  */
 - (void)stopScan{
-    WCLog(@"停止扫描四周的设备");
+    QCLog(@"停止扫描四周的设备");
     [self.centralManager stopScan];
     
     self.isScanDevice = self.centralManager.isScanning;
