@@ -103,8 +103,11 @@ jobs:
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-        
+
+    - name: Deploy App to PGY
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: curl -F 'file=@./LinkSDKDemo.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload
+
     - name: upload dSYM
       if: ${{contains(env.curr_tag, 'video')}}
       run: |
