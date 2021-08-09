@@ -515,7 +515,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 
             }];
         }
-        
+        [MBProgressHUD dismissInView:self.view];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         [MBProgressHUD dismissInView:self.view];
     }];
