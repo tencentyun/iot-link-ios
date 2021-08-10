@@ -55,7 +55,7 @@
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
 		6D50E91226B18CE300DF12A5 /* TIoTDemoWebSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D50E91126B18CE300DF12A5 /* TIoTDemoWebSocketManager.m */; };
-		6D50E91426B18F0600DF12A5 /* HXYNotice.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038BCB233319440036F6B9 /* HXYNotice.m */; };
+		6D50E91426B18F0600DF12A5 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		6D50E91F26B1911300DF12A5 /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED5767162410AED70070D218 /* ReachabilityManager.m */; };
 		6D50E92426B1924800DF12A5 /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
 		6D50E92626B192E300DF12A5 /* TIoTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */; };
@@ -3766,7 +3766,7 @@
 				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
 				F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
-				6D50E91426B18F0600DF12A5 /* HXYNotice.m in Sources */,
+				6D50E91426B18F0600DF12A5 /* (null) in Sources */,
 				6D98FE1625C2E6AA00518AC7 /* TIoTCustomCalendarScrollView.m in Sources */,
 				6D9D9788268468320085BCC2 /* TIoTDemoVideoVC.m in Sources */,
 				6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,

@@ -9,6 +9,19 @@
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
+//TIoTLOG_LEVEL_NONE,
+//TIoTLOG_LEVEL_FATAL,
+//TIoTLOG_LEVEL_ERROR,
+//TIoTLOG_LEVEL_WARN,
+//TIoTLOG_LEVEL_INFO,
+//TIoTLOG_LEVEL_DEBUG,
+//TIoTLOG_LEVEL_ALL
+#ifdef DEBUG
+#define TIoTLOG_LEVEL_FATAL
+#else
+#define TIoTLOG_LEVEL_ALL
+#endif
+
 #ifdef __OBJC__
 
 #import "TIoTUIProxy.h"

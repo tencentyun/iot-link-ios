@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)startRecordPrintLog;
 
-- (void)exportLogFileInViewController:(UIViewController *)viewController;
-
 /**
  通过系统的分享功能导出Log日志文件
  */
