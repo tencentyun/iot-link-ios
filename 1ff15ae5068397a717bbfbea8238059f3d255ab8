@@ -33,6 +33,23 @@
       "revId": "1ff15ae5068397a717bbfbea8238059f3d255ab8",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a67360f_acfef0cf",
+        "filename": "Source/SDK/LinkCore/QCFoundation/TIoTCoreSocketManager.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-10T08:08:29Z",
+      "side": 1,
+      "message": "不需要手动带回车换行",
+      "revId": "1ff15ae5068397a717bbfbea8238059f3d255ab8",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
