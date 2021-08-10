@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93af978c_764ae2e6",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTAlertCustomView.m",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-10T08:10:53Z",
+      "side": 1,
+      "message": "统一将日志改为带等级的log输出，格式为[INFO][file line][function][具体message]",
+      "revId": "b078260d615e8a63369030c6fea2d6167f49dc0d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
