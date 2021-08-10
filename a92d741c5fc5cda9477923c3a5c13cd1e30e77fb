@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "885bd1ea_9faa6670",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTExportPrintLogManager.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-10T07:55:03Z",
+      "side": 1,
+      "message": "建议将OCLog、WCLog 删除，保留统一的loglevel分级",
+      "revId": "a92d741c5fc5cda9477923c3a5c13cd1e30e77fb",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
