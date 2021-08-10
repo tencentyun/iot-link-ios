@@ -16,6 +16,23 @@
       "revId": "e8a93d47f452af4f19f23a61fc51f0c5190e5cac",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ced9dc5_025688a8",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-10T08:04:28Z",
+      "side": 1,
+      "message": "按照[INFO][__file__:__line__][__function__]格式打印log",
+      "revId": "e8a93d47f452af4f19f23a61fc51f0c5190e5cac",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
