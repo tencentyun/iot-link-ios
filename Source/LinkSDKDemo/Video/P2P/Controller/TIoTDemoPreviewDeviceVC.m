@@ -626,7 +626,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //竖屏
         __weak typeof(self) weakSelf = self;
         TIoTDemoCustomSheetView *definitaionSheet = [[TIoTDemoCustomSheetView alloc]init];
-        NSArray *actionTitleArray = @[@"超清 720P",@"高清 480P",@"标清 270P",@"取消"];
+        NSArray *actionTitleArray = @[@"超清 1080P",@"高清 720P",@"标清 360P",@"取消"];
         ChooseFunctionBlock superDefinitaionBlock = ^(TIoTDemoCustomSheetView *view){
             self.qualityString = quality_super;
             [self resetVideoPlayerWithQuality:self.qualityString];
@@ -1194,7 +1194,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             make.height.mas_equalTo(kBtnHeight);
         }];
         UILabel *standardDefValue = [[UILabel alloc]init];
-        [standardDefValue setLabelFormateTitle:@"270P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [standardDefValue setLabelFormateTitle:@"360P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [self.standardDef addSubview:standardDefValue];
         [standardDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.standardDef.mas_centerY);
@@ -1219,7 +1219,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             make.bottom.equalTo(self.standardDef.mas_bottom);
         }];
         UILabel *highDefValue = [[UILabel alloc]init];
-        [highDefValue setLabelFormateTitle:@"480P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [highDefValue setLabelFormateTitle:@"720P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [self.highDef addSubview:highDefValue];
         [highDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.highDef.mas_centerY);
@@ -1245,7 +1245,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             make.left.equalTo(self.highDef.mas_right).offset(20);
         }];
         UILabel *supperDefValue = [[UILabel alloc]init];
-        [supperDefValue setLabelFormateTitle:@"720P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [supperDefValue setLabelFormateTitle:@"1080P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
         [self.supperDef addSubview:supperDefValue];
         [supperDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.supperDef.mas_centerY);
