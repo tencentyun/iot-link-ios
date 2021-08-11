@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "21390539_57e5c51a",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-11T02:03:53Z",
+      "side": 1,
+      "message": "好的，已在每层level中标出",
+      "parentUuid": "476620b0_d6fd02a4",
+      "revId": "e8a93d47f452af4f19f23a61fc51f0c5190e5cac",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ced9dc5_025688a8",
         "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "e8a93d47f452af4f19f23a61fc51f0c5190e5cac",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4de4a141_4751561a",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-11T02:03:53Z",
+      "side": 1,
+      "message": "已按更改日志格式打印信息，在宏文件中统一调用",
+      "parentUuid": "9ced9dc5_025688a8",
+      "revId": "e8a93d47f452af4f19f23a61fc51f0c5190e5cac",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
