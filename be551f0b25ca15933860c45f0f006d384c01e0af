@@ -16,6 +16,24 @@
       "revId": "be551f0b25ca15933860c45f0f006d384c01e0af",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c35c78b_a6b7b4f3",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-12T12:04:44Z",
+      "side": 1,
+      "message": "好的，TIoTLog已修改为NSLog，调整socket 打印日志信息[#2689.4] 中逐步全文替换带level的log打印",
+      "parentUuid": "d586f335_f21e2bbe",
+      "revId": "be551f0b25ca15933860c45f0f006d384c01e0af",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
