@@ -16,6 +16,24 @@
       "revId": "5d7a6f99229891293cc2e163e8a34ef080f04c95",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9652526_57f7742c",
+        "filename": "TIoTLinkKit.xcodeproj/project.pbxproj",
+        "patchSetId": 5
+      },
+      "lineNbr": 3769,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-12T12:17:54Z",
+      "side": 1,
+      "message": "重新编译正常的，后续可在观察看下",
+      "parentUuid": "48116d2c_238e54e8",
+      "revId": "5d7a6f99229891293cc2e163e8a34ef080f04c95",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
