@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d586f335_f21e2bbe",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/Other/TIoTCoreWMacros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-12T02:17:16Z",
+      "side": 1,
+      "message": "1.建议将fprintf 替换为nslog\n2.需要设置分级",
+      "revId": "be551f0b25ca15933860c45f0f006d384c01e0af",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
