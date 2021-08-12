@@ -1035,7 +1035,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             
             NSMutableArray *tempModelArray = [[NSMutableArray alloc]initWithArray:self.modelArray];
             TIoTTimeModel *lastModel = tempModelArray.lastObject;
-            if (timeModel.startTime - lastModel.endTime <= 60) {
+            if (timeModel.startTime - lastModel.endTime <= -1) {   //不用合并时间片
                 
                 lastModel.endTime = timeModel.endTime;
                 
