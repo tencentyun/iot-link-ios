@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48116d2c_238e54e8",
+        "filename": "TIoTLinkKit.xcodeproj/project.pbxproj",
+        "patchSetId": 5
+      },
+      "lineNbr": 3769,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-12T12:10:04Z",
+      "side": 1,
+      "message": "这块是null，不太对吧",
+      "revId": "5d7a6f99229891293cc2e163e8a34ef080f04c95",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
