@@ -16,6 +16,24 @@
       "revId": "04ef6b9f1f133b91ece29f9f53c7e4695da4c38d",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "067a200d_caa0482f",
+        "filename": "Podfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-13T08:45:22Z",
+      "side": 1,
+      "message": "好的",
+      "parentUuid": "580f78e9_e47fa0d5",
+      "revId": "04ef6b9f1f133b91ece29f9f53c7e4695da4c38d",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
