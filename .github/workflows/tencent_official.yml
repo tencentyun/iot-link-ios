@@ -70,14 +70,14 @@ jobs:
 
 
 ############# Video ##################
-    - name: Decrypt Video prerelease keychain
+    - name: video Decrypt prerelease keychain
       if: ${{contains(env.curr_tag, 'video')}}
       run: sh .github/script/import_provisioning.sh Debug
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         P12_EXPORT_CCHARLESREN_PASSWORD: ${{ secrets.IOT_P12_EXPORT_PASSWORD }}
     
-    - name: Build Video Archive
+    - name: video Build Archive
       if: ${{contains(env.curr_tag, 'video')}}
       run: |
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -93,7 +93,7 @@ jobs:
       env:
         PROVISIONING_PASSWORD: ${{ secrets.GPG_DECRYPT_PASSPHRASE }}
         
-    - name: Upload LinkApp Asset
+    - name: video Upload Asset
       if: ${{contains(env.curr_tag, 'video')}}
       uses: actions/upload-release-asset@v1
       with:
@@ -104,11 +104,21 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Deploy App to PGY
+    - name: video install fir
       if: ${{contains(env.curr_tag, 'video')}}
-      run: curl -F 'file=@./LinkSDKDemo.ipa' -F '_api_key=${{ secrets.RELEASE_PGYER_API_KEY }}' https://www.pgyer.com/apiv2/app/upload
+      run: gem install fir-cli
+      
+    - name: video deploy to fir
+      if: ${{contains(env.curr_tag, 'video')}}
+      run: |
+        rc=$(git rev-parse --short HEAD)
+        rl=$(git log --pretty=format:"%s" $rc -1)
 
-    - name: upload dSYM
+        fir publish LinkSDKDemo.ipa -T $RELEASE_PGYER_API_KEY -c "$rl" --oversea_turbo --force_pin_history -V
+      env:
+        RELEASE_PGYER_API_KEY: ${{ secrets.IOT_FIRIM_API_TOKEN }}
+        
+    - name: video upload dSYM
       if: ${{contains(env.curr_tag, 'video')}}
       run: |
         ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkSDKDemo/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
