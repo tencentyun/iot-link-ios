@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7dcf30d_b1cf3509",
+        "filename": "Source/LinkApp/Supporting Files/TIoTLinkKit.pch",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-13T01:41:50Z",
+      "side": 1,
+      "message": "改为error",
+      "revId": "496a39f97debc0f1fbea9c20b147100d045c1838",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
