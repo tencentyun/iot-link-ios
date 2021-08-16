@@ -8,6 +8,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "DDLog.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
