@@ -919,3 +919,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "closeConsoleLog" = "关闭控制台日志";
 "open_exportLog" = "开启导出日志，需继续执行目标操作";
 "exportLog" = "导出日志";
+"delete_allLogs" = "删除所有日志文件";
