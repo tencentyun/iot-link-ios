@@ -146,7 +146,7 @@ PODS:
 
 DEPENDENCIES:
   - CocoaAsyncSocket (= 7.6.5)
-  - CocoaLumberjack (~> 3.7.2)
+  - CocoaLumberjack (= 3.7.2)
   - FDFullscreenPopGesture (= 1.1)
   - Firebase/Analytics (= 6.31.1)
   - Firebase/Crashlytics (= 6.31.1)
@@ -259,6 +259,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 12d180e07c186d0d76d41ff11e72650ad38faebf
+PODFILE CHECKSUM: 5781ecba712d557c9a47865bc87f0e22dc9b0dc5
 
 COCOAPODS: 1.9.3
