@@ -5,7 +5,6 @@
 //
 
 #import "TIoTPrintLogFormatter.h"
-#import "DDLog.h"
 
 static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss:SSS";
 

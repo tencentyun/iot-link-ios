@@ -53,6 +53,7 @@
     
     //打印日志配置
     [[TIoTPrintLogManager sharedManager] config];
+    [[TIoTPrintLogManager sharedManager] setLogLevel:ddLogLevel];
     
     //firebase注册
     [FIRApp configure];

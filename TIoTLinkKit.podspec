@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Source/SDK/LinkCore/**/*.{h,m,c}'
     ss.dependency 'MBProgressHUD'
     ss.dependency 'CocoaAsyncSocket'
+    ss.dependency 'CocoaLumberjack'
   end
   
   #实时音视频，引入则开启

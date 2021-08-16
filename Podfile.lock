@@ -126,6 +126,7 @@ PODS:
     - TIoTLinkKit/LinkCore (= 1.0.0)
   - TIoTLinkKit/LinkCore (1.0.0):
     - CocoaAsyncSocket
+    - CocoaLumberjack
     - MBProgressHUD
   - TIoTLinkKit/LinkRTC (1.0.0):
     - TIoTLinkKit/LinkCore
@@ -251,7 +252,7 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: e9bca68f3e02ae96b49ac1196d63c2a1212eb9f8
+  TIoTLinkKit: c94783a55a42bfd88a903083b498bad184a3157f
   TIoTLinkThirdPartyKit: 097ce7631d6bb13bcb90a0319d4ac5ca360ee012
   TIoTLinkVideo: 47c629a3e9d46fbd2da750ded3871ff061cbc26b
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
