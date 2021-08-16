@@ -28,6 +28,7 @@
 #import "TIoTModifyNameVC.h"
 #import "TIoTCoreServices.h"
 #import "TIoTExportPrintLogManager.h"
+#import "TIoTPrintLogManager.h"
 
 static CGFloat const kLeftPadding = 16; //左边距
 static CGFloat const kRightPadding = 16; //右边距
@@ -77,7 +78,7 @@ static CGFloat const kRightPadding = 16; //右边距
     
     TIoTCustomSheetView *printLogSheet = [[TIoTCustomSheetView alloc]init];
     
-    NSArray *titleArray = @[NSLocalizedString(@"openConsoleLog", @"开启控制台打印"),NSLocalizedString(@"closeConsoleLog", @"关闭控制台打印"),NSLocalizedString(@"open_exportLog", @"开启导出日志，需继续执行目标操作"),NSLocalizedString(@"exportLog", @"导出日志"),NSLocalizedString(@"cancel", @"取消")];
+    NSArray *titleArray = @[NSLocalizedString(@"openConsoleLog", @"开启控制台打印"),NSLocalizedString(@"closeConsoleLog", @"关闭控制台打印"),NSLocalizedString(@"exportLog", @"导出日志"),NSLocalizedString(@"delete_allLogs", @"删除所有日志文件"),NSLocalizedString(@"cancel", @"取消")];
     //开启控制台日志
     ChooseFunctionBlock openPrintLog = ^(TIoTCustomSheetView *view) {
         
@@ -92,15 +93,15 @@ static CGFloat const kRightPadding = 16; //右边距
         [printLogSheet removeFromSuperview];
     };
     
-    //开启导出日志，需继续执行目标操作
-    ChooseFunctionBlock openImportLog = ^(TIoTCustomSheetView *view) {
-        [[TIoTExportPrintLogManager sharedManager] startRecordPrintLog];
+    //导出日志
+    ChooseFunctionBlock importLog = ^(TIoTCustomSheetView *view) {
+        [[TIoTPrintLogManager sharedManager] exploreLogFile];
         [printLogSheet removeFromSuperview];
     };
     
-    //导入日志
-    ChooseFunctionBlock importLog = ^(TIoTCustomSheetView *view) {
-        [[TIoTExportPrintLogManager sharedManager] exportPrintLog];
+    //删除所有日志
+    ChooseFunctionBlock deleteAllLogs = ^(TIoTCustomSheetView *view) {
+        [[TIoTPrintLogManager sharedManager] clearAllLogFiles];
         [printLogSheet removeFromSuperview];
     };
     
@@ -109,7 +110,7 @@ static CGFloat const kRightPadding = 16; //右边距
         [printLogSheet removeFromSuperview];
     };
     
-    NSArray *functionArray = @[openPrintLog,closePrintLog,openImportLog,importLog,cancelBlock];
+    NSArray *functionArray = @[openPrintLog,closePrintLog,importLog,deleteAllLogs,cancelBlock];
     [printLogSheet sheetViewTopTitleArray:titleArray withMatchBlocks:functionArray];
     
     [[UIApplication sharedApplication].delegate.window addSubview:printLogSheet];

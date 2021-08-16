@@ -24,6 +24,7 @@
 #import "TIoTAppUtilOC.h"
 #import <QMapKit/QMapKit.h>
 #import <QMapKit/QMSSearchKit.h>
+#import "TIoTPrintLogManager.h"
 
 @implementation TIoTAppDelegate
 
@@ -50,6 +51,8 @@
     [QMapServices sharedServices].APIKey = model.TencentMapSDKValue;
     [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
     
+    //打印日志配置
+    [[TIoTPrintLogManager sharedManager] config];
     
     //firebase注册
     [FIRApp configure];
