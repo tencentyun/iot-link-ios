@@ -79,7 +79,7 @@ failure:(FailureResponseBlock)failure
             [allParameters removeObjectForKey:@"secretId"];
         }
     
-        WCLog(@"请求action==%@==%@",param[@"X-TC-Action"],[NSString objectToJson:allParameters]);
+    DDLogVerbose(@"请求action==%@==%@",param[@"X-TC-Action"],[NSString objectToJson:allParameters]);
         
         [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         request.HTTPMethod = @"POST";
@@ -87,7 +87,7 @@ failure:(FailureResponseBlock)failure
     request.HTTPBody = [[TIoTCoreUtil qcloudasrutil_sortedJSONTypeQueryParams:allParameters] dataUsingEncoding:NSUTF8StringEncoding];
         
         NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            WCLog(@"收到action==%@==%@",URL,[[NSString alloc] initWithData:data encoding:4]);
+            DDLogDebug(@"收到action==%@==%@",URL,[[NSString alloc] initWithData:data encoding:4]);
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             if (httpResponse.statusCode == 200) {
                 NSError *jsonerror = nil;
@@ -162,7 +162,7 @@ failure:(FailureResponseBlock)failure
         return [obj1 compare:obj2 options:comparisonOptions range:range];
     }];
 //    NSArray *keys=  [[param allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    WCLog(@"%@",keys);
+    DDLogVerbose(@"%@",keys);
     
     NSMutableString *keyValue = [NSMutableString string];
     for (int i = 0; i < keys.count; i ++) {
@@ -223,7 +223,7 @@ failure:(FailureResponseBlock)failure
         urlString = url;
     }
     
-    WCLog(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
+    DDLogVerbose(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     
@@ -240,7 +240,7 @@ failure:(FailureResponseBlock)failure
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        WCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
+        DDLogDebug(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
             NSError *jsonerror = nil;
@@ -286,7 +286,7 @@ failure:(FailureResponseBlock)failure {
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        WCLog(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        DDLogDebug(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {

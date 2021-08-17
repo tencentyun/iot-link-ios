@@ -11,6 +11,7 @@ def common_all_pods
   pod 'Firebase/Analytics', '6.31.1'
   pod 'Firebase/Crashlytics', '6.31.1'
   pod 'Firebase/Performance', '6.31.1'
+  pod 'CocoaLumberjack', '3.7.2'
 end
 
 target 'LinkApp' do
@@ -29,7 +30,6 @@ target 'LinkApp' do
   pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
   pod 'CocoaAsyncSocket', '7.6.5'
-  pod 'CocoaLumberjack', '3.7.2'
   pod 'TIoTLinkThirdPartyKit/TPNS-iOS', '2.2.1'
   pod 'TIoTLinkThirdPartyKit/WechatOpenSDK_NoPay', '2.2.1'
 end

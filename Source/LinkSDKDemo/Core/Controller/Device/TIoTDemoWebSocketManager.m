@@ -78,19 +78,19 @@ static NSString *heartBeatReqID = @"5002";
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
-                NSLog(@"状态不知道");
+                DDLogVerbose(@"状态不知道");
                 break;
             case NetworkReachabilityStatusNotReachable:
-                NSLog(@"没网络");
+                DDLogWarn(@"没网络");
                 // RTC App端和设备端通话中 断网监听
                 [HXYNotice postCallingDisconnectNet];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
-                NSLog(@"WIFI");
+                DDLogVerbose(@"WIFI");
                 [self SRWebSocketOpen];
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
-                NSLog(@"移动网络");
+                DDLogVerbose(@"移动网络");
                 [self SRWebSocketOpen];
                 break;
             default:
@@ -134,23 +134,23 @@ static NSString *heartBeatReqID = @"5002";
 
 #pragma mark - QCSocketManagerDelegate delegete
 - (void)socketDidOpen:(TIoTCoreSocketManager *)manager {
-    WCLog(@"************************** socket 连接成功************************** ");
+    DDLogInfo(@"************************** socket 连接成功************************** ");
     [self registerDevicecActive:nil];
 
     [HXYNotice addSocketConnectSucessPost];
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error {
-    QCLog(@"************************** socket 连接失败************************** ");
+    DDLogError(@"************************** socket 连接失败************************** ");
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didReceiveMessage:(id)message {
-    QCLog(@"************************** socket 接收消息成功************************** ");
+    DDLogInfo(@"************************** socket 接收消息成功************************** ");
     [self handleReceivedMessage:message];
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    WCLog(@"************************** socket连接断开************************** ");
+    DDLogWarn(@"************************** socket连接断开************************** ");
 //    [self SRWebSocketClose];
     [MBProgressHUD showError:@"socket连接断开"];
 }
@@ -184,7 +184,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)handleReceivedMessage:(id)message{
     NSDictionary *dic = [NSString jsonToObject:message];
-    WCLog(@"message:%@",dic);
+    DDLogInfo(@"message:%@",dic);
     NSString *reqId = [NSString stringWithFormat:@"%@",dic[@"reqId"]];
     if ([NSObject isNullOrNilWithObject:dic[@"reqId"]])
     {

@@ -120,7 +120,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self.categoryArr removeAllObjects];
         [self.categoryArr addObjectsFromArray:self.rooms];
 
-        WCLog(@"AppGetRoomList responseObject%@", responseObject);
+        DDLogVerbose(@"AppGetRoomList responseObject%@", responseObject);
         [self.categoryTableView reloadData];
         if (self.categoryArr.count) {
             NSIndexPath *firstIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -145,7 +145,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         [self.productArr removeAllObjects];
         [self.productArr addObjectsFromArray:responseObject[@"DeviceList"]];
 
-        WCLog(@"AppGetRecommList responseObject%@", responseObject);
+        DDLogVerbose(@"AppGetRecommList responseObject%@", responseObject);
         [self.productCollectionView reloadData];
         [self refreshScrollContentSize];
         [MBProgressHUD dismissInView:self.view];
@@ -273,7 +273,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSDictionary *dic = self.productArr[indexPath.row];
-    TIoTLog(@"--dic = %@",dic);
+    DDLogVerbose(@"--dic = %@",dic);
     TIoTIntelligentProductConfigModel *intelligentProjuctModel = [TIoTIntelligentProductConfigModel yy_modelWithJSON:dic];
     NSString *productIDString = self.productArr[indexPath.row][@"ProductId"] ?:@"";
     
@@ -286,7 +286,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
             TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
 //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-            NSLog(@"--!!!-%@",product);
+            DDLogDebug(@"TIoTDataTemplateModel product %@",product);
             
             //MARK:需要根据AppGetProductsConfig接口筛选哪些是条件 哪些是action，这个是手动自动都需要按照这个字段判断
             

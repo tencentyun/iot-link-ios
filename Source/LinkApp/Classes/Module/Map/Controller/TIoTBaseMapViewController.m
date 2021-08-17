@@ -154,11 +154,11 @@
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
                 if (success) {
-                    NSLog(@"成功");
+                    DDLogVerbose(@"成功");
                 }
                 else
                 {
-                    NSLog(@"失败");
+                    DDLogVerbose(@"失败");
                 }
             }];
         }];

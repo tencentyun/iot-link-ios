@@ -19,7 +19,7 @@
 
 - (void)dealloc
 {
-    WCLog(@"释放");
+    DDLogDebug(@"释放");
 }
 
 - (void)viewDidLoad {

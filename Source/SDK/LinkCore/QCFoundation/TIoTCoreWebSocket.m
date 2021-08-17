@@ -1748,7 +1748,7 @@ static inline void QCFastLog(NSString *format, ...)  {
     
     va_end(arg_list);
     
-    NSLog(@"[QC] %@", formattedString);
+    DDLogInfo(@"[QC] %@", formattedString);
 #endif
 }
 

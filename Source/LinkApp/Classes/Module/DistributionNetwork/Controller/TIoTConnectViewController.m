@@ -366,15 +366,15 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
 
 #pragma mark - TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 - (void)smartConfigOnHandleSocketOpen:(TCSocket *)socket {
-     NSLog(@"%@ did open",socket);
+     DDLogInfo(@"%@ did open",socket);
 }
 
 - (void)smartConfigOnHandleSocketClosed:(TCSocket *)socket {
-    NSLog(@"%@ did close",socket);
+    DDLogInfo(@"%@ did close",socket);
 }
 
 - (void)smartConfigOnHandleDataReceived:(TCSocket *)socket data:(NSData *)data {
-    NSLog(@"%@ did receive data %@",socket,data);
+    DDLogInfo(@"%@ did receive data %@",socket,data);
     [self receivedSmartConfigSockedDataWithData:data];
 }
 
@@ -395,12 +395,12 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
                         [self checkTokenStateWithCirculationWithDeviceData:dictionary];
                     }else {
                         //deviceReplay 为 Cuttent_Error
-                        WCLog(@"smaartConfig配网过程中失败，需要重新配网");
+                        DDLogError(@"smaartConfig配网过程中失败，需要重新配网");
                         [self connectFaild];
                     }
                     
                 }else {
-                    WCLog(@"dictionary==%@----smartConfig链路设备success",dictionary);
+                    DDLogInfo(@"dictionary==%@----smartConfig链路设备success",dictionary);
                     [self checkTokenStateWithCirculationWithDeviceData:dictionary];
                 }
                 
@@ -410,7 +410,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
+    DDLogInfo(@"连接成功");
         
         //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -434,17 +434,17 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
+    DDLogInfo(@"发送成功");
 }
 
 - (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
+    DDLogError(@"发送失败 %@", error);
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-    WCLog(@"嘟嘟嘟 %@",dictionary);
+    DDLogInfo(@"嘟嘟嘟 %@",dictionary);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (JSONParsingError != nil) {
@@ -459,12 +459,12 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
                         [self checkTokenStateWithCirculationWithDeviceData:dictionary];
                     }else {
                         //deviceReplay 为 Cuttent_Error
-                        WCLog(@"smaartConfig配网过程中失败，需要重新配网");
+                        DDLogError(@"smaartConfig配网过程中失败，需要重新配网");
                         [self connectFaild];
                     }
                     
                 }else {
-                    WCLog(@"dictionary==%@----smaartConfig链路设备success",dictionary);
+                    DDLogInfo(@"dictionary==%@----smaartConfig链路设备success",dictionary);
                     [self checkTokenStateWithCirculationWithDeviceData:dictionary];
                 }
                 
@@ -508,7 +508,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
     [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
-        WCLog(@"AppGetDeviceBindTokenState--smaartConfig-responseobject=%@",responseObject);
+        DDLogInfo(@"AppGetDeviceBindTokenState--smaartConfig-responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
             self.isTokenbindedStatus = NO;
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
@@ -516,7 +516,7 @@ GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
             [self bindingDevidesWithData:deviceData];
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        WCLog(@"AppGetDeviceBindTokenState--smaartConfig-reason=%@---error=%@",reason,error);
+        DDLogError(@"AppGetDeviceBindTokenState--smaartConfig-reason=%@---error=%@",reason,error);
         
     }];
 }

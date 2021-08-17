@@ -110,7 +110,7 @@
         
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             
-            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+            DDLogVerbose(@"AppGetTokenTicket responseObject%@", responseObject);
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             //            TIoTWebVC *webVC = [TIoTWebVC new];
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];

@@ -13,7 +13,7 @@
         NSString *jsJsonString = [NSString objectToJson:responseDic];
         NSString *jsStr = [NSString stringWithFormat:@"JSBridge.callH5('%@','%@')",portString,jsJsonString];
         [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-            WCLog(@"%@----%@",result, error);
+            DDLogVerbose(@"%@----%@",result, error);
         }];
     }
 }

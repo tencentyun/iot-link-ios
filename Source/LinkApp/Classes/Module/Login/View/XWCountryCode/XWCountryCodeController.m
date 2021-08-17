@@ -111,7 +111,7 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     
-    WCLog(@"选择国家: %@   代码: %@",countryName,code);
+    DDLogVerbose(@"选择国家: %@   代码: %@",countryName,code);
 }
 
 - (void)back{

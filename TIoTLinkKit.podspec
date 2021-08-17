@@ -20,16 +20,16 @@ Pod::Spec.new do |s|
   
   s.subspec 'LinkCore' do |ss|
     ss.source_files  = 'Source/SDK/LinkCore/**/*.{h,m,c}'
-    ss.dependency 'MBProgressHUD'
-    ss.dependency 'CocoaAsyncSocket'
-    ss.dependency 'CocoaLumberjack'
+    ss.dependency 'MBProgressHUD', '1.1.0'
+    ss.dependency 'CocoaAsyncSocket', '7.6.5'
+    ss.dependency 'CocoaLumberjack', '3.7.2'
   end
   
   #实时音视频，引入则开启
   s.subspec 'LinkRTC' do |ss|
     ss.source_files  = 'Source/SDK/LinkRTC/**/*.{h,m,c}'
     ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
-    ss.dependency 'YYModel'
+    ss.dependency 'YYModel', '1.0.4'
     ss.dependency 'TIoTLinkKit/LinkCore'
     ss.pod_target_xcconfig = {
       'VALID_ARCHS'  => 'x86_64 armv7 arm64',
