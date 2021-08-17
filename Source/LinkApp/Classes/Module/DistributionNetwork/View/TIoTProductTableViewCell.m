@@ -68,7 +68,7 @@
 
 #pragma mark - event
 - (void)connect {
-    WCLog(@"连接");
+    DDLogVerbose(@"连接");
     if (self.connectEvent) {
         self.connectEvent();
     }

@@ -25,6 +25,7 @@
 #import <QMapKit/QMapKit.h>
 #import <QMapKit/QMSSearchKit.h>
 #import "TIoTPrintLogManager.h"
+#import "TIoTCoreServices.h"
 
 @implementation TIoTAppDelegate
 
@@ -52,6 +53,7 @@
     [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
     
     //打印日志配置
+    [TIoTCoreServices shared].logEnable = true;
     [[TIoTPrintLogManager sharedManager] config];
     [[TIoTPrintLogManager sharedManager] setLogLevel:ddLogLevel];
     
@@ -136,7 +138,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     [[XGPushManage sharedXGPushManage] reportXGNotificationInfo:userInfo];
-    WCLog(@"userInfo-静默消息---%@",[NSString jsonToObject:userInfo[@"custom"]]);
+    DDLogDebug(@"userInfo-静默消息---%@",[NSString jsonToObject:userInfo[@"custom"]]);
     if( [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
     {
       //NSLog(@"didReceiveRemoteNotification:APP在前台运行时，不做处理");

@@ -167,7 +167,7 @@
     }else if (component == 1){
         self.minuteString = itemArray[row];
     }
-    NSLog(@"%@--%@",self.hourString,self.minuteString);
+    DDLogVerbose(@"%@--%@",self.hourString,self.minuteString);
 }
 
 #pragma mark - lazy loading

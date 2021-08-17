@@ -192,7 +192,7 @@ static NSInteger  const limit = 10;
                 //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
                             TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
                 //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-                            NSLog(@"--!!!-%@",product);
+                            DDLogVerbose(@"TIoTDataTemplateModel product %@",product);
                             
                             for (int i = 0; i <product.properties.count; i++) {
                                 TIoTPropertiesModel *propertieModel = product.properties[i];
@@ -283,7 +283,7 @@ static NSInteger  const limit = 10;
                 //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
                             TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
                 //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-                            NSLog(@"--!!!-%@",product);
+                            DDLogVerbose(@"TIoTDataTemplateModel product ---%@",product);
                             
                             for (int i = 0; i <product.properties.count; i++) {
                                 TIoTPropertiesModel *propertieModel = product.properties[i];
@@ -613,7 +613,7 @@ static NSInteger  const limit = 10;
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.conditionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"0"]) {
-                        NSLog(@"00");
+                        DDLogVerbose(@"00");
                         
                         TIoTDeviceSettingVC *editSettingVC = [[TIoTDeviceSettingVC alloc]init];
                         editSettingVC.isEdited = YES;
@@ -663,7 +663,7 @@ static NSInteger  const limit = 10;
                 }else {
                     TIoTAutoIntelligentModel *autoModel = self.actionArray[indexPath.row - 1];
                     if ([autoModel.type isEqualToString:@"2"]) {
-                        NSLog(@"222");
+                        DDLogVerbose(@"222");
                         
                         TIoTDeviceSettingVC *editSettingVC = [[TIoTDeviceSettingVC alloc]init];
                         editSettingVC.isEdited = YES;
@@ -683,7 +683,7 @@ static NSInteger  const limit = 10;
                         [self.navigationController pushViewController:editSettingVC animated:YES];
                         
                     }else if ([autoModel.type isEqualToString:@"3"])  {
-                        NSLog(@"33");
+                        DDLogVerbose(@"33");
                         
                         TIoTChooseDelayTimeVC *delayTimeVC = [[TIoTChooseDelayTimeVC alloc]init];
                         delayTimeVC.isEditing = YES;
@@ -693,7 +693,7 @@ static NSInteger  const limit = 10;
                         [self.navigationController pushViewController:delayTimeVC animated:YES];
                         
                     }else if ([autoModel.type isEqualToString:@"4"]) {
-                        NSLog(@"44");
+                        DDLogVerbose(@"44");
                         __weak typeof(self)weakSelf = self;
                         TIoTAutoAddManualIntelliListVC *addManualIntellVC = [[TIoTAutoAddManualIntelliListVC alloc]init];
                         addManualIntellVC.paramDic = weakSelf.paramDic;
@@ -710,7 +710,7 @@ static NSInteger  const limit = 10;
                         [self.navigationController pushViewController:addManualIntellVC animated:YES];
                         
                     }else if ([autoModel.type isEqualToString:@"5"]) {
-                        NSLog(@"55");
+                        DDLogVerbose(@"55");
                         __weak typeof(self)weakSelf = self;
                         TIoTAutoNoticeVC *noticeVC = [[TIoTAutoNoticeVC alloc]init];
                         noticeVC.isEdit = YES;

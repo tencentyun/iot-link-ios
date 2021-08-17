@@ -161,16 +161,16 @@
 - (void)connectWiFiCheckTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
     if (@available(iOS 11.0, *)) { //去连接wifi
         if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
-            NSLog(@"wifiInfo :%@", self.wifiInfo);
+            DDLogDebug(@"wifiInfo :%@", self.wifiInfo);
             NSString *Ssid = self.wifiInfo[@"name"];
             NSString *Pwd = self.wifiInfo[@"pwd"];
              NEHotspotConfiguration * configuration = [[NEHotspotConfiguration alloc] initWithSSID:Ssid passphrase:Pwd isWEP:NO];
 
             [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
                 if (nil == error) {
-                    NSLog(@">=iOS 11 Connected!!");
+                    DDLogError(@">=iOS 11 Connected!!");
                 } else {
-                    NSLog (@">=iOS 11 connect WiFi Error :%@", error);
+                    DDLogError (@">=iOS 11 connect WiFi Error :%@", error);
                 }
             }];
         }
@@ -213,7 +213,7 @@ static dispatch_once_t onceToken;
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
     [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
-        WCLog(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
+        DDLogInfo(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
             self.isTokenbindedStatus = NO;
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
@@ -231,7 +231,7 @@ static dispatch_once_t onceToken;
             });
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        WCLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
+        DDLogError(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
 }
@@ -296,11 +296,11 @@ static dispatch_once_t onceToken;
 #pragma mark TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
+    DDLogInfo(@"连接成功");
 }
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
+    DDLogInfo(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connectStepTipView.step < 1) {
@@ -310,14 +310,14 @@ static dispatch_once_t onceToken;
 }
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
+    DDLogError(@"发送失败 %@", error);
 }
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
     self.signInfo = dictionary;
-    WCLog(@"设备成功返回数据: %@",dictionary);
+    DDLogInfo(@"设备成功返回数据: %@",dictionary);
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connectStepTipView.step < 2) {
@@ -333,12 +333,12 @@ static dispatch_once_t onceToken;
                 [self connectWiFiCheckTokenStateWithCirculationWithDeviceData:dictionary];
             }else {
                 //deviceReplay 为 Cuttent_Error
-                WCLog(@"soft配网过程中失败，需要重新配网");
+                DDLogError(@"soft配网过程中失败，需要重新配网");
                 [self connectFaild];
             }
             
         } else {
-            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
+            DDLogInfo(@"dictionary==%@----soft链路设备success",dictionary);
             [self connectWiFiCheckTokenStateWithCirculationWithDeviceData:dictionary];
         }
         

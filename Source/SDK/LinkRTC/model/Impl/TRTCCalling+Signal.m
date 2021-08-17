@@ -7,7 +7,7 @@
 #import "TRTCCalling+Signal.h"
 #import "TRTCCallingUtils.h"
 #import "TRTCCallingHeader.h"
-
+#import "TIoTCoreWMacros.h"
 @implementation TRTCCalling (Signal)
 
 - (void)addSignalListener {
@@ -106,7 +106,7 @@
 
 - (void)sendAPNsForCall:(NSString *)receiver inviteeList:(NSArray *)inviteeList callID:(NSString *)callID groupid:(NSString *)groupid roomid:(UInt32)roomid {
     if (callID.length == 0 || inviteeList.count == 0 || roomid == 0) {
-        NSLog(@"sendAPNsForCall failed");
+        DDLogError(@"sendAPNsForCall failed");
         return;
     }
     int chatType; //单聊：1 群聊：2
@@ -335,7 +335,7 @@
 
     default:
         {
-             NSLog(@"📳 👻 WTF ????");
+             DDLogWarn(@"📳 👻 WTF ????");
         }
             break;
     }

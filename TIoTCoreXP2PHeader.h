@@ -1,12 +1,14 @@
 //
-//  WCMacros.h
-//  QCDeviceCenter
+//  TIoTCoreXP2PHeader.h
+//  Pods
 //
+//  Created by ccharlesren on 2021/8/17.
 //
 
-#ifndef WCMacros_h
-#define WCMacros_h
+#ifndef TIoTCoreXP2PHeader_h
+#define TIoTCoreXP2PHeader_h
 
+#ifdef __OBJC__
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 #ifdef DEBUG
@@ -15,5 +17,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 #endif
 
-#endif /* WCMacros_h */
+#endif
 
+#endif /* TIoTCoreXP2PHeader_h */

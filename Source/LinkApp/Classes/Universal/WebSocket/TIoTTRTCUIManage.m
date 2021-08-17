@@ -317,7 +317,7 @@
         @"Data":[NSString objectToJson:trtcReport]?:@""};
     
     [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
-        NSLog(@"--!!!--%@",responseObject);
+        DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -400,7 +400,7 @@
                     payloadParam.deviceName = device.DeviceName;
                     
                     [self preEnterRoom:payloadParam failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-                        NSLog(@"error--%@",error);
+                        DDLogError(@"error--%@",error);
                     }];
                 }
                 
@@ -422,8 +422,8 @@
 - (void)receiveDeviceData:(NSDictionary *)deviceInfo {
     //检测是否TRTC设备，是否在呼叫中
     NSDictionary *payloadDic = [NSString base64Decode:deviceInfo[@"Payload"]];
-    QCLog(@"\n----设备上报 payload:---%@\n",payloadDic);
-    QCLog(@"\n----用户ID:---%@\n",[TIoTCoreUserManage shared].userId);
+    DDLogInfo(@"----设备上报 payload:---%@",payloadDic);
+    DDLogInfo(@"----用户ID:---%@",[TIoTCoreUserManage shared].userId);
     TIOTtrtcPayloadModel *model = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     model.params.deviceName = deviceInfo[@"DeviceId"];
     if (model.params._sys_userid.length < 1) {

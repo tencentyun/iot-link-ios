@@ -88,7 +88,7 @@
                 self.editBlock(self,YES);
             }
         }else {
-            NSLog(@"进入同屏模式");
+            DDLogVerbose(@"进入同屏模式");
             [self exitEditPattern];
             self.editBlock(self,NO);
         }
