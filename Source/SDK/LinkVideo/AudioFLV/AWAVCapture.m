@@ -1,6 +1,7 @@
 #import "AWAVCapture.h"
 #import "AWEncoderManager.h"
 #include "aw_data.h"
+#import "TIoTCoreXP2PHeader.h"
 
 static aw_data *s_output_buf = NULL;
 __weak static AWAVCapture *sAWAVCapture = nil;
@@ -93,7 +94,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
 
 -(BOOL) startCapture {    
     if (!self.audioConfig) {
-        NSLog(@"one of videoConfig and audioConfig must be NON-NULL");
+        DDLogInfo(@"one of videoConfig and audioConfig must be NON-NULL");
         return NO;
     }
     
@@ -213,7 +214,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
         }
         weakSelf.isSpsPpsAndAudioSpecificConfigSent = audioSpecificConfigTag;
         
-        NSLog(@"[D] is sps pps and audio sepcific config sent=%d", weakSelf.isSpsPpsAndAudioSpecificConfigSent);
+        DDLogInfo(@"[D] is sps pps and audio sepcific config sent=%d", weakSelf.isSpsPpsAndAudioSpecificConfigSent);
     }];
 }
 

@@ -131,7 +131,7 @@
         //            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
                     TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
         //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
-                    NSLog(@"--!!!-%@",product);
+                    DDLogDebug(@"--!!!-%@",product);
                     
                     for (int i = 0; i <product.properties.count; i++) {
                         TIoTPropertiesModel *propertieModel = product.properties[i];

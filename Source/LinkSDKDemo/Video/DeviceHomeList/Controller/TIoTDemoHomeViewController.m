@@ -206,7 +206,7 @@ static NSInteger const kLimit = 100;
         NSArray *actionTitleArray = @[@"预览",@"回放",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            NSLog(@"预览");
+            DDLogVerbose(@"预览");
             
             TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
             previewDeviceVC.selectedModel = model;
@@ -217,7 +217,7 @@ static NSInteger const kLimit = 100;
         };
         
         ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            NSLog(@"回放");
+            DDLogVerbose(@"回放");
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
             TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
             cloudStorageVC.deviceModel = model;
@@ -226,7 +226,7 @@ static NSInteger const kLimit = 100;
         };
         
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
-            NSLog(@"取消");
+            DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
         NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,cancelBlock];

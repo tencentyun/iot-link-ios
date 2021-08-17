@@ -1,7 +1,7 @@
 #import "AWEncoderManager.h"
 #import "AWHWAACEncoder.h"
 #import "AWSWFaacEncoder.h"
-
+#import "TIoTCoreXP2PHeader.h"
 @interface AWEncoderManager()
 //编码器
 @property (nonatomic, strong) AWAudioEncoder *audioEncoder;
@@ -18,7 +18,7 @@
             self.audioEncoder = [[AWSWFaacEncoder alloc] init];
             break;
         default:
-            NSLog(@"[E] AWEncoderManager.open please assin for audioEncoderType");
+            DDLogInfo(@"[E] AWEncoderManager.open please assin for audioEncoderType");
             return;
     }
     

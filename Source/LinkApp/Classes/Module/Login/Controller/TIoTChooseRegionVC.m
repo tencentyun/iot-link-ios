@@ -119,14 +119,14 @@
         
     }];
 
-    TIoTLog(@"timeListArray====%@",regionListArray);
-    TIoTLog(@"originalArray===%@",originalArray);
+    DDLogVerbose(@"timeListArray====%@",regionListArray);
+    DDLogVerbose(@"originalArray===%@",originalArray);
 
     /*
      根据时区名称排序
      */
     NSArray *regionSortedArray = [self charactersOrder:(NSArray *)originalArray];
-    TIoTLog(@"TZSortedArray==%@",regionSortedArray);
+    DDLogVerbose(@"TZSortedArray==%@",regionSortedArray);
 
     /*
      获取第一个字母 组成目标数据格式 如:A =     (
@@ -168,12 +168,12 @@
         NSMutableString *ms = [[NSMutableString alloc] initWithString:zoneString];
         if (CFStringTransform((__bridge CFMutableStringRef)ms, 0, kCFStringTransformMandarinLatin, NO)) {
 
-                     TIoTLog(@"--Pingying: %@", ms);
+            DDLogVerbose(@"--Pingying: %@", ms);
 
         }
         if (CFStringTransform((__bridge CFMutableStringRef)ms, 0, kCFStringTransformStripDiacritics, NO)) {
 
-                      TIoTLog(@"Pingying: %@", ms);
+            DDLogVerbose(@"Pingying: %@", ms);
 
         }
         NSString *regionFirstString = [[ms substringToIndex:1] uppercaseString];
@@ -185,13 +185,13 @@
         }
     }];
 
-    TIoTLog(@"TZDic===%@",regionDic);
+    DDLogVerbose(@"TZDic===%@",regionDic);
 
     self.sortedNameDict = [[NSDictionary alloc]initWithDictionary:regionDic];
     self.indexArray = [[NSMutableArray alloc] initWithArray:[[self.sortedNameDict allKeys] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return [obj1 compare:obj2];
     }]];
-    TIoTLog(@"indexArray == %@",self.indexArray);
+    DDLogVerbose(@"indexArray == %@",self.indexArray);
     
 }
 
@@ -245,7 +245,7 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     
-    WCLog(@"国家title: %@   region: %@   regionID: %@",title,region,regionID);
+    DDLogVerbose(@"国家title: %@   region: %@   regionID: %@",title,region,regionID);
 }
 
 - (void)back{

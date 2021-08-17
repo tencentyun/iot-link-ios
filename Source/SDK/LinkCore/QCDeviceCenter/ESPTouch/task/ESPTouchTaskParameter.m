@@ -8,6 +8,7 @@
 
 #import "ESPTouchTaskParameter.h"
 #import "ESP_NetUtil.h"
+#import "TIoTCoreWMacros.h"
 
 @interface ESPTaskParameter()
 @property (nonatomic,assign) long intervalGuideCodeMillisecond;
@@ -194,7 +195,7 @@ static int _datagramCount = 0;
     if (waitUdpTotalMillisecond < self.waitUdpReceivingMillisecond + [self getTimeoutTotalCodeMillisecond])
     {
         // if it happen, even one turn about sending udp broadcast can't be completed
-        NSLog(@"ESPTouchTaskParameter waitUdpTotalMillisecod is invalid, it is less than mWaitUdpReceivingMilliseond + [self getTimeoutTotalCodeMillisecond]");
+        DDLogInfo(@"ESPTouchTaskParameter waitUdpTotalMillisecod is invalid, it is less than mWaitUdpReceivingMilliseond + [self getTimeoutTotalCodeMillisecond]");
         assert(0);
     }
     self.waitUdpSendingMillisecond = waitUdpTotalMillisecond - self.waitUdpReceivingMillisecond;

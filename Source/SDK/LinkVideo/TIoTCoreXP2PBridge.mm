@@ -9,6 +9,7 @@
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
 //#import "TIoTCoreAppEnvironment.h"
+#import "TIoTCoreWMacros.h"
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
@@ -18,7 +19,7 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (type == XP2PTypeLog) {
         
         NSString *nsFormat = [NSString stringWithUTF8String:msg];
-        NSLog(@"%@", nsFormat);
+        DDLogInfo(@"%@", nsFormat);
     }else if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
@@ -130,7 +131,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
     const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
-    NSLog(@"httpflv---%s",httpflv);
+    DDLogInfo(@"httpflv---%s",httpflv);
     if (httpflv) {
         return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
     }

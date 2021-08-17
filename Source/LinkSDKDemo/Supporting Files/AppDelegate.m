@@ -9,6 +9,8 @@
 #import "Firebase.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTDemoWebSocketManager.h"
+#import "TIoTCoreServices.h"
+#import "TIoTPrintLogManager.h"
 
 @interface AppDelegate ()
 
@@ -47,6 +49,9 @@
     
     //开启打印日志
     [TIoTCoreServices shared].logEnable = true;
+    //打印日志配
+    [[TIoTPrintLogManager sharedManager] config];
+    [[TIoTPrintLogManager sharedManager] setLogLevel:ddLogLevel];
     
     if (![TIoTCoreUserManage shared].isValidToken) {
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"TIoTMainVC") new]];

@@ -308,7 +308,7 @@
             [self.progressView setProgress:newprogress animated:YES];
         }
     } else if (object == self.webView && [keyPath isEqualToString:@"title"] && self.needJudgeJump) {
-        NSLog(@"title change:%@", change);
+        DDLogDebug(@"title change:%@", change);
         NSString *title = [change objectForKey:NSKeyValueChangeNewKey];
         if (!self.requestTicketRefreshURLBlock) {
             self.title = title;
@@ -320,7 +320,7 @@
     NSString *ticket = noti.object;
     NSString *jsStr = [NSString stringWithFormat:@"LoginResult('%@')",ticket];
     [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        WCLog(@"%@----%@",result, error);
+        DDLogDebug(@"%@----%@",result, error);
     }];
 }
 
@@ -344,7 +344,7 @@
 - (void)refushEvaluationContent {
     NSString *jsStr = [NSString stringWithFormat:@"pageShow('')"];
     [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        WCLog(@"%@----%@",result, error);
+        DDLogDebug(@"%@----%@",result, error);
     }];
 }
 
@@ -352,7 +352,7 @@
 - (void)appEventWithH5Response:(NSString *)event {
     NSString *jsStr = [NSString stringWithFormat:@"%@('')",event];
     [self.webView evaluateJavaScript:jsStr completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        WCLog(@"%@----%@",result, error);
+        DDLogDebug(@"%@----%@",result, error);
     }];
 }
 
@@ -372,7 +372,7 @@
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
 //    message.body  --  Allowed types are NSNumber, NSString, NSDate, NSArray,NSDictionary, and NSNull.
-    NSLog(@"body:%@",message.body);
+    DDLogDebug(@"body:%@",message.body);
     
     NSString *responseMethodStirng = self.bridgeMethodDic[message.name];
     if (![NSString isNullOrNilWithObject:responseMethodStirng]) {
@@ -400,7 +400,7 @@
 
 #pragma mark - 显示自定义分享view
 - (void)showSharedViewWithMessage:(WKScriptMessage *)message {
-    TIoTLog(@"弹框");
+    DDLogVerbose(@"弹框");
     if (message.body == nil || [message.body isEqual:[NSNull null]] || [message.body isKindOfClass:[NSNull class]]) {
         
     }else {
@@ -449,7 +449,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
         
-        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
         NSString *ticket = responseObject[@"TokenTicket"]?:@"";
         TIoTWebVC *vc = [TIoTWebVC new];
         NSString *url = nil;
@@ -484,7 +484,7 @@
 
         [self callBackResultWith:message];
         
-        WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+        DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
         NSString *ticket = responseObject[@"TokenTicket"]?:@"";
         TIoTWebVC *vc = [TIoTWebVC new];
         NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
