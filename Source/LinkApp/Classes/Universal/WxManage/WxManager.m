@@ -243,7 +243,7 @@
 #pragma mark Delegate
 -(void) onReq:(BaseReq*)req
 {
-    WCLog(@"发送");
+    DDLogDebug(@"发送");
 }
 
 -(void) onResp:(BaseResp*)resp

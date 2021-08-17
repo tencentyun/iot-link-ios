@@ -189,7 +189,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
                         if (self.minDistanceValue <= self.tempDisValue) {
                             self.tempDisValue = self.minDistanceValue;
                             modelIdx = idx;
-                            NSLog(@"--!!!!-%ld~~~~~%ld",(long)self.tempDisValue,self.minDistanceValue);
+                            DDLogVerbose(@"--!!!!-%ld~~~~~%ld",(long)self.tempDisValue,self.minDistanceValue);
                         }else {
                             
                             self.tempDisValue = self.minDistanceValue;

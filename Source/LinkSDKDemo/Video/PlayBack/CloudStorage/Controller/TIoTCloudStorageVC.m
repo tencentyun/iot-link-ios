@@ -288,7 +288,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     };
     //滑动停止后，获取当前值所在事件开始/结束时间戳
     self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
-        NSLog(@"startStamp--%f----%f",startTimestamp,selectedTimeModel.startTime);
+        DDLogVerbose(@"startStamp--%f----%f",startTimestamp,selectedTimeModel.startTime);
         
         //关闭定时器
         [weakSelf closeTime];
@@ -446,7 +446,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     paramDic[@"ExpireTime"] = [NSNumber numberWithInteger:currentStamp.integerValue + 3600];
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
-        NSLog(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
+        DDLogDebug(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
         
         if (timeModel.EndTime.integerValue == 0 || [NSString isNullOrNilWithObject:timeModel.EndTime]) {
             [MBProgressHUD showError:@"视频连接有误"];
@@ -903,7 +903,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     UISlider *slider = (UISlider *)sender;
     self.currentTime = round(slider.value);
-    NSLog(@"-!!!!!!!~~~~~~--%f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
+    DDLogVerbose(@"-!!!!!!!~~~~~~--%f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
     
     TIoTDemoCloudEventModel *currentTimeModel = [[TIoTDemoCloudEventModel alloc]init];
     if (self.isInnerScroll == YES) {
@@ -966,7 +966,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSString *secondString = [NSString getDayFormatTimeFromSecond:[NSString stringWithFormat:@"%ld",secondTime]];
     NSString *dateStr = [NSString stringWithFormat:@"%@ %@",self.dayDateString,secondString];
     NSString *stampDate = [NSString getTimeStampWithString:dateStr withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""]?:@"";
-    NSLog(@"%@",stampDate);
+    DDLogVerbose(@"%@",stampDate);
     self.timeLabel.text = secondString;
     return stampDate;
 }
@@ -1106,14 +1106,14 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     IJKMPMovieLoadState loadState = _player.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         ///设置播放器样式
         [self setupPlayerCustomControlView];
         
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
     } else {
-        NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: ???: %d", (int)loadState);
     }
 }
 
@@ -1129,11 +1129,11 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
             if (self.isPause == NO) {
                 self.player.currentPlaybackTime = self.currentTime;
             }
@@ -1142,21 +1142,21 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
             self.isPause = YES;
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStateSeekingForward:
         case IJKMPMoviePlaybackStateSeekingBackward: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
             break;
         }
         default: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            DDLogWarn(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
             break;
         }
     }
@@ -1204,7 +1204,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 //起始时间等于duration
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
                 weakSelf.currentLabel.text = weakSelf.totalLabel.text;
-                NSLog(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
+                DDLogDebug(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
             });
             
         }else{
@@ -1213,7 +1213,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                 weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)self.player.currentPlaybackTime/60,(NSInteger)self.player.currentPlaybackTime%60];
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
                 weakSelf.slider.value = time;
-                NSLog(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
+                DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
             });
             time++;
             
@@ -1229,21 +1229,21 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     switch (reason)
     {
         case IJKMPMovieFinishReasonPlaybackEnded:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackEnded: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackEnded: %d", reason);
             [self.imageView bringSubviewToFront:self.playView];
             self.videoPlayBtn.hidden = NO;
             break;
 
         case IJKMPMovieFinishReasonUserExited:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonUserExited: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonUserExited: %d", reason);
             break;
 
         case IJKMPMovieFinishReasonPlaybackError:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d", reason);
             break;
 
         default:
-            NSLog(@"playbackPlayBackDidFinish: ???: %d\n", reason);
+            DDLogWarn(@"playbackPlayBackDidFinish: ???: %d", reason);
             break;
     }
 }

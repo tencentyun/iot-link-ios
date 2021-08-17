@@ -194,7 +194,7 @@
 #pragma mark TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
+    DDLogInfo(@"连接成功");
     [self connectFaildWith:@"连接成功，正在上报"];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -222,7 +222,7 @@
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
+    DDLogInfo(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
         [self connectFaildWith:@"发送成功"];
@@ -231,7 +231,7 @@
 }
 
 - (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
+    DDLogInfo(@"发送失败 %@", error);
     dispatch_async(dispatch_get_main_queue(), ^{
         [MBProgressHUD dismissInView:nil];
         [self connectFaildWith:@"发动失败"];
@@ -241,7 +241,7 @@
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-    WCLog(@"嘟嘟嘟 %@",dictionary);
+    DDLogInfo(@"接收设备端发送信息 %@",dictionary);
     //手机与设备连接成功,收到设备的udp数据
     
     
@@ -256,7 +256,7 @@
                 });
             }else {
                 //deviceReplay 为 Cuttent_Error
-                WCLog(@"soft配网过程中失败，需要重新配网");
+                DDLogError(@"soft配网过程中失败，需要重新配网");
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [MBProgressHUD dismissInView:nil];
                     [self connectFaildWith:@"接收设备信息失败"];
@@ -264,7 +264,7 @@
             }
             
         } else {
-            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
+            DDLogInfo(@"dictionary==%@----soft链路设备success",dictionary);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD dismissInView:nil];
                 [self connectFaildWith:@"接收设备信息成功"];

@@ -474,7 +474,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction{
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
-        WCLog(@"用户协议");
+        DDLogVerbose(@"用户协议");
         if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
             
             if (LanguageIsEnglish) {
@@ -507,7 +507,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     }
     else if ([[URL scheme] isEqualToString:@"Privacy1"]) {
         
-        WCLog(@"隐私");
+        DDLogVerbose(@"隐私");
         if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
             
             if (LanguageIsEnglish) {

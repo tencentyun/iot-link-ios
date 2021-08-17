@@ -25,7 +25,7 @@
     
     if (0 == self.segment.selectedSegmentIndex) {
         [[TIoTCoreAccountSet shared] signInWithCountryCode:@"86" phoneNumber:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
-            NSLog(@"登录==%@",responseObject);
+            DDLogDebug(@"登录==%@",responseObject);
             
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
@@ -34,7 +34,7 @@
             [self getUserInfo];
             
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
-            NSLog(@"登录错==%@",reason);
+            DDLogDebug(@"登录错==%@",reason);
         }];
     }
     else if (1 == self.segment.selectedSegmentIndex)

@@ -84,14 +84,14 @@
 - (void)xgPushDidRegisteredDeviceToken:(nullable NSString *)deviceToken xgToken:(nullable NSString *)xgToken error:(nullable NSError *)error{
     //绑定信鸽
     self.deviceToken = xgToken;
-    WCLog(@"信鸽推送deviceToken：%@------xgToken：%@",deviceToken, xgToken);
+    DDLogDebug(@"信鸽推送deviceToken：%@------xgToken：%@",deviceToken, xgToken);
     [self bindPushToken];
 }
 
 // iOS 10 新增 API 无论APP当前在前台还是后台点击通知都会走该 API
 - (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     
-    WCLog(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@", response.notification.request.content.userInfo, response.notification.request.content.userInfo[@"custom"]);
+    DDLogDebug(@"-普通推送-responseNOtification_requestContent_info==%@--\n custom-%@", response.notification.request.content.userInfo, response.notification.request.content.userInfo[@"custom"]);
     
     [MGJRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":[NSString jsonToObject:response.notification.request.content.userInfo[@"custom"]]} completion:nil];
     
@@ -126,10 +126,10 @@
 - (void)xgPushDidReceiveRemoteNotification:(nonnull id)notification withCompletionHandler:(nullable void (^)(NSUInteger))completionHandler {
     //    NSLog(@"recieve message:%@", notification);
     if ([notification isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"notification ==%@",notification);
+        DDLogDebug(@"notification ==%@",notification);
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([notification isKindOfClass:[UNNotification class]]) {
-                NSLog(@"xg info :%@", ((UNNotification *)notification).request.content.userInfo);
+        DDLogDebug(@"xg info :%@", ((UNNotification *)notification).request.content.userInfo);
         completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
         
         //信鸽过来，查看设备是否要呼叫 检测是否TRTC设备，是否在呼叫中

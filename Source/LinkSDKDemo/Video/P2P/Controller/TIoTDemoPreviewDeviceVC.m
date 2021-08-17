@@ -649,7 +649,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         };
         
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
-            NSLog(@"取消");
+            DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
         
@@ -924,12 +924,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     IJKMPMovieLoadState loadState = _player.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         [self initVideoParamView];
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
     } else {
-        NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: ???: %d", (int)loadState);
     }
 }
 
@@ -946,11 +946,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
             
             // 播放器加载完出图时间
             self.endPlayer = CACurrentMediaTime();
@@ -979,20 +979,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStateSeekingForward:
         case IJKMPMoviePlaybackStateSeekingBackward: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
             break;
         }
         default: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            DDLogWarn(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
             break;
         }
     }

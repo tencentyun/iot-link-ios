@@ -682,7 +682,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     IJKMPMovieLoadState loadState = self.playerOne.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         TIoTExploreOrVideoDeviceModel *modelOne = self.videoArray[TIoTDemoSameScreenOne - TIoTDemoSameScreenOne];
         [self setupDeviceOneWithName:modelOne.DeviceName];
     }
@@ -692,7 +692,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     IJKMPMovieLoadState loadState = self.playerTwo.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         TIoTExploreOrVideoDeviceModel *modelTwo = self.videoArray[TIoTDemoSameScreenTwo - TIoTDemoSameScreenOne];
         [self setupDeviceTwoWithName:modelTwo.DeviceName];
     }
@@ -702,7 +702,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     IJKMPMovieLoadState loadState = self.playerThree.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         TIoTExploreOrVideoDeviceModel *modelThree = self.videoArray[TIoTDemoSameScreenThree - TIoTDemoSameScreenOne];
         [self setupDeviceThreeWithName:modelThree.DeviceName];
     }
@@ -712,7 +712,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     IJKMPMovieLoadState loadState = self.playerFour.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
         TIoTExploreOrVideoDeviceModel *modelFour = self.videoArray[TIoTDemoSameScreenFour - TIoTDemoSameScreenOne];
         
         [self setupDeviceFourWithName:modelFour.DeviceName];

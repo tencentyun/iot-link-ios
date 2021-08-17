@@ -15,7 +15,7 @@ typedef NS_ENUM (NSInteger,TIoTDeviceStatus){
 @implementation TIoTCoreUtil (TIoTDemoDeviceStatus)
 + (void)showDeviceStatusError:(TIoTDemoDeviceStatusModel *)responseModel commandInfo:(NSString *)commandInfo{
     
-    NSLog(@"Command Request DeviceStatue error:%@",responseModel.status);
+    DDLogError(@"Command Request DeviceStatue error:%@",responseModel.status);
     switch (responseModel.status.intValue) {
         case TIoTDeviceStatus1:
             [TIoTCoreUtil showSingleActionAlertWithTitle:@"拒绝请求" content:commandInfo confirmText:@"确定"];

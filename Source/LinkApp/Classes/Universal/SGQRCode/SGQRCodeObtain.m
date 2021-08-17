@@ -28,7 +28,7 @@
 
 - (void)dealloc {
     if (_configure.openLog == YES) {
-        NSLog(@"SGQRCodeObtain - - dealloc");
+        DDLogDebug(@"SGQRCodeObtain - - dealloc");
     }
 }
 
@@ -290,18 +290,18 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
                         [self P_enterImagePickerController];
                     });
                     if (self.configure.openLog == YES) {
-                        NSLog(@"用户第一次同意了访问相册权限");
+                        DDLogDebug(@"用户第一次同意了访问相册权限");
                     }
                 } else { // 用户第一次拒绝了访问相机权限
                     if (self.configure.openLog == YES) {
-                        NSLog(@"用户第一次拒绝了访问相册权限");
+                        DDLogDebug(@"用户第一次拒绝了访问相册权限");
                     }
                 }
             }];
         } else if (status == PHAuthorizationStatusAuthorized) { // 用户允许当前应用访问相册
             self.isPHAuthorization = YES;
             if (self.configure.openLog == YES) {
-                NSLog(@"用户允许访问相册权限");
+                DDLogDebug(@"用户允许访问相册权限");
             }
             [self P_enterImagePickerController];
         } else if (status == PHAuthorizationStatusDenied) { // 用户拒绝当前应用访问相册
@@ -363,7 +363,7 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
             CIQRCodeFeature *feature = [features objectAtIndex:index];
             NSString *resultStr = feature.messageString;
             if (_configure.openLog == YES) {
-                NSLog(@"相册中读取二维码数据信息 - - %@", resultStr);
+                DDLogDebug(@"相册中读取二维码数据信息 - - %@", resultStr);
             }
             self.detectorString = resultStr;
         }

@@ -115,7 +115,7 @@
             if (data.count > 0) {
                 NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
                 weakSelf.configData = [[NSDictionary alloc]initWithDictionary:config];
-                WCLog(@"AppGetProductsConfig config%@", config);
+                DDLogInfo(@"AppGetProductsConfig config%@", config);
                 NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
                 if (wifiConfTypeList.count > 0) {
                     NSString *configType = wifiConfTypeList.firstObject;
@@ -126,7 +126,7 @@
                 }
             }
             [weakSelf jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
-            WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+            DDLogDebug(@"AppGetProductsConfig responseObject%@", responseObject);
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [weakSelf jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];

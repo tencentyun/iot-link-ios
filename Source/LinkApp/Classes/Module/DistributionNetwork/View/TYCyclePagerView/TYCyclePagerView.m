@@ -495,7 +495,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     }
     TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
     if (_numberOfItems <= 0 || ![self isValidIndexSection:newIndexSection]) {
-        NSLog(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
+        DDLogVerbose(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
         return;
     }
     TYIndexSection indexSection = _indexSection;
