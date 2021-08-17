@@ -64,7 +64,7 @@ static NSString *heartBeatReqID = @"5002";
         return;
     }
     
-    QCLog(@"请求的websocket地址：%@",self.socket.url.absoluteString);
+    DDLogInfo(@"请求的websocket地址：%@",self.socket.url.absoluteString);
     [self.socket open];
 }
 
@@ -130,7 +130,7 @@ static NSString *heartBeatReqID = @"5002";
     
     if (webSocket == self.socket) {
         
-        QCLog(@"************************** socket 连接成功************************** ");
+        DDLogInfo(@"************************** socket 连接成功************************** ");
         if ([self.delegate respondsToSelector:@selector(socketDidOpen:)]) {
             [self.delegate socketDidOpen:self];
         }else {
@@ -144,7 +144,7 @@ static NSString *heartBeatReqID = @"5002";
 - (void)webSocket:(TIoTCoreWebSocket *)webSocket didFailWithError:(NSError *)error {
 
     if (webSocket == self.socket) {
-        QCLog(@"************************** socket 连接失败************************** ");
+        DDLogError(@"************************** socket 连接失败************************** ");
         //连接失败就重连
         [self reConnect];
         
@@ -157,8 +157,8 @@ static NSString *heartBeatReqID = @"5002";
 - (void)webSocket:(TIoTCoreWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     
     if (webSocket == self.socket) {
-        QCLog(@"************************** socket连接断开************************** ");
-        QCLog(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",(long)code,reason,wasClean);
+        DDLogWarn(@"************************** socket连接断开************************** ");
+        DDLogWarn(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",(long)code,reason,wasClean);
         [self socketClose];
         if ([self.delegate respondsToSelector:@selector(socket:didCloseWithCode:reason:wasClean:)]) {
             [self.delegate socket:self didCloseWithCode:code reason:reason wasClean:wasClean];
@@ -193,7 +193,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)handleReceivedMessage:(id)message{
     NSDictionary *dic = [NSString jsonToObject:message];
-    QCLog(@"message:%@",dic);
+    DDLogInfo(@"message:%@",dic);
     NSString *reqId = [NSString stringWithFormat:@"%@",dic[@"reqId"]];
     if ([heartBeatReqID isEqualToString:reqId]) {//心跳回包
         return;
@@ -228,7 +228,7 @@ static NSString *heartBeatReqID = @"5002";
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.reConnectTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self socketOpen];
-        QCLog(@"重连");
+        DDLogInfo(@"socket 重连");
     });
     
     //重连时间2的指数级增长
@@ -251,7 +251,7 @@ static NSString *heartBeatReqID = @"5002";
                                                        options:0
                                                          error:&error];
     if (!jsonData) {
-        QCLog(@" error: %@", error.localizedDescription);
+        DDLogError(@" error: %@", error.localizedDescription);
         return;
     } else {
         data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -273,7 +273,7 @@ static NSString *heartBeatReqID = @"5002";
                 
             } else if (weakself.socket.readyState == QC_CLOSING || weakself.socket.readyState == QC_CLOSED) {
                 // websocket 断开了，调用 reConnect 方法重连
-                QCLog(@"重连");
+                DDLogInfo(@"socket 重连");
                 
                 [weakself reConnect];
             }

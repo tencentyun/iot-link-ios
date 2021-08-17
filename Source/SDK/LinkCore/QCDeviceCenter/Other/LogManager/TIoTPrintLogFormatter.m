@@ -22,28 +22,28 @@ static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss:SSS";
     NSString *levelString = @"";
     switch (logMessage->_flag) {
         case DDLogFlagError: {
-            levelString = @"ErrorLevel";
+            levelString = @"Error";
             break;
         }
         case DDLogFlagWarning: {
-            levelString = @"WarningLevel";
+            levelString = @"Warning";
             break;
         }
         case DDLogFlagInfo: {
-            levelString = @"InfoLevel";
+            levelString = @"Info";
             break;
         }
         case DDLogFlagDebug: {
-            levelString = @"DebugLevel";
+            levelString = @"Debug";
             break;
         }
         case DDLogFlagVerbose: {
-            levelString = @"VarboseLevel";
+            levelString = @"Varbose";
             break;
         }
             
         default:{
-            levelString = @"InvalidLevel";
+            levelString = @"Invalid";
             break;
         }
     }
@@ -54,7 +54,7 @@ static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss:SSS";
     NSString *message = logMessage->_message;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {
-        NSString *resultString = [NSString stringWithFormat:@"[%@]:[%@]:[%@]:[%@]:[%@]:[%ld]",timeString,message,levelString,logMessage->_fileName,logMessage->_function,logMessage->_line];
+        NSString *resultString = [NSString stringWithFormat:@"[%@]:[%@]:[%s]:[%ld]:[%@]",timeString,levelString,[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],logMessage->_line,message];
         return resultString;
     }else {
         return @"";

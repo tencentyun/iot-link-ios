@@ -541,7 +541,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat scrollOffSetY = scrollView.contentOffset.y;
-    NSLog(@"scrollOffset--->%f",scrollOffSetY);
+    DDLogVerbose(@"scrollOffset--->%f",scrollOffSetY);
 
     CGFloat kTableViewHeadrHeight = kMapVisualMaxHeight;
 
@@ -603,7 +603,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 
 - (void)searchWithSearchOption:(QMSSearchOption *)searchOption didFailWithError:(NSError *)error
 {
-    WCLog(@"%@",error);
+    DDLogError(@"%@",error);
 }
 
 

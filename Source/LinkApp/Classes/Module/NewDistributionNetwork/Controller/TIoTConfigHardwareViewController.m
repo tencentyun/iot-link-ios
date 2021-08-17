@@ -187,7 +187,7 @@
 - (void)getSoftApToken {
     [[TIoTRequestObject shared] post:AppCreateDeviceBindToken Param:@{} success:^(id responseObject) {
 
-        WCLog(@"AppCreateDeviceBindToken----responseObject==%@",responseObject);
+        DDLogInfo(@"AppCreateDeviceBindToken----responseObject==%@",responseObject);
         
         if (![NSObject isNullOrNilWithObject:responseObject[@"Token"]]) {
             self.networkToken = responseObject[@"Token"];
@@ -195,7 +195,7 @@
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
-        WCLog(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
+        DDLogError(@"AppCreateDeviceBindToken--reason==%@--error=%@",reason,reason);
     }];
 }
 

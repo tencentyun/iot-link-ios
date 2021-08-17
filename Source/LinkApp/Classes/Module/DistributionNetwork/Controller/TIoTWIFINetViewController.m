@@ -48,22 +48,22 @@
     [reachability setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
-                NSLog(@"状态不知道");
+                DDLogDebug(@"状态不知道");
                 weakself.wifiNameTF.text = @"";
                 break;
             case NetworkReachabilityStatusNotReachable:
-                NSLog(@"没网络");
+                DDLogWarn(@"没网络");
                 weakself.wifiNameTF.text = @"";
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
-                NSLog(@"WIFI");
+                DDLogDebug(@"WIFI");
                 [weakself.wifiInfo removeAllObjects];
                 [weakself.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
                 weakself.wifiNameTF.text = weakself.wifiInfo[@"name"];
 
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
-                NSLog(@"移动网络");
+                DDLogDebug(@"移动网络");
                 weakself.wifiNameTF.text = @"";
                 break;
             default:

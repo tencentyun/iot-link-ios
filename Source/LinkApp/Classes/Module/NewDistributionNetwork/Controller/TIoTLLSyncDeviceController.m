@@ -34,7 +34,7 @@
 @implementation TIoTLLSyncDeviceController
 
 - (void)dealloc {
-    NSLog(@"%s",__func__);
+    DDLogDebug(@"%s",__func__);
 }
 
 - (void)viewDidLoad {
@@ -275,7 +275,7 @@
     if (self.currentConnectedPerpheral) {
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
         if (hexstr.length < 2) {
-            NSLog(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
+            DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
             return;
         }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];

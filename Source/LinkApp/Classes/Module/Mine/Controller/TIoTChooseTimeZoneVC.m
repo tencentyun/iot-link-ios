@@ -115,14 +115,14 @@
         [originalArray addObject:[NSString stringWithFormat:@"%@%@%@",itemDic[@"TZ"],separateString,itemDic[@"Title"]]];
     }];
 
-    TIoTLog(@"timeListArray====%@",timeListArray);
-    TIoTLog(@"originalArray===%@",originalArray);
+    DDLogVerbose(@"timeListArray====%@",timeListArray);
+    DDLogVerbose(@"originalArray===%@",originalArray);
 
     /*
      根据时区名称排序
      */
     NSArray *TZSortedArray = [self charactersOrder:(NSArray *)originalArray];
-    TIoTLog(@"TZSortedArray==%@",TZSortedArray);
+    DDLogVerbose(@"TZSortedArray==%@",TZSortedArray);
 
     /*
      获取第一个字母 组成目标数据格式 如:A =     (
@@ -165,7 +165,7 @@
         }
     }];
 
-    TIoTLog(@"TZDic===%@",TZDic);
+    DDLogVerbose(@"TZDic===%@",TZDic);
 
     self.sortedNameDict = [[NSDictionary alloc]initWithDictionary:TZDic];
     self.indexArray = [[NSMutableArray alloc] initWithArray:[[self.sortedNameDict allKeys] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -208,7 +208,7 @@
     _searchController.active = NO;
     [_searchController.searchBar resignFirstResponder];
     
-    WCLog(@"城市名称: %@   城市时区: %@",cityName,timeZone);
+    DDLogVerbose(@"城市名称: %@   城市时区: %@",cityName,timeZone);
     
     //判断时区与选择时区是否一致，不一致则弹框提示
     if ([self.defaultTimeZone isEqualToString:timeZone]) {

@@ -226,11 +226,11 @@
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
                 if (success) {
-                    NSLog(@"成功");
+                    DDLogVerbose(@"成功");
                 }
                 else
                 {
-                    NSLog(@"失败");
+                    DDLogVerbose(@"失败");
                 }
             }];
         }];
@@ -259,23 +259,23 @@
     [options setObject:@"" forKey: kNEHotspotHelperOptionDisplayName];
     dispatch_queue_t queue = dispatch_queue_create("EFNEHotspotHelperDemo", NULL);
 
-    NSLog(@"2.Try");
+    DDLogVerbose(@"2.Try");
     BOOL returnType = [NEHotspotHelper registerWithOptions: options queue: queue handler: ^(NEHotspotHelperCommand * cmd) {
 
-        NSLog(@"4.Finish");
+        DDLogVerbose(@"4.Finish");
         NEHotspotNetwork* network;
         if (cmd.commandType == kNEHotspotHelperCommandTypeEvaluate || cmd.commandType == kNEHotspotHelperCommandTypeFilterScanList) {
             // 遍历 WiFi 列表，打印基本信息
             for (network in cmd.networkList) {
                 NSString* wifiInfoString = [[NSString alloc] initWithFormat: @"---------------------------\nSSID: %@\nMac地址: %@\n信号强度: %f\nCommandType:%ld\n---------------------------\n\n", network.SSID, network.BSSID, network.signalStrength, (long)cmd.commandType];
-                NSLog(@"%@", wifiInfoString);
+                DDLogVerbose(@"%@", wifiInfoString);
 
                 // 检测到指定 WiFi 可设定密码直接连接
                 if ([network.SSID isEqualToString: @"测试 WiFi"]) {
                     [network setConfidence: kNEHotspotHelperConfidenceHigh];
                     [network setPassword: @"123456789"];
                     NEHotspotHelperResponse *response = [cmd createResponse: kNEHotspotHelperResultSuccess];
-                    NSLog(@"Response CMD: %@", response);
+                    DDLogVerbose(@"Response CMD: %@", response);
                     [response setNetworkList: @[network]];
                     [response setNetwork: network];
                     [response deliver];
@@ -285,7 +285,7 @@
     }];
 
     // 注册成功 returnType 会返回一个 Yes 值，否则 No
-    NSLog(@"3.Result: %@", returnType == YES ? @"Yes" : @"No");
+    DDLogVerbose(@"3.Result: %@", returnType == YES ? @"Yes" : @"No");
     
 #warning TODU - modify if judge condition
     if (!returnType) {

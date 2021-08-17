@@ -77,7 +77,7 @@
     [self.contentView addSubview:self.calendarView];
     __weak typeof(self) weakSelf = self;
     self.calendarView.selectedDateBlock = ^(NSString *dateString) {
-        NSLog(@"日历选择日期---%@",dateString);
+        DDLogVerbose(@"日历选择日期---%@",dateString);
         weakSelf.dayDateString = dateString;
         
     };

@@ -310,11 +310,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     IJKMPMovieLoadState loadState = _player.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
-        NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
     } else {
-        NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
+        DDLogInfo(@"loadStateDidChange: ???: %d", (int)loadState);
     }
 }
 
@@ -328,26 +328,26 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     switch (reason)
     {
         case IJKMPMovieFinishReasonPlaybackEnded:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackEnded: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackEnded: %d", reason);
             break;
 
         case IJKMPMovieFinishReasonUserExited:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonUserExited: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonUserExited: %d", reason);
             break;
 
         case IJKMPMovieFinishReasonPlaybackError:
-            NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
+            DDLogInfo(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d", reason);
             break;
 
         default:
-            NSLog(@"playbackPlayBackDidFinish: ???: %d\n", reason);
+            DDLogWarn(@"playbackPlayBackDidFinish: ???: %d\n", reason);
             break;
     }
 }
 
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
-    NSLog(@"mediaIsPreparedToPlayDidChange\n");
+    DDLogInfo(@"mediaIsPreparedToPlayDidChange");
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
@@ -362,28 +362,28 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStateSeekingForward:
         case IJKMPMoviePlaybackStateSeekingBackward: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
             break;
         }
         default: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            DDLogWarn(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
             break;
         }
     }
@@ -445,6 +445,6 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self stopPlayMovie];
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName];
     
-    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
+    DDLogInfo(@"debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 @end

@@ -5,6 +5,7 @@
 //
 
 #import "TCSocket.h"
+#import "TIoTCoreWMacros.h"
 
 @interface TCSocket() <NSStreamDelegate>
 {
@@ -45,7 +46,7 @@
 }
 
 - (void)_openWithIP:(NSString *)ip port:(UInt32)port {
-    NSLog(@"[%@]Connecting..... ip:%@,port:%ld",self.class,ip,(long)port);
+    DDLogInfo(@"[%@]Connecting..... ip:%@,port:%ld",self.class,ip,(long)port);
     self.status = TCSocketStatusOpening;
     CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (__bridge CFStringRef)ip, (UInt32)port, &_readStream, &_writeStream);
     self.outputStream = (__bridge NSOutputStream *)_writeStream;
@@ -82,13 +83,13 @@
 
 - (void)sendData:(NSData *)data {
     if (!data) {
-        NSLog(@"no data to send");
+        DDLogInfo(@"no data to send");
     }
     NSLog(@"Sending data %@",data);
     NSInteger result =  [self.outputStream write:data.bytes maxLength:data.length];
     NSLog(@"send data result is %ld",(long)result);
     if (result == -1) {
-        NSLog(@"stream error is %@",self.outputStream.streamError);
+        DDLogError(@"stream error is %@",self.outputStream.streamError);
     }
 }
 
@@ -142,7 +143,7 @@
             
             break;
         case NSStreamEventErrorOccurred:
-            NSLog(@"%@",[theStream streamError].localizedDescription);
+            DDLogError(@"%@",[theStream streamError].localizedDescription);
             if (theStream == self.outputStream) {
                 if (self.deleagte && [self.deleagte respondsToSelector:@selector(onHandleSocketClosed:)]) {
                     [self.deleagte onHandleSocketClosed:self];
@@ -159,7 +160,7 @@
             }
             break;
         default:
-            NSLog(@"reach default");
+            DDLogWarn(@"reach default");
             break;
     }
 }

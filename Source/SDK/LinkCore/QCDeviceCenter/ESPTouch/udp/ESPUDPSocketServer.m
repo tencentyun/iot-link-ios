@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include "ESPTouchTask.h"
+#import "TIoTCoreWMacros.h"
 
 #define SOCKET_NULL     -1
 
@@ -48,13 +49,13 @@
     self._sck_fd4 = socket(AF_INET,SOCK_DGRAM,0);
     if (DEBUG_ON)
     {
-        NSLog(@"##########################server init(): _sck_fd4=%d", self._sck_fd4);
+        DDLogInfo(@"##########################server init(): _sck_fd4=%d", self._sck_fd4);
     }
     if (self._sck_fd4 < 0)
     {
         if (DEBUG_ON)
         {
-            perror("server: _skd_fd4 init() fail\n");
+            DDLogError(@"server: _skd_fd4 init() fail\n");
         }
         return NO;
     }
@@ -72,7 +73,7 @@
     {
         if (DEBUG_ON)
         {
-            perror("server init() sck4: setsockopt SO_BROADCAST fail\n");
+            DDLogError(@"server init() sck4: setsockopt SO_BROADCAST fail\n");
         }
         [self close];
         return NO;
@@ -80,7 +81,7 @@
     // set socket timeout
     if (![self setSocketTimeout:socketTimeout SocketFd:self._sck_fd4]) {
         if (DEBUG_ON) {
-            perror("server: sck4: setsockopt SO_RCVTIMEO fail\n");
+            DDLogError(@"server: sck4: setsockopt SO_RCVTIMEO fail\n");
         }
         [self close];
         return NO;
@@ -89,7 +90,7 @@
     if (setsockopt(self._sck_fd4, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt))< 0) {
         if (DEBUG_ON)
         {
-            perror("server init() sck4: setsockopt SO_REUSEADDR fail\n");
+            DDLogError(@"server init() sck4: setsockopt SO_REUSEADDR fail\n");
         }
         [self close];
         return NO;
@@ -99,7 +100,7 @@
     {
         if (DEBUG_ON)
         {
-            perror("server init() sck4: bind fail\n");
+            DDLogError(@"server init() sck4: bind fail\n");
         }
         [self close];
         return NO;
@@ -113,13 +114,13 @@
     self._sck_fd6 = socket(AF_INET6,SOCK_DGRAM,0);
     if (DEBUG_ON)
     {
-        NSLog(@"##########################server init(): _sck_fd6=%d", self._sck_fd6);
+        DDLogInfo(@"##########################server init(): _sck_fd6=%d", self._sck_fd6);
     }
     if (self._sck_fd6 < 0)
     {
         if (DEBUG_ON)
         {
-            perror("server: _skd_fd6 init() fail\n");
+            DDLogError(@"server: _skd_fd6 init() fail\n");
         }
         return NO;
     }
@@ -133,7 +134,7 @@
     // set socket timeout
     if (![self setSocketTimeout:socketTimeout SocketFd:self._sck_fd6]) {
         if (DEBUG_ON) {
-            perror("server: sck4: setsockopt SO_RCVTIMEO fail\n");
+            DDLogError(@"server: sck4: setsockopt SO_RCVTIMEO fail\n");
         }
         [self close];
         return NO;
@@ -143,7 +144,7 @@
     if (setsockopt(self._sck_fd6, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt))< 0) {
         if (DEBUG_ON)
         {
-            perror("server init() sck6: setsockopt SO_REUSEADDR fail\n");
+            DDLogError(@"server init() sck6: setsockopt SO_REUSEADDR fail\n");
         }
         [self close];
         return NO;
@@ -153,7 +154,7 @@
     {
         if (DEBUG_ON)
         {
-            perror("server init() sck6: bind fail\n");
+            DDLogError(@"server init() sck6: bind fail\n");
         }
         [self close];
         return NO;
@@ -175,7 +176,7 @@
         // init sck4
         if (![self initWithPort4:port AndSocketTimeout:socketTimeout]) {
             if (DEBUG_ON) {
-                NSLog(@"fail to init socket for ipv4");
+                DDLogInfo(@"fail to init socket for ipv4");
             }
             return nil;
         }
@@ -187,7 +188,7 @@
             }
             else {
                 if (DEBUG_ON) {
-                    NSLog(@"fail to get socket port for ipv4");
+                    DDLogInfo(@"fail to get socket port for ipv4");
                 }
                 [self close];
                 return nil;
@@ -197,7 +198,7 @@
         // init sck6
         if (![self initWithPort6:port AndSocketTimeout:socketTimeout]) {
             if (DEBUG_ON) {
-                NSLog(@"fail to init socket for ipv6");
+                DDLogInfo(@"fail to init socket for ipv6");
             }
             return nil;
         }
@@ -210,7 +211,7 @@
 {
     if (DEBUG_ON)
     {
-        NSLog(@"###################server dealloc()");
+        DDLogInfo(@"###################server dealloc()");
     }
     [self close];
 }
@@ -223,7 +224,7 @@
         if (self._sck_fd4!=SOCKET_NULL) {
             if (DEBUG_ON)
             {
-                NSLog(@"###################server close() fd4=%d",self._sck_fd4);
+                DDLogInfo(@"###################server close() fd4=%d",self._sck_fd4);
             }
             close(self._sck_fd4);
             self._sck_fd4 = SOCKET_NULL;
@@ -231,7 +232,7 @@
         if (self._sck_fd6!=SOCKET_NULL) {
             if (DEBUG_ON)
             {
-                NSLog(@"###################server close() fd6=%d",self._sck_fd6);
+                DDLogInfo(@"###################server close() fd6=%d",self._sck_fd6);
             }
             close(self._sck_fd6);
             self._sck_fd6 = SOCKET_NULL;
@@ -255,7 +256,7 @@
     {
         if (DEBUG_ON)
         {
-            perror("server: setsockopt SO_RCVTIMEO fail\n");
+            DDLogError(@"server: setsockopt SO_RCVTIMEO fail\n");
         }
         return NO;
     } else {
@@ -280,14 +281,14 @@
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte4 socket is closed by the other\n");
+            DDLogError(@"server: receiveOneByte4 socket is closed by the other\n");
         }
     }
     else
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte4 fail\n");
+            DDLogError(@"server: receiveOneByte4 fail\n");
         }
     }
     return UINT8_MAX;
@@ -304,14 +305,14 @@
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte6 socket is closed by the other\n");
+            DDLogError(@"server: receiveOneByte6 socket is closed by the other\n");
         }
     }
     else
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte6 fail\n");
+            DDLogError(@"server: receiveOneByte6 fail\n");
         }
     }
     return UINT8_MAX;
@@ -329,14 +330,14 @@
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte4 socket is closed by the other\n");
+            DDLogError(@"server: receiveOneByte4 socket is closed by the other\n");
         }
     }
     else if(recNumber<0)
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte4 fail\n");
+            DDLogError(@"server: receiveOneByte4 fail\n");
         }
     }
     else
@@ -358,14 +359,14 @@
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte6 socket is closed by the other\n");
+            DDLogError(@"server: receiveOneByte6 socket is closed by the other\n");
         }
     }
     else if(recNumber<0)
     {
         if (DEBUG_ON)
         {
-            perror("server: receiveOneByte6 fail\n");
+            DDLogError(@"server: receiveOneByte6 fail\n");
         }
     }
     else

@@ -116,7 +116,7 @@
                 [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
                 [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
-                    WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+                    DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
                     NSString *ticket = responseObject[@"TokenTicket"]?:@"";
                     NSString *requestID = responseObject[@"RequestId"]?:@"";
                     NSString *platform = @"iOS";
