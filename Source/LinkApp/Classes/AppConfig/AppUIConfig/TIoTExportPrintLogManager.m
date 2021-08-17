@@ -70,7 +70,7 @@ static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss";
         NSError *error = nil;
         BOOL isDeleteSuccess = [fileManager removeItemAtPath:self.logFilePath error:&error];
         if (!isDeleteSuccess) {
-            QCLog(@"delete LogFile error: %@", error.localizedDescription);
+            DDLogVerbose(@"delete LogFile error: %@", error.localizedDescription);
         }
     }
     
@@ -128,14 +128,14 @@ static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss";
     
     BOOL isExist = [fileManager fileExistsAtPath:targetFilePath isDirectory:&isDirectExist];
     if (isExist) {
-        QCLog(@"\n create targetFilePath: %@\n", targetFilePath);
+        DDLogVerbose(@"create targetFilePath: %@", targetFilePath);
         return targetFilePath;
     }
     
     // 不存在则创建
     BOOL isNoExist = [fileManager createDirectoryAtPath:targetFilePath withIntermediateDirectories:YES attributes:nil error:&error];
     if (!isNoExist || error) {
-        QCLog(@"\n create targetFilePath error: %@\n", error.localizedDescription);
+        DDLogVerbose(@"create targetFilePath error: %@", error.localizedDescription);
         return nil;
     }
     return targetFilePath;

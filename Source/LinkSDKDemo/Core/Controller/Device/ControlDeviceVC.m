@@ -62,7 +62,7 @@
         
         self.ci = responseObject;
         
-        NSLog(@"上清==%@",self.ci.zipData);
+        DDLogVerbose(@"上清==%@",self.ci.zipData);
         [self refresh];
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
@@ -183,7 +183,7 @@
 //    NSNumber *statusValue = self.reportData[@"status"][@"Value"];
     
     if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"-1"]) {
-        NSLog(@"--!!-%@---",[TIoTCoreUserManage shared].sys_call_status);
+        DDLogInfo(@"--!!-%@---",[TIoTCoreUserManage shared].sys_call_status);
         if ([key isEqualToString:@"_sys_audio_call_status"]) {
             if (![[TIoTCoreUserManage shared].sys_call_status isEqualToString:@"0"]) {
                 [MBProgressHUD showError:NSLocalizedString(@"other_part_busy", @"对方正忙...") toView:self.view];
@@ -255,8 +255,8 @@
     
     
     NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
-    NSLog(@"\n----收到设备上报信息 payloadDic: %@---\n",payloadDic);
-    NSLog(@"\n---收到设备上报 userid---%@\n",[TIoTCoreUserManage shared].userId);
+    DDLogInfo(@"\n----收到设备上报信息 payloadDic: %@---\n",payloadDic);
+    DDLogInfo(@"\n---收到设备上报 userid---%@\n",[TIoTCoreUserManage shared].userId);
     
     if ([payloadDic.allKeys containsObject:@"params"]) {
         NSDictionary *paramsDic = payloadDic[@"params"];

@@ -38,7 +38,7 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    NSLog(@"==%@==%@",self.wName,self.wPassword);
+    DDLogDebug(@"==%@==%@",self.wName,self.wPassword);
     
 }
 
@@ -130,13 +130,13 @@
 }
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    NSLog(@"连接成功");
+    DDLogInfo(@"连接成功");
 }
 
 - (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
-    NSLog(@"设备成功返回数据: %@",dictionary);
+    DDLogInfo(@"设备成功返回数据: %@",dictionary);
     
     if ([dictionary[@"cmdType"] integerValue] == 2) {
         //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
@@ -146,12 +146,12 @@
                 [self checkTokenStateWithCirculationWithDeviceData:dictionary];
             }else {
                 //deviceReplay 为 Cuttent_Error
-                NSLog(@"soft配网过程中失败，需要重新配网");
+                DDLogError(@"soft配网过程中失败，需要重新配网");
                 [self connectFaildResult:@"模组有问题"];
             }
             
         }else {
-            NSLog(@"dictionary==%@----soft链路设备success",dictionary);
+            DDLogInfo(@"dictionary==%@----soft链路设备success",dictionary);
             [self checkTokenStateWithCirculationWithDeviceData:dictionary];
         }
         
@@ -189,7 +189,7 @@
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
     [[TIoTCoreRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wToken} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
-        NSLog(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
+        DDLogInfo(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
             self.isTokenbindedStatus = NO;
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
@@ -197,7 +197,7 @@
             [self bindingDevidesWithData:deviceData];
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        NSLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
+        DDLogError(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
 }

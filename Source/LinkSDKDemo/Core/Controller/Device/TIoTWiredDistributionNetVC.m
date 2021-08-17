@@ -155,14 +155,14 @@
 
 /// 连接成功
 - (void)wiredDistributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    NSLog(@"--address--%@",address);
+    DDLogInfo(@"--address--%@",address);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self connectFaildWith:@"连接成功"];
     });
 }
 /// 连接失败
 - (void)wiredDistributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
-    NSLog(@"--error--%@",error);
+    DDLogError(@"--error--%@",error);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self connectFaildWith:@"连接失败"];
     });
@@ -190,7 +190,7 @@
 //    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSError *jsonerror = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
-    NSLog(@"收到设备端的响应 [%@:%d] %@", ip, port, dic);
+    DDLogInfo(@"收到设备端的响应 [%@:%d] %@", ip, port, dic);
     
     if (!jsonerror) {
         

@@ -189,7 +189,7 @@
         [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             
-            WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+            DDLogVerbose(@"AppGetTokenTicket responseObject%@", responseObject);
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             TIoTWebVC *vc = [TIoTWebVC new];
             vc.title = self.dataArr[indexPath.row][@"title"];

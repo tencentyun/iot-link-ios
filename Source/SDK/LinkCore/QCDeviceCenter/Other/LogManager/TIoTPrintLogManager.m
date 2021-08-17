@@ -34,7 +34,7 @@
     // 创建本地日志文件
     self.fileLogger = [[DDFileLogger alloc] init];
     self.fileLogger.rollingFrequency = 60 * 60 * 24; // 每24小时创建一个新文件
-    self.fileLogger.logFileManager.maximumNumberOfLogFiles = 10; // 最多允许创建文件数量
+    self.fileLogger.logFileManager.maximumNumberOfLogFiles = 30; // 最多允许创建文件数量
     self.fileLogger.maximumFileSize = 1024*1024*3;   //每个日志最大限制为 3M
     self.fileLogger.logFileManager.maximumNumberOfLogFiles = 7;    // 保存日志7天
     

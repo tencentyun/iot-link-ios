@@ -68,7 +68,7 @@
 
 - (void)switchChange:(UISwitch *_Nullable)senderSwitch {
     if ([senderSwitch isOn]) {
-        NSLog(@"turn on");
+        DDLogVerbose(@"turn on");
         
         if (self.isEdit == YES) {
             self.editModel.isSwitchTuron = 1;
@@ -95,7 +95,7 @@
         
         
     }else {
-        NSLog(@"turn off");
+        DDLogVerbose(@"turn off");
         
         if (self.choiceNoticeArray.count != 0) {
             [self.choiceNoticeArray removeAllObjects];

@@ -196,21 +196,21 @@
 
 #pragma mark - event
 - (void)help{
-    WCLog(@"帮助");
+    DDLogVerbose(@"帮助");
     if (self.helpAction) {
         self.helpAction();
     }
 }
 
 - (void)scan{
-    WCLog(@"扫码");
+    DDLogVerbose(@"扫码");
     if (self.scanAction) {
         self.scanAction();
     }
 }
 
 - (void)retry{
-    WCLog(@"重试");
+    DDLogVerbose(@"重试");
     if (self.retryAction) {
         self.retryAction();
     }

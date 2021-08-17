@@ -7,6 +7,7 @@
 #import "NSString+Extension.h"
 #include <CommonCrypto/CommonDigest.h>
 #include <CommonCrypto/CommonHMAC.h>
+#import "TIoTCoreWMacros.h"
 
 #import <arpa/inet.h>
 #import <ifaddrs.h>
@@ -364,7 +365,7 @@
             int_ch2 = hex_char2-87; //// a 的Ascll - 97
         }
         int_ch = int_ch1+int_ch2;
-        NSLog(@"int_ch=%d",int_ch);
+        DDLogInfo(@"int_ch=%d",int_ch);
         bytes[j] = int_ch;  ///将转化后的数放入Byte数组里
         j++;
     }
@@ -604,9 +605,9 @@
     int r = getdefaultgateway(&(gatewayaddr.s_addr));
     if(r >= 0) {
         ipString = [NSString stringWithFormat: @"%s",inet_ntoa(gatewayaddr)];
-        NSLog(@"default gateway : %@", ipString );
+        DDLogInfo(@"default gateway : %@", ipString );
     } else {
-        NSLog(@"getdefaultgateway() failed");
+        DDLogInfo(@"getdefaultgateway() failed");
     }
     
     return ipString;
@@ -834,8 +835,8 @@
             [strAscii appendFormat:@"[%d]", _byte];
         }
     }
-    NSLog(@"Hex: %@", hexString);
-    NSLog(@"Ascii: %@", strAscii);
+    DDLogInfo(@"Hex: %@", hexString);
+    DDLogInfo(@"Ascii: %@", strAscii);
     return strAscii;
 }
 /*

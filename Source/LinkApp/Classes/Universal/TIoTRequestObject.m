@@ -163,7 +163,7 @@ failure:(FailureResponseBlock)failure
         return [obj1 compare:obj2 options:comparisonOptions range:range];
     }];
 //    NSArray *keys=  [[param allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    NSLog(@"%@",keys);
+    DDLogDebug(@"%@",keys);
     
     NSMutableString *keyValue = [NSMutableString string];
     for (int i = 0; i < keys.count; i ++) {

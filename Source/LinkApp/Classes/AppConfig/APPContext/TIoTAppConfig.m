@@ -28,7 +28,7 @@
         if ([UIApplication sharedApplication].delegate.window) {
             [MBProgressHUD showError:@"配置文件解析失败!" toView:[UIApplication sharedApplication].delegate.window];
         }
-        NSLog(@">>>>>配置文件解析失败!!!>>>>>");
+        DDLogError(@">>>>>配置文件解析失败!!!>>>>>");
         return nil;
     }
     

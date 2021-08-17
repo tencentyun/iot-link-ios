@@ -5,6 +5,7 @@
 
 #import "TIoTCoreLogReport.h"
 #import "TIoTCodeAddress.h"
+#import "TIoTCoreWMacros.h"
 
 @implementation TIoTCoreLogReport {
     
@@ -56,7 +57,7 @@ void onException(NSException *exception) {
                 NSString *withoutSlideAddr = [NSString stringWithFormat:@"\n%@ 腾讯连连SDK内存地址范围(不带偏移): [%p, %p]", [formatter stringFromDate:[NSDate date]], startAddrWithoutSlide, endAddrWithoutSlide];
                 NSString *crashString = [NSString stringWithFormat:@"%@%@\n%@ %@ *** TIoT异常结束 '%@', reason: '%@'\n%@\n", addr, withoutSlideAddr, dateStr, appName, name, exception, exception.callStackSymbols];
 
-                NSLog(crashString);
+                DDLogInfo(crashString);
                 static dispatch_once_t onceToken;
                 dispatch_once(&onceToken, ^{
                     
@@ -154,9 +155,9 @@ void saveToFile(NSString *crashString) {
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         NSString *addr = [NSString stringWithFormat:@"%@ 腾讯连连SDK内存地址范围: [%p, %p]", [formatter stringFromDate:[NSDate date]], startAddr, endAddr];
-        NSLog(addr);
+        DDLogInfo(addr);
         NSString *withoutSlideAddr = [NSString stringWithFormat:@"%@ 腾讯连连SDK内存地址范围(不带偏移): [%p, %p]", [formatter stringFromDate:[NSDate date]], startAddrWithoutSlide, endAddrWithoutSlide];
-        NSLog(withoutSlideAddr);
+        DDLogInfo(withoutSlideAddr);
         NSString *addrString = [NSString stringWithFormat:@"%@\n%@\n", addr, withoutSlideAddr];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
