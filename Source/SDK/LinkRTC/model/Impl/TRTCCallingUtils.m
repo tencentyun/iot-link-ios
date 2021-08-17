@@ -5,6 +5,7 @@
 //
 
 #import "TRTCCallingUtils.h"
+#import "TIoTCoreWMacros.h"
 
 @implementation TRTCCallingUtils
 
@@ -49,7 +50,7 @@
     NSError *err = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&err];
     if (err || ![dic isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"Json parse failed: %@", jsonString);
+        DDLogError(@"Json parse failed: %@", jsonString);
         return nil;
     }
     return dic;
@@ -63,13 +64,13 @@
         NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
         if(error)
         {
-            NSLog(@"[%@] Post Json Error", [self class]);
+            DDLogError(@"[%@] Post Json Error", [self class]);
         }
         return data;
     }
     else
     {
-        NSLog(@"[%@] Post Json is not valid", [self class]);
+        DDLogError(@"[%@] Post Json is not valid", [self class]);
     }
     return nil;
 }
@@ -81,7 +82,7 @@
     NSError *err = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     if (err || ![dic isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"Json parse failed");
+        DDLogError(@"Json parse failed");
         return nil;
     }
     return dic;

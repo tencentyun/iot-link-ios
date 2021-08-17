@@ -206,7 +206,7 @@
     [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
             [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
-                WCLog(@"AppGetTokenTicket responseObject%@", responseObject);
+                DDLogInfo(@"AppGetTokenTicket responseObject%@", responseObject);
                 NSString *ticket = responseObject[@"TokenTicket"]?:@"";
                 TIoTWebVC *vc = [TIoTWebVC new];
                 vc.title = NSLocalizedString(@"help_center", @"帮助中心");
@@ -281,7 +281,7 @@
         if (data.count > 0) {
             NSDictionary *config = [NSString jsonToObject:data[0][@"Config"]];
             self.configData = [[NSDictionary alloc]initWithDictionary:config];
-            WCLog(@"AppGetProductsConfig config%@", config);
+            DDLogInfo(@"AppGetProductsConfig config%@", config);
             NSArray *wifiConfTypeList = config[@"WifiConfTypeList"];
             if (wifiConfTypeList.count > 0) {
                 NSString *configType = wifiConfTypeList.firstObject;
@@ -292,7 +292,7 @@
             }
         }
         [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];
-        WCLog(@"AppGetProductsConfig responseObject%@", responseObject);
+        DDLogDebug(@"AppGetProductsConfig responseObject%@", responseObject);
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 //        [self jumpConfigVC:NSLocalizedString(@"smart_config", @"智能配网")];

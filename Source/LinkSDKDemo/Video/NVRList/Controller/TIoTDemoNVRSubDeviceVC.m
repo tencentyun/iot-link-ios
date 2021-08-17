@@ -134,7 +134,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     self.endP2P = endP2PTime;
     [self saveDeviceInfo:self.selectedModel.DeviceName?:@"" time:(self.endP2P - self.startP2P)*1000];
     
-    NSLog(@"%@", [NSString stringWithFormat:@"****** %@ ended: %f millisecond start: %f interval: %ld ******\n",NSStringFromSelector(_cmd),self.endP2P,self.startP2P,(long)((self.endP2P - self.startP2P)*1000)]);
+    DDLogInfo(@"%@", [NSString stringWithFormat:@"****** %@ ended: %f millisecond start: %f interval: %ld ******\n",NSStringFromSelector(_cmd),self.endP2P,self.startP2P,(long)((self.endP2P - self.startP2P)*1000)]);
     
         [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
             
@@ -245,7 +245,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         NSArray *actionTitleArray = @[@"预览",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            NSLog(@"预览");
+            DDLogVerbose(@"预览");
             
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
             TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
@@ -258,7 +258,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         };
         
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
-            NSLog(@"取消");
+            DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
         NSArray *actionBlockArray = @[previewVideoBlock,cancelBlock];

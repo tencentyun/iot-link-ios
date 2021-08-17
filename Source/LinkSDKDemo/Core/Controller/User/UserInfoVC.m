@@ -36,7 +36,7 @@
         self.nick.text = [TIoTCoreUserManage shared].nickName;
         self.phoneNum.text = [TIoTCoreUserManage shared].phoneNumber;
         [self.header sd_setImageWithURL:[NSURL URLWithString:[TIoTCoreUserManage shared].avatar]];
-        NSLog(@"头像==%@",[TIoTCoreUserManage shared].avatar);
+        DDLogDebug(@"头像==%@",[TIoTCoreUserManage shared].avatar);
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];

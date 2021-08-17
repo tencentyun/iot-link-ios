@@ -495,7 +495,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
             };
             
             self.customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
-                NSLog(@"----%@",dateArray);
+                DDLogVerbose(@"----%@",dateArray);
                 weakSelf.timerSettedIDArray = [dateArray mutableCopy];
                 [weakSelf.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
                     make.height.mas_offset(weakSelf.kHeight);
@@ -584,7 +584,7 @@ static NSString *const kAutoRepeatPeriodViewCellID = @"kAutoRepeatPeriodViewCell
                 if (weakSelf.effectTimeDic == nil) {
                     weakSelf.effectTimeDic = [NSMutableDictionary new];
                 }
-                NSLog(@"---%@",weakSelf.customTimeValueLabel.text);
+                DDLogVerbose(@"---%@",weakSelf.customTimeValueLabel.text);
                 if ([weakSelf.customTimeValueLabel.text isEqualToString:@"00:00-23:59"]) {
                 
                     [weakSelf.effectTimeDic setValue:@"" forKey:@"time"];
