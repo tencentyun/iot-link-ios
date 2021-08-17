@@ -356,7 +356,7 @@ static NSString *cellId = @"rv23244";
             choseView.showValue = self.publishData[pro[@"id"]];
             choseView.dic = pro;
             choseView.updateData = ^(NSDictionary * _Nonnull dataDic) {
-                NSLog(@"%@",dataDic);
+                DDLogDebug(@"%@",dataDic);
                 [self.publishData addEntriesFromDictionary:dataDic];
                 
                 NSString *key = [NSString stringWithFormat:@"%@",dataDic.allValues.firstObject];

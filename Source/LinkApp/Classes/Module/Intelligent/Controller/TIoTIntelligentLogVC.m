@@ -211,7 +211,7 @@ static NSUInteger limit = 10; //每次请求数据个数限制
             self.tableView.hidden = NO;
         }
         
-        NSLog(@"----%@",self.sectionDataArray);
+        DDLogVerbose(@"----%@",self.sectionDataArray);
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 

@@ -12,6 +12,7 @@
 #import "TIoTCoreAddDevice.h"
 #include <CommonCrypto/CommonDigest.h>
 #include <CommonCrypto/CommonHMAC.h>
+#import "TIoTCoreWMacros.h"
 
 @interface TIoTCoreUtil ()<TIoTCoreAddDeviceDelegate>
 @property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
@@ -34,7 +35,7 @@
             NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
     
             wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID]};
-            NSLog(@"network info -> %@", wifiDic);
+            DDLogInfo(@"network info -> %@", wifiDic);
             CFRelease(dictRef);
         }
     }
@@ -158,7 +159,7 @@
     NSString *payload = [self qcloudasrutil_sortedJSONTypeQueryParams:allParams];
     NSString *hashedRequestPayload = [[TIoTCoreUtil qcloudasrutil_SHA256Hex:payload] lowercaseString];
     
-    NSLog(@"payload %@ hashedRequestPayload %@", payload, hashedRequestPayload);
+    DDLogInfo(@"payload %@ hashedRequestPayload %@", payload, hashedRequestPayload);
     
     NSMutableString *canonicalRequest = [[NSMutableString alloc] init];
     [canonicalRequest appendFormat:@"%@\n", httpRequestMethod];
@@ -168,7 +169,7 @@
     [canonicalRequest appendFormat:@"%@\n", signedHeaders];
     [canonicalRequest appendFormat:@"%@", hashedRequestPayload];
     
-    NSLog(@"canonicalRequest %@", canonicalRequest);
+    DDLogInfo(@"canonicalRequest %@", canonicalRequest);
     
     //2. 拼接待签名字符串
     static NSDateFormatter *yyyy_mm_ddFormatter;
@@ -194,7 +195,7 @@
 //    NSString *hashedCanonicalRequest = [[QCloudASRUtil qcloudasrutil_SHA256Hex:canonicalRequest] lowercaseString];
 //    NSString *stringToSign = [NSString stringWithFormat:@"%@\n%@\n%@\n%@", algorithm, requestTimestamp, credentialScope, hashedCanonicalRequest];
     
-    NSLog(@"stringToSign %@", stringToSign);
+    DDLogInfo(@"stringToSign %@", stringToSign);
     
     //3. 计算签名
     NSString *secretKey = [params objectForKey:@"secretKey"];//params.secretKey;
@@ -242,7 +243,7 @@
     [authorization appendFormat:@"SignedHeaders=%@,", signedHeaders];
     [authorization appendString:@" "];
     [authorization appendFormat:@"Signature=%@", signature];
-    NSLog(@"authorization %@ timestamp %ld", authorization, requestTimestamp.integerValue);
+    DDLogInfo(@"authorization %@ timestamp %ld", authorization, requestTimestamp.integerValue);
     return authorization;
 }
 

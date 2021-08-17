@@ -37,13 +37,13 @@
 
 #pragma mark UITextViewDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    NSLog(@"text--%@",textField.text);
+    DDLogDebug(@"text--%@",textField.text);
     
     [[TIoTCoreDeviceSet shared] bindDeviceWithDeviceSignature:textField.text inFamilyId:[TIoTCoreUserManage shared].familyId roomId:@"0" success:^(id  _Nonnull responseObject) {
        
-        NSLog(@"---");
+        DDLogDebug(@"---");
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        NSLog(@"fail bind---");
+        DDLogError(@"fail bind---");
     }];
     
     return YES;

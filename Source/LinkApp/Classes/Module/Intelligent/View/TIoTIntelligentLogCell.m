@@ -186,7 +186,6 @@
         self.detailTableView.hidden = YES;
     }
     
-//    NSLog(@"----!!!=---%@",msgModel.ActionResults[0].deviceName);
 }
 
 - (void)prepareForReuse {

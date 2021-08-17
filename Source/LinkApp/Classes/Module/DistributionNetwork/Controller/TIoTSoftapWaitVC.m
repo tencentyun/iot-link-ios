@@ -42,7 +42,7 @@
 
 - (void)dealloc
 {
-    WCLog(@"释放");
+    DDLogDebug(@"释放");
 }
 
 - (void)viewDidLoad {
@@ -71,7 +71,7 @@
 
 #pragma mark - TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
-    WCLog(@"连接成功");
+    DDLogInfo(@"连接成功");
     
     //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -97,18 +97,18 @@
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
-    WCLog(@"发送成功");
+    DDLogInfo(@"发送成功");
 }
 
 - (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
-    WCLog(@"发送失败 %@", error);
+    DDLogInfo(@"发送失败 %@", error);
 }
 
 - (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
     self.signInfo = dictionary;
-    WCLog(@"嘟嘟嘟 %@",dictionary);
+    DDLogInfo(@"嘟嘟嘟 %@",dictionary);
     
     if ([dictionary[@"cmdType"] integerValue] == 2) {
         //设备已经收到WiFi的ssid/psw/token，正在进行连接WiFi并上报，此时客户端根据token 2秒轮询一次（总时长100s）检测设备状态,然后在绑定设备。
@@ -118,12 +118,12 @@
                 [self checkTokenStateWithCirculationWithDeviceData:dictionary];
             }else {
                 //deviceReplay 为 Cuttent_Error
-                WCLog(@"soft配网过程中失败，需要重新配网");
+                DDLogError(@"soft配网过程中失败，需要重新配网");
                 [self connectFaild];
             }
             
         }else {
-            WCLog(@"dictionary==%@----soft链路设备success",dictionary);
+            DDLogInfo(@"dictionary==%@----soft链路设备success",dictionary);
             [self checkTokenStateWithCirculationWithDeviceData:dictionary];
         }
         
@@ -162,7 +162,7 @@
 - (void)getDevideBindTokenStateWithData:(NSDictionary *)deviceData {
     [[TIoTRequestObject shared] post:AppGetDeviceBindTokenState Param:@{@"Token":self.wifiInfo[@"token"]} success:^(id responseObject) {
         //State:Uint Token 状态，1：初始生产，2：可使用状态
-        WCLog(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
+        DDLogInfo(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
             self.isTokenbindedStatus = NO;
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
@@ -170,7 +170,7 @@
             [self bindingDevidesWithData:deviceData];
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        WCLog(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
+        DDLogError(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
     }];
 }

@@ -197,7 +197,7 @@
                 };
                 
                 customTimeView.saveCustomTimerBlock = ^(NSArray * _Nonnull dateArray, NSArray * _Nonnull originWeekArray) {
-                    NSLog(@"----%@",dateArray);
+                    DDLogVerbose(@"----%@",dateArray);
                     
                     NSInteger indexNum = 4;
                     NSMutableString *dateString = [[NSMutableString alloc]init];

@@ -197,7 +197,7 @@ static NSString *cellID = @"DODO";
 - (void)cm_pageTitleContentView:(CMPageTitleContentView *)view clickWithLastIndex:(NSUInteger)LastIndex Index:(NSUInteger)index Repeat:(BOOL)repeat
 {
     if (view == self.familyTitlesView) {
-        NSLog(@"家庭==%zi",index);
+        DDLogVerbose(@"家庭==%zi",index);
         
         self.currentFamilyId = self.familyList[index][@"FamilyId"];
         self.currentRoomId = nil;
@@ -206,7 +206,7 @@ static NSString *cellID = @"DODO";
     }
     else
     {
-        NSLog(@"房间==%zi",index);
+        DDLogVerbose(@"房间==%zi",index);
         
         if (index > 0) {
             self.currentRoomId = self.roomList[index - 1][@"RoomId"];
