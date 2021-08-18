@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3050a91_56b9bc50",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/ESPTouch/udp/ESPUDPSocketServer.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T08:48:47Z",
+      "side": 1,
+      "message": "对应error",
+      "revId": "708f24961d3ff131a5ec15446f0cda8a4d3dd601",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94f4c9ac_19c87937",
+        "filename": "Source/SDK/LinkCore/QCDeviceCenter/ESPUtils/ESPTools.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T08:48:47Z",
+      "side": 1,
+      "message": "调研 podspec pch",
+      "revId": "708f24961d3ff131a5ec15446f0cda8a4d3dd601",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac48c179_b924cdc8",
+        "filename": "TIoTCoreXP2PHeader.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T08:48:47Z",
+      "side": 1,
+      "message": "路径是不是不对",
+      "revId": "708f24961d3ff131a5ec15446f0cda8a4d3dd601",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
