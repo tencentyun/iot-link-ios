@@ -76,7 +76,6 @@ static NSString *itemId3 = @"i_ooo454";
 
 @property (nonatomic,copy) NSString *templateId;//底部左边对应的属性id
 
-@property (nonatomic, strong) TIoTAlertView *tipAlertView;
 @property (nonatomic, strong) UIView *backMaskView;
 @property (nonatomic, strong) NSDictionary *reportData;
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
@@ -120,20 +119,20 @@ static NSString *itemId3 = @"i_ooo454";
     
 //        TIoTTipView *vc = [[TIoTTipView alloc] init];
         __weak typeof(self)WeakSelf = self;
-        self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
-        [self.tipAlertView alertWithTitle:NSLocalizedString(@"device_offline", @"设备已离线") message:NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。") cancleTitlt:NSLocalizedString(@"q_feedback", @"问题反馈") doneTitle:NSLocalizedString(@"back_home", @"返回首页")];
-        self.tipAlertView.cancelAction = ^{
+    TIoTAlertView *tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+        [tipAlertView alertWithTitle:NSLocalizedString(@"device_offline", @"设备已离线") message:NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。") cancleTitlt:NSLocalizedString(@"q_feedback", @"问题反馈") doneTitle:NSLocalizedString(@"back_home", @"返回首页")];
+        tipAlertView.cancelAction = ^{
             UIViewController *vc = [NSClassFromString(@"TIoTFeedBackViewController") new];
             [WeakSelf.navigationController pushViewController:vc animated:YES];
         };
-        [self.tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
-        self.tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+        [tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        tipAlertView.doneAction = ^(NSString * _Nonnull text) {
             [WeakSelf.navigationController popViewControllerAnimated:YES];
         };
         
         self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
         [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
-        [self.tipAlertView showInView:self.backMaskView];
+        [tipAlertView showInView:self.backMaskView];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
         [self.backMaskView addGestureRecognizer:tap];
@@ -578,6 +577,8 @@ static NSString *itemId3 = @"i_ooo454";
             //下线
 //            [MBProgressHUD showError:@"设备已下线"];
             [self showOfflineTip];
+            
+            [[TIoTTRTCUIManage sharedManager] setDeviceDisConnectDic:@{@"DeviceId":device_Id?:@"",@"Offline":@(YES)}];
             
         }else if ([line_status isEqualToString:@"Online"]) {
             
