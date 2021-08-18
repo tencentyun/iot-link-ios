@@ -16,6 +16,23 @@
       "revId": "7a50ca9ec17905abf079f50d3240cf414b8de279",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eec2e3f_d2f802f4",
+        "filename": "Source/LinkApp/Classes/Universal/LogManager/TIoTPrintLogFormatter.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T07:52:46Z",
+      "side": 1,
+      "message": "配置是不是需要放在linkcore sdk中",
+      "revId": "7a50ca9ec17905abf079f50d3240cf414b8de279",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
