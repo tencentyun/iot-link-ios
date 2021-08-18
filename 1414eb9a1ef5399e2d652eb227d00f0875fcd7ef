@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c957fed_a02fee32",
+        "filename": "Source/LinkApp/Classes/AppConfig/APPContext/TIoTAppConfig.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T12:16:36Z",
+      "side": 1,
+      "message": "建议后期将特殊字符去掉",
+      "revId": "1414eb9a1ef5399e2d652eb227d00f0875fcd7ef",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
