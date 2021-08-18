@@ -33,6 +33,23 @@
       "revId": "1414eb9a1ef5399e2d652eb227d00f0875fcd7ef",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68738555_e19a6da9",
+        "filename": "Source/LinkApp/Classes/Universal/信鸽推送/XGPushManage.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T12:18:08Z",
+      "side": 1,
+      "message": "建议文件路径 中文名称替换掉",
+      "revId": "1414eb9a1ef5399e2d652eb227d00f0875fcd7ef",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
