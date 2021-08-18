@@ -30,6 +30,7 @@
     NSTimer *behungupTimer; //被叫
     
 }
+@property (nonatomic, strong) NSMutableDictionary *deviceOfflineDic;
 @end
 
 @implementation TIoTTRTCUIManage
@@ -677,6 +678,11 @@
     }
 }
 
+/// MARK: 设备断网后保存DeviceID和offline 状态用于退出页面区分提示判断 @{@"DeviceId:":@"";@"Offline":@(YES)}
+- (void)setDeviceDisConnectDic:(NSDictionary *)deviceDic {
+    self.deviceOfflineDic = [NSMutableDictionary dictionaryWithDictionary:deviceDic];
+}
+
 #pragma mark - 断网Timer
 
 - (void)startHungupActionTimer {
@@ -725,8 +731,16 @@
     
     [self cancelTimer];
     
+    NSString *deviceString = self.deviceOfflineDic[@"DeviceId"]?:@"";
+    NSNumber *offline = self.deviceOfflineDic[@"Offline"]?:@(NO);
+    NSString *tipString = @"对方已挂断";
+    if (![NSString isNullOrNilWithObject:deviceString] && [deviceString isEqualToString:_deviceID] && offline.boolValue) {
+        tipString = @"对方设备已离线，请稍后再试";
+        self.deviceOfflineDic = nil;
+    }
+    
     if (remoteUserID.length > 0) {
-        [MBProgressHUD showError:@"对方已挂断"];
+        [MBProgressHUD showError:tipString];
     }
 }
 
@@ -742,5 +756,12 @@
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(callingHungupAction) object:nil];
+}
+
+- (NSMutableDictionary *)deviceOfflineDic {
+    if (!_deviceOfflineDic) {
+        _deviceOfflineDic = [[NSMutableDictionary alloc]init];
+    }
+    return _deviceOfflineDic;
 }
 @end
