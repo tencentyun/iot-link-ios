@@ -16,6 +16,23 @@
       "revId": "1414eb9a1ef5399e2d652eb227d00f0875fcd7ef",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44aeb604_517e3373",
+        "filename": "Source/LinkApp/Classes/AppConfig/AppUIConfig/TIoTAlertCustomView.m",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T12:17:26Z",
+      "side": 1,
+      "message": "WClog QClog删除",
+      "revId": "1414eb9a1ef5399e2d652eb227d00f0875fcd7ef",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
     }
   ]
 }
