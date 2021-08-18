@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97eb6813_de9a2b18",
+        "filename": "TIoTLinkKit.podspec",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T08:33:33Z",
+      "side": 1,
+      "message": "写死版本号",
+      "revId": "4d030f732486fac32d0ec3f6716ecf07f0bc4a78",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
