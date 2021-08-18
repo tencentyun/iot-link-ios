@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "912f3e20_7d72096c",
+        "filename": "Source/LinkApp/Classes/Module/Mine/Controller/TIoTUserInfomationViewController.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-18T07:51:02Z",
+      "side": 1,
+      "message": "导出吧？",
+      "revId": "7a50ca9ec17905abf079f50d3240cf414b8de279",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
