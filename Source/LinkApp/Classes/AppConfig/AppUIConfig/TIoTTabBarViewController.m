@@ -20,7 +20,6 @@
 #import "TIoTCustomSheetView.h"
 #import "TIoTAddAutoIntelligentVC.h"
 #import "TIoTAddManualIntelligentVC.h"
-#import "TIoTAppUtilOC.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
