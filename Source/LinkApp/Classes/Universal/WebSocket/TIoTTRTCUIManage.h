@@ -40,6 +40,10 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 
 /// 关闭断网时候 60超时计时器
 - (void)callingHungupAction;
+
+/// 设备断网后保存DeviceID和offline 状态用于退出页面区分提示判断 @{@"DeviceId:":@"";@"Offline":@(YES)}
+- (void)setDeviceDisConnectDic:(NSDictionary *)deviceDic;
+
 @end
 
 NS_ASSUME_NONNULL_END

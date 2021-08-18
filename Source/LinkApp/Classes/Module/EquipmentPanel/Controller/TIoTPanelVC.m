@@ -120,7 +120,7 @@ static NSString *itemId3 = @"i_ooo454";
     
 //        TIoTTipView *vc = [[TIoTTipView alloc] init];
         __weak typeof(self)WeakSelf = self;
-        self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+    self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
         [self.tipAlertView alertWithTitle:NSLocalizedString(@"device_offline", @"设备已离线") message:NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。") cancleTitlt:NSLocalizedString(@"q_feedback", @"问题反馈") doneTitle:NSLocalizedString(@"back_home", @"返回首页")];
         self.tipAlertView.cancelAction = ^{
             UIViewController *vc = [NSClassFromString(@"TIoTFeedBackViewController") new];
@@ -141,6 +141,7 @@ static NSString *itemId3 = @"i_ooo454";
 }
 
 - (void)hideAlertView {
+    [self.tipAlertView removeFromSuperview];
     [self.backMaskView removeFromSuperview];
 }
 
@@ -176,7 +177,9 @@ static NSString *itemId3 = @"i_ooo454";
     }];
     
     if (![self.deviceDic[@"Online"] boolValue]) {
-        [self showOfflineTip];
+        if (self.tipAlertView == nil) {
+            [self showOfflineTip];
+        }
     }
 }
 
@@ -577,7 +580,11 @@ static NSString *itemId3 = @"i_ooo454";
         if ([line_status isEqualToString:@"Offline"]) {
             //下线
 //            [MBProgressHUD showError:@"设备已下线"];
-            [self showOfflineTip];
+            if (self.tipAlertView == nil) {
+                [self showOfflineTip];
+            }
+            
+            [[TIoTTRTCUIManage sharedManager] setDeviceDisConnectDic:@{@"DeviceId":device_Id?:@"",@"Offline":@(YES)}];
             
         }else if ([line_status isEqualToString:@"Online"]) {
             
