@@ -196,7 +196,7 @@
             
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
-            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&lang=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, [TIoTAppUtilOC getLangParameter] ,ticket];
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&lang=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, [TIoTAppUtilOC getLangParameter] ,ticket,TIoTAPPConfig.GlobalDebugUin];
             vc.urlPath = url;
             vc.needJudgeJump = YES;
             [self.navigationController pushViewController:vc animated:YES];

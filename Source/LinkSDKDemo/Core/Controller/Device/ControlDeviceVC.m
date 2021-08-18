@@ -279,7 +279,7 @@
         NSString *line_status = dic[@"SubType"];
         if ([line_status isEqualToString:@"Offline"]) {
             //下线
-//            [MBProgressHUD showError:@"设备已离线"];
+            [MBProgressHUD showError:@"设备已离线"];
             
         }else if ([line_status isEqualToString:@"Online"]) {
             
