@@ -156,7 +156,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
-            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&lang=%@&ticket=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, [TIoTAppUtilOC getLangParameter],ticket];
             vc.urlPath = url;
             vc.needJudgeJump = YES;
             [selfWeak.navigationController pushViewController:vc animated:YES];
@@ -420,7 +420,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         TIoTWebVC *vc = [TIoTWebVC new];
         weadkSelf.navigationController.tabBarController.tabBar.hidden = YES;
         NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-        NSString *url = [NSString stringWithFormat:@"%@?productId=%@&appID=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].bluetoothSearchH5URL,productIdString,bundleId,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
+        NSString *url = [NSString stringWithFormat:@"%@?productId=%@&appID=%@&lang=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].bluetoothSearchH5URL,productIdString,bundleId,[TIoTAppUtilOC getLangParameter],requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
         vc.urlPath = url;
         vc.needJudgeJump = YES;
         vc.needRefresh = YES;

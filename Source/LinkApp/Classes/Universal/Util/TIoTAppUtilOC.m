@@ -124,4 +124,16 @@
     }
     return NO;
 }
+
++ (NSString *)getLangParameter {
+    NSString *langAndRegionStr = [[NSLocale currentLocale] localeIdentifier];
+    
+    NSString *regionStr = [[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:1];
+    
+    NSString *langStr = [[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:0];
+    
+    NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
+    
+    return langValueString?:@"";
+}
 @end

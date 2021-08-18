@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)checkNewVersion;
 + (void)handleOpsenUrl:(NSString *)result;
 + (BOOL)checkLogin;
++ (NSString *)getLangParameter;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -213,7 +213,7 @@
                 NSString *url = nil;
                 NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 
-                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@#/pages/Functional/HelpCenter/QnAList/QnAList?genCateID=config7", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, ticket];
+                url = [NSString stringWithFormat:@"%@/%@/?appID=%@&lang=%@&ticket=%@#/pages/Functional/HelpCenter/QnAList/QnAList?genCateID=config7", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5HelpCenter, bundleId, [TIoTAppUtilOC getLangParameter],ticket];
                 vc.urlPath = url;
                 vc.needJudgeJump = YES;
                 [self.navigationController pushViewController:vc animated:YES];

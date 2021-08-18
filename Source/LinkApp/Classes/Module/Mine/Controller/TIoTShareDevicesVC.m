@@ -122,10 +122,10 @@
                     NSString *platform = @"iOS";
                     TIoTWebVC *vc = [TIoTWebVC new];
                     NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-                    NSString *url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&appID=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,bundleId,roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
+                    NSString *url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&appID=%@&lang=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,bundleId,[TIoTAppUtilOC getLangParameter],roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];
                     if (deviceDic[@"FromUserID"]) {
                         NSString *fromUserID = deviceDic[@"FromUserID"];
-                        url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&isShareDevice=%@&appID=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,fromUserID,bundleId,roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];;
+                        url = [NSString stringWithFormat:@"%@/?deviceId=%@&familyId=%@&isShareDevice=%@&appID=%@&lang=%@&roomId=%@&familyType=%@&lid=%@&quid=%@&platform=%@&regionId=%@&ticket=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].deviceDetailH5URL,deviceID,familyId,fromUserID,bundleId,[TIoTAppUtilOC getLangParameter],roomID,familyType,requestID,requestID,platform,[TIoTCoreUserManage shared].userRegionId,ticket,TIoTAPPConfig.GlobalDebugUin];;
                     }
                     
                     vc.urlPath = url;

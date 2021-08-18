@@ -20,6 +20,7 @@
 #import "TIoTCustomSheetView.h"
 #import "TIoTAddAutoIntelligentVC.h"
 #import "TIoTAddManualIntelligentVC.h"
+#import "TIoTAppUtilOC.h"
 
 @interface TIoTTabBarViewController ()<UITabBarControllerDelegate>
 
@@ -114,7 +115,7 @@
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";
             //            TIoTWebVC *webVC = [TIoTWebVC new];
             NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@&uin=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId,TIoTAPPConfig.GlobalDebugUin];
+            NSString *url = [NSString stringWithFormat:@"%@/%@/?appID=%@&ticket=%@&UserID=%@&uin=%@&lang=%@", [TIoTCoreAppEnvironment shareEnvironment].h5Url, H5Evaluation, bundleId, ticket,[TIoTCoreUserManage shared].userId,TIoTAPPConfig.GlobalDebugUin,[TIoTAppUtilOC getLangParameter]];
             webController.urlPath = url;
             [webController loadUrl:url];
             webController.needJudgeJump = YES;
