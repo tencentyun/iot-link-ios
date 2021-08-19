@@ -30,6 +30,7 @@
 #import "TIoTAlertView.h"
 #import "TIoTCoreWMacros.h"
 #import "UIColor+Color.h"
+#import "TIoTDataTracking.h"
 
 #import "LinkApp-Swift.h"
 #endif
