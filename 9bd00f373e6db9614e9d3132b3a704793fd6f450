@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b8b43ce_7da3d998",
+        "filename": "Source/LinkApp/Classes/Module/Intelligent/Controller/TIoTAddAutoIntelligentVC.m",
+        "patchSetId": 6
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-19T09:45:47Z",
+      "side": 1,
+      "message": "建议优化为有意义的log",
+      "revId": "9bd00f373e6db9614e9d3132b3a704793fd6f450",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e25d7b4d_183b8903",
+        "filename": "Source/LinkApp/Supporting Files/TIoTLinkKit.pch",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-19T09:45:47Z",
+      "side": 1,
+      "message": "需删除",
+      "revId": "9bd00f373e6db9614e9d3132b3a704793fd6f450",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
