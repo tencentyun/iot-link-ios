@@ -260,6 +260,8 @@
 //            [self getProductsConfig:self.devieceData[@"profile"][@"ProductId"]?:@""];
 //        }
         
+        [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.WIFI_CONF_RESTART]":@"重新配网"}];
+        
         if (_configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
             
             [self changeConfig:NSLocalizedString(@"soft_ap", @"自助配网")];

@@ -25,6 +25,7 @@
 
 #import "TIoTCoreUserManage.h"
 //#import "TIoTCoreSoftAP.h"
+#import "TIoTDataTracking.h"
 
 #define SmartConfigPort 8266
 
@@ -71,6 +72,7 @@
 
 
 - (void)startAddDevice {
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.WIFI_CONF_START]":@"开始配网"}];
     __weak __typeof(self)weakSelf = self;
     self.updConnectBlock = ^(NSString * _Nonnull ipaAddrData) {
         [weakSelf createSoftAPWith:ipaAddrData ssid:weakSelf.ssid pwd:weakSelf.password bssid:weakSelf.bssid token:weakSelf.token];
@@ -78,6 +80,8 @@
 //    self.connectFaildBlock = ^{
 //        [weakSelf connectFaild];
 //    };
+    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_START]":@"开始进行配网协议传输"}];
     
     _connecting = YES;
     [self tapConfirmForResults];
@@ -319,6 +323,8 @@
 }
 
 - (void)startAddDevice {
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.WIFI_CONF_START]":@"开始配网"}];
+    
     self.connecting = YES;
     [self getGatewayIp];
 }
@@ -367,6 +373,8 @@
     self.delegateQueue = dispatch_queue_create("socketSoftAp.comDDD", DISPATCH_QUEUE_CONCURRENT);
     self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
     
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.CREATE_UDP_CONNECTION_START]":@"开始与设备建立UDP连接"}];
+    
     NSError *error = nil;
     
     if (![self.socket bindToPort:55551 error:&error]) {     // 端口绑定
@@ -395,6 +403,7 @@
         TIoTCoreResult *result = [TIoTCoreResult new];
         result.code = 6003;
         result.errMsg = [NSString stringWithFormat:@"udp%@",NSLocalizedString(@"connect_fail", @"连接失败")];
+        [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.UDP_CONNECT_ERROR]":@"upd 创建连接失败"}];
         [self.delegate onResult:result];
     }
 }
@@ -403,6 +412,11 @@
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
     QCLog(@"\n upd连接成功: \n sock : %@\n address: %@ \n",sock,address);
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.CREATE_UDP_CONNECTION_SUCCESS]":@"设备建立UDP连接成功"}];
+    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_START]":@"设备上报日志模式开始"}];
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_CONNECT_WIFI_START]":@"设备上报日志模式开始连接设备APP"}];
+    
     //设备收到WiFi的ssid/pwd/token，正在上报，此时2秒内，客户端没有收到设备回复，如果重复发送5次，都没有收到回复，则认为配网失败，Wi-Fi 设备有异常
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -423,6 +437,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.udpFaildBlock) {
                     self.udpFaildBlock();
+                    
+                    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.UDP_NOT_RESPONSE]":@"设备未响应，请检查设备和网络后重试"}];
                 }
                 
             });
@@ -431,15 +447,31 @@
         
         if (self.distributionNet == TIoTConfigHardwareTypeSoftAp) {
             
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_START]":@"开始进行配网协议传输"}];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_CONNECT_WIFI_SUCCESS]":@"设备上报日志模式连接设备APP成功"}];
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_COMMUNICATE_AP_START]":@"开始跟设备通信"}];
+            
             NSString *Ssid = self.ssid?:@"";
             NSString *Pwd = self.password?:@"";
             NSString *Token = self.token?:@"";
             NSString *apBssid = self.bssid?:@"";
             NSDictionary *dic = @{@"cmdType":@(1),@"ssid":Ssid, @"bssid":apBssid, @"password":Pwd,@"token":Token,@"region":[TIoTCoreUserManage shared].userRegion};
             [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_DETAIL]":@"配网协议传输详情",@"[PROTOCOL_DETAIL_DIC]":dic}];
+            
         } else {
             
-            [sock sendData:[NSJSONSerialization dataWithJSONObject:@{@"cmdType":@(0),@"token":self.token?:@"",@"region":[TIoTCoreUserManage shared].userRegion} options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
+            NSDictionary *dic = @{@"cmdType":@(0),@"token":self.token?:@"",@"region":[TIoTCoreUserManage shared].userRegion};
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_DETAIL]":@"配网协议传输详情",@"[PROTOCOL_DETAIL_DIC]":dic}];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_CONNECT_WIFI_SUCCESS]":@"设备上报日志模式连接设备APP成功"}];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_COMMUNICATE_AP_START]":@"开始跟设备通信"}];
+            
+            [sock sendData:[NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil] withTimeout:-1 tag:10];
         }
         self.sendCount ++;
     });
@@ -453,6 +485,8 @@
 }
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
     QCLog(@"\n upd 连接失败: socket: %@\n 错误提示error: %@\n",sock,error);
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.UDP_CONNECT_ERROR]":@"upd 连接失败，发送配网消息失败，设备连接失败"}];
+    
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didNotConnect:)]) {
         [self.delegate distributionNetUdpSocket:sock didNotConnect:error];
     }
@@ -469,6 +503,7 @@
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
     QCLog(@"\n upd发送失败: socket: %@\n errot: %@ \n tag: %ld\n", sock,error,tag);
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.UDP_SEND_MSG_FAIL]":@"upd 发送socket失败，设备连接失败"}];
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate distributionNetUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
     }else if ([self.delegate respondsToSelector:@selector(softApuUdpSocket:didNotSendDataWithTag:dueToError:)]) {
@@ -479,6 +514,10 @@
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     QCLog(@"\n upd设备接收消息成功: socket: %@\n data: %@\n addrss: %@\n",sock,data,address);
     dispatch_source_cancel(self.timer);
+    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_SUCCESS]":@"配网协议传输成功"}];
+    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.MODULE_REPORT_COMMUNICATE_AP_SUCCESS]":@"收集设备日志成功"}];
     
     if (self.distributionNet == TIoTConfigHardwareTypeSoftAp) {
         if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
@@ -497,6 +536,7 @@
 
 - (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError  * _Nullable)error {
     QCLog(@"\n Upd 关闭: socket: %@\n error: %@\n",sock,error);
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.UDP_CLOSED]":@"udp 关闭，设备连接中断"}];
     if ([self.delegate respondsToSelector:@selector(distributionNetudpSocket:withError:)]) {
         [self.delegate distributionNetudpSocket:sock withError:error];
     }
