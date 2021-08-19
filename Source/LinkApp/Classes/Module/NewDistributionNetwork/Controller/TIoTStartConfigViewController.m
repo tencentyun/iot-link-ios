@@ -182,6 +182,10 @@
 //token 2秒轮询查看设备状态
 - (void)checkTokenStateWithCirculationWithDeviceData:(NSDictionary *)data {
 //    dispatch_source_cancel(self.timer);
+    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_START]":@"开始业务流程"}];
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_QUERY_TOKEN_STATE_START]":@"开始查询TOKEN状态"}];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -193,6 +197,9 @@
                 dispatch_source_cancel(self.timer2);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self connectFaild];
+                    
+                    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_TIMEOUT]":@"配网超时，请检查设备和网络后重试"}];
+                    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_QUERY_BIND_TOKEN_TIMEOUT]":@"BUSINESS_QUERY_BIND_TOKEN_TIMEOUT"}];
                 });
                 return ;
             }
@@ -216,8 +223,19 @@ static dispatch_once_t onceToken;
         DDLogInfo(@"AppGetDeviceBindTokenState---responseobject=%@",responseObject);
         if ([responseObject[@"State"] isEqual:@(1)]) {
             self.isTokenbindedStatus = NO;
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_INVALID_RESPONSE]":@"设备响应错误，请检查设备和网络后重试（cmdType=1）"}];
+            
         }else if ([responseObject[@"State"] isEqual:@(2)]) {
 
+            if (self.configHardwareStyle == TIoTConfigHardwareStyleSoftAP) {
+                [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.SOFTAP_GET_DEVICE_SIGNATURE_SUCCESS]":@"SOFTAP开始获取设备签名"}];
+            }
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_QUERY_TOKEN_STATE_SUCCESS]":@"查询TOKEN状态成功"}];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_SUCCESS]":@"业务流程执行成功"}];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.connectStepTipView.step < 3) {
                     self.connectStepTipView.step = 3;
@@ -233,12 +251,16 @@ static dispatch_once_t onceToken;
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         DDLogError(@"AppGetDeviceBindTokenState---reason=%@---error=%@",reason,error);
         
+        [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_QUERY_BIND_TOKEN_FAIL]":@"查询设备连接云端状态失败(获取设备绑定token状态请求失败)"}];
     }];
 }
 
 //判断token返回后（设备状态为2），绑定设备
 - (void)bindingDevidesWithData:(NSDictionary *)deviceData {
     if (![NSObject isNullOrNilWithObject:deviceData[@"productId"]]) {
+        
+        [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_ADD_DEVICE_START]":@"开始绑定设备"}];
+        
         NSString *roomId = self.roomId ?: @"0";
         [[TIoTRequestObject shared] post:AppTokenBindDeviceFamily Param:@{@"ProductId":deviceData[@"productId"],@"DeviceName":deviceData[@"deviceName"],@"Token":self.wifiInfo[@"token"],@"FamilyId":[TIoTCoreUserManage shared].familyId,@"RoomId":roomId} success:^(id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -250,9 +272,11 @@ static dispatch_once_t onceToken;
             [self connectSucess:deviceData];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             [self connectFaild];
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_ADD_DEVICE_FAIL]":@"添加设备失败"}];
         }];
     }else {
         [self connectFaild];
+        [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_ADD_DEVICE_FAIL_PEODUCTID_NULL]":@"设备返回productId为空"}];
     }
 
 }
@@ -333,12 +357,16 @@ static dispatch_once_t onceToken;
                 [self connectWiFiCheckTokenStateWithCirculationWithDeviceData:dictionary];
             }else {
                 //deviceReplay 为 Cuttent_Error
-                DDLogError(@"soft配网过程中失败，需要重新配网");
+                DDLogError(@"配网过程中失败，需要重新配网（设备返回deviceReply:Current_Error）");
+                [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_FAIL]":@"配网失败，设备返回deviceReply:Current_Error"}];
+                [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BUSINESS_DEVICE_ERROR]":@"设备连接中断，请检查设备配网状态后重试"}];
                 [self connectFaild];
             }
             
         } else {
             DDLogInfo(@"dictionary==%@----soft链路设备success",dictionary);
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.WIFI_CONF_SUCCESS]":@"配网成功"}];
+            
             [self connectWiFiCheckTokenStateWithCirculationWithDeviceData:dictionary];
         }
         

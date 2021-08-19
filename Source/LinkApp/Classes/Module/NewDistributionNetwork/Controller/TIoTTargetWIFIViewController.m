@@ -16,6 +16,7 @@
 #import "TIoTLLSyncDeviceController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <NetworkExtension/NetworkExtension.h>
+#import "ReachabilityManager.h"
 
 @interface TIoTTargetWIFIViewController () <CLLocationManagerDelegate>
 
@@ -47,6 +48,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    //检测网络
+    [self detectNetwork];
 }
 
 - (void)setupUI{
@@ -291,6 +298,31 @@
     if (!returnType) {
         self.wifiListView.wifiListArray = [NSArray array];
     }
+}
+
+- (void)detectNetwork {
+    NetworkReachabilityManager *reachability = [NetworkReachabilityManager sharedManager];
+    [reachability setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
+        switch (status) {
+            case NetworkReachabilityStatusUnknown:
+                DDLogDebug(@"状态不知道");
+                break;
+            case NetworkReachabilityStatusNotReachable:
+                DDLogWarn(@"没网络");
+                break;
+            case NetworkReachabilityStatusReachableViaWiFi:
+                DDLogDebug(@"WIFI");
+                [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.CONNECT_WIFI_SUCCESS]":@"连接WIFI成功"}];
+                break;
+            case NetworkReachabilityStatusReachableViaWWAN:
+                DDLogDebug(@"手机网络");
+                [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.CONNECT_WIFI_SUCCESS]":@"连接WIFI成功"}];
+                break;
+            default:
+                break;
+        }
+    }];
+    
 }
 
 #pragma mark public Method
