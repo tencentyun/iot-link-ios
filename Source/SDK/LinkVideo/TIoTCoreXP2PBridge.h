@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+NS_ASSUME_NONNULL_BEGIN 
 
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
 - (void)getVideoPacket:(uint8_t *)data len:(size_t)len;
