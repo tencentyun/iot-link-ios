@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70bbf34b_bca7ee68",
+        "filename": "TIoTCoreXP2PHeader.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-20T06:27:24Z",
+      "side": 1,
+      "message": "文件路径不对吧，怎么在根目录",
+      "revId": "ffc3492d7ef1aeee2f5aeaac546899bec25ddeb5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
