@@ -312,14 +312,24 @@ static NSInteger secondsNumber = 86400;  //24*60*60
     NSString *startTimestampString = [NSString getTimeStampWithString:dateString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     
     __weak typeof(self) weakSelf = self;
+    __block NSInteger isEmptyData = 0;
+    
     [self.videoTimeSegmentArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         TIoTTimeModel *model = obj;
         if (tempStartTime >= model.startTime && tempStartTime <= model.endTime) {
             if (weakSelf.timeModelBlock) {
+                isEmptyData = 1;
                 weakSelf.timeModelBlock(model, startTimestampString.floatValue);
             }
         }
     }];
+    
+    //判断滚动空数据处，返回空数据标识
+    if (isEmptyData == 0) {
+        if (weakSelf.timeModelBlock) {
+            weakSelf.timeModelBlock([TIoTTimeModel new], -1);
+        }
+    }
 }
 
 /*
