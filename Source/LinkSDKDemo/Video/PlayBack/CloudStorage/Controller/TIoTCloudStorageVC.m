@@ -289,56 +289,70 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     //滑动停止后，获取当前值所在事件开始/结束时间戳
     self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
         DDLogVerbose(@"startStamp--%f----%f",startTimestamp,selectedTimeModel.startTime);
-        
-        //关闭定时器
-        [weakSelf closeTime];
+        if (startTimestamp == -1) {
+            
+            [MBProgressHUD showError:@"暂无播放数据"];
+            //滑动到空数据, 销毁player, 关闭定时器
+            [weakSelf closeTime];
+            [weakSelf stopPlayMovie];
+            
+        }else {
+            //关闭定时器
+            [weakSelf closeTime];
 
-        TIoTDemoCloudEventModel *currentModel = [[TIoTDemoCloudEventModel alloc]init];
+            TIoTDemoCloudEventModel *currentModel = [[TIoTDemoCloudEventModel alloc]init];
 
-        NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
-        NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+            NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",weakSelf.currentDayTime?:@""];
+            NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
 
-        NSInteger startValue = startTimestampString.integerValue + selectedTimeModel.startTime;
-        NSInteger startDurationValue = startTimestamp - startValue;
+            NSInteger startValue = startTimestampString.integerValue + selectedTimeModel.startTime;
+            NSInteger startDurationValue = startTimestamp - startValue;
 
-        NSInteger endStamp = startTimestampString.integerValue + selectedTimeModel.endTime ;
-        currentModel.StartTime = [NSString stringWithFormat:@"%ld",(long)startValue];
-        currentModel.EndTime = [NSString stringWithFormat:@"%ld",(long)endStamp];
-        weakSelf.currentTime = startDurationValue;
-        weakSelf.slider.value = startDurationValue;
-        weakSelf.player.currentPlaybackTime = startDurationValue;
-        weakSelf.scrollDuraionTime = weakSelf.currentTime;
-        weakSelf.startStamp = startValue;
-        weakSelf.isInnerScroll = YES;
-        weakSelf.isHidePlayBtn = YES;
-        weakSelf.isPause = NO;
-        
-        if (weakSelf.videoTimeModel.StartTime.integerValue <= startTimestamp && weakSelf.videoTimeModel.EndTime.integerValue >=startTimestamp ) {
-            if (weakSelf.isTimerSuspend == YES) {
-                if (weakSelf.timer) {
+            NSInteger endStamp = startTimestampString.integerValue + selectedTimeModel.endTime ;
+            currentModel.StartTime = [NSString stringWithFormat:@"%ld",(long)startValue];
+            currentModel.EndTime = [NSString stringWithFormat:@"%ld",(long)endStamp];
+            weakSelf.currentTime = startDurationValue;
+            weakSelf.slider.value = startDurationValue;
+            weakSelf.player.currentPlaybackTime = startDurationValue;
+            weakSelf.scrollDuraionTime = weakSelf.currentTime;
+            weakSelf.startStamp = startValue;
+            weakSelf.isInnerScroll = YES;
+            weakSelf.isHidePlayBtn = YES;
+            weakSelf.isPause = NO;
+            
+            if (weakSelf.videoTimeModel.StartTime.integerValue <= startTimestamp && weakSelf.videoTimeModel.EndTime.integerValue >=startTimestamp ) {
+                
+                if (weakSelf.player == nil) {  //滑动到空数据，销毁player，重新请求
+                    [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+                }else {
                     if (weakSelf.isTimerSuspend == YES) {
-                        dispatch_resume(weakSelf.timer);
-                        weakSelf.isTimerSuspend = NO;
+                        if (weakSelf.timer) {
+                            if (weakSelf.isTimerSuspend == YES) {
+                                dispatch_resume(weakSelf.timer);
+                                weakSelf.isTimerSuspend = NO;
+                            }
+                        }
+                        
+                        //关闭定时器
+                        if (weakSelf.timer != nil) {
+                            dispatch_source_cancel(weakSelf.timer);
+                            weakSelf.timer = nil;
+                        }
                     }
+                    if (weakSelf.player.isPlaying == NO) {
+                        [weakSelf tapVideoView:weakSelf.playPauseBtn];
+                    }
+                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
                 }
                 
-                //关闭定时器
-                if (weakSelf.timer != nil) {
-                    dispatch_source_cancel(weakSelf.timer);
-                    weakSelf.timer = nil;
-                }
+            }else {
+                [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
             }
-            if (weakSelf.player.isPlaying == NO) {
-                [weakSelf tapVideoView:weakSelf.playPauseBtn];
-            }
-            [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
-        }else {
-            [weakSelf getFullVideoURLWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+            
+            TIoTDemoCloudEventModel *scorllCurrentModel = [[TIoTDemoCloudEventModel alloc]init];
+            scorllCurrentModel.StartTime = [NSString stringWithFormat:@"%f",startTimestamp];
+            [weakSelf setScrollOffsetWith:scorllCurrentModel];
         }
-        
-        TIoTDemoCloudEventModel *scorllCurrentModel = [[TIoTDemoCloudEventModel alloc]init];
-        scorllCurrentModel.StartTime = [NSString stringWithFormat:@"%f",startTimestamp];
-        [weakSelf setScrollOffsetWith:scorllCurrentModel];
         
     };
     [self.view addSubview:self.choiceDateView];
