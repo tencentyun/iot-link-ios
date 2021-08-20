@@ -16,6 +16,24 @@
       "revId": "ffc3492d7ef1aeee2f5aeaac546899bec25ddeb5",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c142b9b_f596d246",
+        "filename": "TIoTCoreXP2PHeader.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-20T06:44:49Z",
+      "side": 1,
+      "message": "是不对，这次提交工程中没有引用到，已重提change删除",
+      "parentUuid": "70bbf34b_bca7ee68",
+      "revId": "ffc3492d7ef1aeee2f5aeaac546899bec25ddeb5",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
