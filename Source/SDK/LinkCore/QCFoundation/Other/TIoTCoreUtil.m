@@ -333,7 +333,7 @@
             if (compatible) {
                 UISaveVideoAtPathToSavedPhotosAlbum([videoUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
             }else {
-                [self showAlertViewWithText:@"视频格式不支持，请从文件 App 从获取"];
+                [self showAlertViewWithText:@"该音视频格式不支持录像"];
             }
         }
 }
