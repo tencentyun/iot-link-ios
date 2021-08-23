@@ -1158,6 +1158,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.player.view.frame = self.imageView.bounds;
         self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
         self.player.shouldAutoplay = YES;
+        self.player.shouldShowHudView = YES;
         
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];

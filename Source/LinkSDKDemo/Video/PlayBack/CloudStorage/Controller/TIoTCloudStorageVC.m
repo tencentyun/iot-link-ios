@@ -1300,6 +1300,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         self.player.view.frame = self.imageView.bounds;
         self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
         self.player.shouldAutoplay = YES;
+        self.player.shouldShowHudView = YES;
 
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];
