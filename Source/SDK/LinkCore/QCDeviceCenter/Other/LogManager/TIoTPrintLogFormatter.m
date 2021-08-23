@@ -54,7 +54,7 @@ static NSString *const kTimeFormatString = @"yyyy-MM-dd HH:mm:ss:SSS";
     NSString *message = logMessage->_message;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"pLogEnable"] boolValue]) {
-        NSString *resultString = [NSString stringWithFormat:@"[%@]:[%@]:[%s]:[%ld]:[%@]",timeString,levelString,[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],logMessage->_line,message];
+        NSString *resultString = [NSString stringWithFormat:@"[%@]:[%@]:[%@]:[%ld]:[%@]",timeString,levelString,logMessage->_fileName,logMessage->_line,message];
         return resultString;
     }else {
         return @"";
