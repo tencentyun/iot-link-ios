@@ -14,7 +14,18 @@ failure:(FailureResponseHandler)failure
 {
     BOOL useToken = [build[@"useToken"] boolValue];
     NSString *action = build[@"action"];
-    NSDictionary *params = build[@"params"];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:build[@"params"]];
+    
+    //接口中英文语言国际化返回判断参数
+    NSString *langAndRegionStr = [[NSLocale currentLocale] localeIdentifier];
+    
+    NSString *regionStr = [[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:1];
+    
+    NSString *langStr = [[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:0];
+    
+    NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
+    [params setValue:langValueString forKey:@"lang"];
+    [params setValue:@"iOS" forKey:@"Agent"];
     
     if ([action isEqualToString:@"AppCosAuth"]) {
         

@@ -442,7 +442,7 @@
 
 - (DeviceInfo *)zipData:(NSDictionary *)uiInfo baseInfo:(NSDictionary *)baseInfo deviceData:(NSDictionary *)deviceInfo
 {
-    NSDictionary *standard = uiInfo[@"APP_zh"][@"Panel"][@"standard"];
+    NSDictionary *standard = uiInfo[@"Panel"][@"standard"];
     if (standard && baseInfo && deviceInfo) {
         
         DeviceInfo *obj = [[DeviceInfo alloc] init];
