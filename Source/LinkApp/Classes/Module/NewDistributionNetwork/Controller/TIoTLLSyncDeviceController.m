@@ -213,6 +213,8 @@
 //    self.nameField.text = self.dataArray[indexPath.row];
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
 
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BLE_CONNECTIONING]":@"BLE配网连接蓝牙中"}];
+    
     CBPeripheral *device = self.blueDevices[indexPath.row];
     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
     if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -234,17 +236,19 @@
 //实时扫描外设（目前扫描10s）
 - (void)scanPerpheralsUpdatePerpherals:(NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *)perphersArr {
     self.originBlueDevices = perphersArr;
-    
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BLE_SCAN]":@"BLE配网扫描外设"}];
     self.blueDevices = perphersArr.allKeys;
     [self.collectionView reloadData];
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
     self.currentConnectedPerpheral = connectedPerpheral;
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BLE_CONNECTION_SUCCESS]":@"BLE配网链接外设成功"}];
 }
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
     self.currentConnectedPerpheral = nil;
+    [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BLE_DISCONNECTION]":@"BLE配网断开外设"}];
 }
 
 - (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service {
@@ -276,6 +280,7 @@
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
         if (hexstr.length < 2) {
             DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.BLE_NOTLLSYNC]":@"不支持的蓝牙设备，服务的回调数据不属于llsync"}];
             return;
         }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
@@ -307,13 +312,20 @@
                 totallength = [NSString stringWithFormat:@"0%@",totallength];
             }
             
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_START]":@"开始进行配网协议传输"}];
+            
             NSString *cmdtype = [NSString stringWithFormat:@"E2%@%@%@%@%@",totallength, wifinamelength, wifinamehex, wifipasslength, wifipasshex];
             [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:cmdtype];
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_DETAIL]":[NSString stringWithFormat:@"wifiname:%@ wifipass:%@ cmdtype:%@",wifiname,wifipass,cmdtype]}];
             
             ///设置UI进度
             self.resultvc.connectStepTipView.step = 2;
             
         }else if ([cmdtype isEqualToString:@"E1"] || [cmdtype isEqualToString:@"e1"]) {
+            
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.PROTOCOL_SUCCESS]":@"配网协议传输成功"}];
+            
             //已发送给设备WIFI密钥了，此时需要下一步让设备连接Wi-Fi
             [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
             

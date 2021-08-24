@@ -375,6 +375,7 @@
             vc.configHardwareStyle = self.configHardwareStyle;
             vc.connectGuideData = self.configConnentData;
             [self.navigationController pushViewController:vc animated:YES];
+            [TIoTDataTracking logEvent:@"wifi-configuration" params:@{@"[WifiConfStepCode.WIFI_CONF_START]":@"开始配网"}];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
                 self.llsyncDeviceVC.roomId = self.roomId;
