@@ -193,7 +193,7 @@
 
 #pragma mark TIoTCoreAddDeviceDelegate 代理方法 (与TCSocketDelegate一一对应)
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address {
     DDLogInfo(@"连接成功");
     [self connectFaildWith:@"连接成功，正在上报"];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -221,7 +221,7 @@
     dispatch_resume(self.timer);
 }
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag {
     DDLogInfo(@"发送成功");
     //手机与设备连接成功,收到设备的udp数据
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -238,7 +238,7 @@
     });
 }
 
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
+- (void)distributionNetUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     NSError *JSONParsingError;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONParsingError];
     DDLogInfo(@"接收设备端发送信息 %@",dictionary);

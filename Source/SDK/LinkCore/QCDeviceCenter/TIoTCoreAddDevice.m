@@ -229,8 +229,6 @@
          
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
         [self.delegate distributionNetUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
-    }else if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
-        [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
     }
     
 }
@@ -447,8 +445,6 @@
     
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didConnectToAddress:)]) {
         [self.delegate distributionNetUdpSocket:sock didConnectToAddress:address];
-    }else if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didConnectToAddress:)]) {
-        [self.delegate softApUdpSocket:sock didConnectToAddress:address];
     }
 }
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotConnect:(NSError * _Nullable)error {
@@ -462,8 +458,6 @@
     DDLogInfo(@"upd发送成功: socket: %@\n tag: %ld",sock,tag);
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didSendDataWithTag:)]) {
         [self.delegate distributionNetUdpSocket:sock didSendDataWithTag:tag];
-    }else if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didSendDataWithTag:)]) {
-        [self.delegate softApUdpSocket:sock didSendDataWithTag:tag];
     }
 }
 
@@ -471,8 +465,6 @@
     DDLogInfo(@"upd发送失败: socket: %@\n errot: %@ \n tag: %ld", sock,error,tag);
     if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didNotSendDataWithTag:dueToError:)]) {
         [self.delegate distributionNetUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
-    }else if ([self.delegate respondsToSelector:@selector(softApuUdpSocket:didNotSendDataWithTag:dueToError:)]) {
-        [self.delegate softApuUdpSocket:sock didNotSendDataWithTag:tag dueToError:error];
     }
 }
 
@@ -483,8 +475,6 @@
     if (self.distributionNet == TIoTConfigHardwareTypeSoftAp) {
         if ([self.delegate respondsToSelector:@selector(distributionNetUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
             [self.delegate distributionNetUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
-        }else if ([self.delegate respondsToSelector:@selector(softApUdpSocket:didReceiveData:fromAddress:withFilterContext:)]) {
-            [self.delegate softApUdpSocket:sock didReceiveData:data fromAddress:address withFilterContext:filterContext];
         }
     }else {
         

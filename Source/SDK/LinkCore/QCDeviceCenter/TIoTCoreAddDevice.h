@@ -40,15 +40,6 @@ typedef NS_ENUM(NSInteger,TIoTConfigHardwareType) {
   配网流程(将要废弃)
  */
 
-/// softAP 连接成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didConnectToAddress:(NSData *)address;
-/// softAP 发送消息成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag;
-/// softAP 发送消息失败
-- (void)softApuUdpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
-/// softAP 设备接收消息成功
-- (void)softApUdpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
-
 /**
  配网代理 (推荐使用)
  */
