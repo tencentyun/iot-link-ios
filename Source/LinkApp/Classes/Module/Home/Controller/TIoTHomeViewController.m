@@ -730,7 +730,7 @@ static CGFloat kHeaderViewHeight = 162;
     NSMutableString *mString = [NSMutableString stringWithString:url];
     if (range.location != NSNotFound) {
         NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-        [mString insertString:[NSString stringWithFormat:@"appID=%@&lang=%@&uin=%@", bundleId,[TIoTAppUtilOC getLangParameter],TIoTAPPConfig.GlobalDebugUin] atIndex:range.location+1];
+        [mString insertString:[NSString stringWithFormat:@"appID=%@&lang=%@", bundleId,[TIoTAppUtilOC getLangParameter]] atIndex:range.location+1];
         return [NSString stringWithString:mString];
     } else {
         return url;
