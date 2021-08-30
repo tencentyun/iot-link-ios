@@ -173,6 +173,7 @@
 		6DE47349255D1AEC000A96FE /* TIoTAutoCustomTimingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE47348255D1AEC000A96FE /* TIoTAutoCustomTimingView.m */; };
 		6DE4734D255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4734C255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m */; };
 		6DE473C3255DB9D7000A96FE /* TIoTAutoEffectTimePriodView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE473C2255DB9D7000A96FE /* TIoTAutoEffectTimePriodView.m */; };
+		6DE5D1E826DCBCC800C6EFCA /* TIoTDemoLocalDayTimeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE5D1E326DCBA6E00C6EFCA /* TIoTDemoLocalDayTimeListModel.m */; };
 		6DE6404825834F1B00CB985F /* TIoTConfigScanVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6404725834F1B00CB985F /* TIoTConfigScanVC.m */; };
 		6DE640B1258372CB00CB985F /* TIoTProductWelComeConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE640B0258372CB00CB985F /* TIoTProductWelComeConfigModel.m */; };
 		6DE640B92583C1FC00CB985F /* TIoTChoseFamilyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE640B82583C1FC00CB985F /* TIoTChoseFamilyCell.m */; };
@@ -806,6 +807,8 @@
 		6DE4734C255D2218000A96FE /* TIoTAutoIntellSettingCustomTimeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoIntellSettingCustomTimeCell.m; sourceTree = "<group>"; };
 		6DE473C1255DB9D7000A96FE /* TIoTAutoEffectTimePriodView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAutoEffectTimePriodView.h; sourceTree = "<group>"; };
 		6DE473C2255DB9D7000A96FE /* TIoTAutoEffectTimePriodView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAutoEffectTimePriodView.m; sourceTree = "<group>"; };
+		6DE5D1E226DCBA6E00C6EFCA /* TIoTDemoLocalDayTimeListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoLocalDayTimeListModel.h; sourceTree = "<group>"; };
+		6DE5D1E326DCBA6E00C6EFCA /* TIoTDemoLocalDayTimeListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoLocalDayTimeListModel.m; sourceTree = "<group>"; };
 		6DE6404625834F1B00CB985F /* TIoTConfigScanVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTConfigScanVC.h; sourceTree = "<group>"; };
 		6DE6404725834F1B00CB985F /* TIoTConfigScanVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTConfigScanVC.m; sourceTree = "<group>"; };
 		6DE640AF258372CB00CB985F /* TIoTProductWelComeConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTProductWelComeConfigModel.h; sourceTree = "<group>"; };
@@ -1992,6 +1995,8 @@
 		6DF4A6C826983FE50094044A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6DE5D1E226DCBA6E00C6EFCA /* TIoTDemoLocalDayTimeListModel.h */,
+				6DE5D1E326DCBA6E00C6EFCA /* TIoTDemoLocalDayTimeListModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3825,6 +3830,7 @@
 				6D204C8E265CCF28007F6F27 /* TIoTDemoTabBarController.m in Sources */,
 				6DAF8A36266A047D00CD0328 /* TIoTDemoLocalRecordVC.m in Sources */,
 				6DA526AD264BD3E0000F9636 /* TIoTCustomTimeSlider.m in Sources */,
+				6DE5D1E826DCBCC800C6EFCA /* TIoTDemoLocalDayTimeListModel.m in Sources */,
 				6D204C9D265CF987007F6F27 /* TIoTDemoDeviceHeaderView.m in Sources */,
 				F4F325DF25919A1200A4CAAB /* TRTCVideoCallViewController.swift in Sources */,
 				F4F3D7B324938EBE005D3396 /* InviteVC.m in Sources */,
