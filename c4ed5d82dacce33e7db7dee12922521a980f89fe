@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8522c86_f9fa3636",
+        "filename": "Source/LinkApp/Classes/Module/NewDistributionNetwork/Controller/TIoTConfigResultViewController.m",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2021-08-30T07:31:16Z",
+      "side": 1,
+      "message": "上报中的字段中没有看到deviceName，配网过程中配网哪个设备传名称还是挺重要的，需要加上。\n还有设备型号，设备系统版本号也都是很重要的信息，不能只传个iOS，不够详细，也需要补充。\n@ccharles \u0026 @eagle",
+      "revId": "c4ed5d82dacce33e7db7dee12922521a980f89fe",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
