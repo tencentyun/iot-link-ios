@@ -946,7 +946,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
-            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_player.playbackState);
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped %p", (int)_player.playbackState,_player);
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
