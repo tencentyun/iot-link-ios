@@ -1149,7 +1149,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         case IJKMPMoviePlaybackStatePlaying: {
             DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
             if (self.isPause == NO) {
-                self.player.currentPlaybackTime = self.currentTime;
             }
             [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             [MBProgressHUD dismissInView:self.view];
@@ -1320,12 +1319,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         [self.imageView addSubview:self.player.view];
 
 //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
-        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
-        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
-        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
-        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
-        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-
 }
 
 - (void)stopPlayMovie {
