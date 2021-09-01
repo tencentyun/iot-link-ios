@@ -288,7 +288,7 @@ static NSInteger secondsNumber = 86400;  //24*60*60
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self getTimeDataScorllEnd:scrollView];
+//    [self getTimeDataScorllEnd:scrollView];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {

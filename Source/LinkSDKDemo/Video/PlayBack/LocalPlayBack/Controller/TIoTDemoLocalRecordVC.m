@@ -28,6 +28,8 @@
 #import "TIoTCoreXP2PBridge.h"
 #import "NSString+Extension.h"
 #import "TIoTDemoLocalDayTimeListModel.h"
+#import "TIoTDemoDeviceStatusModel.h"
+#import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
@@ -145,8 +147,15 @@ static NSString *const kLive = @"ipc.flv?action=live";
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [self.player shutdown];
-    [self removeMovieNotificationObservers];
+//    [self.player shutdown];
+//    [self removeMovieNotificationObservers];
+    
+    [self.imageView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIView *view = obj;
+        [view removeFromSuperview];
+    }];
+    
+    [self stopPlayMovie];
     
     [self closeTime];
 }
@@ -269,8 +278,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
             weakSelf.isInnerScroll = NO;
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
-            [weakSelf playVideoWithPartURL:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
-            
+//            [weakSelf playVideoWithStartTime:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
+            [weakSelf seekDesignatedPointWithCurrentTime:previousModel.StartTime selectedTimeMoel:previousModel isChangeModel:YES];
             [weakSelf setScrollOffsetWith:previousModel];
         }
         
@@ -294,8 +303,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
             weakSelf.isInnerScroll = NO;
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
-            [weakSelf playVideoWithPartURL:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
-            
+//            [weakSelf playVideoWithStartTime:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
+            [weakSelf seekDesignatedPointWithCurrentTime:nextModel.StartTime selectedTimeMoel:nextModel isChangeModel:YES];
             [weakSelf setScrollOffsetWith:nextModel];
         }
     };
@@ -333,10 +342,12 @@ static NSString *const kLive = @"ipc.flv?action=live";
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
             
+            NSString *videoPlayStart = [NSString stringWithFormat:@"%f",startTimestamp];
+            
             if (weakSelf.videoTimeModel.StartTime.integerValue <= startTimestamp && weakSelf.videoTimeModel.EndTime.integerValue >=startTimestamp ) {
                 
                 if (weakSelf.player == nil) {  //滑动到空数据，销毁player，重新请求
-                    [weakSelf playVideoWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
                 }else {
                     if (weakSelf.isTimerSuspend == YES) {
                         if (weakSelf.timer) {
@@ -359,7 +370,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
                 }
                 
             }else {
-                [weakSelf playVideoWithPartURL:weakSelf.listModel.VideoURL withTime:currentModel isChangeModel:YES];
+                [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
             }
             
             TIoTDemoCloudEventModel *scorllCurrentModel = [[TIoTDemoCloudEventModel alloc]init];
@@ -412,14 +423,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
     NSString *startTimeTemp = [NSString getTimeStampWithString:[NSString stringWithFormat:@"%@ 00:00:00",self.currentDayTime?:@""] withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     NSString *endTimeTemp = [NSString getTimeStampWithString:[NSString stringWithFormat:@"%@ 23:59:59",self.currentDayTime?:@""] withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
     
-    NSString *actionString = [self getActioinStringWithStartTime:startTimeTemp endTime:endTimeTemp];
-    
-    [self getLocalDayTimeListDataWithCmd:actionString];
-}
-
-//MARK: 获取
-- (NSString *)getActioinStringWithStartTime:(NSString *)startTime endTime:(NSString *)endTime {
-    NSString *action = @"";
     NSString *channel = @"0";
     if (self.isNVR == YES) {
         channel = self.deviceModel.Channel?:@"";
@@ -427,12 +430,12 @@ static NSString *const kLive = @"ipc.flv?action=live";
         channel = @"0";
     }
     
-    action = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_record_index&start_time=%@&end_time=%@",channel,startTime,endTime];
+    NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_record_index&start_time=%@&end_time=%@",channel,startTimeTemp,endTimeTemp];
     
-    return action;
+    [self getLocalDayTimeListDataWithCmd:actionString];
 }
 
-///MARK:获取数据
+///MARK:查询时间后，获取数据
 - (void)getLocalDayTimeListDataWithCmd:(NSString *)actionString {
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         TIoTDemoLocalDayTimeListModel *data = [TIoTDemoLocalDayTimeListModel yy_modelWithJSON:jsonList];
@@ -467,7 +470,13 @@ static NSString *const kLive = @"ipc.flv?action=live";
                     self.isInnerScroll = NO;
                     self.isPause = NO;
 //                    [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:model isChangeModel:YES];
-                    [self setVieoPlayerStartPlayWithDataList:data];
+                    
+                    //此处 changeModel 为yes 需要单独指定
+                    self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+                    self.videoTimeModel.StartTime = model.StartTime;
+                    self.videoTimeModel.EndTime = model.EndTime;
+                    
+                    [self setVieoPlayerStartPlay];
                 }
             }
             
@@ -476,14 +485,51 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }];
 }
 
+/// MARK: seek 进度条滚动
+- (void)seekDesignatedPointWithCurrentTime:(NSString *)currentTime selectedTimeMoel:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange{
+    
+    if (isChange == YES) {
+        self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
+        self.videoTimeModel.StartTime = timeModel.StartTime;
+        self.videoTimeModel.EndTime = timeModel.EndTime;
+    }
+    
+    NSString *channel = @"0";
+    if (self.isNVR == YES) {
+        channel = self.deviceModel.Channel?:@"";
+    }else {
+        channel = @"0";
+    }
+    
+    [self stopPlayMovie];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_seek&time=%@",channel,currentTime];
+
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            
+            TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
+            if ([responseModel.status isEqualToString:@"0"]) {
+                //seek 指定时间后，设备状态正常，可起播放器
+                [self setVieoPlayerStartPlay];
+                
+            }else {
+                //设备状态异常提示
+                [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+            }
+        }];
+    });
+}
+
 /// MARK:开启设备
-- (void)setVieoPlayerStartPlayWithDataList:(TIoTDemoLocalDayTimeListModel *)data {
+- (void)setVieoPlayerStartPlay {
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSString *channalID = @"";
+        
         if (self.isNVR == YES) {
             channalID = [NSString stringWithFormat:@"%@&channel=%@",kLive,self.deviceModel.Channel?:@""];
-            
         }else {
             channalID = [NSString stringWithFormat:@"%@&channel=0",kLive];
         }
@@ -492,16 +538,10 @@ static NSString *const kLive = @"ipc.flv?action=live";
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,channalID?:@""];
         
-//        if (self.isHidePlayBtn == YES) {
-//            [self stopPlayMovie];
-//            [self configVideo];
-//            [self.player prepareToPlay];
-//            [self.player play];
-//            [self autoHideControlView];
-//        }
         [self configVideo];
         [self.player prepareToPlay];
         [self.player play];
+        [self autoHideControlView];
         
         /// 播放器出图开始时间
 //        self.startPlayer = CACurrentMediaTime();
@@ -565,29 +605,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
     NSString *partTime = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)hour,(long)mintue,(long)second];
     NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.currentDayTime,partTime];
     return dateString;
-}
-
-///MARK: 本地回放播放
-- (void)playVideoWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange {
-    if (isChange == YES) {
-        self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
-        self.videoTimeModel.StartTime = timeModel.StartTime;
-        self.videoTimeModel.EndTime = timeModel.EndTime;
-    }
-    
-    //视频播放
-    self.videoUrl = videoPartURL?:@"";
-    if (self.isHidePlayBtn == YES) {
-        [self stopPlayMovie];
-        [self configVideo];
-        [self.player prepareToPlay];
-        [self.player play];
-        [self autoHideControlView];
-    }
-    
-    [self configVideo];
-    [self.player prepareToPlay];
-    [self.player play];
 }
 
 ///MARK: 获取视频防盗链播放URL
@@ -711,7 +728,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.isInnerScroll = NO;
     self.isPause = NO;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
-    [self playVideoWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
+//    [self playVideoWithStartTime:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
+    [self seekDesignatedPointWithCurrentTime:selectedModel.StartTime selectedTimeMoel:selectedModel isChangeModel:YES];
     [self setScrollOffsetWith:selectedModel];
 }
 
@@ -1092,7 +1110,9 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.isPause = NO;
     self.player.currentPlaybackTime = self.currentTime;
     [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.player.currentPlaybackTime];
+    
 //    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
+    [self seekDesignatedPointWithCurrentTime:currentTimeModel.StartTime selectedTimeMoel:currentTimeModel isChangeModel:NO];
     [self setScrollOffsetWith:currentTimeModel];
     
 }
@@ -1507,8 +1527,13 @@ static NSString *const kLive = @"ipc.flv?action=live";
 }
 
 - (void)stopPlayMovie {
-    [self.player stop];
-    self.player = nil;
+    
+    if (self.player != nil) {
+        [self.player stop];
+        [self.player shutdown];
+        [self.player.view removeFromSuperview];
+        self.player = nil;
+    }
 }
 
 #pragma mark - lazy loading
