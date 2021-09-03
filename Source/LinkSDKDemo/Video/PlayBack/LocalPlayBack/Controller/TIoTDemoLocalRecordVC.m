@@ -548,55 +548,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
     });
 }
 
-//MARK:获取某一天云存时间轴
-//- (void)requestCloudStorageDayDate {
-//
-//    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-//    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-//    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
-//    paramDic[@"Date"] = self.currentDayTime?:@"";
-//    paramDic[@"Version"] = @"2020-12-15";
-//    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageTime vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-//        TIoTCloudStorageDayTimeListModel *data = [TIoTCloudStorageDayTimeListModel yy_modelWithJSON:responseObject[@"Data"]];
-//
-//        //data.VideoURL 需要拼接
-//        self.timeList = [NSArray arrayWithArray:data.TimeList?:@[]];
-//
-//        [self recombineTimeSegmentWithTimeArray:self.timeList];
-//
-//        self.choiceDateView.videoTimeSegmentArray = self.modelArray;
-//
-//        if (self.eventItemModel != nil) {
-//            self.currentTime = 0;
-//            self.scrollDuraionTime = self.currentTime;
-//            self.isInnerScroll = NO;
-//            self.isPause = NO;
-//            [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:self.eventItemModel isChangeModel:YES];
-//        }else {
-//            if (self.modelArray.count != 0) {
-//                TIoTTimeModel *timeModel = self.modelArray[0]?:[[TIoTTimeModel alloc]init];
-//                TIoTDemoCloudEventModel *model = [[TIoTDemoCloudEventModel alloc]init];
-//
-//                NSString *startString = [self getDeytimeFormat:round(timeModel.startTime?:0)];
-//                NSString *endString = [self getDeytimeFormat:round(timeModel.endTime?:0)];
-//                model.StartTime = [NSString getTimeStampWithString:startString?:@"" withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-//                model.EndTime = [NSString getTimeStampWithString:endString?:@"" withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-//
-//                self.currentTime = 0;
-//                self.scrollDuraionTime = self.currentTime;
-//                self.isInnerScroll = NO;
-//                self.isPause = NO;
-//                [self getFullVideoURLWithPartURL:data.VideoURL?:@"" withTime:model isChangeModel:YES];
-//        //        [self setScrollOffsetWith:timeModel];
-//            }
-//        }
-//
-//
-//    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-//
-//    }];
-//}
-
 - (NSString *)getDeytimeFormat:(NSInteger)timestamp {
     NSInteger hour = timestamp / (60*60);
     NSInteger mintue = timestamp % (60*60) / 60;
@@ -606,109 +557,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
     NSString *dateString = [NSString stringWithFormat:@"%@ %@",self.currentDayTime,partTime];
     return dateString;
 }
-
-///MARK: 获取视频防盗链播放URL
-//- (void)getFullVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange
-//{
-//    NSString *currentStamp = [NSString getNowTimeString];
-//
-//    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-//    paramDic[@"Version"] = @"2020-12-15";
-//    paramDic[@"VideoURL"] = [NSString stringWithFormat:@"%@?starttime_epoch=%ld&endtime_epoch=%ld",videoPartURL,(long)timeModel.StartTime.integerValue,(long)timeModel.EndTime.integerValue]?:@"";
-//    paramDic[@"ExpireTime"] = [NSNumber numberWithInteger:currentStamp.integerValue + 3600];
-//    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-//        TIoTDemoCloudStoreFullVideoUrl *fullVideoURl = [TIoTDemoCloudStoreFullVideoUrl yy_modelWithJSON:responseObject];
-//        DDLogDebug(@"--fullVideoURL--%@",fullVideoURl.SignedVideoURL);
-//
-//        if (timeModel.EndTime.integerValue == 0 || [NSString isNullOrNilWithObject:timeModel.EndTime]) {
-//            [MBProgressHUD showError:@"视频连接有误"];
-//        }
-//
-//        if (isChange == YES) {
-//            self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
-//            self.videoTimeModel.StartTime = timeModel.StartTime;
-//            self.videoTimeModel.EndTime = timeModel.EndTime;
-//        }
-//
-//        //视频播放
-//        self.videoUrl = fullVideoURl.SignedVideoURL?:@"";
-//        if (self.isHidePlayBtn == YES) {
-//            [self stopPlayMovie];
-//            [self configVideo];
-//            [self.player prepareToPlay];
-//            [self.player play];
-//            [self autoHideControlView];
-//        }
-//        [MBProgressHUD dismissInView:self.view];
-//    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-//        [MBProgressHUD dismissInView:self.view];
-//    }];
-//}
-
-///MARK: 云存事件列表
-//- (void)requestCloudStoreVideoList {
-//
-//    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
-//
-//    NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",self.currentDayTime?:@""];
-//    NSString *endString = [NSString stringWithFormat:@"%@ 23:59:59",self.currentDayTime?:@""];
-//    NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-//    NSString *endTimesstampString = [NSString getTimeStampWithString:endString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-//
-//    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-//    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-//    paramDic[@"Version"] = @"2020-12-15";
-//    paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
-//    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
-//    paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
-//    paramDic[@"EndTime"] = [NSNumber numberWithInteger:endTimesstampString.integerValue];
-//    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-//
-//        self.listModel = [TIoTDemoCloudEventListModel yy_modelWithJSON:responseObject];
-//
-//        if (self.listModel.Events.count != 0) {
-//            NSMutableArray *temp = (NSMutableArray *)[[self.listModel.Events?:@[] reverseObjectEnumerator] allObjects];
-//            self.dataArray = [NSMutableArray arrayWithArray:temp?:@[]];
-//            self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
-//            self.currentTime = 0;
-//            self.scrollDuraionTime = self.currentTime;
-//            self.isInnerScroll = NO;
-//            self.isPause = NO;
-////            [self getFullVideoURLWithPartURL:self.listModel.VideoURL?:@"" withTime:self.dataArray[0] isChangeModel:YES];
-//            [self setScrollOffsetWith:self.dataArray.lastObject];
-//
-//            [self.tableView reloadData];
-//
-//            [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                    TIoTDemoCloudEventModel *model = obj;
-//                    [self requestCloudStoreUrlWithThumbnail:model index:idx];
-//                });
-//
-//            }];
-//        }
-//        [MBProgressHUD dismissInView:self.view];
-//    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-//        [MBProgressHUD dismissInView:self.view];
-//    }];
-//}
-
-///MARK: 云存事件缩略图
-//- (void)requestCloudStoreUrlWithThumbnail:(TIoTDemoCloudEventModel *)eventModel index:(NSInteger)index {
-//    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-//    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-//    paramDic[@"Version"] = @"2020-12-15";
-//    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
-//    paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
-//    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-//        TIoTDemoCloudEventModel *tuumbnailModel = [TIoTDemoCloudEventModel yy_modelWithJSON:responseObject];
-//        eventModel.ThumbnailURL = tuumbnailModel.ThumbnailURL;
-//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-//
-//    }];
-//
-//}
 
 #pragma mark - UITableViewDelegate UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -952,16 +800,11 @@ static NSString *const kLive = @"ipc.flv?action=live";
 ///MARK: 设置播放器样式
 - (void)setupPlayerCustomControlView {
     
-    if (self.customControlVidwoView != nil) {
-        [self.customControlVidwoView removeFromSuperview];
-    }
-    if (self.playPauseBtn != nil) {
-        [self.playPauseBtn removeFromSuperview];
-    }
+    [self clearPlayerControlView];
     
     //播放时长 时间戳差值
 //    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
-    NSInteger durationValue = self.player.duration; //+ self.scrollDuraionTime;
+    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue; //+ self.scrollDuraionTime;
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
     
@@ -1077,7 +920,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     UISlider *slider = (UISlider *)sender;
     self.currentTime = round(slider.value);
-    DDLogVerbose(@"currentPlaybackTime %f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.player.duration));
+//    DDLogVerbose(@"currentPlaybackTime %f \n---start:%f----\n ent:%f\n",round(self.player.currentPlaybackTime),round(self.player.playableDuration) ,round(self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue));
     
     TIoTDemoCloudEventModel *currentTimeModel = [[TIoTDemoCloudEventModel alloc]init];
     if (self.isInnerScroll == YES) {
@@ -1325,6 +1168,10 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //                self.player.currentPlaybackTime = self.currentTime;
 //            }
 //            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+            });
             [MBProgressHUD dismissInView:self.view];
             break;
         }
@@ -1369,14 +1216,15 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     __block NSInteger time = sliderValue; //计时开始
     
-    NSInteger durationValue = self.player.duration;
+//    NSInteger durationValue = self.player.duration;
+    NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
     
     self.slider.minimumValue = 0;
     self.slider.maximumValue = durationValue;
     
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     weakSelf.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     
     dispatch_source_set_timer(weakSelf.timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
@@ -1391,16 +1239,16 @@ static NSString *const kLive = @"ipc.flv?action=live";
                 //起始时间等于duration
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
                 weakSelf.currentLabel.text = weakSelf.totalLabel.text;
-                DDLogDebug(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
+//                DDLogDebug(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%ld----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue,self.player.playableDuration);
             });
             
         }else{
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)self.player.currentPlaybackTime/60,(NSInteger)self.player.currentPlaybackTime%60];
+                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)time/60,(NSInteger)time%60];
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
                 weakSelf.slider.value = time;
-                DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.player.duration,self.player.playableDuration);
+//                DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%ld----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue,self.player.playableDuration);
             });
             time++;
             
@@ -1487,7 +1335,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1533,6 +1381,18 @@ static NSString *const kLive = @"ipc.flv?action=live";
         [self.player shutdown];
         [self.player.view removeFromSuperview];
         self.player = nil;
+    }
+    
+    [self clearPlayerControlView];
+}
+
+/// 删除底层image之上的 控制view （slider 总时间/当前时间显示 暂停/播放按钮等控件）
+- (void)clearPlayerControlView {
+    if (self.customControlVidwoView != nil) {
+        [self.customControlVidwoView removeFromSuperview];
+    }
+    if (self.playPauseBtn != nil) {
+        [self.playPauseBtn removeFromSuperview];
     }
 }
 
