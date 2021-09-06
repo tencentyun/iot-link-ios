@@ -241,7 +241,7 @@
 }
 
 
-- (void)activePushWithDeviceIds:(NSArray *)deviceIds complete:(Result)result
+- (void)activePushWithDeviceIds:(NSArray *)deviceIds complete:(TIoTResult)result
 {
     NSDictionary *params = @{
         @"action":@"YunApi",

@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger,TIotApiHost) {
 @property (nonatomic,strong) void (^deviceChange)(NSDictionary *changeInfo);
 
 /// 注册设备监听（调用成功后才能收到deviceChange）
-- (void)activePushWithDeviceIds:(NSArray *)deviceIds complete:(Result)result;
+- (void)activePushWithDeviceIds:(NSArray *)deviceIds complete:(TIoTResult)result;
 
 /// 获取设备列表
 /// @param offset 非必传（忽略时传0），所需要查询的数据的偏移量
