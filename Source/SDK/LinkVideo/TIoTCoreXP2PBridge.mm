@@ -8,8 +8,13 @@
 #include <string.h>
 #include "AppWrapper.h"
 #import "AWSystemAVCapture.h"
-//#import "TIoTCoreAppEnvironment.h"
-#import "TIoTCoreWMacros.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelOff;
+#endif
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
@@ -38,12 +43,6 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSString *DeviceName = [NSString stringWithUTF8String:idd];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName}];
-//            [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-//
-//            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-//                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-//                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-//                                                     dev_name:DeviceName];
             
         });
     }else if (type == XP2PTypeDetectReady) {
