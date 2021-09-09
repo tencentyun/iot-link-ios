@@ -1317,7 +1317,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];
-
+        [self.player resetHubFrame:self.player.view.frame];
 //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
 }
 

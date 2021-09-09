@@ -1364,7 +1364,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
 
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];
-
+        [self.player resetHubFrame:self.player.view.frame];
+    
         [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:10 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];

@@ -85,12 +85,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-//                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-//                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-//                                             dev_name:self.deviceNameNVR?:@""];
+    //关闭日志
+//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     
-    self.qualityString = quality_super;
+    
+    self.qualityString = quality_standard;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     if (self.isNVR == NO) {
@@ -1162,6 +1161,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];
+        [self.player resetHubFrame:self.player.view.frame];
         
 //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];

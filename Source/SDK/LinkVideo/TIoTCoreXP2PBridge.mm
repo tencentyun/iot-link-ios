@@ -22,9 +22,11 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     }
     
     if (type == XP2PTypeLog) {
-        
-        NSString *nsFormat = [NSString stringWithUTF8String:msg];
-        DDLogInfo(@"%@", nsFormat);
+        BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
+        if (logEnable) {
+            NSString *nsFormat = [NSString stringWithUTF8String:msg];
+            DDLogInfo(@"%@", nsFormat);
+        }
     }else if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
@@ -95,6 +97,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 #ifndef DEBUG
         [TIoTCoreXP2PBridge redirectNSLog];
 #endif
+        //默认打开log开关
+        _logEnable = YES;
     }
     return self;
 }
