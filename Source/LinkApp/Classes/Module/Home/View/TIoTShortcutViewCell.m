@@ -89,7 +89,7 @@
         if (self.intOrFloatUpdate) {
             self.intOrFloatUpdate();
         }
-    }else if ([typeString isEqualToString:@"enum"]) {
+    }else if ([typeString isEqualToString:@"enum"] || [typeString isEqualToString:@"stringenum"]) {
         if (self.enumUpdate) {
             self.enumUpdate();
         }

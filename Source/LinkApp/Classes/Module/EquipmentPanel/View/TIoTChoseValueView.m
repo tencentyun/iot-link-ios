@@ -140,7 +140,12 @@
 {
     [self hide];
     if (self.updateData) {
-        self.updateData(@{self.dic[@"id"]:@([self.currentValue intValue])});
+        NSString *type = _dic[@"define"][@"type"];
+        if ([type isEqual:@"enum"]) {
+            self.updateData(@{self.dic[@"id"]:@([self.currentValue intValue])});
+        } else { //type is stringenum
+            self.updateData(@{self.dic[@"id"]:self.currentValue});
+        }
     }
 }
 
@@ -164,7 +169,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TIoTChoseValueTableViewCell *cell = [TIoTChoseValueTableViewCell cellWithTableView:tableView];
-    BOOL iS = [self.dataArr[indexPath.row][@"id"] integerValue] == [self.currentValue integerValue];
+    NSString *type = _dic[@"define"][@"type"];
+    BOOL iS;
+    if ([type isEqual:@"enum"]) {
+        iS = [self.dataArr[indexPath.row][@"id"] integerValue] == [self.currentValue integerValue];
+    } else { //type is stringenum
+        iS = [self.dataArr[indexPath.row][@"id"] isEqual:self.currentValue];
+    }
     [cell setTitle:self.dataArr[indexPath.row][@"name"] andSelect:iS];
     return cell;
 }
@@ -208,6 +219,10 @@
     for (NSString *key in keys) {
         NSDictionary *dataDic = @{@"id":key,@"name":tmpDic[key]};
         [self.dataArr addObject:dataDic];
+    }
+    if ([self.currentValue isEqual:@""]) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self selectAt:indexPath];
     }
     [self.tableView reloadData];
 }

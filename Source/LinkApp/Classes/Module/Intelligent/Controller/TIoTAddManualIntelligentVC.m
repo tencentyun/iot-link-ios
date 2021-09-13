@@ -143,6 +143,10 @@
                                 
                                 NSString *keyString = [NSString stringWithFormat:@"%d",number.intValue];
                                 valueString = [propertieModel.define.mapping objectForKey:keyString];
+                            }else if ([propertieModel.define.type isEqualToString:@"stringenum"]){
+                                
+                                NSString *keyString = [NSString stringWithFormat:@"%@",number];
+                                valueString = [propertieModel.define.mapping objectForKey:keyString];
                             }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
                                 
                                 if ([propertieModel.define.type isEqualToString:@"int"]) {

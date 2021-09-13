@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^ChooseTaskValueBlock)(NSString *valueString,TIoTPropertiesModel *model);
+typedef void(^ChooseTaskValueBlock)(NSString *keyString,NSString *valueString,TIoTPropertiesModel *model);
 /**
 物模型 enum 和 bool 是 tableview 选择样式 高度 48+188=236
  */
