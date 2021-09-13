@@ -149,7 +149,7 @@
     if ([@"int" isEqualToString:define[@"type"]] || [@"float" isEqualToString:define[@"type"]]) {
         contentText = [NSString stringWithFormat:@"%@%@",item[@"status"][@"Value"],define[@"unit"]];
     }
-    else if ([@"enum" isEqualToString:define[@"type"]] || [@"bool" isEqualToString:define[@"type"]])
+    else if ([@"enum" isEqualToString:define[@"type"]] || [@"bool" isEqualToString:define[@"type"]] || [@"stringrenum" isEqualToString:define[@"type"]])
     {
         NSString *key = [NSString stringWithFormat:@"%@",item[@"status"][@"Value"]];
         contentText = define[@"mapping"][key];
