@@ -833,7 +833,7 @@ static NSString *itemId3 = @"i_ooo454";
         if ([dic[@"define"][@"type"] isEqualToString:@"bool"]) {
             
         }
-        else if ([dic[@"define"][@"type"] isEqualToString:@"enum"]){
+        else if ([dic[@"define"][@"type"] isEqualToString:@"enum"] || [dic[@"define"][@"type"] isEqualToString:@"stringenum"]){
             
             //trtc特殊判断逻辑
             NSString *key = dic[@"id"];

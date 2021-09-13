@@ -112,13 +112,13 @@
     
     self.baseModel = self.modelArray[indexPath.row];
     
-    if ([self.baseModel.define.type isEqualToString:@"enum"] || [self.baseModel.define.type isEqualToString:@"bool"]) {
+    if ([self.baseModel.define.type isEqualToString:@"enum"] || [self.baseModel.define.type isEqualToString:@"bool"] || [self.baseModel.define.type isEqualToString:@"stringenum"]) {
         //点击
         __weak typeof(self) weakSelf = self;
         self.clickValueView = [[TIoTChooseClickValueView alloc]init];
         self.clickValueView.model = self.baseModel;
         
-        self.clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+        self.clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull key, NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
             
             if ([NSString isNullOrNilWithObject:valueString]) {
                 NSString *valueTempStr = weakSelf.dataArr[indexPath.row][@"value"];
@@ -160,7 +160,7 @@
                     
                     if (self.isAutoActionType == NO) {
                         weakSelf.model.Property.conditionContentString = valueString;
-                        weakSelf.model.Property.Value = [NSNumber numberWithFloat:keyString.intValue];
+                        weakSelf.model.Property.Value = [NSString stringWithString:keyString];
                     }else {
                         //修改json Data 的内容
                         weakSelf.model.dataValueString = valueString;
@@ -339,9 +339,9 @@
                         weakSelf.model.Property.conditionContentString = valueString;
                         weakSelf.model.Property.Op = compareValue;
                         if ([weakSelf.baseModel.define.type isEqualToString:@"int"]) {
-                            weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.intValue];
+                            weakSelf.model.Property.Value = [NSString stringWithFormat:@"%d", numberStr.intValue];
                         }else if ([weakSelf.baseModel.define.type isEqualToString:@"float"]) {
-                            weakSelf.model.Property.Value = [NSNumber numberWithFloat:numberStr.floatValue];
+                            weakSelf.model.Property.Value = [NSString stringWithFormat:@"%f", numberStr.floatValue];
                         }
                         
                     }else {

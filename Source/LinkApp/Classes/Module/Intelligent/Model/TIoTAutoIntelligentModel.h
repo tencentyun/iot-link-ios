@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *IconUrl;
 @property (nonatomic, strong) NSString *PropertyId; //设备的属性Id
 @property (nonatomic, strong) NSString *Op; //条件操作符  eq 等于  ne 不等于  gt 大于  lt 小于  ge 大等于  le 小等于
-@property (nonatomic, strong) NSNumber *Value;//比较的值
+@property (nonatomic, strong) NSString *Value;//比较的值
 
 @property (nonatomic, strong) NSString *conditionTitle;//本地添加 conditiontitle name
 @property (nonatomic, copy) NSString *conditionContentString;//本地添加 condition 所选item 内容

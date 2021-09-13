@@ -81,7 +81,7 @@
         self.righImg.hidden = NO;
         self.swich.hidden = YES;
         
-        if ([define[@"type"] isEqualToString:@"enum"]) {
+        if ([define[@"type"] isEqualToString:@"enum"] || [define[@"type"] isEqualToString:@"stringenum"]) {
             [self.imgV setImage:[[UIImage imageNamed:@"c_color"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             
 //            NSString *key = [NSString stringWithFormat:@"%@",info[@"status"][@"Value"]];

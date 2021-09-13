@@ -18,8 +18,10 @@
 @property (nonatomic, strong) UITableView  *tableView;
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
+@property (nonatomic, strong) NSMutableArray *keyArr;
 
 @property (nonatomic, strong)  NSString *value;
+@property (nonatomic, strong)  NSString *key;
 @end
 
 @implementation TIoTChooseClickValueView
@@ -120,7 +122,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-        self.value = self.dataArr[indexPath.row]?:@"";
+    self.value = self.dataArr[indexPath.row]?:@"";
+    self.key = self.keyArr[indexPath.row]?:@"";
 }
 
 #pragma mark - lazy loading
@@ -164,6 +167,7 @@
 - (NSMutableArray *)dataArr{
     if (_dataArr == nil) {
         _dataArr = [NSMutableArray array];
+        _keyArr = [NSMutableArray array];
         NSArray *keyResult = [self.model.define.mapping.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             return [obj1 compare:obj2];
         }];
@@ -171,6 +175,7 @@
             NSString *keyString = keyResult[i];
             NSString *valueString = self.model.define.mapping[keyString]?:@"";
             [_dataArr addObject:valueString];
+            [_keyArr addObject:keyString];
         }
         
     }
@@ -192,7 +197,8 @@
         _bottomView.secondBlock = ^{
             if (weakSelf.chooseTaskValueBlock) {
                 NSString *valueString = weakSelf.value ?:@"";
-                weakSelf.chooseTaskValueBlock(valueString,weakSelf.model);
+                NSString *keyString = weakSelf.key ?:@"";
+                weakSelf.chooseTaskValueBlock(keyString,valueString,weakSelf.model);
             }
             
             [weakSelf dismissView];

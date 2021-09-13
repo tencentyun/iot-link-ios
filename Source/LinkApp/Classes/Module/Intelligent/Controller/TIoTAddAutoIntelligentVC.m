@@ -202,6 +202,10 @@ static NSInteger  const limit = 10;
                                     if ([propertieModel.define.type isEqualToString:@"enum"] || [propertieModel.define.type isEqualToString:@"bool"]) {
                                         NSString *keyString = [NSString stringWithFormat:@"%d",model.Property.Value.intValue];
                                         valueString = [propertieModel.define.mapping objectForKey:keyString];
+                                    }else if ([propertieModel.define.type isEqualToString:@"stringenum"]){
+                                        
+                                        NSString *keyString = [NSString stringWithFormat:@"%@",model.Property.Value];
+                                        valueString = [propertieModel.define.mapping objectForKey:keyString];
                                     }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
                                         
                                         if ([propertieModel.define.type isEqualToString:@"int"]) {
@@ -294,6 +298,10 @@ static NSInteger  const limit = 10;
                                     if ([propertieModel.define.type isEqualToString:@"enum"] || [propertieModel.define.type isEqualToString:@"bool"]) {
                                         
                                         NSString *keyString = [NSString stringWithFormat:@"%d",number.intValue];
+                                        valueString = [propertieModel.define.mapping objectForKey:keyString];
+                                    }else if ([propertieModel.define.type isEqualToString:@"stringenum"]) {
+                                        
+                                        NSString *keyString = [NSString stringWithFormat:@"%@",number];
                                         valueString = [propertieModel.define.mapping objectForKey:keyString];
                                     }else if ([propertieModel.define.type isEqualToString:@"int"] || [propertieModel.define.type isEqualToString:@"float"]){
                                         
