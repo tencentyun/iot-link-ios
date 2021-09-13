@@ -112,7 +112,7 @@
     
     self.baseModel = self.modelArray[indexPath.row];
     
-    if ([self.baseModel.define.type isEqualToString:@"enum"] || [self.baseModel.define.type isEqualToString:@"bool"]) {
+    if ([self.baseModel.define.type isEqualToString:@"enum"] || [self.baseModel.define.type isEqualToString:@"bool"] || [self.baseModel.define.type isEqualToString:@"stringenum"]) {
         //点击
         __weak typeof(self) weakSelf = self;
         self.clickValueView = [[TIoTChooseClickValueView alloc]init];
