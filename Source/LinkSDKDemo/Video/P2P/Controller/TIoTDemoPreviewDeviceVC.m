@@ -123,6 +123,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
     
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
+    self.navigationItem.rightBarButtonItem = right;
+}
+
+- (void)showHudView {
+    self.player.shouldShowHudView = !self.player.shouldShowHudView;
 }
 
 -(void)viewWillAppear:(BOOL)animated{

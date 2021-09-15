@@ -1362,7 +1362,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         self.player.view.frame = self.imageView.bounds;
         self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
         self.player.shouldAutoplay = YES;
-//        self.player.shouldShowHudView = YES;
+        self.player.shouldShowHudView = NO;
 
         self.view.autoresizesSubviews = YES;
         [self.imageView addSubview:self.player.view];
