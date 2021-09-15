@@ -1,14 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="y8H-OK-A7C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19158" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="y8H-OK-A7C">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19141"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--显示所有设备-->
+        <scene sceneID="iPc-G8-UL8">
+            <objects>
+                <viewController id="MPm-JF-Z42" customClass="TIoTAllDevicesVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2xt-tK-U6d">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="AccessToken" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rIJ-KM-7a5">
+                                <rect key="frame" x="20" y="108" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="platformId" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eRM-jE-uTO">
+                                <rect key="frame" x="20" y="150" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGk-mY-evA">
+                                <rect key="frame" x="20" y="192" width="110" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="显示所有设备"/>
+                                <connections>
+                                    <action selector="showAllDevices:" destination="MPm-JF-Z42" eventType="touchUpInside" id="i82-el-R1e"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PK7-GK-96b">
+                                <rect key="frame" x="20" y="231" width="374" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="IvC-Q3-NKP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Olt-a1-ZEP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="rIJ-KM-7a5" firstAttribute="top" secondItem="Olt-a1-ZEP" secondAttribute="top" constant="20" id="4c6-ij-j0j"/>
+                            <constraint firstItem="Olt-a1-ZEP" firstAttribute="trailing" secondItem="eRM-jE-uTO" secondAttribute="trailing" constant="20" id="E1j-UJ-Fg5"/>
+                            <constraint firstItem="PK7-GK-96b" firstAttribute="top" secondItem="DGk-mY-evA" secondAttribute="bottom" constant="8" symbolic="YES" id="G31-RI-Tsc"/>
+                            <constraint firstItem="Olt-a1-ZEP" firstAttribute="trailing" secondItem="rIJ-KM-7a5" secondAttribute="trailing" constant="20" id="SY6-G8-ay5"/>
+                            <constraint firstItem="eRM-jE-uTO" firstAttribute="leading" secondItem="Olt-a1-ZEP" secondAttribute="leading" constant="20" id="Ws5-Ak-0Iw"/>
+                            <constraint firstItem="eRM-jE-uTO" firstAttribute="top" secondItem="rIJ-KM-7a5" secondAttribute="bottom" constant="8" symbolic="YES" id="bGU-Hz-S5w"/>
+                            <constraint firstItem="rIJ-KM-7a5" firstAttribute="leading" secondItem="Olt-a1-ZEP" secondAttribute="leading" constant="20" id="bhX-Vz-AJD"/>
+                            <constraint firstItem="DGk-mY-evA" firstAttribute="leading" secondItem="Olt-a1-ZEP" secondAttribute="leading" constant="20" id="iQg-u7-Le9"/>
+                            <constraint firstItem="DGk-mY-evA" firstAttribute="top" secondItem="eRM-jE-uTO" secondAttribute="bottom" constant="8" symbolic="YES" id="p84-0o-c5l"/>
+                            <constraint firstItem="Olt-a1-ZEP" firstAttribute="trailing" secondItem="PK7-GK-96b" secondAttribute="trailing" constant="20" id="z7J-57-4BZ"/>
+                            <constraint firstItem="PK7-GK-96b" firstAttribute="leading" secondItem="Olt-a1-ZEP" secondAttribute="leading" constant="20" id="zFN-4F-153"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="显示所有设备" id="RhH-1t-3eE"/>
+                    <connections>
+                        <outlet property="accessTokenTextField" destination="rIJ-KM-7a5" id="JMi-Ml-2cO"/>
+                        <outlet property="devicesLabel" destination="PK7-GK-96b" id="WNq-fV-X9u"/>
+                        <outlet property="platformIdTextField" destination="eRM-jE-uTO" id="MtJ-Ux-fUO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xLe-q2-Bxi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2719" y="-575"/>
+        </scene>
         <!--HomeVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -62,6 +125,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rNG-xC-J5Q">
+                        <barButtonItem key="leftBarButtonItem" title="显示所有设备" id="Ogv-Rk-i0H">
+                            <connections>
+                                <segue destination="MPm-JF-Z42" kind="push" id="B7E-ca-K63"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="添加" id="XXa-Cp-TKq">
                             <connections>
                                 <segue destination="6ts-Uc-m2S" kind="push" id="nki-hN-WlU"/>
@@ -453,10 +521,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
-            <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
