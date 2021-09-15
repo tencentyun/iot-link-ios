@@ -197,7 +197,9 @@ failure:(FailureResponseBlock)failure
         accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
         [accessParam setValue:actionStr forKey:@"Action"];
         [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
-        [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+        if (![baseAccessParam.allKeys containsObject:@"AccessToken"]) {
+            [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+        }
         
     }
 
