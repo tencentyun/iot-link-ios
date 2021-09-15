@@ -653,6 +653,36 @@
     }];
 }
 
+/// APP拉用户绑定设备列表
+- (void)getVirtualBindDeviceListWithAccessToken:(NSString *)accessToken platformId:(NSString *)platformId offset:(NSUInteger)offset limit:(NSUInteger)limit success:(SRHandler)success failure:(FRHandler)failure
+{
+    
+    if (accessToken == nil) {
+        failure(@"accessToken参数为空",nil,@{});
+        return;
+    }
+    
+    if (platformId == nil) {
+        failure(@"platformId参数为空",nil,@{});
+        return;
+    }
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setValue:accessToken forKey:@"AccessToken"];
+    [param setValue:platformId forKey:@"BindPlatformId"];
+    if (limit > 0) {
+        [param setObject:@(offset) forKey:@"Offset"];
+        [param setObject:@(limit) forKey:@"Limit"];
+    }
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetVirtualBindDeviceList params:param useToken:YES];
+    [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error,NSDictionary *dic) {
+        failure(reason,error,dic);
+    }];
+}
+
 
 #pragma mark - 云端定时
 
