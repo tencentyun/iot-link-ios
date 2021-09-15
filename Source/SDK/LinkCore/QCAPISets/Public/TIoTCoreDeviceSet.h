@@ -104,6 +104,9 @@ typedef NS_ENUM(NSInteger,TIotApiHost) {
 /// 更换设备绑定的房间
 - (void)modifyRoomOfDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName familyId:(NSString *)familyId roomId:(NSString *)roomId success:(SRHandler)success failure:(FRHandler)failure;
 
+/// APP拉用户绑定设备列表
+- (void)getVirtualBindDeviceListWithAccessToken:(NSString *)accessToken platformId:(NSString *)platformId offset:(NSUInteger)offset limit:(NSUInteger)limit success:(SRHandler)success failure:(FRHandler)failure;
+
 
 #pragma mark - 云端定时
 

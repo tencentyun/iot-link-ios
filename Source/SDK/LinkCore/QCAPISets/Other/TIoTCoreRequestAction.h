@@ -108,6 +108,8 @@ FOUNDATION_EXPORT NSString *const AppGetProductInfo;//扫一扫落地页面显�
 FOUNDATION_EXPORT NSString *const AppGetGatewayBindDeviceList;//网关设备列表
 FOUNDATION_EXPORT NSString *const AppBindSubDeviceInFamily;//绑定子设备
 
+FOUNDATION_EXPORT NSString *const AppGetVirtualBindDeviceList;//APP拉用户绑定设备列表
+
 //MARK: 设备定时
 
 FOUNDATION_EXPORT NSString *const AppGetTimerList;//获取定时任务列表
