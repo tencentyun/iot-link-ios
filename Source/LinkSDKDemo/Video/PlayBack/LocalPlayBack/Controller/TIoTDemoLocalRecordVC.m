@@ -33,7 +33,6 @@
 
 static CGFloat const kPadding = 16;
 static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
-static NSInteger const kLimit = 999;
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 static NSString *const kLive = @"ipc.flv?action=live";
@@ -366,7 +365,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
                     if (weakSelf.player.isPlaying == NO) {
                         [weakSelf tapVideoView:weakSelf.playPauseBtn];
                     }
-                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
+                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:videoPlayStart.integerValue];
+                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
                 }
                 
             }else {
@@ -476,7 +476,9 @@ static NSString *const kLive = @"ipc.flv?action=live";
                     self.videoTimeModel.StartTime = model.StartTime;
                     self.videoTimeModel.EndTime = model.EndTime;
                     
-                    [self setVieoPlayerStartPlay];
+                    // 滚动到第一段视频起始位置开始播放
+                    self.choiceDateView.nextDateBlcok(timeModel);
+//                    [self setVieoPlayerStartPlay];
                 }
             }
             
