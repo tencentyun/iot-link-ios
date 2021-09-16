@@ -46,6 +46,23 @@
     self.customCalendar.removeViewBlock = ^{
         [weakSelf removeView];
     };
+    
+    //上月
+    self.customCalendar.clickPreviousMonthBlock = ^(NSString * _Nonnull month){
+        if (weakSelf.previousMonthBlock) {
+            NSArray *dataArray = weakSelf.previousMonthBlock(month);
+//             weakSelf.dateArray = dataArray;
+//            [weakSelf layoutSubviews];
+        }
+    };
+
+    //下月
+    self.customCalendar.clickNextMonthBlock = ^(NSString * _Nonnull dateString){
+        if (weakSelf.nextMonthBlock) {
+            weakSelf.nextMonthBlock(dateString);
+            [weakSelf layoutSubviews];
+        }
+    };
 }
 
 -(void)removeView {

@@ -189,6 +189,10 @@
     NSString *title = [NSString stringWithFormat:@"%@年%@月", year, month];
 
     self.calendarHeaderLabel.text = title;
+    
+    if (self.clickPreviousMonthBlock) {
+        self.clickPreviousMonthBlock([NSString stringWithFormat:@"%@",month]);
+    }
 }
 
 /*

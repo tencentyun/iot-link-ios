@@ -86,6 +86,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
 @property (nonatomic, assign) BOOL isPause; //是否暂停
 
 @property (nonatomic, assign) NSInteger stopNumber; //视频播放结束后，stop连续调2遍累计变量
+
+@property (nonatomic, strong) TIoTDemoCalendarCustomView *tempCustomView;
 @end
 
 @implementation TIoTDemoLocalRecordVC
@@ -106,9 +108,11 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     [self setupUIViews];
     
-    //获取具有云存日期
-//    [self requestCloudStorageDateList];
-    
+    //获取当月具有云存日期
+    NSArray *dayTimeArray = [self.currentDayTime componentsSeparatedByString:@"-"];
+    NSString *dateString = [NSString stringWithFormat:@"%@%@",dayTimeArray.firstObject?:@"2021",dayTimeArray[1]?:@"01"];
+    [self requestCloudStorageDateListWithTime:dateString];
+     
     //获取某一天云存时间轴
 //    [self requestCloudStorageDayDate];
     
@@ -252,6 +256,52 @@ static NSString *const kLive = @"ipc.flv?action=live";
             
             
         };
+        
+        NSArray *dayTimeArray = [weakSelf.currentDayTime componentsSeparatedByString:@"-"];
+        __block NSString *month = (dayTimeArray[1]?:@"01");
+        __block NSString *year = dayTimeArray.firstObject?:@"2021";
+        __block NSString *dateString = [NSString stringWithFormat:@"%@%@",year,month];
+        
+        //点击上月
+        calendarView.clickPreviousMonthBlock = ^(TIoTDemoCalendarCustomView * _Nonnull view, NSString * _Nonnull month){
+            //判断月份-1 少于当年1月时候，year-1 月为12
+            
+            NSString *monthString = month;
+            NSString *year = dayTimeArray.firstObject?:@"2021";
+            NSString *dateString = [NSString stringWithFormat:@"%@%@",year,monthString];
+            
+            if (monthString.integerValue - 1 < 1) {
+                monthString = [NSString stringWithFormat:@"%02ld",monthString.integerValue - 1 + 12];
+                NSString *tempYear = dayTimeArray.firstObject?:@"2021";
+                year = [NSString stringWithFormat:@"%02ld",tempYear.integerValue - 1];
+                dateString = [NSString stringWithFormat:@"%@%@",year,monthString];
+            }else {
+                dateString = [NSString stringWithFormat:@"%@%02ld",year,monthString.integerValue - 1];
+            }
+            
+            [weakSelf requestCloudStorageDateListWithTime:dateString];
+//            view.calendarDateArray = weakSelf.cloudStoreDateList;
+            weakSelf.tempCustomView = view;
+//            return weakSelf.cloudStoreDateList;
+        };
+        
+        //点击下月
+        calendarView.clickNextMonthBlock = ^NSArray * _Nonnull{
+            //判断月份+1 多于当年12月时候，year+1 月为1
+            if (month.integerValue + 1 > 12) {
+                month = [NSString stringWithFormat:@"%02ld",month.integerValue + 1 - 12];
+                NSString *tempYear = dayTimeArray.firstObject?:@"2021";
+                year = [NSString stringWithFormat:@"%02ld",tempYear.integerValue + 1];
+                dateString = [NSString stringWithFormat:@"%@%@",year,month];
+            }else {
+                dateString = [NSString stringWithFormat:@"%@%02ld",year,month.integerValue + 1];
+            }
+            
+            [weakSelf requestCloudStorageDateListWithTime:dateString];
+            
+            return weakSelf.cloudStoreDateList;
+        };
+        
         [[UIApplication sharedApplication].delegate.window addSubview:calendarView];
         [calendarView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
@@ -399,22 +449,52 @@ static NSString *const kLive = @"ipc.flv?action=live";
 
 #pragma mark - network request
 
-//MARK: 获取具有云存日期
-- (void)requestCloudStorageDateList {
+//MARK: 获取当月具有云存日期
+- (void)requestCloudStorageDateListWithTime:(NSString *)time {
     
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    NSString *channel = @"0";
+    if (self.isNVR == YES) {
+        channel = self.deviceModel.Channel?:@"";
+    }else {
+        channel = @"0";
+    }
     
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageDate vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        TIoTDemoCloudStoreDateListModel *dateList = [TIoTDemoCloudStoreDateListModel yy_modelWithJSON:responseObject];
-        if (dateList.Data.count != 0) {
-            self.cloudStoreDateList = [NSArray arrayWithArray:dateList.Data];
-        }
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+    NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_month_record&time=%@",channel,time];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         
+        TIoTDemoDeviceStatusModel *data = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
+        DDLogDebug(@"jsonList:%@",jsonList);
+        if (![NSString isNullOrNilWithObject:jsonList]) {
+            NSString *binaryString = [NSString getBinaryByDecimal:data.video_list.integerValue];
+            
+            NSMutableArray * dateArray = [self getDateFromBinary:binaryString withYearAndMonth:time];
+            if (dateArray.count != 0) {
+                self.cloudStoreDateList = [NSArray arrayWithArray:dateArray];
+                
+                self.tempCustomView.calendarDateArray = self.cloudStoreDateList;
+                self.tempCustomView.calendarView.dateArray = self.cloudStoreDateList;
+                [self.tempCustomView.calendarView layoutIfNeeded];
+                [self.tempCustomView.calendarView layoutSubviews];
+                
+            }
+        }
     }];
+}
+
+- (NSMutableArray *)getDateFromBinary:(NSString *)binaryString withYearAndMonth:(NSString*)time {
+    NSMutableArray *dateArray = [NSMutableArray new];
+    for (NSInteger i = binaryString.length - 1; i > 0; i--) {
+        NSRange range = NSMakeRange(i, 1);
+        NSString *subString = [binaryString substringWithRange:range];
+        if ([subString isEqualToString:@"1"]) {
+            NSString *year = [time substringToIndex:4];
+            NSString *month = [time substringFromIndex:4];
+            NSString *dateString = [NSString stringWithFormat:@"%@-%@-%02ld",year,month,binaryString.length - i];
+            [dateArray addObject:dateString];
+        }
+    }
+    return dateArray;
 }
 
 //MARK: 本地回放某一天时间轴分段数据

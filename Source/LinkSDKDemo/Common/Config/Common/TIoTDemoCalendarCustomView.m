@@ -13,7 +13,7 @@
 @property (nonatomic, strong) NSString *dayDateString;
 @property (nonatomic, strong) UIView *maskView; //背景遮罩
 @property (nonatomic, strong) UIView *contentView; //背景view
-@property (nonatomic, strong) TIoTCustomCalendar *calendarView; //日历控件view
+//@property (nonatomic, strong) TIoTCustomCalendar *calendarView; //日历控件view
 @property (nonatomic, assign) CGFloat kActionBottonHeight;
 @property (nonatomic, strong) NSString *defaultDateString;
 @end
@@ -80,6 +80,22 @@
         DDLogVerbose(@"日历选择日期---%@",dateString);
         weakSelf.dayDateString = dateString;
         
+    };
+    
+    self.calendarView.previousMonthBlock = ^NSArray *_Nonnull(NSString * _Nonnull month){
+        if (weakSelf.clickPreviousMonthBlock) {
+            weakSelf.clickPreviousMonthBlock(weakSelf,month);
+            
+//            [weakSelf setCalendarDateArray:preMonthDate];
+        }
+        return weakSelf.calendarDateArray;
+    };
+    
+    self.calendarView.nextMonthBlock = ^(NSString *dateString){
+        if (weakSelf.clickNextMonthBlock) {
+            NSArray *nextMonthDate = weakSelf.clickNextMonthBlock();
+//            [weakSelf setCalendarDateArray:nextMonthDate];
+        }
     };
     
     //取消、确认按钮底层view

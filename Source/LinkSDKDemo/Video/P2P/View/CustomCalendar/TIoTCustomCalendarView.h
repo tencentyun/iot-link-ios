@@ -12,6 +12,10 @@ typedef void (^TIoTSelectedDayBlcok)(NSInteger, NSInteger, NSInteger);
 
 typedef void(^TIoTRemoveViewBlock)(void);
 
+typedef void(^TIoTClickPreviousMonthBlock)(NSString *month); //点击上个月block
+
+typedef void(^TIoTClickNextMonthBlock)(NSString *month); //点击下个月block
+
 @interface TIoTCustomCalendarView : UIView
 
 /// 构造方法
@@ -31,6 +35,12 @@ typedef void(^TIoTRemoveViewBlock)(void);
 
 /// 移除block
 @property (nonatomic, copy) TIoTRemoveViewBlock removeViewBlock;
+
+/// 上个月block
+@property (nonatomic, copy) TIoTClickPreviousMonthBlock clickPreviousMonthBlock;
+
+/// 下个月block
+@property (nonatomic, copy) TIoTClickNextMonthBlock clickNextMonthBlock;
 
 @end
 
