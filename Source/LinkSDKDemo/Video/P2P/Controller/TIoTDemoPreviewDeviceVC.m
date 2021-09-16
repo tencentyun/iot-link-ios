@@ -111,10 +111,17 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //云存事件列表
         [self requestCloudStoreVideoList];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
                                                   sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
                                                    pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
                                                  dev_name:self.deviceName?:@""];
+        if (errorcode == XP2P_ERR_VERSION) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+        }
         
         //计算IPC打洞开始时间
         self.startIpcP2P = CACurrentMediaTime();
