@@ -77,6 +77,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval startIpcP2P;
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
 
+@property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -85,6 +86,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _is_ijkPlayer_stream = YES;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     
@@ -1133,17 +1135,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)configVideo {
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
-        fileTip.text = @"数据帧写文件中...";
-        fileTip.textAlignment = NSTextAlignmentCenter;
-        fileTip.textColor = [UIColor whiteColor];
-        [self.imageView addSubview:fileTip];
-        if (self.isNVR == NO) {
-            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
-        }
-        
-    }else {
+
+    // 1.通过播放器发起的拉流
+    if (_is_ijkPlayer_stream) {
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
+        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+
         [self stopPlayMovie];
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
@@ -1169,12 +1166,26 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.imageView addSubview:self.player.view];
         [self.player resetHubFrame:self.player.view.frame];
         
-//        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+        
+    }else {
+        // 2.通过裸流服务拉流
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
+        
+        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+        fileTip.text = @"数据帧写文件中...";
+        fileTip.textAlignment = NSTextAlignmentCenter;
+        fileTip.textColor = [UIColor whiteColor];
+        [self.imageView addSubview:fileTip];
+        if (self.isNVR == NO) {
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
+        }
+        
     }
 }
 
