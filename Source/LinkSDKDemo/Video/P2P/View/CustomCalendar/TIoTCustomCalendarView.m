@@ -5,7 +5,6 @@
 //
 
 #import "TIoTCustomCalendarView.h"
-#import "TIoTCustomCalendarScrollView.h"
 #import "NSDate+TIoTCustomCalendar.h"
 #import "UILabel+TIoTLableFormatter.h"
 
@@ -13,7 +12,6 @@
 
 @property (nonatomic, strong) UILabel *calendarHeaderLabel;
 @property (nonatomic, strong) UIView *weekView;
-@property (nonatomic, strong) TIoTCustomCalendarScrollView *scrollView;
 
 @end
 
@@ -189,6 +187,10 @@
     NSString *title = [NSString stringWithFormat:@"%@年%@月", year, month];
 
     self.calendarHeaderLabel.text = title;
+    
+    if (self.clickMonthBlock) {
+        self.clickMonthBlock([NSString stringWithFormat:@"%@%02ld",year,month.integerValue]);
+    }
 }
 
 /*

@@ -550,6 +550,14 @@ static NSString *const kTIoTCalandarDayCellIdentifier = @"kTIoTCalandarDayCellId
     [self notifyToChangeCalendarHeader];
 }
 
+- (void)refureshUI {
+    [self.middleCollectionView reloadData]; // 中间的 collectionView 先刷新数据
+    [self.leftCollectionView reloadData]; // 最后两边的 collectionView 也刷新数据
+    [self.rightCollectionView reloadData];
+    
+    // 发通知，更改当前月份标题
+//    [self notifyToChangeCalendarHeader];
+}
 @end
 
 
