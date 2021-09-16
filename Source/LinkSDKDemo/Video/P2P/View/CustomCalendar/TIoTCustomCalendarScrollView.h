@@ -23,6 +23,7 @@ typedef void (^DidSelectDayHandler)(NSInteger, NSInteger, NSInteger);
 
 - (void)rightSlide;
 
+- (void)refureshUI;
 @end
 
 NS_ASSUME_NONNULL_END

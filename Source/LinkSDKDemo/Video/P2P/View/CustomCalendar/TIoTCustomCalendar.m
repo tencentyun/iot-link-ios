@@ -5,11 +5,9 @@
 //
 
 #import "TIoTCustomCalendar.h"
-#import "TIoTCustomCalendarView.h"
 
 @interface TIoTCustomCalendar()
 
-@property (nonatomic, strong) TIoTCustomCalendarView *customCalendar;
 
 @end
 
@@ -45,6 +43,14 @@
     
     self.customCalendar.removeViewBlock = ^{
         [weakSelf removeView];
+    };
+    
+    //选择月block
+    self.customCalendar.clickMonthBlock = ^(NSString * _Nonnull dateString){
+        if (weakSelf.choiceMonthBlock) {
+            NSArray *dataArray = weakSelf.choiceMonthBlock(dateString);
+             weakSelf.dateArray = dataArray;
+        }
     };
 }
 

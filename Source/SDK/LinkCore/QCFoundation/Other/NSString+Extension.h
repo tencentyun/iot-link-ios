@@ -154,6 +154,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 //普通字符串转换为十六进制的。
 + (NSString *)hexStringFromString:(NSString *)string;
 + (NSString *)hexStringFromData:(NSData *)data;
+
+//十进制转二进制
++ (NSString *)getBinaryByDecimal:(NSInteger)decimalism;
 @end
 
 NS_ASSUME_NONNULL_END
