@@ -113,7 +113,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.17.0)
+  - Protobuf (3.18.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -136,11 +136,11 @@ PODS:
   - TIoTLinkKit_IJKPlayer (1.0.2)
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
-  - TIoTLinkThirdPartyKit/XP2P-iOS (2.2.1)
+  - TIoTLinkKit_XP2P (2.2.0)
   - TIoTLinkVideo (1.0.0):
     - CocoaLumberjack (= 3.7.2)
     - TIoTLinkKit_Faac (= 2.0.5)
-    - TIoTLinkThirdPartyKit/XP2P-iOS (= 2.2.1)
+    - TIoTLinkKit_XP2P (= 2.2.0)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -212,7 +212,7 @@ SPEC REPOS:
     - TIoTLinkKit_IJKPlayer
     - TIoTLinkKit_TPNS
     - TIoTLinkKit_WechatOpenSDK
-    - TIoTLinkThirdPartyKit
+    - TIoTLinkKit_XP2P
     - TrueTime
     - TXLiteAVSDK_TRTC
     - TZImagePickerController
@@ -251,7 +251,7 @@ SPEC CHECKSUMS:
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
+  Protobuf: 1a37ebea1338949e9ac35a3f06e80b3f536eec8d
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
@@ -262,8 +262,8 @@ SPEC CHECKSUMS:
   TIoTLinkKit_IJKPlayer: e47c3fed6b204e7544f84a24310cab7a372854d1
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
-  TIoTLinkThirdPartyKit: 097ce7631d6bb13bcb90a0319d4ac5ca360ee012
-  TIoTLinkVideo: e17a950ec65815269b5695f239e7f245fb27b375
+  TIoTLinkKit_XP2P: 81481cd6d1b16e156cd3a96300601bde8737a341
+  TIoTLinkVideo: 2e2632095bae0cb7c03d764bddd5d4827906a6f8
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
