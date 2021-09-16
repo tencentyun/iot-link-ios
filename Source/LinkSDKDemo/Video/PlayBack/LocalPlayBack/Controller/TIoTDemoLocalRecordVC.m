@@ -523,6 +523,42 @@ static NSString *const kLive = @"ipc.flv?action=live";
     });
 }
 
+/// MARK: 发送暂停或继续播放信令
+- (void)sendPauseOrResumeSignallingWithSwitch:(BOOL)isPause {
+    NSString *channel = @"0";
+    if (self.isNVR == YES) {
+        channel = self.deviceModel.Channel?:@"";
+    }else {
+        channel = @"0";
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_pause",channel];
+        if (isPause == NO) {
+            actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_resume",channel];
+        }
+
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            
+            TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
+            if ([responseModel.status isEqualToString:@"0"]) {
+                
+                if (isPause == YES) {
+                    // 暂停
+                    [self pauseVideo];
+                }else {
+                    // 继续播放
+                    [self resumeVideo];
+                }
+                
+            }else {
+                //设备状态异常提示
+                [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+            }
+        }];
+    });
+}
+
 /// MARK:开启设备
 - (void)setVieoPlayerStartPlay {
     
@@ -725,17 +761,20 @@ static NSString *const kLive = @"ipc.flv?action=live";
     if (self.customControlVidwoView.hidden == YES ) {
         
         if (!button.selected) {
-            [self pauseVideo];
+//            [self pauseVideo];
+            [self sendPauseOrResumeSignallingWithSwitch:YES];
         }
         button.selected = !button.selected;
         
     }else if (self.customControlVidwoView.hidden == NO) {
         
         if (!button.selected) {
-            [self pauseVideo];
+//            [self pauseVideo];
+            [self sendPauseOrResumeSignallingWithSwitch:YES];
         }else {
             
-            [self resumeVideo];
+//            [self resumeVideo];
+            [self sendPauseOrResumeSignallingWithSwitch:NO];
         }
         
         button.selected = !button.selected;
@@ -954,7 +993,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }
     self.isPause = NO;
     self.player.currentPlaybackTime = self.currentTime;
-    [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.player.currentPlaybackTime];
+    [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:currentTimeModel.StartTime.integerValue];
     
 //    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
     [self seekDesignatedPointWithCurrentTime:currentTimeModel.StartTime selectedTimeMoel:currentTimeModel isChangeModel:NO];
