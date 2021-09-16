@@ -6,14 +6,12 @@
 
 #import "TIoTDemoCalendarCustomView.h"
 #import "UIView+TIoTViewExtension.h"
-#import "TIoTCustomCalendar.h"
 #import "NSDate+TIoTCustomCalendar.h"
 
 @interface TIoTDemoCalendarCustomView ()
 @property (nonatomic, strong) NSString *dayDateString;
 @property (nonatomic, strong) UIView *maskView; //背景遮罩
 @property (nonatomic, strong) UIView *contentView; //背景view
-@property (nonatomic, strong) TIoTCustomCalendar *calendarView; //日历控件view
 @property (nonatomic, assign) CGFloat kActionBottonHeight;
 @property (nonatomic, strong) NSString *defaultDateString;
 @end
@@ -81,6 +79,14 @@
         weakSelf.dayDateString = dateString;
         
     };
+    
+    self.calendarView.choiceMonthBlock = ^NSArray *_Nonnull(NSString * _Nonnull dateString){
+        if (weakSelf.monthBlock) {
+            weakSelf.monthBlock(weakSelf,dateString);
+        }
+        return weakSelf.calendarDateArray;
+    };
+    
     
     //取消、确认按钮底层view
     UIView *buttonView = [[UIView alloc]init];

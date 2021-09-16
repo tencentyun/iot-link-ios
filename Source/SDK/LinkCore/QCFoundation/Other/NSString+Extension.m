@@ -907,4 +907,28 @@
     }
     return hexStr;
 }
+
+//十进制转二进制
++ (NSString *)getBinaryByDecimal:(NSInteger)decimalism {
+    NSString *binary = @"";
+        while (decimalism) {
+            
+            binary = [[NSString stringWithFormat:@"%ld", decimalism % 2] stringByAppendingString:binary];
+            if (decimalism / 2 < 1) {
+                
+                break;
+            }
+            decimalism = decimalism / 2 ;
+        }
+        if (binary.length % 4 != 0) {
+            
+            NSMutableString *mStr = [[NSMutableString alloc]init];;
+            for (int i = 0; i < 4 - binary.length % 4; i++) {
+                
+                [mStr appendString:@"0"];
+            }
+            binary = [mStr stringByAppendingString:binary];
+        }
+        return binary;
+}
 @end
