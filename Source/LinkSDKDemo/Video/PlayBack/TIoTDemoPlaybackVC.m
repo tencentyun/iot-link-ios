@@ -23,6 +23,13 @@
     [self initSubViews];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.playerReloadBlock) {
+        self.playerReloadBlock();
+    }
+}
+
 - (void)initSubViews {
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"回放";
@@ -83,6 +90,12 @@
         
         cloudStorageVC.title = @"云记录";
         localRecordVC.title = @"本地记录";
+        
+        cloudStorageVC.deviceModel = self.deviceModel;
+        localRecordVC.deviceModel = self.deviceModel;
+        localRecordVC.isNVR = self.isNVR;
+        localRecordVC.deviceName = self.deviceName;
+        
         _childControllers = @[cloudStorageVC,localRecordVC];
     }
     return _childControllers;
