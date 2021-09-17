@@ -375,9 +375,9 @@ static NSString *const kLive = @"ipc.flv?action=live";
                             weakSelf.timer = nil;
                         }
                     }
-                    if (weakSelf.player.isPlaying == NO) {
-                        [weakSelf tapVideoView:weakSelf.playPauseBtn];
-                    }
+//                    if (weakSelf.player.isPlaying == NO) {
+//                        [weakSelf tapVideoView:weakSelf.playPauseBtn];
+//                    }
                     [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:videoPlayStart.integerValue];
                     [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
                 }
@@ -600,6 +600,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             }else {
                 //设备状态异常提示
                 [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+                [MBProgressHUD dismissInView:self.view];
             }
         }];
     });
@@ -804,6 +805,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
 ///MARK: 控制栏隐藏状态下tap Video时响应
 - (void)tapVideoView:(UIButton *)button {
     
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
+    
     if (self.customControlVidwoView.hidden == YES ) {
         
         if (!button.selected) {
@@ -843,6 +846,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }
     self.currentTime = self.slider.value;
     self.isPause = NO;
+    
+    [MBProgressHUD dismissInView:self.view];
 }
 
 - (void)resumeVideo {
@@ -856,6 +861,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
         self.isTimerSuspend = NO;
     }
     self.isPause = YES;
+    
+    [MBProgressHUD dismissInView:self.view];
 }
 ///MARK:播放视频按钮方法
 - (void)playVideo:(UIButton *)button {
@@ -1035,7 +1042,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.scrollDuraionTime = self.currentTime;
     self.isHidePlayBtn = YES;
     if (self.player.isPlaying == NO) {
-        [self tapVideoView:self.playPauseBtn];
+//        [self tapVideoView:self.playPauseBtn];le
     }
     self.isPause = NO;
     self.player.currentPlaybackTime = self.currentTime;
