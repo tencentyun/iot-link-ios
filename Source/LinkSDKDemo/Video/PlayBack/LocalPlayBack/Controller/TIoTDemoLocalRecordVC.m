@@ -129,6 +129,11 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
     self.stopNumber = 0;
+    
+    [self closeTime];
+    
+    [self tapVideoView:self.playPauseBtn];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -154,6 +159,14 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //    [self.player shutdown];
 //    [self removeMovieNotificationObservers];
     
+//    [self clearMessage];
+    
+    if (self.player.isPlaying == YES) {
+        [self tapVideoView:self.playPauseBtn];
+    }
+}
+
+- (void)clearMessage {
     [self.imageView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIView *view = obj;
         [view removeFromSuperview];
@@ -1209,7 +1222,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 }
 
 #pragma mark -IJKPlayer
-- (void)loadStateDidChange:(NSNotification*)notification
+- (void)localLoadStateDidChange:(NSNotification*)notification
 {
     //    MPMovieLoadStateUnknown        = 0,
     //    MPMovieLoadStatePlayable       = 1 << 0,
@@ -1230,7 +1243,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }
 }
 
-- (void)moviePlayBackStateDidChange:(NSNotification*)notification
+- (void)localMoviePlayBackStateDidChange:(NSNotification*)notification
 {
     //    MPMoviePlaybackStateStopped,
     //    MPMoviePlaybackStatePlaying,
@@ -1333,7 +1346,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
                 //起始时间等于duration
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
                 weakSelf.currentLabel.text = weakSelf.totalLabel.text;
-//                DDLogDebug(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%ld----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue,self.player.playableDuration);
             });
             
         }else{
@@ -1342,7 +1354,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
                 weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)time/60,(NSInteger)time%60];
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
                 weakSelf.slider.value = time;
-//                DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%ld----playduratio:%f",self.slider.value,self.player.currentPlaybackTime,self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue,self.player.playableDuration);
             });
             time++;
             
@@ -1351,7 +1362,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     dispatch_resume(weakSelf.timer);
 }
 
-- (void)moviePlayBackDidFinish:(NSNotification*)notification
+- (void)localMoviePlayBackDidFinish:(NSNotification*)notification
 {
     int reason = [[[notification userInfo] valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
 
@@ -1382,28 +1393,28 @@ static NSString *const kLive = @"ipc.flv?action=live";
 -(void)installMovieNotificationObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(moviePlayBackDidFinish:)
+                                             selector:@selector(localMoviePlayBackDidFinish:)
                                                  name:IJKMPMoviePlayerPlaybackDidFinishNotification
                                                object:_player];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(moviePlayBackStateDidChange:)
+                                             selector:@selector(localMoviePlayBackStateDidChange:)
                                                  name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
                                                object:_player];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loadStateDidChange:)
+                                             selector:@selector(localLoadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                object:_player];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseP2PdisConnect:)
+                                             selector:@selector(responseLocalP2PdisConnect:)
                                                  name:@"xp2disconnect"
                                                object:nil];
 
 }
 
-- (void)responseP2PdisConnect:(NSNotification *)notify {
+- (void)responseLocalP2PdisConnect:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     NSString *selectedName = self.deviceName?:@"";
     

@@ -13,6 +13,8 @@
 @interface TIoTDemoPlaybackVC ()<CMPageTitleViewDelegate>
 @property (nonatomic, strong) CMPageTitleView *pageView;
 @property (nonatomic, strong) NSArray *childControllers;
+@property (nonatomic, strong) TIoTCloudStorageVC *cloudStorageVC;
+@property (nonatomic, strong) TIoTDemoLocalRecordVC *localRecordVC;
 @end
 
 @implementation TIoTDemoPlaybackVC
@@ -21,6 +23,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initSubViews];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.playerReloadBlock) {
+        self.playerReloadBlock();
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.cloudStorageVC clearMessage];
+    
+    [self.localRecordVC clearMessage];
+
 }
 
 - (void)initSubViews {
@@ -78,12 +95,19 @@
 - (NSArray *)childControllers {
     if (!_childControllers) {
         
-        TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-        TIoTDemoLocalRecordVC *localRecordVC = [[TIoTDemoLocalRecordVC alloc]init];
+        self.cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
+        self.localRecordVC = [[TIoTDemoLocalRecordVC alloc]init];
         
-        cloudStorageVC.title = @"云记录";
-        localRecordVC.title = @"本地记录";
-        _childControllers = @[cloudStorageVC,localRecordVC];
+        self.cloudStorageVC.title = @"云记录";
+        self.localRecordVC.title = @"本地记录";
+        
+        self.cloudStorageVC.deviceModel = self.deviceModel;
+        self.cloudStorageVC.eventItemModel = self.eventItemModel;
+        self.localRecordVC.deviceModel = self.deviceModel;
+        self.localRecordVC.isNVR = self.isNVR;
+        self.localRecordVC.deviceName = self.deviceName;
+        
+        _childControllers = @[self.cloudStorageVC,self.localRecordVC];
     }
     return _childControllers;
 }
