@@ -37,10 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
 
 - (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd;
-- (void)stopAvRecvService:(NSString *)dev_name;
+- (XP2PErrCode)stopAvRecvService:(NSString *)dev_name;
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
-- (void)stopVoiceToServer;
+- (XP2PErrCode)stopVoiceToServer;
 
 - (void)stopService:(NSString *)dev_name;
 @end

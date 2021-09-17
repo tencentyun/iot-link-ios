@@ -164,8 +164,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     startAvRecvService(dev_name.UTF8String, cmd.UTF8String, false);
 }
 
-- (void)stopAvRecvService:(NSString *)dev_name {
-    stopAvRecvService(dev_name.UTF8String, nullptr);
+- (XP2PErrCode)stopAvRecvService:(NSString *)dev_name {
+    return (XP2PErrCode)stopAvRecvService(dev_name.UTF8String, nullptr);
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
@@ -185,13 +185,13 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     [systemAvCapture startCapture];
 }
 
-- (void)stopVoiceToServer {
+- (XP2PErrCode)stopVoiceToServer {
     self.isSending = NO;
     
     [systemAvCapture stopCapture];
     systemAvCapture.delegate = nil;
     
-    stopSendService(self.dev_name.UTF8String, nullptr);
+    return (XP2PErrCode)stopSendService(self.dev_name.UTF8String, nullptr);
 }
 
 - (void)stopService:(NSString *)dev_name {
