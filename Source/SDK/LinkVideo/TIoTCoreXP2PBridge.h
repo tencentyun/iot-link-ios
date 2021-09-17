@@ -67,13 +67,13 @@ NS_ASSUME_NONNULL_BEGIN
  * 开始停止裸流传输接口，通过代理 getVideoPacket 返回裸流数据
  */
 - (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd;
-- (void)stopAvRecvService:(NSString *)dev_name;
+- (XP2PErrCode)stopAvRecvService:(NSString *)dev_name;
 
 /*
  * 语音对讲开始结束接口
  */
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
-- (void)stopVoiceToServer;
+- (XP2PErrCode)stopVoiceToServer;
 
 /*
  * 退出 SDK 服务
