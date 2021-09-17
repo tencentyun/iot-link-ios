@@ -21,6 +21,7 @@
 #import "NSObject+additions.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
+#import "TIoTDemoPlaybackVC.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -568,16 +569,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 ///MARK: 回放
 - (void)clickPlayback:(UIButton *)button {
-    TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-    cloudStorageVC.deviceModel = self.selectedModel;
-    cloudStorageVC.playerReloadBlock = ^{
-        
+    
+    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.deviceModel = self.selectedModel;
+    playBackVC.isNVR = self.isNVR;
+    playBackVC.deviceName = self.deviceName;
+    playBackVC.playerReloadBlock = ^{
         [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
-    [self.navigationController pushViewController:cloudStorageVC animated:YES];
-    
-    
+    [self.navigationController pushViewController:playBackVC animated:YES];
 }
 ///MARK: 录像
 - (void)clickVideoBtn:(UIButton *)button {
@@ -917,14 +918,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //跳转回看页面，并播放当前选中事件视频，滚动条滑动相应位置
     TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
-    TIoTCloudStorageVC *cloudStoreVC = [[TIoTCloudStorageVC alloc]init];
-    cloudStoreVC.eventItemModel = itemModel;
-    cloudStoreVC.deviceModel = self.selectedModel;
-    cloudStoreVC.playerReloadBlock = ^{
+    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.eventItemModel = itemModel;
+    playBackVC.deviceModel = self.selectedModel;
+    playBackVC.isNVR = self.isNVR;
+    playBackVC.deviceName = self.deviceName;
+    playBackVC.playerReloadBlock = ^{
         [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
-    [self.navigationController pushViewController:cloudStoreVC animated:YES];
+    [self.navigationController pushViewController:playBackVC animated:YES];
 }
 
 #pragma mark -IJKPlayer
