@@ -20,6 +20,16 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self initVideoUI];
+    
+    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    UILabel *versionLB = [[UILabel alloc]init];
+    versionLB.text = [NSString stringWithFormat:@"%@",appVersion];
+    [self.view addSubview:versionLB];
+    [versionLB mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).offset(-16);
+        make.left.equalTo(self.view).offset(16);
+    }];
+    
 }
 
 - (void)initVideoUI {
