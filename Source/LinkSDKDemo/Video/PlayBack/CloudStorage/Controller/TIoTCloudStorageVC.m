@@ -114,6 +114,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [super viewWillAppear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
+    [MBProgressHUD dismissInView:self.view];
+    
     [self closeTime];
     
     [self tapCloudVideoView:self.playPauseBtn];
@@ -773,7 +775,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.pauseTipView.hidden = YES;
     [self.playBtn setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
     [self.cloudPlayer play];
-    if (self.cloudTimer) {
+    if (self.cloudTimer && self.cloudIsTimerSuspend != NO) {
         dispatch_resume(self.cloudTimer);
         self.cloudIsTimerSuspend = NO;
     }

@@ -1053,35 +1053,39 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)refushVideo:(NSNotification *)notify {
-    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    NSString *selectedName = self.deviceName?:@"";
     
-    if (![DeviceName isEqualToString:selectedName]) {
-        return;
+    UIViewController *view = [self getCurrentViewController];
+    if ([view isMemberOfClass:[TIoTDemoPreviewDeviceVC class]]) {
+        NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+        NSString *selectedName = self.deviceName?:@"";
+        
+        if (![DeviceName isEqualToString:selectedName]) {
+            return;
+        }
+        
+        [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+        
+        //计算IPC打洞时间
+        self.endIpcP2P = CACurrentMediaTime();
+        
+        //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+        // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
+        /*
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+             
+             self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+             
+             [self configVideo];
+             [self.player prepareToPlay];
+             [self.player play];
+             
+             self.startPlayer = CACurrentMediaTime();
+         });
+         */
+        
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
-    
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
-    
-    //计算IPC打洞时间
-    self.endIpcP2P = CACurrentMediaTime();
-    
-    //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-    // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
-    /*
-     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-         
-         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-         
-         [self configVideo];
-         [self.player prepareToPlay];
-         [self.player play];
-         
-         self.startPlayer = CACurrentMediaTime();
-     });
-     */
-    
-    [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -1428,6 +1432,47 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         _dataArray = [[NSMutableArray alloc]init];
     }
     return _dataArray;
+}
+
+- (UIViewController *)getCurrentViewController
+{
+    UIViewController* currentViewController = [self getRootViewController];
+    BOOL runLoopFind = YES;
+    while (runLoopFind) {
+        if (currentViewController.presentedViewController) {
+
+            currentViewController = currentViewController.presentedViewController;
+        } else if ([currentViewController isKindOfClass:[UINavigationController class]]) {
+
+          UINavigationController* navigationController = (UINavigationController* )currentViewController;
+            currentViewController = [navigationController.childViewControllers lastObject];
+
+        } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
+
+          UITabBarController* tabBarController = (UITabBarController* )currentViewController;
+            currentViewController = tabBarController.selectedViewController;
+        } else {
+            NSUInteger childViewControllerCount = currentViewController.childViewControllers.count;
+                    if (childViewControllerCount > 0) {
+
+                        currentViewController = currentViewController.childViewControllers.lastObject;
+
+                        return currentViewController;
+                    } else {
+
+                        return currentViewController;
+                    }
+                }
+
+            }
+            return currentViewController;
+}
+
+- (UIViewController *)getRootViewController{
+
+    UIWindow* window = [[[UIApplication sharedApplication] delegate] window];
+    NSAssert(window, @"The window is empty");
+    return window.rootViewController;
 }
 /*
 #pragma mark - Navigation

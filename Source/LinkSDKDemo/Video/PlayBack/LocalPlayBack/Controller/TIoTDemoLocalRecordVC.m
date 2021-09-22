@@ -128,6 +128,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
     [super viewWillAppear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
+    [MBProgressHUD dismissInView:self.view];
+    
     self.stopNumber = 0;
     
     [self closeTime];
@@ -869,7 +871,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.pauseTipView.hidden = YES;
     [self.playBtn setImage:[UIImage imageNamed:@"play_control"] forState:UIControlStateNormal];
     [self.player play];
-    if (self.timer) {
+    if (self.timer && self.isTimerSuspend != NO) {
         dispatch_resume(self.timer);
         self.isTimerSuspend = NO;
     }
@@ -1313,7 +1315,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }
     }
     
-    if (self.timer != nil) {
+    if (self.timer != nil && self.isTimerSuspend != YES) {
         dispatch_source_cancel(self.timer);
         self.timer = nil;
     }
@@ -1360,6 +1362,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }
     });
     dispatch_resume(weakSelf.timer);
+    weakSelf.isTimerSuspend = NO;
 }
 
 - (void)localMoviePlayBackDidFinish:(NSNotification*)notification
@@ -1406,12 +1409,31 @@ static NSString *const kLive = @"ipc.flv?action=live";
                                              selector:@selector(localLoadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                object:_player];
-    
+    if (self.isNVR == NO) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refushlocalVideo:)
+                                                     name:@"xp2preconnect"
+                                                   object:nil];
+        
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(responseLocalP2PdisConnect:)
                                                  name:@"xp2disconnect"
                                                object:nil];
 
+}
+
+- (void)refushlocalVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    
+    [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",self.currentTime] selectedTimeMoel:nil isChangeModel:NO];
 }
 
 - (void)responseLocalP2PdisConnect:(NSNotification *)notify {
@@ -1440,6 +1462,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
