@@ -118,7 +118,18 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     [self closeTime];
     
-    [self tapCloudVideoView:self.playPauseBtn];
+    //切换云存和本地录像时，起始时间丢失，需重新赋值
+    if ([self.currentLabel.text isEqualToString:@"00:00"] && (self.slider.value == 0.0)) {
+        self.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",self.currentTime/60,self.currentTime%60];
+        self.slider.minimumValue = 0;
+        self.slider.maximumValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
+        self.slider.value = self.currentTime;
+    }
+    
+    if (!self.playPauseBtn.selected) {
+        [self tapCloudVideoView:self.playPauseBtn];
+    }
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -1205,7 +1216,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }
     }
     
-    if (self.cloudTimer != nil) {
+    if (self.cloudTimer != nil && self.cloudIsTimerSuspend != YES) {
         dispatch_source_cancel(self.cloudTimer);
         self.cloudTimer = nil;
     }
@@ -1243,7 +1254,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         }else{
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)self.cloudPlayer.currentPlaybackTime/60,(NSInteger)self.cloudPlayer.currentPlaybackTime%60];
+                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
                 weakSelf.slider.value = time;
                 DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.cloudPlayer.currentPlaybackTime,self.cloudPlayer.duration,self.cloudPlayer.playableDuration);

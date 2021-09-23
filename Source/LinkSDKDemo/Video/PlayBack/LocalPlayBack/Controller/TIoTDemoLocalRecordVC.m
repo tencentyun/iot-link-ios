@@ -64,7 +64,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 @property (nonatomic, assign) CGFloat kScrollContentWidth; // 总长度
 @property (nonatomic, assign) CGFloat kSliderHeight; //自定义slider高度
 
-@property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceDateView; //自定义滚动条
+@property (nonatomic, strong) TIoTDemoCustomChoiceDateView *choiceLocalDateView; //自定义滚动条
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray; //云存事件列表数组
 @property (nonatomic, strong) NSArray *cloudStoreDateList;
@@ -89,6 +89,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 @property (nonatomic, assign) NSInteger stopNumber; //视频播放结束后，stop连续调2遍累计变量
 
 @property (nonatomic, strong) TIoTDemoCalendarCustomView *tempCustomView;
+@property (nonatomic, assign) BOOL isReAppearPause; //标记切换云存和本地录像
 @end
 
 @implementation TIoTDemoLocalRecordVC
@@ -134,8 +135,16 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     [self closeTime];
     
-    [self tapVideoView:self.playPauseBtn];
+    if (!self.playPauseBtn.selected) {
+        [self tapVideoView:self.playPauseBtn];
+    }
     
+    if ([self.currentLabel.text isEqualToString:@"00:00"] && (self.slider.value == 0.0)) {
+        self.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",self.currentTime/60,self.currentTime%60];
+        self.slider.minimumValue = 0;
+        self.slider.maximumValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
+        self.slider.value = self.currentTime;
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -150,6 +159,12 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     self.stopNumber = 0;
     
+    if (self.player.isPlaying == YES) {
+        [self tapVideoView:self.playPauseBtn];
+    }
+    
+    self.isReAppearPause = YES;
+    
     if (self.playerReloadBlock) {
         self.playerReloadBlock();
     }
@@ -162,10 +177,6 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //    [self removeMovieNotificationObservers];
     
 //    [self clearMessage];
-    
-    if (self.player.isPlaying == YES) {
-        [self tapVideoView:self.playPauseBtn];
-    }
 }
 
 - (void)clearMessage {
@@ -248,9 +259,9 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     __weak typeof(self) weakSelf = self;
-    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116)];
+    self.choiceLocalDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116)];
     //从日历中选日期
-    self.choiceDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
+    self.choiceLocalDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
         
         TIoTDemoCalendarCustomView *calendarView = [[TIoTDemoCalendarCustomView alloc]init];
         //获取云存时间传给日历 此处为当前月云存日期数组
@@ -258,7 +269,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         
         calendarView.choickDayDateBlock = ^(NSString * _Nonnull dayDateString) {
             //更新选择日期时间，并重新请求云存列表刷新UI
-            [weakSelf.choiceDateView resetSelectedDate:dayDateString];
+            [weakSelf.choiceLocalDateView resetSelectedDate:dayDateString];
             weakSelf.currentDayTime = dayDateString?:weakSelf.currentDayTime;
             //刷新云存事件列表和一天时间抽
             weakSelf.currentTime = 0;
@@ -287,7 +298,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         
     };
     //选择之前事件，获取开始/结束时间戳
-    self.choiceDateView.previousDateBlcok = ^(TIoTTimeModel * _Nonnull preTimeModel) {
+    self.choiceLocalDateView.previousDateBlcok = ^(TIoTTimeModel * _Nonnull preTimeModel) {
         if (preTimeModel != nil) {
             //关闭定时器
             [weakSelf closeTime];
@@ -312,7 +323,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         
     };
     //选择下一个事件，获取开始/结束时间戳
-    self.choiceDateView.nextDateBlcok = ^(TIoTTimeModel * _Nonnull nextTimeModel) {
+    self.choiceLocalDateView.nextDateBlcok = ^(TIoTTimeModel * _Nonnull nextTimeModel) {
         if (nextTimeModel!= nil) {
             //关闭定时器
             [weakSelf closeTime];
@@ -336,7 +347,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }
     };
     //滑动停止后，获取当前值所在事件开始/结束时间戳
-    self.choiceDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
+    self.choiceLocalDateView.timeModelBlock = ^(TIoTTimeModel * _Nonnull selectedTimeModel, CGFloat startTimestamp) {
         DDLogVerbose(@"startStamp--%f----%f",startTimestamp,selectedTimeModel.startTime);
         if (startTimestamp == -1) {
             
@@ -393,7 +404,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //                    if (weakSelf.player.isPlaying == NO) {
 //                        [weakSelf tapVideoView:weakSelf.playPauseBtn];
 //                    }
-                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:videoPlayStart.integerValue];
+                    [weakSelf startPlayLocalVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:videoPlayStart.integerValue];
                     [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
                 }
                 
@@ -407,7 +418,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }
         
     };
-    [self.view addSubview:self.choiceDateView];
+    [self.view addSubview:self.choiceLocalDateView];
     
     /*
     self.tableView = [[UITableView alloc]init];
@@ -508,7 +519,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 
             [self recombineTimeSegmentWithTimeArray:self.timeList];
 
-            self.choiceDateView.videoTimeSegmentArray = self.modelArray;
+            self.choiceLocalDateView.videoTimeSegmentArray = self.modelArray;
             
             if (self.eventItemModel != nil) {
                 self.currentTime = 0;
@@ -538,7 +549,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
                     self.videoTimeModel.EndTime = model.EndTime;
                     
                     // 滚动到第一段视频起始位置开始播放
-                    self.choiceDateView.nextDateBlcok(timeModel);
+                    self.choiceLocalDateView.nextDateBlcok(timeModel);
 //                    [self setVieoPlayerStartPlay];
                 }
             }
@@ -715,7 +726,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 ///MARK: viewarray 约束更新适配屏幕
 - (void)resetScreenSubviewsWithLandscape:(BOOL)rotation {
     if (rotation == YES) { //横屏
-        self.choiceDateView.hidden = YES;
+        self.choiceLocalDateView.hidden = YES;
         self.tableView.hidden = YES;
         self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -724,7 +735,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             make.top.bottom.equalTo(self.view);
         }];
     }else { //竖屏
-        self.choiceDateView.hidden = NO;
+        self.choiceLocalDateView.hidden = NO;
         self.tableView.hidden = NO;
         self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
@@ -739,14 +750,14 @@ static NSString *const kLive = @"ipc.flv?action=live";
             }
         }];
         
-        [self.choiceDateView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.choiceLocalDateView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.imageView.mas_bottom);
             make.width.mas_equalTo(kScreenWidth);
             make.height.mas_equalTo(116);
         }];
         
         [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.choiceDateView.mas_bottom).offset(kPadding);
+            make.top.equalTo(self.choiceLocalDateView.mas_bottom).offset(kPadding);
             make.left.right.bottom.equalTo(self.view);
         }];
     }
@@ -838,7 +849,14 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }else {
             
 //            [self resumeVideo];
-            [self sendPauseOrResumeSignallingWithSwitch:NO];
+            
+            if (self.isReAppearPause == YES) {
+                //切换云存和本地tap时，player 进度条重新计算
+                [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",(long)self.currentTime] selectedTimeMoel:self.videoTimeModel isChangeModel:YES];
+            }else {
+                [self sendPauseOrResumeSignallingWithSwitch:NO];
+            }
+            self.isReAppearPause = NO;
         }
         
         button.selected = !button.selected;
@@ -1061,7 +1079,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }
     self.isPause = NO;
     self.player.currentPlaybackTime = self.currentTime;
-    [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:currentTimeModel.StartTime.integerValue];
+    [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.player.currentPlaybackTime];
     
 //    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
     [self seekDesignatedPointWithCurrentTime:currentTimeModel.StartTime selectedTimeMoel:currentTimeModel isChangeModel:NO];
@@ -1220,7 +1238,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     NSInteger kItemWith = 60;
     NSInteger startSecondNum = [self captureTimestampWithOutDaySecound:timeModel.StartTime.floatValue];
     CGFloat scrollOffsetX = (startSecondNum)/(secondsNumber/(kItemWith*24));
-    [self.choiceDateView  setScrollViewContentOffsetX:scrollOffsetX currtentSecond:startSecondNum];
+    [self.choiceLocalDateView  setScrollViewContentOffsetX:scrollOffsetX currtentSecond:startSecondNum];
 }
 
 #pragma mark -IJKPlayer
@@ -1276,10 +1294,10 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //            if (self.isPause == NO) {
 //                self.player.currentPlaybackTime = self.currentTime;
 //            }
-//            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+//            [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+                [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             });
             [MBProgressHUD dismissInView:self.view];
             break;
@@ -1306,7 +1324,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 }
 
 //计时器
-- (void)startPlayVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
+- (void)startPlayLocalVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
     
     if (self.timer) {
         if (self.isTimerSuspend == YES) {
