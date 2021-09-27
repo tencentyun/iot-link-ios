@@ -584,6 +584,12 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.isInnerScroll = NO;
     self.cloudIsPause = NO;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
+    
+    if ([selectedModel.EndTime integerValue] == 0) {
+        NSString *currentStamp = [NSString getNowTimeString];
+        selectedModel.EndTime = currentStamp; //防止设备云存事件未上报结束时间，导致为0无法播放
+    }
+    
     [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
     [self setScrollOffsetWith:selectedModel];
 }
