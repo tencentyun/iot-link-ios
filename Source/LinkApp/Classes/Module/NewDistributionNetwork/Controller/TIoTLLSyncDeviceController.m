@@ -257,6 +257,18 @@
             ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
             [self nextUIStep:nil];
         }
+//        NSString *andomNum = [NSString stringWithFormat:@"%u",arc4random()];
+//        NSString *tempTime = [NSString getNowTimeString];
+//        NSString *writeInfo = [NSString stringWithFormat:@"000008%@%@",[NSString getHexByDecimal:andomNum.integerValue],[NSString getHexByDecimal:tempTime.integerValue]];
+//        for (CBCharacteristic *characteristic in service.characteristics) {
+//            NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
+//            if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
+//                
+//                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo];
+//                
+//            }
+//        }
+        
     }
 }
 
@@ -335,6 +347,8 @@
             NSDictionary *deviceData = @{@"productId": self.currentProductId, @"deviceName": self.currentDevicename};
             [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
             
+        }else if ([cmdtype isEqualToString:@"05"]){
+ 
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
