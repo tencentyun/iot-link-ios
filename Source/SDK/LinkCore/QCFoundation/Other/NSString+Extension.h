@@ -124,6 +124,11 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
 + (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data;
 
+// MD5加密  32位 大写
++ (NSString *)MD5ForUpper32Bate:(NSString *)string;
+//小写
++ (NSString *)MD5ForLower32Bate:(NSString *)string;
+
 /// 获取网关
 + (NSString *)getGateway;
 
@@ -157,6 +162,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //十进制转二进制
 + (NSString *)getBinaryByDecimal:(NSInteger)decimalism;
+
+//16进制字符串逆序
++ (NSString *)reverseWordsInString:(NSString *)oldString;
 @end
 
 NS_ASSUME_NONNULL_END

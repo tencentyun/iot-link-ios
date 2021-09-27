@@ -110,6 +110,9 @@ FOUNDATION_EXPORT NSString *const AppBindSubDeviceInFamily;//绑定子设备
 
 FOUNDATION_EXPORT NSString *const AppGetVirtualBindDeviceList;//APP拉用户绑定设备列表
 
+//MARK: LLSync
+FOUNDATION_EXPORT NSString *const AppGetDeviceConfig;//读取用户设备的私有信息 (psk)
+
 //MARK: 设备定时
 
 FOUNDATION_EXPORT NSString *const AppGetTimerList;//获取定时任务列表
