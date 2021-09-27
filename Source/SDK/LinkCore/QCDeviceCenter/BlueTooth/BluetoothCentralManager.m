@@ -10,10 +10,12 @@
 
 //服务UUID
 #define kServiceUUID    @"FFF0"
+#define kLLSyncServiceUUID    @"FFE0"
 
 // LLSync
 #define kLLSyncService16    @"0000FFF0-0000-1000-8000-00805F9B34FB"
 #define kLLSyncService128   @"0000FFF0-65D0-4E20-B56A-E493541BA4E2"
+#define kNewLLSyncService128   @"0000FFE0-65D0-4E20-B56A-E493541BA4E2"
 
 //特征UUID
 #define kLLSyncCharactUUID_DEVICE_INFO_WRITE_ID    @"0000FFE1-65D0-4E20-B56A-E493541BA4E2"
@@ -147,7 +149,7 @@
         [self performSelector:@selector(stopScan) withObject:nil afterDelay:5.0];
         
         //搜索和获取服务的serviceId不一样，搜索是16bit，服务都是需要128bit的serviceId
-        [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kServiceUUID]] options:nil];
+        [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kServiceUUID],[CBUUID UUIDWithString:kLLSyncServiceUUID]] options:nil];
 //        [self.centralManager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@(YES)}];
     }
 }
@@ -271,6 +273,12 @@
     }
 }
 
+- (void)sendNewLLSynvWithPeripheral:(CBPeripheral *)peripheral Characteristic:(CBCharacteristic *)characteristic LLDeviceInfo:(NSString *)type {
+    NSData *data = [NSString convertHexStrToData:type];
+    // 将指令写入蓝牙
+    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+}
+
 
 //MARK:设置蓝牙最大传输单元
 - (void)setMacTransValue:(NSInteger)maxValue {
@@ -336,7 +344,7 @@
     if (self.isLLsync) {
         NSArray *kCBAdvDataServiceUUIDs = advertisementData[@"kCBAdvDataServiceUUIDs"];
         //    CBUUID *firstsssuud = kCBAdvDataServiceUUIDs.firstObject;
-        if (![kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kServiceUUID]]) {
+        if (!([kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kServiceUUID]]) && !([kCBAdvDataServiceUUIDs containsObject:[CBUUID UUIDWithString:kLLSyncServiceUUID]])) {
             return;
         }
     }
@@ -551,7 +559,7 @@
 //        }
         
         //扫描服务中的所有特征
-        if ([service.UUID isEqual:[CBUUID UUIDWithString:kLLSyncService128]]) {
+        if ([service.UUID isEqual:[CBUUID UUIDWithString:kLLSyncService128]] || [service.UUID isEqual:[CBUUID UUIDWithString:kNewLLSyncService128]]) {
             [peripheral discoverCharacteristics:nil forService:service];
         }
 //        [peripheral discoverCharacteristics:nil forService:service];
