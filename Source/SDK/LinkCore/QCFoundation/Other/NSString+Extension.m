@@ -504,6 +504,36 @@
     NSString *base64DecodeStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     return base64DecodeStr;
 }
+// MD5加密  32位 大写
++ (NSString *)MD5ForUpper32Bate:(NSString *)string {
+    
+    //要进行UTF8的转码
+    const char* input = [string UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(input, (CC_LONG)strlen(input), result);
+    
+    NSMutableString *digest = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (NSInteger i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [digest appendFormat:@"%02X", result[i]];
+    }
+    
+    return digest;
+}
+//小写
++ (NSString *)MD5ForLower32Bate:(NSString *)string {
+    
+    //要进行UTF8的转码
+    const char* input = [string UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(input, (CC_LONG)strlen(input), result);
+    
+    NSMutableString *digest = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (NSInteger i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [digest appendFormat:@"%02x", result[i]];
+    }
+    
+    return digest;
+}
 
 + (BOOL)judgePassWordLegal:(NSString*)pwd{
 
@@ -930,5 +960,36 @@
             binary = [mStr stringByAppendingString:binary];
         }
         return binary;
+}
+
+//16进制字符串逆序
++ (NSString *)reverseWordsInString:(NSString *)oldString {
+    NSMutableString *newString = [NSMutableString stringWithCapacity:oldString.length];
+    NSMutableString *tempString = [NSMutableString stringWithCapacity:2];
+    
+    for (int i = (int)oldString.length - 1; i >= 0; i--) {
+        
+        unichar character = [oldString characterAtIndex:i];
+        
+        if (i%2 == 0) {
+            [tempString appendFormat:@"%c",character];
+            
+            NSMutableString *string= [[NSMutableString alloc] init];
+            
+            for(int i = 0; i < tempString.length; i++){
+                [string appendString:[tempString substringWithRange:NSMakeRange(tempString.length-i-1, 1)]];
+            }
+            
+            tempString = string;
+            
+            [newString appendFormat:@"%@",tempString];
+            [tempString deleteCharactersInRange:NSMakeRange(0, 2)];
+            
+        }else {
+            [tempString appendFormat:@"%c",character];
+        }
+        
+    }
+    return newString;
 }
 @end
