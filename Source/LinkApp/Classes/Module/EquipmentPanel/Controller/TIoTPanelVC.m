@@ -38,6 +38,10 @@
 #import "TIoTAlertView.h"
 #import "UIButton+LQRelayout.h"
 #import <QCloudNetEnv.h>
+#import "UILabel+TIoTExtension.h"
+#import "UIButton+TIoTButtonFormatter.h"
+
+#import "TIoTLLSyncDeviceConfigModel.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -46,6 +50,12 @@ static CGFloat lineSpace = 9;
 static NSString *itemId2 = @"i_ooo223";
 static NSString *itemId3 = @"i_ooo454";
 
+
+typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
+    TIoTBlueDeviceDisconnected,
+    TIoTBlueDeviceConnected,
+    TIoTBlueDeviceConnectedFail,
+};
 
 @implementation TIoTCollectionView
 
@@ -57,7 +67,7 @@ static NSString *itemId3 = @"i_ooo454";
 @end
 
 
-@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate>
+@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate,BluetoothCentralManagerDelegate>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentLogTipLabel;
 @property (nonatomic,strong) UIImageView *bgView;//背景
@@ -80,6 +90,19 @@ static NSString *itemId3 = @"i_ooo454";
 @property (nonatomic, strong) UIView *backMaskView;
 @property (nonatomic, strong) NSDictionary *reportData;
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
+
+@property (nonatomic, strong) UIView *blueConnectView; //蓝牙设备是否连接控制view
+@property (nonatomic, strong) UILabel *blueTipLabel;
+@property (nonatomic, strong) UIButton *controlBlueDeviceButton;
+@property (nonatomic, weak)BluetoothCentralManager *blueManager;
+//原始蓝牙扫描数据包含广播报文
+@property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
+@property (nonatomic, copy) NSArray<CBPeripheral *> *blueDevices;
+@property (nonatomic, strong) CBPeripheral *currentConnectedPerpheral; //当前连接的设备
+@property (nonatomic, assign) TIoTBlueDeviceConnectStatus deviceConnectStatus;
+@property (nonatomic, strong) NSString *currentProductId; //通过设备广播获取的
+@property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
+@property (nonatomic, strong) NSString *timeStampString;
 @end
 
 @implementation TIoTPanelVC
@@ -95,6 +118,7 @@ static NSString *itemId3 = @"i_ooo454";
     
     [self getProductsConfig];
     
+    [self configBlueManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -111,6 +135,35 @@ static NSString *itemId3 = @"i_ooo454";
 
 - (void)dealloc {
     [TIoTCoreUserManage shared].sys_call_status = @"-1";
+}
+
+- (void)configBlueManager {
+    self.blueManager = [BluetoothCentralManager shareBluetooth];
+    self.blueManager.delegate = self;
+    [self.blueManager disconnectPeripheral];
+    [self.blueManager scanNearLLSyncService];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.originBlueDevices) {
+            //发现设备,连接
+            if (self.blueDevices.count > 0) {
+                CBPeripheral *device = self.blueDevices[0];
+                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+                    NSString *productstr = [NSString stringFromHexString:producthex];
+                    self.currentProductId = productstr;
+                    
+                    [self.blueManager connectBluetoothPeripheral:device];
+
+                }
+            }
+        }else {
+            //需要判断是已经连接设备还是未发现设备
+            [self connectedFailBlueDeviceUI];
+        }
+    });
 }
 
 #pragma mark - UI
@@ -438,6 +491,40 @@ static NSString *itemId3 = @"i_ooo454";
     [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":@[self.productId]} success:^(id responseObject) {
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
+            //判断是否是纯蓝牙设备 llsync
+            NSString *newType = tmpArr.firstObject[@"NetType"]?:@"";
+            if ([newType isEqualToString:@"ble"]) {
+                //降低collection高度 顶部显示蓝牙连接view
+                [self.coll mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.top.mas_equalTo(46);
+                }];
+                
+                [self.view addSubview:self.blueConnectView];
+                [self.blueConnectView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self.view);
+                    if (@available(iOS 11.0, *)) {
+                        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+                    }else {
+                        make.top.equalTo(self.view.mas_top).offset(64);
+                    }
+                    make.height.mas_equalTo(46);
+                }];
+                
+                [self.blueConnectView addSubview:self.blueTipLabel];
+                [self.blueTipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.blueConnectView);
+                    make.left.equalTo(self.blueConnectView.mas_left).offset(15);
+                }];
+                
+                [self.blueConnectView addSubview:self.controlBlueDeviceButton];
+                [self.controlBlueDeviceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.blueConnectView);
+                    make.width.mas_equalTo(80);
+                    make.top.equalTo(self.blueConnectView.mas_top).offset(10);
+                    make.bottom.equalTo(self.blueConnectView.mas_bottom).offset(-10);
+                    make.right.equalTo(self.blueConnectView.mas_right).offset(-15);
+                }];
+            }
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
             NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
 
@@ -694,7 +781,212 @@ static NSString *itemId3 = @"i_ooo454";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+//连接蓝牙设备中
+- (void)connectingBlueDeviceUI {
+    [self.blueTipLabel setLabelFormateTitle:@"连接蓝牙中" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    
+//    [self.controlBlueDeviceButton setButtonFormateWithTitlt:@"断开连接" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+    
+    self.controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:kNoSelectedHexColor].CGColor;
+    
+    self.controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    
+}
+//连接蓝牙设备成功
+- (void)connectedSuccessBlueDeviceUI {
+    
+    [self.blueTipLabel setLabelFormateTitle:@"蓝牙已连接" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentLeft];
+    [self.controlBlueDeviceButton setButtonFormateWithTitlt:@"断开连接" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+    
+    self.controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:@"#ffffff"].CGColor;
+    
+    self.controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+    self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
+    
+    self.deviceConnectStatus = TIoTBlueDeviceConnected;
+}
+//蓝牙断开连接
+- (void)disconnectedBlueDeviceUI {
+    [self.blueTipLabel setLabelFormateTitle:@"蓝牙未连接" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    [self.controlBlueDeviceButton setButtonFormateWithTitlt:@"立即连接" titleColorHexString:kIntelligentMainHexColor font:[UIFont wcPfRegularFontOfSize:14]];
+    
+    self.controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:kIntelligentMainHexColor].CGColor;
+    
+    self.controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    
+    self.deviceConnectStatus = TIoTBlueDeviceDisconnected;
+}
+//无法连接蓝牙设备
+- (void)connectedFailBlueDeviceUI {
+    
+    [self.blueTipLabel setLabelFormateTitle:@"无法连接蓝牙设备" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentLeft];
+    [self.controlBlueDeviceButton setButtonFormateWithTitlt:@"重试连接" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+    
+    self.controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:@"#ffffff"].CGColor;
+    
+    self.controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+    self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+    
+    self.deviceConnectStatus = TIoTBlueDeviceConnectedFail;
+}
+//蓝牙适配器不可用(手机没开蓝牙)
+- (void)noAdaptorBlueDeviceUI {
+    [self.blueTipLabel setLabelFormateTitle:@"当前蓝牙适配器不可用" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentLeft];
+    [self.controlBlueDeviceButton setButtonFormateWithTitlt:@"重试连接" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+    
+    self.controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:@"#ffffff"].CGColor;
+    
+    self.controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+    self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kInputErrorTipHexColor];
+    
+    self.deviceConnectStatus = TIoTBlueDeviceConnectedFail;
+}
 
+///MARK:控制连接蓝牙设备按钮
+- (void)controlConnectBlueDevice:(UIButton *)button {
+    switch (self.deviceConnectStatus) {
+        case TIoTBlueDeviceConnected: {
+            //目前已连接中，点击按钮断开
+            [self.blueManager disconnectPeripheral];
+            break;
+        }
+        case TIoTBlueDeviceDisconnected: {
+            //目前未连接，点击立即连接
+            if (self.blueDevices.count > 0) {
+                CBPeripheral *device = self.blueDevices[0];
+                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+                    NSString *productstr = [NSString stringFromHexString:producthex];
+                    self.currentProductId = productstr;
+                    
+                    [self.blueManager connectBluetoothPeripheral:device];
+                    
+                }
+                
+            }else {
+                [self.blueManager scanNearLLSyncService];
+            }
+            break;
+           
+        }
+        case TIoTBlueDeviceConnectedFail: {
+            //重试,重新开始扫描外设
+            [self.blueManager scanNearLLSyncService];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+#pragma mark - BluetoothCentralManagerDelegate
+//实时扫描外设（目前扫描10s）
+- (void)scanPerpheralsUpdatePerpherals:(NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *)perphersArr {
+    self.originBlueDevices = perphersArr;
+    
+    self.blueDevices = perphersArr.allKeys;
+}
+
+//连接外设成功
+- (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
+    self.currentConnectedPerpheral = connectedPerpheral;
+    //连接蓝牙设备成功
+    [self connectedSuccessBlueDeviceUI];
+}
+//断开外设
+- (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
+    self.currentConnectedPerpheral = nil;
+    //断开蓝牙设备
+    [self disconnectedBlueDeviceUI];
+}
+
+- (void)didDiscoverCharacteristicsWithperipheral:(CBPeripheral *)peripheral ForService:(CBService *)service  {
+    [MBProgressHUD dismissInView:nil];
+    if (self.currentConnectedPerpheral) {
+        //本地计算绑定标识
+        NSString *bindID = [NSString getBindIdentifierWithProductId:self.productId deviceName:self.deviceName];
+        NSString *deviceBindId = @"";
+        //设备广播绑定标识符
+        if (self.originBlueDevices) {
+            if (self.blueDevices.count > 0) {
+                CBPeripheral *device = self.blueDevices[0];
+                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                    NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
+                    deviceBindId = [productHex uppercaseString];
+                }
+            }
+        }
+        
+        //判断绑定标识符和设备广播的是否一致
+        if ([bindID isEqualToString:deviceBindId]) {
+            for (CBCharacteristic *characteristic in service.characteristics) {
+                NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
+                //判断是否是纯蓝牙 LLSync
+                if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
+                    //LLSync
+                    
+                    self.characteristicFFE1 = characteristic;
+                    
+                    [self getLocalPskWithProductId:self.productId deviceName:self.deviceName];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+//发送数据后，蓝牙回调
+- (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
+    if (self.currentConnectedPerpheral) {
+        NSString *hexstr = [NSString transformStringWithData:characteristic.value];
+        if (hexstr.length < 2) {
+            DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
+            return;
+        }
+        NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
+        if ([cmdtype isEqualToString:@"05"]) {
+            
+        }
+    }
+}
+/// MARK: 获取local psk
+- (void)getLocalPskWithProductId:(NSString *)productId  deviceName:(NSString *)deviceName {
+    
+    [[TIoTRequestObject shared] post:AppGetDeviceConfig Param:@{@"ProductId":productId?:@"",
+                                                                @"DeviceName":deviceName?:@"",
+                                                                @"DeviceKey":@"ble_psk_device_ket",
+                                                                @"TimestampKey":@"ble_timestamp_device_ket",
+    } success:^(id responseObject) {
+        TIoTLLSyncDeviceConfigModel *model = [TIoTLLSyncDeviceConfigModel yy_modelWithJSON:responseObject];
+        DDLogVerbose(@"ble_psk_device_ket:%@",model.Configs.ble_psk_device_ket);
+        [self writeBlueDeviceInfoWithDeviceCongModel:model];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        DDLogVerbose(@"ble_psk_device_ket error:%@",dic);
+    }];
+}
+
+- (void)writeBlueDeviceInfoWithDeviceCongModel:(TIoTLLSyncDeviceConfigModel *)deviceModel {
+    NSString *psk = deviceModel.Configs.ble_psk_device_ket?:@"";
+    //TS
+    NSString *timeStamp = [NSString getNowTimeString];
+    self.timeStampString = timeStamp;
+    //10进制转16进制
+    NSString *tempTimeHex = [NSString getHexByDecimal:timeStamp.integerValue];
+    
+    //Sign info
+    NSString *timeStampSignInfo = [NSString HmacSha1_Keyhex:psk data:timeStamp];
+    
+    NSString *writeInfo = [NSString stringWithFormat:@"010018%@%@",tempTimeHex,timeStampSignInfo];
+    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+}
 #pragma mark - WCWaterFlowLayoutDelegate
 
 - (CGSize)waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -998,4 +1290,32 @@ static NSString *itemId3 = @"i_ooo454";
     return _deviceInfo;
 }
 
+- (UIView *)blueConnectView {
+    if (!_blueConnectView) {
+        _blueConnectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+        _blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    }
+    return _blueConnectView;
+}
+
+- (UILabel *)blueTipLabel {
+    if (!_blueTipLabel) {
+        _blueTipLabel = [[UILabel alloc]init];
+        [_blueTipLabel setLabelFormateTitle:@"连接蓝牙中" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    }
+    return _blueTipLabel;
+}
+
+- (UIButton *)controlBlueDeviceButton {
+    if (!_controlBlueDeviceButton) {
+        _controlBlueDeviceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_controlBlueDeviceButton setButtonFormateWithTitlt:@"" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+        _controlBlueDeviceButton.layer.borderWidth = 1;
+        _controlBlueDeviceButton.layer.cornerRadius = 10;
+        _controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:kNoSelectedHexColor].CGColor;
+        _controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+        [_controlBlueDeviceButton addTarget:self action:@selector(controlConnectBlueDevice:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _controlBlueDeviceButton;
+}
 @end
