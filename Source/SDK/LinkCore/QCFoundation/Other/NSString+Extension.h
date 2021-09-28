@@ -122,7 +122,10 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 /// HmacSha1->base64
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
+//方法是将加密结果转成了十六进制字符串了 key为String text 类型 
 + (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data;
+//将加密结果转成了十六进制字符串 key为hex 类型hash; 输入的key为16进制string
++ (NSString *)HmacSha1_Keyhex:(NSString *)key data:(NSString *)data;
 
 // MD5加密  32位 大写
 + (NSString *)MD5ForUpper32Bate:(NSString *)string;
@@ -153,6 +156,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 // 十六进制转换为普通字符串的。
 + (NSString *)stringFromHexString:(NSString *)hexString;
 
+// 十六进制转Data
++ (NSData *)dataFromHexString:(NSString *)sHex;
+
 //10进制转16进制
 + (NSString *)getHexByDecimal:(NSInteger)decimal ;
 
@@ -165,6 +171,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString;
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;
 @end
 
 NS_ASSUME_NONNULL_END

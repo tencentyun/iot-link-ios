@@ -609,7 +609,7 @@
     return hash;
 }
 
-//方法是将加密结果转成了十六进制字符串了
+//方法是将加密结果转成了十六进制字符串了 key为String text 类型
 + (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data
 {
     if ([NSString matchSinogram:data]) {
@@ -627,6 +627,46 @@
     NSString *hexString = [self hexStringFromData:HMAC];
     
     return hexString;
+}
+
+//将加密结果转成了十六进制字符串 key为hex 类型hash; 输入的key为16进制string
++ (NSString *)HmacSha1_Keyhex:(NSString *)key data:(NSString *)data
+{
+        
+        NSData *keyData = [self dataFromHexString:key];
+        
+        const char *cKey  = [keyData bytes];
+        
+        const char *cData = [data cStringUsingEncoding:NSUTF8StringEncoding];
+
+        //sha1
+        unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA1, cKey, keyData.length, cData, strlen(cData), cHMAC);
+
+        NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:sizeof(cHMAC)];
+        NSString *hexString = [self hexStringFromData:HMAC];
+        
+        return hexString;
+}
+
+// 十六进制转Data
++ (NSData *)dataFromHexString:(NSString *)sHex {
+    const char *chars = [sHex UTF8String];
+    int i = 0;
+    NSUInteger len = sHex.length;
+
+    NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
+    char byteChars[3] = {'\0','\0','\0'};
+    unsigned long wholeByte;
+
+    while (i < len) {
+        byteChars[0] = chars[i++];
+        byteChars[1] = chars[i++];
+        wholeByte = strtoul(byteChars, NULL, 16);
+        [data appendBytes:&wholeByte length:1];
+    }
+
+    return data;
 }
 
 + (NSString *)getGateway {
@@ -991,5 +1031,21 @@
         
     }
     return newString;
+}
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName {
+    
+    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",productId,deviceName];
+    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
+    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
+    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
+    
+    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
+    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
+    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
+    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
+    
+    return resuleStringHex;
 }
 @end
