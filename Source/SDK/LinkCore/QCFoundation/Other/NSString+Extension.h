@@ -165,6 +165,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString;
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;
 @end
 
 NS_ASSUME_NONNULL_END

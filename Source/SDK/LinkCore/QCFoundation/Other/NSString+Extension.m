@@ -992,4 +992,20 @@
     }
     return newString;
 }
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName {
+    
+    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",productId,deviceName];
+    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
+    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
+    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
+    
+    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
+    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
+    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
+    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
+    
+    return resuleStringHex;
+}
 @end

@@ -8,6 +8,7 @@
 #import "TIoTStepTipView.h"
 #import "TIoTLLSyncDeviceCell.h"
 #import "TIoTLLSyncViewController.h"
+#import "TIoTLLSyncDeviceConfigModel.h"
 
 @interface TIoTLLSyncDeviceController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BluetoothCentralManagerDelegate>
 
@@ -406,13 +407,15 @@
     [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:dic success:^(id responseObject) {
         DDLogVerbose(@"%@",responseObject);
         //计算绑定标识符
-        NSString *bingIDString = [self getBindIDSting];
+        NSString *bingIDString = [NSString getBindIdentifierWithProductId:self.currentProductId deviceName:self.currentDevicename];
         //获取local psk
         NSInteger random = arc4random();
         NSString *randomHex = [NSString getHexByDecimal:random];
 
         NSString *writeInfo = [NSString stringWithFormat:@"02000D02%@%@",randomHex,bingIDString];
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+        //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
+        [self uploadLocalPsk:randomHex];
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
@@ -432,20 +435,17 @@
     }];
 }
 
-/// MARK: 获取绑定标识符
-- (NSString *)getBindIDSting {
-    //计算绑定标识符
-    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",self.currentProductId,self.currentDevicename];
-    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
-    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
-    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
-    
-    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
-    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
-    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
-    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
-    
-    return resuleStringHex;
-    
+///MARK: 上传服务器local psk
+- (void)uploadLocalPsk:(NSString *)pskString {
+    NSString *deviceId = [NSString stringWithFormat:@"%@/%@",self.currentProductId?:@"",self.currentDevicename?:@""];
+    NSDictionary *dic = @{@"DeviceId":deviceId,
+                          @"DeviceKey":@"ble_psk_device_ket",
+                          @"DeviceValue":pskString?:@"",
+    };
+    [[TIoTRequestObject shared] post:AppSetDeviceConfig Param:dic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 @end
