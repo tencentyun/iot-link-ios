@@ -109,6 +109,16 @@ extern aw_flv_audio_tag *aw_sw_encoder_create_faac_specific_config_tag(){
     aw_flv_audio_tag *aac_tag = aw_sw_encoder_create_flv_audio_tag(&s_faac_ctx->config);
     aac_tag->aac_packet_type = aw_flv_a_aac_package_type_aac_sequence_header;
     
+    
+    // 添加对pcm格式封装在flv的支持
+    aac_tag->sound_format = aw_flv_a_codec_id_PCM_LE;
+    aac_tag->common_tag.header_size = 1;
+    aac_tag->sound_rate = aw_flv_a_sound_rate_44kHZ;
+    aac_tag->sound_size = aw_flv_a_sound_size_16_bit;
+    aac_tag->sound_type = aw_flv_a_sound_type_mono;// : aw_flv_a_sound_type_stereo;
+    // 添加对pcm格式封装在flv的支持
+    
+    
     aac_tag->config_record_data = copy_aw_data(s_faac_ctx->audio_specific_config_data);
     aac_tag->common_tag.timestamp = 0;
     aac_tag->common_tag.data_size = s_faac_ctx->audio_specific_config_data->size + 11 + aac_tag->common_tag.header_size;

@@ -20,6 +20,7 @@ typedef enum aw_flv_v_codec_id{
 //共13种(即sound format)，这里只用aac
 typedef enum aw_flv_a_codec_id{
     aw_flv_a_codec_id_MP3 = 2,
+    aw_flv_a_codec_id_PCM_LE = 3,
     aw_flv_a_codec_id_AAC = 10,
 } aw_flv_a_codec_id;
 
