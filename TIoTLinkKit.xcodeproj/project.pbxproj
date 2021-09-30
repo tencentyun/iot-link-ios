@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00ACEA8F26F0CC9D0055EA36 /* TIoTAllDevicesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ACEA8E26F0CC9D0055EA36 /* TIoTAllDevicesVC.m */; };
 		6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */; };
 		6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */; };
 		6D06B07425603C50006361B5 /* TIoTAutoCustomTimePeriodView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07325603C50006361B5 /* TIoTAutoCustomTimePeriodView.m */; };
@@ -497,6 +498,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00ACEA8D26F0CC9D0055EA36 /* TIoTAllDevicesVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAllDevicesVC.h; sourceTree = "<group>"; };
+		00ACEA8E26F0CC9D0055EA36 /* TIoTAllDevicesVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAllDevicesVC.m; sourceTree = "<group>"; };
 		0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		253144D80CC8A037F5D90897 /* Pods-TIoTLinkKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKitDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3139,6 +3142,8 @@
 				F4F3D78024938EBD005D3396 /* ControlDeviceVC.xib */,
 				6D50E91026B18CE300DF12A5 /* TIoTDemoWebSocketManager.h */,
 				6D50E91126B18CE300DF12A5 /* TIoTDemoWebSocketManager.m */,
+				00ACEA8D26F0CC9D0055EA36 /* TIoTAllDevicesVC.h */,
+				00ACEA8E26F0CC9D0055EA36 /* TIoTAllDevicesVC.m */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -3754,6 +3759,7 @@
 				6D9D97EA26857FA50085BCC2 /* TIoTDemoProductDetailModel.m in Sources */,
 				F4F3D7A224938EBE005D3396 /* ControlInfo.m in Sources */,
 				6D9D978C26846B280085BCC2 /* TIoTDemoPlayConfigVC.m in Sources */,
+				00ACEA8F26F0CC9D0055EA36 /* TIoTAllDevicesVC.m in Sources */,
 				6DCB3587259CD908003E03DF /* TIoTWiredDistributionNetVC.m in Sources */,
 				6D98FE1B25C2E6B200518AC7 /* TIoTCustomCalendarCell.m in Sources */,
 				F4F3265825919C6D00A4CAAB /* TIoTVIdeoQRScanDistributionNet.m in Sources */,

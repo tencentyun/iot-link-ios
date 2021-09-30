@@ -218,6 +218,9 @@
 *  多路视频可通过各接口的id区分不同设备。当前的 iOS 层接口采用设备名称（dev_name）区分不同的设备通道。
 *  用户也可通过接入 c++ 版本 sdk后， 采用自己的 ID 区分不同设备，自定义 ID 列表需自己维护管理
 
+### APP与设备交互指引
+
+*  [APP与设备交互指引](https://github.com/tencentyun/iot-link-android/blob/master/sdk/video-link-android/doc/设备与APP交互指引.md)
 
 ### Video SDK接口参数说明
 

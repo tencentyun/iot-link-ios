@@ -348,7 +348,7 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
                 
             };
             return cell;
-        }else if ([model[@"define"][@"type"] isEqualToString:@"enum"]) {
+        }else if ([model[@"define"][@"type"] isEqualToString:@"enum"] || [model[@"define"][@"type"] isEqualToString:@"stringenum"]) {
             TIoTShortcutViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kShortcutViewCellID forIndexPath:indexPath];
             cell.propertyName = model[@"name"]?:@"";
             __weak typeof(self)weakSelf = self;
@@ -371,13 +371,17 @@ static NSString *const kShortcutViewCellID = @"kShortcutViewCellID";
                 TIoTPropertiesModel *propertyModel = [TIoTPropertiesModel yy_modelWithDictionary:model];
                 clickValueView.model = propertyModel;
                 
-                clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
+                clickValueView.chooseTaskValueBlock = ^(NSString * _Nonnull keyString, NSString * _Nonnull valueString, TIoTPropertiesModel * _Nonnull model) {
                     
                     for (int i= 0; i < model.define.mapping.allValues.count; i++) {
-                        NSString *key = [NSString stringWithFormat:@"%d",i];
-                        NSString *value = model.define.mapping[key];
-                        if ([value isEqualToString:valueString]) {
-                            [weakSelf reportDeviceData:@{model.id:@(i)}];
+                        if ([model.define.type isEqual:@"stringenum"]) {
+                            [weakSelf reportDeviceData:@{model.id:keyString}];
+                        } else {
+                            NSString *key = [NSString stringWithFormat:@"%d",i];
+                            NSString *value = model.define.mapping[key];
+                            if ([value isEqualToString:valueString]) {
+                                [weakSelf reportDeviceData:@{model.id:@(i)}];
+                            }
                         }
                     }
                     

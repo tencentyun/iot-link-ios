@@ -98,6 +98,11 @@ NSString *const AppGetProductInfo = @"AppGetProductInfo";
 NSString *const AppGetGatewayBindDeviceList = @"AppGetGatewayBindDeviceList";
 NSString *const AppBindSubDeviceInFamily = @"AppBindSubDeviceInFamily";
 
+NSString *const AppGetVirtualBindDeviceList = @"AppGetVirtualBindDeviceList";//APP拉用户绑定设备列表
+
+//===============纯蓝牙LLSync
+NSString *const AppGetDeviceConfig = @"AppGetDeviceConfig"; //读取用户设备的私有信息 (psk)
+
 //===============设备定时
 
 NSString *const AppGetTimerList = @"AppGetTimerList";//获取定时任务列表

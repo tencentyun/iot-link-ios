@@ -25,10 +25,15 @@
 @property (nonatomic, strong) NSString *currentProductId; //当前连接的产品id
 @property (nonatomic, strong) NSString *currentDevicename; //当前连接的设备名称
 @property (nonatomic, strong) CBPeripheral *currentConnectedPerpheral; //当前连接的设备
+@property (nonatomic, strong) NSString *currentSignature; //当前设备签名
 @property (nonatomic, weak)BluetoothCentralManager *blueManager;
 
 @property (nonatomic, strong) TIoTStartConfigViewController *resultvc; //当前连接的设备
 @property (nonatomic, assign) BOOL isFromHome; //表示从产品页的蓝牙模块来的
+
+@property (nonatomic, strong) NSString *tempTimeString;
+@property (nonatomic, strong) NSString *andomNumString;
+@property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -251,12 +256,45 @@
     [MBProgressHUD dismissInView:nil];
     if (self.currentConnectedPerpheral) {
         
-        [self nextClick:nil];
+//        [self nextClick:nil];
+//
+//        if (!self.isFromHome) {
+//            ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
+//            [self nextUIStep:nil];
+//        }
         
-        if (!self.isFromHome) {
-            ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
-            [self nextUIStep:nil];
+        
+        for (CBCharacteristic *characteristic in service.characteristics) {
+            NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
+            //判断是否是纯蓝牙 LLSync
+            if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
+                //LLSync
+                
+                self.characteristicFFE1 = characteristic;
+                
+                NSString *andomNum = [NSString stringWithFormat:@"%u",arc4random()];
+                NSString *tempTime = [NSString getNowTimeString];
+                self.tempTimeString = tempTime;
+                self.andomNumString = andomNum;
+                //10进制转16进制
+                NSString *andomNumHex = [NSString getHexByDecimal:andomNum.integerValue];
+                NSString *tempTimeHex = [NSString getHexByDecimal:tempTime.integerValue];
+
+                NSString *writeInfo = [NSString stringWithFormat:@"000008%@%@",andomNumHex,tempTimeHex];
+                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo];
+                break;
+            }else {
+                //蓝牙辅助配网
+                [self nextClick:nil];
+                
+                if (!self.isFromHome) {
+                    ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
+                    [self nextUIStep:nil];
+                }
+                break;
+            }
         }
+        
     }
 }
 
@@ -335,6 +373,15 @@
             NSDictionary *deviceData = @{@"productId": self.currentProductId, @"deviceName": self.currentDevicename};
             [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
             
+        }else if ([cmdtype isEqualToString:@"05"]){
+            //子设备绑定
+            NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
+            NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+            self.currentDevicename = deviceName;
+            NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
+            NSString *signatureString = [preString substringFromIndex:6]?:@"";
+            self.currentSignature = signatureString;
+            [self bindSubDevice];
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
@@ -342,4 +389,63 @@
     }
 }
 
+- (void)bindSubDevice {
+    
+    NSString *deviceId = [NSString stringWithFormat:@"%@/%@",self.currentProductId,self.currentDevicename];
+    NSDictionary *dic = @{@"DeviceId":deviceId,
+                          @"DeviceName":self.currentDevicename?:@"",
+                          @"DeviceTimestamp":@(self.tempTimeString.integerValue+60),
+                          @"ConnId":self.andomNumString?:@"",
+                          @"Signature":self.currentSignature?:@"",
+                          @"SignMethod":@"hmacsha1",
+                          @"BindType":@"bluetooth_sign",
+                          @"FamilyId":[TIoTCoreUserManage shared].familyId?:@"",
+                          @"RoomId":self.roomId?:@"",
+    };
+    
+    [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:dic success:^(id responseObject) {
+        DDLogVerbose(@"%@",responseObject);
+        //计算绑定标识符
+        NSString *bingIDString = [self getBindIDSting];
+        //获取local psk
+        NSInteger random = arc4random();
+        NSString *randomHex = [NSString getHexByDecimal:random];
+
+        NSString *writeInfo = [NSString stringWithFormat:@"02000D02%@%@",randomHex,bingIDString];
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
+    }];
+}
+
+/// MARK: 获取local psk
+- (void)getLocalPsk {
+    
+    [[TIoTRequestObject shared] post:AppGetDeviceConfig Param:@{@"ProductId":self.currentProductId?:@"",
+                                                                @"DeviceName":self.currentDevicename?:@"",
+                                                                @"DeviceKey":@"ble_psk_device_ket",
+    } success:^(id responseObject) {
+        DDLogVerbose(@"%@",responseObject);
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        DDLogVerbose(@"%@",dic);
+    }];
+}
+
+/// MARK: 获取绑定标识符
+- (NSString *)getBindIDSting {
+    //计算绑定标识符
+    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",self.currentProductId,self.currentDevicename];
+    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
+    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
+    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
+    
+    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
+    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
+    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
+    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
+    
+    return resuleStringHex;
+    
+}
 @end

@@ -32,13 +32,8 @@
     [self setUpUI];
     
     //Video 设备列表
-//    [self requestVideoList];
-    
-    //explore 设备列表
-//#ifdef DEBUG
-    [self requestExploreList];
-//#endif
-    
+    [self requestVideoList];
+        
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(rightBarItemClick:)];
     self.navigationItem.rightBarButtonItem = item;
 }
@@ -105,6 +100,7 @@
 
 
 /// explore 设备列表
+/*
 - (void)requestExploreList {
         [[TIoTCoreDeviceSet shared] getExploreDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId success:^(id  _Nonnull responseObject) {
     
@@ -117,7 +113,7 @@
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
     
         }];
-}
+}*/
 
 #pragma mark - tableViewDelegate tableViewDataSource
 
