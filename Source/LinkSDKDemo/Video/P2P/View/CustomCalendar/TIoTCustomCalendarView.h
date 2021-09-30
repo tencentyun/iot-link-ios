@@ -5,12 +5,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TIoTCustomCalendarScrollView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^TIoTSelectedDayBlcok)(NSInteger, NSInteger, NSInteger);
 
 typedef void(^TIoTRemoveViewBlock)(void);
+
+typedef void(^TIoTClickMonthBlock)(NSString *month); //点击月block
 
 @interface TIoTCustomCalendarView : UIView
 
@@ -32,6 +35,9 @@ typedef void(^TIoTRemoveViewBlock)(void);
 /// 移除block
 @property (nonatomic, copy) TIoTRemoveViewBlock removeViewBlock;
 
+/// 点击月block
+@property (nonatomic, copy) TIoTClickMonthBlock clickMonthBlock;
+@property (nonatomic, strong) TIoTCustomCalendarScrollView *scrollView;
 @end
 
 NS_ASSUME_NONNULL_END

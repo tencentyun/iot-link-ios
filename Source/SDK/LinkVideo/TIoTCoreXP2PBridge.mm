@@ -210,4 +210,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 + (NSString *)getSDKVersion {    
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
+
++ (void)recordstream:(NSString *)dev_name {
+    startRecordPlayerStream(dev_name.UTF8String);
+}
 @end

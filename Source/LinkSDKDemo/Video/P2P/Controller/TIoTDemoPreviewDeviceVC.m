@@ -21,6 +21,7 @@
 #import "NSObject+additions.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
+#import "TIoTDemoPlaybackVC.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -77,6 +78,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval startIpcP2P;
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
 
+@property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -85,6 +87,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _is_ijkPlayer_stream = YES;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     
@@ -566,16 +569,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 ///MARK: 回放
 - (void)clickPlayback:(UIButton *)button {
-    TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-    cloudStorageVC.deviceModel = self.selectedModel;
-    cloudStorageVC.playerReloadBlock = ^{
-        
+    
+    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.deviceModel = self.selectedModel;
+    playBackVC.isNVR = self.isNVR;
+    playBackVC.deviceName = self.deviceName;
+    playBackVC.playerReloadBlock = ^{
         [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
-    [self.navigationController pushViewController:cloudStorageVC animated:YES];
-    
-    
+    [self.navigationController pushViewController:playBackVC animated:YES];
 }
 ///MARK: 录像
 - (void)clickVideoBtn:(UIButton *)button {
@@ -915,14 +918,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //跳转回看页面，并播放当前选中事件视频，滚动条滑动相应位置
     TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
-    TIoTCloudStorageVC *cloudStoreVC = [[TIoTCloudStorageVC alloc]init];
-    cloudStoreVC.eventItemModel = itemModel;
-    cloudStoreVC.deviceModel = self.selectedModel;
-    cloudStoreVC.playerReloadBlock = ^{
+    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.eventItemModel = itemModel;
+    playBackVC.deviceModel = self.selectedModel;
+    playBackVC.isNVR = self.isNVR;
+    playBackVC.deviceName = self.deviceName;
+    playBackVC.playerReloadBlock = ^{
         [self addRotateNotification];
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     };
-    [self.navigationController pushViewController:cloudStoreVC animated:YES];
+    [self.navigationController pushViewController:playBackVC animated:YES];
 }
 
 #pragma mark -IJKPlayer
@@ -1048,35 +1053,39 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)refushVideo:(NSNotification *)notify {
-    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    NSString *selectedName = self.deviceName?:@"";
     
-    if (![DeviceName isEqualToString:selectedName]) {
-        return;
+    UIViewController *view = [self getCurrentViewController];
+    if ([view isMemberOfClass:[TIoTDemoPreviewDeviceVC class]]) {
+        NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+        NSString *selectedName = self.deviceName?:@"";
+        
+        if (![DeviceName isEqualToString:selectedName]) {
+            return;
+        }
+        
+        [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+        
+        //计算IPC打洞时间
+        self.endIpcP2P = CACurrentMediaTime();
+        
+        //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+        // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
+        /*
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+             
+             self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+             
+             [self configVideo];
+             [self.player prepareToPlay];
+             [self.player play];
+             
+             self.startPlayer = CACurrentMediaTime();
+         });
+         */
+        
+        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
-    
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
-    
-    //计算IPC打洞时间
-    self.endIpcP2P = CACurrentMediaTime();
-    
-    //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-    // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
-    /*
-     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-         
-         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-         
-         [self configVideo];
-         [self.player prepareToPlay];
-         [self.player play];
-         
-         self.startPlayer = CACurrentMediaTime();
-     });
-     */
-    
-    [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -1140,17 +1149,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)configVideo {
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
-        fileTip.text = @"数据帧写文件中...";
-        fileTip.textAlignment = NSTextAlignmentCenter;
-        fileTip.textColor = [UIColor whiteColor];
-        [self.imageView addSubview:fileTip];
-        if (self.isNVR == NO) {
-            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
-        }
-        
-    }else {
+
+    // 1.通过播放器发起的拉流
+    if (_is_ijkPlayer_stream) {
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
+        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+
         [self stopPlayMovie];
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
@@ -1176,12 +1180,26 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.imageView addSubview:self.player.view];
         [self.player resetHubFrame:self.player.view.frame];
         
-//        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
         [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+        
+    }else {
+        // 2.通过裸流服务拉流
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
+        
+        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+        fileTip.text = @"数据帧写文件中...";
+        fileTip.textAlignment = NSTextAlignmentCenter;
+        fileTip.textColor = [UIColor whiteColor];
+        [self.imageView addSubview:fileTip];
+        if (self.isNVR == NO) {
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
+        }
+        
     }
 }
 
@@ -1414,6 +1432,47 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         _dataArray = [[NSMutableArray alloc]init];
     }
     return _dataArray;
+}
+
+- (UIViewController *)getCurrentViewController
+{
+    UIViewController* currentViewController = [self getRootViewController];
+    BOOL runLoopFind = YES;
+    while (runLoopFind) {
+        if (currentViewController.presentedViewController) {
+
+            currentViewController = currentViewController.presentedViewController;
+        } else if ([currentViewController isKindOfClass:[UINavigationController class]]) {
+
+          UINavigationController* navigationController = (UINavigationController* )currentViewController;
+            currentViewController = [navigationController.childViewControllers lastObject];
+
+        } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
+
+          UITabBarController* tabBarController = (UITabBarController* )currentViewController;
+            currentViewController = tabBarController.selectedViewController;
+        } else {
+            NSUInteger childViewControllerCount = currentViewController.childViewControllers.count;
+                    if (childViewControllerCount > 0) {
+
+                        currentViewController = currentViewController.childViewControllers.lastObject;
+
+                        return currentViewController;
+                    } else {
+
+                        return currentViewController;
+                    }
+                }
+
+            }
+            return currentViewController;
+}
+
+- (UIViewController *)getRootViewController{
+
+    UIWindow* window = [[[UIApplication sharedApplication] delegate] window];
+    NSAssert(window, @"The window is empty");
+    return window.rootViewController;
 }
 /*
 #pragma mark - Navigation
