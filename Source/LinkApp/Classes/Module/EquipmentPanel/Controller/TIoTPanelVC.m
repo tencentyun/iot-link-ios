@@ -103,6 +103,8 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 @property (nonatomic, strong) NSString *currentProductId; //通过设备广播获取的
 @property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
 @property (nonatomic, strong) NSString *timeStampString;
+@property (nonatomic, strong) NSString *psk;
+@property (nonatomic, strong) NSString *bleNewType; //判断是否是蓝牙设备
 @end
 
 @implementation TIoTPanelVC
@@ -492,8 +494,8 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         NSArray *tmpArr = responseObject[@"Products"];
         if (tmpArr.count > 0) {
             //判断是否是纯蓝牙设备 llsync
-            NSString *newType = tmpArr.firstObject[@"NetType"]?:@"";
-            if ([newType isEqualToString:@"ble"]) {
+            self.bleNewType = tmpArr.firstObject[@"NetType"]?:@"";
+            if ([self.bleNewType isEqualToString:@"ble"]) {
                 //降低collection高度 顶部显示蓝牙连接view
                 [self.coll mas_updateConstraints:^(MASConstraintMaker *make) {
                     make.top.mas_equalTo(46);
@@ -728,21 +730,83 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 
 - (void)deleteDevice {
     
+    if ([self.bleNewType isEqualToString:@"ble"]) {
+        [[TIoTRequestObject shared] post:AppGetDeviceConfig Param:@{@"ProductId":self.productId?:@"",
+                                                                    @"DeviceName":self.deviceName?:@"",
+                                                                    @"DeviceKey":@"ble_psk_device_ket",
+                                                                    @"TimestampKey":@"ble_timestamp_device_ket",
+        } success:^(id responseObject) {
+            TIoTLLSyncDeviceConfigModel *model = [TIoTLLSyncDeviceConfigModel yy_modelWithJSON:responseObject];
+            DDLogVerbose(@"ble_psk_device_ket:%@",model.Configs.ble_psk_device_ket);
+            if (![NSString isNullOrNilWithObject:model.Configs.ble_psk_device_ket]) {
+                self.psk = model.Configs.ble_psk_device_ket;
+                [self writeDeleteBlueDeviceInfo];
+                [self deleteDeviceNetwork];
+            }
+        } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+            DDLogVerbose(@"ble_psk_device_ket error:%@",dic);
+        }];
+    }else {
+        [self deleteDeviceNetwork];
+    }
+    
+}
+
+- (void)deleteDeviceNetwork {
     [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"],@"ProductID":self.deviceDic[@"ProductId"],@"DeviceName":self.deviceDic[@"DeviceName"]} success:^(id responseObject) {
+        
+        //解绑请求成功
+        if ([self.bleNewType isEqualToString:@"ble"]) {
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07200100"];
+        }
         
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+        //解绑请求失败
+        if ([self.bleNewType isEqualToString:@"ble"]) {
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08000101"];
+        }
     }];
 }
-
 - (void)moreClick:(UIButton *)sender{
     
+    __weak typeof(self) weakSelf = self;
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
     vc.title = NSLocalizedString(@"device_details", @"设备详情");
     vc.deviceDic = self.deviceDic;
+    vc.deleteDeviceRequest = ^{
+        if (![NSString isNullOrNilWithObject:weakSelf.psk]) {
+            [weakSelf writeDeleteBlueDeviceInfo];
+        }else {
+            [[TIoTRequestObject shared] post:AppGetDeviceConfig Param:@{@"ProductId":weakSelf.productId?:@"",
+                                                                        @"DeviceName":weakSelf.deviceName?:@"",
+                                                                        @"DeviceKey":@"ble_psk_device_ket",
+                                                                        @"TimestampKey":@"ble_timestamp_device_ket",
+            } success:^(id responseObject) {
+                TIoTLLSyncDeviceConfigModel *model = [TIoTLLSyncDeviceConfigModel yy_modelWithJSON:responseObject];
+                DDLogVerbose(@"ble_psk_device_ket:%@",model.Configs.ble_psk_device_ket);
+                if (![NSString isNullOrNilWithObject:model.Configs.ble_psk_device_ket]) {
+                    weakSelf.psk = model.Configs.ble_psk_device_ket;
+                    [weakSelf writeDeleteBlueDeviceInfo];
+                }
+            } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+                DDLogVerbose(@"ble_psk_device_ket error:%@",dic);
+            }];
+        }
+    };
+    vc.deleteDeviceBlock = ^(BOOL isSuccess) {
+        
+        if (isSuccess == YES) {
+            //解绑请求成功
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07200100"];
+        }else {
+            //失败
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08000101"];
+        }
+        
+    };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -952,6 +1016,7 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
             return;
         }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
+        //连接鉴权成功 （连接子设备）
         if ([cmdtype isEqualToString:@"06"]) {
             
             //子设备上报
@@ -959,6 +1024,9 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
             
             //写入设备连接结果
             [self writeLinkResultInDeviceWithSuccess:YES];
+        }else if ([cmdtype isEqualToString:@"07"]) {
+            //解除鉴权成功 （解除绑定）
+            
         }
     }
 }
@@ -995,7 +1063,7 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 }
 
 - (void)writeBlueDeviceInfoWithDeviceCongModel:(TIoTLLSyncDeviceConfigModel *)deviceModel {
-    NSString *psk = deviceModel.Configs.ble_psk_device_ket?:@"";
+    self.psk = deviceModel.Configs.ble_psk_device_ket?:@"";
     //TS
     NSString *timeStamp = [NSString getNowTimeString];
     self.timeStampString = timeStamp;
@@ -1003,9 +1071,17 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     NSString *tempTimeHex = [NSString getHexByDecimal:timeStamp.integerValue];
     
     //Sign info
-    NSString *timeStampSignInfo = [NSString HmacSha1_Keyhex:psk data:timeStamp];
+    NSString *timeStampSignInfo = [NSString HmacSha1_Keyhex:self.psk data:timeStamp];
     
     NSString *writeInfo = [NSString stringWithFormat:@"010018%@%@",tempTimeHex,timeStampSignInfo];
+    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+}
+
+//删除设备写入信息
+- (void)writeDeleteBlueDeviceInfo {
+    //Sign info
+    NSString *unBindedRequestSignInfo = [NSString HmacSha1_Keyhex:self.psk data:@"UnbindRequest"];
+    NSString *writeInfo = [NSString stringWithFormat:@"040014%@",unBindedRequestSignInfo];
     [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
 }
 #pragma mark - WCWaterFlowLayoutDelegate
