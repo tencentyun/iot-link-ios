@@ -80,13 +80,20 @@
 
 - (void)deleteDevice
 {
+    if (self.deleteDeviceRequest) {
+        self.deleteDeviceRequest();
+    }
     [[TIoTRequestObject shared] post:AppDeleteDeviceInFamily Param:@{@"FamilyId":self.deviceDic[@"FamilyId"]?:@"",@"ProductID":self.deviceDic[@"ProductId"]?:@"",@"DeviceName":self.deviceDic[@"DeviceName"]?:@""} success:^(id responseObject) {
         
         [HXYNotice addUpdateDeviceListPost];
         [self.navigationController popToRootViewControllerAnimated:YES];
-        
+        if (self.deleteDeviceBlock) {
+            self.deleteDeviceBlock(YES);
+        }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+        if (self.deleteDeviceBlock) {
+            self.deleteDeviceBlock(NO);
+        }
     }];
 }
 
