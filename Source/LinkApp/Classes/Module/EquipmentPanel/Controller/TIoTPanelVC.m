@@ -757,7 +757,7 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         
         //解绑请求成功
         if ([self.bleNewType isEqualToString:@"ble"]) {
-            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07200100"];
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07"];
         }
         
         [HXYNotice addUpdateDeviceListPost];
@@ -766,7 +766,7 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         //解绑请求失败
         if ([self.bleNewType isEqualToString:@"ble"]) {
-            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08000101"];
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08"];
         }
     }];
 }
@@ -797,13 +797,14 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         }
     };
     vc.deleteDeviceBlock = ^(BOOL isSuccess) {
-        
-        if (isSuccess == YES) {
-            //解绑请求成功
-            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07200100"];
-        }else {
-            //失败
-            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08000101"];
+        if (self.characteristicFFE1 != nil) {
+            if (isSuccess == YES) {
+                //解绑请求成功
+                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07"];
+            }else {
+                //失败
+                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08"];
+            }
         }
         
     };
@@ -978,29 +979,31 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         //设备广播绑定标识符
         if (self.originBlueDevices) {
             if (self.blueDevices.count > 0) {
-                CBPeripheral *device = self.blueDevices[0];
-                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
-                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
-                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
-                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
-                    NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
-                    deviceBindId = [productHex uppercaseString];
-                }
-            }
-        }
-        
-        //判断绑定标识符和设备广播的是否一致
-        if ([bindID isEqualToString:deviceBindId]) {
-            for (CBCharacteristic *characteristic in service.characteristics) {
-                NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
-                //判断是否是纯蓝牙 LLSync
-                if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
-                    //LLSync
+                for (CBPeripheral *device in self.blueDevices) {
+                    //                CBPeripheral *device = self.blueDevices[0];
+                    NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                        NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                        NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                        NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
+                        deviceBindId = [productHex uppercaseString];
+                    }
                     
-                    self.characteristicFFE1 = characteristic;
-                    
-                    [self getLocalPskWithProductId:self.productId deviceName:self.deviceName];
-                    break;
+                    //判断绑定标识符和设备广播的是否一致
+                    if ([bindID isEqualToString:deviceBindId]) {
+                        for (CBCharacteristic *characteristic in service.characteristics) {
+                            NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
+                            //判断是否是纯蓝牙 LLSync
+                            if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
+                                //LLSync
+                                
+                                self.characteristicFFE1 = characteristic;
+                                
+                                [self getLocalPskWithProductId:self.productId deviceName:self.deviceName];
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1026,7 +1029,10 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
             [self writeLinkResultInDeviceWithSuccess:YES];
         }else if ([cmdtype isEqualToString:@"07"]) {
             //解除鉴权成功 （解除绑定）
-            
+            [self.blueManager disconnectPeripheral];
+        }else if ([cmdtype isEqualToString:@"08"]) {
+            //连接成功后 将连接结果写入设备后，设备返回
+            [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
         }
     }
 }
@@ -1039,9 +1045,9 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 ///MARK:将连接结果写入设备
 - (void)writeLinkResultInDeviceWithSuccess:(BOOL)isSuccess {
     if (isSuccess == YES) {
-        
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"05"];
     }else {
-        
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"06"];
     }
 
 }
@@ -1082,7 +1088,9 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     //Sign info
     NSString *unBindedRequestSignInfo = [NSString HmacSha1_Keyhex:self.psk data:@"UnbindRequest"];
     NSString *writeInfo = [NSString stringWithFormat:@"040014%@",unBindedRequestSignInfo];
-    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+    if (self.characteristicFFE1 != nil) {
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+    }
 }
 #pragma mark - WCWaterFlowLayoutDelegate
 
