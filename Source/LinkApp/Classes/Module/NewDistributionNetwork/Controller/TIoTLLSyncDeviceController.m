@@ -414,11 +414,20 @@
 
         NSString *writeInfo = [NSString stringWithFormat:@"02000D02%@%@",randomHex,bingIDString];
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.blueManager disconnectPeripheral];
+        });
+        
         //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
         [self uploadLocalPsk:randomHex];
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.blueManager disconnectPeripheral];
+        });
     }];
 }
 
