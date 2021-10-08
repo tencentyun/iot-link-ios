@@ -5,6 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AWSystemAVCapture.h"
 #include "AppWrapper.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -72,7 +73,10 @@ NS_ASSUME_NONNULL_BEGIN
 /*
  * 语音对讲开始结束接口
  */
+//对讲音频默认采样率
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
+//可通过此接口 audio_onfig 参数既可设置对讲音频码率（bitrate）、采样率（sampleRate）、channelCount、sampleSize
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(AWAudioConfig *)audio_onfig;
 - (XP2PErrCode)stopVoiceToServer;
 
 /*

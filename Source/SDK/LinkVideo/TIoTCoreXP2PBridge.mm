@@ -6,7 +6,6 @@
 
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
-#import "AWSystemAVCapture.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 #ifdef DEBUG
@@ -169,6 +168,12 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
+    AWAudioConfig *config = [[AWAudioConfig alloc] init];
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:config];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(AWAudioConfig *)audio_onfig{
+    //设置码率
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
@@ -178,8 +183,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     const char *channel = [channel_number UTF8String];
     _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
-    AWAudioConfig *config = [[AWAudioConfig alloc] init];
-    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:config];
+    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:audio_onfig];
     systemAvCapture.delegate = self;
     systemAvCapture.audioEncoderType = AWAudioEncoderTypeSWFAAC;
     [systemAvCapture startCapture];
