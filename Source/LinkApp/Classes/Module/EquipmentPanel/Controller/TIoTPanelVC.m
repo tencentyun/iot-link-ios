@@ -105,6 +105,7 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 @property (nonatomic, strong) NSString *timeStampString;
 @property (nonatomic, strong) NSString *psk;
 @property (nonatomic, strong) NSString *bleNewType; //判断是否是蓝牙设备
+@property (nonatomic, strong) NSDictionary *DataTemplateDic;
 @end
 
 @implementation TIoTPanelVC
@@ -528,14 +529,14 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
                 }];
             }
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
-            NSDictionary *DataTemplateDic = [NSString jsonToObject:DataTemplate];
+            self.DataTemplateDic = [NSString jsonToObject:DataTemplate];
 
 //            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
             TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
             if ([config.Panel.type isEqualToString:@"h5"]) {
 
             }else {
-                [self getDeviceData:dic andBaseInfo:DataTemplateDic];
+                [self getDeviceData:dic andBaseInfo:self.DataTemplateDic];
             }
 
         }
@@ -678,10 +679,41 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         }else if ([line_status isEqualToString:@"Online"]) {
             
 //            self.coll.allowsSelection = YES;
+        }else if ([line_status isEqualToString:@"Push"]) {
+            if ([payloadDic[@"method"] isEqualToString:@"control"] ) {
+                NSMutableDictionary *deviceReportDic = [NSMutableDictionary new];
+                NSDictionary *dic = payloadDic[@"params"];
+                
+                if ([payloadDic.allKeys containsObject:@"params"]) {
+                    for (NSString *key in dic.allKeys) {
+                        if (![NSString isNullOrNilWithObject:key]) {
+                            [deviceReportDic setValue:@{@"Value":dic[key]?:@""} forKey:key];
+                        }
+                    }
+                }
+                //重新添加下发属性
+                [self.deviceInfo zipData:self.configData baseInfo:self.DataTemplateDic deviceData:deviceReportDic];
+                //原有属性数组去重
+                self.deviceInfo.properties = [self removeDuplicationOriginalArr:self.deviceInfo.properties];
+                self.deviceInfo.allProperties = [self removeDuplicationOriginalArr:self.deviceInfo.allProperties];
+                
+                [self layoutHeader];
+                [self.coll reloadData];
+            }
         }
     }
 }
 
+//设备属性数组去重
+- (NSMutableArray *)removeDuplicationOriginalArr:(NSMutableArray *)oriArr {
+    NSMutableArray *resuleProperty = [NSMutableArray array];
+    for (NSDictionary *dic in oriArr) {
+        if (![resuleProperty containsObject:dic]) {
+            [resuleProperty addObject:dic];
+        }
+    }
+    return resuleProperty;
+}
 
 #pragma mark - event
 
