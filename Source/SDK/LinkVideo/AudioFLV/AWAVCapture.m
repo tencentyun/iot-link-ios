@@ -91,7 +91,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
     }
 }
 
--(BOOL) startCapture {    
+-(BOOL) startCapture {
     if (!self.audioConfig) {
         NSLog(@"one of videoConfig and audioConfig must be NON-NULL");
         return NO;
@@ -174,6 +174,15 @@ __weak static AWAVCapture *sAWAVCapture = nil;
     }];
 }
 
+-(void) sendAudioAACData:(NSData *)aacData toEncodeQueue:(NSOperationQueue *) encodeQueue toSendQueue:(NSOperationQueue *) sendQueue{
+    __weak typeof(self) weakSelf = self;
+    [encodeQueue addOperationWithBlock:^{
+        if (weakSelf.isCapturing) {
+            aw_flv_audio_tag *audio_tag = [weakSelf.encoderManager.audioEncoder encodeAACDataToFlvTag:aacData];
+            [weakSelf sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
+        }
+    }];
+}
 
 -(void) sendFlvAudioTag:(aw_flv_audio_tag *)audio_tag toSendQueue:(NSOperationQueue *) sendQueue{
     __weak typeof(self) weakSelf = self;
@@ -203,7 +212,7 @@ __weak static AWAVCapture *sAWAVCapture = nil;
             return;
         }
         //flv header  hhhhhhhhhhhhhhhhhhhh
-//        aw_write_audio_header();
+        aw_write_audio_header();
         
         
         //audio specific config tag
@@ -224,6 +233,14 @@ __weak static AWAVCapture *sAWAVCapture = nil;
 
 -(void) sendAudioPcmData:(NSData *)audioData{
     [self sendAudioPcmData:audioData toEncodeQueue:self.encodeSampleOpQueue toSendQueue:self.sendSampleOpQueue];
+}
+
+-(void) sendAudioAACData:(NSData *)audioData {
+    if (audioData == nil) {
+        NSLog(@"audiodata is nil");
+        return;
+    }
+    [self sendAudioAACData:audioData toEncodeQueue:self.encodeSampleOpQueue toSendQueue:self.sendSampleOpQueue];
 }
 
 -(void) sendFlvAudioTag:(aw_flv_audio_tag *)flvAudioTag{
