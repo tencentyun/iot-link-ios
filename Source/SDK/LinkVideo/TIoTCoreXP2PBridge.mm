@@ -185,7 +185,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     
     systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:audio_onfig];
     systemAvCapture.delegate = self;
-    systemAvCapture.audioEncoderType = AWAudioEncoderTypeSWFAAC;
+    systemAvCapture.audioEncoderType = AWAudioEncoderTypeHWAACLC;
     [systemAvCapture startCapture];
 }
 

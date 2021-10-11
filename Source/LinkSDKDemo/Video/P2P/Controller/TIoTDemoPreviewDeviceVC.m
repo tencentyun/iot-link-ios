@@ -209,10 +209,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 }
 
                 AWAudioConfig *config = [[AWAudioConfig alloc] init];
-                config.bitrate = 100000;
+                config.bitrate = 32000;
                 config.channelCount = 1;
                 config.sampleSize = 16;
-                config.sampleRate = 44100;
+                config.sampleRate = 8000;
+                
+//                config.bitrate = 100000;
+//                config.channelCount = 1;
+//                config.sampleSize = 16;
+//                config.sampleRate = 44100;
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
             }
             
