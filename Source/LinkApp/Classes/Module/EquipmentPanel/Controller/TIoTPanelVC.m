@@ -1187,6 +1187,8 @@ typedef NS_ENUM(NSInteger, TIoTDataTemplatePropertyType) {
     //按格式组装设备需要数据（int enum bool，需要扩充float）
     
     if (propertyArray.count != 0) {
+        NSString *value = @"";
+        
         for (NSDictionary *propertyDic in propertyArray) {
             NSDictionary *defineDic = propertyDic[@"define"]?:@{};
             NSString *dataTypeString = defineDic[@"type"]?:@"";
@@ -1197,29 +1199,50 @@ typedef NS_ENUM(NSInteger, TIoTDataTemplatePropertyType) {
                 if (![NSString isNullOrNilWithObject:dataTypeString] && [self.deviceReportData.allKeys containsObject:idString]) {
                     if ([dataTypeString isEqualToString:@"int"]) {
 
-                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeInt reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeInt reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        //拼接value
+                        value = [value stringByAppendingString:IDValueString];
                     }else if ([dataTypeString isEqualToString:@"bool"]) {
-
-                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeBool reportDic:dic idString:idString dataTypeString:dataTypeString];
                         
+                        NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeBool reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        //拼接value
+                        value = [value stringByAppendingString:IDValueString];
                     }else if ([dataTypeString isEqualToString:@"enum"]) {
-                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeEnumerate reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeEnumerate reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        //拼接value
+                        value = [value stringByAppendingString:IDValueString];
                     }else if ([dataTypeString isEqualToString:@"float"]) {
                         
                     }
-                    break;
+                    
                 }
             }
 
         }
+        
+        NSString *typeString = @"00";
+        NSInteger length = value.length/2;
+        NSString *lengthHex = [NSString getHexByDecimal:length];
+        NSString *lengthResult = [self getMutableValueLength:lengthHex];
+        //写入设备
+        NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",typeString,lengthResult,value];
+        [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoString];
     }
     
     
 }
 
+///MARK: 多个属性 llData control操作 数据长度
+- (NSString *)getMutableValueLength:(NSString *)lengthHex {
+    //固定为两个字节
+    NSString *bitString = @"0000";
+    NSString *preTempLengthValue = [bitString substringToIndex:bitString.length - lengthHex.length];
+    NSString *resultLengthValue= [NSString stringWithFormat:@"%@%@",preTempLengthValue,lengthHex];
+    return resultLengthValue;
+}
 
 ///MARK: 拼接 llData control操作 数据
-- (void)setPropertyReportDeviceInfoWithType:(TIoTDataTemplatePropertyType)typeValue reportDic:(NSDictionary *)dic idString:(NSString *)idString dataTypeString:(NSString *)dataTypeString {
+- (NSString *)setPropertyReportDeviceInfoWithType:(TIoTDataTemplatePropertyType)typeValue reportDic:(NSDictionary *)dic idString:(NSString *)idString dataTypeString:(NSString *)dataTypeString {
     
     //length
     NSString *lengthString = @"";
@@ -1239,12 +1262,10 @@ typedef NS_ENUM(NSInteger, TIoTDataTemplatePropertyType) {
         
     }
     
-    //type
-    NSString *typeString = @"00";
     //property value  TVL
     //IdValueString
     NSMutableArray *IDNumberArray = [self getPropertyIndexWithType:dataTypeString];
-    
+    //value
     NSString *valueString = @"";
     if ([dic.allKeys containsObject:idString]) {
         NSNumber *valueNumber = dic[idString]?:@(0);
@@ -1254,13 +1275,26 @@ typedef NS_ENUM(NSInteger, TIoTDataTemplatePropertyType) {
 
             NSString *valueHex = [self getTLVValue:valueNumber.integerValue type:typeValue];
             valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
-            
-            //写入设备
-            NSString *writeInfoStrin = [NSString stringWithFormat:@"%@%@%@",typeString,lengthString,valueString];
-            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoStrin];
         }
-        
     }
+    
+    return valueString;
+//    NSString *valueString = @"";
+//    if ([dic.allKeys containsObject:idString]) {
+//        NSNumber *valueNumber = dic[idString]?:@(0);
+//        for (NSNumber *idNumber in IDNumberArray) {
+//            //头字节
+//            NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:typeValue];
+//
+//            NSString *valueHex = [self getTLVValue:valueNumber.integerValue type:typeValue];
+//            valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+//
+//            //写入设备
+//            NSString *writeInfoStrin = [NSString stringWithFormat:@"%@%@%@",typeString,lengthString,valueString];
+//            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoStrin];
+//        }
+//
+//    }
 }
 
 //获取下发属性在设备模板中index (TLV协议中Type 中 ID值)
