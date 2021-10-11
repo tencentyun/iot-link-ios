@@ -22,6 +22,15 @@
     return timeString;
 }
 
++(NSString *)getNowTimeTimestamp {
+
+    NSDate *datenow = [NSDate date];
+
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)([datenow timeIntervalSince1970]*1000)];
+
+    return timeSp;
+}
+
 + (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)timeFormatter {
     
      NSDate *dateNow = [NSDate date];
@@ -1031,6 +1040,49 @@
         
     }
     return newString;
+}
+
+//2进制转16进制
++ (NSString *)getHexByBinary:(NSString *)binary {
+    
+    NSMutableDictionary *binaryDic = [[NSMutableDictionary alloc] initWithCapacity:16];
+    [binaryDic setObject:@"0" forKey:@"0000"];
+    [binaryDic setObject:@"1" forKey:@"0001"];
+    [binaryDic setObject:@"2" forKey:@"0010"];
+    [binaryDic setObject:@"3" forKey:@"0011"];
+    [binaryDic setObject:@"4" forKey:@"0100"];
+    [binaryDic setObject:@"5" forKey:@"0101"];
+    [binaryDic setObject:@"6" forKey:@"0110"];
+    [binaryDic setObject:@"7" forKey:@"0111"];
+    [binaryDic setObject:@"8" forKey:@"1000"];
+    [binaryDic setObject:@"9" forKey:@"1001"];
+    [binaryDic setObject:@"A" forKey:@"1010"];
+    [binaryDic setObject:@"B" forKey:@"1011"];
+    [binaryDic setObject:@"C" forKey:@"1100"];
+    [binaryDic setObject:@"D" forKey:@"1101"];
+    [binaryDic setObject:@"E" forKey:@"1110"];
+    [binaryDic setObject:@"F" forKey:@"1111"];
+    
+    if (binary.length % 4 != 0) {
+        
+        NSMutableString *mStr = [[NSMutableString alloc]init];;
+        for (int i = 0; i < 4 - binary.length % 4; i++) {
+            
+            [mStr appendString:@"0"];
+        }
+        binary = [mStr stringByAppendingString:binary];
+    }
+    NSString *hex = @"";
+    for (int i=0; i<binary.length; i+=4) {
+        
+        NSString *key = [binary substringWithRange:NSMakeRange(i, 4)];
+        NSString *value = [binaryDic objectForKey:key];
+        if (value) {
+            
+            hex = [hex stringByAppendingString:value];
+        }
+    }
+    return hex;
 }
 
 // 获取标识符

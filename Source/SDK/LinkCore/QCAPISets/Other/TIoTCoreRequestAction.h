@@ -113,6 +113,7 @@ FOUNDATION_EXPORT NSString *const AppGetVirtualBindDeviceList;//APP拉用户绑�
 //MARK: LLSync
 FOUNDATION_EXPORT NSString *const AppGetDeviceConfig;//读取用户设备的私有信息 (psk)
 FOUNDATION_EXPORT NSString *const AppSetDeviceConfig;//上传服务器保存用户设备的私有信息 (psk)
+FOUNDATION_EXPORT NSString *const AppReportDataAsDevice;//蓝牙设备上传数据
 
 //MARK: 设备定时
 
