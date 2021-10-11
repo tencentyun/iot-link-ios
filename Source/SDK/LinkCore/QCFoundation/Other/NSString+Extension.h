@@ -86,6 +86,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 /// 获取当前时间时间戳
 + (NSString *)getNowTimeString;
 
+/// 获取当前毫秒时间戳
++(NSString *)getNowTimeTimestamp;
+
 /// 计算两个时间戳的时间差
 + (NSInteger )timeDifferenceInfoWitFormTimeStamp:(NSTimeInterval )fromTimeStamp toTimeStamp:(NSTimeInterval )toTimeStamp dateFormatter:(NSString *)formatter timeType:(TIoTTimeType)timeType;
 
@@ -171,6 +174,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString;
+
+//2进制转16进制
++ (NSString *)getHexByBinary:(NSString *)binary;
 
 // 获取标识符
 + (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;

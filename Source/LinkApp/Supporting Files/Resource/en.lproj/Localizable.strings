@@ -920,3 +920,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "open_exportLog" = "开启导出日志，需继续执行目标操作";
 "exportLog" = "导出日志";
 "delete_allLogs" = "删除所有日志文件";
+
+"device_report_success" = "device_report_success";
+"device_report_fail" = "device_report_fail";
+"analysis_deviceData_error" = "analysis_deviceData_error";

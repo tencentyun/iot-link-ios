@@ -57,6 +57,16 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     TIoTBlueDeviceConnectedFail,
 };
 
+typedef NS_ENUM(NSInteger, TIoTDataTemplatePropertyType) {
+    TIoTDataTemplatePropertyTypeBool, //布尔
+    TIoTDataTemplatePropertyTypeInt, //整数
+    TIoTDataTemplatePropertyTypeString, //字符串
+    TIoTDataTemplatePropertyTypeFloat, //浮点
+    TIoTDataTemplatePropertyTypeEnumerate, //枚举
+    TIoTDataTemplatePropertyTypeTimestamp, //时间
+    TIoTDataTemplatePropertyTypeStruct, //结构体
+};
+
 @implementation TIoTCollectionView
 
 //- (BOOL)touchesShouldCancelInContentView:(UIView *)view
@@ -105,7 +115,8 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
 @property (nonatomic, strong) NSString *timeStampString;
 @property (nonatomic, strong) NSString *psk;
 @property (nonatomic, strong) NSString *bleNewType; //判断是否是蓝牙设备
-@property (nonatomic, strong) NSDictionary *DataTemplateDic;
+@property (nonatomic, strong) NSDictionary *DataTemplateDic; //控制台模板数据 （event action property）
+@property (nonatomic, strong) NSDictionary *deviceReportData; //控制台下发的原始数据 Key:id value:value
 @end
 
 @implementation TIoTPanelVC
@@ -134,6 +145,14 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     {
         self.title = NSLocalizedString(@"control_panel", @"控制面板");
     }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    //离开页面后断开蓝牙连接
+    
+    [self.blueManager stopScan];
+    [self.blueManager disconnectPeripheral];
 }
 
 - (void)dealloc {
@@ -682,12 +701,12 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         }else if ([line_status isEqualToString:@"Push"]) {
             if ([payloadDic[@"method"] isEqualToString:@"control"] ) {
                 NSMutableDictionary *deviceReportDic = [NSMutableDictionary new];
-                NSDictionary *dic = payloadDic[@"params"];
+                self.deviceReportData = [NSDictionary dictionaryWithDictionary:payloadDic[@"params"]];
                 
                 if ([payloadDic.allKeys containsObject:@"params"]) {
-                    for (NSString *key in dic.allKeys) {
+                    for (NSString *key in self.deviceReportData.allKeys) {
                         if (![NSString isNullOrNilWithObject:key]) {
-                            [deviceReportDic setValue:@{@"Value":dic[key]?:@""} forKey:key];
+                            [deviceReportDic setValue:@{@"Value":self.deviceReportData[key]?:@""} forKey:key];
                         }
                     }
                 }
@@ -696,9 +715,12 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
                 //原有属性数组去重
                 self.deviceInfo.properties = [self removeDuplicationOriginalArr:self.deviceInfo.properties];
                 self.deviceInfo.allProperties = [self removeDuplicationOriginalArr:self.deviceInfo.allProperties];
-                
+                //刷新UI
                 [self layoutHeader];
                 [self.coll reloadData];
+                
+                //设备UUID FFE2 写入属性值   取模板数据 self.DataTemplateDic （最全的，和控制台一致），deviceinfo.property 不全
+                [self writePropertyInfoInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:self.deviceReportData];
             }
         }
     }
@@ -1065,8 +1087,42 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         }else if ([cmdtype isEqualToString:@"08"]) {
             //连接成功后 将连接结果写入设备后，设备返回
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
+        }else if ([cmdtype isEqualToString:@"01"]) {
+            //数据模版中的控制回复 control_reply
+//            01000100     01 11
+            NSString *resultStrin = [hexstr substringFromIndex:hexstr.length - 2];
+            //蓝牙上报数据到控制台
+            NSString *jsonString = @"";
+            if (self.deviceReportData != nil) {
+                jsonString = [NSString objectToJson:self.deviceReportData];
+            }
+            
+            NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
+                                       @"DeviceName":self.deviceName?:@"",
+                                       @"Data":jsonString,
+                                       @"DataTimeStamp":@([NSString getNowTimeTimestamp].integerValue),
+            };
+            
+            if ([resultStrin isEqualToString:@"00"]) { //成功
+//                [MBProgressHUD showSuccess:@"设备上报成功"];
+                [self reportDataAsDeviceWithData:paramDic];
+            }else if ([resultStrin isEqualToString:@"01"]) { //失败
+                [MBProgressHUD showSuccess:NSLocalizedString(@"device_report_fail", @"设备上报失败")];
+            }else if ([resultStrin isEqualToString:@"11"]) { //数据解析错误
+                [MBProgressHUD showSuccess:NSLocalizedString(@"analysis_deviceData_error", @"设备数据解析错误")];
+            }
+            
         }
     }
+}
+
+///MARK:蓝牙设备上报数据到控制台
+- (void)reportDataAsDeviceWithData:(NSDictionary *)paramDic {
+    [[TIoTRequestObject shared] post:AppReportDataAsDevice Param:paramDic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 
 ///MARK: 子设备上报
@@ -1124,6 +1180,186 @@ typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
     }
 }
+
+///MARK: 设备远程控制- UUID FFE2中写入property值 （控制台下发）
+- (void)writePropertyInfoInFFE2WithDic:(NSArray *)propertyArray reportDic:(NSDictionary *)dic {
+    
+    //按格式组装设备需要数据（int enum bool，需要扩充float）
+    
+    if (propertyArray.count != 0) {
+        for (NSDictionary *propertyDic in propertyArray) {
+            NSDictionary *defineDic = propertyDic[@"define"]?:@{};
+            NSString *dataTypeString = defineDic[@"type"]?:@"";
+//            NSString *dataTypeString = propertyDic[@"dataType"]?:@"";
+            NSString *idString = propertyDic[@"id"]?:@"";
+            if (self.deviceReportData != nil) {
+                
+                if (![NSString isNullOrNilWithObject:dataTypeString] && [self.deviceReportData.allKeys containsObject:idString]) {
+                    if ([dataTypeString isEqualToString:@"int"]) {
+
+                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeInt reportDic:dic idString:idString dataTypeString:dataTypeString];
+                    }else if ([dataTypeString isEqualToString:@"bool"]) {
+
+                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeBool reportDic:dic idString:idString dataTypeString:dataTypeString];
+                        
+                    }else if ([dataTypeString isEqualToString:@"enum"]) {
+                        [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeEnumerate reportDic:dic idString:idString dataTypeString:dataTypeString];
+                    }else if ([dataTypeString isEqualToString:@"float"]) {
+                        
+                    }
+                    break;
+                }
+            }
+
+        }
+    }
+    
+    
+}
+
+
+///MARK: 拼接 llData control操作 数据
+- (void)setPropertyReportDeviceInfoWithType:(TIoTDataTemplatePropertyType)typeValue reportDic:(NSDictionary *)dic idString:(NSString *)idString dataTypeString:(NSString *)dataTypeString {
+    
+    //length
+    NSString *lengthString = @"";
+    if (typeValue == TIoTDataTemplatePropertyTypeBool) { //布尔
+        lengthString = @"0002";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeInt) { //int
+        lengthString = @"0005";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate
+        lengthString = @"0003";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct
+        
+    }
+    
+    //type
+    NSString *typeString = @"00";
+    //property value  TVL
+    //IdValueString
+    NSMutableArray *IDNumberArray = [self getPropertyIndexWithType:dataTypeString];
+    
+    NSString *valueString = @"";
+    if ([dic.allKeys containsObject:idString]) {
+        NSNumber *valueNumber = dic[idString]?:@(0);
+        for (NSNumber *idNumber in IDNumberArray) {
+            //头字节
+            NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:typeValue];
+
+            NSString *valueHex = [self getTLVValue:valueNumber.integerValue type:typeValue];
+            valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+            
+            //写入设备
+            NSString *writeInfoStrin = [NSString stringWithFormat:@"%@%@%@",typeString,lengthString,valueString];
+            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoStrin];
+        }
+        
+    }
+}
+
+//获取下发属性在设备模板中index (TLV协议中Type 中 ID值)
+- (NSMutableArray *)getPropertyIndexWithType:(NSString *)dataTypeString {
+    NSMutableArray *idNumberArra = [NSMutableArray new];
+    
+    __block NSInteger IDNumber = 0;
+    NSArray *propertyArr = self.DataTemplateDic[@"properties"]?:@[];
+    
+    [propertyArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *propertyDic = obj;
+        for (NSString *idkeyString in self.deviceReportData.allKeys) {
+            if ([propertyDic.allKeys containsObject:@"define"]) {
+                NSDictionary *defineDic = propertyDic[@"define"]?:@{};
+                NSString *typeKey = defineDic[@"type"]?:@"";
+                NSString *IDKey = propertyDic[@"id"]?:@"";
+                if (![NSString isNullOrNilWithObject:typeKey] && [typeKey isEqualToString:dataTypeString] && [IDKey isEqualToString:idkeyString]) {
+                    IDNumber = idx;
+                    [idNumberArra addObject:@(IDNumber)];
+                    break;
+                    *stop = YES;
+                }
+            }
+        }
+        
+    }];
+    return idNumberArra;
+}
+
+/// MARK:获取TLV协议中 type Header Value
+- (NSString *)getTLVIDValue:(NSInteger)idValue type:(TIoTDataTemplatePropertyType)typeValue {
+    NSString *bitSting = @"00000";
+    NSString *preType = @"";
+    NSString *valueSting = @"";
+    
+    if (typeValue == TIoTDataTemplatePropertyTypeBool) { //布尔
+        preType = @"000";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeInt) { //int
+        preType = @"001";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate
+        preType = @"100";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct
+        
+    }
+    
+    NSString *tempIDValue = [NSString getBinaryByDecimal:idValue];
+    //拼接TVL Type 1 Byte
+    NSString *preTempIDValue = [bitSting substringToIndex:bitSting.length - tempIDValue.length];
+    NSString *resultIDValue= [NSString stringWithFormat:@"%@%@",preTempIDValue,tempIDValue];
+    NSString *tempValue = [NSString stringWithFormat:@"%@%@",preType,resultIDValue];
+    //将2进制转16进制 1Byte
+    valueSting = [NSString getHexByBinary:tempValue];
+    return valueSting;
+}
+
+/// MARK:获取TLV协议中 Value
+- (NSString *)getTLVValue:(NSInteger)value type:(TIoTDataTemplatePropertyType )typeValue {
+    NSString *bitSting = @"";
+    if (typeValue == TIoTDataTemplatePropertyTypeBool) { //布尔 1Byte
+        bitSting = @"00";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeInt) { //int 4Byte
+        bitSting = @"00000000";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string N(<=2048)Byte
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float 4Byte
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate  2Byte
+        bitSting = @"0000";
+    }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp  4Byte
+        
+    }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct N(<=2048)Byte
+        
+    }
+    
+    NSString *valueHex = [NSString getHexByDecimal:value];
+    NSString *preTempValue = [bitSting substringToIndex:bitSting.length - valueHex.length];
+    NSString *resultValue = [NSString stringWithFormat:@"%@%@",preTempValue,valueHex];
+    return resultValue;
+}
+
+///MARK: FFE2中将属性值写入设备
+- (void)writPropertyInfoInFFE2DeviceWithMessage:(NSString *)writeInfo {
+    if (self.characteristicFFE1 != nil) {
+        CBService *service = self.characteristicFFE1.service;
+        for (CBCharacteristic *characteristic in service.characteristics) {
+            NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
+            if ([uuidFirstString isEqualToString:@"0000FFE2"]) {
+                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
+            }
+        }
+    }
+}
+
 #pragma mark - WCWaterFlowLayoutDelegate
 
 - (CGSize)waterFlowLayout:(TIoTWaterFlowLayout *)waterFlowLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath

@@ -912,3 +912,7 @@
 "open_exportLog" = "开启导出日志，需继续执行目标操作";
 "exportLog" = "导出日志";
 "delete_allLogs" = "删除所有日志文件";
+
+"device_report_success" = "设备上报成功";
+"device_report_fail" = "设备上报失败";
+"analysis_deviceData_error" = "设备数据解析错误";
