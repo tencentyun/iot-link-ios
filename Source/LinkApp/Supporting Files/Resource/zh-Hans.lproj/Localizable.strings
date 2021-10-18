@@ -916,3 +916,4 @@
 "device_report_success" = "设备上报成功";
 "device_report_fail" = "设备上报失败";
 "analysis_deviceData_error" = "设备数据解析错误";
+"device_action_reply_fail" = "设备行为回复消息失败";

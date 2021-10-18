@@ -376,13 +376,15 @@
             
         }else if ([cmdtype isEqualToString:@"05"]){
             //子设备绑定
-            NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
-            NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
-            self.currentDevicename = deviceName;
-            NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
-            NSString *signatureString = [preString substringFromIndex:6]?:@"";
-            self.currentSignature = signatureString;
-            [self bindSubDevice];
+            if (hexstr.length >= 46) {
+                NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
+                NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                self.currentDevicename = deviceName;
+                NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
+                NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                self.currentSignature = signatureString;
+                [self bindSubDevice];
+            }
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
