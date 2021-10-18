@@ -924,3 +924,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "device_report_success" = "device_report_success";
 "device_report_fail" = "device_report_fail";
 "analysis_deviceData_error" = "analysis_deviceData_error";
+"device_action_reply_fail" = "device_action_reply_fail";

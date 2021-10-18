@@ -103,7 +103,8 @@ NSString *const AppGetVirtualBindDeviceList = @"AppGetVirtualBindDeviceList";//A
 //===============纯蓝牙LLSync
 NSString *const AppGetDeviceConfig = @"AppGetDeviceConfig"; //读取用户设备的私有信息 (psk)
 NSString *const AppSetDeviceConfig = @"AppSetDeviceConfig";//上传服务器保存用户设备的私有信息 (psk)
-NSString *const AppReportDataAsDevice = @"AppReportDataAsDevice"; //蓝牙设备上传数据
+NSString *const AppReportDataAsDevice = @"AppReportDataAsDevice"; //蓝牙设备属性上传数据
+NSString *const AppPublishMsgAsDevice = @"AppPublishMsgAsDevice"; //蓝牙设备行为回复消息数据
 
 //===============设备定时
 
