@@ -3,7 +3,7 @@
 #import <UIKit/UIKit.h>
 #import "AWAACEncoder.h"
 
-@interface AWSystemAVCapture ()<AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
+@interface AWSystemAVCapture ()<AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, AWAACSendDelegate>
 
 //音频设备
 @property (nonatomic, strong) AVCaptureDeviceInput *audioInputDevice;
@@ -28,6 +28,7 @@
     [self createCaptureSession];
     
     self.mAudioEncoder = [[AWAACEncoder alloc] init];
+    self.mAudioEncoder.delegate = self;
     self.mAudioEncoder.sample_rate = self.audioConfig.sampleRate;
 }
 
@@ -62,10 +63,10 @@
 }
 
 -(BOOL) startCapture {
-//    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abc.aac"];
-//    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-//    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-//    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abcde.aac"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     [self.captureSession startRunning];
     return [super startCapture];
@@ -98,11 +99,17 @@
 
 -(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     if (self.isCapturing) {
-        [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
-//            [self->audioFileHandle writeData:encodedData];
-            [self sendAudioAACData:encodedData];
-        }];
+//        [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
+//            [self sendAudioAACData:encodedData];
+//        }];
+        
+        [self.mAudioEncoder encodeSmapleBuffer:sampleBuffer];
     }
 }
 
+#pragma AWAACSendDelegate
+- (void)sendData:(NSMutableData *)data {
+    [self->audioFileHandle writeData:data];
+    [self sendAudioAACData:data];
+}
 @end
