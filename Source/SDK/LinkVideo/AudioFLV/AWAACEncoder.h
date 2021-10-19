@@ -5,12 +5,11 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 @interface AWAACEncoder : NSObject
+@property (nonatomic,assign) NSInteger sample_rate;
 
 @property (nonatomic) dispatch_queue_t encoderQueue;
 @property (nonatomic) dispatch_queue_t callbackQueue;
-@property (nonatomic, assign)Float64 sample_rate;
 
 - (void) encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer completionBlock:(void (^)(NSData *encodedData, NSError* error))completionBlock;
-
 
 @end

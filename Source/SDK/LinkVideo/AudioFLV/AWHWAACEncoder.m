@@ -76,8 +76,7 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
     }else if (self.audioConfig.sampleRate == 8000) {
         sampleRate = 11;
     }
-//    uint8_t sampleRate = 11; //44.1KHz
-    /* 其中，samplingFreguencyIndex 对应关系如下：
+/* 其中，samplingFreguencyIndex 对应关系如下：
     0 - 96000
     1 - 88200
     2 - 64000
@@ -111,6 +110,8 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
 }
 
 -(void)open{
+    _faacConfig = self.audioConfig.faacConfig;
+    /*
     //创建audio encode converter
     AudioStreamBasicDescription inputAudioDes = {
         .mFormatID = kAudioFormatLinearPCM,
@@ -149,14 +150,16 @@ static OSStatus aacEncodeInputDataProc(AudioConverterRef inAudioConverter, UInt3
     self.aMaxOutputFrameSize = aMaxOutput;
     if (aMaxOutput == 0) {
         [self onErrorWithCode:AWEncoderErrorCodeAudioConverterGetMaxFrameSizeFailed des:@"AAC 获取最大frame size失败"];
-    }
+    }*/
 }
 
 -(void)close{
+    /*
     AudioConverterDispose(_aConverter);
     _aConverter = nil;
     self.curFramePcmData = nil;
     self.aMaxOutputFrameSize = 0;
+     */
 }
 
 @end

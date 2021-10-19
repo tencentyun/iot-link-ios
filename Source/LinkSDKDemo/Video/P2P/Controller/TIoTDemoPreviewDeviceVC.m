@@ -218,6 +218,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //                config.channelCount = 1;
 //                config.sampleSize = 16;
 //                config.sampleRate = 44100;
+                
+                //设置会话 withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth
+//                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+//                [[AVAudioSession sharedInstance] setActive:YES error:nil];
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
             }
             

@@ -4,6 +4,7 @@
 
 static aw_data *s_output_buf = NULL;
 __weak static AWAVCapture *sAWAVCapture = nil;
+NSFileHandle *flvAudioFileHandle;
 
 @interface AWAVCapture()
 //编码队列，发送队列
@@ -92,6 +93,11 @@ __weak static AWAVCapture *sAWAVCapture = nil;
 }
 
 -(BOOL) startCapture {
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abcde.flv"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    flvAudioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    
     if (!self.audioConfig) {
         NSLog(@"one of videoConfig and audioConfig must be NON-NULL");
         return NO;
@@ -120,6 +126,9 @@ __weak static AWAVCapture *sAWAVCapture = nil;
         [self.sendSampleOpQueue cancelAllOperations];
         [self.sendSampleOpQueue waitUntilAllOperationsAreFinished];
     });
+    
+    [flvAudioFileHandle closeFile];
+    flvAudioFileHandle = NULL;
 }
 
 -(void) switchCamera{}
@@ -265,6 +274,8 @@ extern void aw_write_audio_header(){
     aw_data *ttt_output_buf = NULL;
     aw_write_flv_header(&ttt_output_buf);
     
+    NSData *rawFLV = [NSData dataWithBytes:ttt_output_buf->data length:ttt_output_buf->size];
+    [flvAudioFileHandle writeData:rawFLV];
     //send flv header
     [sAWAVCapture.delegate capture:ttt_output_buf->data len:ttt_output_buf->size];
 //   ttt_output_buf
@@ -303,6 +314,9 @@ static void aw_streamer_send_flv_tag_to_rtmp(aw_flv_common_tag *common_tag){
             }
         }
     }
+
+    NSData *rawFLV = [NSData dataWithBytes:s_output_buf->data length:s_output_buf->size];
+    [flvAudioFileHandle writeData:rawFLV];
 
 //TODO send FLVBody
     [sAWAVCapture.delegate capture:s_output_buf->data len:s_output_buf->size];

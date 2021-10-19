@@ -62,10 +62,10 @@
 }
 
 -(BOOL) startCapture {
-//    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abc.aac"];
-//    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-//    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-//    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abcde.aac"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     [self.captureSession startRunning];
     return [super startCapture];
@@ -99,7 +99,7 @@
 -(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     if (self.isCapturing) {
         [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
-//            [self->audioFileHandle writeData:encodedData];
+            [self->audioFileHandle writeData:encodedData];
             [self sendAudioAACData:encodedData];
         }];
     }
