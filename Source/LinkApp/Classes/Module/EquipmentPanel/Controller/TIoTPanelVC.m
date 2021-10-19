@@ -183,17 +183,32 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         if (self.originBlueDevices) {
             //发现设备,连接
             if (self.blueDevices.count > 0) {
-                CBPeripheral *device = self.blueDevices[0];
-                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
-                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
-                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
-                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
-                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
-                    NSString *productstr = [NSString stringFromHexString:producthex];
-                    self.currentProductId = productstr;
-                    
-                    [self.blueManager connectBluetoothPeripheral:device];
-
+//                CBPeripheral *device = self.blueDevices[0];
+//                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+//                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+//                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+//                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+//                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+//                    NSString *productstr = [NSString stringFromHexString:producthex];
+//                    self.currentProductId = productstr;
+//
+//                    [self.blueManager connectBluetoothPeripheral:device];
+//
+//                }
+                
+                for (CBPeripheral *device in self.blueDevices) {
+                    NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                        NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                        NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                        NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+                        NSString *productstr = [NSString stringFromHexString:producthex];
+                        if ([productstr isEqualToString:self.productId]) {
+                            self.currentProductId = productstr;
+                            [self.blueManager connectBluetoothPeripheral:device];
+                            break;
+                        }
+                    }
                 }
             }
         }else {
@@ -1002,17 +1017,31 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         case TIoTBlueDeviceDisconnected: {
             //目前未连接，点击立即连接
             if (self.blueDevices.count > 0) {
-                CBPeripheral *device = self.blueDevices[0];
-                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
-                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
-                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
-                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
-                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
-                    NSString *productstr = [NSString stringFromHexString:producthex];
-                    self.currentProductId = productstr;
-                    
-                    [self.blueManager connectBluetoothPeripheral:device];
-                    
+//                CBPeripheral *device = self.blueDevices[0];
+//                NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+//                if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+//                    NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+//                    NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+//                    NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+//                    NSString *productstr = [NSString stringFromHexString:producthex];
+//                    self.currentProductId = productstr;
+//
+//                    [self.blueManager connectBluetoothPeripheral:device];
+//
+//                }
+                
+                for (CBPeripheral *device in self.blueDevices) {
+                    NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+                    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                        NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                        NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                        NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+                        NSString *productstr = [NSString stringFromHexString:producthex];
+                        if ([productstr isEqualToString:self.productId]) {
+                            self.currentProductId = productstr;
+                            [self.blueManager connectBluetoothPeripheral:device];
+                        }
+                    }
                 }
                 
             }else {
@@ -1350,6 +1379,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                 typePreString = @"011";
                             }else if ([typeString isEqualToString:@"timestamp"]) {
                                 typePreString = @"101";
+                            }else if ([typeString isEqualToString:@"string"]) {
+                                typePreString = @"010";
+                            }else if ([typeString isEqualToString:@"stringenum"]) {
+                                typePreString = @"100";
                             }
                             
                             NSString *preTempIDValue = [bitSting substringToIndex:bitSting.length - tempIDValue.length];
@@ -1401,42 +1434,62 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         for (int j = 0; j < dic.allKeys.count; j++) {
             if (![NSString isNullOrNilWithObject:inputIDString] && [inputIDString isEqualToString:dic.allKeys[j]]) {
                 
-                NSString *origionIntValue = dic[inputIDString]?:@"";
+                NSString *origionValue = dic[inputIDString]?:@"";
                 
                 if ([typeString isEqualToString:@"int"]) {
                     NSString *bitSting = @"00000000";
-                    NSString *tempHexValue = [NSString getHexByDecimal:origionIntValue.integerValue];
+                    NSString *tempHexValue = [NSString getHexByDecimal:origionValue.integerValue];
                     TVLValue= [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
                     
 //                    TVLValue = [TVLValue stringByAppendingString:resultHexValue];
                     break;
                 }else if ([typeString isEqualToString:@"bool"]) {
                     NSString *bitSting = @"00";
-                    NSString *tempHexValue = [NSString getHexByDecimal:origionIntValue.integerValue];
+                    NSString *tempHexValue = [NSString getHexByDecimal:origionValue.integerValue];
                     TVLValue= [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
                     
 //                    TVLValue = [TVLValue stringByAppendingString:resultHexValue];
                     break;
                 }else if ([typeString isEqualToString:@"enum"]) {
                     NSString *bitSting = @"0000";
-                    NSString *tempHexValue = [NSString getHexByDecimal:origionIntValue.integerValue];
+                    NSString *tempHexValue = [NSString getHexByDecimal:origionValue.integerValue];
                     TVLValue= [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
                     
 //                    TVLValue = [TVLValue stringByAppendingString:resultHexValue];
                     break;
                 }else if ([typeString isEqualToString:@"float"]) {
                     NSString *bitSting = @"00000000";
-                    NSString *tempHexValue = [NSString getHexByDecimal:origionIntValue.floatValue];
+                    NSString *tempHexValue = [NSString getHexByDecimal:origionValue.floatValue];
                     TVLValue= [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
                     
 //                    TVLValue = [TVLValue stringByAppendingString:resultHexValue];
                     break;
                 }else if ([typeString isEqualToString:@"timestamp"]) {
                     NSString *bitSting = @"00000000";
-                    NSString *tempHexValue = [NSString getHexByDecimal:origionIntValue.integerValue];
+                    NSString *tempHexValue = [NSString getHexByDecimal:origionValue.integerValue];
                     TVLValue = [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
                     
 //                    TVLValue = [TVLValue stringByAppendingString:resultHexValue];
+                    break;
+                }else if ([typeString isEqualToString:@"string"]) {
+                    NSString *originHexString = [NSString hexStringFromString:origionValue];
+                    NSString *bitSting = @"";
+                    for (int i = 0; i<originHexString.length/2; i++) {
+                        bitSting = [bitSting stringByAppendingString:@"00"];
+                    }
+                    NSString *stringValue = [self getTVLValueWithOriginValue:originHexString bitString:bitSting];
+                    
+                    //需要在value前拼接length
+                    NSString *lengthHex = [NSString getHexByDecimal:originHexString.length/2];
+                    NSString *lengthBit = @"0000";
+                    NSString *tempHexLength = [self getTVLValueWithOriginValue:lengthHex bitString:lengthBit];
+                    TVLValue = [NSString stringWithFormat:@"%@%@",tempHexLength,stringValue];
+                    break;
+                }else if ([typeString isEqualToString:@"stringenum"]) {
+                    NSString *bitSting = @"0000";
+//                    NSString *tempHexValue = [NSString hexStringFromString:origionValue];
+//                    TVLValue= [self getTVLValueWithOriginValue:tempHexValue bitString:bitSting];
+                    
                     break;
                 }
             }
