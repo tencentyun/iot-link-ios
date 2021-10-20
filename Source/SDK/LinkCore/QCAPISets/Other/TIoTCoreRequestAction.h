@@ -115,6 +115,8 @@ FOUNDATION_EXPORT NSString *const AppGetDeviceConfig;//读取用户设备的私�
 FOUNDATION_EXPORT NSString *const AppSetDeviceConfig;//上传服务器保存用户设备的私有信息 (psk)
 FOUNDATION_EXPORT NSString *const AppReportDataAsDevice;//蓝牙设备上传数据
 FOUNDATION_EXPORT NSString *const AppPublishMsgAsDevice;//蓝牙设备行为回复消息数据
+FOUNDATION_EXPORT NSString *const AppCheckFirmwareUpdate;//查看固件版本
+FOUNDATION_EXPORT NSString *const AppReportFirmwareVersion;//上报固件版本
 
 //MARK: 设备定时
 

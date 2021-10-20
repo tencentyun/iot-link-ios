@@ -192,10 +192,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
-                        if ([productstr isEqualToString:self.productId]) {
-                            self.currentProductId = productstr;
-                            [self.blueManager connectBluetoothPeripheral:device];
-                            break;
+                        self.currentProductId = productstr;
+                        
+                        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+                            NSNumber *connectHexstr = advertisementData[@"kCBAdvDataIsConnectable"];
+                            NSArray *uuidArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+                            if (![productstr isEqualToString:self.productId] && [uuidArray containsObject:[CBUUID UUIDWithString:@"FFE0"]] && [connectHexstr isEqual: @(1)]) {
+                                [self.blueManager connectBluetoothPeripheral:device];
+                                break;
+                            }else if([productstr isEqualToString:self.productId]) {
+                                [self.blueManager connectBluetoothPeripheral:device];
+                                break;
+                            }
                         }
                     }
                 }
@@ -1015,9 +1023,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
-                        if ([productstr isEqualToString:self.productId]) {
-                            self.currentProductId = productstr;
+                        self.currentProductId = productstr;
+                        
+                        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+                            NSNumber *connectHexstr = advertisementData[@"kCBAdvDataIsConnectable"];
+                            NSArray *uuidArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+                            if (![productstr isEqualToString:self.productId] && [uuidArray containsObject:[CBUUID UUIDWithString:@"FFE0"]] && [connectHexstr isEqual: @(1)]) {
+                                [self.blueManager connectBluetoothPeripheral:device];
+                                break;
+                            }
+                        }else if([productstr isEqualToString:self.productId]) {
                             [self.blueManager connectBluetoothPeripheral:device];
+                            break;
                         }
                     }
                 }
@@ -1049,8 +1066,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
     self.currentConnectedPerpheral = connectedPerpheral;
-    //连接蓝牙设备成功
-    [self connectedSuccessBlueDeviceUI];
 }
 //断开外设
 - (void)disconnectBluetoothDeviceWithPerpheral:(CBPeripheral *)disconnectedPerpheral {
@@ -1092,6 +1107,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                 break;
                             }
                         }
+                    }else {
+                        [self connectedFailBlueDeviceUI];
+                        [self writeLinkResultInDeviceWithSuccess:NO];
                     }
                 }
             }
@@ -1120,6 +1138,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             //解除鉴权成功 （解除绑定）
             [self.blueManager disconnectPeripheral];
         }else if ([cmdtype isEqualToString:@"08"]) {
+            
+            //连接蓝牙设备成功
+            [self connectedSuccessBlueDeviceUI];
+            
             //连接成功后 将连接结果写入设备后，设备返回
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
         }else if ([cmdtype isEqualToString:@"01"]) {
