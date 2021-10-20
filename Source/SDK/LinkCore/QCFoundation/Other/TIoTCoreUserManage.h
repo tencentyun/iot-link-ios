@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *familyId;//
 @property (nonatomic,copy) NSString *currentRoomId;
 @property (nonatomic,assign) NSInteger FamilyType;
+
+/**
+ 固件升级提示（只显示一次）
+ */@property (nonatomic, copy, nullable) NSString *firmwareUpdate;
+
 /*
  注册页面 用户选择项
  */

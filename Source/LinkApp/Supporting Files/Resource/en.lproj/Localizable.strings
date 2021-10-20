@@ -921,7 +921,11 @@ If the problem still persists, we recommend you remove the device and add it aga
 "exportLog" = "导出日志";
 "delete_allLogs" = "删除所有日志文件";
 
-"device_report_success" = "device_report_success";
-"device_report_fail" = "device_report_fail";
-"analysis_deviceData_error" = "analysis_deviceData_error";
-"device_action_reply_fail" = "device_action_reply_fail";
+"device_report_success" = "设备上报成功";
+"device_report_fail" = "设备上报失败";
+"analysis_deviceData_error" = "设备数据解析错误";
+"device_action_reply_fail" = "设备行为回复消息失败";
+"firmware_update" = "可升级固件";
+"update_now" = "立即升级";
+"current_Version" = "当前固件版本为";
+"last_Version" = "当前固件版本为";

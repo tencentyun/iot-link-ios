@@ -133,7 +133,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) NSDictionary *DataTemplateDic; //控制台模板数据 （event action property）
 @property (nonatomic, strong) NSDictionary *deviceReportData; //控制台下发的原始数据 Key:id value:value
 @property (nonatomic, strong) NSDictionary *deviceReportPayload;//控制台下发解密后的payload
-@property (nonatomic, strong) NSString *versionString; //固件版本号
+@property (nonatomic, strong) TIoTFirmwareModel *firmwareModel;
+@property (nonatomic, strong) TIoTAlertView *firmwareView;
 @end
 
 @implementation TIoTPanelVC
@@ -166,12 +167,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    //离开页面后断开蓝牙连接
-    
+- (void)nav_customBack {
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)dealloc {
@@ -247,7 +246,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 - (void)hideAlertView {
-    [self.tipAlertView removeFromSuperview];
+    if (self.tipAlertView != nil) {
+        [self.tipAlertView removeFromSuperview];
+    }
+    if (self.firmwareView != nil) {
+        [self.firmwareView removeFromSuperview];
+    }
     [self.backMaskView removeFromSuperview];
 }
 
@@ -787,8 +791,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                @"DeviceName":self.deviceName?:@"",
     };
     [[TIoTRequestObject shared] post:AppCheckFirmwareUpdate Param:paramDic success:^(id responseObject) {
-        TIoTFirmwareModel *firmwareModel = [TIoTFirmwareModel yy_modelWithJSON:responseObject[@"data"]];
-        self.versionString = firmwareModel.CurrentVersion?:@"";
+        self.firmwareModel = [TIoTFirmwareModel yy_modelWithJSON:responseObject];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
@@ -805,6 +808,15 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
+}
+
+- (NSString *)getVersionWithString:(NSString *)originVersionString {
+    NSString *versionString = @"";
+    NSArray *versionArray = [originVersionString componentsSeparatedByString:@"."];
+    for (NSString *numStr in versionArray) {
+        versionString = [versionString stringByAppendingString:numStr];
+    }
+    return versionString;
 }
 
 #pragma mark - event
@@ -1174,12 +1186,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             //连接成功后 将连接结果写入设备后，设备返回
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
-            if ([NSString isNullOrNilWithObject:self.versionString]) {
-                NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
-                self.versionString = [NSString stringFromHexString:firmwareVersionHexString]?:@"";
-            }
             
-            [self reportFirmwareVersionWithVersion:self.versionString];
+            //获取设备上报固件版本号
+            NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
+            NSString *versionString = [NSString stringFromHexString:firmwareVersionHexString]?:@"";
+            
+            NSString *currentString = [self getVersionWithString:versionString];
+            NSString *desString = [self getVersionWithString:self.firmwareModel.DstVersion];
+            
+            //升级弹框
+            [self chooseUpdateFirwareAlertWithCurrentVersion:currentString desVersion:desString];
+            
+            [self reportFirmwareVersionWithVersion:versionString];
             
         }else if ([cmdtype isEqualToString:@"01"]) {
             //数据模版中的控制回复 control_reply
@@ -1256,6 +1274,36 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
 }
 
+///MARK:升级固件弹框
+- (void)chooseUpdateFirwareAlertWithCurrentVersion:(NSString *)curVersioin desVersion:(NSString *)desVersion {
+    NSString * currentString = curVersioin;
+    NSString * desString = desVersion;
+    
+    if (currentString.floatValue < desString.floatValue) {
+        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
+            
+            //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
+            NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"当前固件版本为"),self.firmwareModel.DstVersion];
+            self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+            [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
+                self.firmwareView.cancelAction = ^{
+                };
+                [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
+                self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
+                    
+                };
+                
+                self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+                [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+                [self.firmwareView showInView:self.backMaskView];
+                
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+                [self.backMaskView addGestureRecognizer:tap];
+            
+            [TIoTCoreUserManage shared].firmwareUpdate = @"1";
+        }
+    }
+}
 ///MARK:蓝牙设备属性上报数据到控制台
 - (void)reportDataAsDeviceWithData:(NSDictionary *)paramDic {
     [[TIoTRequestObject shared] post:AppReportDataAsDevice Param:paramDic success:^(id responseObject) {

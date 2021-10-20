@@ -48,6 +48,7 @@
 @synthesize searchHistoryArray = _searchHistoryArray;
 
 @synthesize demoAccessID = _demoAccessID;
+@synthesize firmwareUpdate = _firmwareUpdate;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -343,6 +344,20 @@
     [[NSUserDefaults standardUserDefaults] setValue:countryTitleEN forKey:@"country_TitleEN"];
 }
 
+#pragma mark - 固件升级
+- (NSString *)firmwareUpdate
+{
+    if (!_firmwareUpdate) {
+        _firmwareUpdate = [[NSUserDefaults standardUserDefaults] valueForKey:@"firmware_Update"];
+    }
+    return _firmwareUpdate;
+}
+
+- (void)setFirmwareUpdate:(NSString *)firmwareUpdate {
+    _firmwareUpdate = firmwareUpdate;
+    [[NSUserDefaults standardUserDefaults] setValue:firmwareUpdate forKey:@"firmware_Update"];
+}
+
 #pragma mark - 生日日期
 
 - (NSString *)isShowBirthDayView {
@@ -564,6 +579,7 @@
     self.countryTitle = @"";
     self.countryTitleEN = @"";
     self.FamilyType = 0;
+    self.firmwareUpdate = @"";
 }
 
 - (void)signInClear {
