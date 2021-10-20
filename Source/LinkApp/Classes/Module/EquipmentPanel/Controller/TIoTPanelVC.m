@@ -42,6 +42,7 @@
 #import "UIButton+TIoTButtonFormatter.h"
 
 #import "TIoTLLSyncDeviceConfigModel.h"
+#import "TIoTFirmwareModel.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -132,6 +133,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) NSDictionary *DataTemplateDic; //控制台模板数据 （event action property）
 @property (nonatomic, strong) NSDictionary *deviceReportData; //控制台下发的原始数据 Key:id value:value
 @property (nonatomic, strong) NSDictionary *deviceReportPayload;//控制台下发解密后的payload
+@property (nonatomic, strong) NSString *versionString; //固件版本号
 @end
 
 @implementation TIoTPanelVC
@@ -148,6 +150,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self getProductsConfig];
     
     [self configBlueManager];
+    
+    [self checkfirmwarVersion];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -777,6 +781,32 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     return resuleProperty;
 }
 
+//获取/检测固件版本
+- (void)checkfirmwarVersion {
+    NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
+                               @"DeviceName":self.deviceName?:@"",
+    };
+    [[TIoTRequestObject shared] post:AppCheckFirmwareUpdate Param:paramDic success:^(id responseObject) {
+        TIoTFirmwareModel *firmwareModel = [TIoTFirmwareModel yy_modelWithJSON:responseObject[@"data"]];
+        self.versionString = firmwareModel.CurrentVersion?:@"";
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+//上报固件版本
+- (void)reportFirmwareVersionWithVersion:(NSString *)version {
+    NSDictionary *paramDic = @{@"Version":version?:@"",
+                               @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+    };
+    
+    [[TIoTRequestObject shared] post:AppReportFirmwareVersion Param:paramDic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
 #pragma mark - event
 
 - (void)addEmptyCandidateModelTipView {
@@ -1144,6 +1174,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             //连接成功后 将连接结果写入设备后，设备返回
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
+            if ([NSString isNullOrNilWithObject:self.versionString]) {
+                NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
+                self.versionString = [NSString stringFromHexString:firmwareVersionHexString]?:@"";
+            }
+            
+            [self reportFirmwareVersionWithVersion:self.versionString];
+            
         }else if ([cmdtype isEqualToString:@"01"]) {
             //数据模版中的控制回复 control_reply
 //            01000100     01 11
