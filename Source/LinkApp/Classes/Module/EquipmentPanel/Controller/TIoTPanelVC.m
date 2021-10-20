@@ -1316,6 +1316,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     };
     [[TIoTRequestObject shared] post:AppGetDeviceOTAInfo Param:paramDic success:^(id responseObject) {
         TIoTFirmwareOTAInfoModel *firmwareOTAInfo = [TIoTFirmwareOTAInfoModel yy_modelWithJSON:responseObject];
+        //开始下载固件包上报
         [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(0)];
         //下载升级包
         [self downloadUpdateInfoURL:firmwareOTAInfo.FirmwareURL?:@""];
@@ -1344,10 +1345,19 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [mgr moveItemAtPath:location.path toPath:file error:nil];
         DDLogInfo(@"download firmware file path :%@",file);
         
+        //发送升级请求包到设备
+        [self sendFirmwareUpdateInfoToDevice];
+        
+        //下载固件包完成后上报
         [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(100)];
     }];
     // 开始任务
     [downloadTask resume];
+    
+}
+
+///MARK:发送升级请求包到设备
+- (void)sendFirmwareUpdateInfoToDevice {
     
 }
 
