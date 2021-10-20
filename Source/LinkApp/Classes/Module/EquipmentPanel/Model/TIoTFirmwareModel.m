@@ -8,3 +8,11 @@
 @implementation TIoTFirmwareModel
 
 @end
+
+@implementation TIoTFirmwareUpdateStatusModel
+
+@end
+
+@implementation TIoTFirmwareOTAInfoModel
+
+@end

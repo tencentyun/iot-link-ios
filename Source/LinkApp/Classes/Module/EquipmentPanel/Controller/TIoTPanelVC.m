@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @end
 
 
-@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate,BluetoothCentralManagerDelegate>
+@interface TIoTPanelVC ()<UICollectionViewDelegate,UICollectionViewDataSource,WCWaterFlowLayoutDelegate,BluetoothCentralManagerDelegate,NSURLSessionDownloadDelegate>
 @property  (nonatomic, strong) UIImageView *emptyImageView;
 @property (nonatomic, strong) UILabel *noIntelligentLogTipLabel;
 @property (nonatomic,strong) UIImageView *bgView;//背景
@@ -785,7 +785,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     return resuleProperty;
 }
 
-//获取/检测固件版本
+//获取/检测固件版本 (确认固件升级任务)
 - (void)checkfirmwarVersion {
     NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
                                @"DeviceName":self.deviceName?:@"",
@@ -1194,7 +1194,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *currentString = [self getVersionWithString:versionString];
             NSString *desString = [self getVersionWithString:self.firmwareModel.DstVersion];
             
-            //升级弹框
+            //升级固件提示弹框
             [self chooseUpdateFirwareAlertWithCurrentVersion:currentString desVersion:desString];
             
             [self reportFirmwareVersionWithVersion:versionString];
@@ -1274,7 +1274,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
 }
 
-///MARK:升级固件弹框
+///MARK:升级固件提示弹框
 - (void)chooseUpdateFirwareAlertWithCurrentVersion:(NSString *)curVersioin desVersion:(NSString *)desVersion {
     NSString * currentString = curVersioin;
     NSString * desString = desVersion;
@@ -1286,23 +1286,100 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"当前固件版本为"),self.firmwareModel.DstVersion];
             self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
             [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
-                self.firmwareView.cancelAction = ^{
-                };
-                [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
-                self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
-                    
-                };
+            self.firmwareView.cancelAction = ^{
+            };
+            [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
+            __weak typeof(self) weakSelf = self;
+            self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
+                //上报开始下载 下载进度 下载完成
                 
-                self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
-                [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
-                [self.firmwareView showInView:self.backMaskView];
-                
-                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
-                [self.backMaskView addGestureRecognizer:tap];
+                //获取升级包URL后，开始下载
+                [weakSelf getFrimwareOTAURL];
+            };
+            
+            self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+            [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+            [self.firmwareView showInView:self.backMaskView];
+            
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+            [self.backMaskView addGestureRecognizer:tap];
             
             [TIoTCoreUserManage shared].firmwareUpdate = @"1";
         }
     }
+}
+
+///MARK: 获取固件升级包URL
+- (void)getFrimwareOTAURL {
+    NSDictionary *paramDic = @{
+                               @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]
+    };
+    [[TIoTRequestObject shared] post:AppGetDeviceOTAInfo Param:paramDic success:^(id responseObject) {
+        TIoTFirmwareOTAInfoModel *firmwareOTAInfo = [TIoTFirmwareOTAInfoModel yy_modelWithJSON:responseObject];
+        [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(0)];
+        //下载升级包
+        [self downloadUpdateInfoURL:firmwareOTAInfo.FirmwareURL?:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+///MARK:下载升级包
+- (void)downloadUpdateInfoURL:(NSString *)urlString {
+    
+    NSURL* url = [NSURL URLWithString:urlString?:@""];
+    
+    NSURLSession* session = [NSURLSession sharedSession];
+    
+    NSURLSessionDownloadTask* downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        NSString *caches = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        
+        NSString *file = [caches stringByAppendingPathComponent:response.suggestedFilename];
+        
+        //将临时文件剪切或者复制Caches文件夹
+        NSFileManager *mgr = [NSFileManager defaultManager];
+        
+        // AtPath 原始文件路径
+        // ToPath 目标文件路径
+        [mgr moveItemAtPath:location.path toPath:file error:nil];
+        DDLogInfo(@"download firmware file path :%@",file);
+        
+        [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(100)];
+    }];
+    // 开始任务
+    [downloadTask resume];
+    
+}
+
+///MARK:APP上报进度（下载，升级更新，烧录）
+//status:downloading updating burning
+- (void)reportAppOTAStatusProgress:(NSString *)status versioin:(NSString *)version persent:(NSNumber *)persent {
+    NSDictionary *paramDic = @{@"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+                               @"State":status?:@"",
+                               @"ResultCode":@(0),
+                               @"ResultMsg":@"",
+                               @"Version":version?:@"",
+                               @"Persent":persent,
+                               
+    };
+    [[TIoTRequestObject shared] post:AppReportOTAStatus Param:paramDic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+///MARK:查询设备固件升级状态
+- (void)checkDeviceFirmwareUpateStatus {
+    NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
+                               @"DeviceName":self.deviceName?:@"",
+    };
+    
+    [[TIoTRequestObject shared] post:AppDescribeFirmwareUpdateStatus Param:paramDic success:^(id responseObject) {
+        TIoTFirmwareUpdateStatusModel *updateStatusModel = [TIoTFirmwareUpdateStatusModel yy_modelWithJSON:responseObject];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 ///MARK:蓝牙设备属性上报数据到控制台
 - (void)reportDataAsDeviceWithData:(NSDictionary *)paramDic {
@@ -1330,9 +1407,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 ///MARK:将连接结果写入设备
 - (void)writeLinkResultInDeviceWithSuccess:(BOOL)isSuccess {
     if (isSuccess == YES) {
-        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"05"];
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1?:[CBCharacteristic new] LLDeviceInfo:@"05"];
     }else {
-        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"06"];
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1?:[CBCharacteristic new] LLDeviceInfo:@"06"];
     }
 
 }

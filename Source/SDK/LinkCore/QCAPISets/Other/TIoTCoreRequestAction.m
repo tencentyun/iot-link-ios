@@ -107,6 +107,9 @@ NSString *const AppReportDataAsDevice = @"AppReportDataAsDevice"; //蓝牙设备
 NSString *const AppPublishMsgAsDevice = @"AppPublishMsgAsDevice"; //蓝牙设备行为回复消息数据
 NSString *const AppCheckFirmwareUpdate = @"AppCheckFirmwareUpdate"; //查看固件版本
 NSString *const AppReportFirmwareVersion = @"AppReportFirmwareVersion"; //上报固件版本
+NSString *const AppDescribeFirmwareUpdateStatus = @"AppDescribeFirmwareUpdateStatus"; //查询设备固件升级状态
+NSString *const AppGetDeviceOTAInfo = @"AppGetDeviceOTAInfo"; //获取固件升级包URL
+NSString *const AppReportOTAStatus = @"AppReportOTAStatus"; //上报设备OTA状态进度 （下载、更新升级、烧录）
 
 //===============设备定时
 
