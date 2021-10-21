@@ -66,6 +66,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *isShowBirthDayView;  //是否弹出生日选择View
 
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyView;
+
 /*
  保存首次进入APP 设备
  */

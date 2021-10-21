@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 - (instancetype)initWithFrame:(CGRect)frame andStyle:(WCAlertViewStyle)style;
 
 - (instancetype)initWithFrame:(CGRect)frame withTopImage:(UIImage *)topImage;
+- (instancetype)initWithPricy:(CGRect)frame ;
 
 @property (nonatomic, strong) void (^doneAction)(NSString *text);
 @property (nonatomic, strong) void (^cancelAction)(void);
