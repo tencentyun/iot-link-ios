@@ -174,7 +174,88 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 }
 
 - (void)firstShowBirthdayView {
+
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyView]) {
+        TIoTAlertView *tipAlertView = [[TIoTAlertView alloc] initWithPricy:[UIScreen mainScreen].bounds];
+        [tipAlertView alertWithTitle:NSLocalizedString(@"register_privacy_policy_title", @"用户协议及隐私政策") message:NSLocalizedString(@"register_privacy_policy_conte", nil)
+                         cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
+
+        tipAlertView.cancelAction = ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        };
+        [tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+            if ([text isEqualToString:@"Privacy2"]) {
+                
+                if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+                    
+                    if (LanguageIsEnglish) {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                        vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }else {
+                        TIoTWebVC *vc = [TIoTWebVC new];
+                        vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+                        vc.urlPath = ServiceProtocolURl;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                } else {
+                    
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    
+                    if (LanguageIsEnglish) {
+                        vc.urlPath = TIoTAPPConfig.serviceAgreementEnglishString;
+                    }else {
+                        vc.urlPath = TIoTAPPConfig.userProtocolUSChineseString;
+                    }
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else if ([text isEqualToString:@"Privacy4"]) {
+                
+                if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+                    
+                    if (LanguageIsEnglish) {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                        vc.urlPath = TIoTAPPConfig.userPrivacyPolicyChEnglishString;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }else {
+                        TIoTWebVC *vc = [TIoTWebVC new];
+                        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                        vc.urlPath = PrivacyProtocolURL;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                    
+                } else {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                    if (LanguageIsEnglish) {
+                        vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+                    }else {
+                        vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
+                    }
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else {
+                [TIoTCoreUserManage shared].isShowPricyView = @"1";
+                
+                [self showEN_age_view];
+            }
+        };
+        
+        UIView *backMaskView = [UIApplication sharedApplication].delegate.window;
+        [tipAlertView showInView:backMaskView];
+        return;
+    }
     
+    [self showEN_age_view];
+}
+
+- (void)showEN_age_view {
     if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView] &&  [[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
         TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
         [customView alertContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:NO];
@@ -200,7 +281,6 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         
     }
 }
-
 #pragma mark - 显示用户之前操作项
 - (void)refreshUserActionItems {
     

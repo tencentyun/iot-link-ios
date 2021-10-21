@@ -36,6 +36,7 @@
     // Do any additional setup after loading the view from its nib.
     self.showLastestVerion = NO;
     self.title = NSLocalizedString(@"about_me", @"关于我们");
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#f5f5f5"];
     
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [info objectForKey:@"CFBundleShortVersionString"];

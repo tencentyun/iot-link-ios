@@ -929,3 +929,9 @@ If the problem still persists, we recommend you remove the device and add it aga
 "update_now" = "立即升级";
 "current_Version" = "当前固件版本为";
 "last_Version" = "当前固件版本为";
+"register_privacy_policy_title" = "用户协议及隐私政策";
+"register_privacy_policy_conte1" = "为了保证您的个人隐私安全，在进行账号注册前，您需要确认您已经阅读腾讯云";
+"register_privacy_policy_conte2" = "用户协议";
+"register_privacy_policy_conte3" = "及";
+"register_privacy_policy_conte4" = "隐私政策";
+"register_privacy_policy_conte5" = "，并同意授权腾讯连连为您注册账号信息（如手机号、昵称、头像）";

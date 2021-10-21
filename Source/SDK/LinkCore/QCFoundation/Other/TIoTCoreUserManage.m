@@ -43,6 +43,7 @@
 @synthesize sys_call_status = _sys_call_status;
 
 @synthesize isShowBirthDayView = _isShowBirthDayView;
+@synthesize isShowPricyView = _isShowPricyView;
 @synthesize addDeviceNumber = _addDeviceNumber;
 
 @synthesize searchHistoryArray = _searchHistoryArray;
@@ -385,6 +386,19 @@
 - (void)setIsRreshDeviceList:(NSString *)isRreshDeviceList {
     _isRreshDeviceList = isRreshDeviceList;
     [[NSUserDefaults standardUserDefaults] setValue:isRreshDeviceList forKey:@"isRreshDeviceList"];
+}
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyView {
+    if (!_isShowPricyView) {
+        _isShowPricyView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyView"];
+    }
+    return _isShowPricyView;
+}
+
+- (void)setIsShowPricyView:(NSString *)isShowPricyView {
+    _isShowPricyView = isShowPricyView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyView forKey:@"isShowPricyView"];
 }
 
 #pragma mark - 首次进入APP 添加设备数量

@@ -71,6 +71,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *isRreshDeviceList;  //从添加设备页面返回首页后，刷新列表
 
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyView;
+
 /*
  保存首次进入APP 设备
  */
