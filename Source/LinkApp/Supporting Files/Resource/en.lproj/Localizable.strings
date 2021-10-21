@@ -88,6 +88,7 @@
 "telephone_number" = "Mobile number";
 "user_id" = "User ID";
 "modify_password" = "Change password";
+"modify_authentation" = "权限管理";
 "modify_nick" = "Change nickname";
 "bind_phone" = "Bind mobile number";
 "old_password" = "Old password";
@@ -935,3 +936,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "register_privacy_policy_conte3" = "及";
 "register_privacy_policy_conte4" = "隐私政策";
 "register_privacy_policy_conte5" = "，并同意授权腾讯连连为您注册账号信息（如手机号、昵称、头像）";
+"authentation_privacy_conte1" = "推送权限";
+"authentation_privacy_conte2" = "位置信息";
+"authentation_privacy_conte3" = "摄像头/麦克风权限";
+"authentation_privacy_conte4" = "蓝牙权限";

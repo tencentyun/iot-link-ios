@@ -89,6 +89,7 @@
 "telephone_number" = "电话号码";
 "user_id" = "用户 ID";
 "modify_password" = "修改密码";
+"modify_authentation" = "权限管理";
 "modify_nick" = "修改昵称";
 "bind_phone" = "手机绑定";
 "old_password" = "旧密码";
@@ -927,3 +928,7 @@
 "register_privacy_policy_conte3" = "及";
 "register_privacy_policy_conte4" = "隐私政策";
 "register_privacy_policy_conte5" = "，并同意授权腾讯连连为您注册账号信息（如手机号、昵称、头像）";
+"authentation_privacy_conte1" = "推送权限";
+"authentation_privacy_conte2" = "位置信息";
+"authentation_privacy_conte3" = "摄像头/麦克风权限";
+"authentation_privacy_conte4" = "蓝牙权限";

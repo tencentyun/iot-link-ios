@@ -12,6 +12,7 @@
 #import "TIoTAppConfig.h"
 #import "TIoTModifyPasswordVC.h"
 #import "TIoTCancelAccountVC.h"
+#import "TIoTAuthentationVC.h"
 
 @interface TIoTAccountAndSafeVC ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -169,6 +170,12 @@
         }else {
         }
 
+        
+    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"modify_authentation", @"权限管理")]) {
+        
+        TIoTAuthentationVC *modifyPassword = [[TIoTAuthentationVC alloc]init];
+        [self.navigationController pushViewController:modifyPassword animated:YES];
+        
     } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"modify_password", @"修改密码")]) {
         
         TIoTModifyPasswordVC *modifyPassword = [[TIoTModifyPasswordVC alloc]init];
@@ -304,16 +311,17 @@
             @{@"title":NSLocalizedString(@"email", @"邮箱"),@"value":email,@"vc":@"",@"haveArrow":@"1"},
             @{@"title":NSLocalizedString(@"wechat", @"微信"),@"value":weixin,@"vc":@"",@"haveArrow":weixinArrow}],
             @[@{@"title":NSLocalizedString(@"location_of_account", @"账户所在地"),@"value":region,@"vc":@"",@"haveArrow":@"0"}],
+            @[@{@"title":NSLocalizedString(@"modify_authentation", @"权限管理"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
             @[@{@"title":NSLocalizedString(@"modify_password", @"修改密码"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
             @[@{@"title":NSLocalizedString(@"account_logout", @"账号注销"),@"value":@"",@"vc":@"",@"haveArrow":@"1"}],
         ]];
 
         if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].hasPassword]) {
             if ([[TIoTCoreUserManage shared].hasPassword isEqualToString:@"0"]) {
-                [_dataArr removeObjectAtIndex:2];
+                [_dataArr removeObjectAtIndex:3];
             }
         }else {
-            [_dataArr removeObjectAtIndex:2];
+            [_dataArr removeObjectAtIndex:3];
         }
     }
     

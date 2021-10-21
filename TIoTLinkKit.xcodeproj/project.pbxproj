@@ -382,6 +382,7 @@
 		EDF93D9923B367A000D477C7 /* TIoTRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF93D9823B367A000D477C7 /* TIoTRequestObject.m */; };
 		F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4027792257775D70004E20F /* TIoTNetConfigViewController.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
+		F42B874B27218FFE0002FD5C /* TIoTAuthentationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B874A27218FFE0002FD5C /* TIoTAuthentationVC.m */; };
 		F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */; };
 		F44D67A025B6D96D001B413C /* TIoTPlayMovieVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */; };
 		F46FE31B26A5735700543EFD /* TIoTLLSyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F46FE31A26A5735700543EFD /* TIoTLLSyncViewController.m */; };
@@ -1197,6 +1198,8 @@
 		F4027791257775D70004E20F /* TIoTNetConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTNetConfigViewController.h; sourceTree = "<group>"; };
 		F4027792257775D70004E20F /* TIoTNetConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTNetConfigViewController.m; sourceTree = "<group>"; };
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F42B874927218FFE0002FD5C /* TIoTAuthentationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAuthentationVC.h; sourceTree = "<group>"; };
+		F42B874A27218FFE0002FD5C /* TIoTAuthentationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAuthentationVC.m; sourceTree = "<group>"; };
 		F44D679C25B6D96D001B413C /* TIoTPlayMovieVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTPlayMovieVC.h; sourceTree = "<group>"; };
 		F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPlayMovieVC.m; sourceTree = "<group>"; };
 		F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTPlayMovieVC.xib; sourceTree = "<group>"; };
@@ -2321,6 +2324,8 @@
 				ED69BE8A237ABAC90023F5FC /* TIoTTextVC.m */,
 				6D982C8624D2BB2D0080C961 /* TIoTAccountAndSafeVC.h */,
 				6D982C8724D2BB2D0080C961 /* TIoTAccountAndSafeVC.m */,
+				F42B874927218FFE0002FD5C /* TIoTAuthentationVC.h */,
+				F42B874A27218FFE0002FD5C /* TIoTAuthentationVC.m */,
 				6D982C8924D2DB350080C961 /* TIoTBindAccountVC.h */,
 				6D982C8A24D2DB350080C961 /* TIoTBindAccountVC.m */,
 				6D982C9224D33FF40080C961 /* TIoTModifyAccountVC.h */,
@@ -3537,6 +3542,7 @@
 				A45734D324E3E1020060D1A0 /* TIoTDeviceWIFITipViewController.m in Sources */,
 				A4F5B12B24D2A7DB00F83B5F /* TIoTStartConfigViewController.m in Sources */,
 				ED800C98240CA2A50045A268 /* TIoTMessageNoticeVC.m in Sources */,
+				F42B874B27218FFE0002FD5C /* TIoTAuthentationVC.m in Sources */,
 				ED78229D241B70FA00919FF6 /* TIoTMessageText2Cell.m in Sources */,
 				ED3A93D22378FE2E00379AA7 /* TIoTSoftapWaitVC.m in Sources */,
 				ED67E58C23C30B1E00BE7628 /* TIoTLongCell.m in Sources */,
