@@ -22,6 +22,7 @@
 #import "TIoTOpensourceLicenseViewController.h"
 #import "TIoTLLSyncDeviceController.h"
 #import "TIoTLLSyncViewController.h"
+#import "TIoTAlertAuthorsizeView.h"
 
 @interface TIoTNewAddEquipmentViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -88,6 +89,30 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     }
     
     [self configLLSyncView];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyWIFIView]) {
+        [self usserAgreeAuthorsize];
+    }
+}
+
+- (void)usserAgreeAuthorsize {
+
+    TIoTAlertAuthorsizeView *customView = [[TIoTAlertAuthorsizeView alloc]init];
+    [customView alertContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"authentation_alert_wifi_title", nil) message:NSLocalizedString(@"authentation_alert_wifi_conte", nil) info:NSLocalizedString(@"authentation_alert_wifi_detai", nil) cancelBtnTitle:NSLocalizedString(@"refuse", @"拒绝") confirmBtnTitle:NSLocalizedString(@"authentation_alert_btn", @"始终允许")];
+    [self.view addSubview:customView];
+    
+    customView.cancelBlock = ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    
+    customView.confirmBlock = ^(NSString *timeString){
+        [TIoTCoreUserManage shared].isShowPricyWIFIView = @"1";
+    };
 }
 
 - (void)setConfigData:(NSDictionary *)configData {

@@ -44,6 +44,9 @@
 
 @synthesize isShowBirthDayView = _isShowBirthDayView;
 @synthesize isShowPricyView = _isShowPricyView;
+@synthesize isShowPricyWIFIView = _isShowPricyWIFIView;
+@synthesize isShowPricyAudioView = _isShowPricyAudioView;
+@synthesize isShowPricyWechatView = _isShowPricyWechatView;
 @synthesize addDeviceNumber = _addDeviceNumber;
 
 @synthesize searchHistoryArray = _searchHistoryArray;
@@ -399,6 +402,47 @@
 - (void)setIsShowPricyView:(NSString *)isShowPricyView {
     _isShowPricyView = isShowPricyView;
     [[NSUserDefaults standardUserDefaults] setValue:isShowPricyView forKey:@"isShowPricyView"];
+}
+
+#pragma mark - 注册隐私弹框
+- (NSString *)isShowPricyWIFIView {
+    if (!_isShowPricyWIFIView) {
+        _isShowPricyWIFIView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyWIFIView"];
+    }
+    return _isShowPricyWIFIView;
+}
+
+- (void)setIsShowPricyWIFIView:(NSString *)isShowPricyWIFIView {
+    _isShowPricyWIFIView = isShowPricyWIFIView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyWIFIView forKey:@"isShowPricyWIFIView"];
+}
+
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyAudioView {
+    if (!_isShowPricyAudioView) {
+        _isShowPricyAudioView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyAudioView"];
+    }
+    return _isShowPricyAudioView;
+}
+
+- (void)setIsShowPricyAudioView:(NSString *)isShowPricyAudioView {
+    _isShowPricyAudioView = isShowPricyAudioView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyAudioView forKey:@"isShowPricyAudioView"];
+}
+
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyWechatView {
+    if (!_isShowPricyWechatView) {
+        _isShowPricyWechatView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyWechatView"];
+    }
+    return _isShowPricyWechatView;
+}
+
+- (void)setIsShowPricyWechatView:(NSString *)isShowPricyWechatView {
+    _isShowPricyWechatView = isShowPricyWechatView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyWechatView forKey:@"isShowPricyWechatView"];
 }
 
 #pragma mark - 首次进入APP 添加设备数量
