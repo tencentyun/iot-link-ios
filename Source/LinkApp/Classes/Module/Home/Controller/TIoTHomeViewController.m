@@ -35,6 +35,8 @@
 #import "TIoTFamilyInfoVC.h"
 #import "TIoTEquipmentNewCell.h"
 #import "TIoTShortcutView.h"
+#import "TIoTAlertAuthorsizeView.h"
+#import <AVFoundation/AVFoundation.h>
 
 @import Lottie;
 
@@ -128,6 +130,10 @@ static CGFloat kHeaderViewHeight = 162;
             
         }
     }
+
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyAudioView]) {
+        [self usserAgreeAuthorsize];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -158,7 +164,29 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 #pragma mark - Other
-
+- (void)usserAgreeAuthorsize {
+    TIoTAlertAuthorsizeView *customView = [[TIoTAlertAuthorsizeView alloc]init];
+    [customView alertContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"authentation_alert_wifi_title", nil) message:NSLocalizedString(@"authentation_alert_audio_conte", nil) info:NSLocalizedString(@"authentation_alert_audio_detai", nil) cancelBtnTitle:NSLocalizedString(@"refuse", @"拒绝") confirmBtnTitle:NSLocalizedString(@"authentation_alert_btn", @"始终允许")];
+    [self.view addSubview:customView];
+    
+    customView.cancelBlock = ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    
+    customView.confirmBlock = ^(NSString *timeString){
+        [TIoTCoreUserManage shared].isShowPricyAudioView = @"1";
+        
+        AVAudioSession *avSession = [AVAudioSession sharedInstance];
+        if ([avSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [avSession requestRecordPermission:^(BOOL available) {
+                if (!available) {
+                    NSLog(@"不同意");
+                }
+            }];
+        }
+    };
+}
 - (void)addNotifications
 {
     [HXYNotice addSocketConnectSucessListener:self reaction:@selector(socketConnected)];

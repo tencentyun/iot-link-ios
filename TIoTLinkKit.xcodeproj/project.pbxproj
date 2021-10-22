@@ -383,6 +383,7 @@
 		F4027793257775D70004E20F /* TIoTNetConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4027792257775D70004E20F /* TIoTNetConfigViewController.m */; };
 		F4103F90249B971100CB678F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4103F8F249B971100CB678F /* CoreData.framework */; };
 		F42B874B27218FFE0002FD5C /* TIoTAuthentationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B874A27218FFE0002FD5C /* TIoTAuthentationVC.m */; };
+		F42B874E27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B874D27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m */; };
 		F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */; };
 		F44D67A025B6D96D001B413C /* TIoTPlayMovieVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */; };
 		F46FE31B26A5735700543EFD /* TIoTLLSyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F46FE31A26A5735700543EFD /* TIoTLLSyncViewController.m */; };
@@ -1200,6 +1201,8 @@
 		F4103F8F249B971100CB678F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F42B874927218FFE0002FD5C /* TIoTAuthentationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAuthentationVC.h; sourceTree = "<group>"; };
 		F42B874A27218FFE0002FD5C /* TIoTAuthentationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAuthentationVC.m; sourceTree = "<group>"; };
+		F42B874C27229E9D0002FD5C /* TIoTAlertAuthorsizeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAlertAuthorsizeView.h; sourceTree = "<group>"; };
+		F42B874D27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAlertAuthorsizeView.m; sourceTree = "<group>"; };
 		F44D679C25B6D96D001B413C /* TIoTPlayMovieVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTPlayMovieVC.h; sourceTree = "<group>"; };
 		F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTPlayMovieVC.m; sourceTree = "<group>"; };
 		F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TIoTPlayMovieVC.xib; sourceTree = "<group>"; };
@@ -2699,6 +2702,8 @@
 				ED6BA5C223C5DF8500BE9EC9 /* TIoTAlertView.m */,
 				6D98FCCF25C044B000518AC7 /* TIoTAlertCustomView.h */,
 				6D98FCD025C044B000518AC7 /* TIoTAlertCustomView.m */,
+				F42B874C27229E9D0002FD5C /* TIoTAlertAuthorsizeView.h */,
+				F42B874D27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m */,
 				6DD4D1462536F4D2005272BE /* TIoTCountdownTimer.h */,
 				6DD4D1472536F4D2005272BE /* TIoTCountdownTimer.m */,
 				6DE8010325503E5B0093F925 /* TIoTCustomSheetView.h */,
@@ -3726,6 +3731,7 @@
 				F4C5DE1124A0B7FE0098F18B /* TIoTAppConfig.m in Sources */,
 				EDA7677B23699A250036C8B7 /* TIoTHelpCell.m in Sources */,
 				F4AD73162553F797003267FC /* TIoTAppUtilOC.m in Sources */,
+				F42B874E27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m in Sources */,
 				D210C8452341F46200A53B08 /* JHVerificationCodeView.m in Sources */,
 				6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */,
 				D2D5DA262362E68600BB0FBE /* TIoTTimeView.m in Sources */,
