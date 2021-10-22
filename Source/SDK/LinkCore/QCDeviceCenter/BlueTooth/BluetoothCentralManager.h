@@ -101,6 +101,12 @@
  */
 - (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfo:(NSString *)type ;
 
+/*
+ * 纯蓝牙LLSnyc固件升级特殊写数据接口
+ */
+
+- (void)sendFirmwareUpdateNewLLSynvWithPeripheral:(CBPeripheral *)peripheral Characteristic:(CBCharacteristic *)characteristic LLDeviceInfo:(NSString *)type;
+
 /**
  * 纯蓝牙LLSnyc写数据
  */
