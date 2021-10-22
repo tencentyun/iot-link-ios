@@ -1317,6 +1317,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 }
             }else if ([binaryString isEqualToString:@"000000001"]) { //允许升级
                 [MBProgressHUD showError:@"设备允许开始升级"];
+                //升级数据包
+                [self updateDataPage];
+                
+                //上报后台进度开始升级数据包
+                [self reportAppOTAStatusProgress:@"updating" versioin:self.firmwareModel.DstVersion persent:@(0)];
+                
             }else if ([binaryString isEqualToString:@"00000010"]) { //不支持断点续传
                 [MBProgressHUD showError:@"设备不支持断点续传"];
             }else if ([binaryString isEqualToString:@"00000011"]) {
@@ -1327,6 +1333,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
         }
     }
+}
+
+///MARK:升级数据包
+- (void)updateDataPage {
+    
 }
 
 ///MARK:升级固件提示弹框
