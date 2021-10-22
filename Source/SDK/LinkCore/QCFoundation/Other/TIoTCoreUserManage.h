@@ -76,6 +76,24 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *isShowPricyView;
 
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyWIFIView;
+
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyAudioView;
+
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyWechatView;
+
 /*
  保存首次进入APP 设备
  */

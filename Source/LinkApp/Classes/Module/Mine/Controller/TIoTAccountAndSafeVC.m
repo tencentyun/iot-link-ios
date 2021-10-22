@@ -13,6 +13,7 @@
 #import "TIoTModifyPasswordVC.h"
 #import "TIoTCancelAccountVC.h"
 #import "TIoTAuthentationVC.h"
+#import "TIoTAlertAuthorsizeView.h"
 
 @interface TIoTAccountAndSafeVC ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -64,6 +65,22 @@
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
     }];
+}
+
+- (void)usserAgreeAuthorsize {
+    TIoTAlertAuthorsizeView *customView = [[TIoTAlertAuthorsizeView alloc]init];
+    [customView alertContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"authentation_alert_wifi_title", nil) message:NSLocalizedString(@"authentation_alert_wechat_conte", nil) info:NSLocalizedString(@"authentation_alert_wechat_detai", nil) cancelBtnTitle:NSLocalizedString(@"refuse", @"拒绝") confirmBtnTitle:NSLocalizedString(@"authentation_alert_btn", @"始终允许")];
+    [self.view addSubview:customView];
+    
+    customView.cancelBlock = ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    
+    customView.confirmBlock = ^(NSString *timeString){
+        [TIoTCoreUserManage shared].isShowPricyWechatView = @"1";
+        [self wxBindClick];
+    };
 }
 
 #pragma mark - tableViewDataSource and tableViewDelegate
@@ -166,7 +183,12 @@
 
         if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
             //微信绑定
-            [self wxBindClick];
+            
+            if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyWechatView]) {
+                [self usserAgreeAuthorsize];
+            }else {
+                [self wxBindClick];
+            }
         }else {
         }
 
