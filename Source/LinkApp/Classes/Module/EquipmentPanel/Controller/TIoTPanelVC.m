@@ -1153,10 +1153,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                 break;
                             }
                         }
-                    }else {
-                        [self connectedFailBlueDeviceUI];
-                        [self writeLinkResultInDeviceWithSuccess:NO];
                     }
+//                    else {
+//                        [self connectedFailBlueDeviceUI];
+//                        [self writeLinkResultInDeviceWithSuccess:NO];
+//                    }
                 }
             }
         }
@@ -1274,6 +1275,56 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             };
             
             [self reoprtPublishMsgAsDeviceWithData:paramDic];
+        }else if ([cmdtype isEqualToString:@"09"]) {
+            //OTA固件升级,发送升级请求包至设备成功后，设备应答
+            NSString *indicateString = [hexstr substringWithRange:NSMakeRange(6, 2)];
+            NSString *binaryString = [NSString getBinaryByHex:indicateString];
+            
+            //允许升级请求包的设备反馈payload
+            NSString *allowUpatePayload = [hexstr substringFromIndex:8];
+            
+            //单次循环中可以连续传输的数据包个数，取值范围0x00 ~ 0xFF
+            NSString *singlesendPagesNumber = [allowUpatePayload substringWithRange:NSMakeRange(0, 2)];
+            //单个数据包大小，取值范围 0x00 ~ 0xF0
+            NSString *singlepageSize = [allowUpatePayload substringWithRange:NSMakeRange(2, 4)];
+            //数据包的超时重传周期，单位：秒
+            NSString *pageOuttimeHex = [allowUpatePayload substringWithRange:NSMakeRange(4, 6)];
+            NSInteger pageOuttimeInt = [NSString getDecimalByHex:pageOuttimeHex];
+            //设备重启最大时间，单位：秒
+            NSString *deviceRestartMaxHex = [allowUpatePayload substringWithRange:NSMakeRange(6, 8)];
+            NSInteger deviceRestartMaxInt = [NSString getDecimalByHex:deviceRestartMaxHex];
+            //断点续传前已接收文件大小
+            NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 16)];
+            //连续两个数据包的发包间隔
+            NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(16, 18)];
+            
+            
+            /*说明:
+              1.    不支持断点续传时，已接收文件大小恒为0。
+              2.    小程序连续 5 个超时重传周期内没有收到设备端回应，认为升级失败。
+              3.    设备重启最大时间是设备下载成功后重启设备，小程序等待设备上报新版本号的最大时间，超出此时间小程序认为升级失败
+             */
+            
+            if ([binaryString isEqualToString:@"00000000"]) { //禁止升级
+                //禁止升级payload
+                NSString *forbidUpdatePayload = [allowUpatePayload substringWithRange:NSMakeRange(0, 2)];
+                if ([forbidUpdatePayload isEqualToString:@"02"]) {
+                    [MBProgressHUD showError:@"设备禁止升级,设备电量不足"];
+                }else if ([forbidUpdatePayload isEqualToString:@"03"]) {
+                    [MBProgressHUD showError:@"设备禁止升级,版本号错误"];
+                }else {
+                    [MBProgressHUD showError:@"设备禁止升级"];
+                }
+            }else if ([binaryString isEqualToString:@"000000001"]) { //允许升级
+                [MBProgressHUD showError:@"设备允许开始升级"];
+            }else if ([binaryString isEqualToString:@"00000010"]) { //不支持断点续传
+                [MBProgressHUD showError:@"设备不支持断点续传"];
+            }else if ([binaryString isEqualToString:@"00000011"]) {
+                [MBProgressHUD showError:@"设备支持断点续传"];
+            }else {
+                //保留 暂时按成功传
+            }
+            
         }
     }
 }
