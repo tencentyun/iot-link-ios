@@ -43,6 +43,7 @@
 
 #import "TIoTLLSyncDeviceConfigModel.h"
 #import "TIoTFirmwareModel.h"
+#include <zlib.h>
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -51,6 +52,9 @@ static CGFloat lineSpace = 9;
 static NSString *itemId2 = @"i_ooo223";
 static NSString *itemId3 = @"i_ooo454";
 
+#define FFE2UUIDString @"0000FFE2"
+#define FFE3UUIDString @"0000FFE3"
+#define FFE4UUIDString @"0000FFE4"
 
 typedef NS_ENUM(NSInteger,TIoTBlueDeviceConnectStatus) {
     TIoTBlueDeviceDisconnected,
@@ -1280,7 +1284,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString * desString = desVersion;
     
     if (currentString.floatValue < desString.floatValue) {
-        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
             
             //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
             NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"当前固件版本为"),self.firmwareModel.DstVersion];
@@ -1335,18 +1339,27 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSURLSessionDownloadTask* downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
         NSString *caches = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
         
-        NSString *file = [caches stringByAppendingPathComponent:response.suggestedFilename];
+        NSString *fileName = [NSString stringWithFormat:@"%@%@_%@",self.productId,self.deviceName,self.firmwareModel.DstVersion];
+        NSString *file = [caches stringByAppendingPathComponent:fileName];
         
         //将临时文件剪切或者复制Caches文件夹
-        NSFileManager *mgr = [NSFileManager defaultManager];
+        NSFileManager *manager = [NSFileManager defaultManager];
+        
+        //先清除，在写入
+        if ([manager fileExistsAtPath:file]) {
+            [manager removeItemAtPath:file error:nil];
+        }
         
         // AtPath 原始文件路径
         // ToPath 目标文件路径
-        [mgr moveItemAtPath:location.path toPath:file error:nil];
-        DDLogInfo(@"download firmware file path :%@",file);
-        
+        [manager moveItemAtPath:location.path toPath:file error:nil];
+        NSLog(@"download firmware file path :%@",file);
+//        NSLog(@"Documentsdirectory: %@",
+//        [manager contentsOfDirectoryAtPath:file error:nil]);
+        NSData *fileData = [NSData dataWithContentsOfFile:file];
+        NSLog(@"file data :%@",fileData);
         //发送升级请求包到设备
-        [self sendFirmwareUpdateInfoToDevice];
+        [self sendFirmwareUpdateInfoToDeviceWithData:fileData];
         
         //下载固件包完成后上报
         [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(100)];
@@ -1357,8 +1370,38 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 ///MARK:发送升级请求包到设备
-- (void)sendFirmwareUpdateInfoToDevice {
+- (void)sendFirmwareUpdateInfoToDeviceWithData:(NSData *)data {
+    NSData *fileConentData = data;
+    //type
+    NSString *typeString = @"00";
+    //value: file size
+    NSString *dataLengthHexTemp = [NSString getHexByDecimal:fileConentData.length];
+    NSString *dataLengthHex = [self getTVLValueWithOriginValue:dataLengthHexTemp bitString:@"00000000"];
+    //value: file crc
+    uLong crc32 = [self getCRC32ResultWithData:fileConentData];
+    NSString *crcHexTemp = [NSString getHexByDecimal:crc32];
+    NSString *crcHex = [self getTVLValueWithOriginValue:crcHexTemp bitString:@"00000000"];
+    //value: file version
+    NSString *fileVersionHex = [NSString hexStringFromString:self.firmwareModel.DstVersion];
+    //value: file version len
+    NSInteger versionLen = fileVersionHex.length/2;
+    NSString *versionLengthHexTemp = [NSString getHexByDecimal:versionLen];
+    NSString *versionLengthHex = [self getTVLValueWithOriginValue:versionLengthHexTemp bitString:@"00"];
+    //Value 总长度
+    NSInteger valueLen = (dataLengthHex.length + crcHex.length + fileVersionHex.length + versionLengthHex.length)/2;
+    NSString *valueLengthTemp = [NSString getHexByDecimal:valueLen];
+    NSString *valueLength = [self getTVLValueWithOriginValue:valueLengthTemp bitString:@"0000"];
     
+    NSString *writeInfo = [NSString stringWithFormat:@"%@%@%@%@%@%@",typeString,valueLength,dataLengthHex,crcHex,versionLengthHex,fileVersionHex];
+//    NSLog(@"%@%",writeInfo);
+    
+    [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE4UUIDString];
+}
+
+- (uLong)getCRC32ResultWithData:(NSData *)data {
+    uLong crc = crc32(0L, Z_NULL, 0);
+    crc = crc32(crc, data.bytes, (int)data.length);
+    return crc;
 }
 
 ///MARK:APP上报进度（下载，升级更新，烧录）
@@ -1514,7 +1557,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *lengthResult = [self getMutableValueLength:lengthHex];
             //写入设备
             NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",typeString,lengthResult,value];
-            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoString];
+            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
             
         }else if (type == TIoTDataTemplateTypeAction) {
             
@@ -1586,7 +1629,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *lengthResult = [self getMutableValueLength:lengthHex];
             //写入设备
             NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",fixedHeader,lengthResult,valueString];
-            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoString];
+            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
             
         }else if (type == TIoTDataTemplateTypeEvent) {
             //event 类别
@@ -1888,14 +1931,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     return resultValue;
 }
 
-///MARK: FFE2中将属性值写入设备
-- (void)writPropertyInfoInFFE2DeviceWithMessage:(NSString *)writeInfo {
+///MARK: 在UUID （FFE2 FFE3 FFE4 ）中将属性值写入设备
+- (void)writPropertyInfoInUUIDDeviceWithMessage:(NSString *)writeInfo UUIDString:(NSString *)uuidString{
     if (self.characteristicFFE1 != nil) {
         CBService *service = self.characteristicFFE1.service;
         for (CBCharacteristic *characteristic in service.characteristics) {
             NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
-            if ([uuidFirstString isEqualToString:@"0000FFE2"]) {
-                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
+            if ([uuidFirstString isEqualToString:uuidString] && ![NSString isNullOrNilWithObject:uuidString]) {
+                if ([uuidString isEqualToString:FFE4UUIDString]) {
+                    [self.blueManager sendFirmwareUpdateNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
+                }else {
+                    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
+                }
             }
         }
     }
