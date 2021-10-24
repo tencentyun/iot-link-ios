@@ -16,3 +16,12 @@
 @implementation TIoTFirmwareOTAInfoModel
 
 @end
+
+@implementation TIoTReportDataAsDeviceModel
+
+@end
+
+@implementation TIoTReportDataAsDeviceResultModel
+
+@end
+

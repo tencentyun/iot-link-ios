@@ -49,6 +49,7 @@
 
 @synthesize demoAccessID = _demoAccessID;
 @synthesize firmwareUpdate = _firmwareUpdate;
+@synthesize isRreshDeviceList = _isRreshDeviceList;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -370,6 +371,20 @@
 - (void)setIsShowBirthDayView:(NSString *)isShowBirthDayView {
     _isShowBirthDayView = isShowBirthDayView;
     [[NSUserDefaults standardUserDefaults] setValue:isShowBirthDayView forKey:@"isShowBirthDayView"];
+}
+
+#pragma mark - 从添加设备页面返回首页后，是否刷新列表
+
+- (NSString *)isRreshDeviceList {
+    if (!_isRreshDeviceList) {
+        _isRreshDeviceList = [[NSUserDefaults standardUserDefaults] valueForKey:@"isRreshDeviceList"];
+    }
+    return _isRreshDeviceList;
+}
+
+- (void)setIsRreshDeviceList:(NSString *)isRreshDeviceList {
+    _isRreshDeviceList = isRreshDeviceList;
+    [[NSUserDefaults standardUserDefaults] setValue:isRreshDeviceList forKey:@"isRreshDeviceList"];
 }
 
 #pragma mark - 首次进入APP 添加设备数量

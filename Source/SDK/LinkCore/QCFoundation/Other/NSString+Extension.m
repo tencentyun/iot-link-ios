@@ -13,6 +13,11 @@
 #import <ifaddrs.h>
 #import "TIoTGetgateway.h"
 
+union u{
+    Float32 f;
+    int32_t i;
+}u;
+
 @implementation NSString (Extension)
 
 + (NSString *)getNowTimeString{
@@ -1015,6 +1020,21 @@
         return binary;
 }
 
+//2进制转10进制
++ (NSInteger)getDecimalByBinary:(NSString *)binary {
+    
+    NSInteger decimal = 0;
+    for (int i=0; i<binary.length; i++) {
+        
+        NSString *number = [binary substringWithRange:NSMakeRange(binary.length - i - 1, 1)];
+        if ([number isEqualToString:@"1"]) {
+            
+            decimal += pow(2, i);
+        }
+    }
+    return decimal;
+}
+
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString {
     NSMutableString *newString = [NSMutableString stringWithCapacity:oldString.length];
@@ -1120,6 +1140,14 @@
         }
     }
     return binary;
+}
+
++ (float)getFloatByHex:(NSString *)hexString {
+    NSString *revertHex = [self reverseWordsInString:hexString?:@""];
+    NSString *tempStr = [NSString stringWithFormat:@"0x%@",[revertHex uppercaseString]];
+    sscanf([tempStr UTF8String], "%x", &u.i);
+    float floatValue = u.f;
+    return floatValue;
 }
 
 // 获取标识符
