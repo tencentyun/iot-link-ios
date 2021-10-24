@@ -66,6 +66,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *isShowBirthDayView;  //是否弹出生日选择View
 
+/**
+ 从主页进入添加设备页面NewAddEquipment
+ */
+@property (nonatomic, copy, nullable) NSString *isRreshDeviceList;  //从添加设备页面返回首页后，刷新列表
+
 /*
  保存首次进入APP 设备
  */

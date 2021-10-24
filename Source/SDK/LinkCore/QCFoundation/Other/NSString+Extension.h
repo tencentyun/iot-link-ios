@@ -174,6 +174,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 //十进制转二进制
 + (NSString *)getBinaryByDecimal:(NSInteger)decimalism;
 
+//2进制转10进制
++ (NSInteger)getDecimalByBinary:(NSString *)binary;
+
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString;
 
@@ -182,6 +185,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //16进制转2进制
 + (NSString *)getBinaryByHex:(NSString *)hex;
+
+//16进制转浮点型
++ (float)getFloatByHex:(NSString *)hexString;
 
 // 获取标识符
 + (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;

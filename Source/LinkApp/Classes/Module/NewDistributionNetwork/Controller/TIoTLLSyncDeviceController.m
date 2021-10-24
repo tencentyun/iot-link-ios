@@ -419,6 +419,7 @@
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [self.blueManager disconnectPeripheral];
+            [self.navigationController popViewControllerAnimated:YES];
         });
         
         //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）

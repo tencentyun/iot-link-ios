@@ -115,6 +115,11 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewDidAppear:animated];
     self.navigationController.tabBarController.tabBar.hidden = NO;
     
+    if ([[TIoTCoreUserManage shared].isRreshDeviceList isEqualToString:@"1"]) {
+        [self getRoomList:[TIoTCoreUserManage shared].familyId];
+    }
+    [TIoTCoreUserManage shared].isRreshDeviceList = @"0";
+    
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
             

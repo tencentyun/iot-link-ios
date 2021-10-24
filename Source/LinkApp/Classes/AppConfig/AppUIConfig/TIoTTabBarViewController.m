@@ -41,6 +41,7 @@
     customTabBar.addDeviceBlock = ^{
         TIoTNewAddEquipmentViewController *vc = [[TIoTNewAddEquipmentViewController alloc] init];
         vc.roomId = [TIoTCoreUserManage shared].currentRoomId?:@"";
+        [TIoTCoreUserManage shared].isRreshDeviceList = @"1";
         [self.selectedViewController pushViewController:vc animated:YES];
         
     };

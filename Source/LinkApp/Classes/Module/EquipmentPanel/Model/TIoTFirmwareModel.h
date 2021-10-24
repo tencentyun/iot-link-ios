@@ -26,4 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *TargetVersion; //新version
 @property (nonatomic, copy) NSString *UploadVersion; //原始version
 @end
+
+@interface TIoTReportDataAsDeviceModel : NSObject
+@property (nonatomic, copy) NSString *Data;
+@end
+@interface TIoTReportDataAsDeviceResultModel : NSObject
+@property (nonatomic, copy) NSString *code;
+@property (nonatomic, copy) NSString *status;
+@end
+
 NS_ASSUME_NONNULL_END
