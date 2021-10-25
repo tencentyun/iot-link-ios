@@ -220,7 +220,7 @@
     if (self.productNameArray.count == self.blueDevices.count) {
         NSString *productName = self.productNameArray[indexPath.row];
         if ([productName isEqualToString:@"error"]) {
-            cell.itemString = @"未知设备";
+            cell.itemString = NSLocalizedString(@"unknow_device", @"未知设备");
             cell.detailString = [self getBlueDeviceMacIndex:indexPath];
         }else {
             cell.itemString = productName;
@@ -466,20 +466,21 @@
         NSString *writeInfo = [NSString stringWithFormat:@"02000D02%@%@",randomHex,bingIDString];
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
         
+        [MBProgressHUD showMessage:NSLocalizedString(@"bind_LLSync_device_success", @"绑定纯蓝牙设备成功") icon:@""];
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.blueManager disconnectPeripheral];
-            [MBProgressHUD showMessage:@"绑定纯蓝牙设备成功" icon:@""];
             [self.navigationController popViewControllerAnimated:YES];
+            //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
+            [self uploadLocalPsk:randomHex];
         });
-        
-        //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
-        [self uploadLocalPsk:randomHex];
         
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [MBProgressHUD showMessage:@"绑定纯蓝牙设备失败" icon:@""];
+            [MBProgressHUD showMessage:NSLocalizedString(@"bind_LLSync_device_failure", @"绑定纯蓝牙设备失败") icon:@""];
             [self.blueManager disconnectPeripheral];
         });
     }];

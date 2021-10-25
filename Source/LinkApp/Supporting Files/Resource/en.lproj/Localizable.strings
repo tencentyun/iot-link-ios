@@ -940,3 +940,6 @@ If the problem still persists, we recommend you remove the device and add it aga
 "authentation_privacy_conte2" = "位置信息";
 "authentation_privacy_conte3" = "摄像头/麦克风权限";
 "authentation_privacy_conte4" = "蓝牙权限";
+"unknow_device" = "未知设备";
+"bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
+"bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";
