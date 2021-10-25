@@ -5,13 +5,23 @@
 
 #import "TIoTAuthentationVC.h"
 #import "TIoTUserInfomationTableViewCell.h"
+#import <UserNotifications/UserNotifications.h>
+#import <CoreLocation/CoreLocation.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource>
+@interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSMutableArray *dataArr;
+@property (nonatomic, strong) CBCentralManager *centralManager; //判断蓝牙是否开启
+/// 蓝牙是否可用
+@property (nonatomic, assign) BOOL bluetoothAvailable;
 @end
 
 @implementation TIoTAuthentationVC
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -19,6 +29,18 @@
     self.title = NSLocalizedString(@"modify_authentation", @"权限管理");
     
     [self setUpUI];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+    //判断蓝牙是否开启
+    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+}
+
+- (void)applicationwillenterforegound
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self.tableView reloadData];
+    });
 }
 
 - (void)setUpUI {
@@ -56,56 +78,30 @@
     //国际化版本
     TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
     cell.dic = self.dataArr[indexPath.section][indexPath.row];
+    cell.arrowSwitch.on = NO;
+    
+    if (indexPath.section == 0) {
+        cell.arrowSwitch.on = [self isSwitchAppNotification];
+    }else if (indexPath.section == 1) {
+        cell.arrowSwitch.on = [self locationAuthority];
+    }else if (indexPath.section == 2) {
+        cell.arrowSwitch.on = [self audioAuthority];
+    }else if (indexPath.section == 3) {
+        cell.arrowSwitch.on = self.bluetoothAvailable;
+    }
+    
+    cell.authSwitch = ^(BOOL open) {
+
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        if ([[UIApplication sharedApplication] canOpenURL:url]){
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        }
+        
+    };
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSArray *sectionArray = self.dataArr[indexPath.section];
-    //国际化版本
-    
-    if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"phone_number", @"手机号码")]) {
-
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
-            
-        
-        }else {
-//            TIoTModifyAccountVC *modifyVC = [[TIoTModifyAccountVC alloc]init];
-//            modifyVC.accountType = AccountModifyType_Phone;
-//            [self.navigationController pushViewController:modifyVC animated:YES];
-        }
-
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"email", @"邮箱")]) {
-
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
-            __weak typeof(self) weakSelf = self;
-            
-//            [self.navigationController pushViewController:bindEmailVC animated:YES];
-        }else {
-            
-            
-        }
-
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"wechat", @"微信")]) {
-
-        if ([sectionArray[indexPath.row][@"value"] isEqualToString:NSLocalizedString(@"unbind", @"未绑定")]) {
-            //微信绑定
-        }else {
-        }
-
-        
-    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"modify_authentation", @"权限管理")]) {
-        
-        TIoTAuthentationVC *modifyPassword = [[TIoTAuthentationVC alloc]init];
-        [self.navigationController pushViewController:modifyPassword animated:YES];
-        
-    } else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"modify_password", @"修改密码")]) {
-        
-        
-        
-    }else if ([sectionArray[indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"account_logout", @"账号注销")]) {
-        
-    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -141,5 +137,97 @@
     }
     
     return _dataArr;
+}
+
+
+#pragma mark - 是否开启APP推送
+/**是否开启推送*/
+- (BOOL)isSwitchAppNotification {
+    if ([UIDevice currentDevice].systemVersion.doubleValue >= 10.0) {
+        __block BOOL result = NO;
+        //异步线程中操作是否完成
+        __block BOOL inThreadOperationComplete = NO;
+        [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+            if (settings.authorizationStatus == UNAuthorizationStatusDenied) {
+                result = NO;
+            }else if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined) {
+                result = NO;
+            }else if (settings.authorizationStatus == UNAuthorizationStatusAuthorized) {
+                result = YES;
+            }else {
+                result = NO;
+            }
+            inThreadOperationComplete = YES;
+        }];
+        
+        while (!inThreadOperationComplete) {
+            [NSThread sleepForTimeInterval:0];
+        }
+        return result;
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    else if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0)
+    {
+        UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (UIUserNotificationTypeNone != setting.types) {
+            return YES;
+        }else {
+            return NO;
+        }
+        
+    }else
+    {
+        UIRemoteNotificationType type = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        if(UIRemoteNotificationTypeNone != type) {
+            return YES;
+        }else {
+            return NO;
+        }
+    }
+}
+
+- (BOOL)locationAuthority {
+    BOOL isLocation = [CLLocationManager locationServicesEnabled];
+    if (isLocation) {
+        
+        CLAuthorizationStatus CLstatus = [CLLocationManager authorizationStatus];
+        if (CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusDenied) {
+            return NO;
+        }
+        
+    }else {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)audioAuthority {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+        return NO;
+    }
+    return YES;
+}
+
+#pragma mark - 判断蓝牙是否开启代理
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    switch (central.state) {
+        case CBManagerStatePoweredOn:
+            self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
+        case CBManagerStateUnknown:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
+        case CBManagerStateResetting:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
+        case CBManagerStateUnsupported:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
+        case CBManagerStatePoweredOff:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
+        case CBManagerStateUnauthorized:
+            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
+        default:  break;
+    }
+    
+    [self.tableView reloadData];
 }
 @end

@@ -97,6 +97,15 @@ class TIoTAPPConfig: NSObject {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config9.js"
     }
     
+    // static config 中国区-第三方sdk目录
+    public static var userThridSDKChChineseString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config12.js"
+    }
+    
+    // static config 中国区-第三方sdk目录英文
+    public static var userThridSDKChEnglishString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config13.js"
+    }
 }
 
 

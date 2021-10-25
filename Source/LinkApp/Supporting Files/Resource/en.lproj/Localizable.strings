@@ -935,7 +935,11 @@ If the problem still persists, we recommend you remove the device and add it aga
 "register_privacy_policy_conte2" = "《用户协议》";
 "register_privacy_policy_conte3" = "及";
 "register_privacy_policy_conte4" = "《隐私政策》";
-"register_privacy_policy_conte5" = "，以帮助您了解我们对您的个人信息的收集/保存/使用/对外提供/保护等情况以及您享有的权利。\n我们不会主动共享或转让您的个人信息至第三方，如存在其他共享或转让您的个人信息或您需要我们将您的个人信息共享或转让至第三方情形时，我们会直接或确认第三方征得您对上述行为的明示同意。我们的产品中需要与第三方服务商共享的个人信息，请您查阅《第三方信息共享清单》。\n如您对以上协议有任何疑问，您可将问题发送至腾讯连连官方邮箱fanyi@tencent.com或寄给我们设立的个人信息保护专职部门。邮寄地址为：中国广东省深圳市南山区科技中一路腾讯大厦 法务部 数据及隐私保护中心（收）\n如您同意以上协议内容，请点击“同意”开始接受我们的产品服务！";
+"register_privacy_policy_conte5" = "，以帮助您了解我们对您的个人信息的收集/保存/使用/对外提供/保护等情况以及您享有的权利。\n我们不会主动共享或转让您的个人信息至第三方，如存在其他共享或转让您的个人信息或您需要我们将您的个人信息共享或转让至第三方情形时，我们会直接或确认第三方征得您对上述行为的明示同意。我们的产品中需要与第三方服务商共享的个人信息，请您查阅";
+"register_privacy_policy_conte6" = "《第三方信息共享清单》";
+"register_privacy_policy_conte7" = "。\n如您对以上协议有任何疑问，您可将问题发送至腾讯连连官方邮箱fanyi@tencent.com或寄给我们设立的个人信息保护专职部门。邮寄地址为：中国广东省深圳市南山区科技中一路腾讯大厦 法务部 数据及隐私保护中心（收）\n如您同意以上协议内容，请点击“同意”开始接受我们的产品服务！";
+"register_privacy_policy_btn1" = "暂不使用";
+"register_privacy_policy_btn2" = "同意";
 "authentation_privacy_conte1" = "推送权限";
 "authentation_privacy_conte2" = "位置信息";
 "authentation_privacy_conte3" = "摄像头/麦克风权限";
@@ -948,3 +952,6 @@ If the problem still persists, we recommend you remove the device and add it aga
 "authentation_alert_audio_detai" = "· 摄像头/麦克风";
 "authentation_alert_wechat_conte" = "您将授权以下个人信息与微信账号绑定：";
 "authentation_alert_wechat_detai" = "· 昵称、头像、地区、性别\n· 设备信息";
+"authentation_resister_title" = "国家/地区";
+"authentation_resister_privacy" = "为了向您提供对应国家/地区的用户协议和隐私政策，请您选择所在的国家及地区";
+"authentation_thirdsdk_title" = "第三方SDK目录";
