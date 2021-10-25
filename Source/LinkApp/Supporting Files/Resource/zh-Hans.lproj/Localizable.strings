@@ -947,3 +947,6 @@
 "authentation_resister_title" = "国家/地区";
 "authentation_resister_privacy" = "为了向您提供对应国家/地区的用户协议和隐私政策，请您选择所在的国家及地区";
 "authentation_thirdsdk_title" = "第三方SDK目录";
+"unknow_device" = "未知设备";
+"bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
+"bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";
