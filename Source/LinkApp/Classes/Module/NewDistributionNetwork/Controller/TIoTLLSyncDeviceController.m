@@ -35,6 +35,7 @@
 @property (nonatomic, strong) NSString *tempTimeString;
 @property (nonatomic, strong) NSString *andomNumString;
 @property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
+@property (nonatomic, strong) NSMutableArray *productNameArray;
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -45,6 +46,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //停止扫描蓝牙时候触发
+    [HXYNotice addBluetoothScanStopLister:self reaction:@selector(stopBlutoothScan)];
+    
     [self setupUI];
     
     self.blueManager = [BluetoothCentralManager shareBluetooth];
@@ -211,6 +216,17 @@
     TIoTLLSyncDeviceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TIoTLLSyncDeviceCell" forIndexPath:indexPath];
     CBPeripheral *device = self.blueDevices[indexPath.row];
     cell.itemString = device.name;
+    
+    if (self.productNameArray.count == self.blueDevices.count) {
+        NSString *productName = self.productNameArray[indexPath.row];
+        if ([productName isEqualToString:@"error"]) {
+            cell.itemString = @"未知设备";
+            cell.detailString = [self getBlueDeviceMacIndex:indexPath];
+        }else {
+            cell.itemString = productName;
+            cell.detailString = [self getBlueDeviceMacIndex:indexPath];
+        }
+    }
     cell.isSelected = NO;
     return  cell;
 }
@@ -233,8 +249,41 @@
     }
 }
 
-
-
+- (NSString *)getBlueDeviceMacIndex:(NSIndexPath *)indexPath {
+    NSString *blueMac = @"";
+    for (int i = 0; i<self.blueDevices.count; i++) {
+        CBPeripheral *obj = self.blueDevices[i];
+        if (i == indexPath.row) {
+            CBPeripheral *device = (CBPeripheral*)obj;
+            NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+            if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                NSString *producthex = [hexstr substringWithRange:NSMakeRange(6, 4)];
+                blueMac = producthex?:@"";
+                break;
+            }
+        }
+        
+    }
+    return blueMac;
+}
+- (void)refushProductName{
+    
+    __block NSMutableArray *tempProductNameArray = [NSMutableArray new];
+    [self.blueDevices enumerateObjectsUsingBlock:^(CBPeripheral * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CBPeripheral *device = (CBPeripheral*)obj;
+        NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+        if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+            NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+            NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+            NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+            NSString *productstr = [NSString stringFromHexString:producthex];
+            [tempProductNameArray addObject:productstr];
+        }
+    }];
+    [self getProductsNameWithproductIDsArray:tempProductNameArray];
+}
 
 #pragma mark - BluetoothCentralManagerDelegate
 //实时扫描外设（目前扫描10s）
@@ -418,7 +467,8 @@
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self.blueManager disconnectPeripheral];
+            [self.blueManager disconnectPeripheral];
+            [MBProgressHUD showMessage:@"绑定纯蓝牙设备成功" icon:@""];
             [self.navigationController popViewControllerAnimated:YES];
         });
         
@@ -429,6 +479,7 @@
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showMessage:@"绑定纯蓝牙设备失败" icon:@""];
             [self.blueManager disconnectPeripheral];
         });
     }];
@@ -460,4 +511,41 @@
         
     }];
 }
+
+- (void)stopBlutoothScan {
+    [self refushProductName];
+}
+
+///MARK:获取设备产品名称
+- (void )getProductsNameWithproductIDsArray:(NSArray *)productIDsArray{
+    [productIDsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *idString = (NSString *)obj;
+        NSArray *idSArray = @[idString?:@""];
+        [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":idSArray?:@[]} success:^(id responseObject) {
+            NSArray *deviceInfoArr = responseObject[@"Products"]?:@[];
+            [deviceInfoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSDictionary *productDic = (NSDictionary *)obj;
+                NSString *productId = productDic[@"Name"]?:@"";
+                [self.productNameArray addObject:productId];
+            }];
+            if (self.productNameArray.count == productIDsArray.count) {
+                [self.collectionView reloadData];
+            }
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            [self.productNameArray addObject:@"error"];
+            if (self.productNameArray.count == productIDsArray.count) {
+                [self.collectionView reloadData];
+            }
+        }];
+    }];
+        
+}
+
+- (NSMutableArray *)productNameArray {
+    if (!_productNameArray) {
+        _productNameArray = [NSMutableArray new];
+    }
+    return _productNameArray;
+}
+
 @end
