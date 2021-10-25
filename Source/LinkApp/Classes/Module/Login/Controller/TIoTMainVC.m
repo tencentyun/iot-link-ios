@@ -5,7 +5,7 @@
 //
 
 #import "TIoTMainVC.h"
-#import "TIoTRegisterViewController.h"
+#import "TIoTRegionViewController.h"
 #import "TIoTVCLoginAccountVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "UIButton+LQRelayout.h"
@@ -115,7 +115,7 @@
 }
 
 - (void)createNewAccount {
-    TIoTRegisterViewController *registerVC = [[TIoTRegisterViewController alloc]init];
+    TIoTRegionViewController *registerVC = [[TIoTRegionViewController alloc]init];
     [self.navigationController pushViewController:registerVC animated:YES];
 }
 

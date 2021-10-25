@@ -146,16 +146,17 @@
     self.procolTV.textColor = [UIColor colorWithHexString:@"#888888"];
     self.procolTV.delegate = self;
     self.procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
-    self.procolTV.scrollEnabled = NO;
+    self.procolTV.scrollEnabled = YES;
     [bgView addSubview:self.procolTV];
     [self.procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.mas_equalTo(20);
         make.trailing.mas_equalTo(-20);
         make.top.equalTo(self.nameL.mas_bottom).offset(20);
+        make.height.mas_equalTo(300);
     }];
     
     
-    UITextView *procolTV1 = [[UITextView alloc] init];
+    /*UITextView *procolTV1 = [[UITextView alloc] init];
     procolTV1.attributedText = [self protolStr];;
     procolTV1.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
     procolTV1.textColor = [UIColor colorWithHexString:kRegionHexColor];
@@ -180,7 +181,7 @@
         make.top.equalTo(procolTV1.mas_top).offset(4);
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV1.mas_left);
-    }];
+    }];*/
     
     UIView *line = [[UIView alloc]init];
     line.backgroundColor = kLineColor;
@@ -188,7 +189,7 @@
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(bgView);
         make.height.mas_equalTo(1);
-        make.top.equalTo(procolTV1.mas_bottom).offset(20 *kScreenAllHeightScale);
+        make.top.equalTo(self.procolTV.mas_bottom).offset(20 *kScreenAllHeightScale);
     }];
     
     UIStackView *stack = [[UIStackView alloc] init];
@@ -203,7 +204,7 @@
     }];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:NSLocalizedString(@"cancel", @"取消") forState:UIControlStateNormal];
+    [btn setTitle:NSLocalizedString(@"register_privacy_policy_btn1", @"取消") forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor colorWithHexString:@"#6C7078"] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
     [btn setBackgroundColor:[UIColor whiteColor]];
@@ -222,7 +223,7 @@
     }];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn2 setTitle:NSLocalizedString(@"confirm", @"确定") forState:UIControlStateNormal];
+    [btn2 setTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定") forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     [btn2 setBackgroundColor:[UIColor whiteColor]];
     btn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:16];
@@ -478,7 +479,9 @@
         NSString *str3 = NSLocalizedString(@"register_privacy_policy_conte3", @"及");
         NSString *str4 = NSLocalizedString(@"register_privacy_policy_conte4", @"隐私政策");
         NSString *str5 = NSLocalizedString(@"register_privacy_policy_conte5", nil);
-        NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@%@",str1,str2,str3,str4,str5];
+        NSString *str6 = NSLocalizedString(@"register_privacy_policy_conte6", @"第三方sdk");
+        NSString *str7 = NSLocalizedString(@"register_privacy_policy_conte7", nil);
+        NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",str1,str2,str3,str4,str5,str6,str7];
         
         NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
         [pstype setAlignment:NSTextAlignmentLeft];
@@ -490,9 +493,13 @@
         NSRange range2 = [showStr rangeOfString:str2];
         [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range2];
         
-        NSString *valueString4 = [[NSString stringWithFormat:@"Privacy4://%@",str2] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+        NSString *valueString4 = [[NSString stringWithFormat:@"Privacy4://%@",str4] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
         NSRange range4 = [showStr rangeOfString:str4];
         [mastring addAttributes:@{NSLinkAttributeName:valueString4,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range4];
+        
+        NSString *valueString6 = [[NSString stringWithFormat:@"Privacy6://%@",str6] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+        NSRange range6 = [showStr rangeOfString:str6];
+        [mastring addAttributes:@{NSLinkAttributeName:valueString6,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range6];
         
         _conentTextProtolString = mastring;
     }
@@ -519,6 +526,12 @@
             self.doneAction([URL scheme]);
         }
         return NO;
+    }else if ([[URL scheme] isEqualToString:@"Privacy6"]) {
+        [self removeView];
+        if (self.doneAction) {
+            self.doneAction([URL scheme]);
+        }
+        return NO;
     }
     return YES;
 }
@@ -535,15 +548,15 @@
 
 - (void)done
 {
-    if (self.procolBtn.selected) {
+//    if (self.procolBtn.selected) {
         
         [self removeView];
         if (self.doneAction) {
             self.doneAction(self.messageT.text);
         }
-    }else {
-        [MBProgressHUD showError:@"请点击同意按钮"];
-    }
+//    }else {
+//        [MBProgressHUD showError:@"请点击同意按钮"];
+//    }
 }
 
 - (void)removeView {

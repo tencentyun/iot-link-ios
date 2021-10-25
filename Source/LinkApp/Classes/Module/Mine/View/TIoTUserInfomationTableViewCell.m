@@ -13,7 +13,6 @@
 @property (nonatomic, strong) UIView *lineView;
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UIImageView *arrowImageView;
-@property (nonatomic, strong) UISwitch *arrowSwitch;
 
 @property (nonatomic, strong) MASConstraint *rightValueConstraint;
 @property (nonatomic, strong) MASConstraint *rightImageConstraint;
@@ -68,6 +67,7 @@
         
         
         self.arrowSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        [self.arrowSwitch addTarget:self action:@selector(openAuth:) forControlEvents:UIControlEventValueChanged];
         self.arrowSwitch.hidden = YES;
         [self.contentView addSubview:self.arrowSwitch];
         [self.arrowSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -137,4 +137,9 @@
     // Configure the view for the selected state
 }
 
+- (void)openAuth:(UISwitch *)sender {
+    if (self.authSwitch) {
+        self.authSwitch(sender.on);
+    }
+}
 @end

@@ -55,8 +55,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     
     [self setupUI];
     //不选地区列表赋默认值
-    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
-    [TIoTCoreUserManage shared].userRegionId = @"1";
+//    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
+//    [TIoTCoreUserManage shared].userRegionId = @"1";
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -94,7 +94,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             // Fallback on earlier versions
             make.top.equalTo(self.view.mas_top).offset(64);
         }
-        make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
+//        make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
+        make.height.mas_equalTo(kHeightCell + 30); //30为顶部空白 2两条分割线
     }];
     
     if (self.defaultPhoneOrEmail != nil) {
@@ -124,7 +125,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         make.top.equalTo(self.scrollView.mas_bottom).offset(16);
     }];
     
-    UITextView *procolTV = [[UITextView alloc] init];
+    /*UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
     procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
     procolTV.textColor = [UIColor colorWithHexString:kRegionHexColor];
@@ -149,7 +150,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         make.top.equalTo(procolTV.mas_top).offset(4);
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV.mas_left);
-    }];
+    }];*/
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -164,7 +165,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(procolTV.mas_bottom).offset(16);
+//        make.top.equalTo(procolTV.mas_bottom).offset(16);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(kHeightCell - 8);
     }];
@@ -178,7 +180,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyView]) {
         TIoTAlertView *tipAlertView = [[TIoTAlertView alloc] initWithPricy:[UIScreen mainScreen].bounds];
         [tipAlertView alertWithTitle:NSLocalizedString(@"register_privacy_policy_title", @"用户协议及隐私政策") message:NSLocalizedString(@"register_privacy_policy_conte", nil)
-                         cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"confirm", @"确定")];
+                         cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消") doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
 
         tipAlertView.cancelAction = ^{
             [self.navigationController popViewControllerAnimated:YES];
@@ -237,6 +239,19 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                     }else {
                         vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
                     }
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else if ([text isEqualToString:@"Privacy6"]) {
+                if (LanguageIsEnglish) {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }else {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                 
@@ -374,7 +389,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 - (void)checkSendCode{
     
     if (_emailStyle) {
-        if ([NSString judgeEmailLegal:self.emailTF.text] && self.procolBtn.selected) {
+        if ([NSString judgeEmailLegal:self.emailTF.text]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -385,7 +400,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     }
     else
     {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -636,7 +651,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         _contentView = [[UIView alloc] init];
         _contentView.backgroundColor = [UIColor whiteColor];
         
-        UILabel *contryLabel = [[UILabel alloc]init];
+        /*UILabel *contryLabel = [[UILabel alloc]init];
         [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:contryLabel];
         [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -693,14 +708,15 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             make.right.left.mas_equalTo(0);
             make.top.equalTo(contryLabel.mas_top);
             make.bottom.equalTo(contryLabel.mas_bottom);
-        }];
+        }];*/
         
         UILabel *phoneLabel = [[UILabel alloc]init];
         [phoneLabel setLabelFormateTitle:NSLocalizedString(@"phone_number", @"手机号码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:phoneLabel];
         [phoneLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
-            make.top.equalTo(lineView.mas_bottom);
+//            make.top.equalTo(lineView.mas_bottom);
+            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];
@@ -753,7 +769,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         _contentView2 = [[UIView alloc] init];
         _contentView2.backgroundColor = [UIColor whiteColor];
         
-        UILabel *contryLabel2 = [[UILabel alloc]init];
+        /*UILabel *contryLabel2 = [[UILabel alloc]init];
         [contryLabel2 setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:contryLabel2];
         [contryLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -812,14 +828,15 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             make.right.left.mas_equalTo(0);
             make.top.equalTo(contryLabel2.mas_top);
             make.bottom.equalTo(contryLabel2.mas_bottom);
-        }];
+        }];*/
         
         UILabel *emailLabel = [[UILabel alloc]init];
         [emailLabel setLabelFormateTitle:NSLocalizedString(@"email_account", @"邮箱账号") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:emailLabel];
         [emailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
-            make.top.equalTo(lineView.mas_bottom);
+//            make.top.equalTo(lineView.mas_bottom);
+            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];
