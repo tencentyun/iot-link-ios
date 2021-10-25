@@ -212,16 +212,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *productstr = [NSString stringFromHexString:producthex];
                         self.currentProductId = productstr;
                         
-                        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
-                            NSNumber *connectHexstr = advertisementData[@"kCBAdvDataIsConnectable"];
-                            NSArray *uuidArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
-                            if (![productstr isEqualToString:self.productId] && [uuidArray containsObject:[CBUUID UUIDWithString:@"FFE0"]] && [connectHexstr isEqual: @(1)]) {
-                                [self.blueManager connectBluetoothPeripheral:device];
-                                break;
-                            }else if([productstr isEqualToString:self.productId]) {
-                                [self.blueManager connectBluetoothPeripheral:device];
-                                break;
-                            }
+                        if([productstr isEqualToString:self.productId]) {
+                            [self.blueManager connectBluetoothPeripheral:device];
+                            break;
                         }
                     }
                 }
@@ -1164,11 +1157,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                 break;
                             }
                         }
+                    }else {
+                        [self connectedFailBlueDeviceUI];
+                        [self writeLinkResultInDeviceWithSuccess:NO];
                     }
-//                    else {
-//                        [self connectedFailBlueDeviceUI];
-//                        [self writeLinkResultInDeviceWithSuccess:NO];
-//                    }
                 }
             }
         }
