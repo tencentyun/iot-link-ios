@@ -89,7 +89,6 @@
 "telephone_number" = "电话号码";
 "user_id" = "用户 ID";
 "modify_password" = "修改密码";
-"modify_authentation" = "权限管理";
 "modify_nick" = "修改昵称";
 "bind_phone" = "手机绑定";
 "old_password" = "旧密码";
@@ -922,6 +921,7 @@
 "update_now" = "立即升级";
 "current_Version" = "当前固件版本为";
 "last_Version" = "当前固件版本为";
+"modify_authentation" = "权限管理";
 "register_privacy_policy_title" = "用户协议与隐私保护";
 "register_privacy_policy_conte1" = "为了更好地保障您的个人权益，在您使用我们的产品前，请务必谨慎阅读腾讯连连";
 "register_privacy_policy_conte2" = "《用户协议》";
