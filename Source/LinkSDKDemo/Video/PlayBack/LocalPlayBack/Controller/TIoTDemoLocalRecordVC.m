@@ -35,7 +35,7 @@ static CGFloat const kPadding = 16;
 static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
-static NSString *const kLive = @"ipc.flv?action=live";
+static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 @interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, assign) CGRect screenRect;
@@ -97,6 +97,8 @@ static NSString *const kLive = @"ipc.flv?action=live";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
     self.isHidePlayBtn = NO;
     self.isTimerSuspend = NO;
@@ -317,7 +319,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
 //            [weakSelf playVideoWithStartTime:weakSelf.listModel.VideoURL withTime:previousModel isChangeModel:YES];
-            [weakSelf seekDesignatedPointWithCurrentTime:previousModel.StartTime selectedTimeMoel:previousModel isChangeModel:YES];
+            [weakSelf seekDesignatedPointWithCurrentTime:previousModel.StartTime selectedTimeMoel:previousModel isChangeModel:YES withProgress:NO];
             [weakSelf setScrollOffsetWith:previousModel];
         }
         
@@ -342,7 +344,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
 //            [weakSelf playVideoWithStartTime:weakSelf.listModel.VideoURL withTime:nextModel isChangeModel:YES];
-            [weakSelf seekDesignatedPointWithCurrentTime:nextModel.StartTime selectedTimeMoel:nextModel isChangeModel:YES];
+            [weakSelf seekDesignatedPointWithCurrentTime:nextModel.StartTime selectedTimeMoel:nextModel isChangeModel:YES withProgress:NO];
             [weakSelf setScrollOffsetWith:nextModel];
         }
     };
@@ -385,7 +387,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             if (weakSelf.videoTimeModel.StartTime.integerValue <= startTimestamp && weakSelf.videoTimeModel.EndTime.integerValue >=startTimestamp ) {
                 
                 if (weakSelf.player == nil) {  //滑动到空数据，销毁player，重新请求
-                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
+                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES withProgress:NO];
                 }else {
                     if (weakSelf.isTimerSuspend == YES) {
                         if (weakSelf.timer) {
@@ -405,11 +407,11 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //                        [weakSelf tapVideoView:weakSelf.playPauseBtn];
 //                    }
                     [weakSelf startPlayLocalVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:videoPlayStart.integerValue];
-                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
+                    [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES withProgress:NO];
                 }
                 
             }else {
-                [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES];
+                [weakSelf seekDesignatedPointWithCurrentTime:videoPlayStart selectedTimeMoel:currentModel isChangeModel:YES withProgress:NO];
             }
             
             TIoTDemoCloudEventModel *scorllCurrentModel = [[TIoTDemoCloudEventModel alloc]init];
@@ -550,7 +552,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
                     
                     // 滚动到第一段视频起始位置开始播放
                     self.choiceLocalDateView.nextDateBlcok(timeModel);
-//                    [self setVieoPlayerStartPlay];
+//                    [self setVieoPlayerStartPlayStartTime:<#(NSString *)#> endTime:<#(NSString *)#>];
                 }
             }
             
@@ -559,8 +561,9 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }];
 }
 
-/// MARK: seek 进度条滚动
-- (void)seekDesignatedPointWithCurrentTime:(NSString *)currentTime selectedTimeMoel:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange{
+/// MARK: seek 进度滚动控制
+//isControlProgress: 是否是播放器进度条
+- (void)seekDesignatedPointWithCurrentTime:(NSString *)currentTime selectedTimeMoel:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange withProgress:(BOOL)isControlProgress{
     
     if (isChange == YES) {
         self.videoTimeModel = [[TIoTDemoCloudEventModel alloc]init];
@@ -575,24 +578,29 @@ static NSString *const kLive = @"ipc.flv?action=live";
         channel = @"0";
     }
     
-    [self stopPlayMovie];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_seek&time=%@",channel,currentTime];
-
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    if (isControlProgress == NO) {   //控制本地录像时间轴滚动
+        [self stopPlayMovie];
+        //seek 指定时间后，设备状态正常，可起播放器
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setVieoPlayerStartPlayStartTime:timeModel.StartTime endTime:timeModel.EndTime];
+        });
+    }else {
+        //seek 播放器进度条后 不用重启播放器，播放流自动跟随时间播放
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_seek&time=%@",channel,currentTime];
             
-            TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
-            if ([responseModel.status isEqualToString:@"0"]) {
-                //seek 指定时间后，设备状态正常，可起播放器
-                [self setVieoPlayerStartPlay];
+            [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
                 
-            }else {
-                //设备状态异常提示
-                [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-            }
-        }];
-    });
+                TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
+                if ([responseModel.status isEqualToString:@"0"]) {
+                    
+                }else {
+                    //设备状态异常提示
+                    [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+                }
+            }];
+        });
+    }
 }
 
 /// MARK: 发送暂停或继续播放信令
@@ -633,16 +641,16 @@ static NSString *const kLive = @"ipc.flv?action=live";
 }
 
 /// MARK:开启设备
-- (void)setVieoPlayerStartPlay {
+- (void)setVieoPlayerStartPlayStartTime:(NSString *)startTime endTime:(NSString *)endTime {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSString *channalID = @"";
         
         if (self.isNVR == YES) {
-            channalID = [NSString stringWithFormat:@"%@&channel=%@",kLive,self.deviceModel.Channel?:@""];
+            channalID = [NSString stringWithFormat:@"%@&channel=%@&start_time=%@&end_time=%@",kPlayback,self.deviceModel.Channel?:@"",startTime,endTime];
         }else {
-            channalID = [NSString stringWithFormat:@"%@&channel=0",kLive];
+            channalID = [NSString stringWithFormat:@"%@&channel=0&start_time=%@&end_time=%@",kPlayback,startTime,endTime];
         }
         
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
@@ -688,7 +696,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     self.isPause = NO;
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
 //    [self playVideoWithStartTime:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
-    [self seekDesignatedPointWithCurrentTime:selectedModel.StartTime selectedTimeMoel:selectedModel isChangeModel:YES];
+    [self seekDesignatedPointWithCurrentTime:selectedModel.StartTime selectedTimeMoel:selectedModel isChangeModel:YES withProgress:NO];
     [self setScrollOffsetWith:selectedModel];
 }
 
@@ -811,21 +819,38 @@ static NSString *const kLive = @"ipc.flv?action=live";
         }
     }];
     
-//    self.playView = [[UIView alloc]init];
-//    [self.imageView addSubview:self.playView];
-//    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.top.bottom.equalTo(self.imageView);
-//    }];
+    self.playView = [[UIView alloc]init];
+    [self.imageView addSubview:self.playView];
+    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.imageView);
+    }];
     
-//    self.videoPlayBtn = [[UIButton alloc]init];
-//    [self.videoPlayBtn setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateNormal];
-//    [self.videoPlayBtn addTarget:self action:@selector(playVideo:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.playView addSubview:self.videoPlayBtn];
-//    [self.videoPlayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.center.equalTo(self.playView);
-//        make.width.height.mas_equalTo(60);
-//    }];
+    self.videoPlayBtn = [[UIButton alloc]init];
+    [self.videoPlayBtn setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateNormal];
+    [self.videoPlayBtn addTarget:self action:@selector(playVideo:) forControlEvents:UIControlEventTouchUpInside];
+    [self.playView addSubview:self.videoPlayBtn];
+    [self.videoPlayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.playView);
+        make.width.height.mas_equalTo(60);
+    }];
     
+    self.playView.hidden = YES;
+    
+}
+
+///MARK:控制播放器进度条是否显示
+- (void)controlProgerssAppear:(UIButton *)button {
+    if (self.customControlVidwoView.hidden == YES) {
+        self.customControlVidwoView.hidden = NO;
+        [self autoHideControlView];
+        
+    }else {
+        self.customControlVidwoView.hidden = YES;
+        if (self.controlTimer != nil) {
+            dispatch_source_cancel(self.controlTimer);
+            self.controlTimer = nil;
+        }
+    }
 }
 
 ///MARK: 控制栏隐藏状态下tap Video时响应
@@ -852,7 +877,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
             
             if (self.isReAppearPause == YES) {
                 //切换云存和本地tap时，player 进度条重新计算
-                [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",(long)self.currentTime] selectedTimeMoel:self.videoTimeModel isChangeModel:YES];
+                [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",(long)self.currentTime] selectedTimeMoel:self.videoTimeModel isChangeModel:YES withProgress:NO];
             }else {
                 [self sendPauseOrResumeSignallingWithSwitch:NO];
             }
@@ -1005,7 +1030,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     }else {
         self.playPauseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         self.playPauseBtn.backgroundColor = [UIColor clearColor];
-        [self.playPauseBtn addTarget:self action:@selector(tapVideoView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.playPauseBtn addTarget:self action:@selector(controlProgerssAppear:) forControlEvents:UIControlEventTouchUpInside];
         [self.imageView addSubview:self.playPauseBtn];
         [self.playPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self.imageView);
@@ -1078,11 +1103,11 @@ static NSString *const kLive = @"ipc.flv?action=live";
 //        [self tapVideoView:self.playPauseBtn];
     }
     self.isPause = NO;
-    self.player.currentPlaybackTime = self.currentTime;
-    [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.player.currentPlaybackTime];
+//    self.player.currentPlaybackTime = self.currentTime;
+    [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
     
 //    [self getFullVideoURLWithPartURL:self.listModel.VideoURL withTime:currentTimeModel isChangeModel:NO];
-    [self seekDesignatedPointWithCurrentTime:currentTimeModel.StartTime selectedTimeMoel:currentTimeModel isChangeModel:NO];
+    [self seekDesignatedPointWithCurrentTime:currentTimeModel.StartTime selectedTimeMoel:currentTimeModel isChangeModel:NO withProgress:YES];
     [self setScrollOffsetWith:currentTimeModel];
     
 }
@@ -1279,9 +1304,10 @@ static NSString *const kLive = @"ipc.flv?action=live";
             self.stopNumber += 1;
             if (self.stopNumber == 2) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self configVideo];
-                    [self.player prepareToPlay];
-                    [self.player play];
+//                    [self configVideo];
+//                    [self.player prepareToPlay];
+//                    [self.player play];
+                    self.playView.hidden = NO;
                 });
             }
             break;
@@ -1451,7 +1477,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
     
     [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
     
-    [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",self.currentTime] selectedTimeMoel:nil isChangeModel:NO];
+    [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",self.currentTime] selectedTimeMoel:nil isChangeModel:NO withProgress:NO];
 }
 
 - (void)responseLocalP2PdisConnect:(NSNotification *)notify {
