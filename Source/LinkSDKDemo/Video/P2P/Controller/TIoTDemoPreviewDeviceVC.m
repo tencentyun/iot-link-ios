@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval endPlayer;
 @property (nonatomic, assign) CFTimeInterval startIpcP2P;
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
-
+@property (nonatomic, assign) BOOL is_init_alert;
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @end
 
@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    _is_init_alert = NO;
     _is_ijkPlayer_stream = YES;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
@@ -208,7 +208,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     NSString *channelNum = self.selectedModel.Channel?:@"0";
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
-                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
+
+                AWAudioConfig *config = [[AWAudioConfig alloc] init];
+                config.bitrate = 32000;
+                config.channelCount = 1;
+                config.sampleSize = 16;
+                config.sampleRate = 8000;
+                
+//                config.bitrate = 100000;
+//                config.channelCount = 1;
+//                config.sampleSize = 16;
+//                config.sampleRate = 44100;
+                
+                //设置会话 withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth
+//                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:nil ];
+//                [[AVAudioSession sharedInstance] setActive:YES error:nil];
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
             }
             
         }else {
@@ -563,6 +578,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
         [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+        
+        [self.player play];
     }
     
     button.selected = !button.selected;
@@ -984,14 +1001,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             }
             
             //弹框
-            NSString *messageString = [NSString stringWithFormat: @"P2P连接时间:  %ld(ms)\n画面显示时间: %ld(ms)",(long)p2pConnectTime,(NSInteger)((self.endPlayer - self.startPlayer)*1000)];
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            if (!_is_init_alert) {
+                NSString *messageString = [NSString stringWithFormat: @"P2P连接时间:  %ld(ms)\n画面显示时间: %ld(ms)",(long)p2pConnectTime,(NSInteger)((self.endPlayer - self.startPlayer)*1000)];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+                UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
                 
-            }];
-            
-            [alertC addAction:alertA];
-            [self presentViewController:alertC animated:YES completion:nil];
+                [alertC addAction:alertA];
+                [self presentViewController:alertC animated:YES completion:nil];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [alertC dismissViewControllerAnimated:YES completion:NULL];
+                });
+                
+                _is_init_alert = YES;
+            }
             
             break;
         }

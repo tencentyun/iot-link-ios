@@ -39,6 +39,7 @@
 
 -(void) sendAudioSampleBuffer:(CMSampleBufferRef) sampleBuffer;
 -(void) sendAudioPcmData:(NSData *)audioData;
+-(void) sendAudioAACData:(NSData *)audioData;
 -(void) sendFlvAudioTag:(aw_flv_audio_tag *)flvAudioTag;
 
 @end
