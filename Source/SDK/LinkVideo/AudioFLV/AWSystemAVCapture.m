@@ -1,6 +1,7 @@
 #import "AWSystemAVCapture.h"
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
+#import "AWAACEncoder.h"
 
 @interface AWSystemAVCapture ()<AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
 
@@ -10,10 +11,12 @@
 @property (nonatomic, strong) AVCaptureAudioDataOutput *audioDataOutput;
 //会话
 @property (nonatomic, strong) AVCaptureSession *captureSession;
-
+@property (nonatomic , strong) AWAACEncoder *mAudioEncoder;
 @end
 
-@implementation AWSystemAVCapture
+@implementation AWSystemAVCapture{
+    NSFileHandle *audioFileHandle;
+}
 
 -(void)switchCamera{
     
@@ -23,6 +26,9 @@
     [self createCaptureDevice];
     [self createOutput];
     [self createCaptureSession];
+    
+    self.mAudioEncoder = [[AWAACEncoder alloc] init];
+    self.mAudioEncoder.sample_rate = self.audioConfig.sampleRate;
 }
 
 //初始化视频设备
@@ -48,10 +54,6 @@
         [self.captureSession addOutput:self.audioDataOutput];
     }
     
-//    if (![self.captureSession canSetSessionPreset:self.captureSessionPreset]) {
-//        @throw [NSException exceptionWithName:@"Not supported captureSessionPreset" reason:[NSString stringWithFormat:@"captureSessionPreset is [%@]", self.captureSessionPreset] userInfo:nil];
-//    }
-    
     self.captureSession.sessionPreset = self.captureSessionPreset;
     
     [self.captureSession commitConfiguration];
@@ -60,6 +62,11 @@
 }
 
 -(BOOL) startCapture {
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abcde.aac"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    
     [self.captureSession startRunning];
     return [super startCapture];
 }
@@ -68,6 +75,8 @@
 -(void) stopCapture {
     [self.captureSession stopRunning];
     [super stopCapture];
+    [audioFileHandle closeFile];
+    audioFileHandle = NULL;
 }
 
 //销毁会话
@@ -89,9 +98,10 @@
 
 -(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     if (self.isCapturing) {
-//        if([self.audioDataOutput isEqual:captureOutput]){
-            [self sendAudioSampleBuffer:sampleBuffer];
-//        }
+        [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
+            [self->audioFileHandle writeData:encodedData];
+            [self sendAudioAACData:encodedData];
+        }];
     }
 }
 

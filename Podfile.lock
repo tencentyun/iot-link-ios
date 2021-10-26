@@ -113,7 +113,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.18.0)
+  - Protobuf (3.19.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -251,7 +251,7 @@ SPEC CHECKSUMS:
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 1a37ebea1338949e9ac35a3f06e80b3f536eec8d
+  Protobuf: e9b99dd5da72f665ec503b19191f245a22188b4d
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
