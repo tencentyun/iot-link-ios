@@ -6,6 +6,8 @@
 //编码
 -(aw_flv_audio_tag *) encodePCMDataToFlvTag:(NSData *)pcmData;
 
+-(aw_flv_audio_tag *) encodeAACDataToFlvTag:(NSData *)aacData;
+
 -(aw_flv_audio_tag *) encodeAudioSampleBufToFlvTag:(CMSampleBufferRef)audioSample;
 
 //创建 audio specific config

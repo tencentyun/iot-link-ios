@@ -1345,7 +1345,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
         IJKFFOptions *options = [IJKFFOptions optionsByDefault];
 
-
         self.cloudPlayer = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
         self.cloudPlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.cloudPlayer.view.frame = self.cloudImageView.bounds;
