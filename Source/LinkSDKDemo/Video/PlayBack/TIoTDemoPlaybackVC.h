@@ -20,7 +20,7 @@ typedef void(^TIoTDemoPlayerReloadBlock)(void);
 
 @property (nonatomic, assign) BOOL isNVR;
 @property (nonatomic, copy) NSString *deviceName;
-
+@property (nonatomic, assign) BOOL isFromHome;
 @end
 
 NS_ASSUME_NONNULL_END

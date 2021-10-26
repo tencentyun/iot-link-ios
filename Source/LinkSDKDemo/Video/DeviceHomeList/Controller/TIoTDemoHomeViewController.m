@@ -22,6 +22,7 @@
 #import "TIoTDemoPreviewDeviceVC.h"
 #import "TIoTDemoProductDetailModel.h"
 #import "TIoTDemoNVRSubDeviceVC.h"
+#import "TIoTDemoPlaybackVC.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
@@ -219,10 +220,19 @@ static NSInteger const kLimit = 100;
         ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"回放");
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-            cloudStorageVC.deviceModel = model;
-            [self.navigationController pushViewController:cloudStorageVC animated:YES];
-            [customActionSheet removeFromSuperview];
+//            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
+//            cloudStorageVC.deviceModel = model;
+//            [self.navigationController pushViewController:cloudStorageVC animated:YES];
+//            [customActionSheet removeFromSuperview];
+            
+            TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+            playBackVC.deviceModel = model;
+            playBackVC.isNVR = self.isNVR;
+            playBackVC.deviceName = model.DeviceName;
+            playBackVC.isFromHome = YES;
+            
+            [self.navigationController pushViewController:playBackVC animated:YES];
+            [customActionSheet removeFromSuperview];  
         };
         
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
