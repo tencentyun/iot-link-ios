@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5008ced2_601304f7",
+        "filename": "Source/LinkSDKDemo/Video/PlayBack/LocalPlayBack/Controller/TIoTDemoLocalRecordVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-27T02:22:52Z",
+      "side": 1,
+      "message": "已修改",
+      "parentUuid": "bce9f44b_ce08ce51",
+      "revId": "630bf0163d2e8c80557190001c984855d2c245a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70c97471_1bdeda7e",
         "filename": "Source/LinkSDKDemo/Video/PlayBack/TIoTDemoPlaybackVC.m",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "630bf0163d2e8c80557190001c984855d2c245a3",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba76e94f_f7ce47e0",
+        "filename": "Source/LinkSDKDemo/Video/PlayBack/TIoTDemoPlaybackVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-27T02:22:52Z",
+      "side": 1,
+      "message": "这里只负责建立通道，用户点击后或切换时候才开始播放",
+      "parentUuid": "70c97471_1bdeda7e",
+      "revId": "630bf0163d2e8c80557190001c984855d2c245a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
