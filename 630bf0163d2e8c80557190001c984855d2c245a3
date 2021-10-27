@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bce9f44b_ce08ce51",
+        "filename": "Source/LinkSDKDemo/Video/PlayBack/LocalPlayBack/Controller/TIoTDemoLocalRecordVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-27T01:50:22Z",
+      "side": 1,
+      "message": "playbackseek之后不需要重置播放器吧",
+      "revId": "630bf0163d2e8c80557190001c984855d2c245a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70c97471_1bdeda7e",
+        "filename": "Source/LinkSDKDemo/Video/PlayBack/TIoTDemoPlaybackVC.m",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-27T01:50:22Z",
+      "side": 1,
+      "message": "连接好后，需要开始播放不，这块的通道还没建立",
+      "revId": "630bf0163d2e8c80557190001c984855d2c245a3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
