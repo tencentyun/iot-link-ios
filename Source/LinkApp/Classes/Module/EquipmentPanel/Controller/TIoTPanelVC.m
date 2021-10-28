@@ -1256,6 +1256,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             [self getDeviceNewestInfo];
             
+        }else if ([cmdtype isEqualToString:@"03"]) {
+         //设备事件上报
+            //type:03 length:2Btye eventId:1Byte value:TVL
+            [self deviceReportEventWithMessage:hexstr];
+            
         }else if ([cmdtype isEqualToString:@"04"]) {
             //设备行为调用写入设备后，设备广播回调
             
@@ -2487,6 +2492,40 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         NSString *writeInfo = @"22010000";
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
+    }];
+}
+
+///MARK: 设备事件上报
+- (void)deviceReportEventWithMessage:(NSString *)message {
+    //type:03 length:2Btye eventId:1Byte value:TVL
+    NSString *eventMessageHex = message;
+    NSString *lengthHex = [eventMessageHex substringWithRange:NSMakeRange(2, 4)];
+    NSString *eventIdHex = [eventMessageHex substringWithRange:NSMakeRange(6, 2)];
+    NSString *eventValueHex = [eventMessageHex substringFromIndex:8];
+    
+    NSDictionary *dic = @{@"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+                          @"EventId":@"eventId",
+                          @"Params":@"{\"eventId1\":1}",
+                          @"Method":@"ReportEventAsDevice",
+    };
+    
+    //上报事件
+    [self requestReportDeviceEvent:dic];
+}
+///MARK:设备事件上报请求
+- (void)requestReportDeviceEvent:(NSDictionary *)dic {
+    NSDictionary *paramDic = [NSDictionary dictionaryWithDictionary:dic?:@{}];
+    [[TIoTRequestObject shared] post:AppReportDeviceEvent Param:paramDic success:^(id responseObject) {
+        NSLog(@"---%@",responseObject);
+        NSString *replayType = @"60";
+        NSString *replayResult = @"00";
+        NSString *writeInfo = [NSString stringWithFormat:@"%@%@",replayType,replayResult];
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        NSString *replayType = @"60";
+        NSString *replayResult = @"00";
+        NSString *writeInfo = [NSString stringWithFormat:@"%@%@",replayType,replayResult];
         [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
     }];
 }
