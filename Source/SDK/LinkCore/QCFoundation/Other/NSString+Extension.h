@@ -189,6 +189,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 //16进制转浮点型
 + (float)getFloatByHex:(NSString *)hexString;
 
+//浮点数转16进制
++ (NSString *)getHexByFloat:(float )floatValue;
+
 // 获取标识符
 + (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;
 @end

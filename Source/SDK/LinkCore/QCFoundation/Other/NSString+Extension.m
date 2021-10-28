@@ -1142,12 +1142,21 @@ union u{
     return binary;
 }
 
+//16进制转浮点型
 + (float)getFloatByHex:(NSString *)hexString {
     NSString *revertHex = [self reverseWordsInString:hexString?:@""];
     NSString *tempStr = [NSString stringWithFormat:@"0x%@",[revertHex uppercaseString]];
     sscanf([tempStr UTF8String], "%x", &u.i);
     float floatValue = u.f;
     return floatValue;
+}
+
+//浮点数转16进制
++ (NSString *)getHexByFloat:(float )floatValue {
+
+    NSString *hexTempString = [NSString stringWithFormat:@"%X",*(int*)&floatValue];
+    NSString *hexString = [self reverseWordsInString:hexTempString?:@""];
+    return hexString;
 }
 
 // 获取标识符
