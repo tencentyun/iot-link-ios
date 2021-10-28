@@ -1217,7 +1217,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }else if ([cmdtype isEqualToString:@"00"]) {
             //设备属性上报 （设备主动上报）
             if (!self.isDeviceReporting == YES) {
-                NSString *jsonString = [self getDeviceReportDataJsonWithPropertyValueHex:hexstr?:@"" typeString:@"properties" structHeaderHex:@""];
+                NSString *jsonString = [self getDeviceReportDataJsonWithPropertyValueHex:hexstr?:@"" typeString:@"properties" structHeaderHex:@"" eventDicInex:0];
                 NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
                                            @"DeviceName":self.deviceName?:@"",
                                            @"Data":jsonString,
@@ -1255,6 +1255,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
          //获取设备最新信息
             
             [self getDeviceNewestInfo];
+            
+        }else if ([cmdtype isEqualToString:@"03"]) {
+         //设备事件上报
+            //type:03 length:2Btye eventId:1Byte value:TVL
+            [self deviceReportEventWithMessage:hexstr];
             
         }else if ([cmdtype isEqualToString:@"04"]) {
             //设备行为调用写入设备后，设备广播回调
@@ -1431,15 +1436,26 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 /**
  propertyValueHex : TVL协议 value hex
  itemPropertyTypeString : 属性类型properties 为一级属性 struct递归结构体获取json
+                          propertie类型 :properties  事件类型  event: events
  structHeaderHex : 如果是struct，需转第一个字节
+ eventDicInex: 如果是事件：事件的index  其他传空 0
  */
-- (NSString *)getDeviceReportDataJsonWithPropertyValueHex:(NSString *)propertyValueHex typeString:(NSString *)itemPropertyTypeString structHeaderHex:(NSString *)structHeaderHex {
+- (NSString *)getDeviceReportDataJsonWithPropertyValueHex:(NSString *)propertyValueHex typeString:(NSString *)itemPropertyTypeString structHeaderHex:(NSString *)structHeaderHex eventDicInex:(NSInteger)eventIndex {
     NSString *jsonString = @"";
     if (![NSString isNullOrNilWithObject:propertyValueHex]) {
         __block NSMutableDictionary *jsonDic = [NSMutableDictionary new];
         
-        if ([self.DataTemplateDic.allKeys containsObject:@"properties"]) {
-            __block NSArray *propertyTemplate = self.DataTemplateDic[@"properties"];;
+//        if ([self.DataTemplateDic.allKeys containsObject:@"properties"]) {
+        if ([self.DataTemplateDic.allKeys containsObject:itemPropertyTypeString?:@""]) {
+//            __block NSArray *propertyTemplate = self.DataTemplateDic[@"properties"];
+            //默认属性 模板数组
+            __block NSArray *propertyTemplate = self.DataTemplateDic[itemPropertyTypeString]?:@[];
+            //如果是event  需重新获取event对应模板数组
+            if ([itemPropertyTypeString isEqualToString:@"events"]) {
+                NSDictionary *eventDic = propertyTemplate[eventIndex]?:@{};
+                propertyTemplate = eventDic[@"params"]?:@[];
+            }
+            
             //判断外层属性还是结构体
             if (![NSString isNullOrNilWithObject:itemPropertyTypeString]) {
                 if ([itemPropertyTypeString isEqualToString:@"struct"]) {
@@ -1507,8 +1523,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         
                         itemValueHex = [propertyValueHex substringWithRange:NSMakeRange(itemStart, valueLenHex)];
                         
-                        NSLog(@"---%ld",index);
-                        
                         //根据模板对照获取
                         [propertyTemplate enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                             NSDictionary *propertyInfo = obj;
@@ -1527,7 +1541,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                     [jsonDic setValue:hexStr forKey:idString];
                                 }else if (propertyTypeKey.integerValue == TIoTDataTemplatePropertyTypeStruct) {
                                     NSString *headerHex = [propertyValueHex substringWithRange:NSMakeRange(index-itemValueHex.length-2*2-2, 2)];
-                                    NSString *structJson = [self getDeviceReportDataJsonWithPropertyValueHex:itemValueHex typeString:@"struct" structHeaderHex:headerHex];
+                                    NSString *structJson = [self getDeviceReportDataJsonWithPropertyValueHex:itemValueHex typeString:@"struct" structHeaderHex:headerHex eventDicInex:0];
                                     NSDictionary *jsonStructDic = [NSString jsonToObject:structJson];
                                     [jsonDic setValue:jsonStructDic?:@{} forKey:idString];
                                 }else if (propertyTypeKey.integerValue == TIoTDataTemplatePropertyTypeFloat) {
@@ -1628,11 +1642,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         // AtPath 原始文件路径
         // ToPath 目标文件路径
         [manager moveItemAtPath:location.path toPath:file error:nil];
-        NSLog(@"download firmware file path :%@",file);
+        DDLogInfo(@"download firmware file path :%@",file);
 //        NSLog(@"Documentsdirectory: %@",
 //        [manager contentsOfDirectoryAtPath:file error:nil]);
         NSData *fileData = [NSData dataWithContentsOfFile:file];
-        NSLog(@"file data :%@",fileData);
+        DDLogInfo(@"file data :%@",fileData);
         //发送升级请求包到设备
         [self sendFirmwareUpdateInfoToDeviceWithData:fileData];
         
@@ -2355,6 +2369,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //将2进制转16进制 1Byte
     valueSting = [NSString getHexByBinary:tempValue];
     return valueSting;
+    asdf
 }
 
 /// MARK:获取TLV协议中 Value
@@ -2487,6 +2502,64 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         NSString *writeInfo = @"22010000";
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
+    }];
+}
+
+///MARK: 设备事件上报
+- (void)deviceReportEventWithMessage:(NSString *)message {
+    //type:03 length:2Btye eventId:1Byte value:TVL
+    NSString *eventMessageHex = message;
+    NSString *lengthHex = [eventMessageHex substringWithRange:NSMakeRange(2, 4)];
+    NSString *eventIdHex = [eventMessageHex substringWithRange:NSMakeRange(6, 2)];
+    NSString *eventValueHex = [eventMessageHex substringFromIndex:8];
+    
+    //eventid int
+    NSInteger eventIdIndex = [NSString getDecimalByHex:eventIdHex];
+    __block NSString *eventId = @"";
+    //获取设备事件上报数据对应模板中的 eventDic  （self.DataTemplateDic 模板全部数据）
+    if (self.DataTemplateDic != nil) {
+        NSArray *eventArray = self.DataTemplateDic[@"events"]?:@[];
+        [eventArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *eventDic = (NSDictionary *)obj?:@{};
+            if (idx == eventIdIndex) {
+                eventId = eventDic[@"id"];
+            }
+        }];
+    }
+    
+    //去除eventid的 1byte 和属性上报格式保持一致，可复用
+    
+    NSString *jsonString = [self getDeviceReportDataJsonWithPropertyValueHex:eventValueHex?:@"" typeString:@"events" structHeaderHex:@"" eventDicInex:eventIdIndex];
+    NSDictionary *dic = @{@"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+                          @"EventId":eventId?:@"",
+                          @"Params":jsonString?:@"",
+                          @"Method":@"ReportEventAsDevice",
+    };
+    
+    //上报事件
+    [self requestReportDeviceEvent:dic withEventIndex:eventIdIndex];
+}
+///MARK:设备事件上报请求
+- (void)requestReportDeviceEvent:(NSDictionary *)dic withEventIndex:(NSInteger)eventIdIndex {
+    NSString *bitSting = @"00000";
+    NSString *preType = @"011";
+    NSString *tempIDValue = [NSString getBinaryByDecimal:eventIdIndex];
+    //拼接TVL Type 1 Byte
+    NSString *preTempIDValue = [bitSting substringToIndex:bitSting.length - tempIDValue.length];
+    NSString *resultIDValue= [NSString stringWithFormat:@"%@%@",preTempIDValue,tempIDValue];
+    NSString *tempValue = [NSString stringWithFormat:@"%@%@",preType,resultIDValue];
+    //将2进制转16进制 1Byte
+    NSString *replayType = [NSString getHexByBinary:tempValue];
+    
+    NSDictionary *paramDic = [NSDictionary dictionaryWithDictionary:dic?:@{}];
+    [[TIoTRequestObject shared] post:AppReportDeviceEvent Param:paramDic success:^(id responseObject) {
+        NSString *replayResult = @"00";
+        NSString *writeInfo = [NSString stringWithFormat:@"%@%@",replayType,replayResult];
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        NSString *replayResult = @"01";
+        NSString *writeInfo = [NSString stringWithFormat:@"%@%@",replayType,replayResult];
         [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
     }];
 }
