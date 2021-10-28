@@ -149,7 +149,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) TIoTFirmwareModel *firmwareModel;
 @property (nonatomic, strong) TIoTAlertView *firmwareView;
 @property (nonatomic, assign) BOOL isDeviceReporting; //设备主动上报成功 （属性，事件，最新数据）
-
+@property (nonatomic, strong) NSArray *structIDArray; //获取最新设备信息后，用于结构体idArray
 @end
 
 @implementation TIoTPanelVC
@@ -211,11 +211,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
                         self.currentProductId = productstr;
-                        
-                        if([productstr isEqualToString:self.productId]) {
-                            [self.blueManager connectBluetoothPeripheral:device];
-                            break;
-                        }
+                        [self.blueManager connectBluetoothPeripheral:device];
+//                        if([productstr isEqualToString:self.productId]) {
+//                            [self.blueManager connectBluetoothPeripheral:device];
+//                            break;
+//                        }
                     }
                 }
             }
@@ -765,7 +765,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [self.coll reloadData];
                 
                 //设备UUID FFE2 写入属性值   取模板数据 self.DataTemplateDic （最全的，和控制台一致），deviceinfo.property 不全
-                [self writePropertyInfoInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeProperty];
+                NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeProperty];
+                //将完整信息TVL数据 写入设备中FFE2特征中
+                [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeProperty headerHexInProperty:@"00"];
+                
                 
             }else if ([payloadDic[@"method"] isEqualToString:@"action"]) {
                 //设备UUID FFE2 写入行为调用
@@ -774,7 +777,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         
                         if ([payloadDic.allKeys containsObject:@"params"]) {
                             //TLV 数据
-                            [self writePropertyInfoInFFE2WithDic:self.DataTemplateDic[@"actions"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeAction];
+                            NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"actions"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeAction];
+                            //将完整信息TVL数据 写入设备中FFE2特征中
+                            [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeAction headerHexInProperty:@"00"];
                         }
                 }
             }
@@ -1243,6 +1248,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             }else if ([resultStrin isEqualToString:@"11"]) { //数据解析错误
                 [MBProgressHUD showSuccess:NSLocalizedString(@"analysis_deviceData_error", @"设备数据解析错误")];
             }
+            
+        }else if ([cmdtype isEqualToString:@"02"]) {
+         //获取设备最新信息
+            
+            [self getDeviceNewestInfo];
             
         }else if ([cmdtype isEqualToString:@"04"]) {
             //设备行为调用写入设备后，设备广播回调
@@ -1783,15 +1793,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
 }
 
-///MARK: 设备远程控制- UUID FFE2中写入property值 （控制台下发）
-- (void)writePropertyInfoInFFE2WithDic:(NSArray *)propertyArray reportDic:(NSDictionary *)reportDic dataTemplate:(TIoTDataTemplateType)type{
+///MARK: 设备远程控制- UUID FFE2中写入的property hex 值 （控制台下发）
+//reportDic 用params再包一层
+- (NSString *)getPropertyInfoValueHexInFFE2WithDic:(NSArray *)propertyArray reportDic:(NSDictionary *)reportDic dataTemplate:(TIoTDataTemplateType)type {
     
     NSDictionary *dic = reportDic[@"params"]?:@{};
+    NSString *value = @"";
     
     //按格式组装设备需要数据（int enum bool，需要扩充float）
     
     if (propertyArray.count != 0) {
-        NSString *value = @"";
         
         // property 类别
         if (type == TIoTDataTemplateTypeProperty) {
@@ -1800,45 +1811,45 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 NSString *dataTypeString = defineDic[@"type"]?:@"";
     //            NSString *dataTypeString = propertyDic[@"dataType"]?:@"";
                 NSString *idString = propertyDic[@"id"]?:@"";
-                if (self.deviceReportData != nil) {
+                
+                if ([dataTypeString isEqualToString:@"struct"]) {
                     
-                    if (![NSString isNullOrNilWithObject:dataTypeString] && [self.deviceReportData.allKeys containsObject:idString]) {
-                        if ([dataTypeString isEqualToString:@"int"]) {
-
-                            NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeInt reportDic:dic idString:idString dataTypeString:dataTypeString];
-                            //拼接value
-                            value = [value stringByAppendingString:IDValueString];
-                        }else if ([dataTypeString isEqualToString:@"bool"]) {
-                            
-                            NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeBool reportDic:dic idString:idString dataTypeString:dataTypeString];
-                            //拼接value
-                            value = [value stringByAppendingString:IDValueString];
-                        }else if ([dataTypeString isEqualToString:@"enum"]) {
-                            NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:TIoTDataTemplatePropertyTypeEnumerate reportDic:dic idString:idString dataTypeString:dataTypeString];
-                            //拼接value
-                            value = [value stringByAppendingString:IDValueString];
-                        }else if ([dataTypeString isEqualToString:@"float"]) {
-                            
+                    if ([dic.allKeys containsObject:idString]) {
+                        NSDictionary *structDetailDic = dic[idString]?:@{};
+                        NSString *structString = @"";
+                        NSDictionary *tempDefineDic = propertyDic[@"define"]?:@{};
+                        NSArray* specsArray = tempDefineDic[@"specs"]?:@{};
+                        for (NSDictionary *structDic in specsArray) {
+                            defineDic = structDic[@"dataType"]?:@{};
+                            NSString *dataTypeString = defineDic[@"type"]?:@"";
+                           NSString * IdStructString = structDic[@"id"]?:@"";
+                            structString = [self getPropertyjointWithReportDic:structDetailDic dataTypeString:dataTypeString idString:IdStructString valueString:structString searchIndexArray:specsArray isDetailStruct:YES withStructValueHex:@""];
                         }
                         
+                        structString = [self getPropertyjointWithReportDic:dic dataTypeString:dataTypeString idString:idString valueString:structString searchIndexArray:propertyArray isDetailStruct:NO withStructValueHex:structString];
+                        
+                        value = [value stringByAppendingString:structString];
                     }
+                    
+                }else {
+                    value = [self getPropertyjointWithReportDic:dic dataTypeString:dataTypeString idString:idString valueString:value searchIndexArray:propertyArray isDetailStruct:NO withStructValueHex:@""];
                 }
-
+                
             }
             
-            NSString *typeString = @"00";
-            NSInteger length = value.length/2;
-            NSString *lengthHex = [NSString getHexByDecimal:length];
-            NSString *lengthResult = [self getMutableValueLength:lengthHex];
-            //写入设备
-            NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",typeString,lengthResult,value];
-            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
+//            NSString *typeString = @"00";
+//            NSInteger length = value.length/2;
+//            NSString *lengthHex = [NSString getHexByDecimal:length];
+//            NSString *lengthResult = [self getMutableValueLength:lengthHex];
+//            //写入设备
+//            NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",typeString,lengthResult,value];
+//            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
             
         }else if (type == TIoTDataTemplateTypeAction) {
             
             //action 类别  先算value 再算fixed 后算length
             //计算 action LLData value值(TVL) （TVL协议中 type + length（可选） +value; 字符串和结构体需要加拼接length）
-            NSString *valueString = @"";
+
             NSString *bitSting = @"00000";
             
             NSString *actionID = reportDic[@"actionId"]?:@""; //上报dic中的ID
@@ -1884,31 +1895,104 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                             //TVL value 计算  （多个数据需要拼接）
                             NSString *value = [self getMutableValueWithDefineDic:actionDic  reportDic:dic];
                             NSString *resultValue = [NSString stringWithFormat:@"%@%@",TVLType,value];
-                            valueString = [valueString stringByAppendingString:resultValue];
+                            value = [value stringByAppendingString:resultValue];
                         }
                     }
                 }
             }
             
-            //action LLData Fixed Header
-            NSString *fixedHeader = @"";
-            NSArray *actionArray = self.DataTemplateDic[@"actions"]?:@[];
-            if (actionArray.count != 0) {
-                //拼接lldata type
-                fixedHeader = [self getLLDataFixedHeaderDataTemplate:TIoTLLDataFixedHeaderDataTemplateTypeAction dataDefine:@"0" payloadDic:reportDic actionOrEventArray:actionArray];
-            }
-            
-            //action LLData length
-            NSInteger length = valueString.length/2;
-            NSString *lengthHex = [NSString getHexByDecimal:length];
-            NSString *lengthResult = [self getMutableValueLength:lengthHex];
-            //写入设备
-            NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",fixedHeader,lengthResult,valueString];
-            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
+//            //action LLData Fixed Header
+//            NSString *fixedHeader = @"";
+//            NSArray *actionArray = self.DataTemplateDic[@"actions"]?:@[];
+//            if (actionArray.count != 0) {
+//                //拼接lldata type
+//                fixedHeader = [self getLLDataFixedHeaderDataTemplate:TIoTLLDataFixedHeaderDataTemplateTypeAction dataDefine:@"0" payloadDic:reportDic actionOrEventArray:actionArray];
+//            }
+//
+//            //action LLData length
+//            NSInteger length = value.length/2;
+//            NSString *lengthHex = [NSString getHexByDecimal:length];
+//            NSString *lengthResult = [self getMutableValueLength:lengthHex];
+//            //写入设备
+//            NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",fixedHeader,lengthResult,value];
+//            [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
             
         }else if (type == TIoTDataTemplateTypeEvent) {
             //event 类别
+            
         }
+        
+    }
+    return value;
+}
+
+///MARK:获取属性拼接后的value
+//indexOriginArray: 结构体为 内层dic; 非结构体 为原始property数据(self.DataTemplateDic)
+//只有在计算完结构体后再传，其他情况传空
+- (NSString *)getPropertyjointWithReportDic:(NSDictionary *)dic dataTypeString:(NSString *)dataTypeString idString:(NSString *)idString valueString:(NSString *)value searchIndexArray:(NSArray *)indexOriginArray isDetailStruct:(BOOL)isDetailStruct withStructValueHex:(NSString *)structString {
+    
+    if (dic != nil) {
+        TIoTDataTemplatePropertyType type;
+        
+        if (![NSString isNullOrNilWithObject:dataTypeString] && [dic.allKeys containsObject:idString]) {
+            if ([dataTypeString isEqualToString:@"int"]) {
+                type = TIoTDataTemplatePropertyTypeInt;
+            }else if ([dataTypeString isEqualToString:@"bool"]) {
+                type = TIoTDataTemplatePropertyTypeBool;
+            }else if ([dataTypeString isEqualToString:@"enum"]) {
+                type = TIoTDataTemplatePropertyTypeEnumerate;
+            }else if ([dataTypeString isEqualToString:@"float"]) {
+                type = TIoTDataTemplatePropertyTypeFloat;
+            }else if ([dataTypeString isEqualToString:@"string"]) {
+                type = TIoTDataTemplatePropertyTypeString;
+            }else if ([dataTypeString isEqualToString:@"timestamp"]) {
+                type = TIoTDataTemplatePropertyTypeTimestamp;
+            }else {
+                type = TIoTDataTemplatePropertyTypeStruct;
+            }
+         
+            NSString * IDValueString = [self setPropertyReportDeviceInfoWithType:type reportDic:dic idString:idString dataTypeString:dataTypeString propertyIndexArray:indexOriginArray isDetailStruct:isDetailStruct withStructValueHex:structString];
+            //拼接value
+            if (![NSString isNullOrNilWithObject:structString]) {
+                NSString *tempStructHex = [NSString stringWithFormat:@"%@%@",IDValueString,value];
+                value = [@"" stringByAppendingString:tempStructHex];
+            }else {
+                value = [value stringByAppendingString:IDValueString];
+            }
+            
+        }
+    }
+    
+    return value;
+}
+
+///MARK: 设备远程控制- UUID FFE2中写入完成数据
+- (void)writeInfoInFFE2WithValue:(NSString *)value reportDic:(NSDictionary *)reportDic tyep:(TIoTDataTemplateType)type headerHexInProperty:(NSString *)typeHeaderString{
+    if (type == TIoTDataTemplateTypeProperty) {  //property 属性
+        NSString *typeString = typeHeaderString?:@"00";//@"00";
+        NSInteger length = value.length/2;
+        NSString *lengthHex = [NSString getHexByDecimal:length];
+        NSString *lengthResult = [self getMutableValueLength:lengthHex];
+        //写入设备
+        NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",typeString,lengthResult,value];
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
+    }else if (type == TIoTDataTemplateTypeAction) { //action 行为
+        //action LLData Fixed Header
+        NSString *fixedHeader = @"";
+        NSArray *actionArray = self.DataTemplateDic[@"actions"]?:@[];
+        if (actionArray.count != 0) {
+            //拼接lldata type
+            fixedHeader = [self getLLDataFixedHeaderDataTemplate:TIoTLLDataFixedHeaderDataTemplateTypeAction dataDefine:@"0" payloadDic:reportDic actionOrEventArray:actionArray];
+        }
+        
+        //action LLData length
+        NSInteger length = value.length/2;
+        NSString *lengthHex = [NSString getHexByDecimal:length];
+        NSString *lengthResult = [self getMutableValueLength:lengthHex];
+        //写入设备
+        NSString *writeInfoString = [NSString stringWithFormat:@"%@%@%@",fixedHeader,lengthResult,value];
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfoString UUIDString:FFE2UUIDString];
+    }else if (type == TIoTDataTemplateTypeEvent) { //event 事件
         
     }
 }
@@ -2018,81 +2102,96 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 ///MARK: 拼接 llData control操作 数据
-- (NSString *)setPropertyReportDeviceInfoWithType:(TIoTDataTemplatePropertyType)typeValue reportDic:(NSDictionary *)dic idString:(NSString *)idString dataTypeString:(NSString *)dataTypeString {
-    
-    //length
-    NSString *lengthString = @"";
-    if (typeValue == TIoTDataTemplatePropertyTypeBool) { //布尔
-        lengthString = @"0002";
-    }else if (typeValue == TIoTDataTemplatePropertyTypeInt) { //int
-        lengthString = @"0005";
-    }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string
-        
-    }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float
-        
-    }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate
-        lengthString = @"0003";
-    }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp
-        
-    }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct
-        
-    }
+- (NSString *)setPropertyReportDeviceInfoWithType:(TIoTDataTemplatePropertyType)typeValue reportDic:(NSDictionary *)dic idString:(NSString *)idString dataTypeString:(NSString *)dataTypeString propertyIndexArray:(NSArray *)indexOriginArray isDetailStruct:(BOOL )isDetailStruct withStructValueHex:(NSString *)withStructValueHex {
     
     //property value  TVL
     //IdValueString
-    NSMutableArray *IDNumberArray = [self getPropertyIndexWithType:dataTypeString];
+    NSMutableArray *IDNumberArray = [self getPropertyIndexWithType:dataTypeString propertyIndexArray:indexOriginArray isDetailStruct:isDetailStruct];
     //value
     NSString *valueString = @"";
     if ([dic.allKeys containsObject:idString]) {
-        NSNumber *valueNumber = dic[idString]?:@(0);
-        for (NSNumber *idNumber in IDNumberArray) {
-            //头字节
-            NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:typeValue];
-
-            NSString *valueHex = [self getTLVValue:valueNumber.integerValue type:typeValue];
-            valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+        
+        if (typeValue == TIoTDataTemplatePropertyTypeBool || typeValue == TIoTDataTemplatePropertyTypeInt || typeValue == TIoTDataTemplatePropertyTypeEnumerate || typeValue == TIoTDataTemplatePropertyTypeTimestamp || typeValue == TIoTDataTemplatePropertyTypeFloat) {
+            NSNumber *valueNumber = dic[idString]?:@(0);
+            for (NSNumber *idNumber in IDNumberArray) {
+                //头字节
+                NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:typeValue];
+                //value hex
+                NSString *tempValueNumber = [NSString stringWithFormat:@"%ld",valueNumber.integerValue];
+                if (typeValue == TIoTDataTemplatePropertyTypeFloat) {
+                    tempValueNumber = [NSString stringWithFormat:@"%f",valueNumber.floatValue];
+                }
+                NSString *valueHex = [self getTLVValue:tempValueNumber type:typeValue];
+                valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+            }
+        }else if (typeValue == TIoTDataTemplatePropertyTypeString) {
+            NSString *idValueString = dic[idString]?:@"";
+            for (NSNumber *idNumber in IDNumberArray) {
+//                //头字节
+                NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:TIoTDataTemplatePropertyTypeString];
+                //value hex
+                NSString *valueHex = [self getTLVValue:idValueString type:typeValue];
+                valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+            }
+        }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) {
+            NSDictionary *idStructValueDic = dic[idString]?:@"";
+            NSString *idStructValueString = [NSString objectToJson:idStructValueDic];
+            for (NSNumber *idNumber in IDNumberArray) {
+//                //头字节
+                NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:TIoTDataTemplatePropertyTypeStruct];
+                //value hex
+                NSString *valueHex = [self getTLVValue:idStructValueString type:typeValue];
+                valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+                
+                if (![NSString isNullOrNilWithObject:withStructValueHex]) {
+                    NSString *structLengthHexValue = [NSString getHexByDecimal:withStructValueHex.length/2];
+                    NSString *valueHex = [self getTVLValueWithOriginValue:structLengthHexValue bitString:@"0000"];
+                    valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
+                }
+            }
         }
     }
     
     return valueString;
-//    NSString *valueString = @"";
-//    if ([dic.allKeys containsObject:idString]) {
-//        NSNumber *valueNumber = dic[idString]?:@(0);
-//        for (NSNumber *idNumber in IDNumberArray) {
-//            //头字节
-//            NSString *typeValueString = [self getTLVIDValue:idNumber.integerValue type:typeValue];
-//
-//            NSString *valueHex = [self getTLVValue:valueNumber.integerValue type:typeValue];
-//            valueString = [NSString stringWithFormat:@"%@%@",typeValueString,valueHex];
-//
-//            //写入设备
-//            NSString *writeInfoStrin = [NSString stringWithFormat:@"%@%@%@",typeString,lengthString,valueString];
-//            [self writPropertyInfoInFFE2DeviceWithMessage:writeInfoStrin];
-//        }
-//
-//    }
 }
 
 //获取下发属性在设备模板中index (TLV协议中Type 中 ID值)
-- (NSMutableArray *)getPropertyIndexWithType:(NSString *)dataTypeString {
+- (NSMutableArray *)getPropertyIndexWithType:(NSString *)dataTypeString propertyIndexArray:(NSArray *)indexOriginArray isDetailStruct:(BOOL)isDetailStruct {
     NSMutableArray *idNumberArra = [NSMutableArray new];
     
     __block NSInteger IDNumber = 0;
-    NSArray *propertyArr = self.DataTemplateDic[@"properties"]?:@[];
+//    NSArray *propertyArr = self.DataTemplateDic[@"properties"]?:@[];
+    NSArray *propertyArr = indexOriginArray?:@[];
     
+    NSMutableArray *idArray = [NSMutableArray new];
+    if (isDetailStruct == YES) { //结构体
+        [indexOriginArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *detailStructDic = obj;
+            [idArray addObject:detailStructDic[@"id"]];
+        }];
+    }else { //非结构体
+        idArray = [NSMutableArray arrayWithArray:self.structIDArray];
+    }
     [propertyArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary *propertyDic = obj;
-        for (NSString *idkeyString in self.deviceReportData.allKeys) {
+        for (NSString *idkeyString in idArray) {
+//        for (NSString *idkeyString in self.deviceReportData.allKeys) {
+            NSDictionary *defineDic = [NSDictionary new];
             if ([propertyDic.allKeys containsObject:@"define"]) {
-                NSDictionary *defineDic = propertyDic[@"define"]?:@{};
-                NSString *typeKey = defineDic[@"type"]?:@"";
-                NSString *IDKey = propertyDic[@"id"]?:@"";
-                if (![NSString isNullOrNilWithObject:typeKey] && [typeKey isEqualToString:dataTypeString] && [IDKey isEqualToString:idkeyString]) {
-                    IDNumber = idx;
-                    [idNumberArra addObject:@(IDNumber)];
-                    break;
-                    *stop = YES;
-                }
+                //非结构体
+                defineDic = propertyDic[@"define"]?:@{};
+            }else if ([propertyDic.allKeys containsObject:@"dataType"]) {
+                //结构体
+                defineDic = propertyDic[@"dataType"]?:@{};
+            }
+            
+            NSString *typeKey = defineDic[@"type"]?:@"";
+            NSString *IDKey = propertyDic[@"id"]?:@"";
+            if (![NSString isNullOrNilWithObject:typeKey] && [typeKey isEqualToString:dataTypeString] && [IDKey isEqualToString:idkeyString]) {
+                IDNumber = idx;
+                [idNumberArra addObject:@(IDNumber)];
+                break;
+                *stop = YES;
             }
         }
         
@@ -2150,7 +2249,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 /// MARK:获取TLV协议中 type Header Value
-- (NSString *)getTLVIDValue:(NSInteger)idValue type:(TIoTDataTemplatePropertyType)typeValue {
+- (NSString *)getTLVIDValue:(NSInteger )idValue type:(TIoTDataTemplatePropertyType)typeValue {
     NSString *bitSting = @"00000";
     NSString *preType = @"";
     NSString *valueSting = @"";
@@ -2160,15 +2259,15 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }else if (typeValue == TIoTDataTemplatePropertyTypeInt) { //int
         preType = @"001";
     }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string
-        
+        preType = @"010";
     }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float
-        
+        preType = @"011";
     }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate
         preType = @"100";
     }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp
-        
+        preType = @"101";
     }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct
-        
+        preType = @"110";
     }
     
     NSString *tempIDValue = [NSString getBinaryByDecimal:idValue];
@@ -2182,7 +2281,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 /// MARK:获取TLV协议中 Value
-- (NSString *)getTLVValue:(NSInteger)value type:(TIoTDataTemplatePropertyType )typeValue {
+- (NSString *)getTLVValue:(NSString *)value type:(TIoTDataTemplatePropertyType )typeValue {
     NSString *bitSting = @"";
     if (typeValue == TIoTDataTemplatePropertyTypeBool) { //布尔 1Byte
         bitSting = @"00";
@@ -2191,17 +2290,42 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }else if (typeValue == TIoTDataTemplatePropertyTypeString) { //string N(<=2048)Byte
         
     }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) { //float 4Byte
-        
+        bitSting = @"00000000";
     }else if (typeValue == TIoTDataTemplatePropertyTypeEnumerate) { //enumerate  2Byte
         bitSting = @"0000";
     }else if (typeValue == TIoTDataTemplatePropertyTypeTimestamp) { //timestamp  4Byte
-        
+        bitSting = @"00000000";
     }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) { //struct N(<=2048)Byte
         
     }
+    NSString *valueHex = @"";
     
-    NSString *valueHex = [NSString getHexByDecimal:value];
-    NSString *preTempValue = [bitSting substringToIndex:bitSting.length - valueHex.length];
+    //及苏阿奴valueHex: 字符串和结构体需要算出valueHex后再计算length，其他属性直接计算valueHex
+    if (typeValue == TIoTDataTemplatePropertyTypeBool || typeValue == TIoTDataTemplatePropertyTypeInt || typeValue == TIoTDataTemplatePropertyTypeEnumerate || typeValue == TIoTDataTemplatePropertyTypeTimestamp) {
+        valueHex = [NSString getHexByDecimal:value.integerValue];
+    }else if (typeValue == TIoTDataTemplatePropertyTypeFloat) {
+        valueHex = [NSString getHexByFloat:value.floatValue];
+    }else if (typeValue == TIoTDataTemplatePropertyTypeString) {
+        valueHex = [NSString hexStringFromString:value];
+    }else if (typeValue == TIoTDataTemplatePropertyTypeStruct) {
+        //结构体中 json 字符串转 NSDictionary
+        NSDictionary *structDic = (NSDictionary *)[NSString jsonToObject:value];
+        //json 转化的 dic 完整拼接的 value hex
+        valueHex = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:structDic dataTemplate:TIoTDataTemplateTypeProperty];
+    }
+    
+    //计算最终value: 字符串和结构体 需要单独加value的length （返回了包含length 的 value）,其他类型不用
+    NSString *preTempValue = @"";
+    if (typeValue == TIoTDataTemplatePropertyTypeString || typeValue == TIoTDataTemplatePropertyTypeStruct) {
+        //value 前的2Bytes 长度
+        NSString *valueLenHex = [NSString getHexByDecimal:valueHex.length/2];
+        NSString *tempValueLenBit = @"0000";
+        preTempValue = [self getTVLValueWithOriginValue:valueLenHex bitString:tempValueLenBit];
+        
+    }else {
+        //type Header
+        preTempValue = [bitSting substringToIndex:bitSting.length - valueHex.length];
+    }
     NSString *resultValue = [NSString stringWithFormat:@"%@%@",preTempValue,valueHex];
     return resultValue;
 }
@@ -2221,6 +2345,73 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             }
         }
     }
+}
+
+///MARK:获取设备最新信息，用于设备获取最新值上报
+- (void)getDeviceNewestInfo{
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
+        
+        //获取设备最新信息上报
+        NSString *newestStr = (NSString *)responseObject[@"Data"];
+        NSDictionary *newestDic = [NSString jsonToObject:newestStr]?:@{};
+        
+        NSArray *propertyArray = self.DataTemplateDic[@"properties"]?:@[];
+        
+        //重组后的属性字典
+        NSMutableDictionary *reportPropertyDic = [NSMutableDictionary new];
+        
+        for (NSString *propertyIDString in newestDic.allKeys) {
+            //获取设备最新属性对应的字典,需要取数Value 对应不同类型的值
+            NSDictionary *idDic = newestDic[propertyIDString]?:@{};
+            
+            for (NSDictionary *propertyDic in propertyArray) {
+                NSDictionary *defineDic = propertyDic[@"define"]?:@{};
+                NSString *dataTypeString = defineDic[@"type"]?:@"";
+                NSString *idString = propertyDic[@"id"]?:@"";
+                if (newestDic != nil) {
+                    
+                    if (![NSString isNullOrNilWithObject:dataTypeString] && [newestDic.allKeys containsObject:idString] && [propertyIDString isEqualToString:idString]) {
+                        if ([dataTypeString isEqualToString:@"int"]) {
+                            NSNumber *intValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:intValue forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"bool"]) {
+                            NSNumber *boolValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:boolValue forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"enum"]) {
+                            NSNumber *enumValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:enumValue forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"float"]) {
+                            NSString *floatValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:@(floatValue.floatValue) forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"string"]) {
+                            NSString *stringValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:stringValue forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"timestamp"]) {
+                            NSNumber *timeStampValue = idDic[@"Value"];
+                            [reportPropertyDic setValue:timeStampValue forKey:propertyIDString];
+                        }else if ([dataTypeString isEqualToString:@"struct"]) {
+                            NSDictionary *structDic = idDic[@"Value"];
+                            [reportPropertyDic setValue:structDic forKey:propertyIDString];
+                        }
+                        
+                    }
+                }
+
+            }
+        }
+        
+        self.structIDArray = [NSArray arrayWithArray:newestDic.allKeys]?:@[];
+        
+        //reportDic 需要 key:params value: newestDic
+        NSDictionary *reportDic = @{@"params":reportPropertyDic?:@{}};
+        NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:propertyArray reportDic:reportDic dataTemplate:TIoTDataTemplateTypeProperty];
+        //将完整信息TVL数据 写入设备中FFE2特征中
+        [self writeInfoInFFE2WithValue:value reportDic:reportDic tyep:TIoTDataTemplateTypeProperty headerHexInProperty:@"22"];
+
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        NSString *writeInfo = @"22010000";
+        [self writPropertyInfoInUUIDDeviceWithMessage:writeInfo UUIDString:FFE2UUIDString];
+    }];
 }
 
 #pragma mark - WCWaterFlowLayoutDelegate
