@@ -524,11 +524,17 @@
         NSArray *idSArray = @[idString?:@""];
         [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":idSArray?:@[]} success:^(id responseObject) {
             NSArray *deviceInfoArr = responseObject[@"Products"]?:@[];
+            NSMutableArray *propertyIdArray = [NSMutableArray new];
+            
             [deviceInfoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSDictionary *productDic = (NSDictionary *)obj;
                 NSString *productId = productDic[@"Name"]?:@"";
-                [self.productNameArray addObject:productId];
+                [propertyIdArray addObject:productId];
             }];
+            
+            NSArray * namesArray = [[propertyIdArray reverseObjectEnumerator] allObjects];
+            [self.productNameArray addObjectsFromArray:namesArray];
+            
             if (self.productNameArray.count == productIDsArray.count) {
                 [self.collectionView reloadData];
             }
