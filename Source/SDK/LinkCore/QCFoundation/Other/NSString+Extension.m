@@ -996,6 +996,27 @@ union u{
     return hexStr;
 }
 
+// NSData转16进制 第一种
++ (NSString *)getDataFromHexStr:(NSData *)data {
+   if (!data || [data length] == 0) {
+       return @"";
+   }
+   NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
+   
+   [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
+       unsigned char *dataBytes = (unsigned char*)bytes;
+       for (NSInteger i = 0; i < byteRange.length; i++) {
+           NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
+           if ([hexStr length] == 2) {
+               [string appendString:hexStr];
+           } else {
+               [string appendFormat:@"0%@", hexStr];
+           }
+       }
+   }];
+   return string;
+}
+
 //十进制转二进制
 + (NSString *)getBinaryByDecimal:(NSInteger)decimalism {
     NSString *binary = @"";

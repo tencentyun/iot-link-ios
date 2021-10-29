@@ -98,4 +98,8 @@
 // RTC App端和设备端通话中 断网监听
 + (void)addCallingDisconnectNetLister:(id)listener reaction:(SEL)selector;
 + (void)postCallingDisconnectNet;
+
+// 开始下发固件升级
++ (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector;
++ (void)postFirmwareUpdateData;
 @end
