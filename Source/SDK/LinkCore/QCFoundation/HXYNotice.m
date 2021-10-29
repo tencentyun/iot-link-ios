@@ -26,6 +26,7 @@ static NSString * const appEnterForeground   = @"appEnterForeground";
 static NSString * const receiveShareDevice   = @"receiveShareDevice";
 static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
 static NSString * const callingDisconnectNet = @"callingDisconnectNet";
+static NSString * const firmwareUpdateData   = @"firmwareUpdateData";
 
 @implementation HXYNotice
 
@@ -237,4 +238,12 @@ static NSString * const callingDisconnectNet = @"callingDisconnectNet";
     [[NSNotificationCenter defaultCenter] postNotificationName:callingDisconnectNet object:nil];
 }
 
+// 开始下发固件升级
++ (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:firmwareUpdateData object:nil];
+}
+
++ (void)postFirmwareUpdateData {
+    [[NSNotificationCenter defaultCenter] postNotificationName:firmwareUpdateData object:nil];
+}
 @end
