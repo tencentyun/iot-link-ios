@@ -2369,7 +2369,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //将2进制转16进制 1Byte
     valueSting = [NSString getHexByBinary:tempValue];
     return valueSting;
-    asdf
 }
 
 /// MARK:获取TLV协议中 Value
