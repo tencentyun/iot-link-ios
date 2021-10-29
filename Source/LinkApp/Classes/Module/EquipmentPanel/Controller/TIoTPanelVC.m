@@ -152,6 +152,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) NSArray *structIDArray; //获取最新设备信息后，用于结构体idArray
 @property (nonatomic, strong) NSMutableDictionary *typeTimesDic; //外层 key:type value:同类型属性在模板数组中的index
 @property (nonatomic, strong) NSMutableDictionary *detailStructTpyeTimesDic; //结构体中 key:type value:同类型属性在模板数组中的index
+@property (nonatomic, assign) NSInteger MTUInt; //连接成功后设备返回的MTU
 @end
 
 @implementation TIoTPanelVC
@@ -1202,6 +1203,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             //连接成功后 将连接结果写入设备后，设备返回
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"090000"];
             
+            self.MTUInt = 0;
+            //MTU
+            NSString *MTUFileString = [hexstr substringWithRange:NSMakeRange(8, 4)];
+            NSString *MTUFilebinaryString = [NSString getBinaryByHex:MTUFileString];
+            NSString *MTUHex = [MTUFilebinaryString substringFromIndex:6];
+            self.MTUInt = [NSString getDecimalByHex:MTUHex];
+            
             //获取设备上报固件版本号
             NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
             NSString *versionString = [NSString stringFromHexString:firmwareVersionHexString]?:@"";
@@ -1326,9 +1334,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *deviceRestartMaxHex = [allowUpatePayload substringWithRange:NSMakeRange(6, 8)];
             NSInteger deviceRestartMaxInt = [NSString getDecimalByHex:deviceRestartMaxHex];
             //断点续传前已接收文件大小
-            NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 16)];
+            NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 8)];
             //连续两个数据包的发包间隔
-            NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(16, 18)];
+            NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(8, 2)];
             
             
             /*说明:
@@ -1647,6 +1655,15 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //        [manager contentsOfDirectoryAtPath:file error:nil]);
         NSData *fileData = [NSData dataWithContentsOfFile:file];
         DDLogInfo(@"file data :%@",fileData);
+        
+        //固件包内容(hex形式)
+        NSString *fileHexString = @"";
+        //获取file 内容 hexString
+        if (fileData.length != 0) {
+            fileHexString = [NSString transformStringWithData:fileData]?:@"";
+        }
+        //self.MTUInt;
+        
         //发送升级请求包到设备
         [self sendFirmwareUpdateInfoToDeviceWithData:fileData];
         
@@ -1717,7 +1734,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     };
     
     [[TIoTRequestObject shared] post:AppDescribeFirmwareUpdateStatus Param:paramDic success:^(id responseObject) {
-        TIoTFirmwareUpdateStatusModel *updateStatusModel = [TIoTFirmwareUpdateStatusModel yy_modelWithJSON:responseObject];
+//        TIoTFirmwareUpdateStatusModel *updateStatusModel = [TIoTFirmwareUpdateStatusModel yy_modelWithJSON:responseObject];
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
@@ -2509,7 +2526,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)deviceReportEventWithMessage:(NSString *)message {
     //type:03 length:2Btye eventId:1Byte value:TVL
     NSString *eventMessageHex = message;
-    NSString *lengthHex = [eventMessageHex substringWithRange:NSMakeRange(2, 4)];
     NSString *eventIdHex = [eventMessageHex substringWithRange:NSMakeRange(6, 2)];
     NSString *eventValueHex = [eventMessageHex substringFromIndex:8];
     
