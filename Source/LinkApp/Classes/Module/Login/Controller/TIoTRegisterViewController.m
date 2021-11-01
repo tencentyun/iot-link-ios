@@ -245,12 +245,12 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             }else if ([text isEqualToString:@"Privacy6"]) {
                 if (LanguageIsEnglish) {
                     TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
-                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
                     vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
                     [self.navigationController pushViewController:vc animated:YES];
                 }else {
                     TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
-                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
                     vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
@@ -271,7 +271,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 }
 
 - (void)showEN_age_view {
-    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView] &&  [[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+    NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
+    if ([NSString isNullOrNilWithObject:errorCode] || [errorCode containsString:@"-1"] || [errorCode containsString:@"-2"]) {
         TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
         [customView alertContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:NO];
         [customView alertCustomViewTitleMessage:NSLocalizedString(@"please_setting_birthday", @"为了给您提供更好的体验，请设备您的出生日期") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
@@ -286,14 +287,30 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             NSString *selectedTime = [NSString getTimeStampWithString:timeString withFormatter:@"yyyy-MM-dd" withTimezone:@""];
 
             NSInteger age = [NSString timeDifferenceInfoWitFormTimeStamp:[[NSDate date] timeIntervalSince1970] toTimeStamp:selectedTime.longLongValue dateFormatter:@"yyyy-MM-dd" timeType:TIoTTimeTypeYear];
-            if (age < 13) {
-                [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
-                [self.navigationController popViewControllerAnimated:YES];
+            
+            NSString *tempErrorCode = errorCode?:@"";
+            if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+                //美东
+                if (age < 13) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-1"];
+                    return;
+                }
+            }else {
+                //国内
+                if (age < 18) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-2"];
+                    return;
+                }
             }
+            
+            [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
         };
-        
-        [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
-        
     }
 }
 #pragma mark - 显示用户之前操作项
