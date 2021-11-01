@@ -858,7 +858,8 @@
 "video_call" = "视频呼叫中...";
 "call" = "呼叫";
 "please_setting_birthday" = "为了给您提供更好的体验，请设备您的出生日期";
-"sorry_we_cannot_support_service" = "很遗憾，我们目前无法向您提供腾通讯连连";
+"sorry_we_cannot_support_service" = "由于您未满十三周岁，暂无法使用我们的产品服务。";
+"sorry_we_cannot_support_service_CN" = "由于您未满十八周岁，暂无法使用我们的产品服务。";
 "device_share" = "设备共享";
 "privacy_policy_lower_case" = "隐私政策";
 "device_shared_agree_1" = "通过将设备与腾讯连连连接，即表示您同意共享有关您设备和设备日志的信息，第三方可以根据其条款和政策使用该设备。\n有关更多信息，请阅读我们的";
@@ -946,7 +947,7 @@
 "authentation_alert_wechat_detai" = "· 昵称、头像、地区、性别\n· 设备信息";
 "authentation_resister_title" = "国家/地区";
 "authentation_resister_privacy" = "为了向您提供对应国家/地区的用户协议和隐私政策，请您选择所在的国家及地区";
-"authentation_thirdsdk_title" = "第三方SDK目录";
+"authentation_thirdsdk_title" = "第三方信息共享清单";
 "unknow_device" = "未知设备";
 "bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
 "bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";

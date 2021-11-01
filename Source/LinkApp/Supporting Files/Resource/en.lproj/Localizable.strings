@@ -864,7 +864,8 @@ If the problem still persists, we recommend you remove the device and add it aga
 "video_call" = "Making video call";
 "call" = "Call";
 "please_setting_birthday" = "To have better experience, please set your date of birth";
-"sorry_we_cannot_support_service" = "Sorry. Tencent LLink is not available";
+"sorry_we_cannot_support_service" = "Because you are under 13 years old, you cannot use our products and services temporarily.";
+"sorry_we_cannot_support_service_CN" = "Because you are under 18 years old, you cannot use our products and services temporarily.";
 "device_share" = "Share Devices";
 "privacy_policy_lower_case" = "privacy policy";
 "device_shared_agree_1" = "By connecting the device with Tencent LLink, you agree to share information about your device and device logs, and the third party can use the device in accordance with its terms and policies.\nFor more information, please read our ";

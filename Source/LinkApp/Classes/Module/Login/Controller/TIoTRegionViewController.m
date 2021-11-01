@@ -232,7 +232,25 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self refreshUserActionItems];
 }
 
-- (void)sendCode:(id)sender{    
+- (void)sendCode:(id)sender{
+    NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
+    
+    //-1表示年龄错误
+    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+        //美东
+        if ([errorCode containsString:@"-1"]) {
+            [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+            return;
+        }
+        
+    }else {
+        //国内
+        if ([errorCode containsString:@"-2"]) {
+            [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+            return;
+        }
+    }
+    
     TIoTRegisterViewController *registerVC = [[TIoTRegisterViewController alloc]init];
     [self.navigationController pushViewController:registerVC animated:YES];
 }
