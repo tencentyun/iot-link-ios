@@ -54,6 +54,7 @@
     
     self.blueManager = [BluetoothCentralManager shareBluetooth];
     self.blueManager.delegate = self;
+    [self.blueManager disconnectPeripheral];
     [self.blueManager scanNearLLSyncService];
 }
 

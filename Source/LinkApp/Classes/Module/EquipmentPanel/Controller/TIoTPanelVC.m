@@ -222,6 +222,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [TIoTCoreUserManage shared].sys_call_status = @"-1";
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
+    [HXYNotice removeListener:self];
 }
 
 - (void)configBlueManager {
@@ -1379,7 +1380,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             }else if ([binaryString isEqualToString:@"000000001"]) { //允许升级
                 [MBProgressHUD showError:@"设备不支持断点续传，并开始升级"];
                 //发送设备升级数据包
-                [self sendUpdateDataPages:allowUpatePayload];
+                [self sendUpdateDataPages:allowUpatePayload isSupportResume:NO];
                 
                 //上报后台进度开始升级数据包
                 [self reportAppOTAStatusProgress:@"updating" versioin:self.firmwareModel.DstVersion persent:@(0)];
@@ -1389,7 +1390,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [MBProgressHUD showError:@"设备支持断点续传,并开始升级"];
                 
                 //发送设备升级数据包
-                [self sendUpdateDataPages:allowUpatePayload];
+                [self sendUpdateDataPages:allowUpatePayload isSupportResume:YES];
                 
                 //上报后台进度开始升级数据包
                 [self reportAppOTAStatusProgress:@"updating" versioin:self.firmwareModel.DstVersion persent:@(0)];
@@ -1411,11 +1412,31 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSInteger fileSizeTemp = [NSString getDecimalByHex:fileSize];
             self.fileSizeInt = fileSizeTemp*2;
             
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(finishSendData) object:nil];
+            
             //发送固件数据给设备
             [HXYNotice postFirmwareUpdateData];
         }else if ([cmdtype isEqualToString:@"0B"]) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
+            
             //失败时需调用升级失败方法处，成功时暂时显示toast
+            NSString *resultValue = [hexstr substringFromIndex:6];
+            //bit 7 1通过 0失败  6-0 0crc错误 1 flash操作失败 2 文件内容错误
+            NSString *resultValueBin = [NSString getBinaryByHex:resultValue];
+            NSString *header = [resultValueBin substringWithRange:NSMakeRange(0, 1)];
+            if ([header isEqualToString:@"1"]) {
+                [MBProgressHUD showSuccess:@"校验成功"];
+            }else {
+                NSString *reason = [header substringFromIndex:1];
+                NSInteger reasonCode = reason.integerValue;
+                if (reasonCode == 0) {
+                    [MBProgressHUD showSuccess:@"校验失败,文件CRC错误"];
+                }else if (reasonCode == 1) {
+                    [MBProgressHUD showSuccess:@"校验失败,flash操作失败"];
+                }else if (reasonCode == 2) {
+                    [MBProgressHUD showSuccess:@"校验失败,文件内容错误"];
+                }
+            }
             
             //开始计时是否超出设备重启最大时间，超出则认为升级失败
             [self performSelector:@selector(overtimeDeviceResartMax) withObject:nil afterDelay:self.deviceRestartMaxInt];
@@ -1478,7 +1499,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
  
     payload : 升级请求包的设备返回 payload
  */
-- (void)sendUpdateDataPages:(NSString *)payload {
+- (void)sendUpdateDataPages:(NSString *)payload isSupportResume:(BOOL)isSupport {
     NSString *allowUpatePayload = payload?:@"";
     
     //单次循环中可以连续传输的数据包个数，取值范围0x00 ~ 0xFF
@@ -1495,6 +1516,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     self.deviceRestartMaxInt = [NSString getDecimalByHex:deviceRestartMaxHex];
     //断点续传前已接收文件大小
     NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 8)];
+    NSInteger resumeFileSizeInt = [NSString getDecimalByHex:resumeFileSize];
+    
     //连续两个数据包的发包间隔
 //    NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(16, 2)];
     
@@ -1512,6 +1535,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //计算全部数据string hex
     self.allDataStringHex = [NSString getDataFromHexStr:self.fileData];
+       //断点续传后的起始filedata 全部数据 string hex
+    if (isSupport == YES) {
+        if (resumeFileSizeInt >0) {
+            self.allDataStringHex = [self.allDataStringHex substringFromIndex:resumeFileSizeInt*2];
+            self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
+        }
+    }
     //单次循环中发包数
     self.singleCyclePackageNum = adinglesendPageInt;
     //每包中 payload 长度
@@ -1540,6 +1570,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 ///MARK:发送固件升级数据
 - (void)sendFirmwareUpdateData {
+    
+    [MBProgressHUD showMessage:@"正在往设备写入固件" icon:@""];
     
     //开始计时 5个超时重传周期内没有设备设备回应，认为失败
     [self performSelector:@selector(firmwareUpdateFail) withObject:nil afterDelay:5*self.pageOuttimeInt];
@@ -1574,6 +1606,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [MBProgressHUD showError:@"升级失败"];
     [self.blueManager disconnectPeripheral];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(overtimeDeviceResartMax) object:nil];
+}
+
+//结束发送数据
+- (void)finishSendData {
+    //结束通知包
+    [self writePropertyInfoInUUIDDeviceWithMessage:@"02" UUIDString:FFE4UUIDString];
 }
 
 //MARK:完整单循环
@@ -1675,8 +1713,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
     [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
     
-    //结束通知包
-    [self writePropertyInfoInUUIDDeviceWithMessage:@"02" UUIDString:FFE4UUIDString];
+    [self performSelector:@selector(finishSendData) withObject:nil afterDelay:self.pageOuttimeInt];
     
 }
 
@@ -1879,20 +1916,24 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString * currentString = curVersioin;
     NSString * desString = desVersion;
     
-    if (currentString.floatValue < desString.floatValue) {
-        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
+//    if (currentString.floatValue < desString.floatValue) {
+//        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
             
             //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
             NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
             self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
             __weak typeof(self) weakSelf = self;
-            
+        if (currentString.floatValue < desString.floatValue) {
             [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
             self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
                 //上报开始下载 下载进度 下载完成
                 //获取升级包URL后，开始下载
                 [weakSelf getFrimwareOTAURL];
             };
+        }else {
+            [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:@""];
+        }
+            
             self.firmwareView.cancelAction = ^{
             };
             [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
@@ -1904,8 +1945,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [self.backMaskView addGestureRecognizer:tap];
             
             [TIoTCoreUserManage shared].firmwareUpdate = @"1";
-        }
-    }
+//        }
+//    }
 }
 
 ///MARK: 获取固件升级包URL
@@ -1914,6 +1955,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]
     };
     [[TIoTRequestObject shared] post:AppGetDeviceOTAInfo Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD showSuccess:@"正在下载固件"];
         TIoTFirmwareOTAInfoModel *firmwareOTAInfo = [TIoTFirmwareOTAInfoModel yy_modelWithJSON:responseObject];
         //开始下载固件包上报
         [self reportAppOTAStatusProgress:@"downloading" versioin:self.firmwareModel.DstVersion persent:@(0)];
@@ -2143,6 +2185,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *writeInfo = [NSString stringWithFormat:@"040014%@",unBindedRequestSignInfo];
     if (self.characteristicFFE1 != nil) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+        [self.blueManager disconnectPeripheral];
     }
 }
 
@@ -2762,7 +2805,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)writePropertyInfoInUUIDDeviceWithMessage:(NSString *)writeInfo UUIDString:(NSString *)uuidString{
     if (self.characteristicFFE1 != nil) {
         CBService *service = self.characteristicFFE1.service;
-        if (service.characteristics != nil) {
+        if (service != nil) {
         for (CBCharacteristic *characteristic in service.characteristics) {
             NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
             if ([uuidFirstString isEqualToString:uuidString] && ![NSString isNullOrNilWithObject:uuidString]) {
