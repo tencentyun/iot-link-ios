@@ -1379,7 +1379,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             }else if ([binaryString isEqualToString:@"000000001"]) { //允许升级
                 [MBProgressHUD showError:@"设备不支持断点续传，并开始升级"];
                 //发送设备升级数据包
-                [self sendUpdateDataPages:allowUpatePayload];
+                [self sendUpdateDataPages:allowUpatePayload isSupportResume:NO];
                 
                 //上报后台进度开始升级数据包
                 [self reportAppOTAStatusProgress:@"updating" versioin:self.firmwareModel.DstVersion persent:@(0)];
@@ -1389,7 +1389,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [MBProgressHUD showError:@"设备支持断点续传,并开始升级"];
                 
                 //发送设备升级数据包
-                [self sendUpdateDataPages:allowUpatePayload];
+                [self sendUpdateDataPages:allowUpatePayload isSupportResume:YES];
                 
                 //上报后台进度开始升级数据包
                 [self reportAppOTAStatusProgress:@"updating" versioin:self.firmwareModel.DstVersion persent:@(0)];
@@ -1415,7 +1415,25 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [HXYNotice postFirmwareUpdateData];
         }else if ([cmdtype isEqualToString:@"0B"]) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
+            
             //失败时需调用升级失败方法处，成功时暂时显示toast
+            NSString *resultValue = [hexstr substringFromIndex:6];
+            //bit 7 1通过 0失败  6-0 0crc错误 1 flash操作失败 2 文件内容错误
+            NSString *resultValueBin = [NSString getBinaryByHex:resultValue];
+            NSString *header = [resultValueBin substringWithRange:NSMakeRange(0, 1)];
+            if ([header isEqualToString:@"1"]) {
+                [MBProgressHUD showSuccess:@"校验成功"];
+            }else {
+                NSString *reason = [header substringFromIndex:1];
+                NSInteger reasonCode = reason.integerValue;
+                if (reasonCode == 0) {
+                    [MBProgressHUD showSuccess:@"校验失败,文件CRC错误"];
+                }else if (reasonCode == 1) {
+                    [MBProgressHUD showSuccess:@"校验失败,flash操作失败"];
+                }else if (reasonCode == 2) {
+                    [MBProgressHUD showSuccess:@"校验失败,文件内容错误"];
+                }
+            }
             
             //开始计时是否超出设备重启最大时间，超出则认为升级失败
             [self performSelector:@selector(overtimeDeviceResartMax) withObject:nil afterDelay:self.deviceRestartMaxInt];
@@ -1478,7 +1496,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
  
     payload : 升级请求包的设备返回 payload
  */
-- (void)sendUpdateDataPages:(NSString *)payload {
+- (void)sendUpdateDataPages:(NSString *)payload isSupportResume:(BOOL)isSupport {
     NSString *allowUpatePayload = payload?:@"";
     
     //单次循环中可以连续传输的数据包个数，取值范围0x00 ~ 0xFF
@@ -1495,6 +1513,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     self.deviceRestartMaxInt = [NSString getDecimalByHex:deviceRestartMaxHex];
     //断点续传前已接收文件大小
     NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 8)];
+    NSInteger resumeFileSizeInt = [NSString getDecimalByHex:resumeFileSize];
+    
     //连续两个数据包的发包间隔
 //    NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(16, 2)];
     
@@ -1512,6 +1532,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //计算全部数据string hex
     self.allDataStringHex = [NSString getDataFromHexStr:self.fileData];
+       //断点续传后的起始filedata 全部数据 string hex
+    if (isSupport == YES) {
+        if (resumeFileSizeInt >0) {
+            self.allDataStringHex = [self.allDataStringHex substringFromIndex:resumeFileSizeInt*2];
+            self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
+        }
+    }
     //单次循环中发包数
     self.singleCyclePackageNum = adinglesendPageInt;
     //每包中 payload 长度
