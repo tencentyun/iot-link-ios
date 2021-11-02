@@ -1572,6 +1572,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)sendFirmwareUpdateData {
     
     [MBProgressHUD showMessage:@"正在往设备写入固件" icon:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
     
     //开始计时 5个超时重传周期内没有设备设备回应，认为失败
     [self performSelector:@selector(firmwareUpdateFail) withObject:nil afterDelay:5*self.pageOuttimeInt];
@@ -1596,6 +1597,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 //升级失败
 - (void)firmwareUpdateFail {
+    [MBProgressHUD dismissInView:self.view];
     [MBProgressHUD showError:@"升级失败"];
     [self.blueManager disconnectPeripheral];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
@@ -1603,6 +1605,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 //设备重启最大超时
 - (void)overtimeDeviceResartMax {
+    [MBProgressHUD dismissInView:self.view];
     [MBProgressHUD showError:@"升级失败"];
     [self.blueManager disconnectPeripheral];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(overtimeDeviceResartMax) object:nil];
@@ -1610,6 +1613,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 //结束发送数据
 - (void)finishSendData {
+    [MBProgressHUD dismissInView:self.view];
     //结束通知包
     [self writePropertyInfoInUUIDDeviceWithMessage:@"02" UUIDString:FFE4UUIDString];
 }
@@ -1969,6 +1973,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 ///MARK:下载升级包
 - (void)downloadUpdateInfoURL:(NSString *)urlString {
     
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    
     NSURL* url = [NSURL URLWithString:urlString?:@""];
     
     NSURLSession* session = [NSURLSession sharedSession];
@@ -1995,6 +2001,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //        [manager contentsOfDirectoryAtPath:file error:nil]);
         self.fileData = [NSData dataWithContentsOfFile:file];
         DDLogInfo(@"file data :%@",self.fileData);
+        
+        [MBProgressHUD dismissInView:self.view];
         
         //发送升级请求包到设备
         [self sendFirmwareUpdateInfoToDeviceWithData:self.fileData];
