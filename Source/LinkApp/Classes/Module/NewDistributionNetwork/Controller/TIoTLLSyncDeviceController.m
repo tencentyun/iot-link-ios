@@ -222,10 +222,10 @@
         NSString *productName = self.productNameArray[indexPath.row];
         if ([productName isEqualToString:@"error"]) {
             cell.itemString = NSLocalizedString(@"unknow_device", @"未知设备");
-            cell.detailString = [self getBlueDeviceMacIndex:indexPath];
+            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }else {
-            cell.itemString = productName;
-            cell.detailString = [self getBlueDeviceMacIndex:indexPath];
+//            cell.itemString = productName;
+            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }
     }
     cell.isSelected = NO;
@@ -281,9 +281,10 @@
             NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
             NSString *productstr = [NSString stringFromHexString:producthex];
             [tempProductNameArray addObject:productstr];
+            [self getProductsNameWithproductIDsArray:@[productstr]];
         }
     }];
-    [self getProductsNameWithproductIDsArray:tempProductNameArray];
+//    [self getProductsNameWithproductIDsArray:tempProductNameArray];
 }
 
 #pragma mark - BluetoothCentralManagerDelegate
