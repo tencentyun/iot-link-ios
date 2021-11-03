@@ -281,10 +281,9 @@
             NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
             NSString *productstr = [NSString stringFromHexString:producthex];
             [tempProductNameArray addObject:productstr];
-            [self getProductsNameWithproductIDsArray:@[productstr]];
         }
     }];
-//    [self getProductsNameWithproductIDsArray:tempProductNameArray];
+    [self getProductsNameWithproductIDsArray:tempProductNameArray];
 }
 
 #pragma mark - BluetoothCentralManagerDelegate
