@@ -35,7 +35,8 @@
 @property (nonatomic, strong) NSString *tempTimeString;
 @property (nonatomic, strong) NSString *andomNumString;
 @property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
-@property (nonatomic, strong) NSMutableArray *productNameArray;
+@property (nonatomic, strong) NSMutableDictionary *productNameDic;
+@property (nonatomic, strong) NSMutableArray *tempProductNameArray;
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -218,13 +219,14 @@
     CBPeripheral *device = self.blueDevices[indexPath.row];
     cell.itemString = device.name;
     
-    if (self.productNameArray.count == self.blueDevices.count) {
-        NSString *productName = self.productNameArray[indexPath.row];
+    if (self.productNameDic.allKeys.count == self.blueDevices.count) {
+        NSString *productIDStr = self.tempProductNameArray[indexPath.row];
+        NSString *productName = self.productNameDic[productIDStr];
         if ([productName isEqualToString:@"error"]) {
             cell.itemString = NSLocalizedString(@"unknow_device", @"未知设备");
             cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }else {
-//            cell.itemString = productName;
+            cell.itemString = productName;
             cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }
     }
@@ -270,8 +272,12 @@
     return blueMac;
 }
 - (void)refushProductName{
-    
-    __block NSMutableArray *tempProductNameArray = [NSMutableArray new];
+    if (self.productNameDic.allKeys.count != 0) {
+        [self.productNameDic removeAllObjects];
+    }
+    if (self.tempProductNameArray.count != 0) {
+        [self.tempProductNameArray removeAllObjects];
+    }
     [self.blueDevices enumerateObjectsUsingBlock:^(CBPeripheral * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         CBPeripheral *device = (CBPeripheral*)obj;
         NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
@@ -280,10 +286,10 @@
             NSString *hexstr = [NSString transformStringWithData:manufacturerData];
             NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
             NSString *productstr = [NSString stringFromHexString:producthex];
-            [tempProductNameArray addObject:productstr];
+            [self.tempProductNameArray addObject:productstr];
+            [self getProductsNameWithproductIDsArray:@[productstr]];
         }
     }];
-    [self getProductsNameWithproductIDsArray:tempProductNameArray];
 }
 
 #pragma mark - BluetoothCentralManagerDelegate
@@ -520,40 +526,37 @@
 
 ///MARK:获取设备产品名称
 - (void )getProductsNameWithproductIDsArray:(NSArray *)productIDsArray{
-    [productIDsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *idString = (NSString *)obj;
-        NSArray *idSArray = @[idString?:@""];
-        [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":idSArray?:@[]} success:^(id responseObject) {
-            NSArray *deviceInfoArr = responseObject[@"Products"]?:@[];
-            NSMutableArray *propertyIdArray = [NSMutableArray new];
-            
-            [deviceInfoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSDictionary *productDic = (NSDictionary *)obj;
-                NSString *productId = productDic[@"Name"]?:@"";
-                [propertyIdArray addObject:productId];
-            }];
-            
-            NSArray * namesArray = [[propertyIdArray reverseObjectEnumerator] allObjects];
-            [self.productNameArray addObjectsFromArray:namesArray];
-            
-            if (self.productNameArray.count == productIDsArray.count) {
-                [self.collectionView reloadData];
-            }
-        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-            [self.productNameArray addObject:@"error"];
-            if (self.productNameArray.count == productIDsArray.count) {
-                [self.collectionView reloadData];
+        
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDsArray?:@[]} success:^(id responseObject) {
+        NSArray *deviceInfoArr = responseObject[@"Products"]?:@[];
+        
+        [deviceInfoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *productDic = (NSDictionary *)obj;
+            NSString *productId = productDic[@"Name"]?:@"";
+            if (productIDsArray.count != 0) {
+                [self.productNameDic setValue:productId forKey:productIDsArray[0]?:@""];
             }
         }];
+            [self.collectionView reloadData];
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        if (productIDsArray.count != 0) {
+            [self.productNameDic setValue:@"error" forKey:productIDsArray[0]?:@""];
+                [self.collectionView reloadData];
+        }
     }];
-        
 }
 
-- (NSMutableArray *)productNameArray {
-    if (!_productNameArray) {
-        _productNameArray = [NSMutableArray new];
+- (NSMutableDictionary *)productNameDic {
+    if (!_productNameDic) {
+        _productNameDic = [NSMutableDictionary new];
     }
-    return _productNameArray;
+    return _productNameDic;
 }
 
+- (NSMutableArray *)tempProductNameArray {
+    if (!_tempProductNameArray) {
+        _tempProductNameArray = [NSMutableArray new];
+    }
+    return _tempProductNameArray;
+}
 @end
