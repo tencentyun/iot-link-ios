@@ -21,8 +21,8 @@ jobs:
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
     
-    - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_12.app && /usr/bin/xcodebuild -version
+#    - name: Select Xcode
+#      run: sudo xcode-select -switch /Applications/Xcode_12.app && /usr/bin/xcodebuild -version
 
     - name: Get Product Line
       run: |
