@@ -258,7 +258,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             }else {
                 [TIoTCoreUserManage shared].isShowPricyView = @"1";
                 
-                [self showEN_age_view];
+//                [self showEN_age_view];
             }
         };
         
@@ -267,9 +267,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         return;
     }
     
-    [self showEN_age_view];
+//    [self showEN_age_view];
 }
-
+/*
 - (void)showEN_age_view {
     NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
     if ([NSString isNullOrNilWithObject:errorCode] || [errorCode containsString:@"-1"] || [errorCode containsString:@"-2"]) {
@@ -312,7 +312,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
         };
     }
-}
+}*/
 #pragma mark - 显示用户之前操作项
 - (void)refreshUserActionItems {
     

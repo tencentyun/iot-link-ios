@@ -294,7 +294,7 @@
     }
     
     if ([NSString isNullOrNilWithObject:_userRegionId]) {
-        _userRegionId = @"1";
+        _userRegionId = @"";
     }
     return _userRegionId;
 }

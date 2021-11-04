@@ -73,7 +73,7 @@
                 NSDictionary *regionDic = obj;
                 if ([regionDic[@"RegionID"] isEqualToString:@"22"]) {
 
-                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
                     
                     [self recombinationDataWithConfigModel:regionListArray];
                     
@@ -85,7 +85,7 @@
                 NSDictionary *regionDic = obj;
                 if ([regionDic[@"RegionID"] isEqualToString:@"1"]) {
 
-                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
+//                    [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
                     [self recombinationDataWithConfigModel:regionListArray];
                     [self.tableView reloadData];
                 }
@@ -230,7 +230,6 @@
     NSString * countryCode = array[2];
     
     if (self.returnRegionBlock != nil) {
-        self.returnRegionBlock(title, region, regionID,countryCode);
         
         if (LanguageIsEnglish) {
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"TitleEN":title,@"Region":region,@"RegionID":regionID,@"CountryCode":countryCode}];
@@ -238,6 +237,7 @@
             [[TIoTCoreUserManage shared] saveUserInfo:@{@"Title":title,@"Region":region,@"RegionID":regionID,@"CountryCode":countryCode}];
         }
         
+        self.returnRegionBlock(title, region, regionID,countryCode);
     }
     
     _searchController.active = NO;
