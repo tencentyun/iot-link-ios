@@ -289,11 +289,7 @@
             NSString *productstr = [NSString stringFromHexString:producthex];
             [self.tempProductNameArray addObject:productstr];
             
-            if (self.currentProductId != nil) {
-                if ([self.currentProductId isEqualToString:productstr]) {
-                    [self getProductsNameWithproductIDsArray:@[productstr]];
-                }
-            }else {
+            if (self.currentProductId == nil) {
                 [self getProductsNameWithproductIDsArray:@[productstr]];
             }
         }
