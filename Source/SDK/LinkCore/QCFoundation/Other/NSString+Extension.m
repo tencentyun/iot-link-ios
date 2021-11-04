@@ -1195,4 +1195,13 @@ union u{
     
     return resuleStringHex;
 }
+
+//获取固定长度的字符串 不足为补0
++ (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString {
+    NSString *value = @"";
+    NSString *preTempValue = [bitString substringToIndex:bitString.length - originValue.length];
+    NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
+    value = resultValue;
+    return value;
+}
 @end

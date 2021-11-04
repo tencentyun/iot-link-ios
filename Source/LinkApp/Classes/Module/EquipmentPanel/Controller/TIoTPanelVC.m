@@ -1123,18 +1123,19 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
                         self.currentProductId = productstr;
-                        
-                        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
-                            NSNumber *connectHexstr = advertisementData[@"kCBAdvDataIsConnectable"];
-                            NSArray *uuidArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
-                            if (![productstr isEqualToString:self.productId] && [uuidArray containsObject:[CBUUID UUIDWithString:@"FFE0"]] && [connectHexstr isEqual: @(1)]) {
-                                [self.blueManager connectBluetoothPeripheral:device];
-                                break;
-                            }
-                        }else if([productstr isEqualToString:self.productId]) {
-                            [self.blueManager connectBluetoothPeripheral:device];
-                            break;
-                        }
+//                        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+//                            NSNumber *connectHexstr = advertisementData[@"kCBAdvDataIsConnectable"];
+//                            NSArray *uuidArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+//                            if (![productstr isEqualToString:self.productId] && [uuidArray containsObject:[CBUUID UUIDWithString:@"FFE0"]] && [connectHexstr isEqual: @(1)]) {
+//                                [self.blueManager connectBluetoothPeripheral:device];
+//                                break;
+//                            }
+//                        }else if([productstr isEqualToString:self.productId]) {
+//                            [self.blueManager connectBluetoothPeripheral:device];
+//                            break;
+//                        }
+                        [self.blueManager connectBluetoothPeripheral:device];
+                        break;
                     }
                 }
                 
@@ -1179,11 +1180,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         //本地计算绑定标识
         NSString *bindID = [NSString getBindIdentifierWithProductId:self.productId deviceName:self.deviceName];
         NSString *deviceBindId = @"";
-        BOOL isFind = NO;
         //设备广播绑定标识符
         if (self.originBlueDevices) {
             if (self.blueDevices.count > 0) {
                 for (CBPeripheral *device in self.blueDevices) {
+                    if ([device isEqual:peripheral]) {
                     //                CBPeripheral *device = self.blueDevices[0];
                     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
                     if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -1200,8 +1201,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                             //判断是否是纯蓝牙 LLSync
                             if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
                                 //LLSync
-                         
-                                isFind = YES;
                                 
                                 self.characteristicFFE1 = characteristic;
                                 
@@ -1210,11 +1209,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                             }
                         }
                     }
-                }
-                
-                if (isFind == NO) {
-                    [self connectedFailBlueDeviceUI];
-                    [self writeLinkResultInDeviceWithSuccess:NO];
+                    }
                 }
             }
         }
@@ -1254,7 +1249,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *MTUFileString = [hexstr substringWithRange:NSMakeRange(8, 4)];
             NSString *MTUFilebinaryString = [NSString getBinaryByHex:MTUFileString];
             NSString *MTUHex = [MTUFilebinaryString substringFromIndex:6];
-            self.MTUInt = [NSString getDecimalByHex:MTUHex]/16;
+            self.MTUInt = [NSString getDecimalByHex:MTUHex];
             
             //获取设备上报固件版本号
             NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
@@ -1431,6 +1426,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(finishSendData) object:nil];
                 //发送固件数据给设备
                 [HXYNotice postFirmwareUpdateData];
+            }else {
+                DDLogInfo(@"上报结束");
             }
             
         }else if ([cmdtype isEqualToString:@"0B"]) {

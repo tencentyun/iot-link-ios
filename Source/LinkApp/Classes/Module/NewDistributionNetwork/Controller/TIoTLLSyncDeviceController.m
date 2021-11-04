@@ -37,6 +37,7 @@
 @property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
 @property (nonatomic, strong) NSMutableDictionary *productNameDic;
 @property (nonatomic, strong) NSMutableArray *tempProductNameArray;
+@property (nonatomic, strong) NSString *bindSliceString; //绑定前分片拼接字符串
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -287,7 +288,14 @@
             NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
             NSString *productstr = [NSString stringFromHexString:producthex];
             [self.tempProductNameArray addObject:productstr];
-            [self getProductsNameWithproductIDsArray:@[productstr]];
+            
+            if (self.currentProductId != nil) {
+                if ([self.currentProductId isEqualToString:productstr]) {
+                    [self getProductsNameWithproductIDsArray:@[productstr]];
+                }
+            }else {
+                [self getProductsNameWithproductIDsArray:@[productstr]];
+            }
         }
     }];
 }
@@ -431,15 +439,56 @@
             [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
             
         }else if ([cmdtype isEqualToString:@"05"]){
-            //子设备绑定
-            if (hexstr.length >= 46) {
-                NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
-                NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
-                self.currentDevicename = deviceName;
-                NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
-                NSString *signatureString = [preString substringFromIndex:6]?:@"";
-                self.currentSignature = signatureString;
-                [self bindSubDevice];
+            //连接成功前，MUT固定20字节
+            NSString *lenHex = [hexstr substringWithRange:NSMakeRange(2, 4)];
+            NSString *lenBinOriginString = [NSString getBinaryByHex:lenHex];
+            NSString *lenBinString = [NSString getFixedLengthValueWithOriginValue:lenBinOriginString bitString:@"0000000000000000"];
+            NSString *lenSliceFlag = [lenBinString substringWithRange:NSMakeRange(0, 2)];
+            if ([lenSliceFlag isEqualToString:@"00"]) {
+                //不分片
+                //子设备绑定
+                if (hexstr.length >= 46) {
+                    NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
+                    NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                    self.currentDevicename = deviceName;
+                    NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
+                    NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                    self.currentSignature = signatureString;
+                    [self bindSubDevice];
+                }
+            }else {
+                
+                if ([lenSliceFlag isEqualToString:@"01"]) {
+                    //首包
+                    if (hexstr.length>=6) {
+                        self.bindSliceString = [hexstr substringFromIndex:6]?:@"";
+                    }
+                }else if ([lenSliceFlag isEqualToString:@"10"]) {
+                    //中间包
+                    if (hexstr.length >= 6) {
+                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+                    }
+                }else if ([lenSliceFlag isEqualToString:@"11"]) {
+                    //尾包
+                    if (hexstr.length >= 6) {
+                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+                    }
+                    //050000 占位写死的作用，实际也是6字节
+                    NSString *resuleValue = [NSString stringWithFormat:@"050000%@",self.bindSliceString];
+                    
+                    if (resuleValue.length >= 46) {
+                        NSString *deviceNameHexString = [resuleValue substringFromIndex:46]?:@"";
+                        NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                        self.currentDevicename = deviceName;
+                        NSString *preString = [resuleValue substringWithRange:NSMakeRange(0, 46)]?:@"";
+                        NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                        self.currentSignature = signatureString;
+                        [self bindSubDevice];
+                    }
+                    self.bindSliceString = @"";
+                }
             }
         }else {
             //如果有失败的话，获取设备配网日志
@@ -544,6 +593,14 @@
                 [self.collectionView reloadData];
         }
     }];
+}
+
+- (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString {
+    NSString *value = @"";
+    NSString *preTempValue = [bitString substringToIndex:bitString.length - originValue.length];
+    NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
+    value = resultValue;
+    return value;
 }
 
 - (NSMutableDictionary *)productNameDic {
