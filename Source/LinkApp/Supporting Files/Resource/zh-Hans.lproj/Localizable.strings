@@ -919,9 +919,10 @@
 "analysis_deviceData_error" = "设备数据解析错误";
 "device_action_reply_fail" = "设备行为回复消息失败";
 "firmware_update" = "可升级固件";
+"newest_firmware" = "固件已是最新版本";
 "update_now" = "立即升级";
 "current_Version" = "当前固件版本为";
-"last_Version" = "当前固件版本为";
+"last_Version" = "最新固件版本为";
 "modify_authentation" = "权限管理";
 "register_privacy_policy_title" = "用户协议与隐私保护";
 "register_privacy_policy_conte1" = "为了更好地保障您的个人权益，在您使用我们的产品前，请务必谨慎阅读腾讯连连";

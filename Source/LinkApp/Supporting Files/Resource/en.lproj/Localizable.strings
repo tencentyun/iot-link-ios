@@ -927,9 +927,10 @@ If the problem still persists, we recommend you remove the device and add it aga
 "analysis_deviceData_error" = "设备数据解析错误";
 "device_action_reply_fail" = "设备行为回复消息失败";
 "firmware_update" = "可升级固件";
+"newest_firmware" = "固件已是最新版本";
 "update_now" = "立即升级";
 "current_Version" = "当前固件版本为";
-"last_Version" = "当前固件版本为";
+"last_Version" = "最新固件版本为";
 "modify_authentation" = "Authority management";
 "register_privacy_policy_title" = "User Agreement & Privacy protection";
 "register_privacy_policy_conte1" = "In order to protect your personal rights and interests, before you use our products, please be sure to carefully read Tencent LLink";

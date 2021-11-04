@@ -2013,10 +2013,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
             
             //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
-            NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
             self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
             __weak typeof(self) weakSelf = self;
-        if (currentString.floatValue < desString.floatValue) {
+        if (currentString.floatValue < desString.floatValue && (![NSString isNullOrNilWithObject:desString]) && (![NSString isNullOrNilWithObject:currentString])) {
+            NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
             [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
             self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
                 //上报开始下载 下载进度 下载完成
@@ -2024,7 +2024,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [weakSelf getFrimwareOTAURL];
             };
         }else {
-            [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"固件已是最新版本") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:@""];
+            NSString *messgeString = [NSString stringWithFormat:@"%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,self.firmwareModel.DstVersion];
+            [self.firmwareView alertWithTitle:NSLocalizedString(@"newest_firmware", @"固件已是最新版本") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:@""];
         }
             
             self.firmwareView.cancelAction = ^{

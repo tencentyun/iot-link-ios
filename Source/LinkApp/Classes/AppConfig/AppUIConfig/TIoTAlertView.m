@@ -65,6 +65,10 @@
     self.messageT.placeholder = message;
     [self.cancleBtn setTitle:cancleTitlt forState:UIControlStateNormal];
     [self.doneBtn setTitle:doneTitle forState:UIControlStateNormal];
+    if ([NSString isNullOrNilWithObject:doneTitle]) {
+        self.doneBtn.hidden = YES;
+        [self.cancleBtn setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+    }
 }
 
 - (void)setDefaultText:(NSString *)defaultText
