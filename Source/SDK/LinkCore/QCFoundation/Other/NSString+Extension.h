@@ -197,6 +197,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 // 获取标识符
 + (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;
+
+//获取固定长度的字符串 不足为补0
++ (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString;
 @end
 
 NS_ASSUME_NONNULL_END
