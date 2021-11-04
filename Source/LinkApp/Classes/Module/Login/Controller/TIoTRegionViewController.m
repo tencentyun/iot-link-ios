@@ -55,10 +55,13 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupUI];
     //不选地区列表赋默认值
-    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
-    [TIoTCoreUserManage shared].userRegionId = @"1";
+    [TIoTCoreUserManage shared].userRegion = @"";
+    [TIoTCoreUserManage shared].userRegionId = @"";
+    [TIoTCoreUserManage shared].signIn_Title = @"";
+    [TIoTCoreUserManage shared].signIn_countryCode = @"";
+
+    [self setupUI];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -177,6 +180,54 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 }
 
 
+- (void)showEN_age_view {
+    NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
+    NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
+    if ([regionID isEqualToString:@"22"] && [errorCode containsString:@"-1"]) {
+        [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+    }else if ([regionID isEqualToString:@"1"] && [errorCode containsString:@"-2"]) {
+        [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+    }else {
+        TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
+        [customView alertContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:NO];
+        [customView alertCustomViewTitleMessage:NSLocalizedString(@"please_setting_birthday", @"为了给您提供更好的体验，请设备您的出生日期") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
+        [self.view addSubview:customView];
+        
+        customView.cancelBlock = ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        };
+        
+        customView.confirmBlock = ^(NSString * _Nonnull timeString) {
+            
+            NSString *selectedTime = [NSString getTimeStampWithString:timeString withFormatter:@"yyyy-MM-dd" withTimezone:@""];
+
+            NSInteger age = [NSString timeDifferenceInfoWitFormTimeStamp:[[NSDate date] timeIntervalSince1970] toTimeStamp:selectedTime.longLongValue dateFormatter:@"yyyy-MM-dd" timeType:TIoTTimeTypeYear];
+            
+            NSString *tempErrorCode = errorCode?:@"";
+            if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+                //美东
+                if (age < 13) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-1"];
+                    return;
+                }
+                [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-5"];
+            }else {
+                //国内
+                if (age < 18) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-2"];
+                    return;
+                }
+                [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-6"];
+            }
+        };
+    }
+}
 #pragma mark - eventResponse
 
 - (void)choseAreaCode{
@@ -198,7 +249,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             [TIoTCoreUserManage shared].signIn_countryCode = CountryCode;
             [TIoTCoreUserManage shared].signIn_Title = Title;
         }
-        
+        [self showEN_age_view];
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
@@ -234,12 +285,19 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 
 - (void)sendCode:(id)sender{
     NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
-    
+    NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
+    if ([NSString isNullOrNilWithObject:regionID]) {
+        [MBProgressHUD showError:NSLocalizedString(@"country_code", @"请选择国家")];
+        return;
+    }
     //-1表示年龄错误
-    if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+    if ([regionID isEqualToString:@"22"]) {
         //美东
         if ([errorCode containsString:@"-1"]) {
             [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+            return;
+        }else if (![errorCode containsString:@"-5"]) {
+            [MBProgressHUD showError:NSLocalizedString(@"country_code", @"请选择国家")];
             return;
         }
         
@@ -247,6 +305,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         //国内
         if ([errorCode containsString:@"-2"]) {
             [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+            return;
+        }else if (![errorCode containsString:@"-6"]) {
+            [MBProgressHUD showError:NSLocalizedString(@"country_code", @"请选择国家")];
             return;
         }
     }
@@ -286,7 +347,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+//        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:@"" forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -298,7 +360,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel = [[UILabel alloc]init];
-        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+//        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+        self.phoneAreaLabel.text = nil;
         [_contentView addSubview:self.phoneAreaLabel];
         [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
