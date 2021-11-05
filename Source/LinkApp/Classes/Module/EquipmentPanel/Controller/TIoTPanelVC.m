@@ -246,10 +246,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *productstr = [NSString stringFromHexString:producthex];
                         self.currentProductId = productstr;
                         [self.blueManager connectBluetoothPeripheral:device];
-//                        if([productstr isEqualToString:self.productId]) {
-//                            [self.blueManager connectBluetoothPeripheral:device];
-//                            break;
-//                        }
                     }
                 }
             }
@@ -1192,6 +1188,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
                         deviceBindId = [productHex uppercaseString];
+                        
+                        NSString *tempProHex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+                        NSString *temp = [NSString stringFromHexString:tempProHex];
+                        DDLogInfo(@"temp product ID :%@\ndeviceBindId:%@",temp,deviceBindId);
                     }
                     
                     //判断绑定标识符和设备广播的是否一致
@@ -1199,7 +1199,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         for (CBCharacteristic *characteristic in service.characteristics) {
                             NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
                             //判断是否是纯蓝牙 LLSync
-                            if ([uuidFirstString isEqualToString:@"0000FFE1"]) {
+                            if ([uuidFirstString isEqualToString:FFE1UUIDString]) {
                                 //LLSync
                                 
                                 self.characteristicFFE1 = characteristic;
@@ -2163,6 +2163,95 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
      
 }
 
+///MARK:分片发送方法
+- (void)sendSliceDataWithOriginHexString:(NSString *)sliceHexDataString mutInt:(NSInteger)mtu UUIDString:(NSString *)uuidString type:(NSString *)typeString {
+    NSString *sliceDataString = [sliceHexDataString?:@"" uppercaseString];  //原始数据 带type+len+value
+    NSInteger mtuInt = mtu;
+    NSString *uuid = uuidString?:@"";
+    NSString *type = typeString; //每片头string
+    NSString *lenBinaryBit = @"0000000000000";
+    
+    //获取value
+    NSString *valueString = @"";        //只有value （原始数据去除type和length）
+    if (sliceDataString.length >= 6) {
+        valueString = [sliceDataString substringFromIndex:6];  //6: type 1B len 2B
+    }
+    
+    //判断value是否>mtu
+    if (sliceDataString.length <= mtuInt) {
+        //直接发送
+        [self writePropertyInfoInUUIDDeviceWithMessage:sliceDataString UUIDString:uuid];
+    }else {
+       //分片发送
+        NSInteger sliceGroup = valueString.length/2/mtuInt; //分片组数
+        //计算满片长度的二进制
+        NSString *lenBinary = [NSString getBinaryByDecimal:mtuInt];
+        NSString *fixedLenBinary = [NSString getFixedLengthValueWithOriginValue:lenBinary bitString:lenBinaryBit];
+        
+        NSString *sliceHeaderBinary = @"";
+        
+        //是否有不满mtuintd的尾片
+        if (valueString.length/2%mtuInt != 0) {
+            
+            for (int i = 0; i<sliceGroup; i++) {
+                //每一片的slice value
+                NSString *itemSliceValue = [valueString substringWithRange:NSMakeRange(i*mtuInt*2, mtuInt*2)];
+                
+                if (i == 0) {
+                    //首片
+                    sliceHeaderBinary = @"010";
+                }else {
+                    //中间
+                    sliceHeaderBinary = @"100";
+                }
+                
+                //计算每一片完整数据
+                [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            }
+            //不满一片数据
+            NSInteger sliceValueLen = sliceGroup*mtuInt*2; //满片数据
+            NSString *itemSliceValue = [valueString substringFromIndex:sliceValueLen];  //不满一片数据
+            
+            NSString *lenBinary = [NSString getBinaryByDecimal:itemSliceValue.length];
+            NSString *fixedLenBinary = [NSString getFixedLengthValueWithOriginValue:lenBinary bitString:lenBinaryBit];
+            
+            //尾片
+            sliceHeaderBinary = @"110";
+            [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            
+        }else {
+            for (int i = 0; i<sliceGroup; i++) {
+                //每一片的slice value
+                NSString *itemSliceValue = [valueString substringWithRange:NSMakeRange(i*mtuInt*2, mtuInt*2)];
+                
+                if (i == 0) {
+                    //首片
+                    sliceHeaderBinary = @"010";
+                }else {
+                    //中间
+                    if (i == sliceGroup - 1) {
+                        sliceHeaderBinary = @"110";
+                    }else {
+                        sliceHeaderBinary = @"100";
+                    }
+                }
+                
+                //计算每一片完整数据
+                [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            }
+        }
+    }
+}
+
+//发送分片数据
+- (void)sendItemSliceDataWithType:(NSString *)type SliceHeaderBinary:(NSString *)sliceHeaderBinary fixedLenBinary:(NSString *)fixedLenBinary itemSliceValue:(NSString *)itemSliceValue UUIDString:(NSString *)uuid {
+    NSString *lengthTypeBinary = [NSString stringWithFormat:@"%@%@",sliceHeaderBinary,fixedLenBinary];
+    NSString *lengthHexTemp = [NSString getHexByBinary:lengthTypeBinary];
+    NSString *lenHex = [NSString getFixedLengthValueWithOriginValue:lengthHexTemp bitString:@"0000"];
+    NSString *itemSliceData = [NSString stringWithFormat:@"%@%@%@",type,lenHex,itemSliceValue];
+    [self writePropertyInfoInUUIDDeviceWithMessage:itemSliceData UUIDString:uuid];
+}
+
 - (uLong)getCRC32ResultWithData:(NSData *)data {
     uLong crc = crc32(0L, Z_NULL, 0);
     crc = crc32(crc, data.bytes, (int)data.length);
@@ -2242,7 +2331,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [self writePropertyInfoInUUIDDeviceWithMessage:@"05" UUIDString:FFE1UUIDString];
     }else {
 //        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1?:[CBCharacteristic new] LLDeviceInfo:@"06"];
-        [self writePropertyInfoInUUIDDeviceWithMessage:@"05" UUIDString:FFE1UUIDString];
+        [self writePropertyInfoInUUIDDeviceWithMessage:@"06" UUIDString:FFE1UUIDString];
     }
 
 }
@@ -2275,7 +2364,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *timeStampSignInfo = [NSString HmacSha1_Keyhex:self.psk data:timeStamp];
     
     NSString *writeInfo = [NSString stringWithFormat:@"010018%@%@",tempTimeHex,timeStampSignInfo];
-    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
+    
+    [self sendSliceDataWithOriginHexString:writeInfo mutInt:17 UUIDString:FFE1UUIDString type:@"01"];
+//    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
 }
 
 //删除设备写入信息
@@ -2911,6 +3002,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             if ([uuidFirstString isEqualToString:uuidString] && ![NSString isNullOrNilWithObject:uuidString]) {
                 if ([uuidString isEqualToString:FFE4UUIDString]) {
                     [self.blueManager sendFirmwareUpdateNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
+                }else if([uuidString isEqualToString:FFE1UUIDString]) {
+                    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo?:@""];
                 }else {
                     [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo?:@""];
                 }
