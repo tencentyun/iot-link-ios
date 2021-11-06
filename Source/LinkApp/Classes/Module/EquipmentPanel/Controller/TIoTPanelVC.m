@@ -1238,10 +1238,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
                         deviceBindId = [productHex uppercaseString];
-                        
-                        NSString *tempProHex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
-                        NSString *temp = [NSString stringFromHexString:tempProHex];
-                        DDLogInfo(@"temp product ID :%@\ndeviceBindId:%@",temp,deviceBindId);
                     }
                     
                     //判断绑定标识符和设备广播的是否一致
@@ -1459,24 +1455,26 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             //1、升级数据包应答 每发送一个轮询后，设备会返回一次应答
             //2、或者丢包后，需要断点续传
             DDLogInfo(@"device report continue send :%@",hexstr);
-            
+            if (hexstr.length >= 16) {
             //next seq
             NSString *nextSeq = [hexstr substringWithRange:NSMakeRange(6, 2)];
             self.nextSeqInt = [NSString getDecimalByHex:nextSeq];
+                if (self.nextSeqInt == self.singleCyclePackageNum) {
+                    self.nextSeqInt = 0;
+                }
             
             //file size
             NSString *fileSize = [hexstr substringWithRange:NSMakeRange(8, 8)];
             NSInteger fileSizeTemp = [NSString getDecimalByHex:fileSize];
             self.fileSizeInt = fileSizeTemp*2;
-            
-            if (self.fileSizeInt < self.fileData.length*2) {
+            if (self.fileSizeInt <= self.fileData.length*2) {
                 [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(finishSendData) object:nil];
                 //发送固件数据给设备
                 [HXYNotice postFirmwareUpdateData];
             }else {
                 DDLogInfo(@"上报结束");
             }
-            
+          }
         }else if ([cmdtype isEqualToString:@"0B"]) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
             
@@ -1513,33 +1511,19 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
     
-    //不足一次发的起始位置
-    NSInteger lessSingleCyxleInitPosi = self.cycleNumDataLen;
+    NSString *remainData = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
     
-    if (self.fileSizeInt < lessSingleCyxleInitPosi) {
-        
+    NSInteger cycleNum = self.fileSizeInt/self.singleCyclePackageBytes;
+    
+    self.cycleCount = cycleNum;
+    
+    if (remainData.length < self.itemPackageDataLen) {
+        if (self.cycleNum != 0) {
+            self.lessSingleCyclePackageNum = self.nextSeqInt;
+        }
+        [self lastDataSend];
+    }else {
         [self cycleNumSend];
-        
-        self.cycleCount += 1;
-        self.nextSeqInt = 0;
-        self.fileSizeInt = 0;
-        [self lessSingleCycleSend];
-
-        self.nextSeqInt = 0;
-        self.fileSizeInt = 0;
-        [self lastDataSend];
-        
-    }else if ((self.fileSizeInt >= lessSingleCyxleInitPosi) && (self.fileSizeInt < (lessSingleCyxleInitPosi + self.lessSingleCyclePackageDataLen))) {
-        
-        [self lessSingleCycleSend];
-
-        self.nextSeqInt = 0;
-        self.fileSizeInt = 0;
-        [self lastDataSend];
-        
-    }else if (self.fileSizeInt >= (lessSingleCyxleInitPosi + self.lessSingleCyclePackageDataLen)){
-        
-        [self lastDataSend];
     }
 }
 
@@ -1639,29 +1623,29 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             self.lastPackageDataLen = self.fileData.length*2;
         }
     }else {
+        //多于一个循环情况
         //计算循环数据
-        self.cycleNumDataLen = singleCycleDataLen * self.cycleNum;
+        NSInteger clcylMtuNum = singleCycleDataLen * self.cycleNum;
+        //计算已发的整包数据
+        self.cycleNumDataLen = (self.fileData.length*2/self.itemPackageDataLen)*self.itemPackageDataLen;
         //计算不满一次循环的数据长度 （余数）
-        lessSingleCycleDataLen = self.fileData.length*2 - self.cycleNumDataLen;
+        lessSingleCycleDataLen = self.fileData.length*2 - clcylMtuNum;
         //计算不满一次循环中，能整包发的次数
         self.lessSingleCyclePackageNum = lessSingleCycleDataLen/self.itemPackageDataLen;
         //不满一次循环中，能整包发送的数据长度
         self.lessSingleCyclePackageDataLen = self.lessSingleCyclePackageNum *self.itemPackageDataLen;
         //计算不满单次循环，不能整包发的最后一个数据包长度
-        self.lastPackageDataLen = lessSingleCycleDataLen - self.lessSingleCyclePackageDataLen;
+        self.lastPackageDataLen = self.fileData.length*2 - self.cycleNumDataLen;
+        
+        if (self.fileData.length*2%(singleCycleDataLen) != 0) {
+            self.cycleNum += 1;
+        }
     }
     
     self.itemPackageDataLenBytes= self.itemPackageDataLen;
     self.singleCyclePackageBytes = self.singleCyclePackageNum*self.itemPackageDataLen;
     
     self.isfinishUpdate = NO;
-    
-//    //计算循环的数据
-//    self.cycleNumDataLen = self.cycleNum*self.singleCyclePackageNum;
-//    //不足一个数据包
-//    NSInteger lessSingleDataLen = self.fileData.length*2 - self.cycleNumDataLen;
-//    self.lastPackageDataLen = lessSingleDataLen;
-    
     
     [self sendFirmwareUpdateData];
     
@@ -1682,12 +1666,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         self.nextSeqInt = 0;
         self.fileSizeInt = 0;
         [self cycleNumSend];
-        
-        self.cycleCount += 1;
-        self.nextSeqInt = 0;
-        self.fileSizeInt = 0;
-        //不足一个循环
-        [self lessSingleCycleSend];
         
         self.nextSeqInt = 0;
         self.fileSizeInt = 0;
@@ -1744,19 +1722,53 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //需要计算能满单次循环的包数量和剩余的一次循环，在剩余的一次循环中，再计算能满一包的数量和不足一包的数量
     //可循环整发
+    NSInteger startLocation = 0;
+    NSInteger packageCount = 0;
     
     int i = 0;
-//    for (NSInteger i = self.cycleCount; i<self.cycleNum; i++) {
-        self.cycleCount = i;
+    if (self.cycleNum == 0 && self.cycleCount == 0) {
+        i = 0;
+    }
+    
+    for (NSInteger i = self.cycleCount; i<self.cycleNum; i++) {
+        if (self.cycleNum == 0) {
+            i = 0;
+        }else {
+
+            if (startLocation > self.allDataStringHex.length) {
+                break;
+            }
+
+            //新修改
+            if (self.fileSizeInt>0) {
+                startLocation = self.fileSizeInt;
+            }
+
+            if ((startLocation + self.singleCyclePackageBytes) > self.allDataStringHex.length){
+                //不满一个循环
+
+                //新修改
+                if (self.fileSizeInt <= 0) {
+                    self.nextSeqInt = 0;
+                }
+
+                if ((startLocation + self.itemPackageDataLenBytes) >self.allDataStringHex.length) {
+                    if ((self.allDataStringHex.length - startLocation)<=self.itemPackageDataLenBytes) {
+                        self.lessSingleCyclePackageNum = packageCount;
+                        [self lastDataSend];
+                        break;
+                    }else {
+                        self.nextSeqInt = 0;
+                        i = 0;
+                    }
+                }
+            }
+        }
         //单次可循环整包
         for (NSInteger j = self.nextSeqInt; j < self.singleCyclePackageNum; j++) {
             
-            NSInteger startLocation = 0;
-            if (self.fileSizeInt > 0) {
-                startLocation = self.fileSizeInt;
-            }else {
-                startLocation = j*self.itemPackageDataLenBytes + i*self.singleCyclePackageBytes;
-            }
+            packageCount = j;
+            startLocation = j*self.itemPackageDataLenBytes + i*self.singleCyclePackageBytes;
             
             NSString *itemPackageWriteInfo = @"";
             //数据包type
@@ -1776,44 +1788,14 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 
                 [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
             }else {
+                
+                //新修改
+                    if ((startLocation + self.itemPackageDataLenBytes) > self.allDataStringHex.length && i == self.cycleNum - 1 && self.cycleNum>2) {
+                        self.lessSingleCyclePackageNum = packageCount;
+                        [self lastDataSend];
+                    }
                 break;
             }
-        }
-}
-
-//MARK: 不足一次单循环，可以完整分包的循环
-- (void)lessSingleCycleSend {
-    
-    //不足一次发的起始位置
-    NSInteger lessSingleCyxleInitPosi = self.cycleNumDataLen; //字节数*2 转为字符串个数
-    
-    //不足一次循环发，单次可循环整包发
-    for (NSInteger i = self.nextSeqInt; i<self.lessSingleCyclePackageNum; i++) {
-        
-        NSInteger startLocation = 0;
-        if (self.fileSizeInt > 0) {
-            startLocation = self.fileSizeInt;
-        }else {
-            startLocation = i*self.itemPackageDataLen+lessSingleCyxleInitPosi;
-        }
-        
-        NSString *itemPackageWriteInfo = @"";
-        //数据包type
-        NSString *packageType = @"01";
-        //拼接完整的每个数据包 value
-        if ((startLocation+self.itemPackageDataLen) <= self.allDataStringHex.length) {
-            NSString *itemDataHexString = [self.allDataStringHex substringWithRange:NSMakeRange(startLocation, self.itemPackageDataLen)];
-            NSString *seqHexTemp = [NSString getHexByDecimal:i];
-            NSString *seqHex = [self getTVLValueWithOriginValue:seqHexTemp bitString:@"00"];
-            NSString *valueHexString = [NSString stringWithFormat:@"%@%@",seqHex,itemDataHexString];
-            //数据包length
-            NSInteger packageLenInt = self.singlePageSizeInt - 2;// (type 1B len 1b)
-            NSString *packageLen = [NSString getHexByDecimal:packageLenInt];
-            
-            itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
-            [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
-        }else {
-            break;
         }
     }
 }
@@ -1828,6 +1810,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     if (self.fileSizeInt > 0) {
         lastPackageInitPosi = self.fileSizeInt;
+        if (self.cycleNum != 0) {
+            lastPackageInitPosi = self.cycleNumDataLen;
+        }
     }else {
         lastPackageInitPosi = lessSingleCyxleInitPosi; //+ self.lessSingleCyclePackageDataLen;
     }
@@ -1847,8 +1832,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *seqHex = [self getTVLValueWithOriginValue:seqHexTemp bitString:@"00"];
     NSString *valueHexString = [NSString stringWithFormat:@"%@%@",seqHex,itemDataHexString];
     //数据包length
-    NSInteger packageLenInt = self.singlePageSizeInt - 2;// (type 1B len 1b)
-    NSString *packageLen = [NSString getHexByDecimal:packageLenInt];
+    NSString *packageLen = [NSString getHexByDecimal:self.lastPackageDataLen];
     
     itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
     [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
