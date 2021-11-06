@@ -200,6 +200,10 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 //获取固定长度的字符串 不足为补0
 + (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString;
+
+//将字符串转为浮点型（0.0.1）
++ (NSString *)getVersionWithString:(NSString *)originVersionString;
+
 @end
 
 NS_ASSUME_NONNULL_END

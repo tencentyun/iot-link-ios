@@ -1204,4 +1204,15 @@ union u{
     value = resultValue;
     return value;
 }
+
+//将字符串转为浮点型（0.0.1）
++ (NSString *)getVersionWithString:(NSString *)originVersionString {
+    NSString *versionString = @"";
+    NSArray *versionArray = [originVersionString componentsSeparatedByString:@"."];
+    for (NSString *numStr in versionArray) {
+        versionString = [versionString stringByAppendingString:numStr];
+    }
+    return versionString;
+}
+
 @end
