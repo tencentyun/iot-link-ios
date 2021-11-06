@@ -952,3 +952,4 @@
 "unknow_device" = "未知设备";
 "bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
 "bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";
+"firmware_update" = "固件升级";

@@ -11,6 +11,7 @@
 #import "TIoTModifyRoomVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "TIoTModifyDeviceNameVC.h"
+#import "TIoTFirmwareModel.h"
 
 @interface TIoTPanelMoreViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -19,7 +20,7 @@
 @property (nonatomic, strong) UILabel *timeLab;
 
 @property (nonatomic,strong) NSMutableArray *dataArr;
-
+@property (nonatomic, assign) BOOL isShowUpdateTip;
 @end
 
 @implementation TIoTPanelMoreViewController
@@ -29,7 +30,39 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.isShowUpdateTip = NO;
     [self setupUI];
+    [self checkDeviceFirmwareUpateStatus];
+}
+
+///MARK:查询设备固件升级状态
+- (void)checkDeviceFirmwareUpateStatus {
+    NSDictionary *paramDic = @{@"ProductId":self.deviceDic[@"ProductId"]?:@"",
+                               @"DeviceName":self.deviceDic[@"DeviceName"]?:@"",
+    };
+    
+    [[TIoTRequestObject shared] post:AppDescribeFirmwareUpdateStatus Param:paramDic success:^(id responseObject) {
+        TIoTFirmwareUpdateStatusModel *updateStatusModel = [TIoTFirmwareUpdateStatusModel yy_modelWithJSON:responseObject];
+        NSString *currentVersion = [NSString getVersionWithString:updateStatusModel.OriVersion?:@""];
+        NSString *dstVersion = [NSString getVersionWithString:updateStatusModel.DstVersion?:@""];
+        
+        if (![NSString isNullOrNilWithObject:updateStatusModel.DstVersion] && currentVersion.floatValue < dstVersion.floatValue) {
+            //显示固件升级提示小红点
+            [self.dataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                NSDictionary *dic = (NSDictionary *)obj;
+                if ([dic[@"title"] isEqualToString:NSLocalizedString(@"firmware_update", @"固件升级")]) {
+                    self.isShowUpdateTip = YES;
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+//                    TIoTDeviceDetailTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//                    cell.isShowFirmwareUpdate = YES;
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+            }];
+        }
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
 }
 
 #pragma mark privateMethods
@@ -124,6 +157,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TIoTDeviceDetailTableViewCell *cell = [TIoTDeviceDetailTableViewCell cellWithTableView:tableView];
     cell.dic = [self dataArr][indexPath.row];
+    cell.isShowFirmwareUpdate = self.isShowUpdateTip;
     return cell;
 }
 
@@ -164,6 +198,10 @@
     {
         UIViewController *vc = [NSClassFromString(@"TIoTDeviceDetailVC") new];
         [self.navigationController pushViewController:vc animated:YES];
+    }else if ([[self dataArr][indexPath.row][@"title"] isEqualToString:NSLocalizedString(@"firmware_update", @"固件升级")]) {
+        if (self.firmwareUpateBlock) {
+            self.firmwareUpateBlock();
+        }
     }
     
 }
@@ -204,6 +242,7 @@
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_info", @"设备信息"),@"value":@"",@"needArrow":@"1"}]];
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"room_setting", @"房间设置"),@"value":@"",@"needArrow":@"1"}]];
         [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"device_share", @"设备分享"),@"value":@"",@"needArrow":@"1"}]];
+        [_dataArr addObject:[NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"firmware_update", @"固件升级"),@"value":@"",@"needArrow":@"1"}]];
     }
     return _dataArr;
 }

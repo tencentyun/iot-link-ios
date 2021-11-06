@@ -174,6 +174,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, assign) NSInteger deviceRestartMaxInt;//设备重启最大时间，单位：秒
 @property (nonatomic, assign) BOOL isfinishUpdate;
 @property (nonatomic, assign) BOOL lessPackageData; //下载文件小于一个数据包标识
+@property (nonatomic, assign) BOOL isEnterDeviceDetailVC; //是否进入设备详情页面
 @end
 
 @implementation TIoTPanelVC
@@ -206,6 +207,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     {
         self.title = NSLocalizedString(@"control_panel", @"控制面板");
     }
+    self.isEnterDeviceDetailVC = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -850,6 +852,26 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }];
 }
 
+///MARK:获取固件版本号
+- (void)getFirmwareVersionWithProductId:(NSString *)producrid deviceName:(NSString *)deviceName {
+    
+    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
+    NSDictionary *paramDic = @{@"ProductId":producrid?:@"",
+                               @"DeviceName":deviceName?:@"",
+    };
+    [[TIoTRequestObject shared] post:AppCheckFirmwareUpdate Param:paramDic success:^(id responseObject) {
+        [MBProgressHUD dismissInView:self.view];
+        self.firmwareModel = [TIoTFirmwareModel yy_modelWithJSON:responseObject];
+        
+        NSString * currentString = [NSString getVersionWithString:self.firmwareModel.CurrentVersion];
+        NSString * desString = [NSString getVersionWithString:self.firmwareModel.DstVersion];
+        
+        [self ShowFirmwareUpdateVersionAlertWithCurrentVersion:currentString?:@"" desVersion:desString?:@""];
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        [MBProgressHUD dismissInView:self.view];
+    }];
+}
+
 //上报固件版本
 - (void)reportFirmwareVersionWithVersion:(NSString *)version {
     NSDictionary *paramDic = @{@"Version":version?:@"",
@@ -863,13 +885,35 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }];
 }
 
-- (NSString *)getVersionWithString:(NSString *)originVersionString {
-    NSString *versionString = @"";
-    NSArray *versionArray = [originVersionString componentsSeparatedByString:@"."];
-    for (NSString *numStr in versionArray) {
-        versionString = [versionString stringByAppendingString:numStr];
+//显示固件版本升级弹框
+- (void)ShowFirmwareUpdateVersionAlertWithCurrentVersion:(NSString *)currentString desVersion:(NSString *)desString {
+    //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
+    self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+    __weak typeof(self) weakSelf = self;
+    if (currentString < desString && (![NSString isNullOrNilWithObject:desString]) && (![NSString isNullOrNilWithObject:currentString])) {
+        NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
+        [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
+        self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
+            //上报开始下载 下载进度 下载完成
+            //获取升级包URL后，开始下载
+            [weakSelf getFrimwareOTAURL];
+        };
+    }else {
+        NSString *messgeString = [NSString stringWithFormat:@"%@\n%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion];
+        [self.firmwareView alertWithTitle:NSLocalizedString(@"newest_firmware", @"固件已是最新版本") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:@""];
     }
-    return versionString;
+    
+    self.firmwareView.cancelAction = ^{
+    };
+    [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
+    self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+    [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+    [self.firmwareView showInView:self.backMaskView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+    [self.backMaskView addGestureRecognizer:tap];
+    
+    [TIoTCoreUserManage shared].firmwareUpdate = @"1";
 }
 
 #pragma mark - event
@@ -961,6 +1005,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 - (void)moreClick:(UIButton *)sender{
     
+    self.isEnterDeviceDetailVC = YES;
+    
     __weak typeof(self) weakSelf = self;
     TIoTPanelMoreViewController *vc = [[TIoTPanelMoreViewController alloc] init];
     vc.title = NSLocalizedString(@"device_details", @"设备详情");
@@ -995,6 +1041,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08"];
             }
         }
+        
+    };
+    vc.firmwareUpateBlock = ^{
+        [self getFirmwareVersionWithProductId:self.productId deviceName:self.deviceName];
         
     };
     [self.navigationController pushViewController:vc animated:YES];
@@ -1255,15 +1305,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *firmwareVersionHexString = [hexstr substringFromIndex:14];
             NSString *versionString = [NSString stringFromHexString:firmwareVersionHexString]?:@"";
             
-            NSString *currentString = [self getVersionWithString:versionString];
-            NSString *desString = [self getVersionWithString:self.firmwareModel.DstVersion];
-            
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(overtimeDeviceResartMax) object:nil];
             if (self.isfinishUpdate == YES) {
                 [self checkfirmwarVersionWithFinish:YES];
             }else {
                 //升级固件提示弹框
-                [self chooseUpdateFirwareAlertWithCurrentVersion:currentString desVersion:desString];
+                [self chooseUpdateFirwareAlertWithCurrentVersion:versionString?:@"" desVersion:self.firmwareModel.DstVersion?:@""];
                 
                 [self reportFirmwareVersionWithVersion:versionString];
             }
@@ -2006,41 +2053,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 ///MARK:升级固件提示弹框
 - (void)chooseUpdateFirwareAlertWithCurrentVersion:(NSString *)curVersioin desVersion:(NSString *)desVersion {
-    NSString * currentString = curVersioin;
-    NSString * desString = desVersion;
-    
-//    if (currentString.floatValue < desString.floatValue) {
-//        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate]) {
-            
-            //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
-            self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
-            __weak typeof(self) weakSelf = self;
-        if (currentString.floatValue < desString.floatValue && (![NSString isNullOrNilWithObject:desString]) && (![NSString isNullOrNilWithObject:currentString])) {
-            NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
-            [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
-            self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
-                //上报开始下载 下载进度 下载完成
-                //获取升级包URL后，开始下载
-                [weakSelf getFrimwareOTAURL];
-            };
-        }else {
-            NSString *messgeString = [NSString stringWithFormat:@"%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,self.firmwareModel.DstVersion];
-            [self.firmwareView alertWithTitle:NSLocalizedString(@"newest_firmware", @"固件已是最新版本") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:@""];
-        }
-            
-            self.firmwareView.cancelAction = ^{
-            };
-            [self.firmwareView setAlertViewContentAlignment:TextAlignmentStyleCenter];
-            self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
-            [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
-            [self.firmwareView showInView:self.backMaskView];
-            
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
-            [self.backMaskView addGestureRecognizer:tap];
-            
-            [TIoTCoreUserManage shared].firmwareUpdate = @"1";
-//        }
-//    }
+    NSString * currentString = [NSString getVersionWithString:curVersioin];
+    NSString * desString = [NSString getVersionWithString:desVersion];
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].firmwareUpdate] && self.isEnterDeviceDetailVC == NO) {
+        [self ShowFirmwareUpdateVersionAlertWithCurrentVersion:currentString desVersion:desString];
+    }
 }
 
 ///MARK: 获取固件升级包URL
@@ -2276,18 +2293,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }];
 }
 
-///MARK:查询设备固件升级状态
-- (void)checkDeviceFirmwareUpateStatus {
-    NSDictionary *paramDic = @{@"ProductId":self.productId?:@"",
-                               @"DeviceName":self.deviceName?:@"",
-    };
-    
-    [[TIoTRequestObject shared] post:AppDescribeFirmwareUpdateStatus Param:paramDic success:^(id responseObject) {
-//        TIoTFirmwareUpdateStatusModel *updateStatusModel = [TIoTFirmwareUpdateStatusModel yy_modelWithJSON:responseObject];
-    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
-        
-    }];
-}
 ///MARK:蓝牙设备属性上报物模型数据到控制台
 - (void)reportDataAsDeviceWithData:(NSDictionary *)paramDic withReportType:(TIoTDeviceReportType)reportType {
     [[TIoTRequestObject shared] post:AppReportDataAsDevice Param:paramDic success:^(id responseObject) {
