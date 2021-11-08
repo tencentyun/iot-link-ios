@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 调试接口，录制通过播放器拉取的数据流并行保存到 Document 目录的 video.data 文件
  * 需提前打开 writeFile 开关
  */
-//+ (void)recordstream:(NSString *)dev_name;
++ (void)recordstream:(NSString *)dev_name;
 @end
 
 NS_ASSUME_NONNULL_END

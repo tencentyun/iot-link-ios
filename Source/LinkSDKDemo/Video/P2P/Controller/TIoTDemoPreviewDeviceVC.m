@@ -1178,7 +1178,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     // 1.通过播放器发起的拉流
     if (_is_ijkPlayer_stream) {
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
-//        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
 #ifdef DEBUG

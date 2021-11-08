@@ -213,6 +213,6 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 + (void)recordstream:(NSString *)dev_name {
-//    startRecordPlayerStream(dev_name.UTF8String);
+    startRecordPlayerStream(dev_name.UTF8String);
 }
 @end
