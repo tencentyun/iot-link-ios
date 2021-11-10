@@ -239,6 +239,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             if (self.blueDevices.count > 0) {
 //                CBPeripheral *device = self.blueDevices[0];
                 
+                NSString *bindID = [NSString getBindIdentifierWithProductId:self.productId deviceName:self.deviceName];
+                NSString *deviceBindId = @"";
+                
                 for (CBPeripheral *device in self.blueDevices) {
                     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
                     if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -246,11 +249,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
-                        //判断设备是否绑定，绑定后才连接
-                        NSString *status = [hexstr substringWithRange:NSMakeRange(4, 2)];
-                        if ([status isEqualToString:@"22"]) {
-                            self.currentProductId = productstr;
-                            [self.blueManager connectBluetoothPeripheral:device];
+                        
+                        //获取绑定标识符，提前获取进行筛选
+                        NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
+                        deviceBindId = [productHex uppercaseString];
+                        
+                        if ([bindID isEqualToString:deviceBindId]) {
+                            //判断设备是否绑定，绑定后才连接
+                            NSString *status = [hexstr substringWithRange:NSMakeRange(4, 2)];
+                            if ([status isEqualToString:@"22"]) {
+                                self.currentProductId = productstr;
+                                [self.blueManager connectBluetoothPeripheral:device];
+                            }
                         }
                     }
                 }
@@ -1165,6 +1175,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             if (self.blueDevices.count > 0) {
 //                CBPeripheral *device = self.blueDevices[0];
                 
+                NSString *bindID = [NSString getBindIdentifierWithProductId:self.productId deviceName:self.deviceName];
+                NSString *deviceBindId = @"";
+                
                 for (CBPeripheral *device in self.blueDevices) {
                     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
                     if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -1172,11 +1185,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                         NSString *hexstr = [NSString transformStringWithData:manufacturerData];
                         NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
                         NSString *productstr = [NSString stringFromHexString:producthex];
-                        //判断设备是否绑定，绑定后才连接
-                        NSString *status = [hexstr substringWithRange:NSMakeRange(4, 2)];
-                        if ([status isEqualToString:@"22"]) {
-                            self.currentProductId = productstr;
-                            [self.blueManager connectBluetoothPeripheral:device];
+                        
+                        //获取绑定标识符，提前获取进行筛选
+                        NSString *productHex = [hexstr substringWithRange:NSMakeRange(22, hexstr.length-22)];
+                        deviceBindId = [productHex uppercaseString];
+                        
+                        if ([bindID isEqualToString:deviceBindId]) {
+                            //判断设备是否绑定，绑定后才连接
+                            NSString *status = [hexstr substringWithRange:NSMakeRange(4, 2)];
+                            if ([status isEqualToString:@"22"]) {
+                                self.currentProductId = productstr;
+                                [self.blueManager connectBluetoothPeripheral:device];
+                            }
                         }
                     }
                 }
