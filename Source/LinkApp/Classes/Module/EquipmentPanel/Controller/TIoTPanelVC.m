@@ -1741,77 +1741,81 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSInteger startLocation = 0;
     NSInteger packageCount = 0;
     
-    int i = 0;
     if (self.cycleNum == 0 && self.cycleCount == 0) {
-        i = 0;
+        [self cycleSendWithStartLocation:startLocation packageCount:packageCount cycleInt:0];
+    }else {
+        for (NSInteger i = self.cycleCount; i<self.cycleNum; i++) {
+            [self cycleSendWithStartLocation:startLocation packageCount:packageCount cycleInt:i];
+        }
     }
     
-    for (NSInteger i = self.cycleCount; i<self.cycleNum; i++) {
-        if (self.cycleNum == 0) {
-            i = 0;
-        }else {
+}
 
-            if (startLocation > self.allDataStringHex.length) {
-                break;
-            }
+- (void)cycleSendWithStartLocation:(NSInteger)startLocation packageCount:(NSInteger)packageCount cycleInt:(NSInteger)i {
+    if (self.cycleNum == 0) {
+        i = 0;
+    }else {
+
+        if (startLocation > self.allDataStringHex.length) {
+            return;
+        }
+
+        //新修改
+        if (self.fileSizeInt>0) {
+            startLocation = self.fileSizeInt;
+        }
+
+        if ((startLocation + self.singleCyclePackageBytes) > self.allDataStringHex.length){
+            //不满一个循环
 
             //新修改
-            if (self.fileSizeInt>0) {
-                startLocation = self.fileSizeInt;
+            if (self.fileSizeInt <= 0) {
+                self.nextSeqInt = 0;
             }
 
-            if ((startLocation + self.singleCyclePackageBytes) > self.allDataStringHex.length){
-                //不满一个循环
-
-                //新修改
-                if (self.fileSizeInt <= 0) {
+            if ((startLocation + self.itemPackageDataLenBytes) >self.allDataStringHex.length) {
+                if ((self.allDataStringHex.length - startLocation)<=self.itemPackageDataLenBytes) {
+                    self.lessSingleCyclePackageNum = packageCount;
+                    [self lastDataSend];
+                    
+                }else {
                     self.nextSeqInt = 0;
-                }
-
-                if ((startLocation + self.itemPackageDataLenBytes) >self.allDataStringHex.length) {
-                    if ((self.allDataStringHex.length - startLocation)<=self.itemPackageDataLenBytes) {
-                        self.lessSingleCyclePackageNum = packageCount;
-                        [self lastDataSend];
-                        break;
-                    }else {
-                        self.nextSeqInt = 0;
-                        i = 0;
-                    }
+                    i = 0;
                 }
             }
         }
-        //单次可循环整包
-        for (NSInteger j = self.nextSeqInt; j < self.singleCyclePackageNum; j++) {
+    }
+    //单次可循环整包
+    for (NSInteger j = self.nextSeqInt; j < self.singleCyclePackageNum; j++) {
+        
+        packageCount = j;
+        startLocation = j*self.itemPackageDataLenBytes + i*self.singleCyclePackageBytes;
+        
+        NSString *itemPackageWriteInfo = @"";
+        //数据包type
+        NSString *packageType = @"01";
+        //拼接完整的每个数据包 value
+        if ((startLocation + self.itemPackageDataLenBytes)<=self.allDataStringHex.length) {
             
-            packageCount = j;
-            startLocation = j*self.itemPackageDataLenBytes + i*self.singleCyclePackageBytes;
+            NSString *itemDataHexString = [self.allDataStringHex substringWithRange:NSMakeRange(startLocation, self.itemPackageDataLenBytes)];
+            NSString *seqHexTemp = [NSString getHexByDecimal:j];
+            NSString *seqHex = [self getTVLValueWithOriginValue:seqHexTemp bitString:@"00"];
+            NSString *valueHexString = [NSString stringWithFormat:@"%@%@",seqHex,itemDataHexString];
+            //数据包length
+            NSInteger packageLenInt = self.singlePageSizeInt - 2;// (type 1B len 1b)
+            NSString *packageLen = [NSString getHexByDecimal:packageLenInt];
             
-            NSString *itemPackageWriteInfo = @"";
-            //数据包type
-            NSString *packageType = @"01";
-            //拼接完整的每个数据包 value
-            if ((startLocation + self.itemPackageDataLenBytes)<=self.allDataStringHex.length) {
-                
-                NSString *itemDataHexString = [self.allDataStringHex substringWithRange:NSMakeRange(startLocation, self.itemPackageDataLenBytes)];
-                NSString *seqHexTemp = [NSString getHexByDecimal:j];
-                NSString *seqHex = [self getTVLValueWithOriginValue:seqHexTemp bitString:@"00"];
-                NSString *valueHexString = [NSString stringWithFormat:@"%@%@",seqHex,itemDataHexString];
-                //数据包length
-                NSInteger packageLenInt = self.singlePageSizeInt - 2;// (type 1B len 1b)
-                NSString *packageLen = [NSString getHexByDecimal:packageLenInt];
-                
-                itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
-                
-                [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
-            }else {
-                
-                //新修改
-                    if ((startLocation + self.itemPackageDataLenBytes) > self.allDataStringHex.length && i == self.cycleNum - 1 && self.cycleNum>2) {
-                        self.lessSingleCyclePackageNum = packageCount;
-                        [self lastDataSend];
-                    }
-                break;
-            }
+            itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
+            
+            [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
+        }else {
+            
+            //新修改
+                if ((startLocation + self.itemPackageDataLenBytes) > self.allDataStringHex.length && i == self.cycleNum - 1 && self.cycleNum>2) {
+                    self.lessSingleCyclePackageNum = packageCount;
+                    [self lastDataSend];
+                }
+            break;
         }
     }
 }
