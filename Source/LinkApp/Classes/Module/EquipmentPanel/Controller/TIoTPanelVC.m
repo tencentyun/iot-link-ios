@@ -175,6 +175,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, assign) BOOL isfinishUpdate;
 @property (nonatomic, assign) BOOL lessPackageData; //下载文件小于一个数据包标识
 @property (nonatomic, assign) BOOL isEnterDeviceDetailVC; //是否进入设备详情页面
+@property (nonatomic, strong) CBService *service;
 @end
 
 @implementation TIoTPanelVC
@@ -1263,7 +1264,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                             //判断是否是纯蓝牙 LLSync
                             if ([uuidFirstString isEqualToString:FFE1UUIDString]) {
                                 //LLSync
-                                
+                                self.service = service;
                                 self.characteristicFFE1 = characteristic;
                                 
                                 [self getLocalPskWithProductId:self.productId deviceName:self.deviceName];
@@ -3005,8 +3006,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)writePropertyInfoInUUIDDeviceWithMessage:(NSString *)writeInfo UUIDString:(NSString *)uuidString{
     if (self.characteristicFFE1 != nil) {
         CBService *service = self.characteristicFFE1.service?:[CBService new];
-        if (service != nil) {
-        for (CBCharacteristic *characteristic in service.characteristics) {
+        if (self.service != nil) {
+        for (CBCharacteristic *characteristic in self.service.characteristics) {
             NSString *uuidFirstString = [characteristic.UUID.UUIDString componentsSeparatedByString:@"-"].firstObject;
             if ([uuidFirstString isEqualToString:uuidString] && ![NSString isNullOrNilWithObject:uuidString]) {
                 if ([uuidString isEqualToString:FFE4UUIDString]) {
