@@ -176,6 +176,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, assign) BOOL lessPackageData; //下载文件小于一个数据包标识
 @property (nonatomic, assign) BOOL isEnterDeviceDetailVC; //是否进入设备详情页面
 @property (nonatomic, strong) CBService *service;
+@property (nonatomic, assign) NSInteger resumeFileSizeInt; //断点续已接收的传数据大小
 @end
 
 @implementation TIoTPanelVC
@@ -1484,6 +1485,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *fileSize = [hexstr substringWithRange:NSMakeRange(8, 8)];
             NSInteger fileSizeTemp = [NSString getDecimalByHex:fileSize];
             self.fileSizeInt = fileSizeTemp*2;
+                
+                NSLog(@"!!!!!!post========fileSizeInt:%ld------nextSeqInt:%ld",self.fileSizeInt,self.nextSeqInt);
+                
             if (self.fileSizeInt <= self.fileData.length*2) {
                 [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(finishSendData) object:nil];
                 //发送固件数据给设备
@@ -1527,7 +1531,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)continueSendData:(NSNotification *)noti {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
-    
+//    if (self.fileSizeInt <= self.allDataStringHex.length) {
+        
     NSString *remainData = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
     
     NSInteger cycleNum = self.fileSizeInt/self.singleCyclePackageBytes;
@@ -1542,6 +1547,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }else {
         [self cycleNumSend];
     }
+//    }
 }
 
 ///MARK:发送升级数据包
@@ -1581,7 +1587,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     self.deviceRestartMaxInt = [NSString getDecimalByHex:deviceRestartMaxHex];
     //断点续传前已接收文件大小
     NSString *resumeFileSize = [allowUpatePayload substringWithRange:NSMakeRange(8, 8)];
-    NSInteger resumeFileSizeInt = [NSString getDecimalByHex:resumeFileSize];
+    self.resumeFileSizeInt = [NSString getDecimalByHex:resumeFileSize];
     
     //连续两个数据包的发包间隔
 //    NSString *intervalTime = [allowUpatePayload substringWithRange:NSMakeRange(16, 2)];
@@ -1600,19 +1606,27 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //计算全部数据string hex
     self.allDataStringHex = [NSString getDataFromHexStr:self.fileData];
-       //断点续传后的起始filedata 全部数据 string hex
-    if (isSupport == YES) {
-        if (resumeFileSizeInt >0) {
-            self.allDataStringHex = [self.allDataStringHex substringFromIndex:resumeFileSizeInt*2];
-            self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
-        }
-    }
+    
     //单次循环中发包数
     self.singleCyclePackageNum = adinglesendPageInt;
     //每包中 payload 长度
     self.itemPackageDataLen = (self.singlePageSizeInt - 3)*2;
     
     self.lessPackageData = NO;
+    
+    //断点续传后的起始filedata 全部数据 string hex
+    if (isSupport == YES) {
+        if (self.resumeFileSizeInt >0) {
+            //            self.allDataStringHex = [self.allDataStringHex substringFromIndex:resumeFileSizeInt*2];
+            //            self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
+            self.fileSizeInt = self.resumeFileSizeInt*2;
+//            NSInteger packagesNumber = self.fileSizeInt/self.itemPackageDataLen;
+//            NSInteger resumeSeq = packagesNumber%self.singleCyclePackageNum;
+            self.cycleCount = self.fileSizeInt/(self.singleCyclePackageNum*self.itemPackageDataLen);
+            self.nextSeqInt = 0;
+            
+        }
+    }
     
     //单次循环的数据长度
     NSInteger singleCycleDataLen = self.itemPackageDataLen * adinglesendPageInt;
@@ -1679,9 +1693,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     if (self.cycleNum != 0) {
         
         //所有完整循环
-        self.cycleCount = 0;
-        self.nextSeqInt = 0;
-        self.fileSizeInt = 0;
+        if (self.resumeFileSizeInt == 0) {
+            self.cycleCount = 0;
+            self.nextSeqInt = 0;
+            self.fileSizeInt = 0;
+        }
         [self cycleNumSend];
         
         self.nextSeqInt = 0;
@@ -1691,9 +1707,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }else {
         if (self.lessPackageData == NO) {
             //所有完整循环
-            self.cycleCount = 0;
-            self.nextSeqInt = 0;
-            self.fileSizeInt = 0;
+            if (self.resumeFileSizeInt == 0) {
+                self.cycleCount = 0;
+                self.nextSeqInt = 0;
+                self.fileSizeInt = 0;
+            }
             [self cycleNumSend];
             
             self.nextSeqInt = 0;
@@ -1702,8 +1720,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [self lastDataSend];
             
         }else {
-            self.nextSeqInt = 0;
-            self.fileSizeInt = 0;
+            if (self.resumeFileSizeInt == 0) {
+                self.nextSeqInt = 0;
+                self.fileSizeInt = 0;
+            }
             //最后一个数据包
             [self lastDataSend];
         }
@@ -1807,9 +1827,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *packageLen = [NSString getHexByDecimal:packageLenInt];
             
             itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
-            
+            NSLog(@"----nextSeq:%ld---cycleCount---:%ld-----i===%ld----j===%ld-----cycleNum:%ld----startLocation----%ld",self.nextSeqInt,self.cycleCount,i,j,self.cycleNum,startLocation);
             [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
-        }else {
+        }
+        else{
             
             //新修改
                 if ((startLocation + self.itemPackageDataLenBytes) > self.allDataStringHex.length && i == self.cycleNum - 1 && self.cycleNum>2) {
@@ -1858,7 +1879,15 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     itemPackageWriteInfo = [NSString stringWithFormat:@"%@%@%@",packageType,packageLen,valueHexString];
     [self writePropertyInfoInUUIDDeviceWithMessage:itemPackageWriteInfo UUIDString:FFE4UUIDString];
     
-    [self performSelector:@selector(finishSendData) withObject:nil afterDelay:self.pageOuttimeInt-1];
+    NSLog(@"lastPackage:----seq:%ld---cycleCount---:%ld----cycleNum:%ld----lastPackageInitPosi:%ld",self.lessSingleCyclePackageNum,self.cycleCount,self.cycleNum,lastPackageInitPosi);
+    
+    NSInteger outTime = 0;
+    if (self.pageOuttimeInt >3) {
+        outTime = self.pageOuttimeInt - 1;
+    }else {
+        outTime = 3;
+    }
+    [self performSelector:@selector(finishSendData) withObject:nil afterDelay:outTime];
     
 }
 
