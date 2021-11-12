@@ -1847,8 +1847,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             //新修改
                 if ((startLocation + self.itemPackageDataLenBytes) > self.allDataStringHex.length && i == self.cycleNum - 1 && self.cycleNum>2) {
-                    self.lessSingleCyclePackageNum = packageCount;
-                    [self lastDataSend];
+//                    self.lessSingleCyclePackageNum = packageCount;
+//                    [self lastDataSend];
                 }
             break;
         }
