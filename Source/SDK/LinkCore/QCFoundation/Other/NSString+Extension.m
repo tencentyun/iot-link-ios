@@ -1212,7 +1212,15 @@ union u{
     for (NSString *numStr in versionArray) {
         versionString = [versionString stringByAppendingString:numStr];
     }
-    return versionString;
+    return versionString = [self getTheCorrectNum:versionString];
 }
 
+//去除字符串前端为0
++ (NSString*)getTheCorrectNum:(NSString*)tempString {
+    while ([tempString hasPrefix:@"0"])
+    {
+        tempString = [tempString substringFromIndex:1];
+    }
+        return tempString;
+}
 @end
