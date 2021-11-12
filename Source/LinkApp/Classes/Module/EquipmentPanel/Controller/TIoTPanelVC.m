@@ -1531,7 +1531,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)continueSendData:(NSNotification *)noti {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
-//    if (self.fileSizeInt <= self.allDataStringHex.length) {
+    if (self.fileSizeInt <= self.allDataStringHex.length) {
         
     NSString *remainData = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
     
@@ -1547,7 +1547,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }else {
         [self cycleNumSend];
     }
-//    }
+    }
 }
 
 ///MARK:发送升级数据包
@@ -1617,58 +1617,73 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //断点续传后的起始filedata 全部数据 string hex
     if (isSupport == YES) {
         if (self.resumeFileSizeInt >0) {
-            //            self.allDataStringHex = [self.allDataStringHex substringFromIndex:resumeFileSizeInt*2];
-            //            self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
+//                        self.allDataStringHex = [self.allDataStringHex substringFromIndex:self.resumeFileSizeInt*2];
+//                        self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
             self.fileSizeInt = self.resumeFileSizeInt*2;
 //            NSInteger packagesNumber = self.fileSizeInt/self.itemPackageDataLen;
 //            NSInteger resumeSeq = packagesNumber%self.singleCyclePackageNum;
             self.cycleCount = self.fileSizeInt/(self.singleCyclePackageNum*self.itemPackageDataLen);
+            
+            NSString *resumeValue = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
+//            self.cycleNumDataLen = (resumeValue.length/self.itemPackageDataLen)*self.itemPackageDataLen;
+//            self.cycleNum = resumeValue.length/(self.itemPackageDataLen * self.singleCyclePackageNum);
             self.nextSeqInt = 0;
             
+            [self calculateDataForFirmwareUpdateData:resumeValue.length];
         }
     }
     
+    [self calculateDataForFirmwareUpdateData:self.fileData.length*2];
+    
+}
+
+///MARK: 计算开始轮询发送前的数据
+//totalLength: 将要轮询发送的总长度 ，每次断点续传会更改
+- (void)calculateDataForFirmwareUpdateData:(NSInteger)totalLength {
+        
+    NSInteger allDataLength = totalLength;
+
     //单次循环的数据长度
-    NSInteger singleCycleDataLen = self.itemPackageDataLen * adinglesendPageInt;
+    NSInteger singleCycleDataLen = self.itemPackageDataLen * self.singleCyclePackageNum;
     //计算需要几次循环
-    self.cycleNum = self.fileData.length*2/(singleCycleDataLen);
+    self.cycleNum = allDataLength/(singleCycleDataLen);
     
     //计算整发的循环的数据长度 (整数)
     NSInteger lessSingleCycleDataLen = 0;
     if (self.cycleNum == 0) {
         //不足一个循环时候
         //计算已发的整包数据
-        self.cycleNumDataLen = (self.fileData.length*2/self.itemPackageDataLen)*self.itemPackageDataLen;
+        self.cycleNumDataLen = (allDataLength/self.itemPackageDataLen)*self.itemPackageDataLen;
         lessSingleCycleDataLen = 0;
         //计算不满一次循环中，能整包发的次数
-        self.lessSingleCyclePackageNum = self.fileData.length*2/self.itemPackageDataLen;
+        self.lessSingleCyclePackageNum = allDataLength/self.itemPackageDataLen;
         //不满一次循环中，能整包发送的数据长度
-        self.lessSingleCyclePackageDataLen = (self.fileData.length*2/self.itemPackageDataLen)*self.itemPackageDataLen;
+        self.lessSingleCyclePackageDataLen = (allDataLength/self.itemPackageDataLen)*self.itemPackageDataLen;
         //计算不满单次循环，不能整包发的最后一个数据包长度
-        self.lastPackageDataLen = self.fileData.length*2 - self.lessSingleCyclePackageDataLen;//lessSingleCycleDataLen - self.lessSingleCyclePackageDataLen;
-        if (self.fileData.length*2 < self.itemPackageDataLen) {
+        self.lastPackageDataLen = allDataLength - self.lessSingleCyclePackageDataLen;//lessSingleCycleDataLen - self.lessSingleCyclePackageDataLen;
+        if (allDataLength < self.itemPackageDataLen) {
             self.lessPackageData = YES;
             self.cycleNumDataLen = 0;
             self.lessSingleCyclePackageNum = 0;
             self.lessSingleCyclePackageDataLen = 0;
-            self.lastPackageDataLen = self.fileData.length*2;
+            self.lastPackageDataLen = allDataLength;
         }
     }else {
         //多于一个循环情况
         //计算循环数据
         NSInteger clcylMtuNum = singleCycleDataLen * self.cycleNum;
         //计算已发的整包数据
-        self.cycleNumDataLen = (self.fileData.length*2/self.itemPackageDataLen)*self.itemPackageDataLen;
+        self.cycleNumDataLen = (allDataLength/self.itemPackageDataLen)*self.itemPackageDataLen;
         //计算不满一次循环的数据长度 （余数）
-        lessSingleCycleDataLen = self.fileData.length*2 - clcylMtuNum;
+        lessSingleCycleDataLen = allDataLength - clcylMtuNum;
         //计算不满一次循环中，能整包发的次数
         self.lessSingleCyclePackageNum = lessSingleCycleDataLen/self.itemPackageDataLen;
         //不满一次循环中，能整包发送的数据长度
         self.lessSingleCyclePackageDataLen = self.lessSingleCyclePackageNum *self.itemPackageDataLen;
         //计算不满单次循环，不能整包发的最后一个数据包长度
-        self.lastPackageDataLen = self.fileData.length*2 - self.cycleNumDataLen;
+        self.lastPackageDataLen = allDataLength - self.cycleNumDataLen;
         
-        if (self.fileData.length*2%(singleCycleDataLen) != 0) {
+        if (allDataLength%(singleCycleDataLen) != 0) {
             self.cycleNum += 1;
         }
     }
@@ -1883,7 +1898,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     NSInteger outTime = 0;
     if (self.pageOuttimeInt >3) {
-        outTime = self.pageOuttimeInt - 1;
+        outTime = self.pageOuttimeInt - 2;
     }else {
         outTime = 3;
     }
