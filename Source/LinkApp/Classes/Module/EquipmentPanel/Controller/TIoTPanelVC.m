@@ -906,7 +906,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //只显示一次弹框（先每次都提示，后续添加升级入口后，只弹一次）
     self.firmwareView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
     __weak typeof(self) weakSelf = self;
-    if (currentString < desString && (![NSString isNullOrNilWithObject:desString]) && (![NSString isNullOrNilWithObject:currentString])) {
+    if (currentString.floatValue < desString.floatValue && (![NSString isNullOrNilWithObject:desString]) && (![NSString isNullOrNilWithObject:currentString])) {
         NSString *messgeString = [NSString stringWithFormat:@"%@%@\n%@%@",NSLocalizedString(@"current_Version", @"当前固件版本为"),self.firmwareModel.CurrentVersion,NSLocalizedString(@"last_Version", @"最新固件版本为"),self.firmwareModel.DstVersion];
         [self.firmwareView alertWithTitle:NSLocalizedString(@"firmware_update", @"可升级固件") message:messgeString  cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"update_now", @"立即升级")];
         self.firmwareView.doneAction = ^(NSString * _Nonnull text) {
