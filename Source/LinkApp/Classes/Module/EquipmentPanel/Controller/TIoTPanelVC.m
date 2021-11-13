@@ -177,6 +177,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, assign) BOOL isEnterDeviceDetailVC; //是否进入设备详情页面
 @property (nonatomic, strong) CBService *service;
 @property (nonatomic, assign) NSInteger resumeFileSizeInt; //断点续已接收的传数据大小
+@property (nonatomic, strong) NSString *resumeValue;
 @end
 
 @implementation TIoTPanelVC
@@ -1527,11 +1528,17 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 ///MARK:收到设备回复后续传
 - (void)continueSendData:(NSNotification *)noti {
+    NSString *allDataValue = self.allDataStringHex;
+    
+    if (self.resumeFileSizeInt>0) {
+        self.fileSizeInt = self.fileSizeInt - self.resumeFileSizeInt*2;
+        allDataValue = self.resumeValue;
+    }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(firmwareUpdateFail) object:nil];
-    if (self.fileSizeInt <= self.allDataStringHex.length) {
+    if (self.fileSizeInt <= allDataValue.length) {
         
-    NSString *remainData = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
+    NSString *remainData = [allDataValue substringFromIndex:self.fileSizeInt];
     
     NSInteger cycleNum = self.fileSizeInt/self.singleCyclePackageBytes;
     
@@ -1615,23 +1622,14 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //断点续传后的起始filedata 全部数据 string hex
     if (isSupport == YES) {
         if (self.resumeFileSizeInt >0) {
-//                        self.allDataStringHex = [self.allDataStringHex substringFromIndex:self.resumeFileSizeInt*2];
-//                        self.fileData = [self.allDataStringHex dataUsingEncoding:NSUTF8StringEncoding];
-            self.fileSizeInt = self.resumeFileSizeInt*2;
-//            NSInteger packagesNumber = self.fileSizeInt/self.itemPackageDataLen;
-//            NSInteger resumeSeq = packagesNumber%self.singleCyclePackageNum;
-            self.cycleCount = self.fileSizeInt/(self.singleCyclePackageNum*self.itemPackageDataLen);
-            
-            NSString *resumeValue = [self.allDataStringHex substringFromIndex:self.fileSizeInt];
-//            self.cycleNumDataLen = (resumeValue.length/self.itemPackageDataLen)*self.itemPackageDataLen;
-//            self.cycleNum = resumeValue.length/(self.itemPackageDataLen * self.singleCyclePackageNum);
-            self.nextSeqInt = 0;
-            
-            [self calculateDataForFirmwareUpdateData:resumeValue.length];
+            self.resumeValue = [self.allDataStringHex substringFromIndex:self.resumeFileSizeInt*2];
+            [self calculateDataForFirmwareUpdateData:self.resumeValue.length];
         }
     }
     
-    [self calculateDataForFirmwareUpdateData:self.fileData.length*2];
+    if (self.resumeFileSizeInt == 0) {
+        [self calculateDataForFirmwareUpdateData:self.fileData.length*2];
+    }
     
 }
 
@@ -1706,32 +1704,32 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     if (self.cycleNum != 0) {
         
         //所有完整循环
-        if (self.resumeFileSizeInt == 0) {
-            self.cycleCount = 0;
-            self.nextSeqInt = 0;
-            self.fileSizeInt = 0;
-        }
-        [self cycleNumSend];
-        
+        self.cycleCount = 0;
         self.nextSeqInt = 0;
         self.fileSizeInt = 0;
-        //最后一个数据包
-        [self lastDataSend];
-    }else {
-        if (self.lessPackageData == NO) {
-            //所有完整循环
-            if (self.resumeFileSizeInt == 0) {
-                self.cycleCount = 0;
-                self.nextSeqInt = 0;
-                self.fileSizeInt = 0;
-            }
-            [self cycleNumSend];
-            
+        [self cycleNumSend];
+        
+        if (self.resumeFileSizeInt==0) {
             self.nextSeqInt = 0;
             self.fileSizeInt = 0;
             //最后一个数据包
             [self lastDataSend];
+        }
+
+    }else {
+        if (self.lessPackageData == NO) {
+            //所有完整循环
+            self.cycleCount = 0;
+            self.nextSeqInt = 0;
+            self.fileSizeInt = 0;
+            [self cycleNumSend];
             
+            if (self.resumeFileSizeInt==0) {
+                self.nextSeqInt = 0;
+                self.fileSizeInt = 0;
+                //最后一个数据包
+                [self lastDataSend];
+            }
         }else {
             if (self.resumeFileSizeInt == 0) {
                 self.nextSeqInt = 0;
@@ -1786,6 +1784,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 - (void)cycleSendWithStartLocation:(NSInteger)startLocation packageCount:(NSInteger)packageCount cycleInt:(NSInteger)i {
+    
+    NSString *allDataValue = self.allDataStringHex;
+    
+    if (self.resumeFileSizeInt > 0) {
+            allDataValue = self.resumeValue;
+    }
+    
     if (self.cycleNum == 0) {
         i = 0;
     }else {
@@ -1829,9 +1834,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         //数据包type
         NSString *packageType = @"01";
         //拼接完整的每个数据包 value
-        if ((startLocation + self.itemPackageDataLenBytes)<=self.allDataStringHex.length) {
+        if ((startLocation + self.itemPackageDataLenBytes)<=allDataValue.length) {
             
-            NSString *itemDataHexString = [self.allDataStringHex substringWithRange:NSMakeRange(startLocation, self.itemPackageDataLenBytes)];
+            NSString *itemDataHexString = [allDataValue substringWithRange:NSMakeRange(startLocation, self.itemPackageDataLenBytes)];
             NSString *seqHexTemp = [NSString getHexByDecimal:j];
             NSString *seqHex = [self getTVLValueWithOriginValue:seqHexTemp bitString:@"00"];
             NSString *valueHexString = [NSString stringWithFormat:@"%@%@",seqHex,itemDataHexString];
@@ -1858,6 +1863,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //MARK:最后一个数据包
 - (void)lastDataSend {
     
+    NSString *allDataValue = self.allDataStringHex;
+    
+    if (self.resumeFileSizeInt > 0) {
+        allDataValue = self.resumeValue;
+    }
+    
     NSInteger lessSingleCyxleInitPosi = self.cycleNumDataLen;
     
     //最后一包的起始位置
@@ -1877,10 +1888,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *packageType = @"01";
     //拼接完整的每个数据包 value
     NSString *itemDataHexString = @"";
-    if ((lastPackageInitPosi+self.lastPackageDataLen) > self.allDataStringHex.length) {
-        itemDataHexString = [self.allDataStringHex substringFromIndex:lastPackageInitPosi];
+    if ((lastPackageInitPosi+self.lastPackageDataLen) > allDataValue.length) {
+        itemDataHexString = [allDataValue substringFromIndex:lastPackageInitPosi];
     }else {
-        itemDataHexString = [self.allDataStringHex substringWithRange:NSMakeRange(lastPackageInitPosi, self.lastPackageDataLen)];
+        itemDataHexString = [allDataValue substringWithRange:NSMakeRange(lastPackageInitPosi, self.lastPackageDataLen)];
     }
     
     NSString *seqHexTemp = [NSString getHexByDecimal:self.lessSingleCyclePackageNum];
