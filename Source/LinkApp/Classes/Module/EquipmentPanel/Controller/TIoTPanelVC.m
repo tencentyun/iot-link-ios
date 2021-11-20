@@ -708,14 +708,24 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [trtcReport setValue:username forKey:@"username"];
     }
     
-    NSDictionary *tmpDic = @{
-                                @"ProductId":self.productId,
-                                @"DeviceName":self.deviceName,
-//                                @"Data":[NSString objectToJson:deviceReport],
-                                @"Data":[NSString objectToJson:trtcReport]
-                            };
+    NSDictionary *tmpDic = nil;
     
+    if ([self.bleNewType isEqualToString:@"ble"]) {
+        tmpDic = @{
+            @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+            @"Data":[NSString objectToJson:deviceReport]
+        };
+    }else {
+        tmpDic = @{
+            @"ProductId":self.productId,
+            @"DeviceName":self.deviceName,
+            //                                @"Data":[NSString objectToJson:deviceReport],
+            @"Data":[NSString objectToJson:trtcReport]
+        };
+    }
     [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+        if ([self.bleNewType isEqualToString:@"ble"]) {
+        }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
@@ -2356,13 +2366,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         NSDictionary *data = [NSString jsonToObject:reportData.Data]?:@{};
         TIoTReportDataAsDeviceResultModel *resultModel = [TIoTReportDataAsDeviceResultModel yy_modelWithJSON:data];
         if (resultModel.code.integerValue > 400 ) {
-            [self writePropertyInfoInUUIDDeviceWithMessage:@"0201" UUIDString:FFE4UUIDString];
+//            [self writePropertyInfoInUUIDDeviceWithMessage:@"0201" UUIDString:FFE4UUIDString];
         }else if (resultModel.code.integerValue == 0) {
-            [self writePropertyInfoInUUIDDeviceWithMessage:@"0200" UUIDString:FFE4UUIDString];
+//            [self writePropertyInfoInUUIDDeviceWithMessage:@"0200" UUIDString:FFE4UUIDString];
         }
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         if (reportType == TIoTDeviceReportTypeProperty) {
-            [self writePropertyInfoInUUIDDeviceWithMessage:@"0201" UUIDString:FFE4UUIDString];
+//            [self writePropertyInfoInUUIDDeviceWithMessage:@"0201" UUIDString:FFE4UUIDString];
         }else if (reportType == TIoTDeviceReportTypeEvent) {
             
         }else if (reportType == TIoTDeviceReportTypeNewData) {
@@ -2887,12 +2897,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSArray *propertyArr = indexOriginArray?:@[];
     
     NSMutableArray *idArray = [NSMutableArray new];
-    if (isDetailStruct == YES) { //结构体
+    if (isDetailStruct == NO) { //非结构体
         [indexOriginArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *detailStructDic = obj;
             [idArray addObject:detailStructDic[@"id"]];
         }];
-    }else { //非结构体
+    }else { //结构体
         idArray = [NSMutableArray arrayWithArray:self.structIDArray];
     }
     [propertyArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
