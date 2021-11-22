@@ -7,6 +7,7 @@
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
+NSFileHandle *fileHandle;
 
 #ifdef DEBUG
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -117,6 +118,11 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //    setStunServerToXp2p("11.11.11.11", 111);
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 
@@ -186,6 +192,17 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     [systemAvCapture startCapture];
 }
 
+- (void)sendVideoToServer:(NSString *)dev_name channel:(NSString *)channel_number avConfig:(AWAVCaptureManager *)avConfig {
+    self.isSending = YES;
+    
+    self.dev_name = dev_name;
+    const char *channel = [channel_number UTF8String];
+    _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
+    
+    avConfig.avCapture.delegate = self;
+    
+}
+
 - (XP2PErrCode)stopVoiceToServer {
     self.isSending = NO;
     
@@ -198,17 +215,23 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
+    
+    //关闭文件
+    [fileHandle closeFile];
+    fileHandle = NULL;
 }
 
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
         dataSend(self.dev_name.UTF8String, data, size);
+        DDLogInfo(@"vide stream data:%s  size:%zu",data,size);
+        NSData *dataTag = [NSData dataWithBytes:data length:size];
+        [fileHandle writeData:dataTag];
     }
 }
 
-
-+ (NSString *)getSDKVersion {    
++ (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
 
