@@ -1,3 +1,8 @@
+
+/*
+ flv文件编码，此文件描述了一个完整flv文件的编码过程，只要有正确的h264和aac数据，就能够使用此文件函数合成正确的flv文件。
+ */
+
 #ifndef aw_encode_flv_h
 #define aw_encode_flv_h
 
@@ -103,6 +108,7 @@ typedef struct aw_flv_script_tag{
     double file_size;
 } aw_flv_script_tag;
 
+extern aw_flv_script_tag *alloc_aw_flv_script_tag();
 extern void free_aw_flv_script_tag(aw_flv_script_tag **);
 
 typedef struct aw_flv_audio_tag{

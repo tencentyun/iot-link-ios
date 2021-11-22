@@ -1,3 +1,4 @@
+
 #import "AWEncoder.h"
 
 @implementation AWEncoder
@@ -9,7 +10,7 @@
 }
 
 -(void) onErrorWithCode:(AWEncoderErrorCode) code des:(NSString *) des{
-    NSLog(@"[ERROR] encoder error code:%ld des:%s", (unsigned long)code, des.UTF8String);
+    aw_log("[ERROR] encoder error code:%ld des:%s", (unsigned long)code, des.UTF8String);
 }
 
 @end
