@@ -1,39 +1,45 @@
+
 #import "AWEncoderManager.h"
 #import "AWHWAACEncoder.h"
-#import "AWSWFaacEncoder.h"
+#import "AWHWH264Encoder.h"
 
 @interface AWEncoderManager()
 //编码器
+@property (nonatomic, strong) AWVideoEncoder *videoEncoder;
 @property (nonatomic, strong) AWAudioEncoder *audioEncoder;
 @end
 
 @implementation AWEncoderManager
 
--(void) openWithAudioConfig:(AWAudioConfig *) audioConfig {
-    switch (self.audioEncoderType) {
-        case AWAudioEncoderTypeHWAACLC:
-            self.audioEncoder = [[AWHWAACEncoder alloc] init];
-            break;
-        case AWAudioEncoderTypeSWFAAC:
-            self.audioEncoder = [[AWSWFaacEncoder alloc] init];
-            break;
-        default:
-            NSLog(@"[E] AWEncoderManager.open please assin for audioEncoderType");
-            return;
+-(void) openWithAudioConfig:(AWAudioConfig *) audioConfig videoConfig:(AWVideoConfig *) videoConfig{
+    if (videoConfig) {
+        self.videoEncoder = [[AWHWH264Encoder alloc] init];
+        self.videoEncoder.videoConfig = videoConfig;
+        self.videoEncoder.manager = self;
+        [self.videoEncoder open];
     }
     
-    self.audioEncoder.audioConfig = audioConfig;
-    self.audioEncoder.manager = self;
-    [self.audioEncoder open];
+    if (audioConfig) {
+        self.audioEncoder = [[AWHWAACEncoder alloc] init];
+        self.audioEncoder.audioConfig = audioConfig;
+        self.audioEncoder.manager = self;
+        [self.audioEncoder open];
+    }
 }
 
 -(void)close{
-    [self.audioEncoder close];
-    self.audioEncoder = nil;
     
+    if (self.videoEncoder) {
+        [self.videoEncoder close];
+        self.videoEncoder = nil;
+        self.videoEncoder = AWVideoEncoderTypeNone;
+    }
+    if (self.audioEncoder) {
+        [self.audioEncoder close];
+        self.audioEncoder = nil;
+        self.audioEncoder = AWAudioEncoderTypeNone;
+    }
     self.timestamp = 0;
-    
-    self.audioEncoder = nil;
 }
 
 @end
