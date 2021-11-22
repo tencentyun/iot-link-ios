@@ -1,3 +1,8 @@
+
+/*
+ 音频编码器基类，只声明接口，和一些公共转换数据函数。
+ */
+
 #import "AWEncoder.h"
 
 @interface AWAudioEncoder : AWEncoder
