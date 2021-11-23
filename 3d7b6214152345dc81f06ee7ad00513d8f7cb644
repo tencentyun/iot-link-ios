@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71d1b552_20fa4347",
+        "filename": "Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-23T02:52:37Z",
+      "side": 1,
+      "message": "audioconfig，建议改为avConfig",
+      "revId": "3d7b6214152345dc81f06ee7ad00513d8f7cb644",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
