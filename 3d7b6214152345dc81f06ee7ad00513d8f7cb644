@@ -16,6 +16,24 @@
       "revId": "3d7b6214152345dc81f06ee7ad00513d8f7cb644",
       "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d2912ef_02fc2aea",
+        "filename": "Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-11-23T03:02:39Z",
+      "side": 1,
+      "message": "已修改",
+      "parentUuid": "71d1b552_20fa4347",
+      "revId": "3d7b6214152345dc81f06ee7ad00513d8f7cb644",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": false
     }
   ]
 }
