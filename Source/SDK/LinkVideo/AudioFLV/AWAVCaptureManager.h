@@ -25,4 +25,7 @@ typedef enum : NSUInteger {
 //配置
 @property (nonatomic, strong) AWAudioConfig *audioConfig;
 @property (nonatomic, strong) AWVideoConfig *videoConfig;
+
+//可选 必须在完成配置、编码类型、视频捕获类型后才可设置，否则无效
+- (void)setCaptureManagerPreviewFrame:(CGRect)frame;
 @end

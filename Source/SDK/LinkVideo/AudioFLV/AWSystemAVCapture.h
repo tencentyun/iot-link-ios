@@ -9,4 +9,9 @@
 
 @interface AWSystemAVCapture : AWAVCapture
 
+/*
+ 可选，默认根据屏幕尺寸大小
+ */
+- (void)setpreviewLayer:(CGRect)frame;
+
 @end

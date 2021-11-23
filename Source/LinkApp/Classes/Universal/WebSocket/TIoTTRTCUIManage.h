@@ -23,6 +23,7 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 
 @property (nonatomic, readonly) NSString *deviceID;
 
+@property (nonatomic, assign) BOOL isP2PVideoCommun; //p2pVideo 双向通话标识
 
 //面板中主动呼叫设备 0 audio； 1video
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;

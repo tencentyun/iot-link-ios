@@ -58,5 +58,11 @@
     return capture;
 }
 
+- (void)setCaptureManagerPreviewFrame:(CGRect)frame {
+    if (self.videoConfig) {
+        _systemAvCapture = [[AWSystemAVCapture alloc] initWithVideoConfig:self.videoConfig audioConfig:self.audioConfig];
+        [_systemAvCapture setpreviewLayer:frame];
+    }
+}
 
 @end

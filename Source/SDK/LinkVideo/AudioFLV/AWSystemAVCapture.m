@@ -99,6 +99,10 @@
     [self.preview.layer addSublayer:self.previewLayer];
 }
 
+- (void)setpreviewLayer:(CGRect)frame {
+    self.previewLayer.frame = frame;
+}
+
 -(void) setVideoOutConfig{
     for (AVCaptureConnection *conn in self.videoDataOutput.connections) {
         if (conn.isVideoStabilizationSupported) {

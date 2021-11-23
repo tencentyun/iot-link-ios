@@ -178,6 +178,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) CBService *service;
 @property (nonatomic, assign) NSInteger resumeFileSizeInt; //断点续已接收的传数据大小
 @property (nonatomic, strong) NSString *resumeValue;
+
+//p2p双向通话
+@property (nonatomic, assign) BOOL isP2PVideoDevice;
 @end
 
 @implementation TIoTPanelVC
@@ -642,6 +645,22 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
             self.DataTemplateDic = [NSString jsonToObject:DataTemplate];
 
+            //新增p2p双向通话
+            id categoryID = tmpArr.firstObject[@"CategoryId"];
+            
+            if ([categoryID isKindOfClass:[NSString class]]) {
+                if ([categoryID isEqualToString:@"567"]) {
+                    self.isP2PVideoDevice = YES;
+                }
+            }else if ([categoryID isKindOfClass:[NSNumber class]]){
+                NSNumber * categoryIDNum = categoryID;
+                if (categoryIDNum.intValue == 567) {
+                    self.isP2PVideoDevice = YES;
+                }
+            }else {
+                self.isP2PVideoDevice = NO;
+            }
+            
 //            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
             TIoTProductConfigModel *config = [TIoTProductConfigModel yy_modelWithJSON:dic];
             if ([config.Panel.type isEqualToString:@"h5"]) {
@@ -751,6 +770,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     if (isTRTCDevice) {
+        [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
         
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
     }
@@ -3347,7 +3367,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
         else if ([dic[@"define"][@"type"] isEqualToString:@"enum"] || [dic[@"define"][@"type"] isEqualToString:@"stringenum"]){
             
-            //trtc特殊判断逻辑
+            //trtc特殊判断逻辑 或者p2p双向通话判断逻辑
             NSString *key = dic[@"id"];
             if ([key isEqualToString:TIoTTRTCaudio_call_status] || [key isEqualToString:TIoTTRTCvideo_call_status]) {
                 self.reportData = dic;
