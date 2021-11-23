@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd0df2b0_ff25eee0",
+        "filename": "Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-23T03:16:45Z",
+      "side": 1,
+      "message": "需替换成这个参数接口\nAWAudioConfig *audioConfig;\n\nAWVideoConfig *videoConfig",
+      "revId": "f42908e8530ecce2145a8866a1eb8dcd51d8bec3",
+      "serverId": "bfd29338-1d98-4536-875c-f9d1fff7ae29",
+      "unresolved": true
+    }
+  ]
+}
