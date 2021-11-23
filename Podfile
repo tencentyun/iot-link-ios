@@ -19,6 +19,7 @@ target 'LinkApp' do
   
   pod 'TIoTLinkKit', :path => './'
   pod 'TIoTLinkKit/LinkRTC', :path => './'
+  pod 'TIoTLinkVideo', :path => './'
   pod 'MJRefresh', '3.2.0'
   pod 'IQKeyboardManager', '6.1.1'
   pod 'FDFullscreenPopGesture', '1.1'

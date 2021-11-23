@@ -731,6 +731,8 @@
     
     [self cancelTimer];
     
+    self.isP2PVideoCommun = NO;
+    
     NSString *deviceString = self.deviceOfflineDic[@"DeviceId"]?:@"";
     NSNumber *offline = self.deviceOfflineDic[@"Offline"]?:@(NO);
     NSString *tipString = @"对方已挂断";
