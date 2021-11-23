@@ -1,8 +1,25 @@
+
 #include "aw_encode_flv.h"
 #include "aw_alloc.h"
 #include <string.h>
 #include "aw_utils.h"
 
+extern aw_flv_script_tag *alloc_aw_flv_script_tag(){
+    aw_flv_script_tag *script_tag = aw_alloc(sizeof(aw_flv_script_tag));
+    memset(script_tag, 0, sizeof(aw_flv_script_tag));
+    
+    //初始化
+    script_tag->common_tag.script_tag = script_tag;
+    script_tag->common_tag.tag_type = aw_flv_tag_type_script;
+    
+    script_tag->v_codec_id = aw_flv_v_codec_id_H264;
+    script_tag->a_codec_id = aw_flv_a_codec_id_AAC;
+    
+    //经计算，我们写入的script 的body size为255
+    script_tag->common_tag.data_size = 255;
+    
+    return script_tag;
+}
 
 extern void free_aw_flv_script_tag(aw_flv_script_tag ** script_tag){
     aw_free(*script_tag);
