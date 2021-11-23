@@ -1,14 +1,17 @@
+
 #import "AWAVConfig.h"
+
+#include "aw_all.h"
 
 @implementation AWAudioConfig
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.bitrate = 100000;
+        self.bitrate = 32000;
         self.channelCount = 1;
         self.sampleSize = 16;
-        self.sampleRate = 44100;
+        self.sampleRate = 8000;
     }
     return self;
 }
@@ -29,6 +32,67 @@
     audioConfig.sampleRate = self.sampleRate;
     audioConfig.sampleSize = self.sampleSize;
     return audioConfig;
+}
+
+@end
+
+@interface AWVideoConfig()
+//推流宽高
+@property (nonatomic, unsafe_unretained) NSInteger pushStreamWidth;
+@property (nonatomic, unsafe_unretained) NSInteger pushStreamHeight;
+@end
+
+@implementation AWVideoConfig
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.width = 480;
+        self.height = 640;
+        self.bitrate = 204800;
+        self.fps = 20;
+//        self.dataFormat = X264_CSP_NV12;
+    }
+    return self;
+}
+
+-(NSInteger)pushStreamWidth{
+    if (self.shouldRotate) {
+        return self.height;
+    }
+    return self.width;
+}
+
+-(NSInteger)pushStreamHeight{
+    if (self.shouldRotate) {
+        return self.width;
+    }
+    return self.height;
+}
+
+-(BOOL)shouldRotate{
+    return UIInterfaceOrientationIsLandscape(self.orientation);
+}
+
+-(aw_x264_config) x264Config{
+    aw_x264_config x264_config;
+    x264_config.width = (int32_t)self.pushStreamWidth;
+    x264_config.height = (int32_t)self.pushStreamHeight;
+    x264_config.bitrate = (int32_t)self.bitrate;
+    x264_config.fps = (int32_t)self.fps;
+    x264_config.input_data_format = (int32_t)self.dataFormat;
+    return x264_config;
+}
+
+-(id)copyWithZone:(NSZone *)zone{
+    AWVideoConfig *videoConfig = [[AWVideoConfig alloc] init];
+    videoConfig.bitrate = self.bitrate;
+    videoConfig.fps = self.fps;
+    videoConfig.dataFormat = self.dataFormat;
+    videoConfig.orientation = self.orientation;
+    videoConfig.width = self.width;
+    videoConfig.height = self.height;
+    return videoConfig;
 }
 
 @end
