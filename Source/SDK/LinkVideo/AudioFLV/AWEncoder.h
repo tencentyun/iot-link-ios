@@ -1,9 +1,12 @@
+
+/*
+ 编码器基类声明公共接口
+ */
+
 #import <AVFoundation/AVFoundation.h>
 #import "AWAVConfig.h"
 
-#include "aw_encode_flv.h"
-#include "aw_alloc.h"
-#include "aw_sw_faac_encoder.h"
+#include "aw_all.h"
 
 typedef enum : NSUInteger {
     AWEncoderErrorCodeVTSessionCreateFailed,
