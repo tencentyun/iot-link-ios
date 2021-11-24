@@ -13,6 +13,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelOff;
 #endif
+NSFileHandle *p2pOutLogFile;
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
@@ -24,8 +25,15 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         if (logEnable) {
             NSString *nsFormat = [NSString stringWithUTF8String:msg];
             DDLogInfo(@"%@", nsFormat);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [p2pOutLogFile writeData:[nsFormat dataUsingEncoding:NSUTF8StringEncoding]];
+            });
         }
-    }else if (type == XP2PTypeSaveFileOn) {
+    }
+    
+    NSString *DeviceName = [NSString stringWithUTF8String:idd]?:@"";
+    
+    if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
         return (isWriteFile?"1":"0");
@@ -41,13 +49,14 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         DDLogWarn(@"XP2P log: disconnect %s\n", msg);
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSString *DeviceName = [NSString stringWithUTF8String:idd];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName}];
+            [p2pOutLogFile synchronizeFile];
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName}];
         });
     }else if (type == XP2PTypeDetectReady) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSString *DeviceName = [NSString stringWithUTF8String:idd];
+            [p2pOutLogFile synchronizeFile];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
         });
     }
@@ -92,26 +101,15 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (instancetype)init {
     self =  [super init];
     if (self) {
-#ifndef DEBUG
-        [TIoTCoreXP2PBridge redirectNSLog];
-#endif
         //默认打开log开关
         _logEnable = YES;
+        
+        NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
+        [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
+        [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
+        p2pOutLogFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
     }
     return self;
-}
-
-+ (void)redirectNSLog {
-    
-    NSString *fileName = @"TTLog.log";
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = paths.firstObject;
-    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-    
-//    [[NSFileManager defaultManager] removeItemAtPath:saveFilePath error:nil];
-
-    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
-    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 }
 
 
@@ -192,12 +190,17 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     [systemAvCapture stopCapture];
     systemAvCapture.delegate = nil;
     
-    return (XP2PErrCode)stopSendService(self.dev_name.UTF8String, nullptr);
+    int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
+    
+    [p2pOutLogFile synchronizeFile];
+    return (XP2PErrCode)errorcode;
 }
 
 - (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
+    
+    [p2pOutLogFile synchronizeFile];
 }
 
 #pragma mark -AWAVCaptureDelegate
