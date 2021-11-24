@@ -8,7 +8,7 @@
 {
     self = [super init];
     if (self) {
-        self.bitrate = 32000;
+        self.bitrate = 100000;//32000;
         self.channelCount = 1;
         self.sampleSize = 16;
         self.sampleRate = 8000;

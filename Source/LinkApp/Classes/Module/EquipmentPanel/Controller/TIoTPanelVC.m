@@ -45,6 +45,8 @@
 #import "TIoTFirmwareModel.h"
 #include <zlib.h>
 
+#import "TIoTAVP2PPlayCaptureVC.h"
+
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
 #define kSectionInset UIEdgeInsetsMake(10, 16, 10, 16)
@@ -181,6 +183,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 //p2p双向通话
 @property (nonatomic, assign) BOOL isP2PVideoDevice;
+@property (nonatomic, strong) NSDictionary *objectModel; //保存物模型
 @end
 
 @implementation TIoTPanelVC
@@ -680,7 +683,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
         NSString *tmpStr = (NSString *)responseObject[@"Data"];
         NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
-        
+        self.objectModel = [NSDictionary dictionaryWithDictionary:tmpDic];
 //        TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
         NSArray *propertiesArray = baseInfo[@"properties"];
         if (propertiesArray.count == 0) {

@@ -14,6 +14,8 @@
 #import "NSString+Extension.h"
 #import "TIoTCoreRequestObject.h"
 
+#import "TIoTAVP2PPlayCaptureVC.h"
+
 @interface TIoTTRTCUIManage ()<TRTCCallingViewDelegate> {
     TRTCCallingAuidoViewController *_callAudioVC;
     TRTCCallingVideoViewController *_callVideoVC;
@@ -28,6 +30,8 @@
     
     NSTimer *noAnswerTimer; //主叫
     NSTimer *behungupTimer; //被叫
+    
+    TIoTAVP2PPlayCaptureVC *_callP2PVideoVC;
     
 }
 @property (nonatomic, strong) NSMutableDictionary *deviceOfflineDic;
@@ -347,7 +351,23 @@
 //                TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
     //            TIoTProductConfigModel *configModel = [TIoTProductConfigModel yy_modelWithJSON:config];
                 NSArray *serverArray = productDic[@"Services"]?:@[];
-                if ([serverArray containsObject:@"TRTC"]) {
+                
+                id categoryID = tmpArr.firstObject[@"CategoryId"];
+                
+                if ([categoryID isKindOfClass:[NSString class]]) {
+                    if ([categoryID isEqualToString:@"567"]) {
+                        self.isP2PVideoCommun = YES;
+                    }
+                }else if ([categoryID isKindOfClass:[NSNumber class]]){
+                    NSNumber * categoryIDNum = categoryID;
+                    if (categoryIDNum.intValue == 567) {
+                        self.isP2PVideoCommun = YES;
+                    }
+                }else {
+                    self.isP2PVideoCommun = NO;
+                }
+                
+                if ([serverArray containsObject:@"TRTC"] || self.isP2PVideoCommun == YES) {
                     //是trtc设备,注册socket和检测trtc设备的状态
                     [self getTRTCDeviceData:productDic[@"ProductId"]?:@"" devices:devices];
                 }

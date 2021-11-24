@@ -4,16 +4,62 @@
 //
 
 #import "TIoTAVP2PPlayCaptureVC.h"
+#import "TIoTDemoPlaybackCustomCell.h"
+#import "TIoTDemoCustomSheetView.h"
+#import "AppDelegate.h"
+#import "UIDevice+TIoTDemoRotateScreen.h"
+#import "NSDate+TIoTCustomCalendar.h"
+#import "TIoTCoreXP2PBridge.h"
+#import "NSString+Extension.h"
+#import <IJKMediaFramework/IJKMediaFramework.h>
+#import "TIoTCoreAppEnvironment.h"
+#import <YYModel.h>
+#import "TIoTDemoCloudEventListModel.h"
+#import "TIoTCloudStorageVC.h"
+#import "TIoTCoreUtil.h"
+#import "NSObject+additions.h"
+#import "TIoTDemoDeviceStatusModel.h"
+#import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 
 #import "AWAVCaptureManager.h"
+
+static NSString *const action_left = @"action=user_define&cmd=ptz_left";
+static NSString *const action_right = @"action=user_define&cmd=ptz_right";
+static NSString *const action_up = @"action=user_define&cmd=ptz_up";
+static NSString *const action_Down = @"action=user_define&cmd=ptz_down";
+static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
+static NSString *const quality_high = @"ipc.flv?action=live&quality=high";
+static NSString *const quality_super = @"ipc.flv?action=live&quality=super";
+static NSString *const action_live = @"live";
+static NSString *const action_voice = @"voice";
+
+typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
+    TIotDemoDeviceDirectionLeft,
+    TIotDemoDeviceDirectionRight,
+    TIotDemoDeviceDirectionUp,
+    TIotDemoDeviceDirectionDown,
+};
 
 @implementation TIoTVideoDeviceCollectionView
 
 @end
 
-@interface TIoTAVP2PPlayCaptureVC ()<AWAVCaptureDelegate>
+@interface TIoTAVP2PPlayCaptureVC ()
+
+@property (nonatomic, strong) UIImageView *imageView;
+
+@property(atomic, retain) IJKFFMoviePlayerController *player;
+@property (nonatomic, strong) NSString *videoUrl;
+
+@property (nonatomic, assign) CFTimeInterval startPlayer;
+@property (nonatomic, assign) CFTimeInterval endPlayer;
+@property (nonatomic, assign) CFTimeInterval startIpcP2P;
+@property (nonatomic, assign) CFTimeInterval endIpcP2P;
+@property (nonatomic, assign) BOOL is_init_alert;
+@property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
+
 //按钮
-@property (nonatomic, strong) UIButton *startCapture;
+@property (nonatomic, strong) UIButton *captureButton;
 @property (nonatomic, strong) UIButton *switchCameras;
 //预览
 @property (nonatomic, strong) UIView *previewBottomView;
@@ -29,8 +75,60 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    _is_init_alert = NO;
+    _is_ijkPlayer_stream = YES;
+    
+    [self installMovieNotificationObservers];
+    
+    [self initializedVideo];
+    
     [self setupUI];
     
+    NSDictionary *xp2pDic = [NSDictionary new];
+    NSString *xp2pValue = @"";
+    
+    if ([self.objectModelDic.allKeys containsObject:@"_sys_xp2p_info"]) {
+        xp2pDic = self.objectModelDic[@"_sys_xp2p_info"]?:@{};
+    }
+    if ([xp2pDic.allKeys containsObject:@"Value"]) {
+        xp2pValue = xp2pDic[@"Value"]?:@"";
+    }
+
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productID?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+
+    if (errorcode == XP2P_ERR_VERSION) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+    }
+    
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
+    self.navigationItem.rightBarButtonItem = right;
+}
+
+- (void)dealloc {
+    [self stopPlayMovie];
+    [self removeMovieNotificationObservers];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    
+//    [self.captureButton removeFromSuperview];
+    [self.previewBottomView removeFromSuperview];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    [self.imageView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIView *view = obj;
+        [view removeFromSuperview];
+    }];
+}
+
+- (void)showHudView {
+    self.player.shouldShowHudView = !self.player.shouldShowHudView;
 }
 
 -(void) setupUI{
@@ -39,17 +137,17 @@
     
     self.avCapture.preview.center = self.previewBottomView.center;
     
-    self.startCapture = [[UIButton alloc] init];
-    [self.startCapture setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.startCapture setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    self.startCapture.backgroundColor = [UIColor blackColor];
-    [self.startCapture setTitle:@"开始" forState:UIControlStateNormal];
-    [self.startCapture addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.startCapture];
+    self.captureButton = [[UIButton alloc] init];
+    [self.captureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.captureButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    self.captureButton.backgroundColor = [UIColor blackColor];
+    [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+    [self.captureButton addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.captureButton];
     
-    self.startCapture.layer.borderWidth = 0.5;
-    self.startCapture.layer.borderColor = [[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1] CGColor];
-    self.startCapture.layer.cornerRadius = 5;
+    self.captureButton.layer.borderWidth = 0.5;
+    self.captureButton.layer.borderColor = [[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1] CGColor];
+    self.captureButton.layer.cornerRadius = 5;
     
     self.switchCameras = [[UIButton alloc] init];
     UIImage *switchImage = [self imageWithPath:@"" scale:2];
@@ -61,12 +159,14 @@
     
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     
-    self.startCapture.frame = CGRectMake(40, screenSize.height - 150 - 40, screenSize.width - 80, 40);
+    self.captureButton.frame = CGRectMake(40, screenSize.height - 150 - 40, screenSize.width - 80, 40);
     
     self.switchCameras.frame = CGRectMake(screenSize.width - 30 - self.switchCameras.currentImage.size.width, 130, self.switchCameras.currentImage.size.width, self.switchCameras.currentImage.size.height);
     
-//    self.preview.frame = self.view.bounds;
-//    self.avCapture.preview.frame = self.preview.bounds;
+    [self.view insertSubview:self.previewBottomView belowSubview:self.captureButton];
+    
+    self.previewBottomView.frame = self.view.bounds;
+    self.avCapture.preview.frame = self.previewBottomView.bounds;
 }
 
 -(UIImage *)imageWithPath:(NSString *)path scale:(CGFloat)scale{
@@ -82,37 +182,307 @@
     return nil;
 }
 
-#pragma mark 事件
+- (void)initializedVideo {
+    self.imageView = [[UIImageView alloc] init];
+    self.imageView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:self.imageView];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        }else {
+            make.top.equalTo(self.view).offset(64);
+        }
+    }];
+    
+    self.imageView.userInteractionEnabled = YES;
+}
 
--(void)onStartClick{
-    if (self.avCapture.isCapturing) {
-        [self.startCapture setTitle:@"开始" forState:UIControlStateNormal];
-        [self.avCapture stopCapture];
-    }else{
-        if ([self.avCapture startCapture]) {
-            [self.startCapture setTitle:@"停止" forState:UIControlStateNormal];
+#pragma mark -IJKPlayer
+- (void)loadStateDidChange:(NSNotification*)notification
+{
+    //    MPMovieLoadStateUnknown        = 0,
+    //    MPMovieLoadStatePlayable       = 1 << 0,
+    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
+    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
+
+    IJKMPMovieLoadState loadState = _player.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
+//        [self initVideoParamView];
+    } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
+    } else {
+        DDLogInfo(@"loadStateDidChange: ???: %d", (int)loadState);
+    }
+}
+
+
+- (void)moviePlayBackStateDidChange:(NSNotification*)notification
+{
+    //    MPMoviePlaybackStateStopped,
+    //    MPMoviePlaybackStatePlaying,
+    //    MPMoviePlaybackStatePaused,
+    //    MPMoviePlaybackStateInterrupted,
+    //    MPMoviePlaybackStateSeekingForward,
+    //    MPMoviePlaybackStateSeekingBackward
+
+    switch (_player.playbackState)
+    {
+        case IJKMPMoviePlaybackStateStopped: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped %p", (int)_player.playbackState,_player);
+            break;
+        }
+        case IJKMPMoviePlaybackStatePlaying: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            
+            // 播放器加载完出图时间
+            self.endPlayer = CACurrentMediaTime();
+            //p2p 连接时间
+            NSInteger p2pConnectTime = (NSInteger)((self.endIpcP2P - self.startIpcP2P)*1000);
+            
+            //弹框
+            if (!_is_init_alert) {
+                NSString *messageString = [NSString stringWithFormat: @"P2P连接时间:  %ld(ms)\n画面显示时间: %ld(ms)",(long)p2pConnectTime,(NSInteger)((self.endPlayer - self.startPlayer)*1000)];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+                UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                
+                [alertC addAction:alertA];
+                [self presentViewController:alertC animated:YES completion:nil];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [alertC dismissViewControllerAnimated:YES completion:NULL];
+                });
+                
+                _is_init_alert = YES;
+            }
+            
+            break;
+        }
+        case IJKMPMoviePlaybackStatePaused: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateInterrupted: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateSeekingForward:
+        case IJKMPMoviePlaybackStateSeekingBackward: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            break;
+        }
+        default: {
+            DDLogWarn(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            break;
         }
     }
 }
 
+#pragma mark Install Movie Notifications
+-(void)installMovieNotificationObservers
+{
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:_player];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadStateDidChange:)
+                                                 name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refushVideo:)
+                                                 name:@"xp2preconnect"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
+}
+
+#pragma mark Remove Movie Notification Handlers
+
+/* Remove the movie notification observers from the movie object. */
+-(void)removeMovieNotificationObservers
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)refushVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    
+    //计算IPC打洞时间
+    self.endIpcP2P = CACurrentMediaTime();
+    
+    //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
+    
+     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+         
+         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+         
+         [self configVideo];
+         [self.player prepareToPlay];
+         [self.player play];
+         
+         self.startPlayer = CACurrentMediaTime();
+     });
+}
+
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD showError:@"通道断开，正在重连"];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
+                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
+                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+                                             dev_name:DeviceName?:@""];
+
+}
+
+- (void)stopPlayMovie {
+    if (self.player != nil) {
+        [self.player stop];
+        [self.player shutdown];
+        [self.player.view removeFromSuperview];
+        self.player = nil;
+    }
+}
+
+- (void)configVideo {
+
+    // 1.通过播放器发起的拉流
+    if (_is_ijkPlayer_stream) {
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
+        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+
+        [self stopPlayMovie];
+#ifdef DEBUG
+        [IJKFFMoviePlayerController setLogReport:YES];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+#else
+        [IJKFFMoviePlayerController setLogReport:NO];
+        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+#endif
+        
+        [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
+        // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
+        
+        IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+        
+        self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+        self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.player.view.frame = self.imageView.bounds;
+//        self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
+        self.player.shouldAutoplay = YES;
+        self.player.shouldShowHudView = YES;
+        
+        self.view.autoresizesSubviews = YES;
+        [self.imageView addSubview:self.player.view];
+        
+        CGRect hubFrame = self.player.view.frame;
+        
+        [self.player resetHubFrame:CGRectMake(hubFrame.origin.x, hubFrame.origin.y, hubFrame.size.width, hubFrame.size.height/2)];
+        
+        //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+        
+    }else {
+        // 2.通过裸流服务拉流
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
+        
+        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+        fileTip.text = @"数据帧写文件中...";
+        fileTip.textAlignment = NSTextAlignmentCenter;
+        fileTip.textColor = [UIColor whiteColor];
+        [self.imageView addSubview:fileTip];
+        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
+        
+    }
+}
+
+#pragma mark 事件
+- (void)startAVCapture {
+//    AWAudioConfig *config = [[AWAudioConfig alloc] init];
+//    config.bitrate = 32000;
+//    config.channelCount = 1;
+//    config.sampleSize = 16;
+//    config.sampleRate = 8000;
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
+    
+    if ([self.avCapture startCapture]) {
+        [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
+    }
+    
+//    if (self.avCapture.isCapturing) {
+//        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+//        [self.avCapture stopCapture];
+//    }else{
+//        if ([self.avCapture startCapture]) {
+//            [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
+//        }
+//    }
+}
+
+-(void)onStartClick{
+    if (self.avCapture.isCapturing) {
+        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+        [self.avCapture stopCapture];
+    }else{
+//        if ([self.avCapture startCapture]) {
+//            [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
+//        }
+        [self startAVCapture];
+    }
+}
+
 - (void)open {
-    [self.avCapture startCapture];
+//    [self.avCapture startCapture];
+    [self startAVCapture];
 }
 
 - (void)close {
-    [self.avCapture stopCapture];
+//    [self.avCapture stopCapture];
+    if (self.avCapture.isCapturing) {
+        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+        [self.avCapture stopCapture];
+    }
 }
 
 -(void)onSwitchClick{
     [self.avCapture switchCamera];
-}
-
--(void)capture:(uint8_t *)data len:(size_t)size {
-    
-}
-
--(void)avCapture:(uint8_t *)data len:(size_t)size {
-    
 }
 
 #pragma mark 懒加载
@@ -126,7 +496,7 @@
         _avCaptureManager.audioConfig = [[AWAudioConfig alloc] init];
         _avCaptureManager.videoConfig = [[AWVideoConfig alloc] init];
         
-        [_avCaptureManager setCaptureManagerPreviewFrame:CGRectMake(100, 100, 350, 200)];
+        [_avCaptureManager setCaptureManagerPreviewFrame:CGRectMake(-30, 100, 350, 200)];
         
         //设置竖屏
         _avCaptureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
@@ -136,7 +506,6 @@
 
 -(AWAVCapture *)avCapture{
     AWAVCapture *capture = self.avCaptureManager.avCapture;
-    capture.delegate = self;
     return capture;
 }
 
