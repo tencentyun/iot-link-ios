@@ -226,7 +226,7 @@
     
 }
 
-- (void)acceptAppCallingEnterRoom {
+- (void)acceptAppCallingOrCalledEnterRoom {
     _isEnterError = NO;
     
     //取消计时器
@@ -236,6 +236,9 @@
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callVideoVC == topVC) {
         [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+    }
+    if (_callAudioVC == topVC) {
+        [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
@@ -289,7 +292,19 @@
         }];
         
     }else {
-        [self acceptAppCallingEnterRoom];
+        if (self.isActiveStatus == YES) { //APP主叫
+            [self acceptAppCallingOrCalledEnterRoom];
+        }else { //APP被叫
+            //接收被呼叫
+            if (![NSString isNullOrNilWithObject:_deviceParam._sys_video_call_status]) {
+                [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:deviceIDTempStr];
+                
+                [self acceptAppCallingOrCalledEnterRoom];
+            }else if (![NSString isNullOrNilWithObject:_deviceParam._sys_audio_call_status]) {
+                [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:deviceIDTempStr];
+            }
+            
+        }
     }
 }
 
@@ -324,6 +339,10 @@
 #pragma mark - 拒绝其他设备呼叫
 - (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+}
+
+- (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     NSMutableDictionary *trtcReport = [reportDic mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
     if (userId) {
@@ -365,8 +384,8 @@
             [dataDic setValue:deviceIDString forKey:@"id_sys_called_id"];
         }else { //被动
             
-            [dataDic setValue:self.reportModel.params._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
-            [dataDic setValue:self.reportModel.params._sys_called_id?:@"" forKey:@"id_sys_called_id"];
+            [dataDic setValue:_deviceParam._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
+            [dataDic setValue:_deviceParam._sys_called_id?:@"" forKey:@"id_sys_called_id"];
         }
         
         //Data json
@@ -381,7 +400,9 @@
     [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
         if (self.isP2PVideoCommun == YES) {
-            [HXYNotice postP2PVIdeoExit];
+            if (self.isActiveStatus == YES) {
+                [HXYNotice postP2PVIdeoExit];
+            }
         }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         if (self.isP2PVideoCommun == YES) {
@@ -389,7 +410,6 @@
         }
     }];
 }
-
 //---------------------TRTC设备轮训状态与注册物模型----------------------------
 
 - (void)repeatDeviceData:(NSArray *)devices{
@@ -735,14 +755,9 @@
     }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
         
         _deviceID = _deviceParam.deviceName;
-        _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
-        _callVideoVC.deviceName = _deviceParam.deviceName;
-        _callVideoVC.actionDelegate = self;
-        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
-        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
-//            [[TIoTTRTCSessionManager sharedManager] enterRoom];
-        }];
-        
+        if (self.isP2PVideoCommun == NO) {
+            [self showAppCalledVideoVC];
+        }
     }
     
     //若60秒被叫不接听，则主动挂断退出  应该在接收到socket status=0时 触发
@@ -750,6 +765,16 @@
     [[NSRunLoop mainRunLoop] addTimer:behungupTimer forMode: NSRunLoopCommonModes];
     
     return NO;
+}
+
+- (void)showAppCalledVideoVC {
+    _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+    _callVideoVC.deviceName = _deviceParam.deviceName;
+    _callVideoVC.actionDelegate = self;
+    _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
+//            [[TIoTTRTCSessionManager sharedManager] enterRoom];
+    }];
 }
 
 - (void)beHungupAction:(NSTimer *)sender {

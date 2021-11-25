@@ -889,29 +889,30 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     if (self.isP2PVideoDevice == YES) {
         
-//        if ([self.reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
-//            if (self.p2pVideoVCCalled == nil) {
-//                [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
-//
-//                NSMutableDictionary *reportDic = [NSMutableDictionary new];
-//                [reportDic setValue:self.reportModel.params._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
-//                [reportDic setValue:self.reportModel.params._sys_userid?:@"" forKey:@"_sys_userid"];
-//                [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
-//
-//
-//                self.reportModel.params.deviceName = [NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""];
-//
-//                self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
-//                self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
-//                self.p2pVideoVCCalled.productID = self.productId?:@"";
-//                self.p2pVideoVCCalled.callType = TIoTTRTCSessionCallType_video;
-//                self.p2pVideoVCCalled.reportDataDic = reportDic;
-//                self.p2pVideoVCCalled.objectModelDic = self.objectModel;
-//                self.p2pVideoVCCalled.payloadParamModel = self.reportModel.params;
-//                self.p2pVideoVCCalled.isCallIng = NO;
-//                [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
-//            }
-//        }
+        if ([self.reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
+            if (self.p2pVideoVCCalled == nil) {
+                
+                [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
+
+                NSMutableDictionary *reportDic = [NSMutableDictionary new];
+                [reportDic setValue:self.reportModel.params._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
+                [reportDic setValue:self.reportModel.params._sys_userid?:@"" forKey:@"_sys_userid"];
+                [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
+
+
+                self.reportModel.params.deviceName = [NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""];
+
+                self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
+                self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
+                self.p2pVideoVCCalled.productID = self.productId?:@"";
+                self.p2pVideoVCCalled.callType = TIoTTRTCSessionCallType_video;
+                self.p2pVideoVCCalled.reportDataDic = reportDic;
+                self.p2pVideoVCCalled.objectModelDic = self.objectModel;
+                self.p2pVideoVCCalled.payloadParamModel = self.reportModel.params;
+                self.p2pVideoVCCalled.isCallIng = NO;
+                [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
+            }
+        }
         
         [HXYNotice postP2PVideoDevicePayload:payloadDic?:@{}];
     }

@@ -107,23 +107,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
     
-    [self requestDeviceCommunicate];
+    if (self.isCallIng == YES) {
+        [self requestDeviceCommunicate];
+    }
 }
 
 - (void)dealloc {
-    
-    [TIoTCoreUserManage shared].sys_call_status = @"-1";
-    
     [self close];
-    
-    [HXYNotice removeListener:self];
-    
-    [self stopPlayMovie];
-    [self removeMovieNotificationObservers];
-    
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
-    
-    [self.previewBottomView removeFromSuperview];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -142,9 +132,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
     }else {
         //设备呼叫APP  被叫
-//        [[TIoTTRTCUIManage sharedManager] preEnterRoom:self.payloadParamModel failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-//            [MBProgressHUD showError:reason];
-//        }];
+        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
     }
     
 }
@@ -179,6 +167,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
     }else {
         //被叫
+        //拼接主呼叫方id_sys_caller_id
+        [dataDic setValue:self.payloadParamModel._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
+
+        //拼接被呼叫方id_sys_called_id
+        [dataDic setValue:self.payloadParamModel._sys_called_id?:@"" forKey:@"id_sys_called_id"];
     }
     
     //Data json
@@ -187,7 +180,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
     [self.reportDataDic setValue:self.productID?:@"" forKey:@"ProductId"];
     [self.reportDataDic setValue:self.deviceName?:@"" forKey:@"DeviceName"];
-    
     [[TIoTRequestObject shared] post:AppControlDeviceData Param:self.reportDataDic success:^(id responseObject) {
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
@@ -271,31 +263,33 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIOTtrtcPayloadModel *reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     //1 设备愿意进行呼叫.  0 拒绝手机通话  2 设备和手机进入通话中
     if ([reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
-        //p2p请求设备状态  app 通过信令 get_device_state 请求设备p2p的
-        NSString *actionString = @"action=inner_define&channel=0&cmd=get_device_st&type=live&quality=standard";
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-            NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-            TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-            if ([responseModel.status isEqualToString:@"0"]) {
-                //得到video audio 采样参数后 需要重新设置AWAudioConfig  AWVideoConfig 各项参数
-                
-            }else {
-                //设备状态异常提示
-                [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-            }
-        }];
+            //p2p请求设备状态  app 通过信令 get_device_state 请求设备p2p的
+            NSString *actionString = @"action=inner_define&channel=0&cmd=get_device_st&type=live&quality=standard";
+            [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+                NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+                TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+                if ([responseModel.status isEqualToString:@"0"]) {
+                    //得到video audio 采样参数后 需要重新设置AWAudioConfig  AWVideoConfig 各项参数
+                    
+                }else {
+                    //设备状态异常提示
+                    [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+                }
+            }];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]) {
+        [self close];
         [self.navigationController popToRootViewControllerAnimated:NO];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]) {
         //开启startservier
         if (self.isStart == NO) {
-            [[TIoTTRTCUIManage sharedManager] acceptAppCallingEnterRoom];
+            [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
             [self startAVCapture];
         }
     }
 }
 
 - (void)deviceP2PVideoDeviceExit {
+    [self close];
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
@@ -558,6 +552,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self startAVCapture];
 //    }
     
+    [self close];
+    
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
@@ -570,7 +566,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
         [self.avCapture stopCapture];
     }
+//    [self.avCapture stopCapture];
+    
     self.isStart = NO;
+    
+    [TIoTCoreUserManage shared].sys_call_status = @"-1";
+    
+    [HXYNotice removeListener:self];
+    
+    [self stopPlayMovie];
+    [self removeMovieNotificationObservers];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    
+    [self.previewBottomView removeFromSuperview];
 }
 
 -(void)onSwitchClick{
