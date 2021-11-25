@@ -45,6 +45,8 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 /// 设备断网后保存DeviceID和offline 状态用于退出页面区分提示判断 @{@"DeviceId:":@"";@"Offline":@(YES)}
 - (void)setDeviceDisConnectDic:(NSDictionary *)deviceDic;
 
+//p2pVideo APP主叫进入通话
+- (void)acceptAppCallingEnterRoom;
 @end
 
 NS_ASSUME_NONNULL_END

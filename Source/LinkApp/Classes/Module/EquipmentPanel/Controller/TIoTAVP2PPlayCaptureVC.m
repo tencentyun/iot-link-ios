@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIView *previewBottomView;
 @property (nonatomic, strong) AWAVCaptureManager *avCaptureManager;
 
+@property (nonatomic, assign) BOOL isStart;
 @end
 
 @implementation TIoTAVP2PPlayCaptureVC
@@ -85,14 +86,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     NSDictionary *xp2pDic = [NSDictionary new];
     NSString *xp2pValue = @"";
-    
-    if ([self.objectModelDic.allKeys containsObject:@"_sys_xp2p_info"]) {
-        xp2pDic = self.objectModelDic[@"_sys_xp2p_info"]?:@{};
+    if (self.objectModelDic != nil) {
+        if ([self.objectModelDic.allKeys containsObject:@"_sys_xp2p_info"]) {
+            xp2pDic = self.objectModelDic[@"_sys_xp2p_info"]?:@{};
+        }
+        if ([xp2pDic.allKeys containsObject:@"Value"]) {
+            xp2pValue = xp2pDic[@"Value"]?:@"";
+        }
     }
-    if ([xp2pDic.allKeys containsObject:@"Value"]) {
-        xp2pValue = xp2pDic[@"Value"]?:@"";
-    }
-
     int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productID?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
 
     if (errorcode == XP2P_ERR_VERSION) {
@@ -115,6 +116,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self close];
     
+    [HXYNotice removeListener:self];
+    
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     
@@ -134,7 +137,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+    if (self.isCallIng == YES) {
+        //APP主叫
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+    }else {
+        //设备呼叫APP  被叫
+//        [[TIoTTRTCUIManage sharedManager] preEnterRoom:self.payloadParamModel failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+//            [MBProgressHUD showError:reason];
+//        }];
+    }
+    
 }
 
 - (void)showHudView {
@@ -158,12 +170,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     //拼接_sys_user_agent
     [dataDic setValue:agentString forKey:@"_sys_user_agent"];
     
-    //拼接主呼叫方id_sys_caller_id
-    [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
-    
-    //拼接被呼叫方id_sys_called_id
-    NSString *deviceID = [NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""];
-    [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
+    if (self.isCallIng == YES) {
+        //拼接主呼叫方id_sys_caller_id
+        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+
+        //拼接被呼叫方id_sys_called_id
+        NSString *deviceID = [NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""];
+        [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
+    }else {
+        //被叫
+    }
     
     //Data json
     NSString *dataDicJson = [NSString objectToJson:dataDic];
@@ -181,37 +197,26 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 -(void) setupUI{
     
+    self.title = self.deviceName?:@"";
+    
     [self.previewBottomView addSubview: self.avCapture.preview];
     
     self.avCapture.preview.center = self.previewBottomView.center;
     
     self.captureButton = [[UIButton alloc] init];
-    [self.captureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.captureButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    self.captureButton.backgroundColor = [UIColor blackColor];
-    [self.captureButton setTitle:@"挂断" forState:UIControlStateNormal];
+//    [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+    [self.captureButton setImage:[UIImage imageNamed:@"icon_hangup"] forState:UIControlStateNormal];
     [self.captureButton addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:self.captureButton];
-    
-//    if controlBackView.superview == nil {
-//        controlBackView.backgroundColor = UIColor(ciColor: .black).withAlphaComponent(0.1)
-//        controlBackView.layer.cornerRadius = 33
-//        view.addSubview(controlBackView)
-//        controlBackView.mas_makeConstraints { (make:MASConstraintMaker?) in
-//            make?.trailing.equalTo()(view.mas_trailing)?.setOffset(-60)
-//            make?.leading.equalTo()(view.mas_leading)?.setOffset(60)
-//            make?.height.mas_equalTo()(66)
-//            if #available(iOS 11.0, *) {
-//                make?.bottom.equalTo()(view.mas_safeAreaLayoutGuideBottom)?.setOffset(-60)
-//            }else {
-//                make?.bottom.equalTo()(view.mas_bottom)?.setOffset(-60)
-//            }
-//        }
-//    }
-    
-    self.captureButton.layer.borderWidth = 0.5;
-    self.captureButton.layer.borderColor = [[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1] CGColor];
-    self.captureButton.layer.cornerRadius = 5;
+    [self.view addSubview:self.captureButton];
+    [self.captureButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.width.height.mas_equalTo(60);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-60);
+        }else {
+            make.bottom.equalTo(self.view.mas_bottom).offset(-60);
+        }
+    }];
     
     self.switchCameras = [[UIButton alloc] init];
     UIImage *switchImage = [self imageWithPath:@"" scale:2];
@@ -222,8 +227,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    [self.view addSubview:self.switchBtn];
     
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    
-    self.captureButton.frame = CGRectMake(40, screenSize.height - 150 - 40, screenSize.width - 80, 40);
     
     self.switchCameras.frame = CGRectMake(screenSize.width - 30 - self.switchCameras.currentImage.size.width, 130, self.switchCameras.currentImage.size.width, self.switchCameras.currentImage.size.height);
     
@@ -282,16 +285,18 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             }
         }];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]) {
-        [self.navigationController popViewControllerAnimated:NO];
+        [self.navigationController popToRootViewControllerAnimated:NO];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]) {
         //开启startservier
-        
-        [self startAVCapture];
+        if (self.isStart == NO) {
+            [[TIoTTRTCUIManage sharedManager] acceptAppCallingEnterRoom];
+            [self startAVCapture];
+        }
     }
 }
 
 - (void)deviceP2PVideoDeviceExit {
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 #pragma mark -IJKPlayer
@@ -533,6 +538,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    config.sampleSize = 16;
 //    config.sampleRate = 8000;
     
+    self.isStart = YES;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
@@ -547,11 +553,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    if (self.avCapture.isCapturing) {
 //        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
 //        [self.avCapture stopCapture];
+//        self.isStart = NO;
 //    }else{
 //        [self startAVCapture];
 //    }
     
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)open {
@@ -563,6 +570,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
         [self.avCapture stopCapture];
     }
+    self.isStart = NO;
 }
 
 -(void)onSwitchClick{
