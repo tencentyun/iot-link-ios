@@ -94,9 +94,9 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyWIFIView]) {
-        [self usserAgreeAuthorsize];
-    }
+//    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyWIFIView]) {
+//        [self usserAgreeAuthorsize];
+//    }
 }
 
 - (void)usserAgreeAuthorsize {

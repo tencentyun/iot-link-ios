@@ -483,9 +483,11 @@
         NSString *str3 = NSLocalizedString(@"register_privacy_policy_conte3", @"及");
         NSString *str4 = NSLocalizedString(@"register_privacy_policy_conte4", @"隐私政策");
         NSString *str5 = NSLocalizedString(@"register_privacy_policy_conte5", nil);
-        NSString *str6 = NSLocalizedString(@"register_privacy_policy_conte6", @"第三方sdk");
+        NSString *str6 = NSLocalizedString(@"register_privacy_policy_conte6", @"腾讯连连App收集个人信息明示清单");
         NSString *str7 = NSLocalizedString(@"register_privacy_policy_conte7", nil);
-        NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",str1,str2,str3,str4,str5,str6,str7];
+        NSString *str8 = NSLocalizedString(@"register_privacy_policy_conte8", @"第三方sdk");
+        NSString *str9 = NSLocalizedString(@"register_privacy_policy_conte9", nil);
+        NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",str1,str2,str3,str4,str5,str6,str7,str8,str9];
         
         NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
         [pstype setAlignment:NSTextAlignmentLeft];
@@ -504,6 +506,10 @@
         NSString *valueString6 = [[NSString stringWithFormat:@"Privacy6://%@",str6] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
         NSRange range6 = [showStr rangeOfString:str6];
         [mastring addAttributes:@{NSLinkAttributeName:valueString6,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range6];
+        
+        NSString *valueString8 = [[NSString stringWithFormat:@"Privacy8://%@",str8] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+        NSRange range8 = [showStr rangeOfString:str8];
+        [mastring addAttributes:@{NSLinkAttributeName:valueString8,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range8];
         
         _conentTextProtolString = mastring;
     }
@@ -524,13 +530,7 @@
             self.doneAction([URL scheme]);
         }
         return NO;
-    }else if ([[URL scheme] isEqualToString:@"Privacy4"]) {
-        [self removeView];
-        if (self.doneAction) {
-            self.doneAction([URL scheme]);
-        }
-        return NO;
-    }else if ([[URL scheme] isEqualToString:@"Privacy6"]) {
+    }else if ([[URL scheme] isEqualToString:@"Privacy4"] || [[URL scheme] isEqualToString:@"Privacy6"] || [[URL scheme] isEqualToString:@"Privacy8"]) {
         [self removeView];
         if (self.doneAction) {
             self.doneAction([URL scheme]);

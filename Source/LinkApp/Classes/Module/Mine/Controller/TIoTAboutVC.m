@@ -137,6 +137,28 @@
     }
 }
 
+- (IBAction)thirdSdkInfo:(UITapGestureRecognizer *)sender {
+    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+    if (LanguageIsEnglish) {
+        vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
+    }else {
+        vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (IBAction)persionInfo:(UITapGestureRecognizer *)sender {
+    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+    vc.title = NSLocalizedString(@"authentation_persioninfo_title", @"个人信息收集清单");
+    if (LanguageIsEnglish) {
+        vc.urlPath = TIoTAPPConfig.userPersonInfoUSENString;
+    }else {
+        vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
     TIoTNewVersionTipView *newVersionView = [[TIoTNewVersionTipView alloc] initWithVersionInfo:versionInfo];
     [[UIApplication sharedApplication].keyWindow addSubview:newVersionView];

@@ -7,8 +7,10 @@
 */
 
 CFBundleName = "腾讯连连开源版";
-NSBluetoothAlwaysUsageDescription = "打开蓝牙用于扫描硬件";
-NSBluetoothPeripheralUsageDescription = "打开蓝牙用于扫描硬件";
-NSCameraUsageDescription = "获取相机权限用于扫描设备二维码";
-NSLocationWhenInUseUsageDescription = "用户获取定位信息";
-NSPhotoLibraryUsageDescription = "获取相册权限用于识别本地二维码";
+NSBluetoothAlwaysUsageDescription = "为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
+NSBluetoothPeripheralUsageDescription = "为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
+NSCameraUsageDescription = "为了便于您扫码添加设备，因此腾讯连连需获取相机权限";
+NSLocationWhenInUseUsageDescription = "为了给您提供精确定位服务，便于设置家庭位置获取天气服务，因此腾讯连连需获取位置权限";
+NSPhotoLibraryUsageDescription = "为了便于您可选择本地图片以更换头像，因此腾讯连连需获取相册权限";
+NSMicrophoneUsageDescription = "为了使用设备的实时语音/视频通话功能，因此腾讯连连需 获取麦克风权限";
+//NSLocalNetworkUsageDescription = "获取组播权限，用于智能产品配网：";
