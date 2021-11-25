@@ -45,7 +45,8 @@
 
 - (void)alertCustomViewTitleMessage:(NSString *)titleString cancelBtnTitle:(NSString *)cancelTitle confirmBtnTitle:(NSString *)confirmTitle {
     
-    self.messageLabel.text = titleString?:@"";
+//    self.messageLabel.text = titleString?:@"";
+    self.messageLabel.attributedText = [self conentAgeTextString];
     self.cancelBtnTitle = cancelTitle?:self.cancelBtnTitle;
     self.confirmBtnTitle = confirmTitle?:self.confirmBtnTitle;
     
@@ -321,6 +322,28 @@
         
     }
     return _bottomView;
+}
+
+- (NSMutableAttributedString *)conentAgeTextString {
+        
+    NSString *str1 = NSLocalizedString(@"please_setting_birthday_info", @"出生日期");
+    NSString *str2 = NSLocalizedString(@"please_setting_birthday_info_detail", @"如果您为未满18周岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。");
+    NSString *showStr = [NSString stringWithFormat:@"%@\n%@",str1,str2];
+    
+    NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
+    [pstype setAlignment:NSTextAlignmentCenter];
+    [pstype setParagraphSpacing:10];
+    
+    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:16], NSForegroundColorAttributeName:[UIColor blackColor], NSParagraphStyleAttributeName:pstype}];
+    
+    NSMutableParagraphStyle *pstype2 = [[NSMutableParagraphStyle alloc] init];
+    [pstype2 setAlignment:NSTextAlignmentLeft];
+    [pstype2 setParagraphSpacing:10];
+    
+    NSRange range2 = [showStr rangeOfString:str2];
+    [mastring addAttributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14], NSForegroundColorAttributeName:[UIColor redColor], NSParagraphStyleAttributeName:pstype2} range:range2];
+        
+    return mastring;
 }
 
 - (NSMutableAttributedString *)conentTextProtolString {

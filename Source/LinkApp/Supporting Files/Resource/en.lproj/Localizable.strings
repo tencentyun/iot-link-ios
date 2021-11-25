@@ -962,3 +962,5 @@ If the problem still persists, we recommend you remove the device and add it aga
 "bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
 "bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";
 "firmware_update" = "固件升级";
+"please_setting_birthday_info" = "please set your date of birth";
+"please_setting_birthday_info_detail" = "如果您为未满18周岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。";
