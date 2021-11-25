@@ -13,11 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)handleOpsenUrl:(NSString *)result;
 + (BOOL)checkLogin;
 + (NSString *)getLangParameter;
-
-/*
- 用于 TRTC和P2P Video 中 _sys_user_agent 参数拼接组成
- */
-+ (NSString *)getSysUserAgent;
 @end
 
 NS_ASSUME_NONNULL_END

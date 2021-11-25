@@ -13,6 +13,7 @@
 #include <CommonCrypto/CommonDigest.h>
 #include <CommonCrypto/CommonHMAC.h>
 #import "TIoTCoreWMacros.h"
+#import "UIDevice+Until.h"
 
 @interface TIoTCoreUtil ()<TIoTCoreAddDeviceDelegate>
 @property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
@@ -395,5 +396,18 @@
 + (NSString *)getCurrentLanguage {
     NSString * currentLang = [[NSLocale preferredLanguages] objectAtIndex:0];
     return currentLang;
+}
+
++ (NSString *)getSysUserAgent {
+    //连连版本号
+    NSString *appVersion = [TIoTCoreUtil getAPPVersion];//[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    //系统版本号
+    NSString *strSysVersion = [TIoTCoreUtil getSystemVersion];//[[UIDevice currentDevice] systemVersion];
+    //获取手机型号
+    NSString *iphoneModel = [UIDevice deviceModel];
+    //语言
+    NSString *currentLang = [TIoTCoreUtil getCurrentLanguage];//CURR_LANG;
+    NSString *agentString = [NSString stringWithFormat:@"ios/%@(ios %@;%@;%@)",appVersion,strSysVersion,iphoneModel,currentLang];
+    return agentString;
 }
 @end

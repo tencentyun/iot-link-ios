@@ -61,6 +61,11 @@ NS_ASSUME_NONNULL_BEGIN
  获取系统语言
  */
 + (NSString *)getCurrentLanguage;
+
+/*
+ 用于 TRTC和P2P Video 中 _sys_user_agent 参数拼接组成
+ */
++ (NSString *)getSysUserAgent;
 @end
 
 NS_ASSUME_NONNULL_END
