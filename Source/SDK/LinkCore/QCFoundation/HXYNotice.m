@@ -27,6 +27,8 @@ static NSString * const receiveShareDevice   = @"receiveShareDevice";
 static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
 static NSString * const callingDisconnectNet = @"callingDisconnectNet";
 static NSString * const firmwareUpdateData   = @"firmwareUpdateData";
+static NSString * const P2PVideoDevice       = @"P2PVideoDevice";
+static NSString * const P2PVideoDeviceExit   = @"P2PVideoDeviceExit";
 
 @implementation HXYNotice
 
@@ -245,5 +247,23 @@ static NSString * const firmwareUpdateData   = @"firmwareUpdateData";
 
 + (void)postFirmwareUpdateData {
     [[NSNotificationCenter defaultCenter] postNotificationName:firmwareUpdateData object:nil];
+}
+
+//p2pVideo 页面收到上报
++ (void)addP2PVideoReportDeviceLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:P2PVideoDevice object:nil];
+}
+
++ (void)postP2PVideoDevicePayload:(NSDictionary *)dic {
+    [[NSNotificationCenter defaultCenter] postNotificationName:P2PVideoDevice object:nil userInfo:dic];
+}
+
+//p2pVideo 结束退出通知
++ (void)addP2PVideoExitLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:P2PVideoDeviceExit object:nil];
+}
+
++ (void)postP2PVIdeoExit {
+    [[NSNotificationCenter defaultCenter] postNotificationName:P2PVideoDeviceExit object:nil];
 }
 @end

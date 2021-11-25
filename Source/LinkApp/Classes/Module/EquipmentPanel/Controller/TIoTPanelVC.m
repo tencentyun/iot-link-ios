@@ -46,6 +46,7 @@
 #include <zlib.h>
 
 #import "TIoTAVP2PPlayCaptureVC.h"
+#import "TIoTAVP2PPlayCaptureVC.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -732,26 +733,27 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     NSDictionary *tmpDic = nil;
     
-    if ([self.bleNewType isEqualToString:@"ble"]) {
-        tmpDic = @{
-            @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
-            @"Data":[NSString objectToJson:deviceReport]
-        };
-    }else {
-        tmpDic = @{
-            @"ProductId":self.productId,
-            @"DeviceName":self.deviceName,
-            //                                @"Data":[NSString objectToJson:deviceReport],
-            @"Data":[NSString objectToJson:trtcReport]
-        };
-    }
-    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
-        if ([self.bleNewType isEqualToString:@"ble"]) {
-        }
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+    if (self.isP2PVideoDevice == NO) {
         
-    }];
-    
+        if ([self.bleNewType isEqualToString:@"ble"]) {
+            tmpDic = @{
+                @"DeviceId":[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""],
+                @"Data":[NSString objectToJson:deviceReport]
+            };
+        }else {
+            tmpDic = @{
+                @"ProductId":self.productId,
+                @"DeviceName":self.deviceName,
+                //                                @"Data":[NSString objectToJson:deviceReport],
+                @"Data":[NSString objectToJson:trtcReport]
+            };
+        }
+        [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+            
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            
+        }];
+    }
     //主动呼叫，开始拨打
     TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
     BOOL isTRTCDevice = NO;
@@ -775,7 +777,19 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     if (isTRTCDevice) {
         [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
         
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+        if (self.isP2PVideoDevice == NO) {
+            //TRTC
+            [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+        }else {
+            
+            //p2p video 双向音视频通话
+            TIoTAVP2PPlayCaptureVC *p2pVideoVC = [[TIoTAVP2PPlayCaptureVC alloc]init];
+            p2pVideoVC.deviceName = self.deviceName?:@"";
+            p2pVideoVC.productID = self.productId?:@"";
+            p2pVideoVC.callType = audioORvideo;
+            p2pVideoVC.reportDataDic = trtcReport;
+            [self.navigationController pushViewController:p2pVideoVC animated:NO];
+        }
     }
 }
 
@@ -846,26 +860,33 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 [self layoutHeader];
                 [self.coll reloadData];
                 
-                //设备UUID FFE2 写入属性值   取模板数据 self.DataTemplateDic （最全的，和控制台一致），deviceinfo.property 不全
-                NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeProperty];
-                //将完整信息TVL数据 写入设备中FFE2特征中
-                [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeProperty headerHexInProperty:@"00"];
-                
+                if ([self.bleNewType isEqualToString:@"ble"]) {
+                    //设备UUID FFE2 写入属性值   取模板数据 self.DataTemplateDic （最全的，和控制台一致），deviceinfo.property 不全
+                    NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"properties"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeProperty];
+                    //将完整信息TVL数据 写入设备中FFE2特征中
+                    [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeProperty headerHexInProperty:@"00"];
+                }
                 
             }else if ([payloadDic[@"method"] isEqualToString:@"action"]) {
-                //设备UUID FFE2 写入行为调用
-                //轮询找到下发actionID和接口请求的actionID 匹配（有可能是一个ID多个参数）
-                if ([self.DataTemplateDic.allKeys containsObject:@"actions"]) {
-                        
-                        if ([payloadDic.allKeys containsObject:@"params"]) {
-                            //TLV 数据
-                            NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"actions"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeAction];
-                            //将完整信息TVL数据 写入设备中FFE2特征中
-                            [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeAction headerHexInProperty:@"00"];
-                        }
+                if ([self.bleNewType isEqualToString:@"ble"]) {
+                    //设备UUID FFE2 写入行为调用
+                    //轮询找到下发actionID和接口请求的actionID 匹配（有可能是一个ID多个参数）
+                    if ([self.DataTemplateDic.allKeys containsObject:@"actions"]) {
+                            
+                            if ([payloadDic.allKeys containsObject:@"params"]) {
+                                //TLV 数据
+                                NSString *value = [self getPropertyInfoValueHexInFFE2WithDic:self.DataTemplateDic[@"actions"]?:@[] reportDic:payloadDic dataTemplate:TIoTDataTemplateTypeAction];
+                                //将完整信息TVL数据 写入设备中FFE2特征中
+                                [self writeInfoInFFE2WithValue:value reportDic:payloadDic tyep:TIoTDataTemplateTypeAction headerHexInProperty:@"00"];
+                            }
+                    }
                 }
             }
         }
+    }
+    
+    if (self.isP2PVideoDevice == YES) {
+        [HXYNotice postP2PVideoDevicePayload:payloadDic?:@{}];
     }
 }
 

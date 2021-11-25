@@ -372,4 +372,28 @@
         [self.topViewController presentViewController:alertC animated:YES completion:nil];
     });
 }
+
+/*
+获取APP版本号
+ */
++ (NSString *)getAPPVersion {
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    return appVersion;
+}
+
+/*
+ 获取手机系统版本号
+ */
++ (NSString *)getSystemVersion {
+    NSString *sysVersion = [[UIDevice currentDevice] systemVersion];
+    return sysVersion;
+}
+
+/*
+ 获取系统语言
+ */
++ (NSString *)getCurrentLanguage {
+    NSString * currentLang = [[NSLocale preferredLanguages] objectAtIndex:0];
+    return currentLang;
+}
 @end

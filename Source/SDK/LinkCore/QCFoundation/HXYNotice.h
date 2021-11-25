@@ -102,4 +102,12 @@
 // 开始下发固件升级
 + (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector;
 + (void)postFirmwareUpdateData;
+
+//p2pVideo 页面收到上报
++ (void)addP2PVideoReportDeviceLister:(id)listener reaction:(SEL)selector;
++ (void)postP2PVideoDevicePayload:(NSDictionary *)dic;
+
+//p2pVideo 结束退出通知
++ (void)addP2PVideoExitLister:(id)listener reaction:(SEL)selector;
++ (void)postP2PVIdeoExit;
 @end

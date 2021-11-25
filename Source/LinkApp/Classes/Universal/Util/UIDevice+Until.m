@@ -52,6 +52,18 @@
     if([deviceModel  isEqualToString:@"iPhone11,4"] ||
        [deviceModel  isEqualToString:@"iPhone11,6"])    return @"iPhone XS Max";
     if([deviceModel  isEqualToString:@"iPhone11,8"])    return @"iPhone XR";
+    if ([deviceModel isEqualToString:@"iPhone12,1"])    return @"iPhone 11";
+    if ([deviceModel isEqualToString:@"iPhone12,3"])    return @"iPhone 11 Pro";
+    if ([deviceModel isEqualToString:@"iPhone12,5"])    return @"iPhone 11 Pro Max";
+    if ([deviceModel isEqualToString:@"iPhone12,8"])    return @"iPhone SE (2nd generation)";
+    if ([deviceModel isEqualToString:@"iPhone13,1"])    return @"iPhone 12 mini";
+    if ([deviceModel isEqualToString:@"iPhone13,2"])    return @"iPhone 12";
+    if ([deviceModel isEqualToString:@"iPhone13,3"])    return @"iPhone 12 Pro";
+    if ([deviceModel isEqualToString:@"iPhone13,4"])    return @"iPhone 12 Pro Max";
+    if ([deviceModel isEqualToString:@"iPhone14,4"])    return @"iPhone 13 mini";
+    if ([deviceModel isEqualToString:@"iPhone14,5"])    return @"iPhone 13";
+    if ([deviceModel isEqualToString:@"iPhone14,2"])    return @"iPhone 13 Pro";
+    if ([deviceModel isEqualToString:@"iPhone14,3"])    return @"iPhone 13 Pro Max";
     
     // iPod 系列
     if ([deviceModel isEqualToString:@"iPod1,1"])      return @"iPod Touch 1G";

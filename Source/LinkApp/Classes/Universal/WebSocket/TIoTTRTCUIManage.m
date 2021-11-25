@@ -13,8 +13,7 @@
 #import "YYModel.h"
 #import "NSString+Extension.h"
 #import "TIoTCoreRequestObject.h"
-
-#import "TIoTAVP2PPlayCaptureVC.h"
+#import "UIDevice+Until.h"
 
 @interface TIoTTRTCUIManage ()<TRTCCallingViewDelegate> {
     TRTCCallingAuidoViewController *_callAudioVC;
@@ -30,8 +29,6 @@
     
     NSTimer *noAnswerTimer; //主叫
     NSTimer *behungupTimer; //被叫
-    
-    TIoTAVP2PPlayCaptureVC *_callP2PVideoVC;
     
 }
 @property (nonatomic, strong) NSMutableDictionary *deviceOfflineDic;
@@ -231,48 +228,65 @@
 - (void)didAcceptJoinRoom {
     //2.根据UI决定是否进入房间
     
-    //开始准备进房间，通话中状态
-    NSDictionary *param = @{@"DeviceId":_deviceParam.deviceName};
+    if (self.isP2PVideoCommun == NO) {
+        //TRTC
+        //开始准备进房间，通话中状态
+        NSDictionary *param = @{@"DeviceId":_deviceParam.deviceName};
 
-    [[TIoTCoreRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
+        [[TIoTCoreRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
 
-        NSDictionary *tempDic = responseObject[@"TRTCParams"];
-        TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
-        [[TIoTTRTCSessionManager sharedManager] configRoom:model];
-        [[TIoTTRTCSessionManager sharedManager] enterRoom];
+            NSDictionary *tempDic = responseObject[@"TRTCParams"];
+            TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
+            [[TIoTTRTCSessionManager sharedManager] configRoom:model];
+            [[TIoTTRTCSessionManager sharedManager] enterRoom];
 
+            //取消计时器
+            [self cancelTimer];
+            
+            
+             //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
+            self->_isEnterError = YES;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self->_isEnterError == YES) {
+                    UIViewController *topVC = [TIoTCoreUtil topViewController];
+                    if (self->_callAudioVC == topVC) {
+                        [self->_callAudioVC beHungUp];
+                    }else {
+                        [self->_callVideoVC beHungUp];
+                    }
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self exitRoom:self->_deviceParam._sys_userid];
+                    });
+                }
+            });
+
+        } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+            UIViewController *topVC = [TIoTCoreUtil topViewController];
+            if (self->_callAudioVC == topVC) {
+                [self->_callAudioVC hungUp];
+            }else {
+                [self->_callVideoVC hungUp];
+            }
+
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self exitRoom:self->_deviceParam._sys_userid];
+            });
+        }];
+        
+    }else {
+        
+        //p2p Video
+        _isEnterError = NO;
+        
         //取消计时器
         [self cancelTimer];
         
-        
-         //一方已进入房间，另一方未成功进入或者异常退出，已等待15秒,已进入房间15秒内对方没有进入房间(TRTC有个回调onUserEnter，对方进入房间会触发这个回调)，则设备端和应用端提示对方已挂断，并退出
-        self->_isEnterError = YES;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (self->_isEnterError == YES) {
-                UIViewController *topVC = [TIoTCoreUtil topViewController];
-                if (self->_callAudioVC == topVC) {
-                    [self->_callAudioVC beHungUp];
-                }else {
-                    [self->_callVideoVC beHungUp];
-                }
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self exitRoom:self->_deviceParam._sys_userid];
-                });
-            }
-        });
-
-    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        //不存在进入房间，所以直接通话
         UIViewController *topVC = [TIoTCoreUtil topViewController];
-        if (self->_callAudioVC == topVC) {
-            [self->_callAudioVC hungUp];
-        }else {
-            [self->_callVideoVC hungUp];
+        if (_callVideoVC == topVC) {
+            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
         }
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self exitRoom:self->_deviceParam._sys_userid];
-        });
-    }];
+    }
 }
 
 - (void)didRefuseedRoom {
@@ -316,15 +330,49 @@
         [trtcReport setValue:username forKey:@"username"];
     }
     
-    NSDictionary *tmpDic = @{
-        @"ProductId":[deviceID?:@"" componentsSeparatedByString:@"/"].firstObject?:@"",
-        @"DeviceName":[deviceID?:@"" componentsSeparatedByString:@"/"].lastObject?:@"",
-        @"Data":[NSString objectToJson:trtcReport]?:@""};
+    NSString *productID = [deviceID?:@"" componentsSeparatedByString:@"/"].firstObject?:@"";
+    NSString *deviceName = [deviceID?:@"" componentsSeparatedByString:@"/"].lastObject?:@"";
+    
+    NSDictionary *tmpDic = nil;
+    
+    if (self.isP2PVideoCommun == NO) {
+        //TRTC
+        tmpDic = @{
+            @"ProductId":productID,
+            @"DeviceName":deviceName,
+            @"Data":[NSString objectToJson:trtcReport]?:@""};
+    }else {
+        //P2P Video
+        NSMutableDictionary *dataDic = [NSMutableDictionary new];
+        if (trtcReport != nil) {
+            dataDic = [NSMutableDictionary dictionaryWithDictionary:trtcReport];
+        }
+        
+        //拼接agent
+        NSString *agentString = [TIoTAppUtilOC getSysUserAgent];
+        [dataDic setValue:agentString forKey:@"_sys_user_agent"];
+        
+        //拼接主呼叫方id_sys_caller_id
+        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+        
+        //拼接被呼叫方id_sys_called_id
+        NSString *deviceIDString = [NSString stringWithFormat:@"%@/%@",productID,deviceName];
+        [dataDic setValue:deviceIDString forKey:@"id_sys_called_id"];
+        
+        //Data json
+        NSString *dataDicJson = [NSString objectToJson:dataDic];
+
+        tmpDic = @{
+            @"ProductId":productID,
+            @"DeviceName":deviceName,
+            @"Data":dataDicJson?:@""};
+    }
     
     [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
+        [HXYNotice postP2PVIdeoExit];
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
-        
+        [HXYNotice postP2PVIdeoExit];
     }];
 }
 

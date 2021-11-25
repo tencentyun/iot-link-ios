@@ -4,24 +4,19 @@
 //
 
 #import "TIoTAVP2PPlayCaptureVC.h"
-#import "TIoTDemoPlaybackCustomCell.h"
-#import "TIoTDemoCustomSheetView.h"
 #import "AppDelegate.h"
-#import "UIDevice+TIoTDemoRotateScreen.h"
-#import "NSDate+TIoTCustomCalendar.h"
 #import "TIoTCoreXP2PBridge.h"
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
-#import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
-#import "TIoTDemoCloudEventListModel.h"
-#import "TIoTCloudStorageVC.h"
 #import "TIoTCoreUtil.h"
 #import "NSObject+additions.h"
+#import "AWAVCaptureManager.h"
+#import "TIoTTRTCUIManage.h"
+#import "UIDevice+Until.h"
+#import "TIoTUIProxy.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
-
-#import "AWAVCaptureManager.h"
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -60,6 +55,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 //按钮
 @property (nonatomic, strong) UIButton *captureButton;
+@property (nonatomic, strong) UIButton *hungupBtn;
 @property (nonatomic, strong) UIButton *switchCameras;
 //预览
 @property (nonatomic, strong) UIView *previewBottomView;
@@ -74,6 +70,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     // Do any additional setup after loading the view from its nib.
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
+    [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
     
     _is_init_alert = NO;
     _is_ijkPlayer_stream = YES;
@@ -106,15 +105,21 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
+    
+    [self requestDeviceCommunicate];
 }
 
 - (void)dealloc {
+    
+    [TIoTCoreUserManage shared].sys_call_status = @"-1";
+    
+    [self close];
+    
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     
-//    [self.captureButton removeFromSuperview];
     [self.previewBottomView removeFromSuperview];
 }
 
@@ -127,8 +132,51 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+}
+
 - (void)showHudView {
     self.player.shouldShowHudView = !self.player.shouldShowHudView;
+}
+
+//请求设备通话
+- (void)requestDeviceCommunicate {
+    
+    //APP主动呼叫时候
+    
+    //组装_sys_user_agent Data
+    NSMutableDictionary *dataDic = [NSMutableDictionary new];
+    if (self.reportDataDic != nil) {
+        dataDic = [NSMutableDictionary dictionaryWithDictionary:self.reportDataDic];
+    }
+    
+    //获取sysUserAgent
+    NSString *agentString = [TIoTAppUtilOC getSysUserAgent];
+    
+    //拼接_sys_user_agent
+    [dataDic setValue:agentString forKey:@"_sys_user_agent"];
+    
+    //拼接主呼叫方id_sys_caller_id
+    [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+    
+    //拼接被呼叫方id_sys_called_id
+    NSString *deviceID = [NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""];
+    [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
+    
+    //Data json
+    NSString *dataDicJson = [NSString objectToJson:dataDic];
+    [self.reportDataDic setValue:dataDicJson forKey:@"Data"];
+
+    [self.reportDataDic setValue:self.productID?:@"" forKey:@"ProductId"];
+    [self.reportDataDic setValue:self.deviceName?:@"" forKey:@"DeviceName"];
+    
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:self.reportDataDic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        
+    }];
 }
 
 -(void) setupUI{
@@ -141,9 +189,25 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self.captureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.captureButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     self.captureButton.backgroundColor = [UIColor blackColor];
-    [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+    [self.captureButton setTitle:@"挂断" forState:UIControlStateNormal];
     [self.captureButton addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.captureButton];
+//    [self.view addSubview:self.captureButton];
+    
+//    if controlBackView.superview == nil {
+//        controlBackView.backgroundColor = UIColor(ciColor: .black).withAlphaComponent(0.1)
+//        controlBackView.layer.cornerRadius = 33
+//        view.addSubview(controlBackView)
+//        controlBackView.mas_makeConstraints { (make:MASConstraintMaker?) in
+//            make?.trailing.equalTo()(view.mas_trailing)?.setOffset(-60)
+//            make?.leading.equalTo()(view.mas_leading)?.setOffset(60)
+//            make?.height.mas_equalTo()(66)
+//            if #available(iOS 11.0, *) {
+//                make?.bottom.equalTo()(view.mas_safeAreaLayoutGuideBottom)?.setOffset(-60)
+//            }else {
+//                make?.bottom.equalTo()(view.mas_bottom)?.setOffset(-60)
+//            }
+//        }
+//    }
     
     self.captureButton.layer.borderWidth = 0.5;
     self.captureButton.layer.borderColor = [[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1] CGColor];
@@ -196,6 +260,38 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
     
     self.imageView.userInteractionEnabled = YES;
+}
+
+#pragma mark - 通知
+- (void)deviceP2PVideoReport:(NSNotification *)reportInfo {
+    NSDictionary *payloadDic = reportInfo.userInfo;
+    TIOTtrtcPayloadModel *reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
+    //1 设备愿意进行呼叫.  0 拒绝手机通话  2 设备和手机进入通话中
+    if ([reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
+        //p2p请求设备状态  app 通过信令 get_device_state 请求设备p2p的
+        NSString *actionString = @"action=inner_define&channel=0&cmd=get_device_st&type=live&quality=standard";
+        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+            TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+            if ([responseModel.status isEqualToString:@"0"]) {
+                //得到video audio 采样参数后 需要重新设置AWAudioConfig  AWVideoConfig 各项参数
+                
+            }else {
+                //设备状态异常提示
+                [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+            }
+        }];
+    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]) {
+        [self.navigationController popViewControllerAnimated:NO];
+    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]) {
+        //开启startservier
+        
+        [self startAVCapture];
+    }
+}
+
+- (void)deviceP2PVideoDeviceExit {
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark -IJKPlayer
@@ -357,9 +453,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
+                                              sec_key:@""
+                                               pro_id:self.productID?:@""
                                              dev_name:DeviceName?:@""];
 
 }
@@ -443,40 +539,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
     
     if ([self.avCapture startCapture]) {
-        [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
+//        [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
     }
-    
+}
+
+-(void)onStartClick{
 //    if (self.avCapture.isCapturing) {
 //        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
 //        [self.avCapture stopCapture];
 //    }else{
-//        if ([self.avCapture startCapture]) {
-//            [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
-//        }
+//        [self startAVCapture];
 //    }
-}
-
--(void)onStartClick{
-    if (self.avCapture.isCapturing) {
-        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
-        [self.avCapture stopCapture];
-    }else{
-//        if ([self.avCapture startCapture]) {
-//            [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
-//        }
-        [self startAVCapture];
-    }
+    
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)open {
-//    [self.avCapture startCapture];
     [self startAVCapture];
 }
 
 - (void)close {
-//    [self.avCapture stopCapture];
     if (self.avCapture.isCapturing) {
-        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
+//        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
         [self.avCapture stopCapture];
     }
 }

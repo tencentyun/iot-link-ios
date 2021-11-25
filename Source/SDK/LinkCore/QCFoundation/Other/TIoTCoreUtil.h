@@ -46,6 +46,21 @@ NS_ASSUME_NONNULL_BEGIN
  弹框提示
  */
 + (void)showSingleActionAlertWithTitle:(NSString *)title content:(NSString *)content confirmText:(NSString *)confirmText;
+
+/*
+获取APP版本号
+ */
++ (NSString *)getAPPVersion;
+
+/*
+ 获取手机系统版本号
+ */
++ (NSString *)getSystemVersion;
+
+/*
+ 获取系统语言
+ */
++ (NSString *)getCurrentLanguage;
 @end
 
 NS_ASSUME_NONNULL_END
