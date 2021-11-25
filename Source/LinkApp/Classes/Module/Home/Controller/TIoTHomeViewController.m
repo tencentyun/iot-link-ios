@@ -136,9 +136,9 @@ static CGFloat kHeaderViewHeight = 162;
         }
     }
 
-    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyAudioView]) {
-        [self usserAgreeAuthorsize];
-    }
+//    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyAudioView]) {
+//        [self usserAgreeAuthorsize];
+//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

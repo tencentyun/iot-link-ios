@@ -957,6 +957,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "authentation_resister_title" = "Country";
 "authentation_resister_privacy" = "In order to provide you with the user agreement and privacy policy of your country/region, please select your country/region";
 "authentation_thirdsdk_title" = "Third-party information sharing checklist";
+"authentation_persioninfo_title" = "个人信息收集清单";
 "unknow_device" = "未知设备";
 "bind_LLSync_device_success" = "绑定纯蓝牙设备成功";
 "bind_LLSync_device_failure" = "绑定纯蓝牙设备失败";

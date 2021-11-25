@@ -57,6 +57,12 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     //不选地区列表赋默认值
 //    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
 //    [TIoTCoreUserManage shared].userRegionId = @"1";
+    
+    //不选地区列表赋默认值
+    [TIoTCoreUserManage shared].userRegion = @"";
+    [TIoTCoreUserManage shared].userRegionId = @"";
+    [TIoTCoreUserManage shared].signIn_Title = @"";
+    [TIoTCoreUserManage shared].signIn_countryCode = @"";
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -94,8 +100,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             // Fallback on earlier versions
             make.top.equalTo(self.view.mas_top).offset(64);
         }
-//        make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
-        make.height.mas_equalTo(kHeightCell + 30); //30为顶部空白 2两条分割线
+        make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
+//        make.height.mas_equalTo(kHeightCell + 30); //30为顶部空白 2两条分割线
     }];
     
     if (self.defaultPhoneOrEmail != nil) {
@@ -122,10 +128,10 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(16);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(36);
     }];
     
-    /*UITextView *procolTV = [[UITextView alloc] init];
+    UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
     procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
     procolTV.textColor = [UIColor colorWithHexString:kRegionHexColor];
@@ -150,7 +156,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         make.top.equalTo(procolTV.mas_top).offset(4);
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV.mas_left);
-    }];*/
+    }];
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -165,8 +171,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-//        make.top.equalTo(procolTV.mas_bottom).offset(16);
-        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
+        make.top.equalTo(procolTV.mas_bottom).offset(16);
+//        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(kHeightCell - 8);
     }];
@@ -258,7 +264,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             }else {
                 [TIoTCoreUserManage shared].isShowPricyView = @"1";
                 
-//                [self showEN_age_view];
+                [self showEN_age_view];
             }
         };
         
@@ -269,7 +275,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     
 //    [self showEN_age_view];
 }
-/*
+
 - (void)showEN_age_view {
     NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
     if ([NSString isNullOrNilWithObject:errorCode] || [errorCode containsString:@"-1"] || [errorCode containsString:@"-2"]) {
@@ -312,7 +318,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
         };
     }
-}*/
+}
 #pragma mark - 显示用户之前操作项
 - (void)refreshUserActionItems {
     
@@ -431,6 +437,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 #pragma mark - eventResponse
 
 -(void)changedTextField:(UITextField *)textField{
+    if (!self.procolBtn.selected) {
+        return;
+    }
     [self checkSendCode];
     
     //优化提示文案
@@ -490,7 +499,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             [TIoTCoreUserManage shared].signIn_countryCode = CountryCode;
             [TIoTCoreUserManage shared].signIn_Title = Title;
         }
-        
+        [self showEN_age_view];
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
@@ -539,6 +548,12 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 
 - (void)procolClick:(UIButton *)btn{
     btn.selected = !btn.selected;
+    
+    if (!btn.selected) {
+        self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+        self.sendCodeBtn.enabled = NO;
+        return;
+    }
     [self checkSendCode];
 }
 
@@ -668,7 +683,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         _contentView = [[UIView alloc] init];
         _contentView.backgroundColor = [UIColor whiteColor];
         
-        /*UILabel *contryLabel = [[UILabel alloc]init];
+        UILabel *contryLabel = [[UILabel alloc]init];
         [contryLabel setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:contryLabel];
         [contryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -679,7 +694,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+//        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:@"" forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -691,7 +707,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel = [[UILabel alloc]init];
-        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+//        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+        self.phoneAreaLabel.text = nil;
         [_contentView addSubview:self.phoneAreaLabel];
         [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
@@ -725,15 +742,15 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             make.right.left.mas_equalTo(0);
             make.top.equalTo(contryLabel.mas_top);
             make.bottom.equalTo(contryLabel.mas_bottom);
-        }];*/
+        }];
         
         UILabel *phoneLabel = [[UILabel alloc]init];
         [phoneLabel setLabelFormateTitle:NSLocalizedString(@"phone_number", @"手机号码") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView addSubview:phoneLabel];
         [phoneLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
-//            make.top.equalTo(lineView.mas_bottom);
-            make.top.mas_equalTo(30*kScreenAllHeightScale);
+            make.top.equalTo(lineView.mas_bottom);
+//            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];
@@ -786,7 +803,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         _contentView2 = [[UIView alloc] init];
         _contentView2.backgroundColor = [UIColor whiteColor];
         
-        /*UILabel *contryLabel2 = [[UILabel alloc]init];
+        UILabel *contryLabel2 = [[UILabel alloc]init];
         [contryLabel2 setLabelFormateTitle:NSLocalizedString(@"contry_region", @"国家/地区") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:contryLabel2];
         [contryLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -797,7 +814,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+//        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn2 setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -811,7 +828,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel2 = [[UILabel alloc]init];
-        [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+//        [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:self.phoneAreaLabel2];
         [self.phoneAreaLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn2.mas_right).offset(5);
@@ -845,15 +862,15 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             make.right.left.mas_equalTo(0);
             make.top.equalTo(contryLabel2.mas_top);
             make.bottom.equalTo(contryLabel2.mas_bottom);
-        }];*/
+        }];
         
         UILabel *emailLabel = [[UILabel alloc]init];
         [emailLabel setLabelFormateTitle:NSLocalizedString(@"email_account", @"邮箱账号") font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:emailLabel];
         [emailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
-//            make.top.equalTo(lineView.mas_bottom);
-            make.top.mas_equalTo(30*kScreenAllHeightScale);
+            make.top.equalTo(lineView.mas_bottom);
+//            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];

@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //get htmlcontent urlPath
 @property (nonatomic,copy) NSString *urlPath;
+@property (nonatomic,assign) BOOL notZZConfigUrl;
 
 @end
 
