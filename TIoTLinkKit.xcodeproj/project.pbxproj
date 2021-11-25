@@ -242,7 +242,6 @@
 		D231049A232F88040003069D /* TIoTHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2310499232F88040003069D /* TIoTHomeViewController.m */; };
 		D23104BD233066810003069D /* UUIDUntil.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104B6233066810003069D /* UUIDUntil.m */; };
 		D23104BE233066810003069D /* KeyChainUntil.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104B7233066810003069D /* KeyChainUntil.m */; };
-		D23104BF233066810003069D /* UIDevice+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104B8233066810003069D /* UIDevice+Until.m */; };
 		D23104D32330678F0003069D /* NSAttributedString+XDPAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104C42330678E0003069D /* NSAttributedString+XDPAdd.m */; };
 		D23104D42330678F0003069D /* NSTimer+BlockSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104C52330678E0003069D /* NSTimer+BlockSupport.m */; };
 		D23104D52330678F0003069D /* NSObject+SwizzlingMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = D23104C62330678E0003069D /* NSObject+SwizzlingMethod.m */; };
@@ -948,10 +947,8 @@
 		D2310499232F88040003069D /* TIoTHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTHomeViewController.m; sourceTree = "<group>"; };
 		D23104B6233066810003069D /* UUIDUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDUntil.m; sourceTree = "<group>"; };
 		D23104B7233066810003069D /* KeyChainUntil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChainUntil.m; sourceTree = "<group>"; };
-		D23104B8233066810003069D /* UIDevice+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Until.m"; sourceTree = "<group>"; };
 		D23104B9233066810003069D /* UUIDUntil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDUntil.h; sourceTree = "<group>"; };
 		D23104BA233066810003069D /* KeyChainUntil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyChainUntil.h; sourceTree = "<group>"; };
-		D23104BB233066810003069D /* UIDevice+Until.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Until.h"; sourceTree = "<group>"; };
 		D23104C22330678E0003069D /* NSTimer+BlockSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+BlockSupport.h"; sourceTree = "<group>"; };
 		D23104C42330678E0003069D /* NSAttributedString+XDPAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+XDPAdd.m"; sourceTree = "<group>"; };
 		D23104C52330678E0003069D /* NSTimer+BlockSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+BlockSupport.m"; sourceTree = "<group>"; };
@@ -2629,8 +2626,6 @@
 			children = (
 				D23104BA233066810003069D /* KeyChainUntil.h */,
 				D23104B7233066810003069D /* KeyChainUntil.m */,
-				D23104BB233066810003069D /* UIDevice+Until.h */,
-				D23104B8233066810003069D /* UIDevice+Until.m */,
 				D23104B9233066810003069D /* UUIDUntil.h */,
 				D23104B6233066810003069D /* UUIDUntil.m */,
 				D210C7D02340A25800A53B08 /* UIImageView+TIoTWebImageView.h */,
@@ -3568,7 +3563,6 @@
 				ED9C49C123B1DCE8005D537F /* UITextView+DisableCopy.m in Sources */,
 				ED72905E238E2AEC00175739 /* TIoTPhotoCell.m in Sources */,
 				EDE067B22373E9B50011F931 /* UIButton+LQRelayout.m in Sources */,
-				D23104BF233066810003069D /* UIDevice+Until.m in Sources */,
 				F4833EC724E29BC20033FAB2 /* TIoTLogTask.swift in Sources */,
 				6DC7F8DD2552E3AF009508EE /* TIoTSettingIntelligentNameVC.m in Sources */,
 				D2B29EE6235FF12B0086BDFA /* TIoTChoseValueTableViewCell.m in Sources */,

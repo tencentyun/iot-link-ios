@@ -349,7 +349,7 @@
         }
         
         //拼接agent
-        NSString *agentString = [TIoTAppUtilOC getSysUserAgent];
+        NSString *agentString = [TIoTCoreUtil getSysUserAgent];
         [dataDic setValue:agentString forKey:@"_sys_user_agent"];
         
         //拼接主呼叫方id_sys_caller_id
