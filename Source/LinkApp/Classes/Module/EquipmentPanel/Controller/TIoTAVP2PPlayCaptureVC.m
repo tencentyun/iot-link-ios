@@ -153,7 +153,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     //获取sysUserAgent
-    NSString *agentString = [TIoTAppUtilOC getSysUserAgent];
+    NSString *agentString = [TIoTCoreUtil getSysUserAgent];
     
     //拼接_sys_user_agent
     [dataDic setValue:agentString forKey:@"_sys_user_agent"];
