@@ -41,7 +41,11 @@
     }];
     
     //拉去静态配置文件（开源软件信息 或其他）
-    [self loadUrl:self.urlPath];
+    if (self.notZZConfigUrl) {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlPath]]];
+    }else {
+        [self loadUrl:self.urlPath];
+    }
 }
 
 - (void)loadUrl:(NSString *)urlString {
