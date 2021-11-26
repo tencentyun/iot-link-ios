@@ -339,6 +339,9 @@
 #pragma mark - 拒绝其他设备呼叫
 - (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     
+    if (self.isP2PVideoCommun == YES) {
+        [HXYNotice postP2PVIdeoExit];
+    }
     [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
 }
 
@@ -775,6 +778,7 @@
     [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
 //            [[TIoTTRTCSessionManager sharedManager] enterRoom];
     }];
+    NSLog(@"------%@------%@",_deviceParam._sys_userid,_callVideoVC);
 }
 
 - (void)beHungupAction:(NSTimer *)sender {
