@@ -46,6 +46,7 @@
 #include <zlib.h>
 
 #import "TIoTAVP2PPlayCaptureVC.h"
+#import "TIoTCoreXP2PBridge.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -198,6 +199,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //续传
     [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refushVideo:)
+                                                 name:@"xp2preconnect"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseP2PdisConnect:)
+                                                 name:@"xp2disconnect"
+                                               object:nil];
+    
     [self setupUI];
     
     [self getProductsConfig];
@@ -236,6 +247,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
     [HXYNotice removeListener:self];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
 }
 
 - (void)configBlueManager {
@@ -694,9 +707,34 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [self layoutHeader];
         [self.coll reloadData];
         
+        [self starP2pServer];
+        
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
     }];
+}
+
+- (void)starP2pServer {
+    NSDictionary *xp2pDic = [NSDictionary new];
+    NSString *xp2pValue = @"";
+    if (self.objectModel != nil) {
+        if ([self.objectModel.allKeys containsObject:@"_sys_xp2p_info"]) {
+            xp2pDic = self.objectModel[@"_sys_xp2p_info"]?:@{};
+        }
+        if ([xp2pDic.allKeys containsObject:@"Value"]) {
+            xp2pValue = xp2pDic[@"Value"]?:@"";
+        }
+    }
+    NSLog(@"_sys_xp2p_info  xp2pValue : %@",xp2pValue);
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    
+    if (errorcode == XP2P_ERR_VERSION) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+    }
 }
 
 //下发数据
@@ -783,14 +821,14 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }else {
             
             //p2p video 双向音视频通话
-            TIoTAVP2PPlayCaptureVC *p2pVideoVC = [[TIoTAVP2PPlayCaptureVC alloc]init];
-            p2pVideoVC.deviceName = self.deviceName?:@"";
-            p2pVideoVC.productID = self.productId?:@"";
-            p2pVideoVC.callType = audioORvideo;
-            p2pVideoVC.reportDataDic = trtcReport;
-            p2pVideoVC.objectModelDic = self.objectModel;
-            p2pVideoVC.isCallIng = YES;
-            [self.navigationController pushViewController:p2pVideoVC animated:NO];
+            self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
+            self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
+            self.p2pVideoVCCalled.productID = self.productId?:@"";
+            self.p2pVideoVCCalled.callType = audioORvideo;
+            self.p2pVideoVCCalled.reportDataDic = trtcReport;
+            self.p2pVideoVCCalled.objectModelDic = self.objectModel;
+            self.p2pVideoVCCalled.isCallIng = YES;
+            [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
         }
     }
 }
@@ -3623,5 +3661,60 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         _detailStructTpyeTimesDic = [NSMutableDictionary new];
     }
     return _detailStructTpyeTimesDic;
+}
+
+- (void)refushVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    
+    
+    //计算IPC打洞时间
+//    self.endIpcP2P = CACurrentMediaTime();
+    
+    
+//    if (self.isCallIng == NO) {
+//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//
+//        [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
+//    }else {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+//
+//            self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+//
+//            [self configVideo];
+//            [self.player prepareToPlay];
+//            [self.player play];
+//
+//            self.startPlayer = CACurrentMediaTime();
+//        });
+//    }
+    
+    
+}
+
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD showError:@"通道断开，正在重连"];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
+                                              sec_key:@""
+                                               pro_id:self.productId?:@""
+                                             dev_name:DeviceName?:@""];
+
 }
 @end

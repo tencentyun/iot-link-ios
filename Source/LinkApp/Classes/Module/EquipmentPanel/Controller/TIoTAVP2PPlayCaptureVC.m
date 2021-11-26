@@ -84,25 +84,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupUI];
     
-    NSDictionary *xp2pDic = [NSDictionary new];
-    NSString *xp2pValue = @"";
-    if (self.objectModelDic != nil) {
-        if ([self.objectModelDic.allKeys containsObject:@"_sys_xp2p_info"]) {
-            xp2pDic = self.objectModelDic[@"_sys_xp2p_info"]?:@{};
-        }
-        if ([xp2pDic.allKeys containsObject:@"Value"]) {
-            xp2pValue = xp2pDic[@"Value"]?:@"";
-        }
-    }
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productID?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
 
-    if (errorcode == XP2P_ERR_VERSION) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alertC addAction:alertA];
-        [self presentViewController:alertC animated:YES completion:nil];
-    }
+    [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
+    
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
@@ -278,10 +265,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             }];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]) {
         [self close];
-        [self.navigationController popToRootViewControllerAnimated:NO];
+        [self.navigationController popViewControllerAnimated:NO];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]) {
         //开启startservier
+        
         if (self.isStart == NO) {
+            
+//            if (self.isCallIng == NO) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+                    
+                    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                    
+                    [self configVideo];
+                    [self.player prepareToPlay];
+                    [self.player play];
+                    
+                    self.startPlayer = CACurrentMediaTime();
+                });
+//            }
+           
+            self.isStart = YES;
+
             [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
             [self startAVCapture];
         }
@@ -290,22 +295,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)deviceP2PVideoDeviceExit {
     [self close];
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark -IJKPlayer
 - (void)loadStateDidChange:(NSNotification*)notification
 {
-    //    MPMovieLoadStateUnknown        = 0,
-    //    MPMovieLoadStatePlayable       = 1 << 0,
-    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
-    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
-
     IJKMPMovieLoadState loadState = _player.loadState;
 
     if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
         DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
-//        [self initVideoParamView];
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
         DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
     } else {
@@ -316,13 +315,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
 {
-    //    MPMoviePlaybackStateStopped,
-    //    MPMoviePlaybackStatePlaying,
-    //    MPMoviePlaybackStatePaused,
-    //    MPMoviePlaybackStateInterrupted,
-    //    MPMoviePlaybackStateSeekingForward,
-    //    MPMoviePlaybackStateSeekingBackward
-
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
@@ -390,14 +382,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                                              selector:@selector(loadStateDidChange:)
                                                  name:IJKMPMoviePlayerLoadStateDidChangeNotification
                                                object:_player];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refushVideo:)
-                                                 name:@"xp2preconnect"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseP2PdisConnect:)
-                                                 name:@"xp2disconnect"
-                                               object:nil];
 }
 
 #pragma mark Remove Movie Notification Handlers
@@ -407,57 +391,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)refushVideo:(NSNotification *)notify {
-    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    NSString *selectedName = self.deviceName?:@"";
-    
-    if (![DeviceName isEqualToString:selectedName]) {
-        return;
-    }
-    
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
-    
-    //计算IPC打洞时间
-    self.endIpcP2P = CACurrentMediaTime();
-    
-    //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-    // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
-    
-     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-         
-         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-         
-         [self configVideo];
-         [self.player prepareToPlay];
-         [self.player play];
-         
-         self.startPlayer = CACurrentMediaTime();
-     });
-}
 
-- (void)responseP2PdisConnect:(NSNotification *)notify {
-    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    NSString *selectedName = self.deviceName?:@"";
-    
-    if (![DeviceName isEqualToString:selectedName]) {
-        return;
-    }
-    
-    [MBProgressHUD showError:@"通道断开，正在重连"];
-    
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
-                                              sec_key:@""
-                                               pro_id:self.productID?:@""
-                                             dev_name:DeviceName?:@""];
-
-}
 
 - (void)stopPlayMovie {
     if (self.player != nil) {
@@ -503,13 +440,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         [self.player resetHubFrame:CGRectMake(hubFrame.origin.x, hubFrame.origin.y, hubFrame.size.width, hubFrame.size.height/2)];
         
-        //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
-        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
-        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
-        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
-        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
-        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-        
     }else {
         // 2.通过裸流服务拉流
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
@@ -526,21 +456,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 #pragma mark 事件
 - (void)startAVCapture {
-//    AWAudioConfig *config = [[AWAudioConfig alloc] init];
-//    config.bitrate = 32000;
-//    config.channelCount = 1;
-//    config.sampleSize = 16;
-//    config.sampleRate = 8000;
     
     self.isStart = YES;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    
-    [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
-    
-    if ([self.avCapture startCapture]) {
-//        [self.captureButton setTitle:@"停止" forState:UIControlStateNormal];
-    }
+//    if (self.isCallIng == YES) {
+//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
+//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//
+//        [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
+//    }
+    [self.avCapture startCapture];
 }
 
 -(void)onStartClick{
@@ -554,7 +478,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self close];
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)open {
