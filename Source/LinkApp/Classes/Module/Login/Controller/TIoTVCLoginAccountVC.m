@@ -285,7 +285,9 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+//                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
                 vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
                 vc.urlPath = ServiceProtocolURl;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -318,7 +320,9 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+//                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
                 vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
                 vc.urlPath = PrivacyProtocolURL;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -331,6 +335,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
             if (LanguageIsEnglish) {
                 vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
             }else {
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
             }
             [self.navigationController pushViewController:vc animated:YES];

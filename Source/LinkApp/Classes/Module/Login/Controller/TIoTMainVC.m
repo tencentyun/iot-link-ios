@@ -175,6 +175,7 @@
                 
                 TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                 vc.title = NSLocalizedString(@"authentation_persioninfo_title", @"个人信息收集清单");
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
                 [self.navigationController pushViewController:vc animated:YES];
                 
@@ -182,7 +183,8 @@
                 
                 TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                 vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
-                vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
+                vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
+                vc.notZZConfigUrl = YES;
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }else {
