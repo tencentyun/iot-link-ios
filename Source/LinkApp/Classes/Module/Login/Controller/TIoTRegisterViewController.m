@@ -203,7 +203,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                         vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
                         [self.navigationController pushViewController:vc animated:YES];
                     }else {
-                        TIoTWebVC *vc = [TIoTWebVC new];
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.notZZConfigUrl = YES;
                         vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
                         vc.urlPath = ServiceProtocolURl;
                         [self.navigationController pushViewController:vc animated:YES];
@@ -243,6 +244,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                     if (LanguageIsEnglish) {
                         vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
                     }else {
+                        vc.notZZConfigUrl = YES;
                         vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
                     }
                     [self.navigationController pushViewController:vc animated:YES];
@@ -257,6 +259,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 }else {
                     TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                     vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+                    vc.notZZConfigUrl = YES;
                     vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
@@ -602,7 +605,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
         DDLogVerbose(@"用户协议");
-        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"] || [[TIoTCoreUserManage shared].userRegionId isEqual:@""] ) { //国内
             
             if (LanguageIsEnglish) {
                 TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
@@ -611,7 +614,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
                 vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
                 vc.urlPath = ServiceProtocolURl;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -657,6 +661,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             if (LanguageIsEnglish) {
                 vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
             }else {
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
             }
             [self.navigationController pushViewController:vc animated:YES];

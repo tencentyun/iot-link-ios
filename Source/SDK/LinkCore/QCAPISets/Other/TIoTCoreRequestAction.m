@@ -177,7 +177,7 @@ NSString *const MapSDKSearchAddressURL = @"https://apis.map.qq.com/ws/place/v1/s
 //===============用户协议、隐私协议链接
 
 NSString *const ServiceProtocolURl = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service";//用户协议
-NSString *const PrivacyProtocolURL = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy";//隐私协议
+NSString *const PrivacyProtocolURL = @"https://privacy.qq.com/document/preview/0da010f1b4944e88bf78520d88642513";//隐私协议 //https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy
 NSString *const DeviceSharedPrivacyProtocolURL = @"";//设备分享隐私协议
 NSString *const CancelAccountURL = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=cancel";//账号注销协议
 @end

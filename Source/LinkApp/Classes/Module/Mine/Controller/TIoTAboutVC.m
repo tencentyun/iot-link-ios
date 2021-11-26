@@ -81,6 +81,7 @@
         if (LanguageIsEnglish) {
             vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
         }else {
+            vc.notZZConfigUrl = YES;
             vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
         }
         [self.navigationController pushViewController:vc animated:YES];
@@ -97,7 +98,8 @@
             vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
             [self.navigationController pushViewController:vc animated:YES];
         }else {
-            TIoTWebVC *vc = [TIoTWebVC new];
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.notZZConfigUrl = YES;
             vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
             vc.urlPath = ServiceProtocolURl;
             [self.navigationController pushViewController:vc animated:YES];
@@ -143,6 +145,7 @@
     if (LanguageIsEnglish) {
         vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
     }else {
+        vc.notZZConfigUrl = YES;
         vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
     }
     [self.navigationController pushViewController:vc animated:YES];
@@ -154,6 +157,7 @@
     if (LanguageIsEnglish) {
         vc.urlPath = TIoTAPPConfig.userPersonInfoUSENString;
     }else {
+        vc.notZZConfigUrl = YES;
         vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
     }
     [self.navigationController pushViewController:vc animated:YES];

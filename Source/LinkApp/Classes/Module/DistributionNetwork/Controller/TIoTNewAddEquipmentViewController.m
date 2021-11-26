@@ -149,6 +149,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
         if (LanguageIsEnglish) {
             vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
         }else {
+            vc.notZZConfigUrl = YES;
             vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
         }
         [self.navigationController pushViewController:vc animated:YES];

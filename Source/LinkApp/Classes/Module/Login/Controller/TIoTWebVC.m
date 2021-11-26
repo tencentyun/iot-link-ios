@@ -40,7 +40,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     //退出页面后，清楚连接设备
+    if (!self.requestTicketRefreshURLBlock) {//评测不需要蓝牙
     [[BluetoothCentralManager shareBluetooth] clearConnectedDevices];
+    }
 }
 
 - (instancetype)init {
@@ -107,10 +109,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    if (!self.requestTicketRefreshURLBlock) {//评测不需要蓝牙
     //判断蓝牙是否开启
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
     //停止扫描蓝牙时候触发
     [HXYNotice addBluetoothScanStopLister:self reaction:@selector(stopBlutoothScan)];
+    }
     
     //屏蔽左滑手势，面板中手势会有冲突
     self.fd_interactivePopDisabled = YES;
