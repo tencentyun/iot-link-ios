@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
-  s.dependency 'TIoTLinkKit_XP2P', '2.3.1'
+  s.dependency 'TIoTLinkKit_XP2P', '2.3.2'
   s.dependency 'TIoTLinkKit_Faac', '2.0.5'
   s.dependency 'CocoaLumberjack', '3.7.2'
   s.pod_target_xcconfig = {
