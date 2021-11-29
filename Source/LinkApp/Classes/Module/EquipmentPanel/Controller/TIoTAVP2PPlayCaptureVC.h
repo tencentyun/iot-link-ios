@@ -10,6 +10,7 @@
 @end
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void(^TIoTAVP2PStartServer)(BOOL isRefresh);
 
 @interface TIoTAVP2PPlayCaptureVC : UIViewController
 @property (nonatomic, strong) NSString *productID;
@@ -19,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableDictionary *reportDataDic; //控制设备报文的dic
 @property (nonatomic, strong) TIOTtrtcPayloadParamModel *payloadParamModel; //被动呼叫才传
 @property (nonatomic, assign) BOOL isCallIng; //是否APP主叫 YES 主叫  NO 被叫
+@property (nonatomic, copy) TIoTAVP2PStartServer isRefreshBlock;
 @end
 
 NS_ASSUME_NONNULL_END

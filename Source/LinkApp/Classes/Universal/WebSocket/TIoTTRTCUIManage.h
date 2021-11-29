@@ -47,7 +47,8 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 
 ///p2pVideo APP主叫(被叫)进入通话
 - (void)acceptAppCallingOrCalledEnterRoom;
-
+///p2pVideo 退出页面
+- (void)refuseAppCallingOrCalledEnterRoom;
 ///p2pVieo APP被叫 推出视频请求页面
 - (void)showAppCalledVideoVC;
 @end

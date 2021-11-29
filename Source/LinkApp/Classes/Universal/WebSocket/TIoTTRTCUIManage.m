@@ -182,17 +182,24 @@
         if (_isActiveCall == YES) {
             if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
                 [_callVideoVC hungUp];
+                if (self.isP2PVideoCommun == YES) {//暂时
+                    [self refuseAppCallingOrCalledEnterRoom];
+                }
             }
             if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
                 //单设备主叫 接通后 设备挂断
                 if (deviceParam._sys_video_call_status.intValue == 0) {
                     [_callVideoVC beHungUp];
+                    if (self.isP2PVideoCommun == YES) {//暂时
+                        [self refuseAppCallingOrCalledEnterRoom];
+                    }
                 }
             }
             
         }else {
             if (deviceParam._sys_video_call_status.intValue == 2) {
                 if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
+                    if (self.isP2PVideoCommun == NO) { //暂时
                     [_callVideoVC otherAnswered];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
@@ -201,11 +208,15 @@
                         self->_isActiveStatus = self->_isActiveCall;
                     });
                     return;
+                    }
                 }
                 
             }else {
                 if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
                     [_callVideoVC hungUp];
+                    if (self.isP2PVideoCommun == YES) {
+                        [self refuseAppCallingOrCalledEnterRoom];
+                    }
                 }else {
                     [_callVideoVC beHungUp];
                 }
@@ -227,6 +238,7 @@
 }
 
 - (void)acceptAppCallingOrCalledEnterRoom {
+    
     _isEnterError = NO;
     
     //取消计时器
@@ -240,6 +252,32 @@
     if (_callAudioVC == topVC) {
         [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
     }
+}
+
+- (void)refuseAppCallingOrCalledEnterRoom {
+    [TIoTCoreUserManage shared].sys_call_status = @"-1";
+
+    if (self.isP2PVideoCommun == YES) {
+        UIViewController *topVC = [TIoTCoreUtil topViewController];
+        if (_callVideoVC == topVC) {
+            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+        }
+    }
+    
+    _isEnterError = NO;
+    _isActiveCall = NO;
+    _isActiveStatus = _isActiveCall;
+    preCallingType = TIoTTRTCSessionCallType_audio;
+    deviceIDTempStr = @"";
+    tempModel = nil;
+    [[TIoTTRTCSessionManager sharedManager] resetSessionType];
+    [_callAudioVC remoteDismiss];
+    [_callVideoVC remoteDismiss];
+
+    _callAudioVC = nil;
+    _callVideoVC = nil;
+    
+    [self cancelTimer];
 }
 
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
@@ -340,7 +378,7 @@
 - (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     
     if (self.isP2PVideoCommun == YES) {
-        [HXYNotice postP2PVIdeoExit];
+        [self exitRoom:@""];
     }
     [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
 }
@@ -778,7 +816,6 @@
     [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
 //            [[TIoTTRTCSessionManager sharedManager] enterRoom];
     }];
-    NSLog(@"------%@------%@",_deviceParam._sys_userid,_callVideoVC);
 }
 
 - (void)beHungupAction:(NSTimer *)sender {
@@ -828,6 +865,14 @@
 - (void)exitRoom:(NSString *)remoteUserID {
     [TIoTCoreUserManage shared].sys_call_status = @"-1";
 
+    if (self.isP2PVideoCommun == YES) {
+        UIViewController *topVC = [TIoTCoreUtil topViewController];
+        if (_callVideoVC == topVC) {
+            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+        }
+        [HXYNotice postP2PVIdeoExit];
+    }
+    
     _isEnterError = NO;
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
@@ -843,15 +888,8 @@
     
     [self cancelTimer];
     
-    if (self.isP2PVideoCommun == YES) {
-        UIViewController *topVC = [TIoTCoreUtil topViewController];
-        if (_callVideoVC == topVC) {
-            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
-        }
-        [HXYNotice postP2PVIdeoExit];
-    }
     
-    self.isP2PVideoCommun = NO;
+//    self.isP2PVideoCommun = NO;
     
     NSString *deviceString = self.deviceOfflineDic[@"DeviceId"]?:@"";
     NSNumber *offline = self.deviceOfflineDic[@"Offline"]?:@(NO);

@@ -72,6 +72,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    if (self.isCallIng == YES) {
+        //APP主叫
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+    }else {
+        //设备呼叫APP  被叫
+        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
+    }
+    
     [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
     [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
     
@@ -114,13 +122,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.isCallIng == YES) {
-        //APP主叫
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
-    }else {
-        //设备呼叫APP  被叫
-        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
-    }
     
 }
 
@@ -494,16 +495,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.isStart = NO;
     
-    [TIoTCoreUserManage shared].sys_call_status = @"-1";
-    
-    [HXYNotice removeListener:self];
-    
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     
-    [self.previewBottomView removeFromSuperview];
+    if (self.previewBottomView != nil) {
+        [self.previewBottomView removeFromSuperview];
+    }
+    
+    if (self.isRefreshBlock) {
+        self.isRefreshBlock(YES);
+    }
+    
+    [[TIoTTRTCUIManage sharedManager]refuseAppCallingOrCalledEnterRoom];
 }
 
 -(void)onSwitchClick{
