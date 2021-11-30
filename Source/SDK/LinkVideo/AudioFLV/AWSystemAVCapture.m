@@ -25,12 +25,10 @@
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 
 @property (nonatomic , strong) AWAACEncoder *mAudioEncoder;
-
+@property (nonatomic, strong) NSFileHandle *audioFileHandle;
 @end
 
-@implementation AWSystemAVCapture{
-    NSFileHandle *audioFileHandle;
-}
+@implementation AWSystemAVCapture
 
 -(void)switchCamera{
     if ([self.videoInputDevice isEqual: self.frontCamera]) {
@@ -155,7 +153,7 @@
     NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"abcde.aac"];
     [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
     [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    self.audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     [self.captureSession startRunning];
     return [super startCapture];
@@ -165,8 +163,8 @@
 -(void) stopCapture {
     [self.captureSession stopRunning];
     [super stopCapture];
-    [audioFileHandle closeFile];
-    audioFileHandle = NULL;
+    [self.audioFileHandle closeFile];
+    self.audioFileHandle = NULL;
 }
 
 //销毁会话
@@ -200,9 +198,10 @@
             [self sendVideoSampleBuffer:sampleBuffer];
         }else if([self.audioDataOutput isEqual:captureOutput]){
 //            [self sendAudioSampleBuffer:sampleBuffer];
+            __weak typeof(self)weakSelf = self;
             [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
-                [self->audioFileHandle writeData:encodedData];
-                [self sendAudioAACData:encodedData];
+                [weakSelf.audioFileHandle writeData:encodedData];
+                [weakSelf sendAudioAACData:encodedData];
             }];
         }
     }
