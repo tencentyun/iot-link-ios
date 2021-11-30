@@ -195,6 +195,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
+    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
+    
+    //续传
+    [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
+    
     [self addP2pNofitications];
     
     [self setupUI];
@@ -223,6 +229,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     if (self.isRefreshFromP2Player == YES) {
         [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
         [HXYNotice removeListener:self];
+        [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
+        self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
+        
+        //续传
+        [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
         [self addP2pNofitications];
         [self getProductsConfig];
     }
@@ -254,12 +265,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 - (void)addP2pNofitications {
-    [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
-    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
-    
-    //续传
-    [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refushVideo:)
@@ -850,17 +855,17 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             __weak typeof(self) weakSelf = self;
             
             //p2p video 双向音视频通话
-            self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
-            self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
-            self.p2pVideoVCCalled.productID = self.productId?:@"";
-            self.p2pVideoVCCalled.callType = audioORvideo;
-            self.p2pVideoVCCalled.reportDataDic = trtcReport;
-            self.p2pVideoVCCalled.objectModelDic = self.objectModel;
-            self.p2pVideoVCCalled.isCallIng = YES;
-            self.p2pVideoVCCalled.isRefreshBlock = ^(BOOL isRefresh) {
+            TIoTAVP2PPlayCaptureVC *p2pVideoVC = [[TIoTAVP2PPlayCaptureVC alloc]init];
+            p2pVideoVC.deviceName = self.deviceName?:@"";
+            p2pVideoVC.productID = self.productId?:@"";
+            p2pVideoVC.callType = audioORvideo;
+            p2pVideoVC.reportDataDic = trtcReport;
+            p2pVideoVC.objectModelDic = self.objectModel;
+            p2pVideoVC.isCallIng = YES;
+            p2pVideoVC.isRefreshBlock = ^(BOOL isRefresh) {
                 weakSelf.isRefreshFromP2Player = isRefresh;
             };
-            [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
+            [self.navigationController pushViewController:p2pVideoVC animated:NO];
         }
     }
 }
@@ -982,7 +987,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 self.p2pVideoVCCalled.payloadParamModel = self.reportModel.params;
                 self.p2pVideoVCCalled.isCallIng = NO;
                 self.p2pVideoVCCalled.isRefreshBlock = ^(BOOL isRefresh) {
-                    weakSelf.isP2PVideoDevice = isRefresh;
+                    weakSelf.isRefreshFromP2Player = isRefresh;
+                    weakSelf.p2pVideoVCCalled = nil;
                 };
                 [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
             }
