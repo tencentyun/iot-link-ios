@@ -328,6 +328,11 @@
         
     NSString *str1 = NSLocalizedString(@"please_setting_birthday_info", @"出生日期");
     NSString *str2 = NSLocalizedString(@"please_setting_birthday_info_detail", @"如果您为未满18周岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。");
+    NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
+    if (![regionID isEqualToString:@"1"]) {
+        str2 = NSLocalizedString(@"please_setting_birthday_info_detail_US", @"如果您为未满13岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。");
+    }
+    
     NSString *showStr = [NSString stringWithFormat:@"%@\n%@",str1,str2];
     
     NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
