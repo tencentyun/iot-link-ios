@@ -853,19 +853,21 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }else {
             
             __weak typeof(self) weakSelf = self;
-            
-            //p2p video 双向音视频通话
-            TIoTAVP2PPlayCaptureVC *p2pVideoVC = [[TIoTAVP2PPlayCaptureVC alloc]init];
-            p2pVideoVC.deviceName = self.deviceName?:@"";
-            p2pVideoVC.productID = self.productId?:@"";
-            p2pVideoVC.callType = audioORvideo;
-            p2pVideoVC.reportDataDic = trtcReport;
-            p2pVideoVC.objectModelDic = self.objectModel;
-            p2pVideoVC.isCallIng = YES;
-            p2pVideoVC.isRefreshBlock = ^(BOOL isRefresh) {
-                weakSelf.isRefreshFromP2Player = isRefresh;
-            };
-            [self.navigationController pushViewController:p2pVideoVC animated:NO];
+            if (self.p2pVideoVCCalled == nil) {
+                //p2p video 双向音视频通话
+                self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
+                self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
+                self.p2pVideoVCCalled.productID = self.productId?:@"";
+                self.p2pVideoVCCalled.callType = audioORvideo;
+                self.p2pVideoVCCalled.reportDataDic = trtcReport;
+                self.p2pVideoVCCalled.objectModelDic = self.objectModel;
+                self.p2pVideoVCCalled.isCallIng = YES;
+                self.p2pVideoVCCalled.isRefreshBlock = ^(BOOL isRefresh) {
+                    weakSelf.isRefreshFromP2Player = isRefresh;
+                    weakSelf.p2pVideoVCCalled = nil;
+                };
+                [self.navigationController pushViewController:self.p2pVideoVCCalled animated:NO];
+            }
         }
     }
 }
