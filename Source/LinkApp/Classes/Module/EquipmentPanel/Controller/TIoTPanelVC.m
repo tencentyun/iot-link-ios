@@ -237,16 +237,20 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
     [self.navigationController popViewControllerAnimated:YES];
+    [self removeNotifications];
+    if (self.isP2PVideoDevice == YES) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+    }
 }
 
 - (void)dealloc {
     [TIoTCoreUserManage shared].sys_call_status = @"-1";
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
-    [HXYNotice removeListener:self];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+    [self removeNotifications];
+    if (self.isP2PVideoDevice == YES) {
+        [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+    }
 }
 
 - (void)addP2pNofitications {
@@ -267,6 +271,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                                object:nil];
 }
 
+- (void)removeNotifications {
+    [HXYNotice removeListener:self];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
+}
 - (void)configBlueManager {
     self.blueManager = [BluetoothCentralManager shareBluetooth];
     self.blueManager.delegate = self;
@@ -528,7 +537,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         {
             _coll.contentInset = UIEdgeInsetsMake(350 + [TIoTUIProxy shareUIProxy].navigationBarHeight, 0, 0, 0);
         }
-        
+        __weak typeof(self)weakSelf = self;
         if ([type isEqualToString:@"bool"]) {
             TIoTBoolView *ev = [[TIoTBoolView alloc] init];
             CGSize size = [ev systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
@@ -537,7 +546,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [ev setInfo:self.deviceInfo.bigProp];
             ev.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             ev.update = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             self.bigBtnView = ev;
             [self.coll addSubview:ev];
@@ -557,7 +566,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [ev setStyle:self.themeStyle];
             ev.info = self.deviceInfo.bigProp;
             ev.update = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             
             CGSize size = [ev systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
@@ -572,7 +581,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [nv setStyle:self.themeStyle];
             nv.info = self.deviceInfo.bigProp;
             nv.update = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             
             self.bigBtnView = nv;
@@ -584,7 +593,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             nv.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             nv.info = self.deviceInfo.bigProp;
             nv.update = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             [nv setStyle:self.themeStyle];
             self.bigBtnView = nv;
@@ -723,14 +732,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [self layoutHeader];
         [self.coll reloadData];
         
-        [self starP2pServer];
+        if (self.isP2PVideoDevice == YES) {
+            [self starP2PServer];
+        }
         
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
     }];
 }
 
-- (void)starP2pServer {
+- (void)starP2PServer {
     NSDictionary *xp2pDic = [NSDictionary new];
     NSString *xp2pValue = @"";
     if (self.objectModel != nil) {
@@ -1194,19 +1205,19 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     };
     vc.deleteDeviceBlock = ^(BOOL isSuccess) {
-        if (self.characteristicFFE1 != nil) {
+        if (weakSelf.characteristicFFE1 != nil) {
             if (isSuccess == YES) {
                 //解绑请求成功
-                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07"];
+                [weakSelf.blueManager sendNewLLSynvWithPeripheral:weakSelf.currentConnectedPerpheral Characteristic:weakSelf.characteristicFFE1 LLDeviceInfo:@"07"];
             }else {
                 //失败
-                [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"08"];
+                [weakSelf.blueManager sendNewLLSynvWithPeripheral:weakSelf.currentConnectedPerpheral Characteristic:weakSelf.characteristicFFE1 LLDeviceInfo:@"08"];
             }
         }
         
     };
     vc.firmwareUpateBlock = ^{
-        [self getFirmwareVersionWithProductId:self.productId deviceName:self.deviceName];
+        [weakSelf getFirmwareVersionWithProductId:weakSelf.productId deviceName:weakSelf.deviceName];
         
     };
     [self.navigationController pushViewController:vc animated:YES];
@@ -3417,7 +3428,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    __weak typeof(self)weakSelf = self;
     if (indexPath.row < self.deviceInfo.properties.count) {
         NSMutableDictionary *pro = self.deviceInfo.properties[indexPath.row];
         NSString *type = pro[@"ui"][@"type"];
@@ -3428,7 +3439,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [cell setInfo:pro];
             [cell setThemeStyle:self.themeStyle];
             cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             return cell;
         }
@@ -3439,7 +3450,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [cell setThemeStyle:self.themeStyle];
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             return cell;
         }else {
@@ -3448,7 +3459,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [cell setThemeStyle:self.themeStyle];
             cell.userInteractionEnabled = [self.deviceDic[@"Online"] boolValue];
             cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
-                [self reportDeviceData:uploadInfo];
+                [weakSelf reportDeviceData:uploadInfo];
             };
             return cell;
         }
@@ -3459,7 +3470,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [cell setShowInfo:@{@"name":NSLocalizedString(@"cloud_timing", @"云端定时"),@"content":@""}];
         [cell setThemeStyle:self.themeStyle];
         cell.boolUpdate = ^(NSDictionary * _Nonnull uploadInfo) {
-            [self reportDeviceData:uploadInfo];
+            [weakSelf reportDeviceData:uploadInfo];
         };
         return cell;
     }
@@ -3474,7 +3485,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [MBProgressHUD showError:@"当前无网络"];
         return;
     }
-    
+    __weak typeof(self)weakSelf = self;
     if (indexPath.row < self.deviceInfo.properties.count) {
         NSDictionary *dic = self.deviceInfo.properties[indexPath.row];
         if ([dic[@"define"][@"type"] isEqualToString:@"bool"]) {
@@ -3494,7 +3505,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             choseView.dic = dic;
             choseView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
-                [self reportDeviceData:dataDic];
+                [weakSelf reportDeviceData:dataDic];
             };
             [choseView show];
         }
@@ -3504,7 +3515,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             slideView.dic = dic;
             slideView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
-                [self reportDeviceData:dataDic];
+                [weakSelf reportDeviceData:dataDic];
             };
             [slideView show];
             
@@ -3516,7 +3527,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             stringView.dic = dic;
             stringView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
-                [self reportDeviceData:dataDic];
+                [weakSelf reportDeviceData:dataDic];
             };
             [stringView show];
         }
@@ -3526,7 +3537,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             slideView.dic = dic;
             slideView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
-                [self reportDeviceData:dataDic];
+                [weakSelf reportDeviceData:dataDic];
             };
             [slideView show];
         }
@@ -3536,7 +3547,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             timeView.dic = dic;
             timeView.updateData = ^(NSDictionary * _Nonnull dataDic) {
                 
-                [self reportDeviceData:dataDic];
+                [weakSelf reportDeviceData:dataDic];
             };
             [timeView show];
             
