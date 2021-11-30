@@ -72,6 +72,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    self.fd_interactivePopDisabled = YES;
+    
     if (self.isCallIng == YES) {
         //APP主叫
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
@@ -107,7 +109,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
-- (void)dealloc {
+- (void)nav_customBack {
     [self close];
 }
 
