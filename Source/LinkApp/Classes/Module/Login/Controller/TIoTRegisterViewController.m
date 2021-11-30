@@ -53,7 +53,6 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupUI];
     //不选地区列表赋默认值
 //    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
 //    [TIoTCoreUserManage shared].userRegionId = @"1";
@@ -63,6 +62,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [TIoTCoreUserManage shared].userRegionId = @"";
     [TIoTCoreUserManage shared].signIn_Title = @"";
     [TIoTCoreUserManage shared].signIn_countryCode = @"";
+
+    [self setupUI];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

@@ -7,7 +7,7 @@
 #import "TIoTOpensourceLicenseViewController.h"
 #import "TIoTOpensourceContentModel.h"
 
-@interface TIoTOpensourceLicenseViewController () <WKNavigationDelegate>
+@interface TIoTOpensourceLicenseViewController () <WKNavigationDelegate, WKUIDelegate>
 
 @property (nonatomic, strong) WKWebView *webView;
 
@@ -33,6 +33,7 @@
     
     self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
     self.webView.navigationDelegate = self;
+    self.webView.UIDelegate = self;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.mas_equalTo(0);
@@ -61,6 +62,15 @@
     }];
 }
 
+
+#pragma mark - WKUIDelegate
+- (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+    NSLog(@"createWebViewWithConfiguration");
+    if (!navigationAction.targetFrame.isMainFrame) {
+        [webView loadRequest:navigationAction.request];
+    }
+    return nil;
+}
 #pragma mark - WKNavigationDelegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     // 获取完整url并进行UTF-8转码
