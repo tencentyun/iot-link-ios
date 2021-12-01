@@ -520,7 +520,8 @@
 //"" = "3. 指示灯快闪即进入一键配网模式";
 "inportPassword_unnecessary" = "请输入密码（非必填）";
 //"" = "前往：设置 - 隐私 - 定位服务 - XXX ] 允许应用访问";
-"APPacquireLocation" = "App需要访问您的位置用于获取Wi-Fi信息";
+//"APPacquireLocation" = "App需要访问您的位置用于获取Wi-Fi信息";
+"APPacquireLocation" = "您拒绝访问GPS定位，无法定位当前位置";
 "turnon_LocationService" = "前往：设置开启定位服务";
 "softAP_distributionNetwork" = "热点配网";
 "setupTargetWiFi" = "设置目标WiFi";
@@ -959,3 +960,5 @@
 "please_setting_birthday_info" = "出生日期";
 "please_setting_birthday_info_detail" = "如果您为未满18周岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。";
 "please_setting_birthday_info_detail_US" = "如果您为未满13岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。";
+"APPacquireCamera" = "您拒绝使用相机权限，无法使用实时语音/视频通话以及扫描二维码功能";
+"turnon_CameraService" = "前往：设置开启相机服务";
