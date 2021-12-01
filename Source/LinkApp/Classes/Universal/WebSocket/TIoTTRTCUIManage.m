@@ -135,12 +135,17 @@
         if (_isActiveCall == YES) {
             if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
                 [_callAudioVC hungUp];
+                if (self.isP2PVideoCommun == YES) {//暂时
+                    [self refuseAppCallingOrCalledEnterRoom];
+                }
             }
             if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
                 //单设备主叫 接通后 设备挂断
                 if (deviceParam._sys_audio_call_status.intValue == 0) {
                     [self->_callAudioVC beHungUp];
-                    
+                    if (self.isP2PVideoCommun == YES) {//暂时
+                        [self refuseAppCallingOrCalledEnterRoom];
+                    }
                 }
             }
 
@@ -153,6 +158,9 @@
                         [self->_callAudioVC hangupTapped];
                         self->_isActiveCall = NO;
                         self->_isActiveStatus = self->_isActiveCall;
+//                        if (self.isP2PVideoCommun == YES) {
+//                            [self exitRoom:@""];
+//                        }
                     });
                     return;
                 }
@@ -161,6 +169,9 @@
                 
                 if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
                     [_callAudioVC hungUp];
+                    if (self.isP2PVideoCommun == YES) {
+                        [self refuseAppCallingOrCalledEnterRoom];
+                    }
                 }else {
                     [_callAudioVC beHungUp];
                 }
@@ -199,16 +210,17 @@
         }else {
             if (deviceParam._sys_video_call_status.intValue == 2) {
                 if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
-                    if (self.isP2PVideoCommun == NO) { //暂时
                     [_callVideoVC otherAnswered];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self->tempModel = deviceParam;
                         [self->_callVideoVC hangupTapped];
                         self->_isActiveCall = NO;
                         self->_isActiveStatus = self->_isActiveCall;
+//                        if (self.isP2PVideoCommun == YES) {
+//                            [self exitRoom:@""];
+//                        }
                     });
                     return;
-                    }
                 }
                 
             }else {
@@ -261,6 +273,9 @@
         UIViewController *topVC = [TIoTCoreUtil topViewController];
         if (_callVideoVC == topVC) {
             [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+        }
+        if (_callAudioVC == topVC) {
+            [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
         }
     }
     
@@ -340,6 +355,7 @@
                 [self acceptAppCallingOrCalledEnterRoom];
             }else if (![NSString isNullOrNilWithObject:_deviceParam._sys_audio_call_status]) {
                 [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:deviceIDTempStr];
+                [self acceptAppCallingOrCalledEnterRoom];
             }
             
         }
@@ -782,6 +798,18 @@
     
     _isActiveCall = NO;//表示被呼叫
     _isActiveStatus = _isActiveCall;
+    if (self.isP2PVideoCommun == NO) {
+        [self showAppCalledVideoVC];
+    }
+    
+    //若60秒被叫不接听，则主动挂断退出  应该在接收到socket status=0时 触发
+    behungupTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(beHungupAction:) userInfo:nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:behungupTimer forMode: NSRunLoopCommonModes];
+    
+    return NO;
+}
+
+- (void)showAppCalledVideoVC {
     //被呼叫了，点击接听后才进房间吧
     if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
         
@@ -796,26 +824,14 @@
     }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
         
         _deviceID = _deviceParam.deviceName;
-        if (self.isP2PVideoCommun == NO) {
-            [self showAppCalledVideoVC];
-        }
+            _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
+            _callVideoVC.deviceName = _deviceParam.deviceName;
+            _callVideoVC.actionDelegate = self;
+            _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
+        //            [[TIoTTRTCSessionManager sharedManager] enterRoom];
+            }];
     }
-    
-    //若60秒被叫不接听，则主动挂断退出  应该在接收到socket status=0时 触发
-    behungupTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(beHungupAction:) userInfo:nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:behungupTimer forMode: NSRunLoopCommonModes];
-    
-    return NO;
-}
-
-- (void)showAppCalledVideoVC {
-    _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:_deviceParam._sys_userid];
-    _callVideoVC.deviceName = _deviceParam.deviceName;
-    _callVideoVC.actionDelegate = self;
-    _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
-    [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
-//            [[TIoTTRTCSessionManager sharedManager] enterRoom];
-    }];
 }
 
 - (void)beHungupAction:(NSTimer *)sender {
@@ -869,6 +885,9 @@
         UIViewController *topVC = [TIoTCoreUtil topViewController];
         if (_callVideoVC == topVC) {
             [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+        }
+        if (_callAudioVC == topVC) {
+            [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
         }
         [HXYNotice postP2PVIdeoExit];
     }
