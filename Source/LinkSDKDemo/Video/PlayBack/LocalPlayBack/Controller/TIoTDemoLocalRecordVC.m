@@ -90,6 +90,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 
 @property (nonatomic, strong) TIoTDemoCalendarCustomView *tempCustomView;
 @property (nonatomic, assign) BOOL isReAppearPause; //标记切换云存和本地录像
+@property (nonatomic, assign) BOOL is_init_alert;
 @end
 
 @implementation TIoTDemoLocalRecordVC
@@ -97,6 +98,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.is_init_alert = NO;
     
     self.isHidePlayBtn = NO;
     self.isTimerSuspend = NO;
@@ -191,6 +193,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
 }
 
 - (void)dealloc{
+    self.is_init_alert = NO;
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     
@@ -1300,6 +1303,10 @@ static NSString *const kLive = @"ipc.flv?action=live";
                 [self startPlayLocalVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             });
             [MBProgressHUD dismissInView:self.view];
+            if (!self.is_init_alert) {
+                [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",self.deviceName] icon:@"" view:self.view];
+                self.is_init_alert = YES;
+            }
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
@@ -1449,7 +1456,7 @@ static NSString *const kLive = @"ipc.flv?action=live";
         return;
     }
     
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ p2p服务准备就绪",selectedName] icon:@"" view:self.view];
     
     [self seekDesignatedPointWithCurrentTime:[NSString stringWithFormat:@"%ld",self.currentTime] selectedTimeMoel:nil isChangeModel:NO];
 }

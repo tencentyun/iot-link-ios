@@ -31,6 +31,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 
 @property (nonatomic, assign) CFTimeInterval startP2P;
 @property (nonatomic, assign) CFTimeInterval endP2P;
+@property (nonatomic, assign) BOOL _is_init_alert;
 @end
 
 @implementation TIoTDemoNVRSubDeviceVC
@@ -38,6 +39,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self._is_init_alert = NO;
     
     [self setupNavBarStyleWithNormal:NO];
     [self setupUIViews];
@@ -69,10 +72,12 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 }
 
 - (void)dealloc {
+    self._is_init_alert = NO;
     [self stopSrviceRemoveObserver];
 }
 
 - (void)nav_customBack {
+    self._is_init_alert = NO;
     [self stopSrviceRemoveObserver];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -127,7 +132,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         return;
     }
     
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",DeviceName] icon:@"" view:self.view];
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ p2p服务准备就绪",DeviceName] icon:@"" view:self.view];
     
     //计算打洞时间
     CFTimeInterval endP2PTime = CACurrentMediaTime();
@@ -137,7 +142,10 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     DDLogInfo(@"%@", [NSString stringWithFormat:@"****** %@ ended: %f millisecond start: %f interval: %ld ******\n",NSStringFromSelector(_cmd),self.endP2P,self.startP2P,(long)((self.endP2P - self.startP2P)*1000)]);
     
         [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-            
+            if (!self._is_init_alert) {
+                [MBProgressHUD show:[NSString stringWithFormat:@"通道建立成功"] icon:@"" view:self.view];
+                self._is_init_alert = YES;
+            }
             NSArray<TIoTExploreOrVideoDeviceModel *> *subdeviceList = [NSArray yy_modelArrayWithClass:TIoTExploreOrVideoDeviceModel.class json:jsonList];
             [self.dataArray removeAllObjects];
             self.dataArray = [NSMutableArray arrayWithArray:subdeviceList];
