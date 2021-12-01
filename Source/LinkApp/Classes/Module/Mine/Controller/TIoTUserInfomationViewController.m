@@ -29,6 +29,7 @@
 #import "TIoTCoreServices.h"
 #import "TIoTExportPrintLogManager.h"
 #import "TIoTPrintLogManager.h"
+#import <AVFoundation/AVFoundation.h>
 
 static CGFloat const kLeftPadding = 16; //左边距
 static CGFloat const kRightPadding = 16; //右边距
@@ -291,6 +292,27 @@ static CGFloat const kRightPadding = 16; //右边距
 //打开系统相册
 - (void)openSystemPhotoOrCamara:(BOOL)isCamara{
     if (isCamara) {
+        AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+            
+            NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_CameraService", @"前往：设置开启定位服务")];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireCamera", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+                    if (success) {
+                        DDLogVerbose(@"成功");
+                    }
+                    else
+                    {
+                        DDLogVerbose(@"失败");
+                    }
+                }];
+            }];
+            
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+            return;
+        }
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             self.picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }

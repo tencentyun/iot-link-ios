@@ -233,8 +233,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                         vc.urlPath = TIoTAPPConfig.userPrivacyPolicyChEnglishString;
                         [self.navigationController pushViewController:vc animated:YES];
                     }else {
-                        TIoTWebVC *vc = [TIoTWebVC new];
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                         vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                        vc.notZZConfigUrl = YES;
                         vc.urlPath = PrivacyProtocolURL;
                         [self.navigationController pushViewController:vc animated:YES];
                     }
@@ -649,8 +650,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                 vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = PrivacyProtocolURL;
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;

@@ -80,6 +80,11 @@
     } else {
         // Fallback on earlier versions
     }
+    
+    CLAuthorizationStatus authStatus =[CLLocationManager authorizationStatus];
+    if (authStatus == kCLAuthorizationStatusRestricted || authStatus == kCLAuthorizationStatusDenied) {
+        [self showLocationTips];
+    }
 }
 
 - (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection
