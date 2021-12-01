@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
 
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
+@property (nonatomic, assign) BOOL is_init_alert;
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -88,6 +89,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     // Do any additional setup after loading the view.
     
     _is_ijkPlayer_stream = YES;
+    self.is_init_alert = NO;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     
@@ -165,6 +167,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)dealloc{
     
+    self.is_init_alert = NO;
     [self stopPlayMovie];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
@@ -989,7 +992,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
-            
+            if (!self.is_init_alert) {
+                [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",self.deviceName] icon:@"" view:self.view];
+                self.is_init_alert = YES;
+            }
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
             
@@ -1063,7 +1069,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             return;
         }
         
-        [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+        [MBProgressHUD show:[NSString stringWithFormat:@"%@ p2p服务准备就绪",selectedName] icon:@"" view:self.view];
         
         //计算IPC打洞时间
         self.endIpcP2P = CACurrentMediaTime();
@@ -1131,6 +1137,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)nav_customBack {
+    self.is_init_alert = NO;
     [self stopPlayMovie];
     if (self.isNVR == NO) {
         [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];

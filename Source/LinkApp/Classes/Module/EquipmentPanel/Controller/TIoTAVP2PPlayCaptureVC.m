@@ -339,6 +339,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     [alertC dismissViewControllerAnimated:YES completion:NULL];
                 });
                 
+                [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",self.deviceName] icon:@"" view:self.view];
                 _is_init_alert = YES;
             }
             

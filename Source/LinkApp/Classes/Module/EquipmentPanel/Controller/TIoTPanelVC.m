@@ -3715,7 +3715,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         return;
     }
     
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ p2p服务准备就绪",selectedName] icon:@"" view:self.view];
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
