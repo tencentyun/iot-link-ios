@@ -111,6 +111,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)nav_customBack {
     [self close];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -252,7 +253,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSDictionary *payloadDic = reportInfo.userInfo;
     TIOTtrtcPayloadModel *reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
     //1 设备愿意进行呼叫.  0 拒绝手机通话  2 设备和手机进入通话中
-    if ([reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
+    if ([reportModel.params._sys_video_call_status isEqualToString:@"1"] || [reportModel.params._sys_audio_call_status isEqualToString:@"1"]) {
             //p2p请求设备状态  app 通过信令 get_device_state 请求设备p2p的
             NSString *actionString = @"action=inner_define&channel=0&cmd=get_device_st&type=live&quality=standard";
             [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
@@ -266,10 +267,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
                 }
             }];
-    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]) {
+    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]||[reportModel.params._sys_audio_call_status isEqualToString:@"0"]) {
         [self close];
         [self.navigationController popViewControllerAnimated:NO];
-    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]) {
+    }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]|| [reportModel.params._sys_audio_call_status isEqualToString:@"2"]) {
+        
         //开启startservier
         
         if (self.isStart == NO) {
@@ -443,6 +445,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         [self.player resetHubFrame:CGRectMake(hubFrame.origin.x, hubFrame.origin.y, hubFrame.size.width, hubFrame.size.height/2)];
         
+        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
+        [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
+        
     }else {
         // 2.通过裸流服务拉流
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
@@ -524,9 +532,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //必须设置采样类型
         _avCaptureManager.captureType = AWAVCaptureTypeSystem;
         _avCaptureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
-        _avCaptureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
         _avCaptureManager.audioConfig = [[AWAudioConfig alloc] init];
-        _avCaptureManager.videoConfig = [[AWVideoConfig alloc] init];
+        if (self.callType == TIoTTRTCSessionCallType_video) {
+            _avCaptureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
+            _avCaptureManager.videoConfig = [[AWVideoConfig alloc] init];
+        }
         
         [_avCaptureManager setCaptureManagerPreviewFrame:CGRectMake(-30, 100, 350, 200)];
         
