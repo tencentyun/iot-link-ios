@@ -229,9 +229,9 @@ int isVideoConfig = 0;
     CFRetain(sampleBuffer);
     __weak typeof(self) weakSelf = self;
     [encodeQueue addOperationWithBlock:^{
-        if (weakSelf.isCapturing) {
-            aw_flv_audio_tag *audio_tag = [weakSelf.encoderManager.audioEncoder encodeAudioSampleBufToFlvTag:sampleBuffer];
-            [weakSelf sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
+        if (self.isCapturing) {
+            aw_flv_audio_tag *audio_tag = [self.encoderManager.audioEncoder encodeAudioSampleBufToFlvTag:sampleBuffer];
+            [self sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
         }
         CFRelease(sampleBuffer);
     }];
@@ -254,9 +254,9 @@ int isVideoConfig = 0;
 -(void)sendAudioPcmData:(NSData *)pcmData toEncodeQueue:(NSOperationQueue *) encodeQueue toSendQueue:(NSOperationQueue *) sendQueue{
     __weak typeof(self) weakSelf = self;
     [encodeQueue addOperationWithBlock:^{
-        if (weakSelf.isCapturing) {
-            aw_flv_audio_tag *audio_tag = [weakSelf.encoderManager.audioEncoder encodePCMDataToFlvTag:pcmData];
-            [weakSelf sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
+        if (self.isCapturing) {
+            aw_flv_audio_tag *audio_tag = [self.encoderManager.audioEncoder encodePCMDataToFlvTag:pcmData];
+            [self sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
         }
     }];
 }
@@ -286,9 +286,9 @@ int isVideoConfig = 0;
     __weak typeof(self) weakSelf = self;
     if(audio_tag){
         [sendQueue addOperationWithBlock:^{
-            if(weakSelf.isCapturing){
-                if (!weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
-                    [weakSelf sendSpsPpsAndAudioSpecificConfigTagToSendQueue:sendQueue];
+            if(self.isCapturing){
+                if (!self.isSpsPpsAndAudioSpecificConfigSent) {
+                    [self sendSpsPpsAndAudioSpecificConfigTagToSendQueue:sendQueue];
                     free_aw_flv_audio_tag((aw_flv_audio_tag **)&audio_tag);
                 }else{
                     aw_local_streamer_send_audio_data(audio_tag);
@@ -311,9 +311,9 @@ int isVideoConfig = 0;
 -(void) sendAudioAACData:(NSData *)aacData toEncodeQueue:(NSOperationQueue *) encodeQueue toSendQueue:(NSOperationQueue *) sendQueue{
     __weak typeof(self) weakSelf = self;
     [encodeQueue addOperationWithBlock:^{
-        if (weakSelf.isCapturing) {
-            aw_flv_audio_tag *audio_tag = [weakSelf.encoderManager.audioEncoder encodeAACDataToFlvTag:aacData];
-            [weakSelf sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
+        if (self.isCapturing) {
+            aw_flv_audio_tag *audio_tag = [self.encoderManager.audioEncoder encodeAACDataToFlvTag:aacData];
+            [self sendFlvAudioTag:audio_tag toSendQueue:sendQueue];
         }
     }];
 }
@@ -324,7 +324,7 @@ int isVideoConfig = 0;
     }
     __weak typeof(self) weakSelf = self;
     [sendQueue addOperationWithBlock:^{
-        if (!weakSelf.isCapturing || weakSelf.isSpsPpsAndAudioSpecificConfigSent) {
+        if (!self.isCapturing || self.isSpsPpsAndAudioSpecificConfigSent) {
             return;
         }
         
@@ -361,22 +361,22 @@ int isVideoConfig = 0;
         aw_flv_audio_tag *audioSpecificConfigTag = NULL;
         if (self.videoConfig) {
             //video sps pps tag
-            spsPpsTag = [weakSelf.encoderManager.videoEncoder createSpsPpsFlvTag];
+            spsPpsTag = [self.encoderManager.videoEncoder createSpsPpsFlvTag];
             if (spsPpsTag) {
                 aw_local_streamer_send_video_sps_pps_tag(spsPpsTag);
             }
         }
         if (self.audioConfig) {
             //audio specific config tag
-            audioSpecificConfigTag = [weakSelf.encoderManager.audioEncoder createAudioSpecificConfigFlvTag];
+            audioSpecificConfigTag = [self.encoderManager.audioEncoder createAudioSpecificConfigFlvTag];
             if (audioSpecificConfigTag) {
                 aw_local_streamer_send_audio_specific_config_tag(audioSpecificConfigTag);
             }
         }
         
-        weakSelf.isSpsPpsAndAudioSpecificConfigSent = spsPpsTag || audioSpecificConfigTag;
+        self.isSpsPpsAndAudioSpecificConfigSent = spsPpsTag || audioSpecificConfigTag;
         
-        aw_log("[D] is sps pps and audio sepcific config sent=%d", weakSelf.isSpsPpsAndAudioSpecificConfigSent);
+        aw_log("[D] is sps pps and audio sepcific config sent=%d", self.isSpsPpsAndAudioSpecificConfigSent);
     }];
 }
 
