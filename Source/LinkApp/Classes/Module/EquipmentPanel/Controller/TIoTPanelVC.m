@@ -879,7 +879,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     [self reloadForBig];
     [self.coll reloadData];
-    
+    TIoTTRTCSessionCallType calledType = TIoTTRTCSessionCallType_audio;
     
     NSDictionary *payloadDic = [NSString base64Decode:dic[@"Payload"]];
     DDLogInfo(@"----8888---%@",payloadDic);
@@ -891,8 +891,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         NSDictionary *paramsDic = payloadDic[@"params"];
         self.reportModel = [TIOTtrtcPayloadModel yy_modelWithJSON:payloadDic];
         if (paramsDic[@"_sys_audio_call_status"]) {
+            calledType = TIoTTRTCSessionCallType_audio;
             [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_audio_call_status;
         }else if (paramsDic[@"_sys_video_call_status"]) {
+            calledType = TIoTTRTCSessionCallType_video;
             [TIoTCoreUserManage shared].sys_call_status = self.reportModel.params._sys_video_call_status;
         }
     }
@@ -966,13 +968,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     if (self.isP2PVideoDevice == YES) {
         
-        if ([self.reportModel.params._sys_video_call_status isEqualToString:@"1"]) {
+        if ([self.reportModel.params._sys_video_call_status isEqualToString:@"1"] || [self.reportModel.params._sys_audio_call_status isEqualToString:@"1"]) {
             if (self.p2pVideoVCCalled == nil) {
                 
                 [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
 
                 NSMutableDictionary *reportDic = [NSMutableDictionary new];
-                [reportDic setValue:self.reportModel.params._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
+                if (![NSString isNullOrNilWithObject:self.reportModel.params._sys_video_call_status]) {
+                    [reportDic setValue:self.reportModel.params._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
+                }else if (![NSString isNullOrNilWithObject:self.reportModel.params._sys_audio_call_status]) {
+                    [reportDic setValue:self.reportModel.params._sys_audio_call_status?:@"" forKey:@"_sys_audio_call_status"];
+                }
+                
                 [reportDic setValue:self.reportModel.params._sys_userid?:@"" forKey:@"_sys_userid"];
                 [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
 
@@ -983,7 +990,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 self.p2pVideoVCCalled = [[TIoTAVP2PPlayCaptureVC alloc]init];
                 self.p2pVideoVCCalled.deviceName = self.deviceName?:@"";
                 self.p2pVideoVCCalled.productID = self.productId?:@"";
-                self.p2pVideoVCCalled.callType = TIoTTRTCSessionCallType_video;
+                self.p2pVideoVCCalled.callType = calledType;
                 self.p2pVideoVCCalled.reportDataDic = reportDic;
                 self.p2pVideoVCCalled.objectModelDic = self.objectModel;
                 self.p2pVideoVCCalled.payloadParamModel = self.reportModel.params;
