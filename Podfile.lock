@@ -113,7 +113,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.18.0)
+  - Protobuf (3.19.1)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
@@ -133,6 +133,7 @@ PODS:
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel (= 1.0.4)
   - TIoTLinkKit_Faac (2.0.5)
+  - TIoTLinkKit_FLV (2.2.3)
   - TIoTLinkKit_IJKPlayer (1.0.2)
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
@@ -140,6 +141,7 @@ PODS:
   - TIoTLinkVideo (1.0.0):
     - CocoaLumberjack (= 3.7.2)
     - TIoTLinkKit_Faac (= 2.0.5)
+    - TIoTLinkKit_FLV (= 2.2.3)
     - TIoTLinkKit_XP2P (= 2.2.2-beta.202109221134)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
@@ -209,6 +211,7 @@ SPEC REPOS:
     - SocketRocket
     - Tencent-MapSDK
     - TIoTLinkKit_Faac
+    - TIoTLinkKit_FLV
     - TIoTLinkKit_IJKPlayer
     - TIoTLinkKit_TPNS
     - TIoTLinkKit_WechatOpenSDK
@@ -251,7 +254,7 @@ SPEC CHECKSUMS:
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 1a37ebea1338949e9ac35a3f06e80b3f536eec8d
+  Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
@@ -259,11 +262,12 @@ SPEC CHECKSUMS:
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 0386fb583c61765a02ad5cca810c7661d5a0bc53
   TIoTLinkKit_Faac: 9295b2ff5e8d978cbcaf9ff062db2728a333f4cb
+  TIoTLinkKit_FLV: aec2b2ec9664990ec6c5b9f760fc1a9043d5a9a5
   TIoTLinkKit_IJKPlayer: e47c3fed6b204e7544f84a24310cab7a372854d1
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
   TIoTLinkKit_XP2P: bae499f4cea3f129a1299aded37c4f8aa9fae403
-  TIoTLinkVideo: cc6b758bd3a99cdd9b056d7f2063e3e7adc535dc
+  TIoTLinkVideo: 145a9f533a63ab2ac46e123bd9999d6012ea5878
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d

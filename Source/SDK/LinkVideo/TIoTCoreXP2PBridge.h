@@ -5,9 +5,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AWSystemAVCapture.h"
+#import "TIoTAVCaptionFLV.h"
 #include "AppWrapper.h"
-#import "AWAVCaptureManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -77,9 +76,9 @@ NS_ASSUME_NONNULL_BEGIN
 //对讲音频默认采样率
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
 //可通过此接口 audio_onfig 参数既可设置对讲音频码率（bitrate）、采样率（sampleRate）、channelCount、sampleSize
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(AWAudioConfig *)audio_onfig;
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate;
 //音视频采样
-- (void)sendVideoToServer:(NSString *)dev_name channel:(NSString *)channel_number avConfig:(AWAVCaptureManager *)avConfig;
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (XP2PErrCode)stopVoiceToServer;
 
 /*

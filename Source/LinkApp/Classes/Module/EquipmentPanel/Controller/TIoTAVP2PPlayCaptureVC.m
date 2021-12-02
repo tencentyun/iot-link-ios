@@ -11,12 +11,12 @@
 #import <YYModel.h>
 #import "TIoTCoreUtil.h"
 #import "NSObject+additions.h"
-#import "AWAVCaptureManager.h"
 #import "TIoTTRTCUIManage.h"
 #import "UIDevice+Until.h"
 #import "TIoTUIProxy.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
+#import <AVFoundation/AVFoundation.h>
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -59,7 +59,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIButton *switchCameras;
 //预览
 @property (nonatomic, strong) UIView *previewBottomView;
-@property (nonatomic, strong) AWAVCaptureManager *avCaptureManager;
 
 @property (nonatomic, assign) BOOL isStart;
 @end
@@ -93,13 +92,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self initializedVideo];
     
     [self setupUI];
-    
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-
-    [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
-    
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
@@ -182,10 +174,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.title = self.deviceName?:@"";
     
-    [self.previewBottomView addSubview: self.avCapture.preview];
-    
-    self.avCapture.preview.center = self.previewBottomView.center;
-    
     self.captureButton = [[UIButton alloc] init];
 //    [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
     [self.captureButton setImage:[UIImage imageNamed:@"icon_hangup"] forState:UIControlStateNormal];
@@ -214,9 +202,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.switchCameras.frame = CGRectMake(screenSize.width - 30 - self.switchCameras.currentImage.size.width, 130, self.switchCameras.currentImage.size.width, self.switchCameras.currentImage.size.height);
     
     [self.view insertSubview:self.previewBottomView belowSubview:self.captureButton];
-    
-    self.previewBottomView.frame = self.view.bounds;
-    self.avCapture.preview.frame = self.previewBottomView.bounds;
 }
 
 -(UIImage *)imageWithPath:(NSString *)path scale:(CGFloat)scale{
@@ -277,23 +262,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         if (self.isStart == NO) {
             
 //            if (self.isCallIng == NO) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-                    
+
                     self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                    
+
                     [self configVideo];
                     [self.player prepareToPlay];
                     [self.player play];
-                    
+
                     self.startPlayer = CACurrentMediaTime();
-                });
+//                });
 //            }
            
             self.isStart = YES;
 
-            [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
-            [self startAVCapture];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+                [[AVAudioSession sharedInstance] setActive:YES error:nil];
+                
+                [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
+                [self startAVCapture];
+            });
         }
     }
 }
@@ -413,9 +403,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)configVideo {
 
     // 1.通过播放器发起的拉流
-    if (_is_ijkPlayer_stream) {
-        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
-        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+    [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -450,32 +438,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-        
-    }else {
-        // 2.通过裸流服务拉流
-        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
-        
-        UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
-        fileTip.text = @"数据帧写文件中...";
-        fileTip.textAlignment = NSTextAlignmentCenter;
-        fileTip.textColor = [UIColor whiteColor];
-        [self.imageView addSubview:fileTip];
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
-        
-    }
 }
 
 #pragma mark 事件
 - (void)startAVCapture {
     
     self.isStart = YES;
-//    if (self.isCallIng == YES) {
-//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//
-//        [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
-//    }
-    [self.avCapture startCapture];
+
+    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:self.previewBottomView];
 }
 
 -(void)onStartClick{
@@ -497,18 +467,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)close {
-    if (self.avCapture.isCapturing) {
-//        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
-        [self.avCapture stopCapture];
-    }
-//    [self.avCapture stopCapture];
-    
     self.isStart = NO;
     
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
     
     if (self.previewBottomView != nil) {
         [self.previewBottomView removeFromSuperview];
@@ -522,38 +486,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 -(void)onSwitchClick{
-    [self.avCapture switchCamera];
-}
-
-#pragma mark 懒加载
--(AWAVCaptureManager *)avCaptureManager{
-    if (!_avCaptureManager) {
-        _avCaptureManager = [[AWAVCaptureManager alloc] init];
-        //必须设置采样类型
-        _avCaptureManager.captureType = AWAVCaptureTypeSystem;
-        _avCaptureManager.audioEncoderType = AWAudioEncoderTypeHWAACLC;
-        _avCaptureManager.audioConfig = [[AWAudioConfig alloc] init];
-        if (self.callType == TIoTTRTCSessionCallType_video) {
-            _avCaptureManager.videoEncoderType = AWVideoEncoderTypeHWH264;
-            _avCaptureManager.videoConfig = [[AWVideoConfig alloc] init];
-        }
-        
-        [_avCaptureManager setCaptureManagerPreviewFrame:CGRectMake(-30, 100, 350, 200)];
-        
-        //设置竖屏
-        _avCaptureManager.videoConfig.orientation = UIInterfaceOrientationPortrait;
-    }
-    return _avCaptureManager;
-}
-
--(AWAVCapture *)avCapture{
-    AWAVCapture *capture = self.avCaptureManager.avCapture;
-    return capture;
+//    [self.avCapture switchCamera];
 }
 
 -(UIView *)previewBottomView{
     if (!_previewBottomView) {
-        _previewBottomView = [[UIView alloc]initWithFrame:self.view.bounds];
+        _previewBottomView = [[UIView alloc]initWithFrame:CGRectMake(30, 100, 350, 200)];
         [self.view addSubview:_previewBottomView];
         [self.view sendSubviewToBack:_previewBottomView];
     }

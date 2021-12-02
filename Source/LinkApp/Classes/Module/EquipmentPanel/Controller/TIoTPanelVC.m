@@ -231,11 +231,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     self.isEnterDeviceDetailVC = NO;
     
     if (self.isRefreshFromP2Player == YES) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
-        [HXYNotice removeListener:self];
-        [self addNormalNotifications];
-        [self addP2pNofitications];
-        [self getProductsConfig];
+
     }
 }
 
@@ -249,9 +245,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self.blueManager disconnectPeripheral];
     [self.navigationController popViewControllerAnimated:YES];
     [self removeNotifications];
-    if (self.isP2PVideoDevice == YES) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
-    }
 }
 
 - (void)dealloc {
@@ -3723,32 +3716,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
     
     [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
-    
-    
-    //计算IPC打洞时间
-//    self.endIpcP2P = CACurrentMediaTime();
-    
-    
-//    if (self.isCallIng == NO) {
-//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryMultiRoute withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil ];
-//        [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//
-//        [[TIoTCoreXP2PBridge sharedInstance] sendVideoToServer:self.deviceName?:@"" channel:@"channel=0" avConfig:self.avCaptureManager];
-//    }else {
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-//
-//            self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-//
-//            [self configVideo];
-//            [self.player prepareToPlay];
-//            [self.player play];
-//
-//            self.startPlayer = CACurrentMediaTime();
-//        });
-//    }
-    
-    
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
