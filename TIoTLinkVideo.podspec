@@ -19,6 +19,11 @@ Pod::Spec.new do |s|
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
   s.dependency 'TIoTLinkKit_XP2P', '2.3.3-beta.202112080926'
   s.dependency 'TIoTLinkKit_Faac', '2.0.5'
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
+=======
+  s.dependency 'TIoTLinkKit_FLV', '2.2.3'
+  s.dependency 'CocoaLumberjack', '3.7.2'
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)
   s.pod_target_xcconfig = {
     'VALID_ARCHS'  => 'arm64'
   }

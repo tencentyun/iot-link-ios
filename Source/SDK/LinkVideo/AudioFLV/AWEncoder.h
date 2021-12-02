@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
 #import <AVFoundation/AVFoundation.h>
 #import "AWAVConfig.h"
 
@@ -31,3 +32,5 @@ typedef enum : NSUInteger {
 -(void) onErrorWithCode:(AWEncoderErrorCode) code des:(NSString *) des;
 
 @end
+=======
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)

@@ -107,6 +107,26 @@ static NSString *itemId3 = @"i_ooo454";
     {
         self.title = NSLocalizedString(@"control_panel", @"控制面板");
     }
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
+=======
+    self.isEnterDeviceDetailVC = NO;
+    
+    if (self.isRefreshFromP2Player == YES) {
+
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+- (void)nav_customBack {
+    [self.blueManager stopScan];
+    [self.blueManager disconnectPeripheral];
+    [self.navigationController popViewControllerAnimated:YES];
+    [self removeNotifications];
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)
 }
 
 - (void)dealloc {
@@ -998,4 +1018,78 @@ static NSString *itemId3 = @"i_ooo454";
     return _deviceInfo;
 }
 
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
+=======
+- (UIView *)blueConnectView {
+    if (!_blueConnectView) {
+        _blueConnectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+        _blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+    }
+    return _blueConnectView;
+}
+
+- (UILabel *)blueTipLabel {
+    if (!_blueTipLabel) {
+        _blueTipLabel = [[UILabel alloc]init];
+        [_blueTipLabel setLabelFormateTitle:@"连接蓝牙中" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kTemperatureHexColor textAlignment:NSTextAlignmentLeft];
+    }
+    return _blueTipLabel;
+}
+
+- (UIButton *)controlBlueDeviceButton {
+    if (!_controlBlueDeviceButton) {
+        _controlBlueDeviceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_controlBlueDeviceButton setButtonFormateWithTitlt:@"" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:14]];
+        _controlBlueDeviceButton.layer.borderWidth = 1;
+        _controlBlueDeviceButton.layer.cornerRadius = 10;
+        _controlBlueDeviceButton.layer.borderColor = [UIColor colorWithHexString:kNoSelectedHexColor].CGColor;
+        _controlBlueDeviceButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+        [_controlBlueDeviceButton addTarget:self action:@selector(controlConnectBlueDevice:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _controlBlueDeviceButton;
+}
+
+- (NSMutableDictionary *)typeTimesDic {
+    if (!_typeTimesDic) {
+        _typeTimesDic = [NSMutableDictionary new];
+    }
+    return _typeTimesDic;
+}
+
+- (NSMutableDictionary *)detailStructTpyeTimesDic {
+    if (!_detailStructTpyeTimesDic) {
+        _detailStructTpyeTimesDic = [NSMutableDictionary new];
+    }
+    return _detailStructTpyeTimesDic;
+}
+
+- (void)refushVideo:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+}
+
+- (void)responseP2PdisConnect:(NSNotification *)notify {
+    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
+    NSString *selectedName = self.deviceName?:@"";
+    
+    if (![DeviceName isEqualToString:selectedName]) {
+        return;
+    }
+    
+    [MBProgressHUD showError:@"通道断开，正在重连"];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
+                                              sec_key:@""
+                                               pro_id:self.productId?:@""
+                                             dev_name:DeviceName?:@""];
+
+}
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)
 @end

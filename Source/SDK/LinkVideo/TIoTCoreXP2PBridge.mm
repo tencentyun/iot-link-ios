@@ -71,14 +71,14 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 
-@interface TIoTCoreXP2PBridge ()<AWAVCaptureDelegate>
+@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
 @end
 
 @implementation TIoTCoreXP2PBridge {
     
-    AWSystemAVCapture *systemAvCapture;
+    TIoTAVCaptionFLV *systemAvCapture;
 
     dispatch_source_t timer;
     void *_serverHandle;
@@ -187,11 +187,14 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
-    AWAudioConfig *config = [[AWAudioConfig alloc] init];
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:config];
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:TIoTAVCaptionFLVAudio_8];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(AWAudioConfig *)audio_onfig{
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate{
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:nil];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView {
     
     self.isSending = YES;
     
@@ -199,9 +202,10 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     const char *channel = [channel_number UTF8String];
     _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
-    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:audio_onfig];
+    
+    systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
+    systemAvCapture.videoLocalView = localView;
     systemAvCapture.delegate = self;
-    systemAvCapture.audioEncoderType = AWAudioEncoderTypeHWAACLC;
     [systemAvCapture startCapture];
 }
 

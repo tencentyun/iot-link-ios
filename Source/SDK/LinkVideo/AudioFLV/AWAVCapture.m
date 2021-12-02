@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
 #import "AWAVCapture.h"
 #import "AWEncoderManager.h"
 #include "aw_data.h"
@@ -325,3 +326,5 @@ static void aw_streamer_send_flv_tag_to_rtmp(aw_flv_common_tag *common_tag){
 }
 
 @end
+=======
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)

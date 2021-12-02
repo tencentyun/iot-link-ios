@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (204be9 修复使用DDLog库后，内存及时不释放问题)
 #import "AWEncoderManager.h"
 #import "AWHWAACEncoder.h"
 #import "AWSWFaacEncoder.h"
@@ -37,3 +38,5 @@
 }
 
 @end
+=======
+>>>>>>> CHANGE (516ba1 添加采集音频+视频+合成flv)
