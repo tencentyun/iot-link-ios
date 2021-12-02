@@ -444,26 +444,18 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)startAVCapture {
     
     self.isStart = YES;
-
-    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:self.previewBottomView];
+    if (self.callType == TIoTTRTCSessionCallType_audio) {
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:nil];
+    }else {
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:self.previewBottomView];
+    }
 }
 
 -(void)onStartClick{
-//    if (self.avCapture.isCapturing) {
-//        [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
-//        [self.avCapture stopCapture];
-//        self.isStart = NO;
-//    }else{
-//        [self startAVCapture];
-//    }
     
     [self close];
     
     [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (void)open {
-    [self startAVCapture];
 }
 
 - (void)close {
@@ -491,7 +483,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 -(UIView *)previewBottomView{
     if (!_previewBottomView) {
-        _previewBottomView = [[UIView alloc]initWithFrame:CGRectMake(30, 100, 350, 200)];
+        _previewBottomView = [[UIView alloc]initWithFrame:CGRectMake(40, 100, 150, 200)];
         [self.view addSubview:_previewBottomView];
         [self.view sendSubviewToBack:_previewBottomView];
     }
