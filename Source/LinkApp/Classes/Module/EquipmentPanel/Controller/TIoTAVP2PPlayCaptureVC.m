@@ -176,9 +176,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.title = self.deviceName?:@"";
     
     self.captureButton = [[UIButton alloc] init];
-//    [self.captureButton setTitle:@"开始" forState:UIControlStateNormal];
     [self.captureButton setImage:[UIImage imageNamed:@"icon_hangup"] forState:UIControlStateNormal];
-    [self.captureButton addTarget:self action:@selector(onStartClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.captureButton addTarget:self action:@selector(onHungupClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.captureButton];
     [self.captureButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
@@ -452,7 +451,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
--(void)onStartClick{
+-(void)onHungupClick{
     
     [self close];
     
