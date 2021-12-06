@@ -36,6 +36,13 @@
     
     AudioStreamBasicDescription outAudioStreamBasicDescription = {0}; // Always initialize the fields of a new audio stream basic description structure to zero, as shown here: ...
     outAudioStreamBasicDescription.mSampleRate = 16000;//inAudioStreamBasicDescription.mSampleRate; // The number of frames per second of the data in the stream, when the stream is played at normal speed. For compressed formats, this field indicates the number of frames per second of equivalent decompressed data. The mSampleRate field must be nonzero, except when this structure is used in a listing of supported formats (see “kAudioStreamAnyRate”).
+    if (self.audioType == TIoTAVCaptionFLVAudio_8) {
+        outAudioStreamBasicDescription.mSampleRate = 8000;
+    }else if (self.audioType == TIoTAVCaptionFLVAudio_16) {
+        outAudioStreamBasicDescription.mSampleRate = 16000;
+    }else if (self.audioType == TIoTAVCaptionFLVAudio_441) {
+        outAudioStreamBasicDescription.mSampleRate = 441000;
+    }
     outAudioStreamBasicDescription.mFormatID = kAudioFormatMPEG4AAC; // kAudioFormatMPEG4AAC_HE does not work. Can't find `AudioClassDescription`. `mFormatFlags` is set to 0.
     outAudioStreamBasicDescription.mFormatFlags = kMPEG4Object_AAC_LC; // Format-specific flags to specify details of the format. Set to 0 to indicate no format flags. See “Audio Data Format Identifiers” for the flags that apply to each format.
     outAudioStreamBasicDescription.mBytesPerPacket = 0; // The number of bytes in a packet of audio data. To indicate variable packet size, set this field to 0. For a format that uses variable packet size, specify the size of each packet using an AudioStreamPacketDescription structure.
@@ -187,6 +194,13 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
     int profile = 2;  //AAC LC
     //39=MediaCodecInfo.CodecProfileLevel.AACObjectELD;
     int freqIdx = 8;//4;  //44.1KHz
+    if (self.audioType == TIoTAVCaptionFLVAudio_8) {
+        freqIdx = 11;
+    }else if (self.audioType == TIoTAVCaptionFLVAudio_16) {
+        freqIdx = 8;
+    }else if (self.audioType == TIoTAVCaptionFLVAudio_441) {
+        freqIdx = 4;
+    }
     int chanCfg = 1;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
     NSUInteger fullLength = adtsLength + packetLength;
     // fill in ADTS data

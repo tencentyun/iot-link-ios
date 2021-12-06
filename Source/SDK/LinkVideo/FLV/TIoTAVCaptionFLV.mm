@@ -63,6 +63,7 @@ NSFileHandle *_fileHandle;
         return;
     }
     self.aacEncoder = [TIoTAACEncoder new];
+    self.aacEncoder.audioType = _audioRate;
     
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     
