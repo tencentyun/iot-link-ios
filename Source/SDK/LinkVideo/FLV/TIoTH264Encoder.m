@@ -295,10 +295,10 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
             error = @"H264: VTCompressionSessionEncodeFrame failed ";
             
             // End the session
-            VTCompressionSessionInvalidate(EncodingSession);
-            CFRelease(EncodingSession);
-            EncodingSession = NULL;
-            error = NULL;
+//            VTCompressionSessionInvalidate(EncodingSession);
+//            CFRelease(EncodingSession);
+//            EncodingSession = NULL;
+//            error = NULL;
             return;
         }
         //            NSLog(@"H264: VTCompressionSessionEncodeFrame Success");

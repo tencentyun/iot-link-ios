@@ -73,13 +73,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.fd_interactivePopDisabled = YES;
     
-    if (self.isCallIng == YES) {
-        //APP主叫
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
-    }else {
-        //设备呼叫APP  被叫
-        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
-    }
     
     [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
     [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
@@ -98,6 +91,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     if (self.isCallIng == YES) {
         [self requestDeviceCommunicate];
+    }
+    
+    if (self.isCallIng == YES) {
+        //APP主叫
+        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+    }else {
+        //设备呼叫APP  被叫
+        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
     }
 }
 
