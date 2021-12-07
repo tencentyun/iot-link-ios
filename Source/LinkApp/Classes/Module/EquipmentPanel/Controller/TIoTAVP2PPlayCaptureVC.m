@@ -17,6 +17,7 @@
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 #import <AVFoundation/AVFoundation.h>
+#import "TIoTP2PCommunicateUIManage.h"
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -96,9 +97,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (self.isCallIng == YES) {
         //APP主叫
         [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+        
+//        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateCallDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
     }else {
         //设备呼叫APP  被叫
         [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
+        
+//        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateShowAppCalledVideoVC];
     }
 }
 
@@ -282,6 +289,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
                 
                 [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
+                
+//                [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//                [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
+                
                 [self startAVCapture];
             });
         }
@@ -475,6 +486,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     [[TIoTTRTCUIManage sharedManager]refuseAppCallingOrCalledEnterRoom];
+    
+//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
 }
 
 -(void)onSwitchClick{

@@ -15,6 +15,7 @@
 #import "TIoTTRTCSessionManager.h"
 #import "TIoTTRTCUIManage.h"
 #import "TIoTCoreUtil.h"
+#import "TIoTP2PCommunicateUIManage.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -121,6 +122,9 @@ static NSString *heartBeatReqID = @"5002";
     
     [[TIoTCoreSocketManager shared] socketOpen];
     [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+    
+//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTP2PCommunicateUIManage sharedManager] selector:@selector(p2pCommunicateCallingHungupAction) object:nil];
 }
 
 -(void)SRWebSocketClose{
@@ -176,7 +180,9 @@ static NSString *heartBeatReqID = @"5002";
     [HXYNotice addReportDevicePost:deviceInfo];
     
     [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
-
+    
+//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
 }
 
 - (void)handleReceivedMessage:(id)message{

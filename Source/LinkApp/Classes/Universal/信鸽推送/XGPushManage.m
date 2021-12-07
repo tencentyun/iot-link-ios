@@ -13,6 +13,7 @@
 #import "TIoTAppConfig.h"
 #import "TIOTTRTCModel.h"
 #import "TIoTTRTCUIManage.h"
+#import "TIoTP2PCommunicateUIManage.h"
 
 @interface XGPushManage ()<XGPushDelegate,UNUserNotificationCenterDelegate>
 
@@ -144,6 +145,13 @@
                 
                 [MBProgressHUD showError:reason];
             }];
+         
+         [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+         [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicatePreEnterRoom:params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+             
+             [MBProgressHUD showError:reason];
+         }];
+         
         }*/
             
     }
