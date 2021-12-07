@@ -118,14 +118,14 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //    setStunServerToXp2p("11.11.11.11", 111);
-    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
-    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
     

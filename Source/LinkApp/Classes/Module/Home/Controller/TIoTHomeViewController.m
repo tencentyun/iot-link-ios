@@ -37,6 +37,7 @@
 #import "TIoTShortcutView.h"
 #import "TIoTAlertAuthorsizeView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "TIoTP2PCommunicateUIManage.h"
 
 @import Lottie;
 
@@ -208,6 +209,10 @@ static CGFloat kHeaderViewHeight = 162;
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
     [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+    
+//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.dataArr];
+//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.shareDataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -1138,6 +1143,9 @@ static CGFloat kHeaderViewHeight = 162;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
         [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+        
+//        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.shareDataArr];
     });
 }
 
@@ -1146,6 +1154,9 @@ static CGFloat kHeaderViewHeight = 162;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
         [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+        
+//        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.dataArr];
     });
 }
 
