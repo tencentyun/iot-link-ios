@@ -48,6 +48,8 @@
 #import "TIoTAVP2PPlayCaptureVC.h"
 #import "TIoTCoreXP2PBridge.h"
 
+#import "TIoTP2PCommunicateUIManage.h"
+
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
 #define kSectionInset UIEdgeInsetsMake(10, 16, 10, 16)
@@ -840,9 +842,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     if (isTRTCDevice) {
         [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
         
+//        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//        [TIoTP2PCommunicateUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
+        
         if (self.isP2PVideoDevice == NO) {
             //TRTC
             [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+            
+//            [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateCallDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.productId?:@"",self.deviceName?:@""]];
+            
         }else {
             
             __weak typeof(self) weakSelf = self;
@@ -910,6 +919,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             [[TIoTTRTCUIManage sharedManager] setDeviceDisConnectDic:@{@"DeviceId":device_Id?:@"",@"Offline":@(YES)}];
             
+//            [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateSetDeviceDisConnectDic:@{@"DeviceId":device_Id?:@"",@"Offline":@(YES)}];
+            
         }else if ([line_status isEqualToString:@"Online"]) {
             
 //            self.coll.allowsSelection = YES;
@@ -965,7 +977,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             if (self.p2pVideoVCCalled == nil) {
                 
                 [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
-
+                
+//                [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+//                [TIoTP2PCommunicateUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
+                
                 NSMutableDictionary *reportDic = [NSMutableDictionary new];
                 if (![NSString isNullOrNilWithObject:self.reportModel.params._sys_video_call_status]) {
                     [reportDic setValue:self.reportModel.params._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
