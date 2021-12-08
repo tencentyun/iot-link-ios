@@ -54,10 +54,9 @@
             
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[obj.row];
                         
-            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                                      sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                                       pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                                     dev_name:model.DeviceName];
+            TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:model.DeviceName?:@""];
+            [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:model.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypeLive;
@@ -131,10 +130,11 @@
     
     cell.playRealTimeMonitoringBlock = ^{
 
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                                 dev_name:nameNameString];
+        
+        
+        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:nameNameString?:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:nameNameString?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -145,7 +145,9 @@
     
     cell.playLocalPlaybackBlock = ^{
 
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId dev_name:nameNameString];
+        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:nameNameString?:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:nameNameString?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypePlayback;

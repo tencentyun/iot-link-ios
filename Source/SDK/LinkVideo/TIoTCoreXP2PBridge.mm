@@ -112,20 +112,29 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     return self;
 }
 
-
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //    setStunServerToXp2p("11.11.11.11", 111);
-    return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
-}
-
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
-    setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    return (XP2PErrCode)startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], [xp2pinfo UTF8String]);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    return (XP2PErrCode)ret;
+}
+
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo {
+    
+    if (xp2pinfo == nil || [xp2pinfo isEqualToString:@""]) {
+        if ((sec_id == nil || [sec_id isEqualToString:@""])   ||  (sec_key == nil || [sec_key isEqualToString:@""])) {
+            NSLog(@"请输入正确的scretId和secretKey，或者xp2pInfo");
+            return XP2P_ERR_INIT_PRM;
+        }
+        setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候不需要传入secretid和secretkey，避免泄露secretid和secretkey，此处仅为演示
+    }
+    
+    int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
+    return (XP2PErrCode)ret;
 }
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
