@@ -144,18 +144,35 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     if (self.isCallIng == YES) {
         //拼接主呼叫方id_sys_caller_id
-        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
 
         //拼接被呼叫方id_sys_called_id
         NSString *deviceID = [NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""];
-        [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
+        [dataDic setValue:deviceID forKey:@"_sys_called_id"];
     }else {
         //被叫
-        //拼接主呼叫方id_sys_caller_id
-        [dataDic setValue:self.payloadParamModel._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
-
-        //拼接被呼叫方id_sys_called_id
-        [dataDic setValue:self.payloadParamModel._sys_called_id?:@"" forKey:@"id_sys_called_id"];
+//        //拼接主呼叫方id_sys_caller_id
+//        [dataDic setValue:self.payloadParamModel._sys_caller_id?:@"" forKey:@"_sys_caller_id"];
+//
+//        //拼接被呼叫方id_sys_called_id
+//        [dataDic setValue:self.payloadParamModel._sys_called_id?:@"" forKey:@"_sys_called_id"];
+        
+        NSString *callerID = @"";
+        NSString *calledID = @"";
+        if ([NSString isNullOrNilWithObject:self.payloadParamModel._sys_caller_id]) {
+            callerID = [NSString stringWithFormat:@"%@/%@",self.productID,self.deviceName];
+        }else {
+            callerID = self.payloadParamModel._sys_caller_id?:@"";
+        }
+        
+        if ([NSString isNullOrNilWithObject:self.payloadParamModel._sys_called_id]) {
+            calledID = [TIoTCoreUserManage shared].userId?:@"";
+        }else {
+            calledID = self.payloadParamModel._sys_called_id?:@"";
+        }
+        
+        [dataDic setValue:callerID forKey:@"_sys_caller_id"];
+        [dataDic setValue:calledID forKey:@"_sys_called_id"];
     }
     
     //Data json
