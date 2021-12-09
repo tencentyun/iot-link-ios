@@ -25,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 //面板中主动呼叫设备 0 audio； 1video
 //- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;
 ///MARK:外部主动拉起页面
-- (void)p2pCommunicateCallDeviceFromPanel:(TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;
+// reportDic 面板主动呼叫时传入
+- (void)p2pCommunicateCallDeviceFromPanel:(TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)reportDic;
 
 
 //- (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure ;
