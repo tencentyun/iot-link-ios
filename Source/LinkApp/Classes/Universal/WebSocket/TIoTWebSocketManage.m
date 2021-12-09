@@ -68,7 +68,6 @@ static NSString *heartBeatReqID = @"5002";
     //TRTC UI Delegate
     [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
     
-//    [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTP2PCommunicateUIManage.sharedManager;
 }
 
 - (void)registerNetworkNotifications{
@@ -123,10 +122,10 @@ static NSString *heartBeatReqID = @"5002";
 -(void)SRWebSocketOpen{
     
     [[TIoTCoreSocketManager shared] socketOpen];
-    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
     
-//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-//    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTP2PCommunicateUIManage sharedManager] selector:@selector(p2pCommunicateCallingHungupAction) object:nil];
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTP2PCommunicateUIManage sharedManager] selector:@selector(p2pCommunicateCallingHungupAction) object:nil];
 }
 
 -(void)SRWebSocketClose{
@@ -181,10 +180,10 @@ static NSString *heartBeatReqID = @"5002";
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
     
-    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
+//    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
     
-//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
 }
 
 - (void)handleReceivedMessage:(id)message{
