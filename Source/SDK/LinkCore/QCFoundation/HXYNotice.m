@@ -29,6 +29,7 @@ static NSString * const callingDisconnectNet = @"callingDisconnectNet";
 static NSString * const firmwareUpdateData   = @"firmwareUpdateData";
 static NSString * const P2PVideoDevice       = @"P2PVideoDevice";
 static NSString * const P2PVideoDeviceExit   = @"P2PVideoDeviceExit";
+static NSString * const statusManagerCommuni = @"statusManagerCommuni";
 
 @implementation HXYNotice
 
@@ -265,5 +266,14 @@ static NSString * const P2PVideoDeviceExit   = @"P2PVideoDeviceExit";
 
 + (void)postP2PVIdeoExit {
     [[NSNotificationCenter defaultCenter] postNotificationName:P2PVideoDeviceExit object:nil];
+}
+
+//statusManager 是否通话中或弹出通话页面
++ (void)addStatusManagerCommunicateLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:statusManagerCommuni object:nil];
+}
+
++ (void)postStatusManagerCommunicateType:(NSInteger)isCommunicating {
+    [[NSNotificationCenter defaultCenter] postNotificationName:statusManagerCommuni object:@(isCommunicating)];
 }
 @end
