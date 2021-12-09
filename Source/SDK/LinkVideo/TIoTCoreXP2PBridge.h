@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
+
 /*
  * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
  */

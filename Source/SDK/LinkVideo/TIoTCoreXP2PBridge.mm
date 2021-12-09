@@ -60,6 +60,14 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
         });
     }
+    else if (type == XP2PTypeDeviceMsgArrived) {
+        NSString *nsFormat = [NSString stringWithUTF8String:msg];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
+            NSLog(@"revice device msg: %@", nsFormat);
+        });
+    }
     else {
         DDLogInfo(@"XP2P log: %s\n", msg);
     }
@@ -111,6 +119,23 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     }
     return self;
 }
+
+
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
+    return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
+}
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
+    
+    //1.配置IOT_P2P SDK
+    self.dev_name = dev_name;
+    setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
+    return (XP2PErrCode)ret;
+}
+
+
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //    setStunServerToXp2p("11.11.11.11", 111);
