@@ -35,6 +35,7 @@
 @property (nonatomic, strong, readwrite) TIOTtrtcPayloadParamModel *tempModel;
 @property (nonatomic, strong, readwrite) NSString *deviceIDTempStr;
 @property (nonatomic, assign, readwrite) TIoTTRTCSessionCallType preCallingType;
+@property (nonatomic, assign) BOOL isCommunicating; //被叫和主叫 yes:进入房间(拉起页面或通话中) no:退出房间后
 @end
 
 @implementation TIoTStatusManager
@@ -133,9 +134,10 @@
         type = TIoTTRTCSessionCallType_video;
     }
     
-    UIViewController *topVC = [TIoTCoreUtil topViewController];
+//    UIViewController *topVC = [TIoTCoreUtil topViewController];
     
-    if (_callAudioVC == topVC) {
+//    if (_callAudioVC == topVC) {
+    if (TIoTTRTCSessionCallType_audio == type) {
         
         if (_isActiveCall == YES) {
             if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
@@ -232,9 +234,10 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (!(deviceParam._sys_video_call_status.intValue == 2 || deviceParam._sys_audio_call_status.intValue == 2)) {
                 
-                UIViewController *topVC = [TIoTCoreUtil topViewController];
+//                UIViewController *topVC = [TIoTCoreUtil topViewController];
                 
-                if (self.callAudioVC == topVC) {
+//                if (self.callAudioVC == topVC) {
+                if (TIoTTRTCSessionCallType_audio == type) {
 //                    [self exitRoom:deviceParam._sys_userid];
                     
                     if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
@@ -244,7 +247,8 @@
                 }
             }
         });
-    }else if (_callVideoVC == topVC) {
+//    }else if (_callVideoVC == topVC) {
+    }else if (TIoTTRTCSessionCallType_video == type) {
         
         if (_isActiveCall == YES) {
             if ([TIoTTRTCSessionManager sharedManager].state != TIoTTRTCSessionType_calling) {
@@ -338,8 +342,10 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (!(deviceParam._sys_video_call_status.intValue == 2 || deviceParam._sys_audio_call_status.intValue == 2)) {
                 
-                UIViewController *topVC = [TIoTCoreUtil topViewController];
-                if (self.callVideoVC ==topVC) {
+//                UIViewController *topVC = [TIoTCoreUtil topViewController];
+//                if (self.callVideoVC ==topVC) {
+                if (TIoTTRTCSessionCallType_video == type) {
+                    
 //                    [self exitRoom:deviceParam._sys_userid];
                     if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
                         [self.delegate didExitRoom:deviceParam._sys_userid];
@@ -525,9 +531,16 @@
     }
     [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
      */
+    if ([self.delegate respondsToSelector:@selector(statusManagerRefuseOtherCallWithDeviceReport:deviceID:)]) {
+        [self.delegate statusManagerRefuseOtherCallWithDeviceReport:reportDic deviceID:deviceID];
+    }
 }
 
 - (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
+    
+    if ([self.delegate respondsToSelector:@selector(statusManagerrequestControlDeviceDataWithReport:deviceID:)]) {
+        [self.delegate statusManagerrequestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+    }
     /*
     NSMutableDictionary *trtcReport = [reportDic mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
@@ -852,7 +865,8 @@
     }
 }
 
-- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString {
+///MARK: deviceDic 面板中手动拉起页面需要传 (主动拉起通话页面)
+- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)deviceDic{
     _isActiveCall = YES; //表示主动呼叫
     _isActiveStatus = _isActiveCall;
  
@@ -876,6 +890,7 @@
     }
     
     _deviceID = self.deviceIDTempStr;
+    self.isCommunicating = YES;
     
     if (audioORvideo == TIoTTRTCSessionCallType_audio) { //audio
 //        _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
@@ -890,8 +905,8 @@
 //        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
     }
     
-    if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:)]) {
-        [self.delegate statusManagerPayloadParamModel:[TIOTtrtcPayloadParamModel new] type:audioORvideo isFromReceived:NO];
+    if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:reportDeviceDic:deviceID:)]) {
+        [self.delegate statusManagerPayloadParamModel:[TIOTtrtcPayloadParamModel new] type:audioORvideo isFromReceived:NO reportDeviceDic:deviceDic deviceID:self.deviceIDTempStr];
     }
     
     //若对方60秒未接听，则显示对方无人接听…，并主动挂断退出
@@ -940,9 +955,12 @@
         type = TIoTTRTCSessionCallType_video;
     }
     
-    UIViewController *topVC = [TIoTCoreUtil topViewController];
+//    UIViewController *topVC = [TIoTCoreUtil topViewController];
     
-    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+//    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+//    if (type == TIoTTRTCSessionCallType_audio || type == TIoTTRTCSessionCallType_video) {
+    if (self.isCommunicating == YES) {
+        
         //正在主动呼叫中，或呼叫UI已启动,直接进房间
 
         if (_isActiveCall) { //如果是被动呼叫的话，不能自动进入房间
@@ -970,9 +988,9 @@
     
     /*************trtc 可直接调用  p2p 不用实现代理即可 可以尝试复写，不行则用isP2PVideoCommun判断 **********/
     
-    if (self.isP2PVideoCommun == NO) {
+//    if (self.isP2PVideoCommun == NO) {
         [self showAppCalledVideoVC];
-    }
+//    }
     
     //若60秒被叫不接听，则主动挂断退出  应该在接收到socket status=0时 触发
     behungupTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(beHungupAction:) userInfo:nil repeats:NO];
@@ -981,9 +999,11 @@
     return NO;
 }
 
+///MARK:被动拉起通话页面
 - (void)showAppCalledVideoVC {
     
     _deviceID = _deviceParam.deviceName;
+    self.isCommunicating = YES;
     
     //被呼叫了，点击接听后才进房间吧
     if (_deviceParam._sys_audio_call_status.intValue == 1) { //audio
@@ -995,8 +1015,8 @@
 //        _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
 //        [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
      
-        if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:)]) {
-            [self.delegate statusManagerPayloadParamModel:_deviceParam type:TIoTTRTCSessionCallType_audio isFromReceived:YES];
+        if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:reportDeviceDic:deviceID:)]) {
+            [self.delegate statusManagerPayloadParamModel:_deviceParam type:TIoTTRTCSessionCallType_audio isFromReceived:YES reportDeviceDic:[NSMutableDictionary new] deviceID:_deviceID];
         }
         
     }else if (_deviceParam._sys_video_call_status.intValue == 1) { //video
@@ -1008,8 +1028,8 @@
 //            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{
 //        //            [[TIoTTRTCSessionManager sharedManager] enterRoom];
 //            }];
-        if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:)]) {
-            [self.delegate statusManagerPayloadParamModel:_deviceParam type:TIoTTRTCSessionCallType_video isFromReceived:YES];
+        if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:reportDeviceDic:deviceID:)]) {
+            [self.delegate statusManagerPayloadParamModel:_deviceParam type:TIoTTRTCSessionCallType_video isFromReceived:YES reportDeviceDic:[NSMutableDictionary new] deviceID:_deviceID];
         }
     }
 }
@@ -1144,6 +1164,8 @@
     }
     [self cancelTimer];
     
+    //退出页面或房间
+    self.isCommunicating = NO;
     
 //    self.isP2PVideoCommun = NO;
     
