@@ -18,6 +18,7 @@
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTP2PCommunicateUIManage.h"
+#import "UILabel+TIoTLableFormatter.h"
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -62,6 +63,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIView *previewBottomView;
 
 @property (nonatomic, assign) BOOL isStart;
+
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIButton *refuseButton;
+@property (nonatomic, strong) UIButton *acceptButton;
+@property (nonatomic, strong) UILabel *tipLabel; //状态提示语
 @end
 
 @implementation TIoTAVP2PPlayCaptureVC
@@ -96,22 +102,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     if (self.isCallIng == YES) {
         //APP主叫
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
+//        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
         
 //        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
 //        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateCallDeviceFromPanel:self.callType withDevideId:[NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""]];
     }else {
         //设备呼叫APP  被叫
-        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
+//        [[TIoTTRTCUIManage sharedManager] showAppCalledVideoVC];
         
 //        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
 //        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateShowAppCalledVideoVC];
     }
 }
 
-- (void)nav_customBack {
+//- (void)nav_customBack {
+//    [self close];
+////    [self.navigationController popViewControllerAnimated:NO];
+//
+//    [self dismissViewControllerAnimated:NO completion:nil];
+//}
+
+- (void)dealloc {
     [self close];
-    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -150,19 +162,36 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [dataDic setValue:agentString forKey:@"_sys_user_agent"];
     
     if (self.isCallIng == YES) {
-        //拼接主呼叫方id_sys_caller_id
-        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+        //拼接主呼叫方_sys_caller_id
+        [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
 
         //拼接被呼叫方id_sys_called_id
         NSString *deviceID = [NSString stringWithFormat:@"%@/%@",self.productID?:@"",self.deviceName?:@""];
-        [dataDic setValue:deviceID forKey:@"id_sys_called_id"];
+        [dataDic setValue:deviceID forKey:@"_sys_called_id"];
     }else {
         //被叫
-        //拼接主呼叫方id_sys_caller_id
-        [dataDic setValue:self.payloadParamModel._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
-
-        //拼接被呼叫方id_sys_called_id
-        [dataDic setValue:self.payloadParamModel._sys_called_id?:@"" forKey:@"id_sys_called_id"];
+//        //拼接主呼叫方id_sys_caller_id
+//        [dataDic setValue:self.payloadParamModel._sys_caller_id?:@"" forKey:@"_sys_caller_id"];
+//
+//        //拼接被呼叫方id_sys_called_id
+//        [dataDic setValue:self.payloadParamModel._sys_called_id?:@"" forKey:@"_sys_called_id"];
+        
+        NSString *callerID = @"";
+        NSString *calledID = @"";
+        if ([NSString isNullOrNilWithObject:self.payloadParamModel._sys_caller_id]) {
+            callerID = [NSString stringWithFormat:@"%@/%@",self.productID,self.deviceName];
+        }else {
+            callerID = self.payloadParamModel._sys_caller_id?:@"";
+        }
+        
+        if ([NSString isNullOrNilWithObject:self.payloadParamModel._sys_called_id]) {
+            calledID = [TIoTCoreUserManage shared].userId?:@"";
+        }else {
+            calledID = self.payloadParamModel._sys_called_id?:@"";
+        }
+        
+        [dataDic setValue:callerID forKey:@"_sys_caller_id"];
+        [dataDic setValue:calledID forKey:@"_sys_called_id"];
     }
     
     //Data json
@@ -195,6 +224,81 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             make.bottom.equalTo(self.view.mas_bottom).offset(-60);
         }
     }];
+    
+    //顶层控制view，拒绝和接听按钮
+    self.topView = [[UIView alloc]init];
+    self.topView.frame = [UIApplication sharedApplication].delegate.window.frame;
+    self.topView.backgroundColor = [UIColor colorWithHexString:@"#696969"];
+    [self.view addSubview:self.topView];
+    
+    self.tipLabel = [[UILabel alloc]init];
+    [self.tipLabel setLabelFormateTitle:@"" font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+    [self.topView addSubview:self.tipLabel];
+    [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(70);
+        }else {
+            make.top.equalTo(self.view.mas_top).offset(70);
+        }
+        make.left.right.equalTo(self.view);
+    }];
+    
+    self.refuseButton = [[UIButton alloc] init];
+    [self.refuseButton setImage:[UIImage imageNamed:@"icon_hangup"] forState:UIControlStateNormal];
+    [self.refuseButton addTarget:self action:@selector(onRefuseClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.refuseButton];
+    
+    self.acceptButton = [[UIButton alloc] init];
+    [self.acceptButton setImage:[UIImage imageNamed:@"icon_accept"] forState:UIControlStateNormal];
+    [self.acceptButton addTarget:self action:@selector(onAcceptClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.acceptButton];
+    
+    if (self.isCallIng == YES) { //主叫   只有拒绝一个按钮
+        self.acceptButton.hidden = YES;
+        
+        [self.refuseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.view);
+            make.width.height.mas_equalTo(60);
+            if (@available(iOS 11.0, *)) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-60);
+            }else {
+                make.bottom.equalTo(self.view.mas_bottom).offset(-60);
+            }
+        }];
+        
+        if (self.callType == TIoTTRTCSessionCallType_audio) { //音频
+            self.tipLabel.text = NSLocalizedString(@"voice_calling", @"语音呼叫中...");
+        }else { // 视频
+            self.tipLabel.text = NSLocalizedString(@"video_call", @"视频呼叫中...");
+        }
+    }else { //被叫   拒绝和接听两个按钮
+        
+        [self.refuseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view.mas_left).offset(65);
+            make.width.height.mas_equalTo(60);
+            if (@available(iOS 11.0, *)) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-60);
+            }else {
+                make.bottom.equalTo(self.view.mas_bottom).offset(-60);
+            }
+        }];
+        
+        [self.acceptButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.view.mas_right).offset(-65);
+            make.width.height.mas_equalTo(60);
+            if (@available(iOS 11.0, *)) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-60);
+            }else {
+                make.bottom.equalTo(self.view.mas_bottom).offset(-60);
+            }
+        }];
+        
+        if (self.callType == TIoTTRTCSessionCallType_audio) { //音频
+            self.tipLabel.text = NSLocalizedString(@"voice_call_invitation", @"语音通话邀请");
+        }else { // 视频
+            self.tipLabel.text = NSLocalizedString(@"video_call_invitation", @"视频通话邀请");
+        }
+    }
     
     self.switchCameras = [[UIButton alloc] init];
     UIImage *switchImage = [self imageWithPath:@"" scale:2];
@@ -261,15 +365,17 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             }];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]||[reportModel.params._sys_audio_call_status isEqualToString:@"0"]) {
         [self close];
-        [self.navigationController popViewControllerAnimated:NO];
+//        [self.navigationController popViewControllerAnimated:NO];
+        [self dismissViewControllerAnimated:NO completion:nil];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]|| [reportModel.params._sys_audio_call_status isEqualToString:@"2"]) {
         
         //开启startservier
         
         if (self.isStart == NO) {
             
+            self.topView.hidden = YES;
 //            if (self.isCallIng == NO) {
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
 
                     self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
@@ -279,7 +385,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     [self.player play];
 
                     self.startPlayer = CACurrentMediaTime();
-//                });
+                });
 //            }
            
             self.isStart = YES;
@@ -288,10 +394,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
                 
-                [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
+//                [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
                 
-//                [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-//                [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
+                [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+                [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
                 
                 [self startAVCapture];
             });
@@ -301,7 +407,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)deviceP2PVideoDeviceExit {
     [self close];
-    [self.navigationController popViewControllerAnimated:NO];
+//    [self.navigationController popViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark -IJKPlayer
@@ -463,10 +570,25 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 -(void)onHungupClick{
+    [HXYNotice postStatusManagerCommunicateType:0];
     
     [self close];
     
-    [self.navigationController popViewControllerAnimated:NO];
+//    [self.navigationController popViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void)onRefuseClick {
+    if ([self.delegate respondsToSelector:@selector(avP2PPlayRefuseOrHungupClick)]) {
+        [self.delegate avP2PPlayRefuseOrHungupClick];
+    }
+}
+
+- (void)onAcceptClick {
+    self.topView.hidden = YES;
+    if ([self.delegate respondsToSelector:@selector(avP2PPlayAcceptClick)]) {
+        [self.delegate avP2PPlayAcceptClick];
+    }
 }
 
 - (void)close {
@@ -481,20 +603,45 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.previewBottomView removeFromSuperview];
     }
     
-    if (self.isRefreshBlock) {
-        self.isRefreshBlock(YES);
-    }
+//    if (self.isRefreshBlock) {
+//        self.isRefreshBlock(YES);
+//    }
     
-    [[TIoTTRTCUIManage sharedManager]refuseAppCallingOrCalledEnterRoom];
+//    [[TIoTTRTCUIManage sharedManager]refuseAppCallingOrCalledEnterRoom];
     
-//    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-//    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
 }
 
 -(void)onSwitchClick{
 //    [self.avCapture switchCamera];
 }
 
+- (void)hideTopView {
+    self.topView.hidden = YES;
+}
+#pragma mark - 更新提示语
+- (void)hungUp {
+    self.tipLabel.text = NSLocalizedString(@"other_part_busy", @"对方正忙...");
+}
+
+- (void)beHungUp {
+    self.tipLabel.text = NSLocalizedString(@"other_part_hangup", @"对方已挂断...");
+}
+
+- (void)noAnswered {
+    self.tipLabel.text = NSLocalizedString(@"other_part_no_answer", @"对方无人接听...");
+}
+
+- (void)otherAnswered {
+    self.tipLabel.text = NSLocalizedString(@"other_part_answered", @"其他用户已接听...");
+}
+
+- (void)hangupTapped {    //挂断
+//    [self hungUp];
+//    [self onRefuseClick];
+}
+#pragma mark - 懒加载
 -(UIView *)previewBottomView{
     if (!_previewBottomView) {
         _previewBottomView = [[UIView alloc]initWithFrame:CGRectMake(40, 100, 150, 200)];

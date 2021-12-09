@@ -110,4 +110,8 @@
 //p2pVideo 结束退出通知
 + (void)addP2PVideoExitLister:(id)listener reaction:(SEL)selector;
 + (void)postP2PVIdeoExit;
+
+//statusManager 是否通话中或弹出通话页面
++ (void)addStatusManagerCommunicateLister:(id)listener reaction:(SEL)selector;
++ (void)postStatusManagerCommunicateType:(NSInteger)isCommunicating;
 @end
