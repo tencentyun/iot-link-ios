@@ -433,16 +433,16 @@
         [dataDic setValue:agentString forKey:@"_sys_user_agent"];
         
         if (self.isActiveStatus == YES) { //主动
-            //拼接主呼叫方id_sys_caller_id
-            [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+            //拼接主呼叫方_sys_caller_id
+            [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
             
             //拼接被呼叫方id_sys_called_id
             NSString *deviceIDString = [NSString stringWithFormat:@"%@/%@",productID,deviceName];
-            [dataDic setValue:deviceIDString forKey:@"id_sys_called_id"];
+            [dataDic setValue:deviceIDString forKey:@"_sys_called_id"];
         }else { //被动
             
-            [dataDic setValue:_deviceParam._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
-            [dataDic setValue:_deviceParam._sys_called_id?:@"" forKey:@"id_sys_called_id"];
+            [dataDic setValue:_deviceParam._sys_caller_id?:@"" forKey:@"_sys_caller_id"];
+            [dataDic setValue:_deviceParam._sys_called_id?:@"" forKey:@"_sys_called_id"];
         }
         
         //Data json
