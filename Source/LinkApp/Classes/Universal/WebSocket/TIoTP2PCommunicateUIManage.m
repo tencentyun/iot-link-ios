@@ -16,11 +16,12 @@
 #import "UIDevice+Until.h"
 
 #import "TIoTStatusManager.h"
+#import "TIoTAVP2PPlayCaptureVC.h"
 
-@interface TIoTP2PCommunicateUIManage ()<TRTCCallingViewDelegate,TIoTStatusManagerDelegate> {
-    TRTCCallingAuidoViewController *_callAudioVC;
-    TRTCCallingVideoViewController *_callVideoVC;
-    
+@interface TIoTP2PCommunicateUIManage ()<TRTCCallingViewDelegate,TIoTStatusManagerDelegate,TIoTAVP2PPlayCaptureVCDelegate> {
+//    TRTCCallingAuidoViewController *_callAudioVC;
+//    TRTCCallingVideoViewController *_callVideoVC;
+    TIoTAVP2PPlayCaptureVC *_callP2PVideo;
 //    socket payload
 //    TIOTtrtcPayloadParamModel *_deviceParam;
     
@@ -145,7 +146,7 @@
 //}
 
 - (void)audioActiveCallSessionNoCallingStatus {
-    [_callAudioVC hungUp];
+    [_callP2PVideo hungUp];
     
     // isp2p
 //    [self refuseAppCallingOrCalledEnterRoom];
@@ -153,7 +154,7 @@
 }
 
 - (void)audioActiveCallSessionCallingStatus {
-    [self->_callAudioVC beHungUp];
+    [_callP2PVideo beHungUp];
     
     //isp2p
 //    [self refuseAppCallingOrCalledEnterRoom];
@@ -161,23 +162,23 @@
 }
 
 - (void)audioVCOtherAnswered {
-    [_callAudioVC otherAnswered];
+    [_callP2PVideo otherAnswered];
 }
 
 - (void)audioVCHangupTapped {
-    [self->_callAudioVC hangupTapped];
+    [_callP2PVideo hangupTapped];   //挂断
 }
 
 - (void)audioVCBeHungup {
-    [_callAudioVC beHungUp];
+    [_callP2PVideo beHungUp];
 }
 
 - (void)audioVCHungup {
-    [_callAudioVC hungUp];
+    [_callP2PVideo hungUp];
 }
 
 - (void)videoActiveCallSessionNoCallingStatus {
-    [_callVideoVC hungUp];
+    [_callP2PVideo hungUp];
     
     // isp2p
 //    [self refuseAppCallingOrCalledEnterRoom];
@@ -185,7 +186,7 @@
 }
 
 - (void)videoActiveCallSessionCallingStatus {
-    [_callVideoVC beHungUp];
+    [_callP2PVideo beHungUp];
     
     //is p2p
 //    [self refuseAppCallingOrCalledEnterRoom];
@@ -193,37 +194,40 @@
 }
 
 - (void)videoVCOtherAnswered {
-    [_callVideoVC otherAnswered];
+    [_callP2PVideo otherAnswered];
 }
 
 - (void)videoVCHangupTapped {
-    [self->_callVideoVC hangupTapped];
+    [_callP2PVideo hangupTapped];   //挂断
 }
 
 - (void)videoVCBeHungup {
-    [_callVideoVC beHungUp];
+    [_callP2PVideo beHungUp];
 }
 
 - (void)videoVCHungup {
-    [_callVideoVC hungUp];
+    [_callP2PVideo hungUp];
 }
 
 - (void)statusManagerDismissVC {
     UIViewController *topVC = [TIoTCoreUtil topViewController];
-    if (_callVideoVC == topVC) {
-        [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
-    }
-    if (_callAudioVC == topVC) {
-        [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
+//    if (_callVideoVC == topVC) {
+//        [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+//    }
+//    if (_callAudioVC == topVC) {
+//        [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
+//    }
+    if (_callP2PVideo == topVC) {
+        [_callP2PVideo hideTopView];
     }
 }
 
 - (void)remoteDismissSetting {
-    [_callAudioVC remoteDismiss];
-    [_callVideoVC remoteDismiss];
-    
-    _callAudioVC = nil;
-    _callVideoVC = nil;
+//    [_callAudioVC remoteDismiss];
+//    [_callVideoVC remoteDismiss];
+//
+//    _callAudioVC = nil;
+//    _callVideoVC = nil;
 }
 
 //- (void)leaveRoomWith:(TIOTtrtcPayloadParamModel *)deviceParam {
@@ -398,22 +402,76 @@
 
 
 - (void)acceptJoinRoom {
-    [self didAcceptJoinRoom];
+//    [self didAcceptJoinRoom];
+    [self avP2PPlayAcceptClick];
 }
 
 - (void)didExitRoom:(NSString *)remoteUserID {
-    if (self.isP2PVideoCommun == YES) {
+//    if (self.isP2PVideoCommun == YES) {
         UIViewController *topVC = [TIoTCoreUtil topViewController];
-        if (_callVideoVC == topVC) {
-            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+//        if (_callVideoVC == topVC) {
+//            [_callVideoVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+//        if (_callAudioVC == topVC) {
+//            [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+        if (_callP2PVideo == topVC) {
+            [HXYNotice postP2PVIdeoExit];
+//            [_callP2PVideo dismissViewControllerAnimated:NO completion:nil];
         }
-        if (_callAudioVC == topVC) {
-            [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
+//        [HXYNotice postP2PVIdeoExit];
+//    }
+}
+
+#pragma mark- TIoTAVP2PPlayCaptureVCDelegate ui决定是否进入房间
+//在TopView上  点击同意 隐藏topview后，开启start
+- (void)avP2PPlayAcceptClick {
+    
+    [self.statusManager setEnterErrorProperty:NO];
+    
+    if (self.statusManager.isActiveStatus == YES) { //APP主叫
+        [self acceptAppCallingOrCalledEnterRoom];
+    }else { //APP被叫
+        //接收被呼叫
+        if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_video_call_status]) {
+            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr];
+
+            [self acceptAppCallingOrCalledEnterRoom];
+        }else if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_audio_call_status]) {
+            [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr];
+            [self acceptAppCallingOrCalledEnterRoom];
         }
-        [HXYNotice postP2PVIdeoExit];
+
     }
 }
 
+//在TopView上  点击拒绝或挂断按钮 退出，放回上页面
+- (void)avP2PPlayRefuseOrHungupClick {
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free) {
+        if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_audio) {
+            if (self.statusManager.tempModel._sys_audio_call_status.intValue != 2) {
+                [self refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:self.statusManager.deviceIDTempStr];
+            }
+        }else if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_video) {
+            if (self.statusManager.tempModel._sys_video_call_status.intValue != 2) {
+                [self refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:self.statusManager.deviceIDTempStr];
+            }
+
+        }
+
+        [self.statusManager cancelTimer];
+    }
+
+    if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_calling) {
+        if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_audio) {
+            [self exitRoom:@""];
+        }else if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_video) {
+
+            [self exitRoom:@""];
+        }
+    }
+}
+/*
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
 - (void)didAcceptJoinRoom {
     //2.根据UI决定是否进入房间
@@ -508,12 +566,20 @@
     }
     
 }
+*/
+
+- (void)statusManagerRefuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+}
+- (void)statusManagerrequestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+}
 
 #pragma mark - 拒绝其他设备呼叫
 - (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     
 //    if (self.isP2PVideoCommun == YES) {
-        [self exitRoom:@""];
+//        [self exitRoom:@""];
 //    }
     [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
 }
@@ -552,16 +618,16 @@
         [dataDic setValue:agentString forKey:@"_sys_user_agent"];
         
         if (self.statusManager.isActiveStatus == YES) { //主动
-            //拼接主呼叫方id_sys_caller_id
-            [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"id_sys_caller_id"];
+            //拼接主呼叫方_sys_caller_id
+            [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
             
-            //拼接被呼叫方id_sys_called_id
+            //拼接被呼叫方_sys_called_id
             NSString *deviceIDString = [NSString stringWithFormat:@"%@/%@",productID,deviceName];
-            [dataDic setValue:deviceIDString forKey:@"id_sys_called_id"];
+            [dataDic setValue:deviceIDString forKey:@"_sys_called_id"];
         }else { //被动
             
-            [dataDic setValue:self.statusManager.deviceParam._sys_caller_id?:@"" forKey:@"id_sys_caller_id"];
-            [dataDic setValue:self.statusManager.deviceParam._sys_called_id?:@"" forKey:@"id_sys_called_id"];
+            [dataDic setValue:self.statusManager.deviceParam._sys_caller_id?:@"" forKey:@"_sys_caller_id"];
+            [dataDic setValue:self.statusManager.deviceParam._sys_called_id?:@"" forKey:@"_sys_called_id"];
         }
         
         //Data json
@@ -577,11 +643,13 @@
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
 //        if (self.isP2PVideoCommun == YES) {
             if (self.statusManager.isActiveStatus == YES) {
+                [self exitRoom:@""];
                 [HXYNotice postP2PVIdeoExit];
             }
 //        }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 //        if (self.isP2PVideoCommun == YES) {
+        [self exitRoom:@""];
             [HXYNotice postP2PVIdeoExit];
 //        }
     }];
@@ -839,44 +907,96 @@
 //    }
 //}
 
-- (void)statusManagerPayloadParamModel:(TIOTtrtcPayloadParamModel *)model type:(TIoTTRTCSessionCallType)type isFromReceived:(BOOL)isFromReceived {
+- (void)statusManagerPayloadParamModel:(TIOTtrtcPayloadParamModel *)model type:(TIoTTRTCSessionCallType)type isFromReceived:(BOOL)isFromReceived reportDeviceDic:(NSMutableDictionary *)reportDeviceDic deviceID:(NSString *)deviceIDString;{
+    
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    NSString *productID = [deviceIDString?:@"" componentsSeparatedByString:@"/"].firstObject?:@"";
+    NSString *deviceName = [deviceIDString?:@"" componentsSeparatedByString:@"/"].lastObject?:@"";
+    
     if (isFromReceived == YES) {
-        if (type == TIoTTRTCSessionCallType_audio) { //audio
-            _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:self.statusManager.deviceParam._sys_userid];
-            _callAudioVC.deviceName = self.statusManager.deviceParam.deviceName;
-            _callAudioVC.actionDelegate = self;
-            _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
-            
-            self.statusManager.callAudioVC = _callAudioVC;
-            
-        }else if (type == TIoTTRTCSessionCallType_video) { //video
-            _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:self.statusManager.deviceParam._sys_userid];
-            _callVideoVC.deviceName = self.statusManager.deviceParam.deviceName;
-            _callVideoVC.actionDelegate = self;
-            _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:nil];
-            
-            self.statusManager.callVideoVC = _callVideoVC;
+//        if (type == TIoTTRTCSessionCallType_audio) { //audio
+//            _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:self.statusManager.deviceParam._sys_userid];
+//            _callAudioVC.deviceName = self.statusManager.deviceParam.deviceName;
+//            _callAudioVC.actionDelegate = self;
+//            _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//            [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:nil];
+//
+//            self.statusManager.callAudioVC = _callAudioVC;
+//
+//        }else if (type == TIoTTRTCSessionCallType_video) { //video
+//            _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:self.statusManager.deviceParam._sys_userid];
+//            _callVideoVC.deviceName = self.statusManager.deviceParam.deviceName;
+//            _callVideoVC.actionDelegate = self;
+//            _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:nil];
+//
+//            self.statusManager.callVideoVC = _callVideoVC;
+//        }
+        
+        
+        NSMutableDictionary *reportDic = [NSMutableDictionary new];
+        if (![NSString isNullOrNilWithObject:model._sys_video_call_status]) {
+            [reportDic setValue:model._sys_video_call_status?:@"" forKey:@"_sys_video_call_status"];
+        }else if (![NSString isNullOrNilWithObject:model._sys_audio_call_status]) {
+            [reportDic setValue:model._sys_audio_call_status?:@"" forKey:@"_sys_audio_call_status"];
         }
+        
+//        [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
+        if (self.statusManager.isActiveStatus == YES) {
+            if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
+                [reportDic setValue:model._sys_caller_id?:@"" forKey:@"_sys_userid"];
+            }else {
+                [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
+            }
+        }else if (self.statusManager.isActiveStatus == NO){
+            
+        }
+        [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
+        
+        _callP2PVideo = [[TIoTAVP2PPlayCaptureVC alloc]init];
+        _callP2PVideo.deviceName = deviceName?:@"";
+        _callP2PVideo.productID = productID?:@"";
+        _callP2PVideo.callType = type;
+        _callP2PVideo.reportDataDic = reportDic;
+        _callP2PVideo.payloadParamModel = model;  //(被叫才传)
+        _callP2PVideo.isCallIng = NO;
+        _callP2PVideo.delegate = self;
+        _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
+        [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
+        
     }else {
-        if (type == TIoTTRTCSessionCallType_audio) { //audio
-            _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
-            _callAudioVC.actionDelegate = self;
-            _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
-            
-            self.statusManager.callAudioVC = _callAudioVC;
-            
-        }else if (type == TIoTTRTCSessionCallType_video) { //video
-            _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:nil];
-            _callVideoVC.actionDelegate = self;
-            _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
-            
-            self.statusManager.callVideoVC = _callVideoVC;
-            
-        }
+        //面板手动呼叫
+        
+//        if (type == TIoTTRTCSessionCallType_audio) { //audio
+//            _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
+//            _callAudioVC.actionDelegate = self;
+//            _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//            [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
+//
+//            self.statusManager.callAudioVC = _callAudioVC;
+//
+//        }else if (type == TIoTTRTCSessionCallType_video) { //video
+//            _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:nil];
+//            _callVideoVC.actionDelegate = self;
+//            _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//            [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
+//
+//            self.statusManager.callVideoVC = _callVideoVC;
+//
+//        }
+        
+        NSString *productID = [deviceIDString?:@"" componentsSeparatedByString:@"/"].firstObject?:@"";
+        NSString *deviceName = [deviceIDString?:@"" componentsSeparatedByString:@"/"].lastObject?:@"";
+        
+        _callP2PVideo = [[TIoTAVP2PPlayCaptureVC alloc]init];
+        _callP2PVideo.deviceName = deviceName?:@"";
+        _callP2PVideo.productID = productID?:@"";
+        _callP2PVideo.callType = type;
+        _callP2PVideo.reportDataDic = reportDeviceDic;
+        _callP2PVideo.isCallIng = YES;
+        _callP2PVideo.delegate = self;
+        _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
+        [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
     }
 }
 
@@ -935,11 +1055,11 @@
 //}
 
 - (void)audioVCNoAnswered {
-    [self->_callAudioVC noAnswered];
+    [_callP2PVideo noAnswered];
 }
 
 - (void)videoVCNoAnswered {
-    [self->_callVideoVC noAnswered];
+    [_callP2PVideo noAnswered];
 }
 
 //- (BOOL)isActiveCalling:(NSString *)deviceID {
@@ -1018,7 +1138,8 @@
 
 - (void)judgeTopVC {
     UIViewController *topVC = [TIoTCoreUtil topViewController];
-    if (_callAudioVC == topVC || _callVideoVC == topVC) {
+//    if (_callAudioVC == topVC || _callVideoVC == topVC || _callP2PVideo == topVC) {
+    if (_callP2PVideo == topVC) {
         //正在主动呼叫中，或呼叫UI已启动
         return;
     }
@@ -1040,13 +1161,14 @@
 //    }
 //}
 
-#pragma mark -TIoTTRTCSessionUIDelegate
+#pragma mark -TIoTTRTCSessionUIDelegate   (video 不走TRTCsession代理)
 //呼起被叫页面，如果当前正在主叫页面，则外界UI不处理
 
 - (void)showRemoteUser:(NSString *)remoteUserID {
 //    _isEnterError = NO;
     [self.statusManager setEnterErrorProperty:NO];
     
+    /*
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     if (_callAudioVC == topVC) {
         //正在主动呼叫中，或呼叫UI已启动
@@ -1054,6 +1176,7 @@
     }else {
         [_callVideoVC OCEnterUserWithUserID:remoteUserID];
     }
+    */
 }
 
 - (void)exitRoom:(NSString *)remoteUserID {
@@ -1148,8 +1271,8 @@
 
 
 #pragma mark - 外部调用
-- (void)p2pCommunicateCallDeviceFromPanel:(TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString {
-    [self.statusManager callDeviceFromPanel:audioORvideo withDevideId:deviceIdString];
+- (void)p2pCommunicateCallDeviceFromPanel:(TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)reportDic {
+    [self.statusManager callDeviceFromPanel:audioORvideo withDevideId:deviceIdString reportDeviceDic:reportDic];
 }
 
 - (void)p2pCommunicatePreEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {

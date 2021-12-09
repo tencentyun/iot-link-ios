@@ -14,7 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param model 使用时需判断model内字段是否为空
 /// @param type 语音/视频 类型
 /// @param isFromReceived 用于区分来自于用户主动调用，还是接收设备上报。用户主动调用,音视频vc 初始化 userid=nil,devicename可不赋值，否则均要传入
-- (void)statusManagerPayloadParamModel:(TIOTtrtcPayloadParamModel *)model type:(TIoTTRTCSessionCallType)type isFromReceived:(BOOL)isFromReceived;
+/// @param reportDeviceDic 手动拉起页面需要传,被呼叫则new空字典
+- (void)statusManagerPayloadParamModel:(TIOTtrtcPayloadParamModel *)model type:(TIoTTRTCSessionCallType)type isFromReceived:(BOOL)isFromReceived reportDeviceDic:(NSMutableDictionary *)reportDeviceDic deviceID:(NSString *)deviceIDString;
+
+- (void)statusManagerRefuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID;
+- (void)statusManagerrequestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID;
 
 - (void)audioVCHungup;
 - (void)audioVCBeHungup;
@@ -69,7 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isP2PVideoCommun; //p2pVideo 双向通话标识
 
 //面板中主动呼叫设备 0 audio； 1video
-- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString;
+//deviceDic 面板中手动拉起页面需要传
+- (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)deviceDic;
 
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure ;
 
