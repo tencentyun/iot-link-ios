@@ -6,32 +6,26 @@
 
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
 
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelOff;
-#endif
 NSFileHandle *p2pOutLogFile;
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
         return nullptr;
     }
+    NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    NSLog(@"XP2P log: %@\n", message);
     
     if (type == XP2PTypeLog) {
         BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
         if (logEnable) {
-            NSString *nsFormat = [NSString stringWithUTF8String:msg];
-            DDLogInfo(@"%@", nsFormat);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [p2pOutLogFile writeData:[nsFormat dataUsingEncoding:NSUTF8StringEncoding]];
+                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
             });
         }
     }
     
-    NSString *DeviceName = [NSString stringWithUTF8String:idd]?:@"";
+    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
     
     if (type == XP2PTypeSaveFileOn) {
         
@@ -46,33 +40,26 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         return saveFilePath.UTF8String;
         
     }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
-        DDLogWarn(@"XP2P log: disconnect %s\n", msg);
+        NSLog(@"XP2P log: disconnect %@\n", message);
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [p2pOutLogFile synchronizeFile];
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName}];
         });
     }else if (type == XP2PTypeDetectReady) {
+        NSLog(@"XP2P log: ready %@\n", message);
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [p2pOutLogFile synchronizeFile];
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
         });
     }
     else if (type == XP2PTypeDeviceMsgArrived) {
-        NSString *nsFormat = [NSString stringWithUTF8String:msg];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
-            NSLog(@"revice device msg: %@", nsFormat);
-        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            NSLog(@"revice device msg: %@", message);
+//        });
     }
-    else {
-        DDLogInfo(@"XP2P log: %s\n", msg);
-    }
-
-//    return (char *)nsFormat.UTF8String;
+    
     return nullptr;
 }
 
@@ -164,7 +151,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
     const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
-    DDLogInfo(@"httpflv---%s",httpflv);
+    NSLog(@"httpflv---%s",httpflv);
     if (httpflv) {
         return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
     }
