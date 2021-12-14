@@ -189,7 +189,11 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
     
-    systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
+    if (systemAvCapture == nil) {
+        systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
+        systemAvCapture.videoLocalView = localView;
+        [systemAvCapture preStart];
+    }
     systemAvCapture.videoLocalView = localView;
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
@@ -198,8 +202,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (XP2PErrCode)stopVoiceToServer {
     self.isSending = NO;
     
-    [systemAvCapture stopCapture];
     systemAvCapture.delegate = nil;
+    [systemAvCapture stopCapture];
     
     return (XP2PErrCode)stopSendService(self.dev_name.UTF8String, nullptr);
 }
@@ -216,8 +220,8 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
-        dataSend(self.dev_name.UTF8String, data, size);
         DDLogInfo(@"vide stream data:%s  size:%zu",data,size);
+        dataSend(self.dev_name.UTF8String, data, size);
         NSData *dataTag = [NSData dataWithBytes:data length:size];
         [fileHandle writeData:dataTag];
     }

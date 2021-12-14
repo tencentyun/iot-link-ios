@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 @property (nonatomic, assign)UIView *videoLocalView;
 -(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate;
 
+- (void)preStart;
 -(BOOL) startCapture;
 -(void) stopCapture;
 @end

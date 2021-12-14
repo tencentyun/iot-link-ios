@@ -156,7 +156,7 @@ NSFileHandle *_fileHandle;
     [_videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
     
     // 启动session
-    [_session startRunning];
+//    [_session startRunning];
     //将当前硬件采集视频图像显示到屏幕
     
     _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_session];
@@ -183,7 +183,7 @@ NSFileHandle *_fileHandle;
                 [self.data appendData:encodedData];
                 encodeFlvData(0, encodedData);
             }else {
-//                NSLog(@"Error encoding AAC: %@", error);
+                NSLog(@"Error encoding AAC: %@", error);
             }
         }];
     }
@@ -290,6 +290,15 @@ int encodeFlvData(int type, NSData *packetData) {
 }
 
 #pragma mark - 录制
+- (void)preStart {
+    [self setupAudioCapture];
+    if (self.videoLocalView) {
+        //是否启动视频采集
+        [self setupVideoCapture];
+    }
+    [self.session commitConfiguration];
+}
+
 -(BOOL) startCapture {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -313,14 +322,10 @@ int encodeFlvData(int type, NSData *packetData) {
 
 - (void) startCamera
 {
-    [self setupAudioCapture];
-    if (self.videoLocalView) {
-        //是否启动视频采集
-        [self setupVideoCapture];
-    }
-    [self.session commitConfiguration];
-    
     [self.session startRunning];
+    if (self.videoLocalView) {
+        [self.videoLocalView.layer addSublayer:_previewLayer];
+    }
 }
 
 - (void) stopCarmera
