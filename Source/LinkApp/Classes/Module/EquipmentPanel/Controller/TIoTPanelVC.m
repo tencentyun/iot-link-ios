@@ -3543,7 +3543,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (![[QCloudNetEnv shareEnv] isReachable]) {
-        [MBProgressHUD showError:@"当前无网络"];
+        [MBProgressHUD showError:NSLocalizedString(@"netWork_error_retry", @"网络异常，请重试")];
         return;
     }
     __weak typeof(self)weakSelf = self;

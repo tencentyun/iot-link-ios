@@ -967,3 +967,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "please_setting_birthday_info_detail_US" = "如果您为未满13岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。";
 "APPacquireCamera" = "You refuse to use the camera permission and cannot use the scan QR code function";
 "turnon_CameraService" = "前往：设置开启相机服务";
+"netWork_error_retry" = "网络异常，请重试";

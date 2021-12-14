@@ -962,3 +962,4 @@
 "please_setting_birthday_info_detail_US" = "如果您为未满13岁的未成年人，将暂时无法使用我们的产品服务，请谨慎选择出生日期。";
 "APPacquireCamera" = "您拒绝使用相机权限，无法使用实时语音/视频通话以及扫描二维码功能";
 "turnon_CameraService" = "前往：设置开启相机服务";
+"netWork_error_retry" = "网络异常，请重试";
