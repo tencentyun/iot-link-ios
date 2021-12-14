@@ -4,7 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "TIOTTRTCModel.h"
+#import "TIoTTRTCSessionManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -15,6 +15,7 @@
 		6D06B07825616720006361B5 /* TIoTAutoConditionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07725616720006361B5 /* TIoTAutoConditionsView.m */; };
 		6D06B07C25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07B25619FE6006361B5 /* TIoTAutoAddManualIntelliListVC.m */; };
 		6D06B0802561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D06B07F2561A1DB006361B5 /* TIoTAutoAddManualIntellListCell.m */; };
+		6D0B763F2768A57A005314FC /* TIoTStatusManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3A6BB1275E27A30087F8F8 /* TIoTStatusManager.m */; };
 		6D127BC9268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D127BC8268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m */; };
 		6D18DF2925E50BA4009CF65E /* TIoTWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18DF2825E50BA4009CF65E /* TIoTWeatherVC.swift */; };
 		6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D20483D26528A71007F6F27 /* TIoTCloudStorageDayTimeListModel.m */; };
@@ -3846,6 +3847,7 @@
 				F4F3D7CA24938EBE005D3396 /* WifiInfoVC.m in Sources */,
 				F4F3D7C024938EBE005D3396 /* UserVC.m in Sources */,
 				6DAF8DE0266F68C000CD0328 /* TIoTDemoCloudStoreDateListModel.m in Sources */,
+				6D0B763F2768A57A005314FC /* TIoTStatusManager.m in Sources */,
 				F4F3D7C224938EBE005D3396 /* MessageVC.m in Sources */,
 				6D6F0542259440AA002A4463 /* TIoTVideoSoftApDistributionNetVC.m in Sources */,
 				6D204EBE2664C53A007F6F27 /* UIDevice+TIoTDemoRotateScreen.m in Sources */,
