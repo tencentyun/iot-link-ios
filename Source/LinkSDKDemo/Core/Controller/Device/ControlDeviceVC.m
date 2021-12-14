@@ -241,7 +241,8 @@
     }
     if (isTRTCDevice) {
         
-        [[TIoTTRTCUIManage sharedManager] callDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.deviceInfo[@"ProductId"]?:@"",self.deviceInfo[@"DeviceName"]?:@""]];
+//        [[TIoTTRTCUIManage sharedManager] trtccallDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.deviceInfo[@"ProductId"]?:@"",self.deviceInfo[@"DeviceName"]?:@""]];
+        [[TIoTTRTCUIManage sharedManager] trtcCallDeviceFromPanel:audioORvideo withDevideId:[NSString stringWithFormat:@"%@/%@",self.deviceInfo[@"ProductId"]?:@"",self.deviceInfo[@"DeviceName"]?:@""] reportDeviceDic:trtcReport];
     }
 }
 
