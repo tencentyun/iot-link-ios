@@ -1053,9 +1053,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //设备属性数组去重
 - (NSMutableArray *)removeDuplicationOriginalArr:(NSMutableArray *)oriArr {
     NSMutableArray *resuleProperty = [NSMutableArray array];
+    NSMutableArray *idMutableArr = [NSMutableArray array];
     for (NSDictionary *dic in oriArr) {
-        if (![resuleProperty containsObject:dic]) {
+        NSString *idString = dic[@"id"]?:@"";
+        if (![resuleProperty containsObject:dic] && ![idMutableArr containsObject:idString]) {
             [resuleProperty addObject:dic];
+            [idMutableArr addObject:idString];
         }
     }
     return resuleProperty;
