@@ -93,9 +93,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 设备断网后保存DeviceID和offline 状态用于退出页面区分提示判断 @{@"DeviceId:":@"";@"Offline":@(YES)}
 - (void)setDeviceDisConnectDic:(NSDictionary *)deviceDic;
 
-//设置还在设备建立连接 yes为 是（通话状态或已拉起页面） NO 完全退出
-- (void)setCommunicatingProperty:(BOOL)isCommunicating;
-
 ///p2pVideo APP主叫(被叫)进入通话
 - (void)acceptAppCallingOrCalledEnterRoom;
 ///p2pVideo 退出页面

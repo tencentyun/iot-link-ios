@@ -3780,7 +3780,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     }
     
     [MBProgressHUD showError:@"通道断开，正在重连"];
-    
+    [HXYNotice postP2PVIdeoExit];
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
     [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
                                               sec_key:@""

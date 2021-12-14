@@ -19,6 +19,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTP2PCommunicateUIManage.h"
 #import "UILabel+TIoTLableFormatter.h"
+#import "ReachabilityManager.h"
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -84,6 +85,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
     [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
     
+    [self decetNetworkStatus];
+    
     _is_init_alert = NO;
     _is_ijkPlayer_stream = YES;
     
@@ -124,6 +127,33 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)dealloc {
     [self close];
+}
+
+- (void)decetNetworkStatus{
+
+    [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
+        switch (status) {
+            case NetworkReachabilityStatusUnknown:
+                DDLogDebug(@"状态不知道");
+                break;
+            case NetworkReachabilityStatusNotReachable:
+                DDLogWarn(@"没网络");
+                // RTC App端和设备端通话中 断网监听
+                [HXYNotice postCallingDisconnectNet];
+                break;
+            case NetworkReachabilityStatusReachableViaWiFi:
+                DDLogDebug(@"WIFI");
+                break;
+            case NetworkReachabilityStatusReachableViaWWAN:
+                DDLogDebug(@"移动网络");
+                break;
+            default:
+                break;
+        }
+    }];
+    
+    [[NetworkReachabilityManager sharedManager] startMonitoring];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
