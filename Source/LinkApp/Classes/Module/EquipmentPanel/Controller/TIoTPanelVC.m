@@ -336,6 +336,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [self.tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
         self.tipAlertView.doneAction = ^(NSString * _Nonnull text) {
             [WeakSelf.navigationController popViewControllerAnimated:YES];
+            [WeakSelf.backMaskView removeFromSuperview];
         };
         
         self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
