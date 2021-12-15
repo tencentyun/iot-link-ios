@@ -207,6 +207,13 @@
         [trtcReport setValue:username forKey:@"username"];
     }
 
+    //拼接主呼叫方_sys_caller_id
+    [trtcReport setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
+    
+    //拼接被呼叫方_sys_called_id
+    NSString *deviceIDString = [NSString stringWithFormat:@"%@/%@",self.deviceInfo[@"ProductId"]?:@"",self.deviceInfo[@"DeviceName"]?:@""];
+    [trtcReport setValue:deviceIDString forKey:@"_sys_called_id"];
+    
     NSDictionary *tmpDic = @{
                                 @"ProductId":self.deviceInfo[@"ProductId"],
                                 @"DeviceName":self.deviceInfo[@"DeviceName"],
