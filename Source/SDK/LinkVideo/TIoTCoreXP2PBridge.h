@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationReady;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
+
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
 
 /*

@@ -7,6 +7,12 @@
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
 
+
+NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
+NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preconnect"; //app本地已ready，表示探测完成，可以发起请求了
+NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PTypeDeviceMsgArrived"; //收到设备端的请求数据
+NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+
 NSFileHandle *p2pOutLogFile;
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
@@ -44,20 +50,31 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [p2pOutLogFile synchronizeFile];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
         });
     }else if (type == XP2PTypeDetectReady) {
         NSLog(@"XP2P log: ready %@\n", message);
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [p2pOutLogFile synchronizeFile];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:@{@"id": DeviceName}];
         });
     }
     else if (type == XP2PTypeDeviceMsgArrived) {
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            NSLog(@"revice device msg: %@", message);
-//        });
+        // 设备端向App发消息
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDeviceMsg object:nil userInfo:@{@"id": DeviceName, @"msg": message}];
+        });
+    }
+    else if (type == XP2PTypeCmdNOReturn) {
+        //设备自定义信令未回复内容
+        NSLog(@"设备自定义信令未回复内容: %@", message);
+    }
+    else if (type == XP2PTypeStreamEnd) {
+        // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
+        });
     }
     
     return nullptr;
@@ -70,6 +87,15 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     }
 }
 
+char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+//    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+//    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+//        [delegate getVideoPacket:recv_buf len:recv_len];
+//    }
+    return nullptr;
+}
+
+typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
 @interface TIoTCoreXP2PBridge ()<AWAVCaptureDelegate>
 @property (nonatomic, strong) NSString *dev_name;
@@ -112,7 +138,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
@@ -127,7 +153,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
 //    setStunServerToXp2p("11.11.11.11", 111);
     //注册回调
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;

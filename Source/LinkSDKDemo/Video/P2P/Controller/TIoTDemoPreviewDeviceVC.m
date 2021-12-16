@@ -1108,8 +1108,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
              self.startPlayer = CACurrentMediaTime();
          });
          */
+        [self setVieoPlayerStartPlayWith:self.qualityString];
         
-        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+//        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
 }
 
@@ -1121,13 +1122,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         return;
     }
     
+    NSLog(@"通道断开，正在重连");
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-    
-    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+        [self setVieoPlayerStartPlayWith:self.qualityString];
+    });
 
 }
 /// MARK:新设备
@@ -1157,9 +1159,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)nav_customBack {
     [self stopPlayMovie];
-    if (self.isNVR == NO) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
-    }
     [self removeMovieNotificationObservers];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -1211,7 +1210,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-//        [self.player setOptionValue:@"16000" forKey:@"ar" ofCategory:kIJKFFOptionCategoryCodec];
+//        [self.player setOptionValue:@"8000" forKey:@"ar" ofCategory:kIJKFFOptionCategoryCodec];
+//        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
         
     }else {
         // 2.通过裸流服务拉流
@@ -1431,13 +1431,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
     }
     
-    if (self.isNVR == NO) {
-//        NSString *deviceName = self.deviceName?:@"";
-//        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-//                                                  sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-//                                                   pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-//                                                 dev_name:deviceName];
-    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
