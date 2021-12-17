@@ -78,10 +78,14 @@
 
 - (void)setItemString:(NSString *)itemString {
     _itemString = itemString?:@"";
-    self.weekLabel.text = itemString?:@"";
+//    self.weekLabel.text = itemString?:@"";
     self.detailLabel.text = itemString?:@"";
 }
 
+- (void)setDetailString:(NSString *)detailString {
+    _detailString = detailString;
+    self.weekLabel.text = detailString?:@"";
+}
 - (void)setIsSelected:(BOOL)isSelected {
     _isSelected = isSelected;
 }

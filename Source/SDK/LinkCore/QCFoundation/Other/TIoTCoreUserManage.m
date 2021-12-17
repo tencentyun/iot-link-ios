@@ -43,11 +43,17 @@
 @synthesize sys_call_status = _sys_call_status;
 
 @synthesize isShowBirthDayView = _isShowBirthDayView;
+@synthesize isShowPricyView = _isShowPricyView;
+@synthesize isShowPricyWIFIView = _isShowPricyWIFIView;
+@synthesize isShowPricyAudioView = _isShowPricyAudioView;
+@synthesize isShowPricyWechatView = _isShowPricyWechatView;
 @synthesize addDeviceNumber = _addDeviceNumber;
 
 @synthesize searchHistoryArray = _searchHistoryArray;
 
 @synthesize demoAccessID = _demoAccessID;
+@synthesize firmwareUpdate = _firmwareUpdate;
+@synthesize isRreshDeviceList = _isRreshDeviceList;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -288,7 +294,7 @@
     }
     
     if ([NSString isNullOrNilWithObject:_userRegionId]) {
-        _userRegionId = @"1";
+        _userRegionId = @"";
     }
     return _userRegionId;
 }
@@ -343,6 +349,20 @@
     [[NSUserDefaults standardUserDefaults] setValue:countryTitleEN forKey:@"country_TitleEN"];
 }
 
+#pragma mark - 固件升级
+- (NSString *)firmwareUpdate
+{
+    if (!_firmwareUpdate) {
+        _firmwareUpdate = [[NSUserDefaults standardUserDefaults] valueForKey:@"firmware_Update"];
+    }
+    return _firmwareUpdate;
+}
+
+- (void)setFirmwareUpdate:(NSString *)firmwareUpdate {
+    _firmwareUpdate = firmwareUpdate;
+    [[NSUserDefaults standardUserDefaults] setValue:firmwareUpdate forKey:@"firmware_Update"];
+}
+
 #pragma mark - 生日日期
 
 - (NSString *)isShowBirthDayView {
@@ -355,6 +375,74 @@
 - (void)setIsShowBirthDayView:(NSString *)isShowBirthDayView {
     _isShowBirthDayView = isShowBirthDayView;
     [[NSUserDefaults standardUserDefaults] setValue:isShowBirthDayView forKey:@"isShowBirthDayView"];
+}
+
+#pragma mark - 从添加设备页面返回首页后，是否刷新列表
+
+- (NSString *)isRreshDeviceList {
+    if (!_isRreshDeviceList) {
+        _isRreshDeviceList = [[NSUserDefaults standardUserDefaults] valueForKey:@"isRreshDeviceList"];
+    }
+    return _isRreshDeviceList;
+}
+
+- (void)setIsRreshDeviceList:(NSString *)isRreshDeviceList {
+    _isRreshDeviceList = isRreshDeviceList;
+    [[NSUserDefaults standardUserDefaults] setValue:isRreshDeviceList forKey:@"isRreshDeviceList"];
+}
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyView {
+    if (!_isShowPricyView) {
+        _isShowPricyView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyView"];
+    }
+    return _isShowPricyView;
+}
+
+- (void)setIsShowPricyView:(NSString *)isShowPricyView {
+    _isShowPricyView = isShowPricyView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyView forKey:@"isShowPricyView"];
+}
+
+#pragma mark - 注册隐私弹框
+- (NSString *)isShowPricyWIFIView {
+    if (!_isShowPricyWIFIView) {
+        _isShowPricyWIFIView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyWIFIView"];
+    }
+    return _isShowPricyWIFIView;
+}
+
+- (void)setIsShowPricyWIFIView:(NSString *)isShowPricyWIFIView {
+    _isShowPricyWIFIView = isShowPricyWIFIView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyWIFIView forKey:@"isShowPricyWIFIView"];
+}
+
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyAudioView {
+    if (!_isShowPricyAudioView) {
+        _isShowPricyAudioView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyAudioView"];
+    }
+    return _isShowPricyAudioView;
+}
+
+- (void)setIsShowPricyAudioView:(NSString *)isShowPricyAudioView {
+    _isShowPricyAudioView = isShowPricyAudioView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyAudioView forKey:@"isShowPricyAudioView"];
+}
+
+#pragma mark - 注册隐私弹框
+
+- (NSString *)isShowPricyWechatView {
+    if (!_isShowPricyWechatView) {
+        _isShowPricyWechatView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isShowPricyWechatView"];
+    }
+    return _isShowPricyWechatView;
+}
+
+- (void)setIsShowPricyWechatView:(NSString *)isShowPricyWechatView {
+    _isShowPricyWechatView = isShowPricyWechatView;
+    [[NSUserDefaults standardUserDefaults] setValue:isShowPricyWechatView forKey:@"isShowPricyWechatView"];
 }
 
 #pragma mark - 首次进入APP 添加设备数量
@@ -564,6 +652,7 @@
     self.countryTitle = @"";
     self.countryTitleEN = @"";
     self.FamilyType = 0;
+    self.firmwareUpdate = @"";
 }
 
 - (void)signInClear {

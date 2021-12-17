@@ -7,13 +7,13 @@
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
 
-
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
 NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preconnect"; //app本地已ready，表示探测完成，可以发起请求了
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PTypeDeviceMsgArrived"; //收到设备端的请求数据
 NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
 
 NSFileHandle *p2pOutLogFile;
+NSFileHandle *fileHandle;
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
@@ -97,14 +97,14 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
-@interface TIoTCoreXP2PBridge ()<AWAVCaptureDelegate>
+@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
 @end
 
 @implementation TIoTCoreXP2PBridge {
     
-    AWSystemAVCapture *systemAvCapture;
+    TIoTAVCaptionFLV *systemAvCapture;
 
     dispatch_source_t timer;
     void *_serverHandle;
@@ -138,6 +138,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+    //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
@@ -213,11 +214,18 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
-    AWAudioConfig *config = [[AWAudioConfig alloc] init];
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:config];
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:TIoTAVCaptionFLVAudio_8];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(AWAudioConfig *)audio_onfig{
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate{
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:nil];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView {
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     self.isSending = YES;
     
@@ -225,17 +233,22 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     const char *channel = [channel_number UTF8String];
     _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
-    systemAvCapture = [[AWSystemAVCapture alloc] initWithAudioConfig:audio_onfig];
+    
+    if (systemAvCapture == nil) {
+        systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
+        systemAvCapture.videoLocalView = localView;
+        [systemAvCapture preStart];
+    }
+    systemAvCapture.videoLocalView = localView;
     systemAvCapture.delegate = self;
-    systemAvCapture.audioEncoderType = AWAudioEncoderTypeHWAACLC;
     [systemAvCapture startCapture];
 }
 
 - (XP2PErrCode)stopVoiceToServer {
     self.isSending = NO;
     
-    [systemAvCapture stopCapture];
     systemAvCapture.delegate = nil;
+    [systemAvCapture stopCapture];
     
     int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
     
@@ -248,17 +261,22 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     stopService(dev_name.UTF8String);
     
     [p2pOutLogFile synchronizeFile];
+    //关闭文件
+    [fileHandle closeFile];
+    fileHandle = NULL;
 }
 
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
+        NSLog(@"vide stream data:%s  size:%zu",data,size);
         dataSend(self.dev_name.UTF8String, data, size);
+        NSData *dataTag = [NSData dataWithBytes:data length:size];
+        [fileHandle writeData:dataTag];
     }
 }
 
-
-+ (NSString *)getSDKVersion {    
++ (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
 

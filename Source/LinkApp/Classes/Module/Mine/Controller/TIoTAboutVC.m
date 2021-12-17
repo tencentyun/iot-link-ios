@@ -36,6 +36,7 @@
     // Do any additional setup after loading the view from its nib.
     self.showLastestVerion = NO;
     self.title = NSLocalizedString(@"about_me", @"关于我们");
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#f5f5f5"];
     
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [info objectForKey:@"CFBundleShortVersionString"];
@@ -68,8 +69,9 @@
             vc.urlPath = TIoTAPPConfig.userPrivacyPolicyChEnglishString;
             [self.navigationController pushViewController:vc animated:YES];
         }else {
-            TIoTWebVC *vc = [TIoTWebVC new];
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
             vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+            vc.notZZConfigUrl = YES;
             vc.urlPath = PrivacyProtocolURL;
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -80,6 +82,7 @@
         if (LanguageIsEnglish) {
             vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
         }else {
+            vc.notZZConfigUrl = YES;
             vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
         }
         [self.navigationController pushViewController:vc animated:YES];
@@ -96,7 +99,8 @@
             vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
             [self.navigationController pushViewController:vc animated:YES];
         }else {
-            TIoTWebVC *vc = [TIoTWebVC new];
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.notZZConfigUrl = YES;
             vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
             vc.urlPath = ServiceProtocolURl;
             [self.navigationController pushViewController:vc animated:YES];
@@ -134,6 +138,30 @@
     } else {
         [MBProgressHUD showError:NSLocalizedString(@"no_need_upgrade", @"您的应用为最新版本")  toView:self.view];
     }
+}
+
+- (IBAction)thirdSdkInfo:(UITapGestureRecognizer *)sender {
+    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+    if (LanguageIsEnglish) {
+        vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
+    }else {
+        vc.notZZConfigUrl = YES;
+        vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (IBAction)persionInfo:(UITapGestureRecognizer *)sender {
+    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+    vc.title = NSLocalizedString(@"authentation_persioninfo_title", @"个人信息收集清单");
+    if (LanguageIsEnglish) {
+        vc.urlPath = TIoTAPPConfig.userPersonInfoUSENString;
+    }else {
+        vc.notZZConfigUrl = YES;
+        vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {

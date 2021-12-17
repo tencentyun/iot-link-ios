@@ -178,7 +178,8 @@ static NSString *heartBeatReqID = @"5002";
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
     
-    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
+//    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
+    [[TIoTTRTCUIManage sharedManager] trtcReceiveDeviceData:deviceInfo?:@{}];
 
 }
 

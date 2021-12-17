@@ -98,4 +98,20 @@
 // RTC App端和设备端通话中 断网监听
 + (void)addCallingDisconnectNetLister:(id)listener reaction:(SEL)selector;
 + (void)postCallingDisconnectNet;
+
+// 开始下发固件升级
++ (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector;
++ (void)postFirmwareUpdateData;
+
+//p2pVideo 页面收到上报
++ (void)addP2PVideoReportDeviceLister:(id)listener reaction:(SEL)selector;
++ (void)postP2PVideoDevicePayload:(NSDictionary *)dic;
+
+//p2pVideo 结束退出通知
++ (void)addP2PVideoExitLister:(id)listener reaction:(SEL)selector;
++ (void)postP2PVIdeoExit;
+
+//statusManager 是否通话中或弹出通话页面
++ (void)addStatusManagerCommunicateLister:(id)listener reaction:(SEL)selector;
++ (void)postStatusManagerCommunicateType:(NSInteger)isCommunicating;
 @end

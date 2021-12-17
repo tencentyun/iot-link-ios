@@ -65,6 +65,16 @@
             make.height.width.mas_equalTo(18);
         }];
         
+        
+        self.arrowSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        [self.arrowSwitch addTarget:self action:@selector(openAuth:) forControlEvents:UIControlEventValueChanged];
+        self.arrowSwitch.hidden = YES;
+        [self.contentView addSubview:self.arrowSwitch];
+        [self.arrowSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.contentView);
+            make.right.equalTo(self.contentView).offset(-16);
+        }];
+        
         self.valueLab = [[UILabel alloc] init];
         self.valueLab.textColor = [UIColor colorWithHexString:kPhoneEmailHexColor];
         self.valueLab.font = [UIFont wcPfRegularFontOfSize:14];
@@ -96,6 +106,9 @@
     self.valueLab.text = dic[@"value"]?:@"";
     if ([dic[@"haveArrow"] isEqualToString:@"1"]) {
         self.arrowImageView.hidden = NO;
+    }else if ([dic[@"haveArrow"] isEqualToString:@"2"]) {
+        self.arrowImageView.hidden = YES;
+        self.arrowSwitch.hidden = NO;
     }
     else{
         self.arrowImageView.hidden = YES;
@@ -124,4 +137,9 @@
     // Configure the view for the selected state
 }
 
+- (void)openAuth:(UISwitch *)sender {
+    if (self.authSwitch) {
+        self.authSwitch(sender.on);
+    }
+}
 @end

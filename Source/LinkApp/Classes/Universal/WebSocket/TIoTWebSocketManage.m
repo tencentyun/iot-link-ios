@@ -15,6 +15,7 @@
 #import "TIoTTRTCSessionManager.h"
 #import "TIoTTRTCUIManage.h"
 #import "TIoTCoreUtil.h"
+#import "TIoTP2PCommunicateUIManage.h"
 
 #define dispatch_main_async_safe(block)\
 if ([NSThread isMainThread]) {\
@@ -66,6 +67,7 @@ static NSString *heartBeatReqID = @"5002";
     
     //TRTC UI Delegate
     [TIoTTRTCSessionManager sharedManager].uidelegate = TIoTTRTCUIManage.sharedManager;
+    
 }
 
 - (void)registerNetworkNotifications{
@@ -120,7 +122,12 @@ static NSString *heartBeatReqID = @"5002";
 -(void)SRWebSocketOpen{
     
     [[TIoTCoreSocketManager shared] socketOpen];
-    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(trtcCallingHungupAction) object:nil];
+    
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTP2PCommunicateUIManage sharedManager] selector:@selector(p2pCommunicateCallingHungupAction) object:nil];
 }
 
 -(void)SRWebSocketClose{
@@ -175,8 +182,11 @@ static NSString *heartBeatReqID = @"5002";
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
     
-    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
-
+//    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
+    [[TIoTTRTCUIManage sharedManager] trtcReceiveDeviceData:deviceInfo?:@{}];
+    
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
 }
 
 - (void)handleReceivedMessage:(id)message{

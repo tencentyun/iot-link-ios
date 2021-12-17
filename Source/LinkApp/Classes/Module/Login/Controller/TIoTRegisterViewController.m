@@ -53,10 +53,17 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupUI];
     //不选地区列表赋默认值
-    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
-    [TIoTCoreUserManage shared].userRegionId = @"1";
+//    [TIoTCoreUserManage shared].userRegion = @"ap-guangzhou";
+//    [TIoTCoreUserManage shared].userRegionId = @"1";
+    
+    //不选地区列表赋默认值
+    [TIoTCoreUserManage shared].userRegion = @"";
+    [TIoTCoreUserManage shared].userRegionId = @"";
+    [TIoTCoreUserManage shared].signIn_Title = @"";
+    [TIoTCoreUserManage shared].signIn_countryCode = @"";
+
+    [self setupUI];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -95,6 +102,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             make.top.equalTo(self.view.mas_top).offset(64);
         }
         make.height.mas_equalTo(kHeightCell*2 + 30); //30为顶部空白 2两条分割线
+//        make.height.mas_equalTo(kHeightCell + 30); //30为顶部空白 2两条分割线
     }];
     
     if (self.defaultPhoneOrEmail != nil) {
@@ -121,7 +129,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:emailRegisterBtn];
     [emailRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(kLeftRightPadding);
-        make.top.equalTo(self.scrollView.mas_bottom).offset(16);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(36);
     }];
     
     UITextView *procolTV = [[UITextView alloc] init];
@@ -165,6 +173,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
         make.top.equalTo(procolTV.mas_bottom).offset(16);
+//        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(kHeightCell - 8);
     }];
@@ -174,8 +183,107 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 }
 
 - (void)firstShowBirthdayView {
+
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyView]) {
+        TIoTAlertView *tipAlertView = [[TIoTAlertView alloc] initWithPricy:[UIScreen mainScreen].bounds];
+        [tipAlertView alertWithTitle:NSLocalizedString(@"register_privacy_policy_title", @"用户协议及隐私政策") message:NSLocalizedString(@"register_privacy_policy_conte", nil)
+                         cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消") doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
+
+        tipAlertView.cancelAction = ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        };
+        [tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+            if ([text isEqualToString:@"Privacy2"]) {
+                
+                if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+                    
+                    if (LanguageIsEnglish) {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                        vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }else {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.notZZConfigUrl = YES;
+                        vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+                        vc.urlPath = ServiceProtocolURl;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                } else {
+                    
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                    
+                    if (LanguageIsEnglish) {
+                        vc.urlPath = TIoTAPPConfig.serviceAgreementEnglishString;
+                    }else {
+                        vc.urlPath = TIoTAPPConfig.userProtocolUSChineseString;
+                    }
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else if ([text isEqualToString:@"Privacy4"]) {
+                
+                if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+                    
+                    if (LanguageIsEnglish) {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                        vc.urlPath = TIoTAPPConfig.userPrivacyPolicyChEnglishString;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }else {
+                        TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                        vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                        vc.notZZConfigUrl = YES;
+                        vc.urlPath = PrivacyProtocolURL;
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                    
+                } else {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                    if (LanguageIsEnglish) {
+                        vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+                    }else {
+                        vc.notZZConfigUrl = YES;
+                        vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
+                    }
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else if ([text isEqualToString:@"Privacy6"]) {
+                if (LanguageIsEnglish) {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+                    vc.urlPath = TIoTAPPConfig.userThridSDKChEnglishString;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }else {
+                    TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                    vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+                    vc.notZZConfigUrl = YES;
+                    vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                
+            }else {
+                [TIoTCoreUserManage shared].isShowPricyView = @"1";
+                
+                [self showEN_age_view];
+            }
+        };
+        
+        UIView *backMaskView = [UIApplication sharedApplication].delegate.window;
+        [tipAlertView showInView:backMaskView];
+        return;
+    }
     
-    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowBirthDayView] &&  [[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+//    [self showEN_age_view];
+}
+
+- (void)showEN_age_view {
+    NSString *errorCode = [TIoTCoreUserManage shared].isShowBirthDayView;
+    if ([NSString isNullOrNilWithObject:errorCode] || [errorCode containsString:@"-1"] || [errorCode containsString:@"-2"]) {
         TIoTAlertCustomView *customView = [[TIoTAlertCustomView alloc]init];
         [customView alertContentType:TIoTAlertViewContentTypeDatePick isAddHideGesture:NO];
         [customView alertCustomViewTitleMessage:NSLocalizedString(@"please_setting_birthday", @"为了给您提供更好的体验，请设备您的出生日期") cancelBtnTitle:NSLocalizedString(@"cancel", @"取消") confirmBtnTitle:NSLocalizedString(@"confirm", @"确定")];
@@ -190,17 +298,32 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             NSString *selectedTime = [NSString getTimeStampWithString:timeString withFormatter:@"yyyy-MM-dd" withTimezone:@""];
 
             NSInteger age = [NSString timeDifferenceInfoWitFormTimeStamp:[[NSDate date] timeIntervalSince1970] toTimeStamp:selectedTime.longLongValue dateFormatter:@"yyyy-MM-dd" timeType:TIoTTimeTypeYear];
-            if (age < 13) {
-                [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
-                [self.navigationController popViewControllerAnimated:YES];
+            
+            NSString *tempErrorCode = errorCode?:@"";
+            if ([[TIoTCoreUserManage shared].userRegionId isEqualToString:@"22"]) {
+                //美东
+                if (age < 13) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-1"];
+                    return;
+                }
+            }else {
+                //国内
+                if (age < 18) {
+                    [MBProgressHUD showError:NSLocalizedString(@"sorry_we_cannot_support_service_CN", @"很遗憾，我们目前无法向您提供腾通讯连连")];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [TIoTCoreUserManage shared].isShowBirthDayView = [tempErrorCode stringByAppendingString:@"-2"];
+                    return;
+                }
             }
+            
+            [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
         };
-        
-        [TIoTCoreUserManage shared].isShowBirthDayView = @"1";
-        
     }
 }
-
 #pragma mark - 显示用户之前操作项
 - (void)refreshUserActionItems {
     
@@ -294,7 +417,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 - (void)checkSendCode{
     
     if (_emailStyle) {
-        if ([NSString judgeEmailLegal:self.emailTF.text] && self.procolBtn.selected) {
+        if ([NSString judgeEmailLegal:self.emailTF.text]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -305,7 +428,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     }
     else
     {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -319,6 +442,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 #pragma mark - eventResponse
 
 -(void)changedTextField:(UITextField *)textField{
+    if (!self.procolBtn.selected) {
+        return;
+    }
     [self checkSendCode];
     
     //优化提示文案
@@ -378,7 +504,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             [TIoTCoreUserManage shared].signIn_countryCode = CountryCode;
             [TIoTCoreUserManage shared].signIn_Title = Title;
         }
-        
+        [self showEN_age_view];
     };
     [self.navigationController pushViewController:regionVC animated:YES];
 }
@@ -427,6 +553,12 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 
 - (void)procolClick:(UIButton *)btn{
     btn.selected = !btn.selected;
+    
+    if (!btn.selected) {
+        self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+        self.sendCodeBtn.enabled = NO;
+        return;
+    }
     [self checkSendCode];
 }
 
@@ -475,7 +607,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     if ([[URL scheme] isEqualToString:@"Terms1"]) {
        
         DDLogVerbose(@"用户协议");
-        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"] || [[TIoTCoreUserManage shared].userRegionId isEqual:@""] ) { //国内
             
             if (LanguageIsEnglish) {
                 TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
@@ -484,7 +616,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
                 vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
                 vc.urlPath = ServiceProtocolURl;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -517,8 +650,9 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
                 vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = PrivacyProtocolURL;
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
@@ -530,6 +664,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             if (LanguageIsEnglish) {
                 vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
             }else {
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
             }
             [self.navigationController pushViewController:vc animated:YES];
@@ -567,7 +702,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+//        [self.areaCodeBtn setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+        [self.areaCodeBtn setTitle:@"" forState:UIControlStateNormal];
         [self.areaCodeBtn setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -579,7 +715,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel = [[UILabel alloc]init];
-        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+//        [self.phoneAreaLabel setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+        self.phoneAreaLabel.text = nil;
         [_contentView addSubview:self.phoneAreaLabel];
         [self.phoneAreaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn.mas_right).offset(5);
@@ -621,6 +758,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         [phoneLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
             make.top.equalTo(lineView.mas_bottom);
+//            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];
@@ -684,7 +822,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.areaCodeBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
+//        [self.areaCodeBtn2 setTitle:[NSString stringWithFormat:@"%@",NSLocalizedString(@"china_main_land", @"中国大陆")] forState:UIControlStateNormal];
         [self.areaCodeBtn2 setTitleColor:[UIColor colorWithHexString:kRegionHexColor] forState:UIControlStateNormal];
         self.areaCodeBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.areaCodeBtn2.titleLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -698,7 +836,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }];
         
         self.phoneAreaLabel2 = [[UILabel alloc]init];
-        [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
+//        [self.phoneAreaLabel2 setLabelFormateTitle:@"(+86)" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:kRegionHexColor textAlignment:NSTextAlignmentLeft];
         [_contentView2 addSubview:self.phoneAreaLabel2];
         [self.phoneAreaLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.areaCodeBtn2.mas_right).offset(5);
@@ -740,6 +878,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         [emailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(kLeftRightPadding);
             make.top.equalTo(lineView.mas_bottom);
+//            make.top.mas_equalTo(30*kScreenAllHeightScale);
             make.height.mas_equalTo(kHeightCell);
             make.width.mas_equalTo(kWidthTitle);
         }];

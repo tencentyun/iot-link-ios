@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *familyId;//
 @property (nonatomic,copy) NSString *currentRoomId;
 @property (nonatomic,assign) NSInteger FamilyType;
+
+/**
+ 固件升级提示（只显示一次）
+ */@property (nonatomic, copy, nullable) NSString *firmwareUpdate;
+
 /*
  注册页面 用户选择项
  */
@@ -60,6 +65,34 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 @property (nonatomic, copy, nullable) NSString *isShowBirthDayView;  //是否弹出生日选择View
+
+/**
+ 从主页进入添加设备页面NewAddEquipment
+ */
+@property (nonatomic, copy, nullable) NSString *isRreshDeviceList;  //从添加设备页面返回首页后，刷新列表
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyView;
+
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyWIFIView;
+
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyAudioView;
+
+
+/**
+ 首次进入，隐私弹框
+ */
+@property (nonatomic, copy, nullable) NSString *isShowPricyWechatView;
 
 /*
  保存首次进入APP 设备

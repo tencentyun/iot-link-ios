@@ -86,6 +86,9 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 /// 获取当前时间时间戳
 + (NSString *)getNowTimeString;
 
+/// 获取当前毫秒时间戳
++(NSString *)getNowTimeTimestamp;
+
 /// 计算两个时间戳的时间差
 + (NSInteger )timeDifferenceInfoWitFormTimeStamp:(NSTimeInterval )fromTimeStamp toTimeStamp:(NSTimeInterval )toTimeStamp dateFormatter:(NSString *)formatter timeType:(TIoTTimeType)timeType;
 
@@ -122,7 +125,10 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 
 /// HmacSha1->base64
 + (NSString *)HmacSha1:(NSString *)key data:(NSString *)data;
+//方法是将加密结果转成了十六进制字符串了 key为String text 类型 
 + (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data;
+//将加密结果转成了十六进制字符串 key为hex 类型hash; 输入的key为16进制string
++ (NSString *)HmacSha1_Keyhex:(NSString *)key data:(NSString *)data;
 
 // MD5加密  32位 大写
 + (NSString *)MD5ForUpper32Bate:(NSString *)string;
@@ -153,8 +159,16 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 // 十六进制转换为普通字符串的。
 + (NSString *)stringFromHexString:(NSString *)hexString;
 
+// 十六进制转Data
++ (NSData *)dataFromHexString:(NSString *)sHex;
+
+// Data 转十六进制
++ (NSString *)getDataFromHexStr:(NSData *)data;
+
 //10进制转16进制
 + (NSString *)getHexByDecimal:(NSInteger)decimal ;
+//16进制转10进制
++ (NSInteger )getDecimalByHex:(NSString *)hex;
 
 //普通字符串转换为十六进制的。
 + (NSString *)hexStringFromString:(NSString *)string;
@@ -163,8 +177,33 @@ typedef NS_ENUM(NSInteger, TIoTTimeType) {
 //十进制转二进制
 + (NSString *)getBinaryByDecimal:(NSInteger)decimalism;
 
+//2进制转10进制
++ (NSInteger)getDecimalByBinary:(NSString *)binary;
+
 //16进制字符串逆序
 + (NSString *)reverseWordsInString:(NSString *)oldString;
+
+//2进制转16进制
++ (NSString *)getHexByBinary:(NSString *)binary;
+
+//16进制转2进制
++ (NSString *)getBinaryByHex:(NSString *)hex;
+
+//16进制转浮点型
++ (float)getFloatByHex:(NSString *)hexString;
+
+//浮点数转16进制
++ (NSString *)getHexByFloat:(float )floatValue;
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName;
+
+//获取固定长度的字符串 不足为补0
++ (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString;
+
+//将字符串转为浮点型（0.0.1）
++ (NSString *)getVersionWithString:(NSString *)originVersionString;
+
 @end
 
 NS_ASSUME_NONNULL_END

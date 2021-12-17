@@ -35,6 +35,9 @@
 #import "TIoTFamilyInfoVC.h"
 #import "TIoTEquipmentNewCell.h"
 #import "TIoTShortcutView.h"
+#import "TIoTAlertAuthorsizeView.h"
+#import <AVFoundation/AVFoundation.h>
+#import "TIoTP2PCommunicateUIManage.h"
 
 @import Lottie;
 
@@ -115,6 +118,11 @@ static CGFloat kHeaderViewHeight = 162;
     [super viewDidAppear:animated];
     self.navigationController.tabBarController.tabBar.hidden = NO;
     
+    if ([[TIoTCoreUserManage shared].isRreshDeviceList isEqualToString:@"1"]) {
+        [self getRoomList:[TIoTCoreUserManage shared].familyId];
+    }
+    [TIoTCoreUserManage shared].isRreshDeviceList = @"0";
+    
     if (self.devicesTableView) {
         if (self.currentFamilyId != nil) {
             
@@ -128,6 +136,10 @@ static CGFloat kHeaderViewHeight = 162;
             
         }
     }
+
+//    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyAudioView]) {
+//        [self usserAgreeAuthorsize];
+//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -158,7 +170,29 @@ static CGFloat kHeaderViewHeight = 162;
 }
 
 #pragma mark - Other
-
+- (void)usserAgreeAuthorsize {
+    TIoTAlertAuthorsizeView *customView = [[TIoTAlertAuthorsizeView alloc]init];
+    [customView alertContentType:TIoTAlertCustomViewContentTypeText isAddHideGesture:NO];
+    [customView alertCustomViewTitleMessage:NSLocalizedString(@"authentation_alert_wifi_title", nil) message:NSLocalizedString(@"authentation_alert_audio_conte", nil) info:NSLocalizedString(@"authentation_alert_audio_detai", nil) cancelBtnTitle:NSLocalizedString(@"refuse", @"拒绝") confirmBtnTitle:NSLocalizedString(@"authentation_alert_btn", @"始终允许")];
+    [self.view addSubview:customView];
+    
+    customView.cancelBlock = ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    
+    customView.confirmBlock = ^(NSString *timeString){
+        [TIoTCoreUserManage shared].isShowPricyAudioView = @"1";
+        
+        AVAudioSession *avSession = [AVAudioSession sharedInstance];
+        if ([avSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [avSession requestRecordPermission:^(BOOL available) {
+                if (!available) {
+                    NSLog(@"不同意");
+                }
+            }];
+        }
+    };
+}
 - (void)addNotifications
 {
     [HXYNotice addSocketConnectSucessListener:self reaction:@selector(socketConnected)];
@@ -173,8 +207,15 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)appEnterForeground {
     //进入前台需要轮训下trtc状态，防止漏接现象//轮训设备状态，查看trtc设备是否要呼叫我
-    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
-    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+//    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+//    [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+    
+    [[TIoTTRTCUIManage sharedManager] trtcRepeatDeviceData:self.dataArr];
+    [[TIoTTRTCUIManage sharedManager] trtcRepeatDeviceData:self.shareDataArr];
+    
+    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.dataArr];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.shareDataArr];
 }
 
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
@@ -1104,7 +1145,12 @@ static CGFloat kHeaderViewHeight = 162;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
-        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+//        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.shareDataArr];
+        
+        [[TIoTTRTCUIManage sharedManager] trtcRepeatDeviceData:self.shareDataArr];
+        
+        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.shareDataArr];
     });
 }
 
@@ -1112,7 +1158,11 @@ static CGFloat kHeaderViewHeight = 162;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //轮训设备状态，查看trtc设备是否要呼叫我
-        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+//        [[TIoTTRTCUIManage sharedManager] repeatDeviceData:self.dataArr];
+        [[TIoTTRTCUIManage sharedManager] trtcRepeatDeviceData:self.dataArr];
+        
+        [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRepeatDeviceData:self.dataArr];
     });
 }
 

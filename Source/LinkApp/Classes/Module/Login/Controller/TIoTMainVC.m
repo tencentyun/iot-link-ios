@@ -9,6 +9,7 @@
 #import "TIoTVCLoginAccountVC.h"
 #import "TIoTSingleCustomButton.h"
 #import "UIButton+LQRelayout.h"
+#import "TIoTOpensourceLicenseViewController.h"
 
 @interface TIoTMainVC ()
 @property (nonatomic, strong) UIImageView   *headerImage;
@@ -25,6 +26,11 @@
     // Do any additional setup after loading the view.
     
     [self setUpUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self firstShowBirthdayView];
 }
 
 - (void)setUpUI {
@@ -115,6 +121,7 @@
 }
 
 - (void)createNewAccount {
+//    TIoTRegionViewController *registerVC = [[TIoTRegionViewController alloc]init];
     TIoTRegisterViewController *registerVC = [[TIoTRegisterViewController alloc]init];
     [self.navigationController pushViewController:registerVC animated:YES];
 }
@@ -134,5 +141,60 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)firstShowBirthdayView {
+
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isShowPricyView]) {
+        TIoTAlertView *tipAlertView = [[TIoTAlertView alloc] initWithPricy:[UIScreen mainScreen].bounds];
+        [tipAlertView alertWithTitle:NSLocalizedString(@"register_privacy_policy_title", @"用户协议及隐私政策")
+                             message:NSLocalizedString(@"register_privacy_policy_conte", nil)
+                         cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消")
+                           doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
+
+        tipAlertView.cancelAction = ^{
+            exit(0);
+        };
+        [tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+            if ([text isEqualToString:@"Privacy2"]) {
+                
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
+                vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+                vc.urlPath = ServiceProtocolURl;
+                [self.navigationController pushViewController:vc animated:YES];
+                
+            }else if ([text isEqualToString:@"Privacy4"]) {
+                
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
+                vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                vc.urlPath = PrivacyProtocolURL;
+                [self.navigationController pushViewController:vc animated:YES];
+            }else if ([text isEqualToString:@"Privacy6"]) {
+                
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.title = NSLocalizedString(@"authentation_persioninfo_title", @"个人信息收集清单");
+                vc.notZZConfigUrl = YES;
+                vc.urlPath = TIoTAPPConfig.userPersonInfoUSZHString;
+                [self.navigationController pushViewController:vc animated:YES];
+                
+            }else if ([text isEqualToString:@"Privacy8"]) {
+                
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.title = NSLocalizedString(@"authentation_thirdsdk_title", @"第三方信息");
+                vc.urlPath = TIoTAPPConfig.userThridSDKChChineseString;
+                vc.notZZConfigUrl = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+                
+            }else {
+                [TIoTCoreUserManage shared].isShowPricyView = @"1";
+            }
+        };
+        
+        UIView *backMaskView = [UIApplication sharedApplication].delegate.window;
+        [tipAlertView showInView:backMaskView];
+    }
+}
 
 @end
