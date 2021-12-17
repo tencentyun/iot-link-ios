@@ -84,7 +84,8 @@ class TIoTAPPConfig: NSObject {
     
     // static config 美国地区-隐私政策中文
     public static var userPrivacyPolicyUSChineseString: NSString {
-        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config8.js"
+//        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config8.js"
+        return "https://privacy.qq.com/document/preview/0da010f1b4944e88bf78520d88642513"
     }
     
     // static config 中国区-隐私政策英文
@@ -97,6 +98,27 @@ class TIoTAPPConfig: NSObject {
         return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config9.js"
     }
     
+    // static config 中国区-第三方sdk目录
+    public static var userThridSDKChChineseString: NSString {
+//        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config12.js"
+        return "https://privacy.qq.com/document/preview/bd3470c6063f4ac6831900edcb60c9bd"
+    }
+    
+    // static config 中国区-第三方sdk目录英文
+    public static var userThridSDKChEnglishString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config13.js"
+    }
+    
+    // static config 中国区-个人信息目录英文
+    public static var userPersonInfoUSZHString: NSString {
+//        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config14.js"
+        return "https://privacy.qq.com/document/preview/278bbbbbdd5748999fce491cfa6dd424"
+    }
+    
+    // static config 中国区-个人信息目录英文
+    public static var userPersonInfoUSENString: NSString {
+        return "https://imgcache.qq.com/qzone/qzactStatics/qcloud/data/42/config15.js"
+    }
 }
 
 

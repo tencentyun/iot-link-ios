@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *_sys_extra_info; //_sys_extra_info: "{ \ "rejectUserId \ ": \ "userb \ "}"消息，判断rejectUserId是否为自己的用户id，，如果为自己的用户id，则退出呼叫通话的流程
 @property (nonatomic, strong) NSString *deviceName;//UI展示的名字
 @property (nonatomic, strong) NSString *username; //用户名
+@property (nonatomic, strong) NSString *_sys_caller_id; //主呼叫方id
+@property (nonatomic, strong) NSString *_sys_called_id; //被呼叫方id
 @end
 
 @interface TIOTtrtcPayloadModel : NSObject

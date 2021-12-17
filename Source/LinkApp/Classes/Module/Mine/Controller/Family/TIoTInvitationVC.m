@@ -157,7 +157,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
                     [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
                     
                     DDLogVerbose(@"timeListArray====%@",regionListArray);
-                    self.regionListDataArray = [NSMutableArray arrayWithArray:regionListArray];
+                    self.regionListDataArray = [NSMutableArray arrayWithArray:@[regionDic]];
                     
                     [self setDefaultAccountAreaWithRegionDic:regionDic];
                 }
@@ -170,7 +170,7 @@ static CGFloat const kWidthTitle = 90; //左侧title 提示宽度
                     [[TIoTCoreUserManage shared] saveUserInfo:regionDic];
                     
                     DDLogVerbose(@"timeListArray====%@",regionListArray);
-                    self.regionListDataArray = [NSMutableArray arrayWithArray:regionListArray];
+                    self.regionListDataArray = [NSMutableArray arrayWithArray:@[regionDic]];
                     
                     [self setDefaultAccountAreaWithRegionDic:regionDic];
                 }

@@ -12,7 +12,7 @@
 @property (nonatomic, strong) UILabel *valueLab;
 @property (nonatomic, strong) UIView *lineView;
 @property (nonatomic, strong) UIImageView *arrowImageView;
-
+@property (nonatomic, strong) UIView *firmwareUpdateTip;
 @end
 
 @implementation TIoTDeviceDetailTableViewCell
@@ -78,6 +78,17 @@
             make.centerY.equalTo(self.backContentView);
             make.left.equalTo(self.titleLab.mas_right).offset(10).priority(750);
         }];
+        
+        self.firmwareUpdateTip = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+        self.firmwareUpdateTip.backgroundColor = [UIColor redColor];
+        self.firmwareUpdateTip.layer.cornerRadius = self.firmwareUpdateTip.frame.size.width/2;
+        [self.backContentView addSubview:self.firmwareUpdateTip];
+        [self.firmwareUpdateTip mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.backContentView);
+            make.width.height.mas_equalTo(10);
+            make.right.equalTo(self.arrowImageView.mas_left).offset(-15);
+        }];
+        self.firmwareUpdateTip.hidden = YES;
     }
     return self;
 }
@@ -87,6 +98,7 @@
     
     self.titleLab.text = dic[@"title"];
     self.valueLab.text = dic[@"value"];
+    self.isShowFirmwareUpdate = NO;
     
     if ([dic[@"needArrow"] isEqualToString:@"1"]) {
         self.arrowImageView.hidden = NO;
@@ -133,6 +145,15 @@
     _timePriodNumFont = timePriodNumFont;
     [self.titleLab setFont:timePriodNumFont];
     [self.valueLab setFont:timePriodNumFont];
+}
+
+- (void)setIsShowFirmwareUpdate:(BOOL)isShowFirmwareUpdate {
+    _isShowFirmwareUpdate = isShowFirmwareUpdate;
+    if (isShowFirmwareUpdate == YES) {
+        self.firmwareUpdateTip.hidden = NO;
+    }else {
+        self.firmwareUpdateTip.hidden = YES;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

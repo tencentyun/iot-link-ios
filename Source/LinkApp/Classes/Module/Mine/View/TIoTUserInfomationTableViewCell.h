@@ -15,6 +15,9 @@ static NSString * const ID = @"TIoTUserInfomationTableViewCell";
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, copy) NSDictionary *dic;
 
+@property (nonatomic, strong) UISwitch *arrowSwitch;
+@property (nonatomic) void (^authSwitch)(BOOL open);
+
 @end
 
 NS_ASSUME_NONNULL_END

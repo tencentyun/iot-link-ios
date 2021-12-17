@@ -90,7 +90,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         make.top.equalTo(self.scrollView.mas_bottom).offset(16);
     }];
     
-    UITextView *procolTV = [[UITextView alloc] init];
+    /*UITextView *procolTV = [[UITextView alloc] init];
     procolTV.attributedText = [self protolStr];;
     procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
     procolTV.textColor = [UIColor colorWithHexString:kRegionHexColor];
@@ -122,7 +122,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
         }
         make.width.height.mas_equalTo(30);
         make.right.equalTo(procolTV.mas_left);
-    }];
+    }];*/
     
     
     self.sendCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -137,7 +137,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     [self.view addSubview:self.sendCodeBtn];
     [self.sendCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(kLeftRightPadding);
-        make.top.equalTo(procolTV.mas_bottom).offset(16);
+//        make.top.equalTo(procolTV.mas_bottom).offset(16);
+        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
         make.right.equalTo(self.view).offset(-kLeftRightPadding);
         make.height.mas_equalTo(40);
     }];
@@ -167,7 +168,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
 //是否可发送验证码
 - (void)checkSendCode{
     if (_emailStyle) {
-        if ([NSString judgeEmailLegal:self.emailTF.text] && self.procolBtn.selected) {
+//        if ([NSString judgeEmailLegal:self.emailTF.text] && self.procolBtn.selected) {
+        if ([NSString judgeEmailLegal:self.emailTF.text]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -178,7 +180,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
     }
     else
     {
-        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
+//        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId] && self.procolBtn.selected) {
+        if ([NSString judgePhoneNumberLegal:self.phoneTF.text withRegionID:[TIoTCoreUserManage shared].userRegionId]) {
             self.sendCodeBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
             self.sendCodeBtn.enabled = YES;
         }
@@ -286,7 +289,8 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
                 [self.navigationController pushViewController:vc animated:YES];
                 return NO;
             }else {
-                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
                 vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
                 vc.urlPath = ServiceProtocolURl;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -333,6 +337,7 @@ static CGFloat const kWidthTitle = 80; //左侧title 提示宽度
             if (LanguageIsEnglish) {
                 vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
             }else {
+                vc.notZZConfigUrl = YES;
                 vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
             }
             [self.navigationController pushViewController:vc animated:YES];

@@ -13,6 +13,11 @@
 #import <ifaddrs.h>
 #import "TIoTGetgateway.h"
 
+union u{
+    Float32 f;
+    int32_t i;
+}u;
+
 @implementation NSString (Extension)
 
 + (NSString *)getNowTimeString{
@@ -20,6 +25,15 @@
     NSTimeInterval time1 =[date1 timeIntervalSince1970];
     NSString *timeString = [NSString stringWithFormat:@"%.0f",time1];
     return timeString;
+}
+
++(NSString *)getNowTimeTimestamp {
+
+    NSDate *datenow = [NSDate date];
+
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)([datenow timeIntervalSince1970]*1000)];
+
+    return timeSp;
 }
 
 + (NSString *)getNowTimeStingWithTimeZone:(NSString *)tiemzone formatter:(NSString *)timeFormatter {
@@ -609,7 +623,7 @@
     return hash;
 }
 
-//方法是将加密结果转成了十六进制字符串了
+//方法是将加密结果转成了十六进制字符串了 key为String text 类型
 + (NSString *)HmacSha1_hex:(NSString *)key data:(NSString *)data
 {
     if ([NSString matchSinogram:data]) {
@@ -627,6 +641,46 @@
     NSString *hexString = [self hexStringFromData:HMAC];
     
     return hexString;
+}
+
+//将加密结果转成了十六进制字符串 key为hex 类型hash; 输入的key为16进制string
++ (NSString *)HmacSha1_Keyhex:(NSString *)key data:(NSString *)data
+{
+        
+        NSData *keyData = [self dataFromHexString:key];
+        
+        const char *cKey  = [keyData bytes];
+        
+        const char *cData = [data cStringUsingEncoding:NSUTF8StringEncoding];
+
+        //sha1
+        unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA1, cKey, keyData.length, cData, strlen(cData), cHMAC);
+
+        NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:sizeof(cHMAC)];
+        NSString *hexString = [self hexStringFromData:HMAC];
+        
+        return hexString;
+}
+
+// 十六进制转Data
++ (NSData *)dataFromHexString:(NSString *)sHex {
+    const char *chars = [sHex UTF8String];
+    int i = 0;
+    NSUInteger len = sHex.length;
+
+    NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
+    char byteChars[3] = {'\0','\0','\0'};
+    unsigned long wholeByte;
+
+    while (i < len) {
+        byteChars[0] = chars[i++];
+        byteChars[1] = chars[i++];
+        wholeByte = strtoul(byteChars, NULL, 16);
+        [data appendBytes:&wholeByte length:1];
+    }
+
+    return data;
 }
 
 + (NSString *)getGateway {
@@ -847,6 +901,10 @@
     return hex;
 }
 
++ (NSInteger )getDecimalByHex:(NSString *)hex {
+    NSString * decimal = [NSString stringWithFormat:@"%lu",strtoul([hex UTF8String],0,16)];
+    return decimal.integerValue;
+}
 
 // 十六进制转换为普通字符串的。
 + (NSString*)stringFromHexString:(NSString*)hexString
@@ -938,6 +996,27 @@
     return hexStr;
 }
 
+// NSData转16进制 第一种
++ (NSString *)getDataFromHexStr:(NSData *)data {
+   if (!data || [data length] == 0) {
+       return @"";
+   }
+   NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
+   
+   [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
+       unsigned char *dataBytes = (unsigned char*)bytes;
+       for (NSInteger i = 0; i < byteRange.length; i++) {
+           NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
+           if ([hexStr length] == 2) {
+               [string appendString:hexStr];
+           } else {
+               [string appendFormat:@"0%@", hexStr];
+           }
+       }
+   }];
+   return string;
+}
+
 //十进制转二进制
 + (NSString *)getBinaryByDecimal:(NSInteger)decimalism {
     NSString *binary = @"";
@@ -960,6 +1039,21 @@
             binary = [mStr stringByAppendingString:binary];
         }
         return binary;
+}
+
+//2进制转10进制
++ (NSInteger)getDecimalByBinary:(NSString *)binary {
+    
+    NSInteger decimal = 0;
+    for (int i=0; i<binary.length; i++) {
+        
+        NSString *number = [binary substringWithRange:NSMakeRange(binary.length - i - 1, 1)];
+        if ([number isEqualToString:@"1"]) {
+            
+            decimal += pow(2, i);
+        }
+    }
+    return decimal;
 }
 
 //16进制字符串逆序
@@ -991,5 +1085,142 @@
         
     }
     return newString;
+}
+
+//2进制转16进制
++ (NSString *)getHexByBinary:(NSString *)binary {
+    
+    NSMutableDictionary *binaryDic = [[NSMutableDictionary alloc] initWithCapacity:16];
+    [binaryDic setObject:@"0" forKey:@"0000"];
+    [binaryDic setObject:@"1" forKey:@"0001"];
+    [binaryDic setObject:@"2" forKey:@"0010"];
+    [binaryDic setObject:@"3" forKey:@"0011"];
+    [binaryDic setObject:@"4" forKey:@"0100"];
+    [binaryDic setObject:@"5" forKey:@"0101"];
+    [binaryDic setObject:@"6" forKey:@"0110"];
+    [binaryDic setObject:@"7" forKey:@"0111"];
+    [binaryDic setObject:@"8" forKey:@"1000"];
+    [binaryDic setObject:@"9" forKey:@"1001"];
+    [binaryDic setObject:@"A" forKey:@"1010"];
+    [binaryDic setObject:@"B" forKey:@"1011"];
+    [binaryDic setObject:@"C" forKey:@"1100"];
+    [binaryDic setObject:@"D" forKey:@"1101"];
+    [binaryDic setObject:@"E" forKey:@"1110"];
+    [binaryDic setObject:@"F" forKey:@"1111"];
+    
+    if (binary.length % 4 != 0) {
+        
+        NSMutableString *mStr = [[NSMutableString alloc]init];;
+        for (int i = 0; i < 4 - binary.length % 4; i++) {
+            
+            [mStr appendString:@"0"];
+        }
+        binary = [mStr stringByAppendingString:binary];
+    }
+    NSString *hex = @"";
+    for (int i=0; i<binary.length; i+=4) {
+        
+        NSString *key = [binary substringWithRange:NSMakeRange(i, 4)];
+        NSString *value = [binaryDic objectForKey:key];
+        if (value) {
+            
+            hex = [hex stringByAppendingString:value];
+        }
+    }
+    return hex;
+}
+
++ (NSString *)getBinaryByHex:(NSString *)hex {
+    
+    NSMutableDictionary *hexDic = [[NSMutableDictionary alloc] initWithCapacity:16];
+    [hexDic setObject:@"0000" forKey:@"0"];
+    [hexDic setObject:@"0001" forKey:@"1"];
+    [hexDic setObject:@"0010" forKey:@"2"];
+    [hexDic setObject:@"0011" forKey:@"3"];
+    [hexDic setObject:@"0100" forKey:@"4"];
+    [hexDic setObject:@"0101" forKey:@"5"];
+    [hexDic setObject:@"0110" forKey:@"6"];
+    [hexDic setObject:@"0111" forKey:@"7"];
+    [hexDic setObject:@"1000" forKey:@"8"];
+    [hexDic setObject:@"1001" forKey:@"9"];
+    [hexDic setObject:@"1010" forKey:@"A"];
+    [hexDic setObject:@"1011" forKey:@"B"];
+    [hexDic setObject:@"1100" forKey:@"C"];
+    [hexDic setObject:@"1101" forKey:@"D"];
+    [hexDic setObject:@"1110" forKey:@"E"];
+    [hexDic setObject:@"1111" forKey:@"F"];
+    
+    NSString *binary = @"";
+    for (int i=0; i<[hex length]; i++) {
+        
+        NSString *key = [hex substringWithRange:NSMakeRange(i, 1)];
+        NSString *value = [hexDic objectForKey:key.uppercaseString];
+        if (value) {
+            
+            binary = [binary stringByAppendingString:value];
+        }
+    }
+    return binary;
+}
+
+//16进制转浮点型
++ (float)getFloatByHex:(NSString *)hexString {
+    NSString *revertHex = [self reverseWordsInString:hexString?:@""];
+    NSString *tempStr = [NSString stringWithFormat:@"0x%@",[revertHex uppercaseString]];
+    sscanf([tempStr UTF8String], "%x", &u.i);
+    float floatValue = u.f;
+    return floatValue;
+}
+
+//浮点数转16进制
++ (NSString *)getHexByFloat:(float )floatValue {
+
+    NSString *hexTempString = [NSString stringWithFormat:@"%X",*(int*)&floatValue];
+    NSString *hexString = [self reverseWordsInString:hexTempString?:@""];
+    return hexString;
+}
+
+// 获取标识符
++ (NSString *)getBindIdentifierWithProductId:(NSString *)productId deviceName:(NSString *)deviceName {
+    
+    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",productId,deviceName];
+    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
+    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
+    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
+    
+    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
+    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
+    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
+    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
+    
+    return resuleStringHex;
+}
+
+//获取固定长度的字符串 不足为补0
++ (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString {
+    NSString *value = @"";
+    NSString *preTempValue = [bitString substringToIndex:bitString.length - originValue.length];
+    NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
+    value = resultValue;
+    return value;
+}
+
+//将字符串转为浮点型（0.0.1）
++ (NSString *)getVersionWithString:(NSString *)originVersionString {
+    NSString *versionString = @"";
+    NSArray *versionArray = [originVersionString componentsSeparatedByString:@"."];
+    for (NSString *numStr in versionArray) {
+        versionString = [versionString stringByAppendingString:numStr];
+    }
+    return versionString = [self getTheCorrectNum:versionString];
+}
+
+//去除字符串前端为0
++ (NSString*)getTheCorrectNum:(NSString*)tempString {
+    while ([tempString hasPrefix:@"0"])
+    {
+        tempString = [tempString substringFromIndex:1];
+    }
+        return tempString;
 }
 @end

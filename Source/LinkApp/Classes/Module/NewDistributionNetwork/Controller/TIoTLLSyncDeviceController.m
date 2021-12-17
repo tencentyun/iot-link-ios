@@ -8,6 +8,7 @@
 #import "TIoTStepTipView.h"
 #import "TIoTLLSyncDeviceCell.h"
 #import "TIoTLLSyncViewController.h"
+#import "TIoTLLSyncDeviceConfigModel.h"
 
 @interface TIoTLLSyncDeviceController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BluetoothCentralManagerDelegate>
 
@@ -34,6 +35,9 @@
 @property (nonatomic, strong) NSString *tempTimeString;
 @property (nonatomic, strong) NSString *andomNumString;
 @property (nonatomic, strong) CBCharacteristic *characteristicFFE1; //子设备绑定 写入设备时的特征值
+@property (nonatomic, strong) NSMutableDictionary *productNameDic;
+@property (nonatomic, strong) NSMutableArray *tempProductNameArray;
+@property (nonatomic, strong) NSString *bindSliceString; //绑定前分片拼接字符串
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -44,10 +48,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //停止扫描蓝牙时候触发
+    [HXYNotice addBluetoothScanStopLister:self reaction:@selector(stopBlutoothScan)];
+    
     [self setupUI];
     
     self.blueManager = [BluetoothCentralManager shareBluetooth];
     self.blueManager.delegate = self;
+    [self.blueManager disconnectPeripheral];
     [self.blueManager scanNearLLSyncService];
 }
 
@@ -210,6 +219,18 @@
     TIoTLLSyncDeviceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TIoTLLSyncDeviceCell" forIndexPath:indexPath];
     CBPeripheral *device = self.blueDevices[indexPath.row];
     cell.itemString = device.name;
+    
+    if (self.productNameDic.allKeys.count == self.blueDevices.count) {
+        NSString *productIDStr = self.tempProductNameArray[indexPath.row];
+        NSString *productName = self.productNameDic[productIDStr];
+        if ([productName isEqualToString:@"error"]) {
+            cell.itemString = NSLocalizedString(@"unknow_device", @"未知设备");
+            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
+        }else {
+            cell.itemString = productName;
+            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
+        }
+    }
     cell.isSelected = NO;
     return  cell;
 }
@@ -232,8 +253,48 @@
     }
 }
 
-
-
+- (NSString *)getBlueDeviceMacIndex:(NSIndexPath *)indexPath {
+    NSString *blueMac = @"";
+    for (int i = 0; i<self.blueDevices.count; i++) {
+        CBPeripheral *obj = self.blueDevices[i];
+        if (i == indexPath.row) {
+            CBPeripheral *device = (CBPeripheral*)obj;
+            NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+            if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+                NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+                NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+                NSString *producthex = [hexstr substringWithRange:NSMakeRange(6, 4)];
+                blueMac = producthex?:@"";
+                break;
+            }
+        }
+        
+    }
+    return blueMac;
+}
+- (void)refushProductName{
+    if (self.productNameDic.allKeys.count != 0) {
+        [self.productNameDic removeAllObjects];
+    }
+    if (self.tempProductNameArray.count != 0) {
+        [self.tempProductNameArray removeAllObjects];
+    }
+    [self.blueDevices enumerateObjectsUsingBlock:^(CBPeripheral * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CBPeripheral *device = (CBPeripheral*)obj;
+        NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+        if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+            NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+            NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+            NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+            NSString *productstr = [NSString stringFromHexString:producthex];
+            [self.tempProductNameArray addObject:productstr];
+            
+            if (self.currentProductId == nil) {
+                [self getProductsNameWithproductIDsArray:@[productstr]];
+            }
+        }
+    }];
+}
 
 #pragma mark - BluetoothCentralManagerDelegate
 //实时扫描外设（目前扫描10s）
@@ -374,14 +435,57 @@
             [self.resultvc checkTokenStateWithCirculationWithDeviceData:deviceData];
             
         }else if ([cmdtype isEqualToString:@"05"]){
-            //子设备绑定
-            NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
-            NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
-            self.currentDevicename = deviceName;
-            NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
-            NSString *signatureString = [preString substringFromIndex:6]?:@"";
-            self.currentSignature = signatureString;
-            [self bindSubDevice];
+            //连接成功前，MUT固定20字节
+            NSString *lenHex = [hexstr substringWithRange:NSMakeRange(2, 4)];
+            NSString *lenBinOriginString = [NSString getBinaryByHex:lenHex];
+            NSString *lenBinString = [NSString getFixedLengthValueWithOriginValue:lenBinOriginString bitString:@"0000000000000000"];
+            NSString *lenSliceFlag = [lenBinString substringWithRange:NSMakeRange(0, 2)];
+            if ([lenSliceFlag isEqualToString:@"00"]) {
+                //不分片
+                //子设备绑定
+                if (hexstr.length >= 46) {
+                    NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
+                    NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                    self.currentDevicename = deviceName;
+                    NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
+                    NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                    self.currentSignature = signatureString;
+                    [self bindSubDevice];
+                }
+            }else {
+                
+                if ([lenSliceFlag isEqualToString:@"01"]) {
+                    //首包
+                    if (hexstr.length>=6) {
+                        self.bindSliceString = [hexstr substringFromIndex:6]?:@"";
+                    }
+                }else if ([lenSliceFlag isEqualToString:@"10"]) {
+                    //中间包
+                    if (hexstr.length >= 6) {
+                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+                    }
+                }else if ([lenSliceFlag isEqualToString:@"11"]) {
+                    //尾包
+                    if (hexstr.length >= 6) {
+                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+                    }
+                    //050000 占位写死的作用，实际也是6字节
+                    NSString *resuleValue = [NSString stringWithFormat:@"050000%@",self.bindSliceString];
+                    
+                    if (resuleValue.length >= 46) {
+                        NSString *deviceNameHexString = [resuleValue substringFromIndex:46]?:@"";
+                        NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                        self.currentDevicename = deviceName;
+                        NSString *preString = [resuleValue substringWithRange:NSMakeRange(0, 46)]?:@"";
+                        NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                        self.currentSignature = signatureString;
+                        [self bindSubDevice];
+                    }
+                    self.bindSliceString = @"";
+                }
+            }
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
@@ -406,7 +510,7 @@
     [[TIoTRequestObject shared] post:AppSigBindDeviceInFamily Param:dic success:^(id responseObject) {
         DDLogVerbose(@"%@",responseObject);
         //计算绑定标识符
-        NSString *bingIDString = [self getBindIDSting];
+        NSString *bingIDString = [NSString getBindIdentifierWithProductId:self.currentProductId deviceName:self.currentDevicename];
         //获取local psk
         NSInteger random = arc4random();
         NSString *randomHex = [NSString getHexByDecimal:random];
@@ -414,8 +518,23 @@
         NSString *writeInfo = [NSString stringWithFormat:@"02000D02%@%@",randomHex,bingIDString];
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
         
+        [MBProgressHUD showMessage:NSLocalizedString(@"bind_LLSync_device_success", @"绑定纯蓝牙设备成功") icon:@""];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.blueManager disconnectPeripheral];
+            [self.navigationController popViewControllerAnimated:YES];
+            //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
+            [self uploadLocalPsk:randomHex];
+        });
+        
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"03200101"];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showMessage:@"绑定纯蓝牙设备失败" icon:@""];
+            [MBProgressHUD showMessage:NSLocalizedString(@"bind_LLSync_device_failure", @"绑定纯蓝牙设备失败") icon:@""];
+            [self.blueManager disconnectPeripheral];
+        });
     }];
 }
 
@@ -432,20 +551,65 @@
     }];
 }
 
-/// MARK: 获取绑定标识符
-- (NSString *)getBindIDSting {
-    //计算绑定标识符
-    NSString *deviceIdString = [NSString stringWithFormat:@"%@%@",self.currentProductId,self.currentDevicename];
-    NSString *deviceMd5String = [NSString MD5ForUpper32Bate:deviceIdString];
-    NSString *deviceIdPreHex = [deviceMd5String substringToIndex:16];
-    NSString *deviceIdEndHex = [deviceMd5String substringFromIndex: deviceMd5String.length - 16];
-    
-    NSInteger deviceIdPreInt = strtoul([deviceIdPreHex UTF8String],0,16);
-    NSInteger deviceIdEndInt = strtoul([deviceIdEndHex UTF8String],0,16);
-    NSInteger resultInt = deviceIdPreInt ^ deviceIdEndInt;
-    NSString *resuleStringHex = [[NSString stringWithFormat:@"%lx",(long)resultInt] uppercaseString];
-    
-    return resuleStringHex;
-    
+///MARK: 上传服务器local psk
+- (void)uploadLocalPsk:(NSString *)pskString {
+    NSString *deviceId = [NSString stringWithFormat:@"%@/%@",self.currentProductId?:@"",self.currentDevicename?:@""];
+    NSDictionary *dic = @{@"DeviceId":deviceId,
+                          @"DeviceKey":@"ble_psk_device_ket",
+                          @"DeviceValue":pskString?:@"",
+    };
+    [[TIoTRequestObject shared] post:AppSetDeviceConfig Param:dic success:^(id responseObject) {
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
+- (void)stopBlutoothScan {
+    [self refushProductName];
+}
+
+///MARK:获取设备产品名称
+- (void )getProductsNameWithproductIDsArray:(NSArray *)productIDsArray{
+        
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDsArray?:@[]} success:^(id responseObject) {
+        NSArray *deviceInfoArr = responseObject[@"Products"]?:@[];
+        
+        [deviceInfoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *productDic = (NSDictionary *)obj;
+            NSString *productId = productDic[@"Name"]?:@"";
+            if (productIDsArray.count != 0) {
+                [self.productNameDic setValue:productId forKey:productIDsArray[0]?:@""];
+            }
+        }];
+            [self.collectionView reloadData];
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+        if (productIDsArray.count != 0) {
+            [self.productNameDic setValue:@"error" forKey:productIDsArray[0]?:@""];
+                [self.collectionView reloadData];
+        }
+    }];
+}
+
+- (NSString *)getFixedLengthValueWithOriginValue:(NSString *)originValue bitString:(NSString *)bitString {
+    NSString *value = @"";
+    NSString *preTempValue = [bitString substringToIndex:bitString.length - originValue.length];
+    NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
+    value = resultValue;
+    return value;
+}
+
+- (NSMutableDictionary *)productNameDic {
+    if (!_productNameDic) {
+        _productNameDic = [NSMutableDictionary new];
+    }
+    return _productNameDic;
+}
+
+- (NSMutableArray *)tempProductNameArray {
+    if (!_tempProductNameArray) {
+        _tempProductNameArray = [NSMutableArray new];
+    }
+    return _tempProductNameArray;
 }
 @end

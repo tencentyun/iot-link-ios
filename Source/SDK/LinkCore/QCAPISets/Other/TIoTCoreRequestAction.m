@@ -102,6 +102,15 @@ NSString *const AppGetVirtualBindDeviceList = @"AppGetVirtualBindDeviceList";//A
 
 //===============纯蓝牙LLSync
 NSString *const AppGetDeviceConfig = @"AppGetDeviceConfig"; //读取用户设备的私有信息 (psk)
+NSString *const AppSetDeviceConfig = @"AppSetDeviceConfig";//上传服务器保存用户设备的私有信息 (psk)
+NSString *const AppReportDataAsDevice = @"AppReportDataAsDevice"; //蓝牙设备属性上传数据
+NSString *const AppPublishMsgAsDevice = @"AppPublishMsgAsDevice"; //蓝牙设备行为回复消息数据
+NSString *const AppCheckFirmwareUpdate = @"AppCheckFirmwareUpdate"; //查看固件版本
+NSString *const AppReportFirmwareVersion = @"AppReportFirmwareVersion"; //上报固件版本
+NSString *const AppDescribeFirmwareUpdateStatus = @"AppDescribeFirmwareUpdateStatus"; //查询设备固件升级状态
+NSString *const AppGetDeviceOTAInfo = @"AppGetDeviceOTAInfo"; //获取固件升级包URL
+NSString *const AppReportOTAStatus = @"AppReportOTAStatus"; //上报设备OTA状态进度 （下载、更新升级、烧录）
+NSString *const AppReportDeviceEvent = @"AppReportDeviceEvent"; //设备事件上报
 
 //===============设备定时
 
@@ -168,7 +177,7 @@ NSString *const MapSDKSearchAddressURL = @"https://apis.map.qq.com/ws/place/v1/s
 //===============用户协议、隐私协议链接
 
 NSString *const ServiceProtocolURl = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=service";//用户协议
-NSString *const PrivacyProtocolURL = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy";//隐私协议
+NSString *const PrivacyProtocolURL = @"https://privacy.qq.com/document/preview/0da010f1b4944e88bf78520d88642513";//隐私协议 //https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=privacy
 NSString *const DeviceSharedPrivacyProtocolURL = @"";//设备分享隐私协议
 NSString *const CancelAccountURL = @"https://iot.cloud.tencent.com/explorer-h5/about-policy/#?type=cancel";//账号注销协议
 @end

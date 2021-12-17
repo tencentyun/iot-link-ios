@@ -273,6 +273,12 @@
     }
 }
 
+- (void)sendFirmwareUpdateNewLLSynvWithPeripheral:(CBPeripheral *)peripheral Characteristic:(CBCharacteristic *)characteristic LLDeviceInfo:(NSString *)type {
+    NSData *data = [NSString convertHexStrToData:type];
+    // 将指令写入蓝牙
+    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
+}
+
 - (void)sendNewLLSynvWithPeripheral:(CBPeripheral *)peripheral Characteristic:(CBCharacteristic *)characteristic LLDeviceInfo:(NSString *)type {
     NSData *data = [NSString convertHexStrToData:type];
     // 将指令写入蓝牙

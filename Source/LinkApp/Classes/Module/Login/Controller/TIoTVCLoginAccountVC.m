@@ -20,6 +20,7 @@
 #import "TIoTCountdownTimer.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTAlertCustomView.h"
+#import "TIoTOpensourceLicenseViewController.h"
 
 static CGFloat const kLeftRightPadding = 20; //左右边距
 static CGFloat const kRightRightPadding = 16; //左右边距
@@ -54,6 +55,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 @property (nonatomic, strong) UIButton *weixinLoginButton;
 
 @property (nonatomic, strong) NSString *cancelAccountTimeString;
+@property (nonatomic, strong) UIButton *procolBtn;
 
 @property (nonatomic, strong) TIoTCountdownTimer *countdownTimer;
 @end
@@ -122,9 +124,41 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
         make.leading.equalTo(self.contentView.mas_trailing);
     }];
     
+    //单选框
+    UITextView *procolTV = [[UITextView alloc] init];
+    procolTV.attributedText = [self protolStr];;
+    procolTV.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithHexString:kIntelligentMainHexColor]}; //
+    procolTV.textColor = [UIColor colorWithHexString:kRegionHexColor];
+    procolTV.delegate = self;
+    procolTV.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
+    procolTV.scrollEnabled = NO;
+    procolTV.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:procolTV];
+    [procolTV mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(emailRegisterBtn.mas_bottom).offset(38);
+        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
+//        make.centerX.equalTo(self.view).offset(15);
+//        make.left.equalTo(self.scrollView.mas_left).offset(27);
+        make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding+50);
+        make.right.equalTo(self.view.mas_right).offset(-40);
+    }];
+    
+    UIButton *procolBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.procolBtn = procolBtn;
+    [procolBtn addTarget:self action:@selector(procolClick:) forControlEvents:UIControlEventTouchUpInside];
+    [procolBtn setImage:[UIImage imageNamed:@"procolDefault"] forState:UIControlStateNormal];
+    [procolBtn setImage:[UIImage imageNamed:@"agree_selected"] forState:UIControlStateSelected];
+    [self.view addSubview:procolBtn];
+    [procolBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(procolTV.mas_top).offset(4);
+        make.width.height.mas_equalTo(30);
+        make.right.equalTo(procolTV.mas_left);
+    }];//单选框
+    
     [self.view addSubview:self.loginAccountButton];
     [self.loginAccountButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
+//        make.top.equalTo(self.scrollView.mas_bottom).offset(30);
+        make.top.equalTo(self.procolBtn.mas_bottom).offset(30);
         make.left.equalTo(self.view.mas_left).offset(kLeftRightPadding);
         make.right.equalTo(self.view.mas_right).offset(-kRightRightPadding);
         make.height.mas_equalTo(40);
@@ -208,6 +242,107 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     //判断获取验证码按钮是否可点击
     [self judgeVerificationButtonResponse];
     
+}
+
+- (NSMutableAttributedString *)protolStr {
+    NSString *str1 = NSLocalizedString(@"register_agree_1", @"同意并遵守腾讯云");
+    NSString *str2 = NSLocalizedString(@"register_agree_2", @"用户协议");
+    NSString *str3 = NSLocalizedString(@"register_agree_3", @"及");
+    NSString *str4= NSLocalizedString(@"register_agree_4", @"隐私政策");
+    NSString *showStr = [NSString stringWithFormat:@"%@%@%@%@",str1,str2,str3,str4];
+    
+    NSRange range1 = [showStr rangeOfString:str2];
+    NSRange range2 = [showStr rangeOfString:str4];
+    NSMutableParagraphStyle *pstype = [[NSMutableParagraphStyle alloc] init];
+    [pstype setAlignment:NSTextAlignmentCenter];
+    NSMutableAttributedString *mastring = [[NSMutableAttributedString alloc] initWithString:showStr attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:[UIColor whiteColor],NSParagraphStyleAttributeName:pstype}];
+    
+    NSString *valueString1 = [[NSString stringWithFormat:@"Terms1://%@",str2] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    NSString *valueString2 = [[NSString stringWithFormat:@"Privacy1://%@",str4] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    
+    [mastring addAttributes:@{NSLinkAttributeName:valueString1,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range1];
+    [mastring addAttributes:@{NSLinkAttributeName:valueString2,/*NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle],*/NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],} range:range2];
+    return mastring;
+}
+
+- (void)procolClick:(UIButton *)btn{
+    btn.selected = !btn.selected;
+    [self changedTextField:nil];
+}
+
+#pragma mark uitextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction{
+    if ([[URL scheme] isEqualToString:@"Terms1"]) {
+       
+        DDLogVerbose(@"用户协议");
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+            
+            if (LanguageIsEnglish) {
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+                vc.urlPath = TIoTAPPConfig.userProtocolChEnglishString;
+                [self.navigationController pushViewController:vc animated:YES];
+                return NO;
+            }else {
+//                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
+                vc.title =  NSLocalizedString(@"register_agree_2", @"用户协议");
+                vc.urlPath = ServiceProtocolURl;
+                [self.navigationController pushViewController:vc animated:YES];
+                return NO;
+            }
+        } else {
+            
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.title = NSLocalizedString(@"register_agree_2", @"用户协议");
+            
+            if (LanguageIsEnglish) {
+                vc.urlPath = TIoTAPPConfig.serviceAgreementEnglishString;
+            }else {
+                vc.urlPath = TIoTAPPConfig.userProtocolUSChineseString;
+            }
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        }
+        
+    }
+    else if ([[URL scheme] isEqualToString:@"Privacy1"]) {
+        
+        DDLogVerbose(@"隐私");
+        if ([[TIoTCoreUserManage shared].userRegionId isEqual:@"1"]) { //国内
+            
+            if (LanguageIsEnglish) {
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                vc.urlPath = TIoTAPPConfig.userPrivacyPolicyChEnglishString;
+                [self.navigationController pushViewController:vc animated:YES];
+                return NO;
+            }else {
+//                TIoTWebVC *vc = [TIoTWebVC new];
+                TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+                vc.notZZConfigUrl = YES;
+                vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+                vc.urlPath = PrivacyProtocolURL;
+                [self.navigationController pushViewController:vc animated:YES];
+                return NO;
+            }
+            
+        } else {
+            TIoTOpensourceLicenseViewController *vc = [TIoTOpensourceLicenseViewController new];
+            vc.title = NSLocalizedString(@"register_agree_4", @"隐私政策");
+            if (LanguageIsEnglish) {
+                vc.urlPath = TIoTAPPConfig.privacyPolicyEnglishString;
+            }else {
+                vc.notZZConfigUrl = YES;
+                vc.urlPath = TIoTAPPConfig.userPrivacyPolicyUSChineseString;
+            }
+            [self.navigationController pushViewController:vc animated:YES];
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (void)firstShowBirthdayView {
@@ -1033,6 +1168,12 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     }
 }
 -(void)changedTextField:(UITextField *)textField {
+    
+    if (!self.procolBtn.selected) {
+        self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+        self.loginAccountButton.enabled = NO;
+        return;
+    }
     
     if (self.loginStyle == YES) {    //验证码登录
 
