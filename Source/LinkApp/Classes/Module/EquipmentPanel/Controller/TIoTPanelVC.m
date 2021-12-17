@@ -973,7 +973,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 self.deviceInfo.properties = [self removeDuplicationOriginalArr:self.deviceInfo.properties];
                 self.deviceInfo.allProperties = [self removeDuplicationOriginalArr:self.deviceInfo.allProperties];
                 //刷新UI
-                [self layoutHeader];
+                if ([self.bleNewType isEqualToString:@"ble"]) {
+                    [self layoutHeader];
+                }
                 [self.coll reloadData];
                 
                 if ([self.bleNewType isEqualToString:@"ble"]) {

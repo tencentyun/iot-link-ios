@@ -41,14 +41,14 @@
         NSArray *keys = [reportDic allKeys];
         for (NSString *key in keys) {
             if ([key isEqualToString:self.bigProp[@"id"]]) {
-                NSMutableDictionary *dic = self.bigProp[@"status"];
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.bigProp[@"status"]];
                 [dic setObject:reportDic[key] forKey:@"Value"];
             }
             else
             {
                 for (NSMutableDictionary *propertie in self.properties) {
                     if ([key isEqualToString:propertie[@"id"]]) {
-                        NSMutableDictionary *dic = propertie[@"status"];
+                        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:propertie[@"status"]] ;
                         [propertie setObject:reportDic[key] forKey:@"Value"];
                         break;
                     }
