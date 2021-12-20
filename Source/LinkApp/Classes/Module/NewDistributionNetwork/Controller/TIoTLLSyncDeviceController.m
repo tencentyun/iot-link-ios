@@ -41,6 +41,7 @@
 
 @property (nonatomic, strong) CBPeripheral *currentSelectedPerpheral; //首页选中了个蓝牙设备，先记录。后面再连接
 @property (nonatomic, assign) BOOL realCommandStart; //表示正式开始已经回复E0
+@property (nonatomic, assign) BOOL repeatCurrentPerheral; //正在重复搜索
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -63,6 +64,7 @@
     [self.blueManager scanNearLLSyncService];
     
     self.realCommandStart = NO;
+    self.repeatCurrentPerheral = NO;
 }
 
 - (void)changeContentArea {
@@ -310,6 +312,12 @@
     
     self.blueDevices = perphersArr.allKeys;
     [self.collectionView reloadData];
+    
+    if (self.repeatCurrentPerheral) {
+        self.repeatCurrentPerheral = NO;
+        //如果是重复扫描的话就扫描到赶紧连接
+        [self repeatScanLLsyncDevice];
+    }
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
@@ -375,17 +383,38 @@
     
     [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!self.realCommandStart) {
             //还没收到就重新发送,重新断开
+            self.repeatCurrentPerheral = YES;
+            
             [self.blueManager disconnectPeripheral];
-            [self startConnectLLSync:self.resultvc];
+            [self.blueManager scanNearLLSyncService];
+//            [self startConnectLLSync:self.resultvc];
         }else {
             return;
         }
     });
 }
 
+
+- (void)repeatScanLLsyncDevice {
+    
+    CBPeripheral *device = self.blueDevices.firstObject;
+    NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+    if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
+        NSData *manufacturerData = advertisementData[@"kCBAdvDataManufacturerData"];
+        NSString *hexstr = [NSString transformStringWithData:manufacturerData];
+        NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
+        NSString *productstr = [NSString stringFromHexString:producthex];
+        self.currentProductId = productstr;
+        
+        
+        self.currentSelectedPerpheral = device;
+        
+        [self startConnectLLSync:self.resultvc];
+    }
+}
 //首页蓝牙搜索头部调用
 - (void)startConnectLLSync:(TIoTStartConfigViewController *)startconfigVC {
     self.resultvc = startconfigVC;
