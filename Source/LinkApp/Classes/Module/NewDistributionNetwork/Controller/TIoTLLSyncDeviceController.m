@@ -38,6 +38,9 @@
 @property (nonatomic, strong) NSMutableDictionary *productNameDic;
 @property (nonatomic, strong) NSMutableArray *tempProductNameArray;
 @property (nonatomic, strong) NSString *bindSliceString; //绑定前分片拼接字符串
+
+@property (nonatomic, strong) CBPeripheral *currentSelectedPerpheral; //首页选中了个蓝牙设备，先记录。后面再连接
+@property (nonatomic, assign) BOOL realCommandStart; //表示正式开始已经回复E0
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -58,6 +61,8 @@
     self.blueManager.delegate = self;
     [self.blueManager disconnectPeripheral];
     [self.blueManager scanNearLLSyncService];
+    
+    self.realCommandStart = NO;
 }
 
 - (void)changeContentArea {
@@ -237,7 +242,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 //    self.nameField.text = self.dataArray[indexPath.row];
-    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
+//    [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:NSLocalizedString(@"llsync_network_hud", @"连接蓝牙中")];
 
     CBPeripheral *device = self.blueDevices[indexPath.row];
     NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
@@ -248,8 +253,10 @@
         NSString *productstr = [NSString stringFromHexString:producthex];
         self.currentProductId = productstr;
         
-        [self.blueManager connectBluetoothPeripheral:device];
-
+        
+        self.currentSelectedPerpheral = device;
+//        [self.blueManager connectBluetoothPeripheral:device];
+        [self nextClick:nil]; //让跳下一页
     }
 }
 
@@ -344,14 +351,14 @@
                 NSString *writeInfo = [NSString stringWithFormat:@"000008%@%@",andomNumHex,tempTimeHex];
                 [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo];
                 break;
-            }else {
+            }else if([uuidFirstString containsString:@"FFF0"]){
                 //蓝牙辅助配网
-                [self nextClick:nil];
                 
                 if (!self.isFromHome) {
                     ///如果不是首页蓝牙部分进入的，自动触发指令发送，否则从首页蓝牙进入的话需要等wifi信息后在走下一步
-                    [self nextUIStep:nil];
+                    [self nextClick:nil]; //不是首页让跳结果页面展示配网步骤和结果，还得开始发送指令
                 }
+                [self nextUIStep:nil];
                 break;
             }
         }
@@ -367,6 +374,26 @@
     self.resultvc.connectStepTipView.step = 1;
     
     [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!self.realCommandStart) {
+            //还没收到就重新发送,重新断开
+            [self.blueManager disconnectPeripheral];
+            [self startConnectLLSync:self.resultvc];
+        }else {
+            return;
+        }
+    });
+}
+
+//首页蓝牙搜索头部调用
+- (void)startConnectLLSync:(TIoTStartConfigViewController *)startconfigVC {
+    self.resultvc = startconfigVC;
+    ///设置UI进度
+    self.resultvc.connectStepTipView.step = 0;
+    
+    [self.blueManager connectBluetoothPeripheral:self.currentSelectedPerpheral];
+    // 连接之后，会走到上面的send 接口发送E0
 }
 
 //发送数据后，蓝牙回调
@@ -379,6 +406,8 @@
         }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
         if ([cmdtype isEqualToString:@"08"]) {
+            
+            self.realCommandStart = YES;
             //设备信息返回了，此时需要下一步设置wifi模式
             NSString *devicenamehex = [hexstr substringWithRange:NSMakeRange(14, hexstr.length-14)];
             NSString *devicenamestr = [NSString stringFromHexString:devicenamehex];

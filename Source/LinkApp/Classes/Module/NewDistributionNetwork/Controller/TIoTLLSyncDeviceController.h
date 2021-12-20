@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)changeContentArea ;
 
 //首页蓝牙搜索头部调用
-- (void)nextUIStep:(TIoTStartConfigViewController *)startconfigVC;
+- (void)startConnectLLSync:(TIoTStartConfigViewController *)startconfigVC;
 @end
 
 NS_ASSUME_NONNULL_END

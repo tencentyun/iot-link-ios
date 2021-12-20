@@ -350,7 +350,7 @@
                 self.llsyncDeviceVC.wifiInfo = [self.wifiInfo copy];
                 self.llsyncDeviceVC.connectGuideData = self.configConnentData[@"WifiSoftAP"][@"connectApGuide"];
                 self.llsyncDeviceVC.configdata = self.configConnentData;
-                [self.llsyncDeviceVC nextUIStep:vc];
+                [self.llsyncDeviceVC startConnectLLSync:vc];
             });
         }
     }
