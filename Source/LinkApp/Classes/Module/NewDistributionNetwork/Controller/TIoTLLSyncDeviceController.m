@@ -388,7 +388,7 @@
             //还没收到就重新发送,重新断开
             self.repeatCurrentPerheral = YES;
             
-            [self.blueManager disconnectPeripheral];
+            [self.blueManager clearConnectedDevices];
             [self.blueManager scanNearLLSyncService];
 //            [self startConnectLLSync:self.resultvc];
         }else {
