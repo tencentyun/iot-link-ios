@@ -313,11 +313,11 @@
     self.blueDevices = perphersArr.allKeys;
     [self.collectionView reloadData];
     
-    if (self.repeatCurrentPerheral) {
+    /*if (self.repeatCurrentPerheral) {
         self.repeatCurrentPerheral = NO;
         //如果是重复扫描的话就扫描到赶紧连接
         [self repeatScanLLsyncDevice];
-    }
+    }*/
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
@@ -374,6 +374,13 @@
     }
 }
 
+//获取一个随机整数，范围在[from,to），包括from，不包括to
+-(int)getRandomNumber:(int)from to:(int)to
+{
+    int randdddd = (to  - from + 1);
+    return (int)(from + (arc4random() % randdddd));
+}
+
 - (void)nextUIStep:(TIoTStartConfigViewController *)startconfigVC {
     if (self.resultvc == nil) {
         self.resultvc = startconfigVC;
@@ -383,14 +390,20 @@
     
     [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E0"];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!self.realCommandStart) {
             //还没收到就重新发送,重新断开
             self.repeatCurrentPerheral = YES;
             
-            [self.blueManager clearConnectedDevices];
-            [self.blueManager scanNearLLSyncService];
-//            [self startConnectLLSync:self.resultvc];
+            [self.blueManager disconnectPeripheral];
+//            [self.blueManager scanNearLLSyncService];
+            int random = [self getRandomNumber:3 to:11];
+            NSLog(@"命中连接率%d",random);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(random * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self startConnectLLSync:self.resultvc];
+            });
+            
+            self.realCommandStart = NO;
         }else {
             return;
         }
