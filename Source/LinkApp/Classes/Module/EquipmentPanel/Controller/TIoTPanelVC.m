@@ -103,10 +103,6 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 @implementation TIoTCollectionView
 
-//- (BOOL)touchesShouldCancelInContentView:(UIView *)view
-//{
-//    return YES;
-//}
 
 @end
 
