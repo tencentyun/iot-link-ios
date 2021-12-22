@@ -111,6 +111,13 @@
     TIoTDemoPlayConfigVC *demoPlayListVC = [[TIoTDemoPlayConfigVC alloc]init];
     [self.navigationController pushViewController:demoPlayListVC animated:YES];
 }
+
+- (void)jumpLocalAreaNetwork {
+    TIoTAreaNetworkConfigVC *areaNetVC = [[TIoTAreaNetworkConfigVC alloc]init];
+    [self.navigationController pushViewController:areaNetVC animated:YES];
+}
+
+
 /*
 #pragma mark - Navigation
 

@@ -156,6 +156,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //                config.sampleSize = 16;
 //                config.sampleRate = 8000;
 //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }
             
         }else {
