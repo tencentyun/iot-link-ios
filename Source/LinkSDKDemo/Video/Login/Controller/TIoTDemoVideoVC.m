@@ -94,7 +94,7 @@
         make.left.right.equalTo(consumerVersionBtn);
         make.top.equalTo(consumerVersionBtn.mas_bottom).offset(20);
     }];
-    
+       
     //    UIButton *localAreaNetworkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [localAreaNetworkBtn setButtonFormateWithTitlt:@"IoT Video（局域网）" titleColorHexString:kVideoDemoMainThemeColor font:[UIFont wcPfRegularFontOfSize:17]];
     //    localAreaNetworkBtn.layer.borderColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor].CGColor;
