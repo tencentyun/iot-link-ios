@@ -18,8 +18,9 @@ Pod::Spec.new do |s|
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
 
-  s.dependency 'TIoTLinkKit_XP2P', '2.3.4'
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.2-beta.202112210201'
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
+  s.dependency 'CocoaAsyncSocket', '7.6.5'
   
   s.pod_target_xcconfig = {
     'VALID_ARCHS'  => 'arm64'
