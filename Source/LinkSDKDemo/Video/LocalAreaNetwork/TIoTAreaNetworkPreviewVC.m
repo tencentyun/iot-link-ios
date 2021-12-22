@@ -149,13 +149,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 //对讲
 #warning 对讲也会调这个方法走到这里
                 NSString *channel = @"channel=0";
-//
-//                AWAudioConfig *config = [[AWAudioConfig alloc] init];
-//                config.bitrate = 32000;
-//                config.channelCount = 1;sendVoiceToServer
-//                config.sampleSize = 16;
-//                config.sampleRate = 8000;
-//                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }
             
         }else {
