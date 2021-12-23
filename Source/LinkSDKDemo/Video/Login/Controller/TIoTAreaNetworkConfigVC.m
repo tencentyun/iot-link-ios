@@ -5,6 +5,7 @@
 #import "TIoTAreaNetworkConfigVC.h"
 #import "TIoTAreaNetworkPreviewVC.h"
 #import "TIoTAreaNetworkDeviceCell.h"
+#import "TIoTLocalNetDetch.h"
 
 static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 
@@ -14,6 +15,7 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSString *productIDString;
 @property (nonatomic, strong) NSString *clientTokenString;
+@property (nonatomic, strong) TIoTLocalNetDetch *localDettch;
 @end
 
 @implementation TIoTAreaNetworkConfigVC
@@ -22,6 +24,9 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setupUI];
+    
+    self.localDettch = [[TIoTLocalNetDetch alloc] init];
+    [self.localDettch startLocalMonitorService:nil];
 }
 
 - (void)setupUI {
@@ -130,6 +135,12 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 - (void)detectEquipment {
     
     [self hideKeyBoard];
+    
+//发送广播包
+    [self.localDettch sendUDPData:@"productid" clientToken:@"token"];
+    
+    
+    [self previewAreaNetworkDetectDevice];
 }
 
 #pragma mark - UITableViewDelegate And TableViewDataDelegate

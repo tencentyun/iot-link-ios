@@ -77,9 +77,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupPreViewViews];
     
-    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+
+    self.deviceName = @"xxxxxx";
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:@"productid" dev_name:@"devicename" remote_host:@"hostip" remote_port:@"port"];
+
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setVieoPlayerStartPlayWith:self.qualityString];
+    });
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -94,6 +99,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
+    
 }
 
 - (void)showHudView {
@@ -762,10 +768,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
+        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
         
 #warning 获取URL 起播放器
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+//        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         

@@ -88,11 +88,13 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+    char *msg = (char *)recv_buf;
+    printf("device feedback ==> %s",msg);
 //    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
 //    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
 //        [delegate getVideoPacket:recv_buf len:recv_len];
 //    }
-    return nullptr;
+    return "";
 }
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
@@ -188,7 +190,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 
 - (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port {
     self.dev_name = dev_name;
-    
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     int ret = startLanService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, remote_host.UTF8String, remote_port.UTF8String);
     return (XP2PErrCode)ret;
 }
