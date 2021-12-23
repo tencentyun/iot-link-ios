@@ -146,7 +146,7 @@
 
     if (self.centralManager.state == CBManagerStatePoweredOn) {
         //扫描10秒停止扫描
-        [self performSelector:@selector(stopScan) withObject:nil afterDelay:5.0];
+        [self performSelector:@selector(stopScan) withObject:nil afterDelay:12.0];
         
         //搜索和获取服务的serviceId不一样，搜索是16bit，服务都是需要128bit的serviceId
         [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kServiceUUID],[CBUUID UUIDWithString:kLLSyncServiceUUID]] options:nil];

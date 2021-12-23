@@ -324,6 +324,7 @@
         //如果是重复扫描的话就扫描到赶紧连接
         [self repeatScanLLsyncDevice];
     }*/
+    [self refushProductName];
 }
 //连接外设成功
 - (void)connectBluetoothDeviceSucessWithPerpheral:(CBPeripheral *)connectedPerpheral withConnectedDevArray:(NSArray <CBPeripheral *>*)connectedDevArray {
@@ -643,7 +644,7 @@
 }
 
 - (void)stopBlutoothScan {
-    [self refushProductName];
+//    [self refushProductName];
 }
 
 ///MARK:获取设备产品名称
