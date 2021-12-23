@@ -45,6 +45,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
+// 不建议使用下面两个start接口，避免泄漏您的secretid和secretkey，会造成您的账户泄漏，demo仅用此接口做演示使用
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
 
@@ -90,6 +91,16 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 //音视频采样
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (XP2PErrCode)stopVoiceToServer;
+
+
+
+/*
+ * 局域网相关接口
+ */
+- (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port;
+- (NSString *)getLanUrlForHttpFlv:(NSString *)dev_name;
+- (int)getLanProxyPort:(NSString *)dev_name;
+
 
 /*
  * 退出 SDK 服务

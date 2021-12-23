@@ -185,6 +185,28 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     return @"";
 }
 
+
+- (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port {
+    self.dev_name = dev_name;
+    
+    int ret = startLanService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, remote_host.UTF8String, remote_port.UTF8String);
+    return (XP2PErrCode)ret;
+}
+
+- (NSString *)getLanUrlForHttpFlv:(NSString *)dev_name {
+    const char *httpflv =  getLanUrl(dev_name.UTF8String);
+    NSLog(@"httpflv---%s",httpflv);
+    if (httpflv) {
+        return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
+    }
+    return @"";
+}
+
+- (int)getLanProxyPort:(NSString *)dev_name {
+    int proxyPort = getLanProxyPort(dev_name.UTF8String);
+    return proxyPort;
+}
+
 - (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
