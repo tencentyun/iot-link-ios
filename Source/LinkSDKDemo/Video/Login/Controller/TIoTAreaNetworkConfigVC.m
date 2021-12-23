@@ -145,7 +145,8 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 
 ///MARK: 探测设备
 - (void)detectEquipment {
-    [self.localDetch sendUDPData:self.productIDString?:@"" clientToken:self.clientTokenString?:@""];
+//    [self.localDetch sendUDPData:self.productIDString?:@"" clientToken:self.clientTokenString?:@""];
+    [self.localDetch sendUDPData:@"65CC3I8Q4G" clientToken:@"abbbbcdef"];
     [self hideKeyBoard];
 }
 
@@ -193,6 +194,7 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 #pragma mark - cell delegate
 - (void)previewAreaNetworkDetectDevice  {
     TIoTAreaNetworkPreviewVC *liveVC = [[TIoTAreaNetworkPreviewVC alloc]init];
+    liveVC.deviceName = @"llynne_41877702_1";
     [self.navigationController pushViewController:liveVC animated:YES];
 }
 
