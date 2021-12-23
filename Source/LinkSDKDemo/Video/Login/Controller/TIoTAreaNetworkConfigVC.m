@@ -6,19 +6,16 @@
 #import "TIoTAreaNetworkPreviewVC.h"
 #import "TIoTAreaNetworkDeviceCell.h"
 #import "TIoTLocalNetDetch.h"
-#import <YYModel.h>
-#import "TIoTAreaNetDetectionModel.h"
 
 static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 
-@interface TIoTAreaNetworkConfigVC ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,TIoTAreaNetworkDeviceCellDelegate,TIoTLocalNetDetchDelegate>
+@interface TIoTAreaNetworkConfigVC ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,TIoTAreaNetworkDeviceCellDelegate>
 @property (nonatomic, strong) UITextField *productID;
 @property (nonatomic, strong) UITextField *clientToken;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSString *productIDString;
 @property (nonatomic, strong) NSString *clientTokenString;
-@property (nonatomic, strong) TIoTLocalNetDetch *localDetch;
-@property (nonatomic, strong) NSMutableArray *detectDataArray;
+@property (nonatomic, strong) TIoTLocalNetDetch *localDettch;
 @end
 
 @implementation TIoTAreaNetworkConfigVC
@@ -28,11 +25,8 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
     // Do any additional setup after loading the view.
     [self setupUI];
     
-    [self initVariable];
-}
-
-- (void)dealloc {
-    [self.localDetch stopLocalMonitor];
+    self.localDettch = [[TIoTLocalNetDetch alloc] init];
+    [self.localDettch startLocalMonitorService:nil];
 }
 
 - (void)setupUI {
@@ -137,56 +131,26 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
     }];
 }
 
-- (void)initVariable {
-    self.localDetch = [[TIoTLocalNetDetch alloc]init];
-    self.localDetch.delegate = self;
-    [self.localDetch startLocalMonitorService:nil];
-}
-
 ///MARK: 探测设备
 - (void)detectEquipment {
-    [self.localDetch sendUDPData:self.productIDString?:@"" clientToken:self.clientTokenString?:@""];
+    
     [self hideKeyBoard];
-}
-
-#pragma mark - 探测代理回调
-- (void)reviceDeviceMessage:(NSData *)deviceMessage {
-    if (deviceMessage != nil) {
-        NSString *jsonString = [[NSString alloc]initWithData:deviceMessage encoding:NSUTF8StringEncoding];
-        TIoTAreaNetDetectionModel *model = [TIoTAreaNetDetectionModel yy_modelWithJSON:jsonString];
-        
-        //添加探测到的设备，刷新列表, 停止探测
-        if (self.detectDataArray != nil) {
-            if (self.detectDataArray.count == 0) {
-                [self.detectDataArray addObject:model];
-            }else {
-                [self.detectDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    TIoTAreaNetDetectionModel *detectedModel = obj;
-                    if (![detectedModel.params.deviceName isEqualToString:model.params.deviceName]) {
-                        [self.detectDataArray addObject:model];
-                    }
-                }];
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-            
-        }
-    }
+    
+//发送广播包
+    [self.localDettch sendUDPData:@"productid" clientToken:@"token"];
+    
+    
+    [self previewAreaNetworkDetectDevice];
 }
 
 #pragma mark - UITableViewDelegate And TableViewDataDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.detectDataArray.count;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTAreaNetworkDeviceCell *cell = [tableView dequeueReusableCellWithIdentifier:kAreaNetworkDeviceCellID forIndexPath:indexPath];
     cell.delegate = self;
-    if (self.detectDataArray.count != 0 && indexPath.row <= self.detectDataArray.count-1) {
-        cell.rspDetectionDeviceModel = self.detectDataArray[indexPath.row];
-    }
     return cell;
 }
 
@@ -274,13 +238,6 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
         [_tableView registerClass:[TIoTAreaNetworkDeviceCell class] forCellReuseIdentifier:kAreaNetworkDeviceCellID];
     }
     return _tableView;
-}
-
-- (NSMutableArray *)detectDataArray {
-    if (!_detectDataArray) {
-        _detectDataArray = [[NSMutableArray alloc]init];
-    }
-    return _detectDataArray;
 }
 
 /*
