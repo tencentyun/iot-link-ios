@@ -14,6 +14,7 @@
 #include <CommonCrypto/CommonHMAC.h>
 #import "TIoTCoreWMacros.h"
 #import "UIDevice+Until.h"
+#import "TIoTCoreUserManage.h"
 
 @interface TIoTCoreUtil ()<TIoTCoreAddDeviceDelegate>
 @property (nonatomic, strong) TIoTCoreSoftAP   *softAP;
@@ -34,8 +35,10 @@
         
         if (dictRef) {
             NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
-    
-            wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID]};
+            
+            NSString *wifiname = [networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID];
+            NSString *pwd = [[[TIoTCoreUserManage shared] wifiMap] objectForKey:wifiname?:@"wifiname"];
+            wifiDic = @{@"name":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID],@"bssid":[networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeyBSSID], @"pwd":pwd?:@""};
             DDLogInfo(@"network info -> %@", wifiDic);
             CFRelease(dictRef);
         }

@@ -250,6 +250,7 @@
         [self.wifiInfo removeAllObjects];
         [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiInputView.inputText = self.wifiInfo[@"name"];
+        self.pwdInputView.inputText = self.wifiInfo[@"pwd"];
     }
 }
 
@@ -304,6 +305,11 @@
 #pragma mark eventResponse
 
 - (void)nextClick:(UIButton *)sender {
+    NSString *pwdtext = self.pwdInputView.inputText;
+    NSString *wiftext = self.wifiInputView.inputText;
+    NSMutableDictionary *wifipwds = [[TIoTCoreUserManage shared] wifiMap];
+    [wifipwds setObject:pwdtext?:@"" forKey:wiftext?:@"wifi"];
+    
     [self.wifiInfo setObject:self.wifiInputView.inputText forKey:@"name"];
     [self.wifiInfo setObject:self.pwdInputView.inputText forKey:@"pwd"];
     [self.wifiInfo setObject:self.currentDistributionToken forKey:@"token"];
@@ -373,6 +379,7 @@
             [self.wifiInfo removeAllObjects];
             [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
             self.wifiInputView.inputText = self.wifiInfo[@"name"];
+            self.pwdInputView.inputText = self.wifiInfo[@"pwd"];
         } else {
             [self.locationManager requestWhenInUseAuthorization];
         }
@@ -387,6 +394,7 @@
         [self.wifiInfo removeAllObjects];
         [self.wifiInfo setDictionary:[TIoTCoreUtil getWifiSsid]];
         self.wifiInputView.inputText = self.wifiInfo[@"name"];
+        self.pwdInputView.inputText = self.wifiInfo[@"pwd"];
     }
     else if (status == kCLAuthorizationStatusNotDetermined)
     {

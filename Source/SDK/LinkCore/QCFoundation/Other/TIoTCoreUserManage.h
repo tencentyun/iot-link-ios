@@ -115,6 +115,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *demoAccessID;
 
+@property (nonatomic, readonly, nullable) NSMutableDictionary *wifiMap;
+
 //保存accessToken 和 有效期
 - (void)saveAccessToken:(NSString *)accessToken expireAt:(NSString *)expireAt;
 

@@ -65,6 +65,11 @@
 }
 
 #pragma mark - getter & setter
+- (instancetype)init {
+    self = [super init];
+    _wifiMap = [NSMutableDictionary dictionary];
+    return self;
+}
 
 - (BOOL)isValidToken
 {

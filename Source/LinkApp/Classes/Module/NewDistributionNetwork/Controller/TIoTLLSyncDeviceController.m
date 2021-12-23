@@ -232,9 +232,15 @@
         NSString *productName = self.productNameDic[productIDStr];
         if ([productName isEqualToString:@"error"]) {
             cell.itemString = NSLocalizedString(@"unknow_device", @"未知设备");
-            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
+//            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }else {
             cell.itemString = productName;
+//            cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
+        }
+        
+        if ([device.name containsString:@"_"]) {
+            cell.detailString = device.name?:@"";
+        }else {
             cell.detailString = [NSString stringWithFormat:@"%@_%@",device.name?:@"",[self getBlueDeviceMacIndex:indexPath]];
         }
     }
