@@ -74,6 +74,7 @@
 		6D5CA712277304080044D027 /* TIoTAreaNetworkConfigVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CA711277304080044D027 /* TIoTAreaNetworkConfigVC.m */; };
 		6D5CA717277304330044D027 /* TIoTAreaNetworkPreviewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CA715277304330044D027 /* TIoTAreaNetworkPreviewVC.m */; };
 		6D5CA71B277304620044D027 /* TIoTAreaNetworkDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CA71A277304620044D027 /* TIoTAreaNetworkDeviceCell.m */; };
+		6D5CA76A277454D20044D027 /* TIoTAreaNetDetectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CA769277454D20044D027 /* TIoTAreaNetDetectionModel.m */; };
 		6D6489B1257D37C7000B340F /* TIoTSingleCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */; };
 		6D6489B5257E1592000B340F /* TIoTModifyDeviceNameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6489B4257E1592000B340F /* TIoTModifyDeviceNameVC.m */; };
 		6D648A91257E5BAB000B340F /* TIoTShareDeviceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D648A90257E5BAB000B340F /* TIoTShareDeviceMessageCell.m */; };
@@ -624,6 +625,8 @@
 		6D5CA716277304330044D027 /* TIoTAreaNetworkPreviewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAreaNetworkPreviewVC.h; sourceTree = "<group>"; };
 		6D5CA719277304610044D027 /* TIoTAreaNetworkDeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTAreaNetworkDeviceCell.h; sourceTree = "<group>"; };
 		6D5CA71A277304620044D027 /* TIoTAreaNetworkDeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTAreaNetworkDeviceCell.m; sourceTree = "<group>"; };
+		6D5CA768277454D20044D027 /* TIoTAreaNetDetectionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAreaNetDetectionModel.h; sourceTree = "<group>"; };
+		6D5CA769277454D20044D027 /* TIoTAreaNetDetectionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAreaNetDetectionModel.m; sourceTree = "<group>"; };
 		6D6489AF257D37C7000B340F /* TIoTSingleCustomButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSingleCustomButton.h; sourceTree = "<group>"; };
 		6D6489B0257D37C7000B340F /* TIoTSingleCustomButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSingleCustomButton.m; sourceTree = "<group>"; };
 		6D6489B3257E1591000B340F /* TIoTModifyDeviceNameVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTModifyDeviceNameVC.h; sourceTree = "<group>"; };
@@ -1643,10 +1646,28 @@
 		6D5CA7142773041A0044D027 /* LocalAreaNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				6D5CA767277454670044D027 /* Controller */,
+				6D5CA766277454570044D027 /* Model */,
+			);
+			path = LocalAreaNetwork;
+			sourceTree = "<group>";
+		};
+		6D5CA766277454570044D027 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6D5CA768277454D20044D027 /* TIoTAreaNetDetectionModel.h */,
+				6D5CA769277454D20044D027 /* TIoTAreaNetDetectionModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6D5CA767277454670044D027 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
 				6D5CA716277304330044D027 /* TIoTAreaNetworkPreviewVC.h */,
 				6D5CA715277304330044D027 /* TIoTAreaNetworkPreviewVC.m */,
 			);
-			path = LocalAreaNetwork;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		6D64A09327044E5700315A49 /* Model */ = {
@@ -3837,6 +3858,7 @@
 				6D98FE7D25C2E8F000518AC7 /* NSDate+TIoTCustomCalendar.m in Sources */,
 				6D204C87265CBDBC007F6F27 /* UIImage+TIoTDemoExtension.m in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
+				6D5CA76A277454D20044D027 /* TIoTAreaNetDetectionModel.m in Sources */,
 				6DAF875A26675D2900CD0328 /* TIoTDemoCalendarCustomView.m in Sources */,
 				6D204EAE2664C3C4007F6F27 /* UINavigationController+TIoTDemoCustomUI.m in Sources */,
 				6D204B3B265BCDEC007F6F27 /* TIoTAccessIDPickerView.m in Sources */,
