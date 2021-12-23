@@ -8,6 +8,8 @@
 #import "TIoTLocalNetDetch.h"
 #import <YYModel.h>
 #import "TIoTAreaNetDetectionModel.h"
+#import "TIoTCoreUserManage.h"
+#import "NSString+Extension.h"
 
 static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 
@@ -135,6 +137,25 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
         make.top.equalTo(detectDeviceBtn.mas_bottom).offset(30);
         make.left.right.bottom.equalTo(self.view);
     }];
+    
+    [self judgeAutoFillInputInfo];
+}
+
+- (void)judgeAutoFillInputInfo {
+    
+    self.productID.text = [TIoTCoreUserManage shared].demoAreaNetProductID?:@"";
+    self.clientToken.text =  [TIoTCoreUserManage shared].demoAreaNetClientToken?:@"";
+}
+
+- (void)saveInputInfo {
+    
+    if (![NSString isNullOrNilWithObject:self.productIDString]&&![NSString isFullSpaceEmpty:self.productIDString]) {
+        [TIoTCoreUserManage shared].demoAreaNetProductID = self.productIDString?:@"";
+    }
+    
+    if (![NSString isNullOrNilWithObject:self.clientTokenString]&&![NSString isFullSpaceEmpty:self.clientTokenString]) {
+        [TIoTCoreUserManage shared].demoAreaNetClientToken = self.clientTokenString?:@"";
+    }
 }
 
 - (void)initVariable {
@@ -147,6 +168,7 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 - (void)detectEquipment {
     [self.localDetch sendUDPData:self.productIDString?:@"" clientToken:self.clientTokenString?:@""];
     [self hideKeyBoard];
+    [self saveInputInfo];
 }
 
 #pragma mark - 探测代理回调
@@ -191,8 +213,10 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
 }
 
 #pragma mark - cell delegate
-- (void)previewAreaNetworkDetectDevice  {
+- (void)previewAreaNetworkDetectDevice:(TIoTAreaNetDetectionModel *)model  {
     TIoTAreaNetworkPreviewVC *liveVC = [[TIoTAreaNetworkPreviewVC alloc]init];
+    liveVC.model = model;
+    liveVC.productID = self.productIDString;
     [self.navigationController pushViewController:liveVC animated:YES];
 }
 

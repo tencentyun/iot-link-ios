@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol TIoTAreaNetworkDeviceCellDelegate <NSObject>
 
-- (void)previewAreaNetworkDetectDevice;
+- (void)previewAreaNetworkDetectDevice:(TIoTAreaNetDetectionModel *)model;
 
 @end
 /// 局域网 设备列表cell

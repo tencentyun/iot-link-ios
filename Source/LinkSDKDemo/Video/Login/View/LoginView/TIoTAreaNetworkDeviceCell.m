@@ -53,8 +53,8 @@
 }
 
 - (void)previewAreaNetWorkLive {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(previewAreaNetworkDetectDevice)]) {
-        [self.delegate previewAreaNetworkDetectDevice];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(previewAreaNetworkDetectDevice:)]) {
+        [self.delegate previewAreaNetworkDetectDevice:_rspDetectionDeviceModel];
     }
 }
 
