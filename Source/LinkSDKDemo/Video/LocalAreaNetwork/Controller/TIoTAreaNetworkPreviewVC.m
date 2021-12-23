@@ -9,6 +9,9 @@
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
+#import "TIoTDemoCustomSheetView.h"
+#import "AppDelegate.h"
+#import "UIDevice+TIoTDemoRotateScreen.h"
 
 static CGFloat const kPadding = 16;
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
@@ -37,16 +40,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIImageView *talkbackIcon;
 @property (nonatomic, strong) UIImageView *videoIcon;
 @property (nonatomic, strong) UIView *videoingView; //录像中提示view
+@property (nonatomic, strong) UIView *landscapeChangeDefinition; //横屏时清晰度选择视图
 
 @property (nonatomic, strong) UIButton *definitionBtn; //竖屏-切换清晰度按钮
 @property (nonatomic, strong) UIButton *voiceBtn; //音量-是否静音
 @property (nonatomic, strong) UIButton *rotateBtn;//转屏
 
+@property (nonatomic, strong) UIButton *standardDef; //横屏-切换清晰度按钮
+@property (nonatomic, strong) UIButton *highDef;
+@property (nonatomic, strong) UIButton *supperDef;
+
 @property(atomic, retain) IJKFFMoviePlayerController *player;
 @property (nonatomic, strong) NSString *videoUrl;
 
-
 @property (nonatomic, strong) NSString *qualityString; //保存选择video清晰度
+
+@property (nonatomic, strong) NSString *deviceName; //设备名称 NVR 和 IPC model有区别
 
 @property (nonatomic, assign) CFTimeInterval startPlayer;
 @property (nonatomic, assign) CFTimeInterval endPlayer;
@@ -75,11 +84,23 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
     [self initializedVideo];
     
+    [self addRotateNotification];
+    
     [self setupPreViewViews];
     
+<<<<<<< Updated upstream
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
     [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+=======
+    self.deviceName = self.model.params.deviceName;
+    
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setVieoPlayerStartPlayWith:self.qualityString];
+    });
+>>>>>>> Stashed changes
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -115,6 +136,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
     
     [self stopPlayMovie];
+    [self recoverNavigationBar];
+    
+    [self ratetePortrait];
     
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
 }
@@ -124,46 +148,21 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self stopPlayMovie];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-#warning stop service
-        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 
-///MARK: 获取设备状态，是否可以推流（type 参数区分直播和对讲）
-- (void)getDeviceStatusWithType:(NSString *)singleType qualityType:(NSString *)qualityType{
+- (void)addRotateNotification {
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orientationChange:)
+                                                name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+}
+
+/// 对讲post请求
+- (void)voicePostRequest {
     
-    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
-    NSString *actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
-    
-#warning 检查设备状态
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-        if ([responseModel.status isEqualToString:@"0"]) {
-            if ([singleType isEqualToString:action_live]) {
-                //直播
-#warning 开始
-                [self setVieoPlayerStartPlayWith:qualityType];
-            }else if ([singleType isEqualToString:action_voice]) {
-                //对讲
-#warning 对讲也会调这个方法走到这里
-                NSString *channel = @"channel=0";
-//
-//                AWAudioConfig *config = [[AWAudioConfig alloc] init];
-//                config.bitrate = 32000;
-//                config.channelCount = 1;sendVoiceToServer
-//                config.sampleSize = 16;
-//                config.sampleRate = 8000;
-//                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel audioConfig:config];
-                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
-            }
-            
-        }else {
-            //设备状态异常提示
-            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-        }
-    }];
+    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8];
 }
 
 - (void)setupPreViewViews {
@@ -483,11 +482,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 #pragma mark - action
 ///MARK: 对讲
-#warning 对讲功能按钮
 - (void)clickTalkback:(UIButton *)button {
     if (!button.selected) {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_select"];
-        [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
+        [self voicePostRequest];
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
         [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
@@ -512,7 +510,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 #pragma mark - 控制video 显示
 - (void)rotateScreen {
-    [MBProgressHUD showMessage:@"暂不支持" icon:@""];
+    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.isRotation == YES) {
+        appDelegate.isRotation = NO;
+        [self ratetePortrait];
+    }else {
+        appDelegate.isRotation = YES;
+        [self rotateLandscapeRight];
+    }
 }
 
 - (void)controlVoice:(UIButton *)button {
@@ -528,11 +533,57 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)changeVideoDefinitaion {
     
-    [MBProgressHUD showMessage:@"暂不支持" icon:@""];
+    if ([UIDevice judgeScreenOrientationPortrait]) {
+        //竖屏
+        __weak typeof(self) weakSelf = self;
+        TIoTDemoCustomSheetView *definitaionSheet = [[TIoTDemoCustomSheetView alloc]init];
+        NSArray *actionTitleArray = @[@"超清 1080P",@"高清 720P",@"标清 360P",@"取消"];
+        ChooseFunctionBlock superDefinitaionBlock = ^(TIoTDemoCustomSheetView *view){
+            weakSelf.qualityString = quality_super;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
+            [weakSelf.definitionBtn setTitle:@"超清" forState:UIControlStateNormal];
+            [definitaionSheet removeFromSuperview];
+        };
+        
+        ChooseFunctionBlock highDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
+            weakSelf.qualityString = quality_high;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
+            [weakSelf.definitionBtn setTitle:@"高清" forState:UIControlStateNormal];
+            [definitaionSheet removeFromSuperview];
+        };
+        
+        ChooseFunctionBlock standardDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
+            weakSelf.qualityString = quality_standard;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
+            [weakSelf.definitionBtn setTitle:@"标清" forState:UIControlStateNormal];
+            [definitaionSheet removeFromSuperview];
+        };
+        
+        ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
+            DDLogVerbose(@"取消");
+            [view removeFromSuperview];
+        };
+        
+        NSArray *actionBlockArray = @[superDefinitaionBlock,highDefinitionBlock,standardDefinitionBlock,cancelBlock];
+        
+        [definitaionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
+        [[UIApplication sharedApplication].delegate.window addSubview:definitaionSheet];
+        [definitaionSheet mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
+        }];
+    }else {
+        //横屏
+        
+        [self hideSettingVidoParamView];
+        
+        [self.view addSubview:self.landscapeChangeDefinition];
+        [self.landscapeChangeDefinition mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.left.right.equalTo(self.view);
+        }];
+    }
 }
 
 #pragma mark - dirention action
-#warning 方向按键
 - (void)turnUpDirection {
     [self turnDirectionWithDirection:TIotDemoDeviceDirectionUp];
 }
@@ -574,14 +625,108 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 ///MARK:根据方向发送设备信令
 - (void)sendDeivecWithSignalling:(NSString *)singleText {
-//    NSString *singleString = [NSString stringWithFormat:@"%@&channel=0",singleText];
+    NSString *singleString = [NSString stringWithFormat:@"%@?_protocol=tcp",singleText];
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:singleString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         if (![NSString isNullOrNilWithObject:jsonList] || ![NSString isFullSpaceEmpty:jsonList]) {
             [MBProgressHUD showMessage:jsonList icon:@""];
         }
         
     }];
+}
+
+#pragma mark - handler orientation event
+- (void)orientationChange:(NSNotification *)notification {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    switch (orientation) {
+        case UIDeviceOrientationLandscapeLeft:{
+            //屏幕向左横置
+            appDelegate.isRotation = YES;
+            [self setNavigationBarTransparency];
+            [self resetScreenSubviewsWithLandscape:YES];
+            break;
+            }
+        case UIDeviceOrientationLandscapeRight: {
+            //屏幕向右橫置
+            appDelegate.isRotation = YES;
+            [self setNavigationBarTransparency];
+            [self resetScreenSubviewsWithLandscape:YES ];
+            break;
+        }
+        case UIDeviceOrientationPortrait: {
+            //屏幕直立
+            appDelegate.isRotation = NO;
+            [self resetScreenSubviewsWithLandscape:NO];
+            break;
+        }
+        default:
+            //无法辨识
+            break;
+    }
+}
+
+///MARK: viewarray 约束更新适配屏幕
+- (void)resetScreenSubviewsWithLandscape:(BOOL)rotation {
+    if (rotation == YES) { //横屏
+        self.actionBottomView.hidden = YES;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(self.screenRect.size.width);
+            make.top.bottom.equalTo(self.view);
+        }];
+        [self controlLandScapeDefaultQuality];
+    }else { //竖屏
+        if (self.definitionBtn.hidden == YES) {
+            [self hideDefinitionView];
+        }
+        self.actionBottomView.hidden = NO;
+        self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+        [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(self.screenRect.size.width);
+            make.height.mas_equalTo(self.screenRect.size.width*kScreenScale);
+            make.centerX.equalTo(self.view);
+            if (@available(iOS 11.0, *)) {
+                make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            }else {
+                make.top.equalTo(self.view).offset(64);
+            }
+        }];
+    }
+}
+
+///MARK:横屏
+- (void)rotateLandscapeRight {
+    
+    //
+    [self controlLandScapeDefaultQuality];
+    
+    [self setNavigationBarTransparency];
+    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.isRotation = YES;
+    [UIDevice changeOrientation:UIInterfaceOrientationLandscapeRight];
+}
+
+///MARK:竖屏
+- (void)ratetePortrait {
+    [self recoverNavigationBar];
+    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.isRotation = NO;
+    [UIDevice changeOrientation:UIInterfaceOrientationPortrait];
+}
+
+///MARK: 设置导航栏透明
+- (void)setNavigationBarTransparency {
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+}
+
+///MARK: 恢复导航栏
+- (void)recoverNavigationBar {
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:nil];
 }
 
 #pragma mark -IJKPlayer
@@ -762,10 +907,18 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
+<<<<<<< Updated upstream
         NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
         
 #warning 获取URL 起播放器
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+=======
+        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
+        
+        // 获取URL 起播放器
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+>>>>>>> Stashed changes
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         
@@ -792,6 +945,214 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player.view removeFromSuperview];
         self.player = nil;
     }
+}
+
+#pragma mark - lazy loading
+- (UIView *)landscapeChangeDefinition {
+    if (!_landscapeChangeDefinition) {
+        _landscapeChangeDefinition = [[UIView alloc]init];
+        _landscapeChangeDefinition.backgroundColor = [UIColor clearColor];
+        
+        CGFloat kLeftPadding = 40;
+        CGFloat kBottomPadding = 30;
+        CGFloat kBtnWidth = 80;
+        CGFloat kBtnHeight = 74;
+        
+        //标清
+        self.standardDef = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+        [self.standardDef addTarget:self action:@selector(switchStandardDef) forControlEvents:UIControlEventTouchUpInside];
+        [_landscapeChangeDefinition addSubview:self.standardDef];
+        [self.standardDef mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(_landscapeChangeDefinition.mas_bottom).offset(-kBottomPadding);
+            make.left.equalTo(_landscapeChangeDefinition.mas_left).offset(kLeftPadding);
+            make.width.mas_equalTo(kBtnWidth);
+            make.height.mas_equalTo(kBtnHeight);
+        }];
+        UILabel *standardDefValue = [[UILabel alloc]init];
+        [standardDefValue setLabelFormateTitle:@"360P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.standardDef addSubview:standardDefValue];
+        [standardDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.standardDef.mas_centerY);
+            make.centerX.equalTo(self.standardDef);
+        }];
+        UILabel *standardDefTip = [[UILabel alloc]init];
+        [standardDefTip setLabelFormateTitle:@"标清" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.standardDef addSubview:standardDefTip];
+        [standardDefTip mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.standardDef);
+            make.top.equalTo(self.standardDef.mas_centerY);
+        }];
+        
+        //高清
+        self.highDef = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.highDef addTarget:self action:@selector(switchHighDef) forControlEvents:UIControlEventTouchUpInside];
+        self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+        [_landscapeChangeDefinition addSubview:self.highDef];
+        [self.highDef mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(self.standardDef);
+            make.left.equalTo(self.standardDef.mas_right).offset(20);
+            make.bottom.equalTo(self.standardDef.mas_bottom);
+        }];
+        UILabel *highDefValue = [[UILabel alloc]init];
+        [highDefValue setLabelFormateTitle:@"720P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.highDef addSubview:highDefValue];
+        [highDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.highDef.mas_centerY);
+            make.centerX.equalTo(self.highDef);
+        }];
+        UILabel *highDefTip = [[UILabel alloc]init];
+        [highDefTip setLabelFormateTitle:@"高清" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.highDef addSubview:highDefTip];
+        [highDefTip mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.highDef);
+            make.top.equalTo(self.highDef.mas_centerY);
+        }];
+        
+        
+        //超清
+        self.supperDef = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.supperDef addTarget:self action:@selector(switchSupperDef) forControlEvents:UIControlEventTouchUpInside];
+        self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+        [_landscapeChangeDefinition addSubview:self.supperDef];
+        [self.supperDef mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(self.standardDef);
+            make.bottom.equalTo(self.standardDef.mas_bottom);
+            make.left.equalTo(self.highDef.mas_right).offset(20);
+        }];
+        UILabel *supperDefValue = [[UILabel alloc]init];
+        [supperDefValue setLabelFormateTitle:@"1080P" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.supperDef addSubview:supperDefValue];
+        [supperDefValue mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.supperDef.mas_centerY);
+            make.centerX.equalTo(self.supperDef);
+        }];
+        UILabel *supperDefTip = [[UILabel alloc]init];
+        [supperDefTip setLabelFormateTitle:@"超清" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
+        [self.supperDef addSubview:supperDefTip];
+        [supperDefTip mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.supperDef);
+            make.top.equalTo(self.supperDef.mas_centerY);
+        }];
+        
+        
+        //提示tip
+        UILabel *definitionTip = [[UILabel alloc]init];
+        [definitionTip setLabelFormateTitle:@"画质" font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentLeft];
+        [_landscapeChangeDefinition addSubview:definitionTip];
+        [definitionTip mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_landscapeChangeDefinition.mas_left).offset(kLeftPadding);
+            make.bottom.equalTo(self.standardDef.mas_top).offset(-10);
+        }];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideDefinitionView)];
+        [_landscapeChangeDefinition addGestureRecognizer:tap];
+    }
+    return _landscapeChangeDefinition;
+}
+
+#pragma mark - respensed event
+///MARK: 移除横屏清晰度选择view
+- (void)hideDefinitionView {
+    [self showSettingVidoParamView];
+    
+    [self.landscapeChangeDefinition removeFromSuperview];
+}
+
+- (void)hideSettingVidoParamView {
+    self.definitionBtn.hidden = YES;
+    self.voiceBtn.hidden = YES;
+    self.rotateBtn.hidden = YES;
+}
+
+- (void)showSettingVidoParamView {
+    self.definitionBtn.hidden = NO;
+    self.voiceBtn.hidden = NO;
+    self.rotateBtn.hidden = NO;
+}
+
+///MARK: 横屏时候默认选中清晰度
+- (void)controlLandScapeDefaultQuality {
+    if ([self.qualityString isEqualToString:quality_standard]) {
+        [self standarDefUI];
+    }else if ([self.qualityString isEqualToString:quality_high]) {
+        [self highDefUI];
+    }else if ([self.qualityString isEqualToString:quality_super]) {
+        [self supperDefUI];
+    }
+}
+
+- (void)switchStandardDef {
+    
+    [self standarDefUI];
+    [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)standarDefUI {
+    self.qualityString = quality_standard;
+    self.standardDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
+    self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    [self.definitionBtn setTitle:@"标清" forState:UIControlStateNormal];
+    [self hideDefinitionView];
+}
+
+- (void)switchHighDef {
+    
+    [self highDefUI];
+    [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)highDefUI {
+    self.qualityString = quality_high;
+    self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    self.highDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
+    self.supperDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    [self.definitionBtn setTitle:@"高清" forState:UIControlStateNormal];
+    [self hideDefinitionView];
+}
+
+- (void)switchSupperDef {
+    
+    [self supperDefUI];
+    [self resetVideoPlayerWithQuality:self.qualityString];
+}
+
+- (void)supperDefUI {
+    self.qualityString = quality_super;
+    self.standardDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    self.highDef.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.3];
+    self.supperDef.backgroundColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor];
+    [self.definitionBtn setTitle:@"超清" forState:UIControlStateNormal];
+    [self hideDefinitionView];
+}
+
+///MARK: 切换live 清晰度
+- (void)resetVideoPlayerWithQuality:(NSString *)qualityString {
+    
+    [self.player stop];
+    [self.player shutdown];
+    self.player = nil;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
+        
+        // 获取URL 起播放器
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+        
+        
+        self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
+        [self configVideo];
+
+        [self.player prepareToPlay];
+        [self.player play];
+        
+        /// 播放器出图开始时间
+        self.startPlayer = CACurrentMediaTime();
+    });
+    
 }
 
 - (void)configVideo {
