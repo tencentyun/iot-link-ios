@@ -25,21 +25,15 @@
 
 4.  LLSync Advertisement
 
-5.  BLE 通信数据流 
+5.  BLE 通信数据流    
 
--     5.1 子设备绑定 
--     5.2 子设备连接 
--     5.3 子设备解绑  
--     5.4 数据模板协议交互 
--     5.5 设备信息上报    
--    5.6 设备OTA   
+*     5.1 子设备绑定 
+*     5.2 子设备连接 
+*     5.3 子设备解绑  
+*     5.4 数据模板协议交互    
+*     5.5 设备信息上报    
+*     5.6 设备OTA     
 
-
-6. 蓝牙辅助配网
-
--     6.1  概述
--     6.2  蓝牙辅助配网流程
--     6.3  传输格式
 
 # 1、设备参数
 
@@ -51,7 +45,7 @@
 
 # 2、LLSync TLV格式
 
-   腾讯云物联网为接入平台定义一套[数据模板协议](https://cloud.tencent.com/document/product/1081/34916)，将设备的接入形式通过JSON模板标准化。多数BLE设备受资源限制，较难承载JSON格式的数据交互，针对此定义了TLV格式的二进制数据包来表示数据模板，最大程度的减少资源占用。如无特殊说明，本文所有数据均使用网络序传输。
+   腾讯云物联网为接入平台定义一套[数据模板协议](https://cloud.tencent.com/document/product/1081/34916)，将设备的接入形式通过JSON模板标准化。多数BLE设备受资源限制，较难承载JSON格式的数据交互，针对此定义了TLV格式的二进制数据包来表示数据模板，最大程度的减少资源占用。如无特别说明，本文所有数据均使用网络序传输。
 
    LLSync TLV二进制数据包中有用户数据、数据长度和数据类型，TLV格式被广泛应用在LLData数据包和LLEvent数据包中。
 
@@ -180,7 +174,7 @@
 
 **LLData**：数据模版操作特征值，用于通知设备端执行数据模版操作。
 
-**LLEvent**：事件上报特征值，用于设备端向小程序上报数据。
+**LLEvent**：事件上报特征值，用于设备端向App上报数据。
 
 **LLOTA**：升级数据特征值，用于控制设备进行版本更新。
 
@@ -238,7 +232,7 @@ LLSync协议版本大于 0:
 | 6 | N/A | 连接失败 |
 | 7 | N/A | 解绑成功 |
 | 8 | N/A | 解绑失败 |
-| 9 | 2 Bytes Result | 小程序设置MTU的结果 |
+| 9 | 2 Bytes Result | App设置MTU的结果 |
 | 0x0A | N/A | 等待绑定确认超时 |
 
 
@@ -530,7 +524,7 @@ LLOTA用于对设备进行版本更新。
 
 ​
 
-## 4. LLSync Advertisement定义    
+# 4. LLSync Advertisement定义    
 
    自定义广播数据按照BlueTooth协议要求，添加到0xFF Manufacturer Specific Data的字段当中，company ID使用0xFEE7（Tencent Holdings Limited），0xFEE7和0xFEBA均为腾讯申请的Company ID。   
 
@@ -630,7 +624,7 @@ Result 为 {0x4b,0x60,0x60,0x75,0x9b,0xf3,0xc9,0x97}
 
 **绑定标识计算：**    
 
-<font color = red>网关或小程序在绑定成功时提供，计算方式和设备标识符一致。</font>
+<font color = red>网关或App在绑定成功时提供，计算方式和设备标识符一致。</font>
 
 **广播包示例如下：**   
 
@@ -644,5 +638,850 @@ CBD52F25B5E1：蓝牙MAC地址
 
 51444131505A4C424E42：ProductID或标识符     
 
-61-bit service UUIDs: 0xFFE0 开头 
+61-bit service UUIDs: 0xFFE0 开头    
+
+
+# 5、BLE 通信数据流   
+
+## 5.1 子设备绑定
+
+场景：BLE终端尚未绑定，需要先进行绑定才可以连接   
+
+![image_binding](https://ask.qcloudimg.com/developer-images/article/7364147/2gymm8rqfh.png)
+
+**1、往LLDeviceInfo上写入Unix TS**   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>Nonce</td>
+    <td>Timestamp</td>
+  </tr>
+  <tr>
+    <td>0x00</td>
+    <td>4  Bytes nonce</td>
+    <td>4 Bytes timestamp</td>
+  </tr>
+</table>   
+
+
+**特殊说民：  
+  · App 在判断是纯蓝牙设备时，需将时间戳和随机数转为16进制，按格式要求的固定字节数写入蓝牙设备。       
+  · 此时用到的时间戳和随机数要保存，后续绑定API中还会用到。   
+  · 设备连接期间数据包MTU为23（实际数据20Bytes） 。后续需要根据MTU分片传输**   
+
+**2、出于设备安全考虑，LLSync SDK支持安全绑定功能，绑定前需要设备端确认。**   
+
+ · 该功能是可选功能，通过配置SDK的BLE\_QIOT\_SECURE\_BIND可以启用安全绑定功能。若不启用该功能则设备进入绑定验证签名流程(见步骤3)；   
+
+ · 若启用安全绑定功能，设备端需要等待用户确认后才可以继续绑定流程。   
+
+启用安全绑定功能时，设备端需要先通过LLEvent告知App绑定过程的最大超时时间，用户超时未操作时结束绑定流程。   
+
+| Type | Length | Value |
+|:----|:----|:----|
+| 0x0D | 2 Bytes length | 2 Bytes Wait Time |
+
+
+_说明：绑定确认超时时间单位为秒，占用2字节。默认60秒。_   
+
+    启用安全绑定功能后，用户选择确认绑定、拒绝绑定时，设备端会通过验证签名报文(见步骤3)上报App用户操作结果。   
+
+如果用户不做操作导致绑定超时或者在App上取消绑定，App 会通过LLDeviceInfo报文通知设备。   
+
+| Type | Result |
+|:----|:----|
+| 0x0A | 0/1 |
+
+
+_说明：_   
+
+   _1._ _Result 为 0 表示用户在App上点击取消，为 1 表示连接超时。_   
+
+   _2._ App_通知设备超时，是考虑到节约设备资源。设备也可以依靠自身能力检测绑定超时。_   
+
+**3、设备验证签名后返回的LLEvent数据包。**
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length </th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>sign info</td>
+    <td>device name</td>
+  </tr>
+  <tr>
+    <td>0x05</td>
+    <td>2 Bytes length</td>
+    <td>20 Bytes sign info</td>
+    <td>N Bytes device name</td>
+  </tr>
+</table>
+
+
+ **特别说明：从设备返回的LLEvent数据包中获取 DeviceName 和 Signature，作为绑定接口入参。   
+      绑定接口时间戳需要在之前保存的基础上加60（单位秒）**    
+      
+_说明：_        
+
+ _1._ _sign info是通过设备的psk对设备信息签名得到，签名算法使用hamc-sha1。_   
+
+_2._ _deviceinfo = product id + devicename + ; + nonce + ; + expiration time_   
+
+_3._ _expiration time = timestamp + 60_   
+
+_4._ _计算签名时对于 nonce 和 timestamp，将其转换为字符串类型后再计算签名，避免大小端问题导致的签名错误。示例：timestamp = 0x5f3279fa，转换为对应数值的字符串为“1597143546”   。_
+
+_5._ _启用安全绑定功能后，Length字段需要指定**绑定标记**。_      
+
+
+**4. 往FFE1写入绑定成功结果格式见下表**      
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th colspan="3" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>Result</td>
+    <td>Local Psk</td>
+    <td>绑定标识符</td>
+  </tr>
+  <tr>
+    <td>0x02</td>
+    <td>02</td>
+    <td>4 Bytes Local Psk</td>
+    <td>8 Bytes</td>
+  </tr>
+</table>
+
+**特别说明：此时的 Local Psk 为重新生成的随机数，再将此时的 Psk 上传存储云端接口用于后续子设备连接时使用**   
+
+_说明:_    
+ 
+_1._ _**Local Psk和绑定标识符由App生成。**_   
+
+_2._ _Result表示绑定状态，绑定成功固定为0x02。_   
+
+**5. 往FFE1写入绑定失败结果格式见下表**   
+
+| type | value |
+|:----|:----|
+| 0x03 | 1 Byte Reply\_Result |
+
+
+_说明：_
+
+_1._ _BLE终端不会校验网关/App的身份，存在BLE终端被恶意绑定的可能，BLE终端可以配置通过按键进入待绑定状态，默认2分钟有效。_   
+
+_2._ _设备连接成功之后，不会再广播beacon，App/网关无法再次扫描。_   
+
+_如果绑定成功，需要在设备上存储 Local Psk 用于后续的网关 + 子设备连接鉴权。_   
+
+​
+
+## 5.2 子设备连接   
+
+场景：设备广播Beacon标识设备已绑定，需要进行连接   
+
+​
+
+![llsync_linking](https://ask.qcloudimg.com/developer-images/article/7364147/lcqdop7co8.png)
+
+_说明：如果是App，写入上线结果认为是写入App和设备的连接结果。_   
+
+**1、往LLDeviceInfo写入签名信息数据格式见下表**   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>Timestamp</td>
+    <td>Sign info</td>
+  </tr>
+  <tr>
+    <td>0x01</td>
+    <td>4 Bytes timestamp</td>
+    <td>20 Bytes sign info</td>
+  </tr>
+</table>
+
+
+**特别说民：   
+     · 此处的psk为从云端psk接口获取的。signInfo 为 psk和重新获取的时间戳计算得出（key为hex 类型hash; 输入的key为16进制string）。   
+     ·子设备上报接口暂时缺失**   
+
+
+**2、 设备验证签名后返回的LLEvent格式数据包**   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Sign info</td>
+    <td>Device name</td>
+  </tr>
+  <tr>
+    <td>0x06</td>
+    <td>2 Bytes length</td>
+    <td>20 Bytes sign info</td>
+    <td>N Bytes device name</td>
+  </tr>
+</table>   
+
+**特殊说明：此处psk为从云端psk接口获取**      
+
+_说明：_   
+
+_1._ _sign info是使用Local Psk对设备信息进行签名，算法选择hmac-sha1。设备信息包括 expiration time + product id + device name，其中expiration time = timestamp + 60。_   
+
+_2.计算签名时对于timestamp，将其转换为字符串类型后再计算签名，避免大小端问题导致的签名错误。示例：timestamp = 0x5f3279fa，转换为对应数值的字符串为“1597143546” 。_   
+
+​
+
+## **5.3 子设备解绑**   
+
+场景：子设备已经绑定且完成连接，App 端请求解绑。   
+
+![llsync_ unbind](https://ask.qcloudimg.com/developer-images/article/7364147/t2wzkys8ur.png)
+
+**1、 往LLDeviceInfo写入解绑请求**   
+
+| Type | Value |
+|:----|:----|
+| 0x04 | 20  Bytes sign info |
+
+
+_说明：sign info是使用Local Psk对固定字符串“UnbindRequest”进行签名，算法选择hmac-sha1。_   
+
+_**2、**_ **验签后返回的LLEvent信息数据格式如下表。**   
+
+| Type | Length | Value |
+|:----|:----|:----|
+| 0x07 | 2 Bytes length | 20 Bytes sign info |
+
+
+_说明：sign info是使用Local Psk对固定字符串“UnbindResponse”进行签名，算法选择hmac-sha1。_   
+
+_**3、**_**往LLDeviceInfo写入解除绑定成功。**   
+
+| Type |
+|:----|
+| 0x07 |
+
+
+**4、往LLDeviceInfo写入解除绑定失败。**   
+
+| Type |
+|:----|
+| 0x08 |
+
+
+​
+
+## 5.4 数据模板协议交互       
+
+### 5.4.1 设备属性上报      
+
+​
+
+![llsync_property_report](https://ask.qcloudimg.com/developer-images/article/7364147/gpa4rgstlx.png)
+
+
+**特殊说明：数据模板中数据传输需要根据MTU对数据分片**   
+
+1、 设备属性上报LLEvent 数据格式，对应数据模版的Report操作。    
+
+| Type | Length | Property Value |
+|:----|:----|:----|
+| 0x00 | 2 Bytes length | TLV数据 |
+
+
+Property Value中可以包含多个Property的数据。示例：      
+
+| 数值 | 描述 |
+|:----|:----|
+| 00 | Type |
+| 00, 0F | Length |
+| 00，01 | Propert Power Switch = 1 |
+| 81，00，01 | Property Color = 1 |
+| 22，00，00，00，23 | Property Brightness = 0x23 |
+| 43，00，02，31，32 | Property Name = “12” |
+
+
+2、属性上报结果通过LLData通知设备，对应数据模版的report\_reply操作      
+
+| Header | Value |
+|:----|:----|
+| 0x20 | 1 Byte Reply\_Result |
+
+
+​
+
+### 5.4.2 设备远程控制   
+
+​
+
+![llsync_device_report](https://ask.qcloudimg.com/developer-images/article/7364147/om9ekbfxst.png)
+
+1、 通过LLData远程控制设备，对应数据模版的control操作。   
+
+| Type | Length | Property Value |
+|:----|:----|:----|
+| 0x00 | 2 Bytes length | TLV数据 |
+
+
+Property Value中可以包含多个Property的数据。示例：    
+
+| 数值 | 描述 |
+|:----|:----|
+| 00 | Type |
+| 00，0F | Length |
+| 00，01 | Property Power Switch = 1 |
+| 81，00，01 | Property Color = 1 |
+| 22，00，00，00，23 | Property Brightness = 0x23 |
+| 43，00，02，31，32 | Property Name = “12” |
+
+
+2、 设备通过LLEvent上报操作结果，对应数据模版的control\_reply操作。   
+
+| Type | Length | Value |
+|:----|:----|:----|
+| 0x01 | 2 Bytes length | 1 Byte Reply\_Result |
+
+
+​
+
+### 5.4.3 获取设备最新信息      
+
+​
+
+![](https://ask.qcloudimg.com/developer-images/article/7364147/6yt423kfsq.png)
+
+1、 设备通过LLEvent获取最新信息，对应数据模版的get\_status操作。   
+
+| Type |
+|:----|
+| 0x02 |
+
+
+2、 App通过LLData下发最新信息，对应数据模版的get\_status\_reply操作。   
+
+| Type | Result | Length | Property Value |
+|:----|:----|:----|:----|
+| 0x22 | 1 Byte Reply\_Result | 2 Bytes value length | TLV数据 |
+
+
+Property Value中可以包含多个property的数据。   
+
+| 数值 | 描述 |
+|:----|:----|
+| 22 | Type |
+| 00 | Reply\_Result = 成功 |
+| 00，0F | Length |
+| 00，01 | Property Power Switch = 1 |
+| 81，00，01 | Property Color = 1 |
+| 22，00，00，00，23 | Property Brightness = 0x23 |
+| 43，00，02，31，32 | Property Name = “12” |
+
+
+### 5.4.4 设备事件上报   
+
+​
+
+![](https://ask.qcloudimg.com/developer-images/article/7364147/7f4krjc4s6.png)
+
+1、设备通过LLEvent上报事件，对应数据模版中的event\_post操作。   
+
+| Type | Length | Event id | Event value |
+|:----|:----|:----|:----|
+| 0x03 | 2 Bytes length | 1 Byte event id | TLV数据 |
+
+
+Event value中可以包含多个event 参数。示例：   
+
+| 数值 | 描述 |
+|:----|:----|
+| 03 | Type |
+| 00，11 | Length |
+| 02 | Event id |
+| 40， 00，08， 31，32，33，34，35，36，37，38 | Event Param Name = “12345678” |
+| 21，00，00，04，00 | Event Param Error Code = 0x400 |
+
+
+2、通过LLData返回操作结果，对应数据模版中的event\_reply操作。    
+
+| Type | Value |
+|:----|:----|
+| ​ | 1 Byte Reply\_Result |
+
+
+_说明：假设event id = 0，那么Type字段应该是0x60。_   
+
+### 5.4.5 设备行为调用    
+
+​
+
+![](https://ask.qcloudimg.com/developer-images/article/7364147/y6ktj2iaod.png)
+
+1、通过LLData向设备发起行为调用请求，对应数据模版中的action操作。   
+
+| Type | Length | Action Value |
+|:----|:----|:----|
+| ​ | 2 Bytes length | TLV数据 |
+
+
+_说明：假设action id = 0，那么Type字段应该是0x80。_   
+
+Action value中可以包含多个 input 参数。示例。   
+
+| 数值 | 描述 |
+|:----|:----|
+| 80 | Type |
+| 00, 0B | Length |
+| 20，00，00，00，04 | input id interval = 0x04 |
+| 41，00，04，31，32，33，34 | input id message = “1234” |
+
+
+2、设备通过LLEvent上报行为调用结果，对应数据模版中的action\_reply操作。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="3" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Response params</td>
+    <td>Response params</td>
+    <td>Response params</td>
+  </tr>
+  <tr>
+    <td>0x04</td>
+    <td>2 Bytes length</td>
+    <td>1 Byte Reply\_Result</td>
+    <td>1 Byte action id</td>
+    <td>TLV数据</td>
+  </tr>
+</table>
+
+
+Response param中可以包含多个 response 参数。示例。   
+
+| 数值 | 描述 |
+|:----|:----|
+| 04 | Type |
+| 00，0F | Length |
+| 00 | Reply Result = 成功 |
+| 00 | action id = 0 |
+| 00，01 | Response Result = 1 |
+| 41， 00，08， 31，32，33，34，35，36，37，38 | Response message = “12345678” |
+
+
+## 5.5 设备信息上报   
+
+1、连接成功后，设备通过LLEvent主动向App/网关上报设备信息，包括协议版本号，设备需要设置的MTU大小和设备固件版本号。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="4" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td rowspan="2">LLSync version</td>
+    <td rowspan="2">MTU Filed</td>
+    <td colspan="2">Firmware version</td>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Length</td>
+    <td>Payload</td>
+  </tr>
+  <tr>
+    <td>0x08</td>
+    <td>2 Bytes</td>
+    <td>1 Byte</td>
+    <td>2 Bytes</td>
+    <td>1 Byte</td>
+    <td>N (<=32) Bytes</td>
+  </tr>
+</table>
+
+
+_说明：_
+
+_1._ _版本号与_**LLSync Advertisement**_中必须一致。_
+
+_示例，08 00 09 02 00 14 05 30 2e 30 2e 31，LLSync版本号为2，mtu大小设置为0x14，固件版本号长度5字节，固件版本号为”0.0.1”  。_   
+
+**MTU Filed**定义：   
+
+<table>
+  <tr>
+    <th class="align-left">Bit</th>
+    <th class="align-left">15</th>
+    <th class="align-left">14</th>
+    <th class="align-left">···</th>
+    <th class="align-left">11</th>
+    <th class="align-left">10</th>
+    <th class="align-left">…</th>
+    <th class="align-left">0</th>
+  </tr>
+  <tr>
+    <td>说明</td>
+    <td>mtu flag</td>
+    <td colspan="3">Reserved</td>
+    <td colspan="3">MTU大小</td>
+  </tr>
+</table>
+
+
+_说明：_
+
+_1._ _Bits 0 – Bits 10用来表示设备端通信使用的 MTU 大小mtu\_size；_   
+
+_2._ _Bits 15 用来向App表示是否设置 MTU。当mtu flag为 1 时，App需要按照设备上传的mtu\_size 进行MTU设置；当mtu flag为0时，App不设置 MTU ，使用mtu\_size进行分片。_   
+
+_需要App去设置 MTU 的原因是：在安卓手机上如果App不显式设置 MTU，双方会使用默认MTU为23进行通信；在IOS上不存在该问题。_   
+
+_3._ _Bits 11 – Bits 14预留。_   
+
+​
+
+2.、App收到设备信息上报后，需要检查**mtu flag**。当mtu flag设置为1时：    
+
+安卓系统上，App需要调用 MTU 设置接口修改 MTU，并通过LLDeviceInfo通知设备端设置结果。   
+
+| Type | Value |
+|:----|:----|
+| 0x09 | 2 Byte Result |
+
+
+_说明：_
+
+_1._ _0表示设置成功，0xFFFF表示设置失败，其他表示设置成功的MTU值。_   
+
+_2._ _当前App只能获取到设置成功失败，无法获取到设置成功的具体MTU值。_   
+
+IOS系统上，App无法设置MTU，在蓝牙连接时IOS系统会设置MTU，LLSync SDK可以直接上报IOS系统设置的MTU给App用来通信。   
+
+​
+
+3、在手机上设置 MTU 后，由于App无法得知设置成功的MTU数值，因此还需要设备通过LLEvent将最终的MTU 数值上报给App，最终完成**MTU的协商**。   
+
+| Type | Length | Value |
+|:----|:----|:----|
+| ​ | ​ | MTU size |
+| MTU size | MTU size | 2 Bytes |
+
+
+_说明：_
+
+_1._ _在安卓上App设置 MTU 失败时，设备端上报MTU = 20，即默认ATT\_MTU – 3。_
+
+_2._ _在安卓上App设置 MTU 成功，设备端会将蓝牙SDK获取到最新MTU值上报给App。_
+
+_在IOS上，当IOS系统设置MTU后，设备端会将蓝牙SDK获取到最新MTU值上报给App。_    
+
+​
+
+## 5.6 设备OTA    
+
+设备OTA流程图如下，设备端只关心和App的数据交互。包括：   
+
+1、 设备端主动上报版本号   
+
+2、 App下发升级请求   
+
+3、 设备端应答升级请求   
+
+4、App下发升级数据包   
+
+5、设备端应答升级数据包   
+
+6、App通知下发结束   
+
+7、设备端上报文件校验结果   
+
+​
+
+![](https://ask.qcloudimg.com/developer-images/article/7364147/jbcec9m6at.png)   
+
+**特殊说明：设备OTA中数据传输需要根据MTU对数据分片**      
+
+### 5.6.1 固件版本上报      
+
+设备通过 LLEvent 进行固件版本号上报，见 4.5 中一并上报。   
+
+### 5.6.2 升级请求包    
+
+App通过 LLOTA 下发升级请求包到设备。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="4" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>File size</td>
+    <td>File crc</td>
+    <td>File version len</td>
+    <td>File version</td>
+  </tr>
+  <tr>
+    <td>0x00</td>
+    <td>File size</td>
+    <td>4 Bytes</td>
+    <td>4 Bytes</td>
+    <td>1 Byte</td>
+    <td>1 ~ 32 Bytes</td>
+  </tr>
+</table>
+
+
+_说明：_
+
+_1._ _约定使用CRC32 进行文件校验。_   
+
+_2._ _升级请求包分片规则请参见_ **_LLEvent 分片规则_**_。_   
+
+_示例：_   
+
+ _00 00 0e 00 00 00 ff 18 70 16 3c 05 30 2e 30 2e 31，文件大小为0xFF，文件CRC为0x1870163C，文件版本为0.0.1_   
+
+ _对上述数据应用分片规则，可以分为三包：_   
+
+ _00 40 04 00 00 00 ff_   
+
+ _00 80 04 18 70 16 3c_   
+
+ _00 c0 06 05 30 2e 30 2e 31_   
+
+ _也可以分为两包:_   
+
+ _00 40 08 00 00 00 ff 18 70 16 3c_   
+
+ _00 c0 06 05 30 2e 30 2e 31_   
+
+ _分包数量也可以大于三包，大于三包时会有多个0x00,0x80开头的数据包。_   
+
+_分包数量取决于数据长度和ATT MTU大小，LLSync会自动处理分包和组包，用户无需关心。_   
+
+### 5.6.3 升级请求应答包   
+
+设备通过 LLEvent 对升级请求作出应答。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Indicate</td>
+    <td>Payload</td>
+  </tr>
+  <tr>
+    <td>0x09</td>
+    <td>2 Bytes</td>
+    <td>1 byte</td>
+    <td>N Bytes</td>
+  </tr>
+</table>
+
+
+升级请求应答包中value由1字节indicate和N字节的payload构成。   
+
+1、indicate表示升级请求的请求结果。   
+
+2、payload是请求结果的延伸字段。   
+
+**indicate定义**：   
+
+| Bit | 说明 |
+|:----|:----|
+| 0 | 0: 禁止升级  1: 允许升级     |
+| 1 | 0: 不支持断点续传 1: 支持断点续传 |
+| 2 ～ 7 | Reserved |
+
+
+不同的indicate字段会有不同的payload。    
+
+**当允许升级时payload定义如下：**   
+
+| 字段 | 说明 |
+|:----|:----|
+| 1 byte total package numbers | 单次循环中可以连续传输的数据包个数，取值范围0x00 ~ 0xFF。 |
+| 1 byte package length | 单个数据包大小，取值范围 0x00 ~ 0xF0 |
+| 1 byte data retry time | 数据包的超时重传周期，单位：秒 |
+| 1 byte device reboot time | 设备重启最大时间，单位：秒 |
+| 4 bytes last received file size | 断点续传前已接收文件大小 |
+| 1 byte package send interval | App连续两个数据包的发包间隔 |
+
+
+_说明：_   
+
+_1._ _不支持断点续传时，已接收文件大小恒为0。_   
+
+_2._ _App连续 5 个超时重传周期内没有收到设备端回应，认为升级失败。_   
+
+_3._ _设备重启最大时间是设备下载成功后重启设备，App等待设备上报新版本号的最大时间，超出此时间App认为升级失败。_
+
+_4._ _升级请求应答包分片规则请参见_ **_LLEvent 分片规则_**_。_   
+
+_示例：_   
+
+ _0a 00 09 03 10 0f 05 14 00 00 00 00，表示设备端允许升级且支持断点续传，单次循环传输0x10个数据包，每个数据包数据长度为0x0F，数据包超时设置为5秒，设备重启时间最大为20秒，断点续传前文件大小为0。_     
+
+**当禁止升级时payload表示禁止升级的原因**：   
+
+| 错误码 | 说明 |
+|:----|:----|
+| 2 | 设备电量不足 |
+| 3 | 版本号错误 |
+
+
+_示例：_   
+
+ _0a 00 02 00 02,表示设备端禁止升级，因为设备电量过低。_   
+
+### 5.6.4 升级数据包   
+
+App通过 LLOTA 下发升级数据包到设备。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Seq</td>
+    <td>Payload</td>
+  </tr>
+  <tr>
+    <td>0x01</td>
+    <td>1 Byte</td>
+    <td>1 Byte</td>
+    <td>N Bytes</td>
+  </tr>
+</table>
+
+
+_说明：_   
+
+_1._ _length字段表示seq和payload的长度之和。_   
+
+_2._ _seq表示数据包在单次循环中的序列号，从0开始，每一包数据增加1，直到total package numbers – 1结束，单次循环结束后重新从0开始。_   
+
+_示例：_   
+
+ _01 10 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01，表示seq为0x01的数据包，数据总长度为0x10，有效数据长度为0x0F，即0x0F个0x01。_   
+
+### 5.6.5 升级数据应答包   
+
+设备通过 LLEvent 对升级数据包作出应答。   
+
+<table>
+  <tr>
+    <th class="align-left">Type</th>
+    <th class="align-left">Length</th>
+    <th colspan="2" class="align-left">Value</th>
+  </tr>
+  <tr>
+    <td>​</td>
+    <td>​</td>
+    <td>Next Seq</td>
+    <td>File size</td>
+  </tr>
+  <tr>
+    <td>0x0A</td>
+    <td>2 Bytes</td>
+    <td>1 byte</td>
+    <td>4 Bytes</td>
+  </tr>
+</table>
+
+
+_说明：_   
+
+_1._ _next seq是设备收到的数据包的seq的下一个seq，file size是设备已接收的正确文件的大小。_   
+
+_2._ _设备收到单个循环的所有数据包后，使用next seq和file size对此次循环作出应答，App收到应答后再发送下一循环的数据包数据包。_   
+
+_3._ _设备收到错误的seq时，发送应答包给App请求重传，App根据设备上报的next seq和file size重新传输数据，App应该从file size处开始传输，seq等于next seq。_   
+
+_4._ _当传输出错时，在一个数据重传周期内，设备端只会上报一次数据应答包。_   
+
+_5._ _连续5个数据重传周期内没有收到正确的数据包，设备端认为升级失败，用户可以控制断开连接。_   
+
+_6._ _升级数据包最后一个循环中数据包可能不足total package numbers，设备会根据文件大小计算，以便在收到最后一个数据包时仍然可以发送数据应答包。_   
+
+_示例：_   
+
+ _0b 00 05 0f 00 00 00 f0，表示设备端收到的最后一个数据包的seq为0x0F，设备当前接收的正确文件的大小为0xF0。_      
+
+### 5.6.6 升级数据结束通知包     
+
+App通过 LLOTA 通知设备升级数据包下发结束。   
+
+| Type |
+|:----|
+| 0x02 |
+
+
+_说明：App文件下发结束后通知设备端进行固件检查并上报结果。_   
+
+### 5.6.7 上报固件检查结果      
+
+设备通过 LLEvent 上报升级文件的校验结果。   
+
+| type | length | value |
+|:----|:----|:----|
+| 0x0B | 2 Bytes | 校验结果定义 |
+
+
+**校验结果定义：**   
+
+| Bit | 说明 |
+|:----|:----|
+| 7 | 1 ： 校验通过   0 ： 校验失败  |
+| 6 ～ 0 | 0 ： 文件CRC错误  1 ： flash操作失败   2 ： 文件内容错误 |
+
+
+_说明：_   
+
+_1._ _使用 1 字节表示校验结果，Bit 7 表示校验是否通过，如果文件校验错误，Bit 6 ～ 0表示具体的错误原因。_
+
+_示例：0c 00 01 80，表示文件校验通过。_  
 
