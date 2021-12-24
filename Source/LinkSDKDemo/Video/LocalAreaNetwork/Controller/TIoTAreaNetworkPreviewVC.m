@@ -92,9 +92,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self setVieoPlayerStartPlayWith:self.qualityString];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self setVieoPlayerStartPlayWith:self.qualityString];
+//    });
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];

@@ -145,6 +145,9 @@ static NSString * kAreaNetworkDeviceCellID = @"kAreaNetworkDeviceCellID";
     
     self.productID.text = [TIoTCoreUserManage shared].demoAreaNetProductID?:@"";
     self.clientToken.text =  [TIoTCoreUserManage shared].demoAreaNetClientToken?:@"";
+    
+    self.productIDString = self.productID.text;
+    self.clientTokenString = self.clientToken.text;
 }
 
 - (void)saveInputInfo {
