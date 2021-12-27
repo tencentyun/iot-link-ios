@@ -24,7 +24,6 @@ target 'LinkApp' do
   pod 'FDFullscreenPopGesture', '1.1'
   pod 'SocketRocket', '0.5.1'
   pod 'TZImagePickerController', '3.2.1'
-  pod 'MGJRouter', '0.10.0'
   pod 'TrueTime','5.0.3'
   pod 'KeychainAccess', '4.2.0'
   pod 'Tencent-MapSDK', '4.3.9'

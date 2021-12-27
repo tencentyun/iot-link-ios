@@ -8,7 +8,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import "XGPush.h"
 #import "XGPushPrivate.h"  /// 如果是海外集群需要导入此头文件
-#import "MGJRouter.h"
+#import "TIoTRouter.h"
 #import "TIoTFeedBackViewController.h"
 #import "TIoTAppConfig.h"
 #import "TIOTTRTCModel.h"
@@ -93,7 +93,7 @@
     
     DDLogDebug(@"-normal xgPush responseNOtification_requestContent_info==%@--\n custom-%@", response.notification.request.content.userInfo, response.notification.request.content.userInfo[@"custom"]);
     
-    [MGJRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":[NSString jsonToObject:response.notification.request.content.userInfo[@"custom"]]} completion:nil];
+    [TIoTRouter openURL:@"TIoT://TPNSPushManage/feedback" withUserInfo:@{@"customMessageContent":[NSString jsonToObject:response.notification.request.content.userInfo[@"custom"]]} completion:nil];
     
     completionHandler();
 }

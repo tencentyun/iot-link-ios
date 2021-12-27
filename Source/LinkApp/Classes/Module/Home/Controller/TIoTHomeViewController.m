@@ -25,7 +25,7 @@
 
 #import "UIView+Extension.h"
 #import "TIoTWebVC.h"
-#import "MGJRouter.h"
+#import "TIoTRouter.h"
 
 #import "Firebase.h"
 #import "TIoTTRTCUIManage.h"
@@ -684,12 +684,12 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
-/// 通过MGJRouter 注册帮助反馈控制器，以便点击通知后跳转
+/// 通过TIoTRouter 注册帮助反馈控制器，以便点击通知后跳转
 - (void)registFeedBackRouterController {
         
-    [MGJRouter registerURLPattern:@"TIoT://TPNSPushManage/feedback" toHandler:^(NSDictionary *routerParameters) {
+    [TIoTRouter registerURLPattern:@"TIoT://TPNSPushManage/feedback" toHandler:^(NSDictionary *routerParameters) {
         //传入推送的全部信息，在控制器内部取出URL，进行展示
-        NSString *url = routerParameters[MGJRouterParameterUserInfo][@"customMessageContent"][@"url"]?:@"";
+        NSString *url = routerParameters[TIoTRouterParameterUserInfo][@"customMessageContent"][@"url"]?:@"";
         if (url.length) {
             TIoTWebVC *vc = [[TIoTWebVC alloc] init];
             vc.title = NSLocalizedString(@"feedbak_detail", @"反馈详情");
