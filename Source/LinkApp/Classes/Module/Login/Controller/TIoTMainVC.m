@@ -32,8 +32,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self versionUpdateAlertView];
     [self firstShowBirthdayView];
+    [self versionUpdateAlertView];
 }
 
 - (void)setUpUI {
@@ -153,7 +153,6 @@
                              message:NSLocalizedString(@"register_privacy_policy_conte", nil)
                          cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消")
                            doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
-        [tipAlertView setBackGroundAlphaValue:0.0];
         tipAlertView.cancelAction = ^{
             exit(0);
         };
@@ -211,7 +210,7 @@
         self.versionUpdateAlert.cancelAction = ^{
             [TIoTCoreUserManage shared].isVersionUpdateView = @"1";
         };
-        [self.versionUpdateAlert setBackGroundAlphaValue:0.7];
+        [self.versionUpdateAlert setBackGroundAlphaValue:0.3];
         [self.versionUpdateAlert setAlertViewContentAlignment:TextAlignmentStyleLeft];
         
         self.versionBackMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
