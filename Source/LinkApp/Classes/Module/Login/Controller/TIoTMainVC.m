@@ -16,7 +16,8 @@
 @property (nonatomic, strong) UILabel       *welcomeLalel;
 @property (nonatomic, strong) TIoTSingleCustomButton      *registButton;
 @property (nonatomic, strong) UIButton      *loginButton;
-
+@property (nonatomic, strong) UIView        *versionBackMaskView;
+@property (nonatomic, strong) TIoTAlertView *versionUpdateAlert;
 @end
 
 @implementation TIoTMainVC
@@ -30,6 +31,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self versionUpdateAlertView];
     [self firstShowBirthdayView];
 }
 
@@ -150,7 +152,7 @@
                              message:NSLocalizedString(@"register_privacy_policy_conte", nil)
                          cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消")
                            doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
-
+        [tipAlertView setBackGroundAlphaValue:0.0];
         tipAlertView.cancelAction = ^{
             exit(0);
         };
@@ -195,6 +197,53 @@
         UIView *backMaskView = [UIApplication sharedApplication].delegate.window;
         [tipAlertView showInView:backMaskView];
     }
+}
+
+- (void)versionUpdateAlertView {
+    self.versionUpdateAlert = [[TIoTAlertView alloc]initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+    [self.versionUpdateAlert alertWithTitle:@"更新版本" message:@"1. 更新了腾讯连连隐私保护指引；\n2. 修复了部分问题;" cancleTitlt:@"确定" doneTitle:@""];
+    [self.versionUpdateAlert setBackGroundAlphaValue:0.7];
+    [self.versionUpdateAlert setAlertViewContentAlignment:TextAlignmentStyleLeft];
+    
+    self.versionBackMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+    [[UIApplication sharedApplication].delegate.window addSubview:self.versionBackMaskView];
+    self.versionBackMaskView.backgroundColor = [UIColor clearColor];
+    [self.versionUpdateAlert showInView:self.versionBackMaskView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+    [self.versionBackMaskView addGestureRecognizer:tap];
+}
+
+- (void)showOfflineTip
+{
+
+//        __weak typeof(self)WeakSelf = self;
+//    self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+//        [self.tipAlertView alertWithTitle:NSLocalizedString(@"device_offline", @"设备已离线") message:NSLocalizedString(@"device_offline_check", @"请检查：\n1.设备是否有电；\n\n2.设备连接的路由器是否正常工作,网络通畅；\n\n3.是否修改了路由器的名称或密码，可以尝试重新连接；\n\n4.设备是否与路由器距离过远、隔墙或有其他遮挡物。") cancleTitlt:NSLocalizedString(@"q_feedback", @"问题反馈") doneTitle:NSLocalizedString(@"back_home", @"返回首页")];
+//        self.tipAlertView.cancelAction = ^{
+//            UIViewController *vc = [NSClassFromString(@"TIoTFeedBackViewController") new];
+//            [WeakSelf.navigationController pushViewController:vc animated:YES];
+//        };
+//        [self.tipAlertView setAlertViewContentAlignment:TextAlignmentStyleLeft];
+//        self.tipAlertView.doneAction = ^(NSString * _Nonnull text) {
+//            [WeakSelf.navigationController popViewControllerAnimated:YES];
+//            [WeakSelf.backMaskView removeFromSuperview];
+//        };
+//
+//        self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+//        [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+//        [self.tipAlertView showInView:self.backMaskView];
+//
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+//        [self.backMaskView addGestureRecognizer:tap];
+
+}
+
+- (void)hideAlertView {
+    if (self.versionUpdateAlert != nil) {
+        [self.versionUpdateAlert removeFromSuperview];
+    }
+    [self.versionBackMaskView removeFromSuperview];
 }
 
 @end

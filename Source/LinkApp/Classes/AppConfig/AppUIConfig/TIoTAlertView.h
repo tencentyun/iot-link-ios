@@ -35,4 +35,5 @@ typedef NS_ENUM(NSInteger,WCAlertViewStyle) {
 - (void)showInView:(UIView *)superView;
 - (void)setAlertViewContentAlignment:(TextAlignmentStyle)TextAlignmentStyle;
 - (void)showSingleConfrimButton;
+- (void)setBackGroundAlphaValue:(CGFloat)value;
 @end
