@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationReady;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg;
+extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
+
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
 
 /*
@@ -40,15 +45,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
-/*
- * 调试SDK功能可以使用此接口，OEM请使用下面的start xp2pinfo, 以防止sec_id ,sec_key泄露
- */
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name ;
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
+- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
 
 /*
- * OEM 版本推荐使用此接口，sec_id, sec_key 传@""即可。 此接口需传从自建服务获取到的 xp2pinfo
+ * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
  */
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo;
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name;
+
+/*
+ * 此接口慎重：需注意 正式版app发布时候不需要传入secretid和secretkey，避免将这两个参数放置在app中，防止账号泄露，此处仅为演示功能
+ * 此接口只二者选一：传入xp2pinfo 就不需要填写 secretid和secretkey，xp2pinfo可从自建服务获取；
+ * 仅跑通流程的话，可设置 secretid和secretkey 两个参数，xp2pinfo传“”即可
+ */
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo;
 
 /*
  * 使用播放器播放时，需先等待 SDK 初始化完成，ready事件(xp2preconnect 通知)之后，即可获取到 http-url

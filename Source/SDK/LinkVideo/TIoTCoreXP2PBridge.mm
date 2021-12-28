@@ -6,27 +6,34 @@
 
 #import "TIoTCoreXP2PBridge.h"
 #include <string.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
-NSFileHandle *fileHandle;
 
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelOff;
-#endif
+NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
+NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preconnect"; //app本地已ready，表示探测完成，可以发起请求了
+NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PTypeDeviceMsgArrived"; //收到设备端的请求数据
+NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+
+NSFileHandle *p2pOutLogFile;
+NSFileHandle *fileHandle;
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
         return nullptr;
     }
+    NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    NSLog(@"XP2P log: %@\n", message);
     
     if (type == XP2PTypeLog) {
         BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
         if (logEnable) {
-            NSString *nsFormat = [NSString stringWithUTF8String:msg];
-            DDLogInfo(@"%@", nsFormat);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
+            });
         }
-    }else if (type == XP2PTypeSaveFileOn) {
+    }
+    
+    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
+    
+    if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
         return (isWriteFile?"1":"0");
@@ -39,24 +46,37 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         return saveFilePath.UTF8String;
         
     }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
-        DDLogWarn(@"XP2P log: disconnect %s\n", msg);
+        NSLog(@"XP2P log: disconnect %@\n", message);
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSString *DeviceName = [NSString stringWithUTF8String:idd];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2disconnect" object:nil userInfo:@{@"id": DeviceName?:@""}];
-            
+            [p2pOutLogFile synchronizeFile];
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
         });
     }else if (type == XP2PTypeDetectReady) {
+        NSLog(@"XP2P log: ready %@\n", message);
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSString *DeviceName = [NSString stringWithUTF8String:idd];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"xp2preconnect" object:nil userInfo:@{@"id": DeviceName?:@""}];
+            [p2pOutLogFile synchronizeFile];
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:@{@"id": DeviceName}];
         });
     }
-    else {
-        DDLogInfo(@"XP2P log: %s\n", msg);
+    else if (type == XP2PTypeDeviceMsgArrived) {
+        // 设备端向App发消息
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDeviceMsg object:nil userInfo:@{@"id": DeviceName, @"msg": message}];
+        });
     }
-
-//    return (char *)nsFormat.UTF8String;
+    else if (type == XP2PTypeCmdNOReturn) {
+        //设备自定义信令未回复内容
+        NSLog(@"设备自定义信令未回复内容: %@", message);
+    }
+    else if (type == XP2PTypeStreamEnd) {
+        // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
+        });
+    }
+    
     return nullptr;
 }
 
@@ -67,6 +87,15 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     }
 }
 
+char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+//    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+//    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+//        [delegate getVideoPacket:recv_buf len:recv_len];
+//    }
+    return nullptr;
+}
+
+typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
@@ -93,51 +122,63 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 - (instancetype)init {
     self =  [super init];
     if (self) {
-#ifndef DEBUG
-        [TIoTCoreXP2PBridge redirectNSLog];
-#endif
         //默认打开log开关
         _logEnable = YES;
+        
+        NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
+        [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
+        [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
+        p2pOutLogFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
     }
     return self;
 }
 
-+ (void)redirectNSLog {
-    
-    NSString *fileName = @"TTLog.log";
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = paths.firstObject;
-    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-    
-//    [[NSFileManager defaultManager] removeItemAtPath:saveFilePath error:nil];
-
-    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
-    freopen([saveFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-}
-
 
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
-//    setStunServerToXp2p("11.11.11.11", 111);
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
-
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
-    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
-    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     //注册回调
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle);
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    return (XP2PErrCode)startServiceWithXp2pInfo(dev_name.UTF8String, [pro_id UTF8String], [dev_name UTF8String], [xp2pinfo UTF8String]);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
+    return (XP2PErrCode)ret;
+}
+
+
+
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
+//    setStunServerToXp2p("11.11.11.11", 111);
+    //注册回调
+    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
+    
+    //1.配置IOT_P2P SDK
+    self.dev_name = dev_name;
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    return (XP2PErrCode)ret;
+}
+
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo {
+    
+    if (xp2pinfo == nil || [xp2pinfo isEqualToString:@""]) {
+        if ((sec_id == nil || [sec_id isEqualToString:@""])   ||  (sec_key == nil || [sec_key isEqualToString:@""])) {
+            NSLog(@"请输入正确的scretId和secretKey，或者xp2pInfo");
+            return XP2P_ERR_INIT_PRM;
+        }
+        setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候不需要传入secretid和secretkey，避免泄露secretid和secretkey，此处仅为演示
+    }
+    
+    int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
+    return (XP2PErrCode)ret;
 }
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
     const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
-    DDLogInfo(@"httpflv---%s",httpflv);
+    NSLog(@"httpflv---%s",httpflv);
     if (httpflv) {
         return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
     }
@@ -181,6 +222,10 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView {
+    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     self.isSending = YES;
     
@@ -205,13 +250,17 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     systemAvCapture.delegate = nil;
     [systemAvCapture stopCapture];
     
-    return (XP2PErrCode)stopSendService(self.dev_name.UTF8String, nullptr);
+    int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
+    
+    [p2pOutLogFile synchronizeFile];
+    return (XP2PErrCode)errorcode;
 }
 
 - (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
+    [p2pOutLogFile synchronizeFile];
     //关闭文件
     [fileHandle closeFile];
     fileHandle = NULL;
@@ -220,7 +269,7 @@ void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
-        DDLogInfo(@"vide stream data:%s  size:%zu",data,size);
+        NSLog(@"vide stream data:%s  size:%zu",data,size);
         dataSend(self.dev_name.UTF8String, data, size);
         NSData *dataTag = [NSData dataWithBytes:data length:size];
         [fileHandle writeData:dataTag];

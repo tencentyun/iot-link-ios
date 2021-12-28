@@ -4,8 +4,7 @@
 
 typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
     TIoTAVCaptionFLVAudio_8,
-    TIoTAVCaptionFLVAudio_16,
-    TIoTAVCaptionFLVAudio_441
+    TIoTAVCaptionFLVAudio_16
 };
 
 @protocol TIoTAVCaptionFLVDelegate <NSObject>

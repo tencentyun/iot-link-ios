@@ -99,10 +99,10 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
                                                object:nil];
     
 
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                             dev_name:self.selectedModel.DeviceName?:@""];
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.selectedModel.DeviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.selectedModel.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+    
     CFTimeInterval startP2PTime = CACurrentMediaTime();
     self.startP2P = startP2PTime;
     
@@ -115,10 +115,10 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     }
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                             dev_name:DeviceName?:@""];
+    
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 }
 
 - (void)responseP2PConnect:(NSNotification *)notify {

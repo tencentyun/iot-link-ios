@@ -141,7 +141,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [self ratetePortrait];
     
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-    
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
     if (self.playerReloadBlock) {
         self.playerReloadBlock();
     }

@@ -544,10 +544,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
         [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
             if (self.isNVRType == NO) {
-                [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                                          sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                                           pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                                         dev_name:model.DeviceName?:@""];
+                
+                TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+                [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:model.DeviceName?:@""];
+                [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:model.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
             }
         }];
         
@@ -838,10 +838,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 - (void)responseP2PdisConnect:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId
-                                              sec_key:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey
-                                               pro_id:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId
-                                             dev_name:DeviceName?:@""];
+
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 }
 
 - (void)refushVideo:(NSNotification *)notify {
