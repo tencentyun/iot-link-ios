@@ -205,8 +205,11 @@
     bool versionBool = [TIoTAppUtilOC isTheVersion:appVersion laterThanLocalVersion:@"1.5.3"];   //要求在1.5.4 以上
     
     if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isVersionUpdateView] && versionBool) {
+        
+        NSString *tipContent = [NSString stringWithFormat:@"%@\n%@",NSLocalizedString(@"update_private_protect_introduce", @"1. 更新了腾讯连连隐私保护指引"),NSLocalizedString(@"fix_problems", @"2. 修复了部分问题")];
+        
         self.versionUpdateAlert = [[TIoTAlertView alloc]initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
-        [self.versionUpdateAlert alertWithTitle:@"更新版本" message:@"1. 更新了腾讯连连隐私保护指引；\n2. 修复了部分问题;" cancleTitlt:@"确定" doneTitle:@""];
+        [self.versionUpdateAlert alertWithTitle:NSLocalizedString(@"update_version", @"更新版本") message:tipContent cancleTitlt:NSLocalizedString(@"confirm", @"确定") doneTitle:@""];
         self.versionUpdateAlert.cancelAction = ^{
             [TIoTCoreUserManage shared].isVersionUpdateView = @"1";
         };

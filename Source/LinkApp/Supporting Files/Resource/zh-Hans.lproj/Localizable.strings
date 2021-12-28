@@ -963,3 +963,7 @@
 "APPacquireCamera" = "您拒绝使用相机权限，无法使用实时语音/视频通话以及扫描二维码功能";
 "turnon_CameraService" = "前往：设置开启相机服务";
 "netWork_error_retry" = "网络异常，请重试";
+
+"update_version" = "更新版本";
+"update_private_protect_introduce" = "1. 更新了腾讯连连隐私保护指引";
+"fix_problems" = "2. 修复了部分问题";

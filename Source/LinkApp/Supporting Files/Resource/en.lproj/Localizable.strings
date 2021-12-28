@@ -968,3 +968,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "APPacquireCamera" = "You refuse to use the camera permission and cannot use the scan QR code function";
 "turnon_CameraService" = "前往：设置开启相机服务";
 "netWork_error_retry" = "网络异常，请重试";
+
+"update_version" = "更新版本";
+"update_private_protect_introduce" = "1. 更新了腾讯连连隐私保护指引";
+"fix_problems" = "2. 修复了部分问题";
