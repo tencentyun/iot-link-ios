@@ -1,16 +1,13 @@
 /* 
   InfoPlist.strings
   LinkApp
-
-  Created by ccharlesren on 2020/9/24.
-  Copyright © 2020 Tencent. All rights reserved.
 */
 
 CFBundleName = "腾讯连连开源版";
 NSBluetoothAlwaysUsageDescription = "为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
 NSBluetoothPeripheralUsageDescription = "为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
 NSCameraUsageDescription = "为了便于您扫码添加设备、使用拍照功能，因此腾讯连连需获取相机权限";
-NSLocationWhenInUseUsageDescription = "为了获取当前位置的wifi信息，给您提供设备配网功能以及给您提供精确定位服务，便于设置家庭位置获取天气服务，因此腾讯连连需获取位置权限";
+NSLocationWhenInUseUsageDescription = "为了在设备配网时能获取当前位置的WiFi信息，我们需要您开通位置权限；如果您拒绝开通位置权限的，我们将不能获取当前的WIFI信息，可能导致设备配网功能无法使用。如果您需要获取更精准的天气服务，可以选择开通位置权限；如果您拒绝开通位置权限，您也可以通过自行搜索位置实现该位置的天气服务";
 NSPhotoLibraryUsageDescription = "为了便于您可选择本地图片以更换头像，因此腾讯连连需获取相册权限";
 NSMicrophoneUsageDescription = "为了使用设备的实时语音/视频通话功能，因此腾讯连连需 获取摄像头/麦克风权限";
 //NSLocalNetworkUsageDescription = "获取组播权限，用于智能产品配网：";
