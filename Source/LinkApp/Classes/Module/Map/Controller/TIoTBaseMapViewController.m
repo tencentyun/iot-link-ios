@@ -64,6 +64,9 @@
 {
     [super viewDidLoad];
     
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
     [self setupNavigationBar];
     
     [self setupMapView];
@@ -110,7 +113,9 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
-            
+            if (self.delegate && [self.delegate respondsToSelector:@selector(enterforegoundAuthorized)]) {
+                [self.delegate enterforegoundAuthorized];
+            }
         } else {
             [self.locationManager requestWhenInUseAuthorization];
         }
@@ -119,10 +124,25 @@
 
 #pragma mark CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
+//- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+//{
+//    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+//
+//    }
+//    else if (status == kCLAuthorizationStatusNotDetermined)
+//    {
+//        [manager requestWhenInUseAuthorization];
+//    }
+//    else
+//    {
+//        [self showLocationTips];
+//    }
+//}
+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager API_AVAILABLE(ios(14.0), macos(11.0), watchos(7.0), tvos(14.0)) {
+    CLAuthorizationStatus status = [manager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        
+        [self agreeAuthorized];
     }
     else if (status == kCLAuthorizationStatusNotDetermined)
     {
@@ -131,6 +151,13 @@
     else
     {
         [self showLocationTips];
+    }
+}
+
+//通过授权
+- (void)agreeAuthorized {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(agreeLocationAuthorized)]) {
+        [self.delegate agreeLocationAuthorized];
     }
 }
 

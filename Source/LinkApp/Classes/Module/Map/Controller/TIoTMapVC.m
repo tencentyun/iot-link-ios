@@ -29,7 +29,7 @@ static CGFloat const kLocationBtnWidthOrHeight = 60;  //定位按钮宽、高
 static CGFloat const kIntervalHeight = 25;  //定位按钮距离tableview 距离
 static CGFloat const kRightPadding = 0; //定位按钮右边距
 
-@interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,QMSSearchDelegate>
+@interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,QMSSearchDelegate,TIoTBaseMapViewControllerDelegate>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomActionView;
 @property (nonatomic, assign) BOOL isLoaded;
 @property (nonatomic, assign) BOOL isFirstLocatePin;   //首次进入定位大头针判断
@@ -79,6 +79,9 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     
     self.isSearchLocationVCBack = NO;
     self.searchLocationModel = nil;
+    
+    self.delegate = self;
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -88,6 +91,25 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     
 }
 
+- (void)applicationBecomeActive
+{
+    [self setupMapCenter];
+}
+
+#pragma mark - 父类代理
+- (void)agreeLocationAuthorized {
+    [self clickMapCenter];
+}
+
+- (void)enterforegoundAuthorized {
+    [self clickMapCenter];
+}
+
+- (void)clickMapCenter {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setupMapCenter];
+    });
+}
 - (void)setupMapCenter {
     
     [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate];
