@@ -10,13 +10,15 @@
 #import "TIoTSingleCustomButton.h"
 #import "UIButton+LQRelayout.h"
 #import "TIoTOpensourceLicenseViewController.h"
+#import "TIoTAppUtilOC.h"
 
 @interface TIoTMainVC ()
 @property (nonatomic, strong) UIImageView   *headerImage;
 @property (nonatomic, strong) UILabel       *welcomeLalel;
 @property (nonatomic, strong) TIoTSingleCustomButton      *registButton;
 @property (nonatomic, strong) UIButton      *loginButton;
-
+@property (nonatomic, strong) UIView        *versionBackMaskView;
+@property (nonatomic, strong) TIoTAlertView *versionUpdateAlert;
 @end
 
 @implementation TIoTMainVC
@@ -30,6 +32,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self versionUpdateAlertView];
     [self firstShowBirthdayView];
 }
 
@@ -150,7 +153,7 @@
                              message:NSLocalizedString(@"register_privacy_policy_conte", nil)
                          cancleTitlt:NSLocalizedString(@"register_privacy_policy_btn1", @"取消")
                            doneTitle:NSLocalizedString(@"register_privacy_policy_btn2", @"确定")];
-
+        [tipAlertView setBackGroundAlphaValue:0.0];
         tipAlertView.cancelAction = ^{
             exit(0);
         };
@@ -195,6 +198,38 @@
         UIView *backMaskView = [UIApplication sharedApplication].delegate.window;
         [tipAlertView showInView:backMaskView];
     }
+}
+
+- (void)versionUpdateAlertView {
+    
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    bool versionBool = [TIoTAppUtilOC isTheVersion:appVersion laterThanLocalVersion:@"1.5.3"];   //要求在1.5.4 以上
+    
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isVersionUpdateView] && versionBool) {
+        self.versionUpdateAlert = [[TIoTAlertView alloc]initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+        [self.versionUpdateAlert alertWithTitle:@"更新版本" message:@"1. 更新了腾讯连连隐私保护指引；\n2. 修复了部分问题;" cancleTitlt:@"确定" doneTitle:@""];
+        self.versionUpdateAlert.cancelAction = ^{
+            [TIoTCoreUserManage shared].isVersionUpdateView = @"1";
+        };
+        [self.versionUpdateAlert setBackGroundAlphaValue:0.7];
+        [self.versionUpdateAlert setAlertViewContentAlignment:TextAlignmentStyleLeft];
+        
+        self.versionBackMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+        [[UIApplication sharedApplication].delegate.window addSubview:self.versionBackMaskView];
+        self.versionBackMaskView.backgroundColor = [UIColor clearColor];
+        [self.versionUpdateAlert showInView:self.versionBackMaskView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+        [self.versionBackMaskView addGestureRecognizer:tap];
+    }
+}
+
+- (void)hideAlertView {
+    if (self.versionUpdateAlert != nil) {
+        [self.versionUpdateAlert removeFromSuperview];
+    }
+    [self.versionBackMaskView removeFromSuperview];
+    [TIoTCoreUserManage shared].isVersionUpdateView = @"1";
 }
 
 @end

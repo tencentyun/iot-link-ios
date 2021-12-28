@@ -54,6 +54,7 @@
 @synthesize demoAccessID = _demoAccessID;
 @synthesize firmwareUpdate = _firmwareUpdate;
 @synthesize isRreshDeviceList = _isRreshDeviceList;
+@synthesize isVersionUpdateView = _isVersionUpdateView;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -448,6 +449,19 @@
 - (void)setIsShowPricyWechatView:(NSString *)isShowPricyWechatView {
     _isShowPricyWechatView = isShowPricyWechatView;
     [[NSUserDefaults standardUserDefaults] setValue:isShowPricyWechatView forKey:@"isShowPricyWechatView"];
+}
+
+#pragma mark - 首次进入，合规整改更新提示
+- (NSString *)isVersionUpdateView {
+    if (!_isVersionUpdateView) {
+        _isVersionUpdateView = [[NSUserDefaults standardUserDefaults] valueForKey:@"isVersionUpdateView"];
+    }
+    return _isVersionUpdateView;
+}
+
+- (void)setIsVersionUpdateView:(NSString *)isVersionUpdateView {
+    _isVersionUpdateView = isVersionUpdateView;
+    [[NSUserDefaults standardUserDefaults] setValue:isVersionUpdateView forKey:@"isVersionUpdateView"];
 }
 
 #pragma mark - 首次进入APP 添加设备数量

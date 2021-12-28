@@ -520,6 +520,10 @@
     btn.selected = !btn.selected;
 }
 
+- (void)setBackGroundAlphaValue:(CGFloat)value {
+    self.backgroundColor = kRGBAColor(0, 0, 0, value);
+}
+
 #pragma mark uitextViewDelegate
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction{

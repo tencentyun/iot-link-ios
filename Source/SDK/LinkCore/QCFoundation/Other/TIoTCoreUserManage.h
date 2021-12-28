@@ -94,6 +94,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *isShowPricyWechatView;
 
+/**
+ 首次进入，合规整改更新提示
+ */
+@property (nonatomic, copy, nullable) NSString *isVersionUpdateView;
+
 /*
  保存首次进入APP 设备
  */
