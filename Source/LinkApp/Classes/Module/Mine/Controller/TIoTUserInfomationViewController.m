@@ -30,6 +30,7 @@
 #import "TIoTExportPrintLogManager.h"
 #import "TIoTPrintLogManager.h"
 #import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
 
 static CGFloat const kLeftPadding = 16; //左边距
 static CGFloat const kRightPadding = 16; //右边距
@@ -295,8 +296,8 @@ static CGFloat const kRightPadding = 16; //右边距
         AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
         if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
             
-            NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_CameraService", @"前往：设置开启定位服务")];
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireCamera", @"App需要访问您的位置用于获取Wi-Fi信息") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+            NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_CameraService", @"前往：设置开启相机服务")];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"APPacquireCamera", @"您拒绝使用相机权限，无法使用实时语音/视频通话以及扫描二维码功能") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
             UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
                     if (success) {
@@ -315,19 +316,69 @@ static CGFloat const kRightPadding = 16; //右边距
         }
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             self.picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:self.picker animated:YES completion:nil];
         }
         else{
             [MBProgressHUD showError:NSLocalizedString(@"camera_openFailure", @"相机打开失败")];
             return;
         }
+    } else{
+         
+        BOOL isAuth = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+        if (!isAuth) return;
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) { //弹出访问权限提示框
+            if (status == PHAuthorizationStatusAuthorized) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    //同意授权
+                    [self accessPhotoAlbum];
+                    
+                });
+            }if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusNotDetermined) {
+                //未授权
+                [self alertAccessPhotoAlbum];
+            }if (status == PHAuthorizationStatusDenied) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    //拒绝授权
+                    [self alertAccessPhotoAlbum];
+                });
+            }else {
+                if (@available(iOS 14, *)) {
+                    if (status == PHAuthorizationStatusLimited) {
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            //权限只在 accessLevel 为 PHAccessLevelReadWrite 时生效
+                        });
+                    }
+                }
+            }
+        }];
     }
-    else{
-        self.picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        self.picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    }
+}
+//访问相册
+- (void)accessPhotoAlbum {
+    self.picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    self.picker.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:self.picker animated:YES completion:nil];
 }
 
+- (void)alertAccessPhotoAlbum {
+    
+    NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"turnon_photo_authorization", @"前往：设置开启相册授权")];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"access_photo_update_avatar", @"App需要访问您的相册用于上传头像") message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                DDLogVerbose(@"成功");
+            }
+            else
+            {
+                DDLogVerbose(@"失败");
+            }
+        }];
+    }];
+    
+    [alertC addAction:alertA];
+    [self presentViewController:alertC animated:YES completion:nil];
+}
 //绑定手机号
 - (void)bindPhone{
     TIoTBindPhoneViewController *vc = [[TIoTBindPhoneViewController alloc] init];

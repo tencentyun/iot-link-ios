@@ -968,3 +968,5 @@
 "update_private_protect_introduce" = "1. 更新了腾讯连连隐私保护指引";
 "fix_problems" = "2. 修复了部分问题";
 "content_copy_success" = "内容已复制";
+"access_photo_update_avatar" = "App需要访问您的相册用于上传头像";
+"turnon_photo_authorization" = "前往：设置开启相册授权";
