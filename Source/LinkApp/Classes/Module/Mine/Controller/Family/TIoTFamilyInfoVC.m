@@ -12,17 +12,20 @@
 #import "TIoTSingleCustomButton.h"
 #import "TIoTModifyNameVC.h"
 #import "TIoTMapVC.h"
+#import <CoreLocation/CoreLocation.h>
 
 static NSString *headerId = @"pf99";
 static NSString *footerId = @"pfwer";
 static NSString *itemId = @"pfrrr";
 static NSString *itemId2 = @"pfDDD";
 
-@interface TIoTFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface TIoTFamilyInfoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *coll;
 
 @property (nonatomic,strong) NSMutableArray *dataArr;
 @property (nonatomic, strong) UIView *backMaskView;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, assign) BOOL isLocationAuthorized;
 @end
 
 @implementation TIoTFamilyInfoVC
@@ -32,6 +35,12 @@ static NSString *itemId2 = @"pfDDD";
     // Do any additional setup after loading the view from its nib.
     
     [HXYNotice addUpdateMemberListListener:self reaction:@selector(getMemberList)];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.isLocationAuthorized = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [self setupUI];
 }
@@ -55,6 +64,49 @@ static NSString *itemId2 = @"pfDDD";
     [self.coll registerNib:[UINib nibWithNibName:@"TIoTFamilyMemberCell" bundle:nil] forCellWithReuseIdentifier:itemId2];
 }
 
+- (void)applicationwillenterforegound
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+            //同意授权
+            self.isLocationAuthorized = YES;
+        } else {
+            //不同意
+//            [self.locationManager requestWhenInUseAuthorization];
+            self.isLocationAuthorized = NO;
+            [self clearAddress];
+        }
+    });
+}
+
+#pragma mark CLLocationManagerDelegate
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager API_AVAILABLE(ios(14.0), macos(11.0), watchos(7.0), tvos(14.0)) {
+    CLAuthorizationStatus status = [manager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        //同意授权
+        self.isLocationAuthorized = YES;
+    }
+    else if (status == kCLAuthorizationStatusNotDetermined)
+    {
+        //没有授权
+//        [manager requestWhenInUseAuthorization];
+        self.isLocationAuthorized = NO;
+        [self clearAddress];
+    }
+    else
+    {
+        //拒绝授权
+        self.isLocationAuthorized = NO;
+        [self clearAddress];
+    }
+}
+
+- (void)clearAddress {
+    NSMutableDictionary *addressDic = self.dataArr[0][2];
+    [addressDic setValue:NSLocalizedString(@"setting_family_address", @"设置位置") forKey:@"addresJson"];
+}
+
 #pragma mark - request
 
 - (void)getFamilyInfo {
@@ -68,6 +120,9 @@ static NSString *itemId2 = @"pfDDD";
             
             [addressDic setValue:addDic[@"title"]?:@"" forKey:@"name"];
             [addressDic setValue:addressString forKey:@"addresJson"];
+            if (self.isLocationAuthorized == NO) {
+                [addressDic setValue:NSLocalizedString(@"setting_family_address", @"设置位置") forKey:@"addresJson"];
+            }
         }
         //刷新
         [self.coll reloadData];
@@ -148,7 +203,11 @@ static NSString *itemId2 = @"pfDDD";
         [tempDic setValue:title forKey:@"name"];
         [tempDic setValue:addJson forKey:@"addresJson"];
         
-        [self.coll reloadData];
+        if (self.isLocationAuthorized == NO) {
+            [tempDic setValue:NSLocalizedString(@"setting_family_address", @"设置位置") forKey:@"addresJson"];
+        }
+        
+        [self.coll reloadData]; 
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
         
     }];
