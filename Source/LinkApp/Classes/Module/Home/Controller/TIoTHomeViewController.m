@@ -39,12 +39,14 @@
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTP2PCommunicateUIManage.h"
 
+#import <CoreLocation/CoreLocation.h>
+
 @import Lottie;
 
 static CGFloat weatherHeight = 10;
 static CGFloat kHeaderViewHeight = 162;
 
-@interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate>
+@interface TIoTHomeViewController ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate,UIPopoverPresentationControllerDelegate,CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UITableView *devicesTableView;
 @property (nonatomic, strong) NSMutableArray *devicesArray; //一般设备原始数据拆分后的数组
@@ -100,6 +102,8 @@ static CGFloat kHeaderViewHeight = 162;
 @property (nonatomic, assign) CGFloat tableViewScrollOffset; // tableView偏移量
 @property (nonatomic, assign) CGFloat weatherScrollOffsetY; //天气view便宜量
 @property (nonatomic, assign) BOOL isRefreshRoomList;    //修改房间后判断是否要刷新房间列表
+
+@property (nonatomic, strong) CLLocationManager *locationManager; 
 @end
 
 @implementation TIoTHomeViewController
@@ -152,6 +156,7 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (void)dealloc{
     [HXYNotice removeListener:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidLoad {
@@ -167,6 +172,31 @@ static CGFloat kHeaderViewHeight = 162;
     
     [self registFeedBackRouterController];
     
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    [self requestAudioAuthorization];
+}
+
+#pragma mark - 请求麦克风和摄像头权限
+- (void)requestAudioAuthorization {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (authStatus == AVAuthorizationStatusNotDetermined) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio
+                                 completionHandler:^(BOOL granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (granted) {
+                    //同意授权
+                } else {
+                    //拒绝授权
+                }
+            });
+        }];
+    } else if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+        //拒绝授权
+    } else if (authStatus == AVAuthorizationStatusAuthorized) {
+        //同意授权
+    }
 }
 
 #pragma mark - Other
@@ -203,6 +233,8 @@ static CGFloat kHeaderViewHeight = 162;
     [HXYNotice addAPPEnterForegroundLister:self reaction:@selector(appEnterForeground)];
     
     [HXYNotice addReceiveShareDeviceLister:self reaction:@selector(getSharedDevicesList)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)appEnterForeground {
@@ -245,6 +277,29 @@ static CGFloat kHeaderViewHeight = 162;
     return nil;
 }
 
+
+- (void)applicationwillenterforegound {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+            
+        } else {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+    });
+}
+#pragma mark CLLocationManagerDelegate
+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager API_AVAILABLE(ios(14.0), macos(11.0), watchos(7.0), tvos(14.0)) {
+    CLAuthorizationStatus status = [manager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        
+    }else if (status == kCLAuthorizationStatusNotDetermined) {
+        [manager requestWhenInUseAuthorization];
+    }else {
+        //提示语弹框
+    }
+}
 /**  集成刷新控件 */
 - (void)setupRefreshView
 {
