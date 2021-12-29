@@ -23,6 +23,15 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 客户端拉取到的裸流数据对应 data 参数
  */
 - (void)getVideoPacket:(uint8_t *)data len:(size_t)len;
+
+
+/*
+ * 设备主动发消息给app:
+ * dev_name 和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
+ * data是设备主动发过来的内容
+ * 需注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
+ */
+- (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
 @end
 
 
