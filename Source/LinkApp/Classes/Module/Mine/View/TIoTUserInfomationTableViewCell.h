@@ -7,6 +7,11 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol TIoTUserInfomationTableViewCellDelegate <NSObject>
+
+- (void)clickCopyUserid;
+
+@end
 
 static NSString * const ID = @"TIoTUserInfomationTableViewCell";
 
@@ -17,7 +22,7 @@ static NSString * const ID = @"TIoTUserInfomationTableViewCell";
 
 @property (nonatomic, strong) UISwitch *arrowSwitch;
 @property (nonatomic) void (^authSwitch)(BOOL open);
-
+@property (nonatomic, weak)id<TIoTUserInfomationTableViewCellDelegate>delegate;
 @end
 
 NS_ASSUME_NONNULL_END

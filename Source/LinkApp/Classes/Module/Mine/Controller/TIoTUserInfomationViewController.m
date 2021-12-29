@@ -34,7 +34,7 @@
 static CGFloat const kLeftPadding = 16; //左边距
 static CGFloat const kRightPadding = 16; //右边距
 
-@interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface TIoTUserInfomationViewController ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,TIoTUserInfomationTableViewCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -463,6 +463,9 @@ static CGFloat const kRightPadding = 16; //右边距
     
     //国际化版本
     TIoTUserInfomationTableViewCell *cell = [TIoTUserInfomationTableViewCell cellWithTableView:tableView];
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        cell.delegate = self;
+    }
     cell.dic = self.dataArr[indexPath.section][indexPath.row];
     return cell;
 }
@@ -603,7 +606,7 @@ static CGFloat const kRightPadding = 16; //右边距
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     //国际化版本
-    if (indexPath.section == 0 && indexPath.row == 2) {
+    if (indexPath.section == 0 && indexPath.row == 0) {
         return YES;
     }else {
         return NO;
@@ -629,7 +632,16 @@ static CGFloat const kRightPadding = 16; //右边距
         UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
         NSString *userID = [TIoTCoreUserManage shared].userId;
         pastboard.string = (userID != nil ? userID : @"");
+        [MBProgressHUD showSuccess:NSLocalizedString(@"content_copy_success", @"内容已复制")];
     }
+}
+
+#pragma mark - cell delegate
+- (void)clickCopyUserid {
+    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+    NSString *userID = [TIoTCoreUserManage shared].userId;
+    pastboard.string = (userID != nil ? userID : @"");
+    [MBProgressHUD showSuccess:NSLocalizedString(@"content_copy_success", @"内容已复制")];
 }
 
 #pragma mark - UIImagePickerControllerDelegate && UINavigationControllerDelegate
@@ -718,7 +730,7 @@ static CGFloat const kRightPadding = 16; //右边距
         
         //国际化版本
         _dataArr = [NSMutableArray arrayWithArray:@[
-            @[@{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"0"},
+            @[@{@"title":NSLocalizedString(@"user_ID", @"用户ID"),@"value":[TIoTCoreUserManage shared].userId!=nil?[TIoTCoreUserManage shared].userId:@"",@"vc":@"",@"haveArrow":@"3"},
               @{@"title":NSLocalizedString(@"avatar", @"头像"),@"value":@"",@"vc":@"",@"haveArrow":@"1",@"Avatar":@"icon-avatar_man"},
               [NSMutableDictionary dictionaryWithDictionary:@{@"title":NSLocalizedString(@"nick", @"昵称"),@"value":[TIoTCoreUserManage shared].nickName?:@"",@"vc":@"",@"haveArrow":@"1"}],
             ],

@@ -109,6 +109,17 @@
     }else if ([dic[@"haveArrow"] isEqualToString:@"2"]) {
         self.arrowImageView.hidden = YES;
         self.arrowSwitch.hidden = NO;
+    }else if ([dic[@"haveArrow"] isEqualToString:@"3"]) {  //个人信息页面用户ID copy图标
+        self.arrowImageView.hidden = NO;
+        self.arrowImageView.image = [UIImage imageNamed:@"copy_userid"];
+        [self.arrowImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.titleLab);
+            make.right.equalTo(self.contentView).offset(-16);
+            make.height.width.mas_equalTo(22);
+        }];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(copyUserid)];
+        [self.arrowImageView addGestureRecognizer:tap];
+        self.arrowImageView.userInteractionEnabled = YES;
     }
     else{
         self.arrowImageView.hidden = YES;
@@ -128,6 +139,12 @@
     
     if ([dic[@"title"]?:@"" isEqualToString: NSLocalizedString(@"user_ID", @"用户ID")]) {
         self.valueLab.textColor = [UIColor colorWithHexString:kRegionHexColor];
+    }
+}
+
+- (void)copyUserid {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(clickCopyUserid)]) {
+        [self.delegate clickCopyUserid];
     }
 }
 
