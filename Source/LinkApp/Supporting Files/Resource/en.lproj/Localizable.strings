@@ -972,3 +972,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "update_version" = "更新版本";
 "update_private_protect_introduce" = "1. 更新了腾讯连连隐私保护指引";
 "fix_problems" = "2. 修复了部分问题";
+"content_copy_success" = "内容已复制";
