@@ -886,6 +886,11 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 
 - (void)loginSure {
     
+    if (!self.procolBtn.selected) {
+        [MBProgressHUD showError:NSLocalizedString(@"agree_userAgreement_privacyPolicy", @"请同意用户协议和隐私协议后才能登录")];
+        return;
+    }
+    
     [self savePhoneOrEmailAccount];
     
     NSDictionary *tmpDic = nil;
