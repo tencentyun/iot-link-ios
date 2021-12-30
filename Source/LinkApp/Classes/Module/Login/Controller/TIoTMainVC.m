@@ -202,7 +202,11 @@
 - (void)versionUpdateAlertView {
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    bool versionBool = [TIoTAppUtilOC isTheVersion:appVersion laterThanLocalVersion:@"1.5.3"];   //要求在1.5.4 以上
+    bool versionBool = NO;
+    ////要求在1.5.4 以上 或持续集成版
+    if ([TIoTAppUtilOC isTheVersion:appVersion laterThanLocalVersion:@"1.5.3"] || [appVersion containsString:@"master+git"]) {
+        versionBool = YES;
+    }
     
     if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isVersionUpdateView] && versionBool) {
         
