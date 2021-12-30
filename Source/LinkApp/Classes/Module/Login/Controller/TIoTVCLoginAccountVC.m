@@ -1169,11 +1169,11 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 }
 -(void)changedTextField:(UITextField *)textField {
     
-    if (!self.procolBtn.selected) {
-        self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
-        self.loginAccountButton.enabled = NO;
-        return;
-    }
+//    if (!self.procolBtn.selected) {
+//        self.loginAccountButton.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+//        self.loginAccountButton.enabled = NO;
+//        return;
+//    }
     
     if (self.loginStyle == YES) {    //验证码登录
 
