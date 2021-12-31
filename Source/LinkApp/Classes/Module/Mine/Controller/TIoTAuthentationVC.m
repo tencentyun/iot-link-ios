@@ -13,6 +13,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSMutableArray *dataArr;
 @property (nonatomic, strong) CBCentralManager *centralManager; //判断蓝牙是否开启
+@property (nonatomic, strong) TIoTAlertView *blueAuthorizationAlert;
+@property (nonatomic, strong) UIView *maskView;
 /// 蓝牙是否可用
 @property (nonatomic, assign) BOOL bluetoothAvailable;
 @end
@@ -33,6 +35,7 @@
     
     //判断蓝牙是否开启
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+    
 }
 
 - (void)applicationwillenterforegound
@@ -87,6 +90,11 @@
     }else if (indexPath.section == 2) {
         cell.arrowSwitch.on = [self audioAuthority];
     }else if (indexPath.section == 3) {
+        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isBluetooth] || ([[TIoTCoreUserManage shared].isBluetooth isEqualToString:@"0"])) {
+            self.bluetoothAvailable = false;
+        }else {
+            self.bluetoothAvailable = true;
+        }
         cell.arrowSwitch.on = self.bluetoothAvailable;
     }
     
@@ -192,7 +200,7 @@
     if (isLocation) {
         
         CLAuthorizationStatus CLstatus = [CLLocationManager authorizationStatus];
-        if (CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusDenied) {
+        if (CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusNotDetermined) {
             return NO;
         }
         
@@ -204,7 +212,7 @@
 
 - (BOOL)audioAuthority {
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusNotDetermined) {
         return NO;
     }
     return YES;
@@ -212,22 +220,102 @@
 
 #pragma mark - 判断蓝牙是否开启代理
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
-    switch (central.state) {
-        case CBManagerStatePoweredOn:
-            self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
-        case CBManagerStateUnknown:
-            self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
-        case CBManagerStateResetting:
-            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
-        case CBManagerStateUnsupported:
-            self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
-        case CBManagerStatePoweredOff:
-            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
-        case CBManagerStateUnauthorized:
-            self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
-        default:  break;
+    
+    if (@available (iOS 13.0, *)) {
+        [self requestBluetoothAuthorization:central];
+    }else {
+        switch (central.state) {
+            case CBManagerStatePoweredOn:
+                [TIoTCoreUserManage shared].isBluetooth = @"1";
+                self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
+            case CBManagerStateUnknown:
+                self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
+            case CBManagerStateResetting:
+                self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
+            case CBManagerStateUnsupported:
+                self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
+            case CBManagerStatePoweredOff:
+                if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isBluetooth] || ![[TIoTCoreUserManage shared].isBluetooth isEqualToString:@"1"]) {
+                    [self jumpSettingBluetoothAuthorization];
+                }
+                self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
+            case CBManagerStateUnauthorized:
+                if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isBluetooth] || ![[TIoTCoreUserManage shared].isBluetooth isEqualToString:@"1"]) {
+                    [self jumpSettingBluetoothAuthorization];
+                }
+                self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
+            default:  break;
+        }
     }
+
     
     [self.tableView reloadData];
 }
+
+- (void)hideAlertView {
+    if (self.blueAuthorizationAlert != nil) {
+        [self.blueAuthorizationAlert removeFromSuperview];
+    }
+    [self.maskView removeFromSuperview];
+}
+
+
+- (void)requestBluetoothAuthorization:(CBCentralManager *)central {
+
+    if (@available (iOS 13.0, *)) {
+        CBManagerAuthorization authStatus = central.authorization;
+        if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isBluetooth] || ([[TIoTCoreUserManage shared].isBluetooth isEqualToString:@"0"] && authStatus != CBManagerAuthorizationAllowedAlways)) {
+            [self jumpSettingBluetoothAuthorization];
+            
+        }else {
+            if (authStatus == CBManagerAuthorizationNotDetermined) {
+                [TIoTCoreUserManage shared].isBluetooth = @"0";
+                [self jumpSettingBluetoothAuthorization];
+            } else if (authStatus == CBManagerAuthorizationDenied || authStatus == CBManagerAuthorizationRestricted) {
+                //拒绝授权
+                [TIoTCoreUserManage shared].isBluetooth = @"0";
+                [self jumpSettingBluetoothAuthorization];
+            } else if (authStatus == CBManagerAuthorizationAllowedAlways) {
+                //同意授权
+                [TIoTCoreUserManage shared].isBluetooth = @"1";
+            }
+        }
+    }
+}
+
+//自定义蓝牙权限弹框警告
+- (void)jumpSettingBluetoothAuthorization {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
+    if (app_Name == nil) {
+        app_Name = [infoDict objectForKey:@"CFBundleName"];
+    }
+    
+    NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"access_bluetooth_intro", @"请前往设置开启蓝牙功能,为了便于您访问蓝牙设备,因此腾讯连连需获取蓝牙权限")];
+    NSString *titleString = [NSString stringWithFormat:@"\"%@\"%@",app_Name,NSLocalizedString(@"would_lick_access_bluetooth", @"想访问蓝牙")];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:titleString message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+    
+    UIAlertAction *alertCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        [TIoTCoreUserManage shared].isBluetooth = @"0";
+    }];
+    [alertC addAction:alertCancel];
+    
+    UIAlertAction *alertConfirm = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                DDLogVerbose(@"成功");
+                [TIoTCoreUserManage shared].isBluetooth = @"1";
+            }
+            else
+            {
+                DDLogVerbose(@"失败");
+                [TIoTCoreUserManage shared].isBluetooth = @"0";
+            }
+        }];
+    }];
+    [alertC addAction:alertConfirm];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
+}
+
 @end

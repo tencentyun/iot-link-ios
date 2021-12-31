@@ -976,3 +976,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "access_photo_update_avatar" = "App需要访问您的相册用于上传头像";
 "turnon_photo_authorization" = "前往：设置开启相册授权";
 "agree_userAgreement_privacyPolicy" = "请同意用户协议和隐私协议后才能登录";
+"authorization_access_microphone" = "为了使用设备的实时语音/视频通话功能，因此腾讯连连需 获取摄像头/麦克风权限";
+"Would_like_access_microphone" = "Would Like to Access the Microphone";
+"access_bluetooth_intro" = "Trun on Bluetooth to scan for hardware";
+"would_lick_access_bluetooth" = "Would Like to Use Bluetooth";

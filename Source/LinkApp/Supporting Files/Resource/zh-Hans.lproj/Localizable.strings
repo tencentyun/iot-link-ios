@@ -971,3 +971,7 @@
 "access_photo_update_avatar" = "App需要访问您的相册用于上传头像";
 "turnon_photo_authorization" = "前往：设置开启相册授权";
 "agree_userAgreement_privacyPolicy" = "请同意用户协议和隐私协议后才能登录";
+"authorization_access_microphone" = "为了使用设备的实时语音/视频通话功能，因此腾讯连连需 获取摄像头/麦克风权限";
+"Would_like_access_microphone" = "想访问您的麦克风";
+"access_bluetooth_intro" = "请前往设置开启蓝牙功能,为了便于您访问蓝牙设备,因此腾讯连连需获取蓝牙权限";
+"would_lick_access_bluetooth" = "想要使用蓝牙";

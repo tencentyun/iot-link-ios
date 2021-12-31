@@ -180,25 +180,60 @@ static CGFloat kHeaderViewHeight = 162;
 
 #pragma mark - 请求麦克风和摄像头权限
 - (void)requestAudioAuthorization {
+    
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    if (authStatus == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio
-                                 completionHandler:^(BOOL granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (granted) {
-                    //同意授权
-                } else {
-                    //拒绝授权
-                }
-            });
-        }];
-    } else if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
-        //拒绝授权
-    } else if (authStatus == AVAuthorizationStatusAuthorized) {
-        //同意授权
+    
+    if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isMicrophone] || ![[TIoTCoreUserManage shared].isMicrophone isEqualToString:@"1"]) {
+        [self jumpSettingMicAuthorization];
+    }else {
+        if (authStatus == AVAuthorizationStatusNotDetermined) {
+            [TIoTCoreUserManage shared].isMicrophone = @"0";
+            [self jumpSettingMicAuthorization];
+        } else if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+            //拒绝授权
+            [TIoTCoreUserManage shared].isMicrophone = @"0";
+            [self jumpSettingMicAuthorization];
+        } else if (authStatus == AVAuthorizationStatusAuthorized) {
+            //同意授权
+            [TIoTCoreUserManage shared].isMicrophone = @"1";
+        }
     }
 }
 
+//自定义麦克风权限弹框警告
+- (void)jumpSettingMicAuthorization {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
+    if (app_Name == nil) {
+        app_Name = [infoDict objectForKey:@"CFBundleName"];
+    }
+    
+    NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"authorization_access_microphone", @"为了使用设备的实时语音/视频通话功能，因此腾讯连连需 获取摄像头/麦克风权限")];
+    NSString *titleString = [NSString stringWithFormat:@"\"%@\"%@",app_Name,NSLocalizedString(@"Would_like_access_microphone", @"想访问您的麦克风")];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:titleString message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+    
+    UIAlertAction *alertCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        [TIoTCoreUserManage shared].isMicrophone = @"0";
+    }];
+    [alertC addAction:alertCancel];
+    
+    UIAlertAction *alertConfirm = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                DDLogVerbose(@"成功");
+                [TIoTCoreUserManage shared].isMicrophone = @"1";
+            }
+            else
+            {
+                DDLogVerbose(@"失败");
+                [TIoTCoreUserManage shared].isMicrophone = @"0";
+            }
+        }];
+    }];
+    [alertC addAction:alertConfirm];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
+}
 #pragma mark - Other
 - (void)usserAgreeAuthorsize {
     TIoTAlertAuthorsizeView *customView = [[TIoTAlertAuthorsizeView alloc]init];

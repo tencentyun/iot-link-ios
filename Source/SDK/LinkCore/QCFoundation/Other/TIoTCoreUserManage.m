@@ -55,6 +55,8 @@
 @synthesize firmwareUpdate = _firmwareUpdate;
 @synthesize isRreshDeviceList = _isRreshDeviceList;
 @synthesize isVersionUpdateView = _isVersionUpdateView;
+@synthesize isBluetooth = _isBluetooth;
+@synthesize isMicrophone = _isMicrophone;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -587,6 +589,31 @@
 - (void)setFamilyType:(NSInteger)FamilyType {
     _FamilyType = FamilyType;
     [[NSUserDefaults standardUserDefaults] setValue:@(FamilyType) forKey:@"FamilyType"];
+}
+
+#pragma mark - 麦克风 蓝牙 权限判断
+- (NSString *)isBluetooth {
+    if (!_isBluetooth) {
+        _isBluetooth = [[NSUserDefaults standardUserDefaults] valueForKey:@"isBluetooth"];
+    }
+    return _isBluetooth;
+}
+
+- (void)setIsBluetooth:(NSString *)isBluetooth {
+    _isBluetooth = isBluetooth;
+    [[NSUserDefaults standardUserDefaults] setValue:isBluetooth forKey:@"isBluetooth"];
+}
+
+- (NSString *)isMicrophone {
+    if (!_isMicrophone) {
+        _isMicrophone = [[NSUserDefaults standardUserDefaults] valueForKey:@"isMicrophone"];
+    }
+    return _isMicrophone;
+}
+
+- (void)setIsMicrophone:(NSString *)isMicrophone {
+    _isMicrophone = isMicrophone;
+    [[NSUserDefaults standardUserDefaults] setValue:isMicrophone forKey:@"isMicrophone"];
 }
 
 #pragma mark - SDKDemo

@@ -61,6 +61,16 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, copy, nullable) NSString *login_PhoneEmail_Text;            //登录页面 手机/邮箱
 
 /**
+ 麦克风权限
+ */
+@property (nonatomic, copy, nullable) NSString *isMicrophone; //麦克风权限
+
+/**
+ 蓝牙权限
+ */
+@property (nonatomic, copy, nullable) NSString *isBluetooth; //蓝牙权限
+
+/**
  首次进入，选择生日日期
  */
 
