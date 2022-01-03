@@ -20,6 +20,10 @@ class TIoTDeviceDataModel: TIoTBaseModel {
     var _sys_audio_call_status: TIoTDeviceValueModel?
     var _sys_video_call_status: TIoTDeviceValueModel?
     var _sys_userid: TIoTDeviceValueModel?
+    var _sys_caller_id: TIoTDeviceValueModel?
+    var _sys_called_id: TIoTDeviceValueModel?
+    
+    
     
     class func modelContainerPropertyGenericClass() -> [String: AnyObject]? {
         return ["brightness": TIoTDeviceValueModel.classForCoder(),

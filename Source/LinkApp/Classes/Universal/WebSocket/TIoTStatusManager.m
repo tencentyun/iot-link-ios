@@ -36,6 +36,8 @@
 @property (nonatomic, strong, readwrite) NSString *deviceIDTempStr;
 @property (nonatomic, assign, readwrite) TIoTTRTCSessionCallType preCallingType;
 @property (nonatomic, assign) BOOL isCommunicating; //被叫和主叫 yes:进入房间(拉起页面或通话中) no:退出房间后
+@property (nonatomic, copy) NSString *caller_id; //用于保存正在通话或呼叫中的callerID
+@property (nonatomic, copy) NSString *called_id; //用于保存正在通话或呼叫中的calledID
 @end
 
 @implementation TIoTStatusManager
@@ -102,6 +104,8 @@
     
     //1.先启动UI，再根据UI选择决定是否走calldevice逻辑
 //    [self isActiveCalling:deviceParam.deviceName];
+    self.caller_id = deviceParam._sys_caller_id?:@"";
+    self.caller_id = deviceParam._sys_called_id?:@"";
     [self isActiveCalling:deviceParam];
 }
 
@@ -234,11 +238,11 @@
                         [self refuseAppCallingOrCalledEnterRoom];
                     }
                     */
-                    
+                    if ([self.called_id isEqualToString:deviceParam._sys_called_id]) {
                     if ([self.delegate respondsToSelector:@selector(audioActiveCallSessionNoCallingStatus)]) {
                         [self.delegate audioActiveCallSessionNoCallingStatus];
                     }
-                    
+                    }
                 }else {
 //                    [_callAudioVC beHungUp];
                     
@@ -259,7 +263,7 @@
                 if (TIoTTRTCSessionCallType_audio == type && self.isCommunicating == YES) {
 //                    [self exitRoom:deviceParam._sys_userid];
                     
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid]) {
+                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
                             [self.delegate didExitRoom:deviceParam._sys_userid];
@@ -267,7 +271,7 @@
                         [self settingExitRoom:deviceParam._sys_userid];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
-                        if (![NSString isNullOrNilWithObject:idString]) {
+                        if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id] ) {
 //                            [self exitRoom:idString];
                             
                             if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
@@ -276,10 +280,10 @@
                             [self settingExitRoom:idString];
                         }else {
                             //保底
-                            if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                                [self.delegate didExitRoom:deviceParam._sys_userid];
-                            }
-                            [self settingExitRoom:deviceParam._sys_userid];
+//                            if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
+//                                [self.delegate didExitRoom:deviceParam._sys_userid];
+//                            }
+//                            [self settingExitRoom:deviceParam._sys_userid];
                         }
                     }
                 }
@@ -363,10 +367,13 @@
                         [self refuseAppCallingOrCalledEnterRoom];
                     }
                      */
+                    
+                    if ([self.called_id isEqualToString:deviceParam._sys_called_id]) {
+                    
                     if ([self.delegate respondsToSelector:@selector(videoActiveCallSessionNoCallingStatus)]) {
                         [self.delegate videoActiveCallSessionNoCallingStatus];
                     }
-                    
+                    }
                 }else {
 //                    [_callVideoVC beHungUp];
                     if ([self.delegate respondsToSelector:@selector(videoVCBeHungup)]) {
@@ -385,7 +392,7 @@
                 if (TIoTTRTCSessionCallType_video == type && self.isCommunicating == YES) {
                     
 //                    [self exitRoom:deviceParam._sys_userid];
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid]) {
+                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
                             [self.delegate didExitRoom:deviceParam._sys_userid];
@@ -393,7 +400,7 @@
                         [self settingExitRoom:deviceParam._sys_userid];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
-                        if (![NSString isNullOrNilWithObject:idString]) {
+                        if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                            [self exitRoom:idString];
                             
                             if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
@@ -401,11 +408,11 @@
                             }
                             [self settingExitRoom:idString];
                         }else {
-                            //保底
-                            if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                                [self.delegate didExitRoom:deviceParam._sys_userid];
-                            }
-                            [self settingExitRoom:deviceParam._sys_userid];
+//                            //保底
+//                            if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
+//                                [self.delegate didExitRoom:deviceParam._sys_userid];
+//                            }
+//                            [self settingExitRoom:deviceParam._sys_userid];
                         }
                     }
                 }
@@ -589,7 +596,7 @@
     [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
      */
     //视频通话APP主动挂断后 减少一次"提示"
-    self.isCommunicating = NO;
+//    self.isCommunicating = NO;
     
     if ([self.delegate respondsToSelector:@selector(statusManagerRefuseOtherCallWithDeviceReport:deviceID:)]) {
         [self.delegate statusManagerRefuseOtherCallWithDeviceReport:reportDic deviceID:deviceID];
@@ -598,7 +605,7 @@
 
 - (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     //视频通话APP主动挂断后 减少一次"提示"
-    self.isCommunicating = NO;
+//    self.isCommunicating = NO;
     
     if ([self.delegate respondsToSelector:@selector(statusManagerrequestControlDeviceDataWithReport:deviceID:)]) {
         [self.delegate statusManagerrequestControlDeviceDataWithReport:reportDic deviceID:deviceID];
@@ -979,6 +986,15 @@
 //        _callVideoVC.actionDelegate = self;
 //        _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
 //        [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:^{}];
+    }
+    
+    if (deviceDic) {
+        if ([deviceDic.allKeys containsObject:@"_sys_caller_id"]) {
+            self.caller_id = deviceDic[@"_sys_caller_id"];
+        }
+        if ([deviceDic.allKeys containsObject:@"_sys_called_id"]) {
+            self.called_id = deviceDic[@"_sys_called_id"];
+        }
     }
     
     if ([self.delegate respondsToSelector:@selector(statusManagerPayloadParamModel:type:isFromReceived:reportDeviceDic:deviceID:)]) {
