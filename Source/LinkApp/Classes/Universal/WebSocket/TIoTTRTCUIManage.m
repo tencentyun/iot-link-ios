@@ -602,7 +602,7 @@
         tmpDic = @{
             @"ProductId":productID,
             @"DeviceName":deviceName,
-            @"Data":[NSString objectToJson:trtcReport]?:@""};
+            @"Data":[NSString objectToJson:dataDic]?:@""};
     
 //    }else {
 //        //P2P Video
