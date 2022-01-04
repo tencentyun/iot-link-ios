@@ -976,3 +976,5 @@ If the problem still persists, we recommend you remove the device and add it aga
 "access_photo_update_avatar" = "App需要访问您的相册用于上传头像";
 "turnon_photo_authorization" = "前往：设置开启相册授权";
 "agree_userAgreement_privacyPolicy" = "请同意用户协议和隐私协议后才能登录";
+"access_bluetooth_intro" = "如未能成功获取蓝牙状态，请尝试前往【设置】-【蓝牙】中开启，为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
+"would_lick_access_bluetooth" = "Would Like to Use Bluetooth";

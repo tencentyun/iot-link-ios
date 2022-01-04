@@ -222,6 +222,8 @@
         case CBManagerStateUnsupported:
             self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
         case CBManagerStatePoweredOff:
+            
+            [self customAlertOpenBluetooth];
             self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
         case CBManagerStateUnauthorized:
             self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
@@ -230,4 +232,28 @@
     
     [self.tableView reloadData];
 }
+
+- (void)customAlertOpenBluetooth {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
+    if (app_Name == nil) {
+        app_Name = [infoDict objectForKey:@"CFBundleName"];
+    }
+    
+    NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"access_bluetooth_intro", @"如未能成功获取蓝牙状态，请尝试前往【设置】-【蓝牙】中开启，为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限")];
+        NSString *titleString = [NSString stringWithFormat:@"\"%@\"%@",app_Name,NSLocalizedString(@"would_lick_access_bluetooth", @"想要使用蓝牙")];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:titleString message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        
+        UIAlertAction *alertCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"取消") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertC addAction:alertCancel];
+        
+        UIAlertAction *alertConfirm = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertC addAction:alertConfirm];
+        
+        [self presentViewController:alertC animated:YES completion:nil];
+}
+
 @end
