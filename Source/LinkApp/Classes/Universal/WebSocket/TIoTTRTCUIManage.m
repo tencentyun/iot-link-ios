@@ -916,8 +916,15 @@
         return;
     }
     
+    BOOL isAccess = NO;
+    if (type == TIoTTRTCSessionCallType_audio) {
+       isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeAudio];
+    }else {
+        isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeVideo];
+    }
+    
     if (isFromReceived == YES) {
-        if (type == TIoTTRTCSessionCallType_audio) { //audio
+        if (type == TIoTTRTCSessionCallType_audio && isAccess == YES) { //audio
             _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:model._sys_userid];
             _callAudioVC.deviceName = self.statusManager.deviceParam.deviceName;
             _callAudioVC.actionDelegate = self;
@@ -926,7 +933,7 @@
 
 //            self.statusManager.callAudioVC = _callAudioVC;
 
-        }else if (type == TIoTTRTCSessionCallType_video) { //video
+        }else if (type == TIoTTRTCSessionCallType_video && isAccess == YES) { //video
             _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:model._sys_userid];
             _callVideoVC.deviceName = self.statusManager.deviceParam.deviceName;
             _callVideoVC.actionDelegate = self;
@@ -970,13 +977,13 @@
     }else {
         //面板手动呼叫
         
-        if (type == TIoTTRTCSessionCallType_audio) { //audio
+        if (type == TIoTTRTCSessionCallType_audio && isAccess == YES) { //audio
             _callAudioVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
             _callAudioVC.actionDelegate = self;
             _callAudioVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [[TIoTCoreUtil topViewController] presentViewController:_callAudioVC animated:NO completion:^{}];
 
-        }else if (type == TIoTTRTCSessionCallType_video) { //video
+        }else if (type == TIoTTRTCSessionCallType_video && isAccess == YES) { //video
             _callVideoVC = [[TRTCCallingVideoViewController alloc] initWithOcUserID:nil];
             _callVideoVC.actionDelegate = self;
             _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;

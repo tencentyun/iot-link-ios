@@ -937,10 +937,11 @@
 "register_privacy_policy_conte9" = "。\n如您对以上协议有任何疑问，您可将问题发送至腾讯连连官方邮箱Dataprivacy@tencent.com或寄给我们设立的个人信息保护专职部门。邮寄地址为：中国广东省深圳市南山区海天二路33号腾讯滨海大厦 数据隐私保护部（收）\n如您同意以上协议内容，请点击“同意”开始接受我们的产品服务！";
 "register_privacy_policy_btn1" = "暂不使用";
 "register_privacy_policy_btn2" = "同意";
-"authentation_privacy_conte1" = "推送权限";
+"authentation_privacy_conte1" = "通知推送权限";
 "authentation_privacy_conte2" = "位置信息";
-"authentation_privacy_conte3" = "摄像头/麦克风权限";
+"authentation_privacy_conte3" = "摄像头权限";
 "authentation_privacy_conte4" = "蓝牙权限";
+"authentation_privacy_conte5" = "麦克风权限";
 "authentation_alert_btn" = "始终允许";
 "authentation_alert_wifi_title" = "请授权腾讯连连以下权限";
 "authentation_alert_wifi_conte" = "该步骤将为硬件设备配置WiFi网络实现通信，绑定硬件设备与APP用户之间的关系。因此 腾讯连连 需获取以下权限：";

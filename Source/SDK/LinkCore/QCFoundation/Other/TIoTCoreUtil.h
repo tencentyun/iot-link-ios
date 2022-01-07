@@ -5,7 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <AVFoundation/AVFoundation.h>
 #import "TIoTVideoDistributionNetModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -66,6 +66,12 @@ NS_ASSUME_NONNULL_BEGIN
  用于 TRTC和P2P Video 中 _sys_user_agent 参数拼接组成
  */
 + (NSString *)getSysUserAgent;
+
+/*
+ 用于摄像头和麦克风权限判断
+ */
++ (BOOL)requestMediaAuthorization:(AVMediaType)mediaType;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,6 +8,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
+#import "TIoTCoreUtil.h"
 
 @interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -85,8 +86,10 @@
     }else if (indexPath.section == 1) {
         cell.arrowSwitch.on = [self locationAuthority];
     }else if (indexPath.section == 2) {
-        cell.arrowSwitch.on = [self audioAuthority];
+        cell.arrowSwitch.on = [self audioAuthority:AVMediaTypeVideo];
     }else if (indexPath.section == 3) {
+        cell.arrowSwitch.on = [self audioAuthority:AVMediaTypeAudio];
+    }else if (indexPath.section == 4) {
         cell.arrowSwitch.on = self.bluetoothAvailable;
     }
     
@@ -129,9 +132,10 @@
     if (!_dataArr) {
 
         _dataArr = [NSMutableArray arrayWithArray:@[
-            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte1", @"推送权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
+            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte1", @"通知推送权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte2", @"位置信息"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
-            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte3", @"摄像头/麦克风权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
+            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte3", @"摄像头权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
+            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte5", @"麦克风权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte4", @"蓝牙权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
         ]];
     }
@@ -202,12 +206,8 @@
     return YES;
 }
 
-- (BOOL)audioAuthority {
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
-        return NO;
-    }
-    return YES;
+- (BOOL)audioAuthority:(AVMediaType)type {
+    return [TIoTCoreUtil requestMediaAuthorization:type];
 }
 
 #pragma mark - 判断蓝牙是否开启代理

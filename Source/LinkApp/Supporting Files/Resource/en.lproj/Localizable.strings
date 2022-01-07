@@ -944,8 +944,9 @@ If the problem still persists, we recommend you remove the device and add it aga
 "register_privacy_policy_btn2" = "Yes";
 "authentation_privacy_conte1" = "Notification";
 "authentation_privacy_conte2" = "Location";
-"authentation_privacy_conte3" = "Camera/Microphone";
+"authentation_privacy_conte3" = "Camera";
 "authentation_privacy_conte4" = "Bluetooth";
+"authentation_privacy_conte5" = "Microphone";
 "authentation_alert_btn" = "Allow";
 "authentation_alert_wifi_title" = "Please authorize Tencent LLink the following permissions";
 "authentation_alert_wifi_conte" = "This step will configure the WiFi network for the hardware device to achieve communication, and bind the relationship between the hardware device and the APP user. Therefore, Tencent LLink needs to obtain the following permissions：";

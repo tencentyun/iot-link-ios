@@ -935,6 +935,14 @@
         return;
     }
     
+    BOOL isAccess = NO;
+    if (type == TIoTTRTCSessionCallType_audio) {
+       isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeAudio];
+    }else {
+       isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeVideo];
+    }
+    
+    
     UIViewController *topVC = [TIoTCoreUtil topViewController];
     NSString *productID = [deviceIDString?:@"" componentsSeparatedByString:@"/"].firstObject?:@"";
     NSString *deviceName = [deviceIDString?:@"" componentsSeparatedByString:@"/"].lastObject?:@"";
@@ -988,7 +996,9 @@
         _callP2PVideo.isCallIng = NO;
         _callP2PVideo.delegate = self;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
-        [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
+        if (isAccess == YES) {
+            [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
+        }
         
     }else {
         //面板手动呼叫
@@ -1022,7 +1032,9 @@
         _callP2PVideo.isCallIng = YES;
         _callP2PVideo.delegate = self;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
-        [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
+        if (isAccess == YES) {
+            [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
+        }
     }
 }
 
