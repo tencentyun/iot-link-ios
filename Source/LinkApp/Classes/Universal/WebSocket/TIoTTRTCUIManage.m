@@ -997,6 +997,12 @@
 //        _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
 //        [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
     }
+    
+    if (type == TIoTTRTCSessionCallType_audio) {
+        [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeAudio];
+    }else {
+        [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeVideo];
+    }
 }
 
 /*

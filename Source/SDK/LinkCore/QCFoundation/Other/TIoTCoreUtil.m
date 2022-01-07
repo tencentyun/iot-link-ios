@@ -413,4 +413,34 @@
     NSString *agentString = [NSString stringWithFormat:@"ios/%@(ios %@;%@;%@)",appVersion,strSysVersion,iphoneModel,currentLang];
     return agentString;
 }
+
+/*
+ 用于摄像头和麦克风权限判断
+ */
++ (BOOL)requestMediaAuthorization:(AVMediaType)mediaType {
+    __block BOOL isAccess = NO;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if (authStatus == AVAuthorizationStatusNotDetermined) {
+        [AVCaptureDevice requestAccessForMediaType:mediaType
+                                 completionHandler:^(BOOL granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (granted) {
+                    //同意授权
+                    isAccess = YES;
+                } else {
+                    //拒绝授权
+                    isAccess = NO;
+                }
+            });
+        }];
+    } else if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+        //拒绝授权
+        isAccess = NO;
+    } else if (authStatus == AVAuthorizationStatusAuthorized) {
+        //同意授权
+        isAccess = YES;
+    }
+    return isAccess;
+}
+
 @end
