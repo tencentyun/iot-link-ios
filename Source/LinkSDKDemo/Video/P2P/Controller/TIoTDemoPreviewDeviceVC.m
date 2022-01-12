@@ -642,22 +642,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         TIoTDemoCustomSheetView *definitaionSheet = [[TIoTDemoCustomSheetView alloc]init];
         NSArray *actionTitleArray = @[@"超清 1080P",@"高清 720P",@"标清 360P",@"取消"];
         ChooseFunctionBlock superDefinitaionBlock = ^(TIoTDemoCustomSheetView *view){
-            self.qualityString = quality_super;
-            [self resetVideoPlayerWithQuality:self.qualityString];
+            weakSelf.qualityString = quality_super;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
             [weakSelf.definitionBtn setTitle:@"超清" forState:UIControlStateNormal];
             [definitaionSheet removeFromSuperview];
         };
         
         ChooseFunctionBlock highDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
-            self.qualityString = quality_high;
-            [self resetVideoPlayerWithQuality:self.qualityString];
+            weakSelf.qualityString = quality_high;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
             [weakSelf.definitionBtn setTitle:@"高清" forState:UIControlStateNormal];
             [definitaionSheet removeFromSuperview];
         };
         
         ChooseFunctionBlock standardDefinitionBlock = ^(TIoTDemoCustomSheetView *view){
-            self.qualityString = quality_standard;
-            [self resetVideoPlayerWithQuality:self.qualityString];
+            weakSelf.qualityString = quality_standard;
+            [weakSelf resetVideoPlayerWithQuality:weakSelf.qualityString];
             [weakSelf.definitionBtn setTitle:@"标清" forState:UIControlStateNormal];
             [definitaionSheet removeFromSuperview];
         };

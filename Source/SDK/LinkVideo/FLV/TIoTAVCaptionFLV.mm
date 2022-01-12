@@ -112,6 +112,7 @@ NSFileHandle *_fileHandle;
     self.h264Encoder = [TIoTH264Encoder new];
     [self.h264Encoder initWithConfiguration];
     [self.h264Encoder initEncode:480 height:640];
+//    [self.h264Encoder start:480 height:640];
     self.h264Encoder.delegate = self;
 
     if ([_session canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
@@ -178,12 +179,12 @@ NSFileHandle *_fileHandle;
         [self.aacEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
             
             if (encodedData) {
-                NSLog(@"Audio data (%lu):%@", (unsigned long)encodedData.length,encodedData.description);
+//                NSLog(@"Audio data (%lu):%@", (unsigned long)encodedData.length,encodedData.description);
                 
                 [self.data appendData:encodedData];
                 encodeFlvData(0, encodedData);
             }else {
-                NSLog(@"Error encoding AAC: %@", error);
+//                NSLog(@"Error encoding AAC: %@", error);
             }
         }];
     }
@@ -210,7 +211,7 @@ NSFileHandle *_fileHandle;
 }
 - (void)gotEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame {
     
-    NSLog(@"Video data (%lu):%@", (unsigned long)data.length,data.description);
+//    NSLog(@"Video data (%lu):%@", (unsigned long)data.length,data.description);
     
     if (_fileHandle != NULL)
     {
@@ -236,7 +237,7 @@ void flv_init_load() {
 
 static int flv_onmuxer(void* flv, int type, const void* data, size_t bytes, uint32_t timestamp)
 {
-    NSLog(@"========= flv_onmuxer type: %d, size: %zu", type,bytes);
+//    NSLog(@"========= flv_onmuxer type: %d, size: %zu", type,bytes);
     return flv_writer_input(flv, type, data, bytes, timestamp);
 }
 
@@ -247,7 +248,7 @@ static int flv_onwrite(void *param, const struct flv_vec_t* vec, int n) {
         total_size += vec[i].len;
     }
 
-    NSLog(@"========= flv_onmuxer total size: %d", total_size);
+//    NSLog(@"========= flv_onmuxer total size: %d", total_size);
     char* bytes = new char[total_size];
     for(int i = 0, offset = 0; i < n; i++) {
         memcpy(bytes + offset, vec[i].ptr, vec[i].len);
@@ -277,7 +278,7 @@ int encodeFlvData(int type, NSData *packetData) {
     
     const void *c_data = packetData.bytes;
     NSUInteger len = packetData.length;
-    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
+//    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
     
     int ret = 0;
     if (type == 0) { //audio

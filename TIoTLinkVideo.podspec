@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
 
-  s.dependency 'TIoTLinkKit_XP2P', '2.5.0-beta.202201050735'
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.3-beta.202201111002' #2.5.0-beta.202201050735  2.4.3-beta.202201111002 ~> 2.4.3-beta.1
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   
   s.pod_target_xcconfig = {
