@@ -204,7 +204,7 @@ static CGFloat kHeaderViewHeight = 162;
     
     [HXYNotice addReceiveShareDeviceLister:self reaction:@selector(getSharedDevicesList)];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)appEnterForeground {
