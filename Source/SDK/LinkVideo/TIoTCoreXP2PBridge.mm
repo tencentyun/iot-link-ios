@@ -300,10 +300,10 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
-        NSLog(@"vide stream data:%s  size:%zu",data,size);
+//        NSLog(@"vide stream data:%s  size:%zu",data,size);
         dataSend(self.dev_name.UTF8String, data, size);
-        NSData *dataTag = [NSData dataWithBytes:data length:size];
-        [fileHandle writeData:dataTag];
+//        NSData *dataTag = [NSData dataWithBytes:data length:size];
+//        [fileHandle writeData:dataTag];
     }
 }
 

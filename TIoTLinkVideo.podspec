@@ -17,8 +17,13 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
+<<<<<<< HEAD   (725b18 修改为集成snapshot版本)
   
   s.dependency 'TIoTLinkKit_XP2P', '~> 2.4.3-beta.1'
+=======
+
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.3-beta.202201111002' #2.5.0-beta.202201050735  2.4.3-beta.202201111002 ~> 2.4.3-beta.1
+>>>>>>> CHANGE (b5dfc4 优化双向音视频编码器)
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   
