@@ -145,7 +145,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
     int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
-    setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
+    ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
 
