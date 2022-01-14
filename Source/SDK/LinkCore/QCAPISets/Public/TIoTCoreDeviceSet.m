@@ -1120,7 +1120,7 @@
 ///获取Video设备列表
 - (void)getVideoDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId returnModel:(BOOL)returnModel success:(SRHandler)success failure:(FRHandler)failure{
     
-    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeDevices withVersioinData:@"2019-11-26"];
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:DescribeDevices withVersioinData:@"2019-11-26" regionString:[TIoTCoreAppEnvironment shareEnvironment].deviceRegion];
     
     NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
     thisInterfaceParams[@"Limit"] = [NSNumber numberWithInteger:limit];
@@ -1159,7 +1159,7 @@
 /// explore 获取设备列表
 - (void)getExploreDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId success:(SRHandler)success failure:(FRHandler)failure {
     
-    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:GetDeviceList withVersioinData:@"2019-04-23"];
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:GetDeviceList withVersioinData:@"2019-04-23" regionString:[TIoTCoreAppEnvironment shareEnvironment].deviceRegion];
     NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
     thisInterfaceParams[@"Limit"] = [NSNumber numberWithInteger:limit];
     thisInterfaceParams[@"Offset"] = [NSNumber numberWithInteger:offset];
@@ -1195,7 +1195,7 @@
     
     NSMutableDictionary *thisInterfaceParams = param ?: [NSMutableDictionary new];
     
-    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:action?:@"" withVersioinData:thisInterfaceParams[@"Version"]?:@""];
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:action?:@"" withVersioinData:thisInterfaceParams[@"Version"]?:@"" regionString:[TIoTCoreAppEnvironment shareEnvironment].deviceRegion];
     
     if ([thisInterfaceParams.allKeys containsObject:@"Version"]) {
         [thisInterfaceParams removeObjectForKey:@"Version"];
@@ -1241,12 +1241,12 @@
 #pragma mark - params function
 
 - (NSDictionary *)commonParamsForV3AuthenticationWithAction:(NSString *)actionString withVersioinData:(NSString *)dataString
-{
+                                               regionString:(NSString *)regionString {
     NSMutableDictionary *commonParams = [[NSMutableDictionary alloc] init];
     commonParams[@"X-TC-Action"] = actionString?:@"";
     NSInteger timeInterval = [[NSDate date] timeIntervalSince1970];
     commonParams[@"X-TC-Timestamp"] = [NSString stringWithFormat:@"%ld", timeInterval];
-    commonParams[@"X-TC-Region"] = @"ap-guangzhou";
+    commonParams[@"X-TC-Region"] = regionString?:@"ap-guangzhou";
     commonParams[@"X-TC-Version"] = dataString?:@"";
     return commonParams;
 }

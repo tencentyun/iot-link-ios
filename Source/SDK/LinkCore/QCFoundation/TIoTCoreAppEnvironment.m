@@ -63,6 +63,8 @@ NSString *const TIoTLinkKitShortVersionString = @"1.0.3";
     self.cloudSecretKey = @"";
     self.cloudProductId = @"";
     
+    self.deviceRegion = @"ap-guangzhou";
+    
     //explore
     self.exploreHostApi = @"https://iotexplorer.tencentcloudapi.com";
     

@@ -119,6 +119,10 @@ h5
  */
 @property (nonatomic, copy) NSString *weatherIndicesHost;
 
+/**
+ 地域
+ */
+@property (nonatomic, copy) NSString *deviceRegion;
 
 - (void)setEnvironment;
 @end

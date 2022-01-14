@@ -80,12 +80,14 @@
     // 保存信息
     [self saveDeviceInfo];
     
-    if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString])) {
+    if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString]) && (![NSString isNullOrNilWithObject:self.loginView.regionConettString] && ![NSString isFullSpaceEmpty:self.loginView.regionConettString])) {
         
         TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
         environment.cloudSecretId = self.loginView.secretIDString;
         environment.cloudSecretKey = self.loginView.secretKeyString;
         environment.cloudProductId = self.loginView.productIDString;
+        
+        environment.deviceRegion = self.loginView.regionIDString; //用户保存demo中地域ID，默认为中国 ap-guangzhou
         
         //原播放列表
         TIoTDemoHomeViewController *homeVC = [[TIoTDemoHomeViewController alloc]init];
@@ -112,9 +114,10 @@
     
     NSUserDefaults *defaluts = [NSUserDefaults standardUserDefaults];
     if (![NSString isNullOrNilWithObject:self.loginView.accessID.text?:@""]) {
-        [defaluts setValue:@{@"AccessTokenString":self.loginView.accessToken.text?:@"",@"productIDString":self.loginView.productID.text?:@""} forKey:self.loginView.accessID.text?:@""];
+        [defaluts setValue:@{@"AccessTokenString":self.loginView.accessToken.text?:@"",@"productIDString":self.loginView.productID.text?:@"",@"regionNameString":self.loginView.regionContent.text?:@""} forKey:self.loginView.accessID.text?:@""];
         self.loginView.secretKeyString = self.loginView.accessToken.text;
         self.loginView.productIDString = self.loginView.productID.text;
+        self.loginView.regionConettString = self.loginView.regionContent.text;
         
     }
 }
@@ -143,6 +146,7 @@
     if (tokenAndProductIDDic != nil) {
         self.loginView.accessToken.text = [tokenAndProductIDDic objectForKey:@"AccessTokenString"];
         self.loginView.productID.text = [tokenAndProductIDDic objectForKey:@"productIDString"];
+        self.loginView.regionContent.text = [tokenAndProductIDDic objectForKey:@"regionNameString"];
     }
 }
 

@@ -8,6 +8,7 @@
 #import "TIoTCoreXP2PBridge.h"
 #import "TIoTAccessIDPickerView.h"
 #import "TIoTCoreUserManage.h"
+#import "TIoTRegionPickerView.h"
 
 @interface TIoTLoginCustomView ()<UITextFieldDelegate>
 //选择应用端
@@ -16,6 +17,8 @@
 //AccessID
 @property (nonatomic, strong) UIButton *choiceIDBtn;
 @property (nonatomic, strong) TIoTAccessIDPickerView *choiceAccessIDView;
+@property (nonatomic, strong) TIoTRegionPickerView *choiceRegionNameView;
+@property (nonatomic, readwrite, strong) NSString *regionIDString;
 @end
 
 @implementation TIoTLoginCustomView
@@ -34,6 +37,7 @@
     CGFloat kItemHeight = 56;
     CGFloat kAPIBtnWidthHeight = 24;
     CGFloat kInputItemLeftPadding = 150;
+    CGFloat kChoiceRegionBtnWidth = 60;
     
     //第一行 选择应用端   应用端选择先隐藏预留
     /*
@@ -205,6 +209,50 @@
         make.left.right.equalTo(line2);
     }];
     
+    //地域
+    self.regionConettString = @"中国";
+    self.regionIDString = @"ap-guangzhou";
+    
+    UILabel *regionLabel = [[UILabel alloc]init];
+    [regionLabel setLabelFormateTitle:@"地域名称" font:[UIFont wcPfRegularFontOfSize:17] titleColorHexString:@"#000000" textAlignment:NSTextAlignmentLeft];
+    [self addSubview:regionLabel];
+    [regionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.mas_left).offset(kWidthPadding);
+        make.top.equalTo(line4.mas_bottom);
+        make.height.mas_equalTo(kItemHeight);
+    }];
+    
+    UIButton *choiceRegion = [UIButton buttonWithType:UIButtonTypeSystem];
+    [choiceRegion setButtonFormateWithTitlt:@"选择地域" titleColorHexString:kMainThemeColor font:[UIFont wcPfRegularFontOfSize:14]];
+    [choiceRegion addTarget:self action:@selector(chooseRegionName) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:choiceRegion];
+    [choiceRegion mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(kChoiceRegionBtnWidth);
+        make.top.bottom.equalTo(regionLabel);
+        make.right.equalTo(self.mas_right).offset(-kWidthPadding);
+        make.centerY.equalTo(regionLabel);
+    }];
+    
+    self.regionContent = [[UILabel alloc]init];
+    [self.regionContent setLabelFormateTitle:self.regionConettString font:[UIFont wcPfRegularFontOfSize:17] titleColorHexString:kVideoDemoPlaceColor textAlignment:NSTextAlignmentLeft];
+    [self addSubview:self.regionContent];
+    [self.regionContent mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.mas_left).offset(kInputItemLeftPadding);
+        make.centerY.equalTo(regionLabel);
+        make.height.equalTo(regionLabel);
+        make.right.equalTo(choiceRegion.mas_left);
+    }];
+    
+    UIView *line5 = [[UIView alloc]init];
+    line5.backgroundColor = [UIColor colorWithHexString:kVideoDemoPlaceColor];
+    [self addSubview:line5];
+    [line5 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(regionLabel.mas_bottom);
+        make.height.mas_equalTo(1);
+        make.left.right.equalTo(line2);
+    }];
+    
+    
     //选择 多媒体SDK按钮先隐藏预留
     UIButton *mediaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [mediaBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
@@ -272,6 +320,7 @@
         if (tokenAndProductIDDic != nil) {
             weakSelf.accessToken.text = [tokenAndProductIDDic objectForKey:@"AccessTokenString"];
             weakSelf.productID.text = [tokenAndProductIDDic objectForKey:@"productIDString"];
+            weakSelf.regionContent.text = [tokenAndProductIDDic objectForKey:@"regionNameString"];
         }
     };
     [[UIApplication sharedApplication].delegate.window addSubview:self.choiceAccessIDView];
@@ -280,6 +329,21 @@
     }];
 }  
 
+//选择域名方法
+- (void)chooseRegionName {
+    [self hideKeyBoard];
+    
+    __weak typeof (self) weakSelf = self;
+    self.choiceRegionNameView = [[TIoTRegionPickerView alloc]init];
+    self.choiceRegionNameView.regionStringBlock = ^(NSString * _Nonnull regionString, NSString * _Nonnull regioinID) {
+        weakSelf.regionContent.text = regionString?:@"";
+        weakSelf.regionIDString = regioinID;
+    };
+    [[UIApplication sharedApplication].delegate.window addSubview:self.choiceRegionNameView];
+    [self.choiceRegionNameView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.left.bottom.top.equalTo([UIApplication sharedApplication].delegate.window);
+    }];
+}
 
 #pragma mark - UITextField delegate
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
