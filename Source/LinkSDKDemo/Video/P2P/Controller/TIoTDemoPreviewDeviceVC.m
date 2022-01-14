@@ -856,7 +856,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
     paramDic[@"DeviceName"] = self.deviceName?:@"";
     paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
@@ -890,7 +890,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)requestCloudStoreUrlWithThumbnail:(TIoTDemoCloudEventModel *)eventModel index:(NSInteger)index {
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"DeviceName"] = self.deviceName?:@"";
     paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {

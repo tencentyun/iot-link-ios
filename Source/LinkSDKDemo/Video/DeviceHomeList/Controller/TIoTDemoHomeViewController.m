@@ -120,7 +120,7 @@ static NSInteger const kLimit = 100;
 - (void)requestProductDetail {
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeProduct vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         
         TIoTDemoProductDetailModel *model = [TIoTDemoProductDetailModel yy_modelWithJSON:responseObject];
@@ -145,7 +145,7 @@ static NSInteger const kLimit = 100;
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"Limit"] = [NSNumber numberWithInteger:kLimit];
     paramDic[@"Offset"] = [NSNumber numberWithInteger:0];
 

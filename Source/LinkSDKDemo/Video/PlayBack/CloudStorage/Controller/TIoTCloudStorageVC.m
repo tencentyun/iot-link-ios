@@ -405,7 +405,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageDate vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudStoreDateListModel *dateList = [TIoTDemoCloudStoreDateListModel yy_modelWithJSON:responseObject];
@@ -424,7 +424,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"Date"] = self.currentDayTime?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageTime vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTCloudStorageDayTimeListModel *data = [TIoTCloudStorageDayTimeListModel yy_modelWithJSON:responseObject[@"Data"]];
         
@@ -481,7 +481,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     NSString *currentStamp = [NSString getNowTimeString];
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"VideoURL"] = [NSString stringWithFormat:@"%@?starttime_epoch=%ld&endtime_epoch=%ld",videoPartURL,(long)timeModel.StartTime.integerValue,(long)timeModel.EndTime.integerValue]?:@"";
     paramDic[@"ExpireTime"] = [NSNumber numberWithInteger:currentStamp.integerValue + 3600];
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:GenerateSignedVideoURL vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
@@ -525,7 +525,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
     paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
@@ -565,7 +565,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)requestCloudStoreUrlWithThumbnail:(TIoTDemoCloudEventModel *)eventModel index:(NSInteger)index {
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2020-12-15";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
     paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
