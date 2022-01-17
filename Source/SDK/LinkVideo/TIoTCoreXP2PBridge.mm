@@ -20,10 +20,12 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         return nullptr;
     }
     NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-    NSLog(@"XP2P log: %@\n", message);
+    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
+    if (logEnable) {
+        NSLog(@"XP2P log: %@\n", message);
+    }
     
     if (type == XP2PTypeLog) {
-        BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
         if (logEnable) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
