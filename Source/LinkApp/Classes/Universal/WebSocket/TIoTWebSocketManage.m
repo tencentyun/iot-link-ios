@@ -117,6 +117,8 @@ static NSString *heartBeatReqID = @"5002";
 
         }
     }];
+    
+    
 }
 
 -(void)SRWebSocketOpen{
