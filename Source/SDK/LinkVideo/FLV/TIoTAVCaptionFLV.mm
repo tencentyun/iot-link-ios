@@ -15,6 +15,7 @@
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
+dispatch_queue_t muxerQueue;
 NSFileHandle *_fileHandle;
 
 @interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate>
@@ -52,6 +53,8 @@ NSFileHandle *_fileHandle;
 }
 
 -(void) onInit{
+    muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
+    
     _data = [NSMutableData new];
     _session = [AVCaptureSession new];
 }
@@ -272,22 +275,26 @@ int encodeFlvData(int type, NSData *packetData) {
         NSLog(@"Please init flv muxer first.");
         return -1;
     }
-
-    CFTimeInterval timestamp = CACurrentMediaTime();
-    uint32_t pts = timestamp*1000;
     
-    const void *c_data = packetData.bytes;
-    NSUInteger len = packetData.length;
-//    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
+    dispatch_async(muxerQueue, ^{
+        
+        CFTimeInterval timestamp = CACurrentMediaTime();
+        uint32_t pts = timestamp*1000;
+        
+        const void *c_data = packetData.bytes;
+        NSUInteger len = packetData.length;
+        //    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
+        
+        
+        int ret = 0;
+        if (type == 0) { //audio
+            ret = flv_muxer_aac(flvMuxer, c_data, len, pts, pts);
+        }else {
+            ret = flv_muxer_avc(flvMuxer, c_data, len, pts, pts);
+        }
+    });
     
-    int ret = 0;
-    if (type == 0) { //audio
-        ret = flv_muxer_aac(flvMuxer, c_data, len, pts, pts);
-    }else {
-        ret = flv_muxer_avc(flvMuxer, c_data, len, pts, pts);
-    }
-    
-    return ret;
+    return 0;
 }
 
 #pragma mark - 录制

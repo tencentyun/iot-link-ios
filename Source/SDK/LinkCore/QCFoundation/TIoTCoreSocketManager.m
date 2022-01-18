@@ -8,7 +8,7 @@
 #import "TIoTCoreWebSocket.h"
 #import "NSString+Extension.h"
 #import "TIoTCoreAppEnvironment.h"
-
+#import "TIoTCoreUserManage.h"
 #import "TIoTCoreQMacros.h"
 
 #define dispatch_main_async_safe(block)\
@@ -104,7 +104,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)startHeartBeatWith:(id)userInfo {
     
-    self.heartBeat = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(heartBeatAction:) userInfo:userInfo repeats:YES];
+    self.heartBeat = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(ping:) userInfo:userInfo repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.heartBeat forMode:NSRunLoopCommonModes];
     [self.heartBeat fire];
 }
@@ -118,7 +118,35 @@ static NSString *heartBeatReqID = @"5002";
         [[TIoTCoreSocketManager shared] sendData:params];
     }
 }
+//ping
+- (void)ping:(NSTimer *)timer {
+    NSArray *deviceIds = timer.userInfo;
 
+    if ([TIoTCoreSocketManager shared].socketReadyState == WC_OPEN) {
+        
+        NSData *data= [NSJSONSerialization dataWithJSONObject:[self heartData:deviceIds] options:NSJSONWritingPrettyPrinted error:nil];
+        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        [[TIoTCoreSocketManager shared] sendData:dataDic];
+    }
+    
+}
+
+
+//心跳数据
+- (NSDictionary *)heartData:(NSArray *)deviceIds {
+    return @{
+        @"action":[TIoTCoreAppEnvironment shareEnvironment].action,
+        @"reqId":[[NSUUID UUID] UUIDString],
+        @"params":@{
+            @"Action": @"AppDeviceTraceHeartBeat",
+            @"AccessToken":[TIoTCoreUserManage shared].accessToken,
+            @"RequestId":@"weichuan-client",
+            @"ActionParams": @{
+                @"DeviceIds": deviceIds
+            }
+        }
+    };
+}
 
 
 #pragma mark - socket delegate
