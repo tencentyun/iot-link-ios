@@ -22,6 +22,7 @@
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 #import "TIoTDemoPlaybackVC.h"
+#import <AVFoundation/AVFoundation.h>
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -207,6 +208,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     NSString *channelNum = self.selectedModel.Channel?:@"0";
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
+                
+                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+                [[AVAudioSession sharedInstance] setActive:YES error:nil];
+                
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
             }
             

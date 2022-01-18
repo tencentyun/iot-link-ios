@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
 
-  s.dependency 'TIoTLinkKit_XP2P', '2.4.4' #~> 2.4.3-beta.1
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.4-beta.202201170801' #~> 2.4.3-beta.1  2.4.4     2.4.3-beta.202201111002       2.4.4-beta.202201170801
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   
