@@ -18,7 +18,11 @@ Pod::Spec.new do |s|
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
 
+<<<<<<< HEAD   (dc4f36 添加 websocket 设备心跳)
   s.dependency 'TIoTLinkKit_XP2P', '2.4.3-beta.202201111002' #2.5.0-beta.202201050735  2.4.3-beta.202201111002 ~> 2.4.3-beta.1
+=======
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.5-beta.202201190337' #~> 2.4.3-beta.1  2.4.4     2.4.3-beta.202201111002       2.4.4-beta.202201170801  2.4.5-beta.202201190337
+>>>>>>> CHANGE (875092 打开日志&更新enet基础库&修复iOS15导航栏)
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   
   s.pod_target_xcconfig = {

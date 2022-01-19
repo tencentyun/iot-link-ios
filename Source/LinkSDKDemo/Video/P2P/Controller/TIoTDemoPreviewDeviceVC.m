@@ -89,7 +89,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     _is_ijkPlayer_stream = YES;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+<<<<<<< HEAD   (dc4f36 添加 websocket 设备心跳)
     
+=======
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+>>>>>>> CHANGE (875092 打开日志&更新enet基础库&修复iOS15导航栏)
     
     self.qualityString = quality_standard;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
