@@ -89,8 +89,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
     _is_ijkPlayer_stream = YES;
     //关闭日志
-    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
-    
+//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     self.qualityString = quality_standard;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
