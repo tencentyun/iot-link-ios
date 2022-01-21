@@ -10,6 +10,8 @@
 #import "TIoTDemoLocalRecordVC.h"
 #import "TIoTCoreXP2PBridge.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "TIoTXp2pInfoModel.h"
+#import "NSString+Extension.h"
 
 @interface TIoTDemoPlaybackVC ()<CMPageTitleViewDelegate>
 @property (nonatomic, strong) CMPageTitleView *pageView;
@@ -25,28 +27,7 @@
     // Do any additional setup after loading the view.
     [self initSubViews];
     
-    if (self.isFromHome == YES) {
-        if (self.isNVR == NO) {
-            
-            TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-            int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-            [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
-            
-            if (errorcode == XP2P_ERR_VERSION) {
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
-                UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-                }];
-                [alertC addAction:alertA];
-                [self presentViewController:alertC animated:YES completion:nil];
-            }
-            
-            //计算IPC打洞开始时间
-    //        self.startIpcP2P = CACurrentMediaTime();
-            
-        }
-        
-        [self installMovieNotificationObservers];
-    }
+    [self requestXp2pInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -84,6 +65,51 @@
     }
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
+}
+
+- (void)requestXp2pInfo {
+    
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+    paramDic[@"DeviceName"] = self.deviceName?:@"";
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        
+        [self requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        [self requestDiffDeviceDataWithXp2pInfo:@""];
+        [MBProgressHUD showError:@"xp2pInfo api请求失败"];
+    }];
+}
+
+- (void)requestDiffDeviceDataWithXp2pInfo:(NSString *)xp2pInfo {
+    if (self.isFromHome == YES) {
+        if (self.isNVR == NO) {
+            
+            TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+            int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
+            [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+            
+            if (errorcode == XP2P_ERR_VERSION) {
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+                UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alertC addAction:alertA];
+                [self presentViewController:alertC animated:YES completion:nil];
+            }
+            
+            //计算IPC打洞开始时间
+    //        self.startIpcP2P = CACurrentMediaTime();
+            
+        }
+        
+        [self installMovieNotificationObservers];
+    }
 }
 
 - (void)initSubViews {
@@ -235,9 +261,29 @@
     
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
 
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+    paramDic[@"DeviceName"] = self.deviceName?:@"";
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        
+        [self resconnectXp2pWithDevicename:selectedName xp2pInfo:xp2pInfoString];
+        
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        [self resconnectXp2pWithDevicename:selectedName xp2pInfo:@""];
+        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
+    }];
+}
+
+- (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
 }
 
 - (UIViewController *)getCurrentViewController

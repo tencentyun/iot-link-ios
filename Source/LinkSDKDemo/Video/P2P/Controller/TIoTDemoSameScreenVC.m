@@ -15,6 +15,7 @@
 #import "TIoTDemoDeviceStatusModel.h"
 #import <YYModel.h>
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
+#import "TIoTXp2pInfoModel.h"
 
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 static NSString *const action_live = @"live";
@@ -545,9 +546,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             TIoTExploreOrVideoDeviceModel *model = obj;
             if (self.isNVRType == NO) {
                 
-                TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-                [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:model.DeviceName?:@""];
-                [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:model.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+                [self requestXp2pInfoWithDeviceName:model.DeviceName?:@"" isReconnection:NO];
             }
         }];
         
@@ -638,6 +637,37 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
         }
     }];
+}
+
+- (void)requestXp2pInfoWithDeviceName:(NSString *)deviceName isReconnection:(BOOL)isReconnection {
+    
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+    paramDic[@"DeviceName"] = deviceName?:@"";
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        
+        [self resconnectXp2pWithDevicename:deviceName xp2pInfo:xp2pInfoString];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        [self resconnectXp2pWithDevicename:deviceName xp2pInfo:@""];
+        if (isReconnection) {
+            [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
+        }else {
+            [MBProgressHUD showError:@"xp2pInfo api请求失败"];
+        }
+        
+    }];
+}
+
+- (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
 }
 
 #pragma mark -IJKPlayer
@@ -839,9 +869,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName?:@""];
 
-    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+    [self requestXp2pInfoWithDeviceName:DeviceName?:@"" isReconnection:YES];
+    
+//    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 }
 
 - (void)refushVideo:(NSNotification *)notify {

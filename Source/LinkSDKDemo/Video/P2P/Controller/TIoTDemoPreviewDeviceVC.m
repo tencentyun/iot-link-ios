@@ -22,6 +22,7 @@
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 #import "TIoTDemoPlaybackVC.h"
+#import "TIoTXp2pInfoModel.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -110,13 +111,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupPreViewViews];
     
+    [self requestXp2pInfo];
+    
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
+    self.navigationItem.rightBarButtonItem = right;
+}
+
+- (void)requestDiffDeviceDataWithXp2pInfo:(NSString *)xp2pInfo {
     if (self.isNVR == NO) {
         //云存事件列表
         [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
         
         if (errorcode == XP2P_ERR_VERSION) {
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -132,9 +140,25 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }else {
         [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
+}
+
+- (void)requestXp2pInfo {
     
-    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
-    self.navigationItem.rightBarButtonItem = right;
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+    paramDic[@"DeviceName"] = self.deviceName?:@"";
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        [self requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        [self requestDiffDeviceDataWithXp2pInfo:@""];
+        [MBProgressHUD showError:@"xp2pInfo api请求失败"];
+    }];
 }
 
 - (void)showHudView {
@@ -1101,12 +1125,35 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
-        [self setVieoPlayerStartPlayWith:self.qualityString];
+        
+        NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+        paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+        paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+        paramDic[@"DeviceName"] = self.deviceName?:@"";
+        
+        [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+            TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+            NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+            TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+            NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+            
+            [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:xp2pInfoString?:@""];
+            
+        } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+            [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:@""];
+            [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
+        }];
+        
     });
 
 }
+
+- (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+    [self setVieoPlayerStartPlayWith:self.qualityString];
+}
+
 /// MARK:新设备
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
