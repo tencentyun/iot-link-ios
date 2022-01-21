@@ -159,6 +159,7 @@ FOUNDATION_EXPORT NSString *const DescribeCloudStorageEvents;//云存事件列�
 FOUNDATION_EXPORT NSString *const DescribeCloudStorageThumbnail;//云存缩略图
 FOUNDATION_EXPORT NSString *const GenerateSignedVideoURL;//获取视频防盗链播放URL
 FOUNDATION_EXPORT NSString *const DescribeProduct;//获取产品详情
+FOUNDATION_EXPORT NSString *const DescribeDeviceData;//获取设备属性数据
 
 //MARK: Explore
 FOUNDATION_EXPORT NSString *const GetDeviceList;//Explore 设备列表

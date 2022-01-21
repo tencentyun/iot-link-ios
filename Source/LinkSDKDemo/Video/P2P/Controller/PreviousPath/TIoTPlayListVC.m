@@ -15,7 +15,8 @@
 #import "TIoTExploreDeviceListModel.h"
 #import "TIoTVideoDeviceListModel.h"
 #import "TIoTExploreOrVideoDeviceModel.h"
-
+#import "TIoTXp2pInfoModel.h"
+#import "NSString+Extension.h"
 #import <YYModel.h>
 
 @interface TIoTPlayListVC () <UITableViewDelegate, UITableViewDataSource>
@@ -53,11 +54,9 @@
         [[self.tableView indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             TIoTExploreOrVideoDeviceModel *model = self.dataArray[obj.row];
-                        
-            TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-            [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:model.DeviceName?:@""];
-            [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:model.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
-
+            
+            [self requestXp2pInfo:model.DeviceName?:@""];
+            
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypeLive;
             video.deviceName = model.DeviceName;
@@ -82,7 +81,31 @@
 }
 
 #pragma mark - request
-
+- (void)requestXp2pInfo:(NSString *)deviceName {
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
+    paramDic[@"DeviceName"] = deviceName?:@"";
+    
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
+        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
+        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
+        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        
+        [self requestXp2pInfoWithDeviceName:deviceName xp2pInfo:xp2pInfoString];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        
+        [self requestXp2pInfoWithDeviceName:deviceName xp2pInfo:@""];
+        [MBProgressHUD showError:@"xp2pInfo api请求失败"];
+    }];
+}
+    
+- (void)requestXp2pInfoWithDeviceName:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo{
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+}
 /// video 设备列表
 - (void)requestVideoList {
         [[TIoTCoreDeviceSet shared] getVideoDeviceListLimit:99 offset:0 productId:[TIoTCoreAppEnvironment shareEnvironment].cloudProductId returnModel:YES success:^(id  _Nonnull responseObject) {
@@ -132,9 +155,7 @@
 
         
         
-        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:nameNameString?:@""];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:nameNameString?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+        [self requestXp2pInfo:nameNameString?:@""];
 
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -145,10 +166,8 @@
     
     cell.playLocalPlaybackBlock = ^{
 
-        TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:nameNameString?:@""];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:nameNameString?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
-
+        [self requestXp2pInfo:nameNameString?:@""];
+        
             TIoTPlayMovieVC *video = [[TIoTPlayMovieVC alloc] init];
             video.playType = TIotPLayTypePlayback;
             video.modalPresentationStyle = UIModalPresentationFullScreen;
