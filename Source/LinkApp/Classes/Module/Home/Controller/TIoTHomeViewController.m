@@ -629,7 +629,15 @@ static CGFloat kHeaderViewHeight = 162;
 ///MARK: 请求天气数据
 - (void)requestWeatherData {
 
-    [self requestWeatherNowData];
+    if (self.longitude == 0.0 && self.latitude == 0.0) {
+        [self.unitLabel setLabelFormateTitle: @"" font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+        [self.weatherLab setLabelFormateTitle:NSLocalizedString(@"no_weather_info", "暂无天气信息") font:[UIFont fontWithName:@"PingFang-SC" size:12] titleColorHexString:@"#FFFFFF" textAlignment:NSTextAlignmentLeft];
+        [self.dailyNameLabel setLabelFormateTitle:NSLocalizedString(@"please_set_location", "请先设置当前家庭位置") font:[UIFont wcPfRegularFontOfSize:16] titleColorHexString:@"#BFD2FF" textAlignment:NSTextAlignmentLeft];
+        self.weatherBottomBtn.enabled = YES;
+        self.weatherAnimationView.hidden = YES;
+    }else {
+        [self requestWeatherNowData];
+    }
 }
 
 ///MARK:请求天气实况
