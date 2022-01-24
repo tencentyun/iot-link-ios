@@ -19,7 +19,7 @@ class TIoTDeviceDataModel: TIoTBaseModel {
     //TRTC设备的属性
     var _sys_audio_call_status: TIoTDeviceValueModel?
     var _sys_video_call_status: TIoTDeviceValueModel?
-    var _sys_userid: TIoTDeviceValueModel?
+//    var _sys_userid: TIoTDeviceValueModel?
     var _sys_caller_id: TIoTDeviceValueModel?
     var _sys_called_id: TIoTDeviceValueModel?
     
@@ -34,7 +34,8 @@ class TIoTDeviceDataModel: TIoTBaseModel {
                 
                 "_sys_audio_call_status": TIoTDeviceValueModel.classForCoder(),
                 "_sys_video_call_status": TIoTDeviceValueModel.classForCoder(),
-                "_sys_userid": TIoTDeviceValueModel.classForCoder()]
+//                "_sys_userid": TIoTDeviceValueModel.classForCoder()
+        ]
     }
     
     class func modelCustomPropertyMapper() -> [String : Any]? {

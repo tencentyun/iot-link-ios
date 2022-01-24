@@ -34,6 +34,8 @@
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel; //监听设备上报
 @property (nonatomic, strong, readwrite) TIOTtrtcPayloadParamModel *tempModel;
 @property (nonatomic, strong, readwrite) NSString *deviceIDTempStr;
+@property (nonatomic, strong, readwrite) NSString *deviceIDOriginStr; //通话中的
+@property (nonatomic, assign, readwrite) BOOL isActiveOriginStatus;
 @property (nonatomic, assign, readwrite) TIoTTRTCSessionCallType preCallingType;
 @property (nonatomic, assign) BOOL isCommunicating; //被叫和主叫 yes:进入房间(拉起页面或通话中) no:退出房间后
 @property (nonatomic, copy) NSString *caller_id; //用于保存正在通话或呼叫中的callerID
@@ -68,15 +70,15 @@
     NSString *IDString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
     NSString *deviceParamString = [self getSysCallerIdWithPayloadParamModel:_deviceParam];
     
-    if (deviceParam._sys_userid == nil) {
-        failure(@"DeviceId参数为空",nil,@{});
+//    if (deviceParam._sys_userid == nil) {
+//        failure(@"DeviceId参数为空",nil,@{});
         if ([NSString isNullOrNilWithObject:IDString]) {
                     return;
         }
 //        return;
-    }
+//    }
     
-    if (_deviceParam._sys_userid || ![NSString isNullOrNilWithObject:deviceParamString]) {
+    if (![NSString isNullOrNilWithObject:deviceParamString]) {
         if ([_deviceParam.deviceName isEqualToString:deviceParam.deviceName]) {
             _deviceParam = deviceParam;
         }
@@ -102,10 +104,14 @@
             
     }
     
+    if (self.isCommunicating == NO) {
+        self.isActiveOriginStatus = _isActiveStatus;
+    }
+    
     //1.先启动UI，再根据UI选择决定是否走calldevice逻辑
 //    [self isActiveCalling:deviceParam.deviceName];
     self.caller_id = deviceParam._sys_caller_id?:@"";
-    self.caller_id = deviceParam._sys_called_id?:@"";
+    self.called_id = deviceParam._sys_called_id?:@"";
     [self isActiveCalling:deviceParam];
 }
 
@@ -113,17 +119,20 @@
     
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
+    if (self.isCommunicating == NO) {
+        self.isActiveOriginStatus = _isActiveStatus;
+    }
     
     NSString *IDString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
     NSString *deviceParamIDString = [self getSysCallerIdWithPayloadParamModel:_deviceParam];
     
-    if (_deviceParam._sys_userid || ![NSString isNullOrNilWithObject:deviceParamIDString]) {
-            if ([deviceParam._sys_userid isEqualToString:_deviceParam._sys_userid] || [IDString isEqualToString:deviceParamIDString]) {
+    if (![NSString isNullOrNilWithObject:deviceParamIDString]) {
+            if ([IDString isEqualToString:deviceParamIDString]) {
             if(deviceParam._sys_audio_call_status.intValue == 1 || deviceParam._sys_video_call_status.intValue == 1)
             [self leaveRoomWith:deviceParam];
         }
         
-        if ([[NSString stringWithFormat:@"%@%@",deviceParam._sys_userid,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",_deviceParam._sys_userid,_deviceParam.deviceName]] || [[NSString stringWithFormat:@"%@%@",IDString,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",deviceParamIDString,_deviceParam.deviceName]]) {
+        if ([[NSString stringWithFormat:@"%@%@",IDString,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",deviceParamIDString,_deviceParam.deviceName]]) {
             [self leaveRoomWith:deviceParam];
         }
         
@@ -132,15 +141,16 @@
         }
         
         //case 1
-        if ([_deviceParam._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId] || [deviceParamIDString isEqualToString:[TIoTCoreUserManage shared].userId]) {
+        if ([deviceParamIDString isEqualToString:[TIoTCoreUserManage shared].userId]) {
             [self leaveRoomWith:deviceParam];
         }
         
-        if ([_deviceParam._sys_userid isEqualToString:_deviceParam.deviceName]|| [deviceParamIDString isEqualToString:_deviceParam.deviceName]) {
+        if ([deviceParamIDString isEqualToString:_deviceParam.deviceName]) {
             [self leaveRoomWith:deviceParam];
         }
         
     }else {
+        //两个不同用户同时呼叫，被拒绝的用户离开房间  deviceParamIDString 为空，IDString 为被拒绝用户ID（设备上报的）
         [self leaveRoomWith:deviceParam];
     }
     
@@ -155,6 +165,28 @@
         type = TIoTTRTCSessionCallType_audio;
     }else if (![NSString isNullOrNilWithObject:deviceParam._sys_video_call_status]) {
         type = TIoTTRTCSessionCallType_video;
+    }
+    
+    //两个不同用户同时呼叫，被拒绝的用户离开房间逻辑
+    NSString *extraJson = deviceParam._sys_extra_info?:@"";
+    NSDictionary *extraDic = [NSString jsonToObject:extraJson];
+    if ([extraDic.allKeys containsObject:@"rejectUserId"]) {
+        NSString *userIDString = extraDic[@"rejectUserId"]?:@"";
+        if ([userIDString isEqualToString:[TIoTCoreUserManage shared].userId]) {
+            if (TIoTTRTCSessionCallType_audio == type && self.isCommunicating == YES) {
+                if ([self.delegate respondsToSelector:@selector(audioActiveCallSessionNoCallingStatus)]) {
+                    [self.delegate audioActiveCallSessionNoCallingStatus];
+                }
+            }else if (TIoTTRTCSessionCallType_video == type && self.isCommunicating == YES) {
+                if ([self.delegate respondsToSelector:@selector(videoActiveCallSessionCallingStatus)]) {
+                    [self.delegate videoActiveCallSessionCallingStatus];
+                }
+            }
+            if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
+                [self.delegate didExitRoom:userIDString];
+            }
+            [self settingExitRoom:userIDString];
+        }
     }
     
 //    UIViewController *topVC = [TIoTCoreUtil topViewController];
@@ -220,6 +252,9 @@
                         }
                         self->_isActiveCall = NO;
                         self->_isActiveStatus = self->_isActiveCall;
+                        if (self.isCommunicating == NO) {
+                            self.isActiveOriginStatus = self->_isActiveStatus;
+                        }
                     });
                     return;
                 }
@@ -263,12 +298,14 @@
                 if (TIoTTRTCSessionCallType_audio == type && self.isCommunicating == YES) {
 //                    [self exitRoom:deviceParam._sys_userid];
                     
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
+                    NSString *callID = [self getSysCallerIdWithPayloadParamModel:deviceParam];
+                    
+                    if (![NSString isNullOrNilWithObject:callID] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                            [self.delegate didExitRoom:deviceParam._sys_userid];
+                            [self.delegate didExitRoom:callID];
                         }
-                        [self settingExitRoom:deviceParam._sys_userid];
+                        [self settingExitRoom:callID];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
                         if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id] ) {
@@ -347,6 +384,9 @@
                         }
                         self->_isActiveCall = NO;
                         self->_isActiveStatus = self->_isActiveCall;
+                        if (self.isCommunicating == NO) {
+                            self.isActiveOriginStatus = self->_isActiveStatus;
+                        }
 //                        if (self.isP2PVideoCommun == YES) {
 //                            [self exitRoom:@""];
 //                        }
@@ -392,12 +432,15 @@
                 if (TIoTTRTCSessionCallType_video == type && self.isCommunicating == YES) {
                     
 //                    [self exitRoom:deviceParam._sys_userid];
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
+                    
+                    NSString *callID = [self getSysCallerIdWithPayloadParamModel:deviceParam];
+                    
+                    if (![NSString isNullOrNilWithObject:callID] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                            [self.delegate didExitRoom:deviceParam._sys_userid];
+                            [self.delegate didExitRoom:callID];
                         }
-                        [self settingExitRoom:deviceParam._sys_userid];
+                        [self settingExitRoom:callID];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
                         if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
@@ -464,8 +507,10 @@
     _isEnterError = NO;
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
+    self.isActiveOriginStatus = _isActiveStatus;
     self.preCallingType = TIoTTRTCSessionCallType_audio;
     self.deviceIDTempStr = @"";
+    self.deviceIDOriginStr = @"";
     self.tempModel = nil;
     [[TIoTTRTCSessionManager sharedManager] resetSessionType];
 //    [_callAudioVC remoteDismiss];
@@ -755,19 +800,24 @@
                 NSString *tmpStr = (NSString *)responseObject[@"Data"];
                 TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
                 
+                TIOTtrtcPayloadParamModel *paramModel = [TIOTtrtcPayloadParamModel new];
+                paramModel._sys_called_id = product._sys_called_id.Value;
+                paramModel._sys_caller_id = product._sys_caller_id.Value;
+                
+                NSString *iDString = [self getSysCallerIdWithPayloadParamModel:paramModel];
                 
                 if ([product._sys_video_call_status.Value isEqualToString:@"1"] || [product._sys_audio_call_status.Value isEqualToString:@"1"]) {
                     
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
-                    if (product._sys_userid.Value.length > 0) {
-                        payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
+                    if (iDString.length > 0) {
+//                        payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
                         
-                        if (![payloadParam._sys_userid containsString:[TIoTCoreUserManage shared].userId]) {
+                        if (![iDString containsString:[TIoTCoreUserManage shared].userId]) {
                             //没给你打，目前正在跟别人打呢
                             return;
                         }
                     }else {
-                        payloadParam._sys_userid = device.DeviceId;
+//                        payloadParam._sys_userid = device.DeviceId;
                     }
                     payloadParam._sys_video_call_status = product._sys_video_call_status.Value;
                     payloadParam._sys_audio_call_status = product._sys_audio_call_status.Value;
@@ -807,17 +857,18 @@
     if (![NSString isNullOrNilWithObject:idString]) {
         tempIDString = idString;
     }else {
-        if (model.params._sys_userid.length < 1) {
-            tempIDString = deviceInfo[@"DeviceId"];
-        }else {
-            tempIDString = model.params._sys_userid;
-        }
+//        if (model.params._sys_userid.length < 1) {
+//            tempIDString = deviceInfo[@"DeviceId"];
+//        }else {
+//            tempIDString = model.params._sys_userid;
+//        }
+        tempIDString = deviceInfo[@"DeviceId"];
     }
     
     model.params.deviceName = deviceInfo[@"DeviceId"];
-    if (model.params._sys_userid.length < 1) {
-        model.params._sys_userid = deviceInfo[@"DeviceId"];
-    }
+//    if (model.params._sys_userid.length < 1) {
+//        model.params._sys_userid = deviceInfo[@"DeviceId"];
+//    }
 
     
     if ([payloadDic.allKeys containsObject:@"params"]) {
@@ -876,8 +927,8 @@
                 }else {
                     NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
                     for (NSString *userIdString in userIdArray) {
-                        model.params._sys_userid = userIdString?:@"";
-                        if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+//                        model.params._sys_userid = userIdString?:@"";
+                        if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                             [self preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
 
                                 [MBProgressHUD showError:reason];
@@ -893,7 +944,7 @@
             NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
             for (NSString *userIdString in userIdArray) {
 
-                model.params._sys_userid = userIdString?:@"";
+//                model.params._sys_userid = userIdString?:@"";
                 [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                     [MBProgressHUD showError:reason];
                 }];
@@ -904,9 +955,9 @@
             NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
             for (NSString *userIdString in userIdArray) {
 
-                model.params._sys_userid = userIdString?:@"";
+//                model.params._sys_userid = userIdString?:@"";
                 if (self.isEnterError == NO) {
-                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                    if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                         
                         if ([self.deviceID isEqualToString:model.params.deviceName]) {
                             [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
@@ -914,7 +965,7 @@
                             }];
                         }
                         
-                    }else if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
+                    }else if ([userIdString isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
                            //防止case 3 中另一个设备 呼叫正在调起通话页面的APP
                             [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                                 [MBProgressHUD showError:reason];
@@ -934,11 +985,11 @@
     //异常
     if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
         
-        NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
+        NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
         for (NSString *userIdString in userIdArray) {
 
-            model.params._sys_userid = userIdString?:@"";
-            if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+//            model.params._sys_userid = userIdString?:@"";
+            if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                 [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                     [MBProgressHUD showError:reason];
                 }];
@@ -952,9 +1003,13 @@
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)deviceDic{
     _isActiveCall = YES; //表示主动呼叫
     _isActiveStatus = _isActiveCall;
- 
+    if (self.isCommunicating == NO) {
+        self.isActiveOriginStatus = _isActiveStatus;
+    }
+    
     self.preCallingType = audioORvideo;
     self.deviceIDTempStr = deviceIdString?:@"";
+    self.deviceIDOriginStr = deviceIdString?:@"";
     
 //    UIViewController *topVC = [TIoTCoreUtil topViewController];
 //    if (audioORvideo == TIoTTRTCSessionCallType_audio ||  audioORvideo == TIoTTRTCSessionCallType_video) {
@@ -1040,6 +1095,11 @@
 - (BOOL)isActiveCalling:(TIOTtrtcPayloadParamModel *)deviceParam {
     self.deviceIDTempStr = deviceParam.deviceName?:@"";
     
+    //设备呼叫APP
+    if (self.isCommunicating == NO) {
+        self.deviceIDOriginStr = _deviceParam.deviceName?:@"";
+        self.isActiveOriginStatus = _isActiveStatus;;
+    }
     TIoTTRTCSessionCallType type = TIoTTRTCSessionCallType_audio;
     if (![NSString isNullOrNilWithObject:deviceParam._sys_audio_call_status]) {
         type = TIoTTRTCSessionCallType_audio;
@@ -1057,7 +1117,7 @@
 
         if (_isActiveCall) { //如果是被动呼叫的话，不能自动进入房间
 //            [self didAcceptJoinRoom];
-            
+//            self.deviceIDTempStr = deviceParam.deviceName?:@"";
             if ([self.delegate respondsToSelector:@selector(acceptJoinRoom)]) {
                 [self.delegate acceptJoinRoom];
             }
@@ -1075,8 +1135,12 @@
         return  YES;
     }
     
+//    self.deviceIDTempStr = deviceParam.deviceName?:@"";
     _isActiveCall = NO;//表示被呼叫
     _isActiveStatus = _isActiveCall;
+    if (self.isCommunicating == NO) {
+        self.isActiveOriginStatus = _isActiveStatus;
+    }
     
     /*************trtc 可直接调用  p2p 不用实现代理即可 可以尝试复写，不行则用isP2PVideoCommun判断 **********/
     
@@ -1241,8 +1305,11 @@
     _isEnterError = NO;
     _isActiveCall = NO;
     _isActiveStatus = _isActiveCall;
+    self.isActiveOriginStatus = _isActiveStatus;
+    
     self.preCallingType = TIoTTRTCSessionCallType_audio;
     self.deviceIDTempStr = @"";
+    self.deviceIDOriginStr = @"";
     self.tempModel = nil;
     [[TIoTTRTCSessionManager sharedManager] resetSessionType];
 //    [_callAudioVC remoteDismiss];
@@ -1304,10 +1371,24 @@
     if (_isActiveStatus == YES) { //主叫
         if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
             idString = model._sys_caller_id;
+        }else {
+            NSString *extraJson = model._sys_extra_info?:@"";
+            NSDictionary *extraDic = [NSString jsonToObject:extraJson];
+            if ([extraDic.allKeys containsObject:@"rejectUserId"]) {
+                idString = extraDic[@"rejectUserId"];
+                
+            }
         }
     }else { // 被叫
         if (![NSString isNullOrNilWithObject:model._sys_called_id]) {
             idString = model._sys_called_id;
+        }else {
+            NSString *extraJson = model._sys_extra_info?:@"";
+            NSDictionary *extraDic = [NSString jsonToObject:extraJson];
+            if ([extraDic.allKeys containsObject:@"rejectUserId"]) {
+                idString = extraDic[@"rejectUserId"];
+                
+            }
         }
     }
     return idString;

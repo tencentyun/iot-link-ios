@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TIOTtrtcPayloadParamModel : NSObject
 @property (nonatomic, strong) NSString *_sys_video_call_status;
 @property (nonatomic, strong) NSString *_sys_audio_call_status;
-@property (nonatomic, strong) NSString *_sys_userid;
+//@property (nonatomic, strong) NSString *_sys_userid;
 @property (nonatomic, strong) NSString *_sys_user_agent; //谁呼叫的
 @property (nonatomic, strong) NSString *_sys_extra_info; //_sys_extra_info: "{ \ "rejectUserId \ ": \ "userb \ "}"消息，判断rejectUserId是否为自己的用户id，，如果为自己的用户id，则退出呼叫通话的流程
 @property (nonatomic, strong) NSString *deviceName;//UI展示的名字
