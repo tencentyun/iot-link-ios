@@ -61,7 +61,19 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
 }
 
 - (void)preEnterRoom:(TIOTtrtcPayloadParamModel *)deviceParam failure:(FRHandler)failure {
-    if (deviceParam._sys_userid == nil) {
+    
+    NSString *iDString = [TIoTCoreUserManage shared].userId;
+    if (![NSString isNullOrNilWithObject:iDString]) {
+        if ([deviceParam._sys_caller_id isEqual:iDString]) {
+            iDString = deviceParam._sys_caller_id;
+        }
+        
+        if ([deviceParam._sys_called_id isEqual:iDString]) {
+            iDString = deviceParam._sys_caller_id;
+        }
+    }
+    
+    if (iDString == nil) {
         failure(@"DeviceId参数为空",nil,@{});
         return;
     }
@@ -70,7 +82,7 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
     _deviceParam = deviceParam;
     
     //开始准备进房间，通话中状态
-    NSDictionary *param = @{@"DeviceId":deviceParam._sys_userid};
+    NSDictionary *param = @{@"DeviceId":iDString};
 //    NSDictionary *tmpDic = @{@"ProductId":self.productId, @"DeviceName":self.deviceName};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppIotRTCCallDevice params:param useToken:YES];
@@ -108,6 +120,22 @@ NSString *const TIoTTRTCvideo_call_status = @"_sys_video_call_status";
 - (void)resetSessionType {
     _state = TIoTTRTCSessionType_free;
 }
+
+////获取 caller_id  （被叫时用called_id）
+//- (NSString *)getSysCallerIdWithPayloadParamModel:(TIOTtrtcPayloadParamModel *)model {
+//
+//    NSString *idString = @"";
+//    if (_isActiveStatus == YES) { //主叫
+//        if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
+//            idString = model._sys_caller_id;
+//        }
+//    }else { // 被叫
+//        if (![NSString isNullOrNilWithObject:model._sys_called_id]) {
+//            idString = model._sys_called_id;
+//        }
+//    }
+//    return idString;
+//}
 
 #pragma mark -
 

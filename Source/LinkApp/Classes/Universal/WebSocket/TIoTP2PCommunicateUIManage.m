@@ -439,12 +439,12 @@
     }else { //APP被叫
         //接收被呼叫
         if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_video_call_status]) {
-            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr];
+            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus];
 
             [self acceptAppCallingOrCalledEnterRoom];
         }else if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_audio_call_status]) {
-            [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr];
-            [self acceptAppCallingOrCalledEnterRoom];
+            [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus];
+            [self acceptAppCallingOrCalledEnterRoom ];
         }
 
     }
@@ -456,11 +456,11 @@
     if ([TIoTTRTCSessionManager sharedManager].state == TIoTTRTCSessionType_free) {
         if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_audio) {
             if (self.statusManager.tempModel._sys_audio_call_status.intValue != 2) {
-                [self refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:self.statusManager.deviceIDTempStr];
+                [self refuseOtherCallWithDeviceReport:@{@"_sys_audio_call_status":@"0"} deviceID:self.statusManager.deviceIDOriginStr isActive:self.statusManager.isActiveOriginStatus];
             }
         }else if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_video) {
             if (self.statusManager.tempModel._sys_video_call_status.intValue != 2) {
-                [self refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:self.statusManager.deviceIDTempStr];
+                [self refuseOtherCallWithDeviceReport:@{@"_sys_video_call_status":@"0"} deviceID:self.statusManager.deviceIDOriginStr isActive:self.statusManager.isActiveOriginStatus];
             }
 
         }
@@ -575,27 +575,27 @@
 */
 
 - (void)statusManagerRefuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus];
 }
 - (void)statusManagerrequestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus];
 }
 
 #pragma mark - 拒绝其他设备呼叫
-- (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
+- (void)refuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID isActive:(BOOL)isActive{
     
 //    if (self.isP2PVideoCommun == YES) {
 //        [self exitRoom:@""];
 //    }
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:isActive];
 }
 
-- (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
+- (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID isActive:(BOOL)isActive{
     NSMutableDictionary *trtcReport = [reportDic mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
-    if (userId) {
-        [trtcReport setValue:userId forKey:@"_sys_userid"];
-    }
+//    if (userId) {
+//        [trtcReport setValue:userId forKey:@"_sys_userid"];
+//    }
     NSString *username = [TIoTCoreUserManage shared].nickName;
     if (username) {
         [trtcReport setValue:username forKey:@"username"];
@@ -623,7 +623,7 @@
         NSString *agentString = [TIoTCoreUtil getSysUserAgent];
         [dataDic setValue:agentString forKey:@"_sys_user_agent"];
         
-        if (self.statusManager.isActiveStatus == YES) { //主动
+        if (isActive == YES) { //主动
             //拼接主呼叫方_sys_caller_id
             [dataDic setValue:[TIoTCoreUserManage shared].userId?:@"" forKey:@"_sys_caller_id"];
             
@@ -661,7 +661,7 @@
             @"Data":dataDicJson?:@""};
 //    }
     
-    [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
 //        if (self.isP2PVideoCommun == YES) {
             if (self.statusManager.isActiveStatus == YES) {
@@ -976,15 +976,16 @@
         }
         
 //        [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
-        if (self.statusManager.isActiveStatus == YES) {
-            if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
-                [reportDic setValue:model._sys_caller_id?:@"" forKey:@"_sys_userid"];
-            }else {
-                [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
-            }
-        }else if (self.statusManager.isActiveStatus == NO){
-            
-        }
+        
+//        if (self.statusManager.isActiveStatus == YES) {
+//            if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
+//                [reportDic setValue:model._sys_caller_id?:@"" forKey:@"_sys_userid"];
+//            }else {
+//                [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
+//            }
+//        }else if (self.statusManager.isActiveStatus == NO){
+//
+//        }
         [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
         
         _callP2PVideo = [[TIoTAVP2PPlayCaptureVC alloc]init];

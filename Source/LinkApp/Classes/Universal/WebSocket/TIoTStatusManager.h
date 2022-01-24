@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) TIoTTRTCSessionCallType preCallingType;
 @property (nonatomic, strong, readonly) TIOTtrtcPayloadParamModel *tempModel;
 @property (nonatomic, strong, readonly) NSString *deviceIDTempStr;
+@property (nonatomic, strong, readonly) NSString *deviceIDOriginStr; //通话中的
 @property (nonatomic, strong) TRTCCallingAuidoViewController *callAudioVC;
 @property (nonatomic, strong) TRTCCallingVideoViewController *callVideoVC;
 
@@ -65,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)settingExitRoom:(NSString *)remoteUserID; 
 
 
-
+@property (nonatomic, readonly) BOOL isActiveOriginStatus; //多设备呼叫情况下保留和第一个设备呼叫关系
 @property (nonatomic, readonly) BOOL isActiveStatus; //YES主动  NO 被动
 @property (nonatomic, readonly) BOOL isEnterError; //yes 正常进入房间，no  15s内没进入
 
