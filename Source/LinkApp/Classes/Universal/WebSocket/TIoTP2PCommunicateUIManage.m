@@ -593,9 +593,9 @@
 - (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
     NSMutableDictionary *trtcReport = [reportDic mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
-    if (userId) {
-        [trtcReport setValue:userId forKey:@"_sys_userid"];
-    }
+//    if (userId) {
+//        [trtcReport setValue:userId forKey:@"_sys_userid"];
+//    }
     NSString *username = [TIoTCoreUserManage shared].nickName;
     if (username) {
         [trtcReport setValue:username forKey:@"username"];
@@ -976,15 +976,16 @@
         }
         
 //        [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
-        if (self.statusManager.isActiveStatus == YES) {
-            if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
-                [reportDic setValue:model._sys_caller_id?:@"" forKey:@"_sys_userid"];
-            }else {
-                [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
-            }
-        }else if (self.statusManager.isActiveStatus == NO){
-            
-        }
+        
+//        if (self.statusManager.isActiveStatus == YES) {
+//            if (![NSString isNullOrNilWithObject:model._sys_caller_id]) {
+//                [reportDic setValue:model._sys_caller_id?:@"" forKey:@"_sys_userid"];
+//            }else {
+//                [reportDic setValue:model._sys_userid?:@"" forKey:@"_sys_userid"];
+//            }
+//        }else if (self.statusManager.isActiveStatus == NO){
+//
+//        }
         [reportDic setValue:[TIoTCoreUserManage shared].nickName?:@"" forKey:@"username"];
         
         _callP2PVideo = [[TIoTAVP2PPlayCaptureVC alloc]init];
