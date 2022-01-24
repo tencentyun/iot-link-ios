@@ -68,15 +68,15 @@
     NSString *IDString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
     NSString *deviceParamString = [self getSysCallerIdWithPayloadParamModel:_deviceParam];
     
-    if (deviceParam._sys_userid == nil) {
-        failure(@"DeviceId参数为空",nil,@{});
+//    if (deviceParam._sys_userid == nil) {
+//        failure(@"DeviceId参数为空",nil,@{});
         if ([NSString isNullOrNilWithObject:IDString]) {
                     return;
         }
 //        return;
-    }
+//    }
     
-    if (_deviceParam._sys_userid || ![NSString isNullOrNilWithObject:deviceParamString]) {
+    if (![NSString isNullOrNilWithObject:deviceParamString]) {
         if ([_deviceParam.deviceName isEqualToString:deviceParam.deviceName]) {
             _deviceParam = deviceParam;
         }
@@ -117,13 +117,13 @@
     NSString *IDString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
     NSString *deviceParamIDString = [self getSysCallerIdWithPayloadParamModel:_deviceParam];
     
-    if (_deviceParam._sys_userid || ![NSString isNullOrNilWithObject:deviceParamIDString]) {
-            if ([deviceParam._sys_userid isEqualToString:_deviceParam._sys_userid] || [IDString isEqualToString:deviceParamIDString]) {
+    if (![NSString isNullOrNilWithObject:deviceParamIDString]) {
+            if ([IDString isEqualToString:deviceParamIDString]) {
             if(deviceParam._sys_audio_call_status.intValue == 1 || deviceParam._sys_video_call_status.intValue == 1)
             [self leaveRoomWith:deviceParam];
         }
         
-        if ([[NSString stringWithFormat:@"%@%@",deviceParam._sys_userid,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",_deviceParam._sys_userid,_deviceParam.deviceName]] || [[NSString stringWithFormat:@"%@%@",IDString,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",deviceParamIDString,_deviceParam.deviceName]]) {
+        if ([[NSString stringWithFormat:@"%@%@",IDString,deviceParam.deviceName] isEqualToString:[NSString stringWithFormat:@"%@%@",deviceParamIDString,_deviceParam.deviceName]]) {
             [self leaveRoomWith:deviceParam];
         }
         
@@ -132,11 +132,11 @@
         }
         
         //case 1
-        if ([_deviceParam._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId] || [deviceParamIDString isEqualToString:[TIoTCoreUserManage shared].userId]) {
+        if ([deviceParamIDString isEqualToString:[TIoTCoreUserManage shared].userId]) {
             [self leaveRoomWith:deviceParam];
         }
         
-        if ([_deviceParam._sys_userid isEqualToString:_deviceParam.deviceName]|| [deviceParamIDString isEqualToString:_deviceParam.deviceName]) {
+        if ([deviceParamIDString isEqualToString:_deviceParam.deviceName]) {
             [self leaveRoomWith:deviceParam];
         }
         
@@ -263,12 +263,14 @@
                 if (TIoTTRTCSessionCallType_audio == type && self.isCommunicating == YES) {
 //                    [self exitRoom:deviceParam._sys_userid];
                     
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
+                    NSString *callID = [self getSysCallerIdWithPayloadParamModel:deviceParam];
+                    
+                    if (![NSString isNullOrNilWithObject:callID] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                            [self.delegate didExitRoom:deviceParam._sys_userid];
+                            [self.delegate didExitRoom:callID];
                         }
-                        [self settingExitRoom:deviceParam._sys_userid];
+                        [self settingExitRoom:callID];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
                         if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id] ) {
@@ -392,12 +394,15 @@
                 if (TIoTTRTCSessionCallType_video == type && self.isCommunicating == YES) {
                     
 //                    [self exitRoom:deviceParam._sys_userid];
-                    if (![NSString isNullOrNilWithObject:deviceParam._sys_userid] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
+                    
+                    NSString *callID = [self getSysCallerIdWithPayloadParamModel:deviceParam];
+                    
+                    if (![NSString isNullOrNilWithObject:callID] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
 //                        [self exitRoom:deviceParam._sys_userid];
                         if ([self.delegate respondsToSelector:@selector(didExitRoom:)]) {
-                            [self.delegate didExitRoom:deviceParam._sys_userid];
+                            [self.delegate didExitRoom:callID];
                         }
-                        [self settingExitRoom:deviceParam._sys_userid];
+                        [self settingExitRoom:callID];
                     }else {
                         NSString *idString = [self getSysCallerIdWithPayloadParamModel:deviceParam];
                         if (![NSString isNullOrNilWithObject:idString] && [self.called_id isEqualToString:deviceParam._sys_called_id]) {
@@ -755,19 +760,24 @@
                 NSString *tmpStr = (NSString *)responseObject[@"Data"];
                 TIoTDeviceDataModel *product = [TIoTDeviceDataModel yy_modelWithJSON:tmpStr];
                 
+                TIOTtrtcPayloadParamModel *paramModel = [TIOTtrtcPayloadParamModel new];
+                paramModel._sys_called_id = product._sys_called_id.Value;
+                paramModel._sys_caller_id = product._sys_caller_id.Value;
+                
+                NSString *iDString = [self getSysCallerIdWithPayloadParamModel:paramModel];
                 
                 if ([product._sys_video_call_status.Value isEqualToString:@"1"] || [product._sys_audio_call_status.Value isEqualToString:@"1"]) {
                     
                     TIOTtrtcPayloadParamModel *payloadParam = [TIOTtrtcPayloadParamModel new];
-                    if (product._sys_userid.Value.length > 0) {
-                        payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
+                    if (iDString.length > 0) {
+//                        payloadParam._sys_userid = product._sys_userid ? product._sys_userid.Value:device.DeviceId;
                         
-                        if (![payloadParam._sys_userid containsString:[TIoTCoreUserManage shared].userId]) {
+                        if (![iDString containsString:[TIoTCoreUserManage shared].userId]) {
                             //没给你打，目前正在跟别人打呢
                             return;
                         }
                     }else {
-                        payloadParam._sys_userid = device.DeviceId;
+//                        payloadParam._sys_userid = device.DeviceId;
                     }
                     payloadParam._sys_video_call_status = product._sys_video_call_status.Value;
                     payloadParam._sys_audio_call_status = product._sys_audio_call_status.Value;
@@ -807,17 +817,18 @@
     if (![NSString isNullOrNilWithObject:idString]) {
         tempIDString = idString;
     }else {
-        if (model.params._sys_userid.length < 1) {
-            tempIDString = deviceInfo[@"DeviceId"];
-        }else {
-            tempIDString = model.params._sys_userid;
-        }
+//        if (model.params._sys_userid.length < 1) {
+//            tempIDString = deviceInfo[@"DeviceId"];
+//        }else {
+//            tempIDString = model.params._sys_userid;
+//        }
+        tempIDString = deviceInfo[@"DeviceId"];
     }
     
     model.params.deviceName = deviceInfo[@"DeviceId"];
-    if (model.params._sys_userid.length < 1) {
-        model.params._sys_userid = deviceInfo[@"DeviceId"];
-    }
+//    if (model.params._sys_userid.length < 1) {
+//        model.params._sys_userid = deviceInfo[@"DeviceId"];
+//    }
 
     
     if ([payloadDic.allKeys containsObject:@"params"]) {
@@ -876,8 +887,8 @@
                 }else {
                     NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
                     for (NSString *userIdString in userIdArray) {
-                        model.params._sys_userid = userIdString?:@"";
-                        if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+//                        model.params._sys_userid = userIdString?:@"";
+                        if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                             [self preEnterRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
 
                                 [MBProgressHUD showError:reason];
@@ -893,7 +904,7 @@
             NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
             for (NSString *userIdString in userIdArray) {
 
-                model.params._sys_userid = userIdString?:@"";
+//                model.params._sys_userid = userIdString?:@"";
                 [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                     [MBProgressHUD showError:reason];
                 }];
@@ -904,9 +915,9 @@
             NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
             for (NSString *userIdString in userIdArray) {
 
-                model.params._sys_userid = userIdString?:@"";
+//                model.params._sys_userid = userIdString?:@"";
                 if (self.isEnterError == NO) {
-                    if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+                    if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                         
                         if ([self.deviceID isEqualToString:model.params.deviceName]) {
                             [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
@@ -914,7 +925,7 @@
                             }];
                         }
                         
-                    }else if ([model.params._sys_userid isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
+                    }else if ([userIdString isEqualToString:model.params.deviceName]) {   //返回socket params 里没有userid时候（设备端主动呼叫，未接听，设备主动挂断）
                            //防止case 3 中另一个设备 呼叫正在调起通话页面的APP
                             [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                                 [MBProgressHUD showError:reason];
@@ -934,11 +945,11 @@
     //异常
     if ([deviceInfo[@"SubType"] isEqualToString:@"Offline"]) {
         
-        NSArray *userIdArray = [model.params._sys_userid componentsSeparatedByString:@";"];
+        NSArray *userIdArray = [tempIDString componentsSeparatedByString:@";"];
         for (NSString *userIdString in userIdArray) {
 
-            model.params._sys_userid = userIdString?:@"";
-            if ([model.params._sys_userid isEqualToString:[TIoTCoreUserManage shared].userId]) {
+//            model.params._sys_userid = userIdString?:@"";
+            if ([userIdString isEqualToString:[TIoTCoreUserManage shared].userId]) {
                 [self preLeaveRoom:model.params failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
                     [MBProgressHUD showError:reason];
                 }];
