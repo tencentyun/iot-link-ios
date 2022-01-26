@@ -10,12 +10,15 @@
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTCoreUtil.h"
 
-@interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate>
+@interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate,CLLocationManagerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSMutableArray *dataArr;
 @property (nonatomic, strong) CBCentralManager *centralManager; //判断蓝牙是否开启
 /// 蓝牙是否可用
 @property (nonatomic, assign) BOOL bluetoothAvailable;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, assign) BOOL locationAvailable; //地图是否可用
 @end
 
 @implementation TIoTAuthentationVC
@@ -33,7 +36,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationwillenterforegound) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     //判断蓝牙是否开启
-    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+    if ([[TIoTCoreUserManage shared].isChangeBluetoothAuth isEqualToString:@"1"]) {
+        self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+        self.bluetoothAvailable = YES;
+    }else  {
+        if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isChangeBluetoothAuth]) {
+            self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+        }else {
+            self.bluetoothAvailable = NO;
+        }
+        
+    }
 }
 
 - (void)applicationwillenterforegound
@@ -93,13 +106,75 @@
         cell.arrowSwitch.on = self.bluetoothAvailable;
     }
     
-    cell.authSwitch = ^(BOOL open) {
-
-        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        if ([[UIApplication sharedApplication] canOpenURL:url]){
-            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-        }
+    cell.authSwitch = ^(BOOL open,UISwitch *switchControl) {
         
+        if (indexPath.section == 0) {
+            [self jumpSetting];
+            
+        }else if (indexPath.section == 1) {
+            CLAuthorizationStatus CLstatus = [CLLocationManager authorizationStatus];
+            if (CLstatus == kCLAuthorizationStatusNotDetermined) {
+                self.locationManager = [[CLLocationManager alloc] init];
+                self.locationManager.delegate = self;
+            }else {
+                [self jumpSetting];
+            }
+            
+        }else if (indexPath.section == 2) {
+            if ([self getMediaNotDetermStatusWithType:AVMediaTypeVideo]) {
+                
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo
+                                         completionHandler:^(BOOL granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (granted) {
+                            //同意授权
+                            switchControl.on = YES;
+                        } else {
+                            //拒绝授权
+                            switchControl.on = NO;
+                        }
+                    });
+                }];
+                
+            }else {
+                [self jumpSetting];
+            }
+        }else if (indexPath.section == 3) {
+            if ([self getMediaNotDetermStatusWithType:AVMediaTypeAudio]) {
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio
+                                         completionHandler:^(BOOL granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (granted) {
+                            //同意授权
+                            switchControl.on = YES;
+                        } else {
+                            //拒绝授权
+                            switchControl.on = NO;
+                        }
+                    });
+                }];
+            }else {
+                [self jumpSetting];
+            }
+        }else if (indexPath.section == 4) {
+            if (self.centralManager.state == CBManagerStateUnauthorized) {
+                //判断蓝牙是否开启
+                self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+                if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isChangeBluetoothAuth]) {
+                    [self jumpSetting];
+                }
+            }else {
+                
+                if ([NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].isChangeBluetoothAuth]) {
+                    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+                }else {
+                    if ([[TIoTCoreUserManage shared].isChangeBluetoothAuth isEqualToString:@"0"]) {
+                        self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+                    }
+                    [self jumpSetting];
+                }
+            }
+        }
     };
     return cell;
 }
@@ -143,6 +218,22 @@
     return _dataArr;
 }
 
+//判断是否麦克风和摄像头请求授权
+- (BOOL)getMediaNotDetermStatusWithType:(AVMediaType)mediaType {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if (authStatus == AVAuthorizationStatusNotDetermined) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
+
+- (void)jumpSetting {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+}
 
 #pragma mark - 是否开启APP推送
 /**是否开启推送*/
@@ -196,7 +287,7 @@
     if (isLocation) {
         
         CLAuthorizationStatus CLstatus = [CLLocationManager authorizationStatus];
-        if (CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusDenied) {
+        if (CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusDenied || CLstatus == kCLAuthorizationStatusNotDetermined) {
             return NO;
         }
         
@@ -207,25 +298,30 @@
 }
 
 - (BOOL)audioAuthority:(AVMediaType)type {
-    return [TIoTCoreUtil requestMediaAuthorization:type];
+//    return [TIoTCoreUtil requestMediaAuthorization:type];
+    return [TIoTCoreUtil userAccessMediaAuthorization:type];
 }
 
 #pragma mark - 判断蓝牙是否开启代理
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     switch (central.state) {
         case CBManagerStatePoweredOn:
+            [TIoTCoreUserManage shared].isChangeBluetoothAuth = @"1";
             self.bluetoothAvailable = true; break; //NSLog(@"蓝牙开启且可用");
         case CBManagerStateUnknown:
+            [TIoTCoreUserManage shared].isChangeBluetoothAuth = @"0";
             self.bluetoothAvailable = false; break; //NSLog(@"手机没有识别到蓝牙，请检查手机。");
         case CBManagerStateResetting:
+            [TIoTCoreUserManage shared].isChangeBluetoothAuth = @"1";
             self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙已断开连接，重置中。");
         case CBManagerStateUnsupported:
             self.bluetoothAvailable = false; break; //NSLog(@"手机不支持蓝牙功能，请更换手机。");
         case CBManagerStatePoweredOff:
-            
             [self customAlertOpenBluetooth];
+            [TIoTCoreUserManage shared].isChangeBluetoothAuth = @"0";
             self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能关闭，请前往设置打开蓝牙及控制中心打开蓝牙。");
         case CBManagerStateUnauthorized:
+            [TIoTCoreUserManage shared].isChangeBluetoothAuth = @"0";
             self.bluetoothAvailable = false; break; //NSLog(@"手机蓝牙功能没有权限，请前往设置。");
         default:  break;
     }
@@ -250,10 +346,26 @@
         [alertC addAction:alertCancel];
         
         UIAlertAction *alertConfirm = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"确定") style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            [self jumpSetting];
         }];
         [alertC addAction:alertConfirm];
         
         [self presentViewController:alertC animated:YES completion:nil];
 }
 
+#pragma mark CLLocationManagerDelegate
+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager API_AVAILABLE(ios(14.0), macos(11.0), watchos(7.0), tvos(14.0)) {
+    CLAuthorizationStatus status = [manager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        self.locationAvailable = YES;
+    }else if (status == kCLAuthorizationStatusNotDetermined) {
+        self.locationAvailable = NO;
+        [manager requestWhenInUseAuthorization];
+    }else {
+        //提示语弹框
+        self.locationAvailable = NO;
+    }
+    [self.tableView reloadData];
+}
 @end

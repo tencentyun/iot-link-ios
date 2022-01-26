@@ -21,7 +21,7 @@ static NSString * const ID = @"TIoTUserInfomationTableViewCell";
 @property (nonatomic, copy) NSDictionary *dic;
 
 @property (nonatomic, strong) UISwitch *arrowSwitch;
-@property (nonatomic) void (^authSwitch)(BOOL open);
+@property (nonatomic) void (^authSwitch)(BOOL open,UISwitch *switchControl);
 @property (nonatomic, weak)id<TIoTUserInfomationTableViewCellDelegate>delegate;
 @end
 

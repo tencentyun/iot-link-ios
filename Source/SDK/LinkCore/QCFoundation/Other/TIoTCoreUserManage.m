@@ -55,6 +55,7 @@
 @synthesize firmwareUpdate = _firmwareUpdate;
 @synthesize isRreshDeviceList = _isRreshDeviceList;
 @synthesize isVersionUpdateView = _isVersionUpdateView;
+@synthesize isChangeBluetoothAuth = _isChangeBluetoothAuth;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -525,6 +526,20 @@
 - (void)setSignIn_Email_Address:(NSString *)signIn_Email_Address {
     _signIn_Email_Address = signIn_Email_Address;
     [[NSUserDefaults standardUserDefaults] setValue:signIn_Email_Address forKey:@"signIn_Email_Address"];
+}
+
+#pragma mark - 是否更改过蓝牙权限
+
+- (NSString *)isChangeBluetoothAuth {
+    if (!_isChangeBluetoothAuth) {
+        _isChangeBluetoothAuth = [[NSUserDefaults standardUserDefaults] valueForKey:@"is_ChangeBluetooth_Auth"];
+    }
+    return _isChangeBluetoothAuth;
+}
+
+- (void)setIsChangeBluetoothAuth:(NSString *)isChangeBluetoothAuth {
+    _isChangeBluetoothAuth = isChangeBluetoothAuth;
+    [[NSUserDefaults standardUserDefaults] setValue:isChangeBluetoothAuth forKey:@"is_ChangeBluetooth_Auth"];
 }
 
 #pragma mark - 地图搜索

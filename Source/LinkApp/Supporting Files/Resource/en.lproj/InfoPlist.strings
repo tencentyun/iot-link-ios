@@ -8,5 +8,5 @@ NSBluetoothAlwaysUsageDescription = "Turn on Bluetooth to scan for hardware";
 NSBluetoothPeripheralUsageDescription = "Turn on Bluetooth to scan for hardware";
 NSCameraUsageDescription = "Obtain camera permission to scan the QR code and video function of the device";
 NSLocationWhenInUseUsageDescription = "User obtains location information";
-NSPhotoLibraryUsageDescription = "Obtain the permission of the album to identify the local QR code";
+NSPhotoLibraryUsageDescription = "Obtain the permission of the album to identify the local QR code and change the avatar";
 NSMicrophoneUsageDescription = "Obtain microphone permission to use the real-time voice and call functions of the device";
