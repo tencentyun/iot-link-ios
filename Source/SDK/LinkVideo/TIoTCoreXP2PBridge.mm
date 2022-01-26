@@ -100,6 +100,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
+@property (nonatomic, assign) long v_index;
 @end
 
 @implementation TIoTCoreXP2PBridge {
@@ -124,7 +125,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     if (self) {
         //默认打开log开关
         _logEnable = YES;
-        
+        _v_index = 0;
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
         [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
@@ -269,7 +270,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
-//        NSLog(@"vide stream data:%s  size:%zu",data,size);
+//        printf("vide stream data index:%ld, time:%f, size:%zu\n",_v_index++,[[NSDate date] timeIntervalSince1970],size);
         dataSend(self.dev_name.UTF8String, data, size);
 //        NSData *dataTag = [NSData dataWithBytes:data length:size];
 //        [fileHandle writeData:dataTag];

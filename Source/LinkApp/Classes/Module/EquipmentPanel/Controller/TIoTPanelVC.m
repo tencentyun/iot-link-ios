@@ -3776,19 +3776,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    NSString *selectedName = self.deviceName?:@"";
+//    NSString *selectedName = self.deviceName?:@"";
     
-    if (![DeviceName isEqualToString:selectedName]) {
-        return;
-    }
-    
-    [MBProgressHUD showError:@"通道断开，正在重连"];
-    [HXYNotice postP2PVIdeoExit];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@""
-                                              sec_key:@""
-                                               pro_id:self.productId?:@""
-                                             dev_name:DeviceName?:@""];
+//    if (![DeviceName isEqualToString:selectedName]) {
+//        return;
+//    }
+    NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
+    [MBProgressHUD showError:error_message];
 
 }
 @end

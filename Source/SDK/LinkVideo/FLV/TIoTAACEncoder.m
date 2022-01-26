@@ -168,9 +168,9 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
             error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
         }
         if (completionBlock) {
-            dispatch_async(_callbackQueue, ^{
+//            dispatch_async(_callbackQueue, ^{
                 completionBlock(data, error);
-            });
+//            });
         }
         CFRelease(sampleBuffer);
         CFRelease(blockBuffer);

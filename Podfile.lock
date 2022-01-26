@@ -135,10 +135,10 @@ PODS:
   - TIoTLinkKit_IJKPlayer (1.0.3)
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
-  - TIoTLinkKit_XP2P (2.4.5-beta.202201190337)
+  - TIoTLinkKit_XP2P (2.4.20)
   - TIoTLinkVideo (1.0.0):
     - TIoTLinkKit_FLV (= 2.2.3)
-    - TIoTLinkKit_XP2P (= 2.4.5-beta.202201190337)
+    - TIoTLinkKit_XP2P (= 2.4.20)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (8.0.9644)
   - TZImagePickerController (3.2.1)
@@ -257,8 +257,8 @@ SPEC CHECKSUMS:
   TIoTLinkKit_IJKPlayer: 68e5627c9b403fe0137b2f7ee950a9eed23a9941
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
-  TIoTLinkKit_XP2P: 135edcb466ba2389dcf7f4d4f62b95723379e23a
-  TIoTLinkVideo: 279fa0b3114dfb7b4d999ca07727f8e654e6117e
+  TIoTLinkKit_XP2P: 8ab9aabd50a5445514fd31521dceb23dbccfd59c
+  TIoTLinkVideo: aa2401600951e068aba7b5b035aa8fdac7a593c1
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d

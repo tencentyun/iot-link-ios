@@ -404,32 +404,29 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         if (self.isStart == NO) {
             
             self.topView.hidden = YES;
-//            if (self.isCallIng == NO) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-
-                    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-
-                    [self configVideo];
-                    [self.player prepareToPlay];
-                    [self.player play];
-
-                    self.startPlayer = CACurrentMediaTime();
-                });
-//            }
-           
-            self.isStart = YES;
-
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //            if (self.isCallIng == NO) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+                
+                self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+                
+                [self configVideo];
+                [self.player prepareToPlay];
+                [self.player play];
+                
+                self.startPlayer = CACurrentMediaTime();
+                //            }
+                
+                self.isStart = YES;
+                
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
-                
-//                [[TIoTTRTCUIManage sharedManager] acceptAppCallingOrCalledEnterRoom];
-                
+                                
                 [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
                 [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
                 
                 [self startAVCapture];
+                
             });
         }
     }
@@ -592,7 +589,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 #pragma mark 事件
 - (void)startAVCapture {
     
-    self.isStart = YES;
     if (self.callType == TIoTTRTCSessionCallType_audio) {
         [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:nil];
     }else {
