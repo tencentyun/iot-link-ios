@@ -156,7 +156,7 @@
 
 - (void)openAuth:(UISwitch *)sender {
     if (self.authSwitch) {
-        self.authSwitch(sender.on);
+        self.authSwitch(sender.on,self.arrowSwitch);
     }
 }
 @end

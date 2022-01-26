@@ -443,4 +443,21 @@
     return isAccess;
 }
 
+/**
+ 获取摄像头和麦克风权限状态（无弹框）
+ */
++ (BOOL)userAccessMediaAuthorization:(AVMediaType)mediaType; {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    BOOL isAccess = NO;
+    if (authStatus == AVAuthorizationStatusNotDetermined) {
+        isAccess = NO;
+    } else if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
+        //拒绝授权
+        isAccess = NO;
+    } else if (authStatus == AVAuthorizationStatusAuthorized) {
+        //同意授权
+        isAccess = YES;
+    }
+    return isAccess;
+}
 @end

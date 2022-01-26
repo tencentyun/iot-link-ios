@@ -72,6 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)requestMediaAuthorization:(AVMediaType)mediaType;
 
+/**
+ 用户是否授权摄像头和麦克风权限（无弹框）
+ */
++ (BOOL)userAccessMediaAuthorization:(AVMediaType)mediaType;
 @end
 
 NS_ASSUME_NONNULL_END
