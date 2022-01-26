@@ -16,7 +16,7 @@
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
 dispatch_queue_t muxerQueue;
-NSFileHandle *_fileHandle;
+//NSFileHandle *_fileHandle;
 
 @interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate>
 // 负责输如何输出设备之间的数据传递
@@ -216,8 +216,8 @@ NSFileHandle *_fileHandle;
     
 //    NSLog(@"Video data (%lu):%@", (unsigned long)data.length,data.description);
     
-    if (_fileHandle != NULL)
-    {
+//    if (_fileHandle != NULL)
+//    {
         const char bytes[] = "\x00\x00\x00\x01";
         size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
         NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
@@ -229,7 +229,7 @@ NSFileHandle *_fileHandle;
         NSMutableData *fullH264 = [NSMutableData dataWithData:ByteHeader];
         [fullH264 appendData:data];
         encodeFlvData(1, fullH264);
-    }
+//    }
     
 }
 
@@ -258,8 +258,8 @@ static int flv_onwrite(void *param, const struct flv_vec_t* vec, int n) {
         offset += vec[i].len;
     }
 
-    NSData *ByteHeader = [NSData dataWithBytes:bytes length:total_size];
-    [_fileHandle writeData:ByteHeader];
+//    NSData *ByteHeader = [NSData dataWithBytes:bytes length:total_size];
+//    [_fileHandle writeData:ByteHeader];
     
     [tAVCaptionFLV.delegate capture:(uint8_t *)bytes len:total_size];
     
@@ -313,10 +313,10 @@ int encodeFlvData(int type, NSData *packetData) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths firstObject];
     
-    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264.flv"];
-    [fileManager removeItemAtPath:self.h264File error:nil];
-    [fileManager createFileAtPath:self.h264File contents:nil attributes:nil];
-    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.h264File];
+//    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264.flv"];
+//    [fileManager removeItemAtPath:self.h264File error:nil];
+//    [fileManager createFileAtPath:self.h264File contents:nil attributes:nil];
+//    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.h264File];
         
     flv_init_load();
 
@@ -341,8 +341,8 @@ int encodeFlvData(int type, NSData *packetData) {
 //    [_h264Encoder End];
     [_session stopRunning];
 
-    [_fileHandle closeFile];
-    _fileHandle = NULL;
+//    [_fileHandle closeFile];
+//    _fileHandle = NULL;
 //
     // 获取程序Documents目录路径
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
