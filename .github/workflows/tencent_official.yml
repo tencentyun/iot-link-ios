@@ -6,7 +6,7 @@ on:
 
 jobs:
   Build:
-    runs-on: macos-10.15
+    runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
     - name: pod cache
