@@ -1104,10 +1104,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSLog(@"通道断开，正在重连");
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
-        [self setVieoPlayerStartPlayWith:self.qualityString];
+    
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setVieoPlayerStartPlayWith:self.qualityString];
+        });
     });
 
 }
