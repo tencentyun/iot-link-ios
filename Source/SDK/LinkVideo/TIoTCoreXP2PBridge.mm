@@ -316,4 +316,8 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 + (void)recordstream:(NSString *)dev_name {
     startRecordPlayerStream(dev_name.UTF8String);
 }
+
++ (int)getStreamLinkMode:(NSString *)dev_name {
+    return getStreamLinkMode(dev_name.UTF8String);
+}
 @end
