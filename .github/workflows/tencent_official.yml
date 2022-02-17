@@ -64,9 +64,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: upload dSYM
-      if: ${{!contains(env.curr_tag, 'video')}}
-      run: ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
+#    - name: upload dSYM
+#      if: ${{!contains(env.curr_tag, 'video')}}
+#      run: ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
 
 
 ############# Video ##################
@@ -118,7 +118,7 @@ jobs:
       env:
         RELEASE_PGYER_API_KEY: ${{ secrets.IOT_FIRIM_API_TOKEN }}
         
-    - name: video upload dSYM
-      if: ${{contains(env.curr_tag, 'video')}}
-      run: |
-        ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkSDKDemo/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
+#    - name: video upload dSYM
+#      if: ${{contains(env.curr_tag, 'video')}}
+#      run: |
+#        ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkSDKDemo/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkSDKDemo.xcarchive/dSYMs/LinkSDKDemo.app.dSYM
