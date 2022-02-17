@@ -997,6 +997,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
             
+            //获取当前发送链路的连接模式：0 无效；62 直连；63 转发
+            int netmode = [TIoTCoreXP2PBridge getStreamLinkMode:self.deviceName];
+            NSLog(@"nnnnnn---netmode==%d",netmode);
+            
             break;
         }
         case IJKMPMoviePlaybackStatePaused: {
