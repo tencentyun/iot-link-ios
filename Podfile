@@ -8,9 +8,6 @@ def common_all_pods
   pod 'SDWebImage', '4.4.2'
   pod 'YYModel', '1.0.4'
   pod 'QCloudCOSXML/Transfer', '5.5.2'
-  pod 'Firebase/Analytics', '6.31.1'
-  pod 'Firebase/Crashlytics', '6.31.1'
-  pod 'Firebase/Performance', '6.31.1'
   pod 'CocoaLumberjack', '3.7.2'
 end
 

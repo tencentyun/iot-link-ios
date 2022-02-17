@@ -6,7 +6,6 @@
 
 #import "AppDelegate.h"
 #import "TIoTCoreFoundation.h"
-#import "Firebase.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTDemoWebSocketManager.h"
 #import "TIoTCoreServices.h"
@@ -43,9 +42,6 @@
     environment.cloudSecretId = @"";
     environment.cloudSecretKey = @"";
     environment.cloudProductId = @"";
-    
-    //firebase注册
-    [FIRApp configure];
     
     //开启打印日志
     [TIoTCoreServices shared].logEnable = true;

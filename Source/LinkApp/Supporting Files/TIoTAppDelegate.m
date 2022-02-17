@@ -15,7 +15,6 @@
 
 #import "WxManager.h"
 #import "WRNavigationBar.h"
-#import "Firebase.h"
 #import "UIViewController+GetController.h"
 #import "TIoTWebVC.h"
 #import "TIoTWebVC+TIoTWebVCCategory.h"
@@ -56,15 +55,6 @@
     [TIoTCoreServices shared].logEnable = true;
     [[TIoTPrintLogManager sharedManager] config];
     [[TIoTPrintLogManager sharedManager] setLogLevel:ddLogLevel];
-    
-    //firebase注册
-    [FIRApp configure];
-    
-    if ([TIoTCoreUserManage shared].userId != nil) {
-        //上报用户userid
-        [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
-        [[FIRCrashlytics crashlytics] setUserID:[TIoTCoreUserManage shared].userId];
-    }
     
     TrueTimeClient *client = [TrueTimeClient sharedInstance];
     [client startWithPool:@[@"time.apple.com"] port:123];

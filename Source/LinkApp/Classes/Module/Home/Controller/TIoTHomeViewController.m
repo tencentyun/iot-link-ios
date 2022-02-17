@@ -27,7 +27,6 @@
 #import "TIoTWebVC.h"
 #import "TIoTRouter.h"
 
-#import "Firebase.h"
 #import "TIoTTRTCUIManage.h"
 #import "UILabel+TIoTExtension.h"
 #import "UIImage+Ex.h"
@@ -824,9 +823,6 @@ static CGFloat kHeaderViewHeight = 162;
         [[TIoTRequestObject shared] post:AppGetUser Param:@{} success:^(id responseObject) {
             NSDictionary *data = responseObject[@"Data"];
             [[TIoTCoreUserManage shared] saveUserInfo:data];
-            //上报用户userid
-            [FIRAnalytics setUserID:[TIoTCoreUserManage shared].userId];
-            [[FIRCrashlytics crashlytics] setUserID:[TIoTCoreUserManage shared].userId];
             
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
