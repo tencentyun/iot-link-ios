@@ -886,8 +886,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 
 - (void)loginSure {
     
-    if (!self.procolBtn.selected) {
-        [MBProgressHUD showError:NSLocalizedString(@"agree_userAgreement_privacyPolicy", @"请同意用户协议和隐私协议后才能登录")];
+    if (![self agreementToast]) {
         return;
     }
     
@@ -1032,9 +1031,21 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
     
 }
 
+- (BOOL)agreementToast {
+    if (!self.procolBtn.selected) {
+        [MBProgressHUD showError:NSLocalizedString(@"agree_userAgreement_privacyPolicy", @"请同意用户协议和隐私协议后才能登录")];
+        return NO;
+    }else {
+        return YES;
+    }
+}
 
 #pragma mark - 发送验证码
 - (void)sendCode:(UIButton *)button {
+
+    if (![self agreementToast]) {
+        return;
+    }
     
     [MBProgressHUD showLodingNoneEnabledInView:nil withMessage:@""];
 
@@ -1114,6 +1125,11 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 }
 
 - (void)wxLoginClick:(id)sender{
+    
+    if (![self agreementToast]) {
+        return;
+    }
+    
     [[WxManager sharedWxManager] authFromWxComplete:^(id obj, NSError *error) {
         if (!error) {
             [self getTokenByOpenId:[NSString stringWithFormat:@"%@",obj]];

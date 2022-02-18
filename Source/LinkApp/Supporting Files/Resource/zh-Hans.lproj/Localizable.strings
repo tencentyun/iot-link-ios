@@ -942,6 +942,7 @@
 "authentation_privacy_conte3" = "摄像头权限";
 "authentation_privacy_conte4" = "蓝牙权限";
 "authentation_privacy_conte5" = "麦克风权限";
+"authentation_privacy_conte6" = "相册权限";
 "authentation_alert_btn" = "始终允许";
 "authentation_alert_wifi_title" = "请授权腾讯连连以下权限";
 "authentation_alert_wifi_conte" = "该步骤将为硬件设备配置WiFi网络实现通信，绑定硬件设备与APP用户之间的关系。因此 腾讯连连 需获取以下权限：";

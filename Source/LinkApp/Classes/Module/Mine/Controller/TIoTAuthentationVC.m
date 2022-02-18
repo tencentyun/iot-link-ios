@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTCoreUtil.h"
+#import <Photos/Photos.h>
 
 @interface TIoTAuthentationVC ()<UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate,CLLocationManagerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -19,6 +20,7 @@
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) BOOL locationAvailable; //地图是否可用
+@property (strong, nonatomic) UIImagePickerController *picker;
 @end
 
 @implementation TIoTAuthentationVC
@@ -101,8 +103,10 @@
     }else if (indexPath.section == 2) {
         cell.arrowSwitch.on = [self audioAuthority:AVMediaTypeVideo];
     }else if (indexPath.section == 3) {
-        cell.arrowSwitch.on = [self audioAuthority:AVMediaTypeAudio];
+        cell.arrowSwitch.on = [self authoriedPhotoAlbum];
     }else if (indexPath.section == 4) {
+        cell.arrowSwitch.on = [self audioAuthority:AVMediaTypeAudio];
+    }else if (indexPath.section == 5) {
         cell.arrowSwitch.on = self.bluetoothAvailable;
     }
     
@@ -140,6 +144,39 @@
                 [self jumpSetting];
             }
         }else if (indexPath.section == 3) {
+            if ([self getPhoteNotDetermStatus]) {
+                BOOL isAuth = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+                if (!isAuth) return;
+                [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) { //弹出访问权限提示框
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            //同意授权
+                            switchControl.on = YES;
+                            
+                        });
+                    }if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusNotDetermined) {
+                        //未授权
+                        switchControl.on = NO;
+                    }if (status == PHAuthorizationStatusDenied) {
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            //拒绝授权
+                            switchControl.on = NO;
+                        });
+                    }else {
+                        if (@available(iOS 14, *)) {
+                            if (status == PHAuthorizationStatusLimited) {
+                                dispatch_async(dispatch_get_main_queue(),^{
+                                    //权限只在 accessLevel 为 PHAccessLevelReadWrite 时生效
+                                    switchControl.on = YES;
+                                });
+                            }
+                        }
+                    }
+                }];
+            }else {
+                [self jumpSetting];
+            }
+        }else if (indexPath.section == 4) {
             if ([self getMediaNotDetermStatusWithType:AVMediaTypeAudio]) {
                 [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio
                                          completionHandler:^(BOOL granted) {
@@ -156,7 +193,7 @@
             }else {
                 [self jumpSetting];
             }
-        }else if (indexPath.section == 4) {
+        }else {
             if (self.centralManager.state == CBManagerStateUnauthorized) {
                 //判断蓝牙是否开启
                 self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
@@ -210,6 +247,7 @@
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte1", @"通知推送权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte2", @"位置信息"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte3", @"摄像头权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
+            @[@{@"title":NSLocalizedString(@"authentation_privacy_conte6", @"相册权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte5", @"麦克风权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
             @[@{@"title":NSLocalizedString(@"authentation_privacy_conte4", @"蓝牙权限"),@"value":@"",@"vc":@"",@"haveArrow":@"2"}],
         ]];
@@ -222,6 +260,15 @@
 - (BOOL)getMediaNotDetermStatusWithType:(AVMediaType)mediaType {
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if (authStatus == AVAuthorizationStatusNotDetermined) {
+        return YES;
+    }else {
+        return NO;
+    }
+}
+
+- (BOOL)getPhoteNotDetermStatus {
+    PHAuthorizationStatus status= [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusNotDetermined) {
         return YES;
     }else {
         return NO;
@@ -297,6 +344,27 @@
     return YES;
 }
 
+- (BOOL)authoriedPhotoAlbum {
+     BOOL isAccess = NO;
+    PHAuthorizationStatus status= [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusNotDetermined) {
+        isAccess = NO;
+    }else if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusDenied) {
+        isAccess = NO;
+    }else if (status == PHAuthorizationStatusAuthorized) {
+        isAccess = YES;
+    }else {
+        if (@available(iOS 14, *)) {
+            if (status == PHAuthorizationStatusLimited) {
+                isAccess = YES;
+            }
+        }else {
+            isAccess = NO;
+        }
+    }
+    return isAccess;
+}
+
 - (BOOL)audioAuthority:(AVMediaType)type {
 //    return [TIoTCoreUtil requestMediaAuthorization:type];
     return [TIoTCoreUtil userAccessMediaAuthorization:type];
@@ -367,5 +435,15 @@
         self.locationAvailable = NO;
     }
     [self.tableView reloadData];
+}
+
+#pragma mark - lazyloading
+- (UIImagePickerController *)picker
+{
+    if (!_picker) {
+        _picker = [[UIImagePickerController alloc]init];
+        _picker.allowsEditing = NO;
+    }
+    return _picker;
 }
 @end
