@@ -124,6 +124,8 @@ NS_ASSUME_NONNULL_BEGIN
  SDKDemo
  */
 @property (nonatomic, copy, nullable) NSString *demoAccessID;
+@property (nonatomic, copy, nullable) NSString *demoAreaNetProductID;
+@property (nonatomic, copy, nullable) NSString *demoAreaNetClientToken;
 
 @property (nonatomic, readonly, nullable) NSMutableDictionary *wifiMap;
 

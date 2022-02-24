@@ -23,6 +23,15 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 客户端拉取到的裸流数据对应 data 参数
  */
 - (void)getVideoPacket:(uint8_t *)data len:(size_t)len;
+
+
+/*
+ * 设备主动发消息给app:
+ * dev_name 和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
+ * data是设备主动发过来的内容
+ * 需注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
+ */
+- (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
 @end
 
 
@@ -45,6 +54,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
+// 不建议使用下面两个start接口，避免泄漏您的secretid和secretkey，会造成您的账户泄漏，demo仅用此接口做演示使用
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
 
@@ -91,6 +101,16 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (XP2PErrCode)stopVoiceToServer;
 
+
+
+/*
+ * 局域网相关接口
+ */
+- (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port;
+- (NSString *)getLanUrlForHttpFlv:(NSString *)dev_name;
+- (int)getLanProxyPort:(NSString *)dev_name;
+
+
 /*
  * 退出 SDK 服务
  */
@@ -101,6 +121,11 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 需提前打开 writeFile 开关
  */
 + (void)recordstream:(NSString *)dev_name;
+
+/*
+ * 获取当前发送链路的连接模式：0 无效；62 直连；63 转发
+ */
++ (int)getStreamLinkMode:(NSString *)dev_name;
 @end
 
 NS_ASSUME_NONNULL_END

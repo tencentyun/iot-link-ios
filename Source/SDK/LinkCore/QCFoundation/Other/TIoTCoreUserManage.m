@@ -56,6 +56,8 @@
 @synthesize isRreshDeviceList = _isRreshDeviceList;
 @synthesize isVersionUpdateView = _isVersionUpdateView;
 @synthesize isChangeBluetoothAuth = _isChangeBluetoothAuth;
+@synthesize demoAreaNetProductID = _demoAreaNetProductID;
+@synthesize demoAreaNetClientToken = _demoAreaNetClientToken;
 
 +(instancetype)shared{
     static TIoTCoreUserManage *_instance = nil;
@@ -618,6 +620,30 @@
     [[NSUserDefaults standardUserDefaults] setValue:demoAccessID forKey:@"demoAccessID"];
 }
 
+- (NSString *)demoAreaNetProductID {
+    if (!_demoAreaNetProductID) {
+        _demoAreaNetProductID = [[NSUserDefaults standardUserDefaults] valueForKey:@"demoAreaNetProductID"];
+    }
+    return _demoAreaNetProductID;
+}
+
+- (void)setDemoAreaNetProductID:(NSString *)demoAreaNetProductID {
+    _demoAreaNetProductID = demoAreaNetProductID;
+    [[NSUserDefaults standardUserDefaults] setValue:demoAreaNetProductID forKey:@"demoAreaNetProductID"];
+}
+
+- (NSString *)demoAreaNetClientToken {
+    if (!_demoAreaNetClientToken) {
+        _demoAreaNetClientToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"demoAreaNetClientToken"];
+    }
+    return _demoAreaNetClientToken;
+}
+
+- (void)setDemoAreaNetClientToken:(NSString *)demoAreaNetClientToken {
+    _demoAreaNetClientToken = demoAreaNetClientToken;
+    [[NSUserDefaults standardUserDefaults] setValue:demoAreaNetClientToken forKey:@"demoAreaNetClientToken"];
+}
+
 //保存用户信息
 - (void)saveUserInfo:(NSDictionary *)userInfo{
     
@@ -687,6 +713,8 @@
     self.countryTitleEN = @"";
     self.FamilyType = 0;
     self.firmwareUpdate = @"";
+    self.demoAreaNetProductID = @"";
+    self.demoAreaNetClientToken = @"";
 }
 
 - (void)signInClear {
@@ -694,6 +722,8 @@
     self.signIn_Title = @"";
     self.signIn_Phone_Numner = @"";
     self.signIn_Email_Address = @"";
+    self.demoAreaNetProductID = @"";
+    self.demoAreaNetClientToken = @"";
 }
 
 @end
