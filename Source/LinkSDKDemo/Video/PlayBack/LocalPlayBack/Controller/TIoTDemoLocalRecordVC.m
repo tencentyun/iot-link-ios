@@ -31,9 +31,10 @@
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
 #import "TIoTXp2pInfoModel.h"
+#import "TIoTDemoLocalDayCustomCell.h"
 
 static CGFloat const kPadding = 16;
-static NSString *const kPlaybackCustomCellID = @"kPlaybackCustomCellID";
+static NSString *const kPlaybackLocalCellID = @"kPlaybackCustomCellID";
 static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 static NSString *const kPlayback = @"ipc.flv?action=playback";
@@ -122,7 +123,10 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 //    [self requestCloudStorageDayDate];
     
     //获取某一天本地回放时间轴
-    [self requestLocalRecordListDate];
+//    [self requestLocalRecordListDate];
+    
+    //获取某一天本地回放文件列表
+    [self requestLocalRecordFileList];
     
     //云存事件列表
 //    [self requestCloudStoreVideoList];
@@ -281,10 +285,11 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
             weakSelf.isHidePlayBtn = YES;
             weakSelf.isPause = NO;
 //            [weakSelf requestCloudStorageDayDate];
-            [weakSelf requestLocalRecordListDate];
+//            [weakSelf requestLocalRecordListDate];
 //            [weakSelf requestCloudStoreVideoList];
             
-            
+            //获取某一天本地回放时间轴
+            [weakSelf requestLocalRecordFileList];
         };
         
         //点击月份
@@ -423,20 +428,20 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     };
     [self.view addSubview:self.choiceLocalDateView];
     
-    /*
+    
     self.tableView = [[UITableView alloc]init];
     self.tableView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 84;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.tableView registerClass:[TIoTDemoPlaybackCustomCell class] forCellReuseIdentifier:kPlaybackCustomCellID];
+    [self.tableView registerClass:[TIoTDemoLocalDayCustomCell class] forCellReuseIdentifier:kPlaybackLocalCellID];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.choiceDateView.mas_bottom).offset(kPadding);
+        make.top.equalTo(self.choiceLocalDateView.mas_bottom).offset(kPadding);
         make.left.right.bottom.equalTo(self.view);
     }];
-    */
+    
 }
 
 #pragma mark - network request
@@ -510,6 +515,40 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     [self getLocalDayTimeListDataWithCmd:actionString];
 }
 
+//MARK: 查询某天的设备卡文件列表，这个接口比上面那个get_record_index 拉取到的数据全
+- (void)requestLocalRecordFileList {
+    
+    NSString *startTimeTemp = [NSString getTimeStampWithString:[NSString stringWithFormat:@"%@ 00:00:00",self.currentDayTime?:@""] withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+    NSString *endTimeTemp = [NSString getTimeStampWithString:[NSString stringWithFormat:@"%@ 23:59:59",self.currentDayTime?:@""] withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
+    
+    NSString *channel = @"0";
+    if (self.isNVR == YES) {
+        channel = self.deviceModel.Channel?:@"";
+    }else {
+        channel = @"0";
+    }
+    
+    NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_file_list&start_time=%@&end_time=%@&file_type=0",channel,startTimeTemp,endTimeTemp]; //file_type    文件类型，整型值,取值0：视频，1：图片，其他：自定义
+    
+    [self getLocalDayFileListDataWithCmd:actionString];
+}
+
+///MARK:查询时间后，获取数据
+- (void)getLocalDayFileListDataWithCmd:(NSString *)actionString {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        TIoTDemoLocalDayFileListModel *data = [TIoTDemoLocalDayFileListModel yy_modelWithJSON:jsonList];
+        DDLogDebug(@"jsonList:%@",jsonList);
+        if (![NSString isNullOrNilWithObject:jsonList] && data.file_list.count != 0) {
+            
+            self.dataArray = [data.file_list mutableCopy];
+            [self.tableView reloadData];
+            
+            // 滚动到第一段视频起始位置开始播放
+//            self.choiceLocalDateView.nextDateBlcok(timeModel);
+        }
+        
+    }];
+}
 ///MARK:查询时间后，获取数据
 - (void)getLocalDayTimeListDataWithCmd:(NSString *)actionString {
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
@@ -661,7 +700,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
         [self configVideo];
         [self.player prepareToPlay];
         [self.player play];
-        [self autoHideControlView];
+//        [self autoHideControlView];
         
         /// 播放器出图开始时间
 //        self.startPlayer = CACurrentMediaTime();
@@ -684,7 +723,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTDemoPlaybackCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlaybackCustomCellID forIndexPath:indexPath];
+    TIoTDemoLocalDayCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlaybackLocalCellID forIndexPath:indexPath];
     cell.model = self.dataArray[indexPath.row];
     return cell;
 }
@@ -695,10 +734,9 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     self.scrollDuraionTime = self.currentTime;
     self.isInnerScroll = NO;
     self.isPause = NO;
-    TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
-//    [self playVideoWithStartTime:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
-    [self seekDesignatedPointWithCurrentTime:selectedModel.StartTime selectedTimeMoel:selectedModel isChangeModel:YES withProgress:NO];
-    [self setScrollOffsetWith:selectedModel];
+    
+    TIoTDemoLocalFileModel *selectedModel = self.dataArray[indexPath.row];
+    [self setVieoPlayerStartPlayStartTime:selectedModel.start_time endTime:selectedModel.end_time];
 }
 
 #pragma mark - handler orientation event
@@ -1389,7 +1427,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
             
             dispatch_source_cancel(weakSelf.timer);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf stopPlayMovie];
+//                [weakSelf stopPlayMovie];
                 //起始时间等于duration
                 weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
                 weakSelf.currentLabel.text = weakSelf.totalLabel.text;

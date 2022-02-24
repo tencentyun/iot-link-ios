@@ -15,3 +15,15 @@
 @implementation TIoTDemoLocalTimeDateModel
 
 @end
+
+
+
+@implementation TIoTDemoLocalDayFileListModel
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{@"file_list":[TIoTDemoLocalFileModel class],
+    };
+}
+@end
+
+@implementation TIoTDemoLocalFileModel
+@end
