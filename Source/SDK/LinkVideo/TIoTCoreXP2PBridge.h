@@ -32,6 +32,11 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 需注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
  */
 - (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
+
+/*
+ * sdk 事件消息
+ */
+- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType;
 @end
 
 

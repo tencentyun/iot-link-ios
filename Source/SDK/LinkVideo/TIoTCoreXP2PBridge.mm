@@ -78,7 +78,20 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
         });
     }
+    else if (type == XP2PTypeDownloadEnd) {
+        // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
+        });
+    }
     
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+        if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+            [delegate reviceEventMsgWithID:DeviceName eventType:type];
+        }
+    });
     return nullptr;
 }
 

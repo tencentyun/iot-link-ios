@@ -39,7 +39,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 static NSString *const kPlayback = @"ipc.flv?action=playback";
 
-@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, TIoTCoreXP2PBridgeDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
@@ -92,6 +92,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 @property (nonatomic, strong) TIoTDemoCalendarCustomView *tempCustomView;
 @property (nonatomic, assign) BOOL isReAppearPause; //标记切换云存和本地录像
+@property (nonatomic, strong) NSFileHandle *saveDownloadFile;
 @end
 
 @implementation TIoTDemoLocalRecordVC
@@ -736,9 +737,46 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     self.isPause = NO;
     
     TIoTDemoLocalFileModel *selectedModel = self.dataArray[indexPath.row];
-    [self setVieoPlayerStartPlayStartTime:selectedModel.start_time endTime:selectedModel.end_time];
+//    [self setVieoPlayerStartPlayStartTime:selectedModel.start_time endTime:selectedModel.end_time];
+    [self downLoadFile:selectedModel];
 }
 
+- (void)downLoadFile:(TIoTDemoLocalFileModel *)filemodel {
+//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    
+    NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:filemodel.file_name];
+    [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
+    _saveDownloadFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
+    
+    [TIoTCoreXP2PBridge sharedInstance].delegate = self;
+    
+    UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
+    fileTip.text = @"数据帧写文件中...";
+    fileTip.textAlignment = NSTextAlignmentCenter;
+    fileTip.textColor = [UIColor whiteColor];
+    [self.imageView addSubview:fileTip];
+    
+    NSString *fileurl = [NSString stringWithFormat:@"action=download&channel=0&file_name=%@&offset=%d",filemodel.file_name ,0];
+    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:fileurl];
+}
+
+#pragma mark - TIoTCoreXP2PBridgeDelegate
+- (void)getVideoPacket:(uint8_t *)data len:(size_t)len {
+    NSLog(@"----videodata===%ld",len);
+    [_saveDownloadFile writeData:[NSData dataWithBytes:data length:len]];
+}
+
+- (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {}
+
+- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType {
+    if (eventType == XP2PTypeDownloadEnd) {//下载完成的事件
+        NSLog(@"----videodataFFFFFFFFFinsi===%d",eventType);
+        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+        
+        [MBProgressHUD showError:@"文件已下载完成"];
+    }
+}
 #pragma mark - handler orientation event
 - (void)handleOrientationChange:(NSNotification *)notification {
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
