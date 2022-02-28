@@ -439,7 +439,7 @@
         //开始准备进房间，通话中状态
         NSDictionary *param = @{@"DeviceId":self.statusManager.deviceParam.deviceName};
 
-        [[TIoTRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] post:AppIotRTCCallDevice Param:param success:^(id responseObject) {
 
             NSDictionary *tempDic = responseObject[@"TRTCParams"];
             TIOTTRTCModel *model = [TIOTTRTCModel yy_modelWithJSON:tempDic];
@@ -637,7 +637,7 @@
 //            @"Data":dataDicJson?:@""};
 //    }
     
-    [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
+    [[TIoTCoreRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
 //        if (self.isP2PVideoCommun == YES) {
 //            if (self.isActiveStatus == YES) {
