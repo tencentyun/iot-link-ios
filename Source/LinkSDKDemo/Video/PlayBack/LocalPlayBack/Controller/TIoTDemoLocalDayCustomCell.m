@@ -12,7 +12,7 @@
 @property (nonatomic, strong) UIView *contentCustomView;
 @property (nonatomic, strong) UILabel *eventTimeabel;
 @property (nonatomic, strong) UILabel *eventDescribe;
-@property (nonatomic, strong) UIImageView *eventThumb;
+@property (nonatomic, strong) UIButton *eventThumb;
 @property (nonatomic, strong) UIImageView *thumbActionImage;
 @end
 
@@ -38,7 +38,7 @@
     self.contentView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.contentCustomView = [[UILabel alloc]init];
+    self.contentCustomView = [[UIView alloc]init];
     self.contentCustomView.backgroundColor = [UIColor whiteColor]
     ;    [self.contentView addSubview:self.contentCustomView];
     [self.contentCustomView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -65,7 +65,17 @@
         make.right.equalTo(self.contentCustomView.mas_right).offset(2*kWidthPadding+100);
     }];
     
-    self.eventThumb = [[UIImageView alloc]init];
+    self.eventThumb = [[UIButton alloc]init];
+    [self.eventThumb setBackgroundImage:[UIImage imageNamed:@"res_download"] forState:UIControlStateNormal];
+    [self.eventThumb addTarget:self action:@selector(downLoadCell) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentCustomView addSubview:self.eventThumb];
+    [self.eventThumb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentCustomView);
+        make.right.equalTo(self.contentCustomView.mas_right).offset(-kWidthPadding);
+        make.width.height.mas_equalTo(32);
+    }];
+    
+    /*self.eventThumb = [[UIImageView alloc]init];
     self.eventThumb.backgroundColor = [UIColor blackColor];
     [self.contentCustomView addSubview:self.eventThumb];
     [self.eventThumb mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -81,19 +91,28 @@
     [self.thumbActionImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.eventThumb);
         make.width.height.mas_equalTo(32);
-    }];
+    }];*/
     
+}
+
+- (void)downLoadCell {
+    if ([self.delegate respondsToSelector:@selector(downLoadResWithModel:)]) {
+        [self.delegate downLoadResWithModel:_model];
+    }
 }
 
 - (void)setModel:(TIoTDemoLocalFileModel *)model {
     _model = model;
-    NSString *timeString = [NSString convertTimestampToTime:model.start_time?:@"" byDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    /*NSString *timeString = [NSString convertTimestampToTime:model.start_time?:@"" byDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     NSString *dayTime = [timeString componentsSeparatedByString:@" "].lastObject;
     NSString *hourString = [dayTime componentsSeparatedByString:@":"].firstObject;
     NSString *minuteString = [dayTime componentsSeparatedByString:@":"][1];
     self.eventTimeabel.text = [NSString stringWithFormat:@"%@:%@",hourString,minuteString];
-    self.eventDescribe.text = model.file_name?:@"";
-    [self.eventThumb setImageWithURLStr:model.file_size?:@"" placeHolder:@""];
+    self.eventDescribe.text = model.file_name?:@"";*/
+    
+    NSString *startString = [NSString convertTimestampToTime:model.start_time?:@"" byDateFormat:@"HH:mm:ss"];
+    NSString *endString = [NSString convertTimestampToTime:model.end_time?:@"" byDateFormat:@"HH:mm:ss"];
+    self.eventTimeabel.text = [NSString stringWithFormat:@"%@ - %@",startString,endString];
 }
 
 - (void)awakeFromNib {

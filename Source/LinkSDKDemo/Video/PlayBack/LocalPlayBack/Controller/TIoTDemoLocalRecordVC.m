@@ -39,7 +39,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 static NSString *const kPlayback = @"ipc.flv?action=playback";
 
-@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, TIoTCoreXP2PBridgeDelegate>
+@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, TIoTCoreXP2PBridgeDelegate, TIoTDemoLocalDayCustomCellDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
@@ -436,7 +436,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     self.tableView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 84;
+    self.tableView.rowHeight = 66;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[TIoTDemoLocalDayCustomCell class] forCellReuseIdentifier:kPlaybackLocalCellID];
     [self.view addSubview:self.tableView];
@@ -727,6 +727,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoLocalDayCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlaybackLocalCellID forIndexPath:indexPath];
+    cell.delegate = self;
     cell.model = self.dataArray[indexPath.row];
     return cell;
 }
@@ -739,14 +740,17 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     self.isPause = NO;
     
     TIoTDemoLocalFileModel *selectedModel = self.dataArray[indexPath.row];
-//    [self setVieoPlayerStartPlayStartTime:selectedModel.start_time endTime:selectedModel.end_time];
-    [self downLoadFile:selectedModel];
+    [self setVieoPlayerStartPlayStartTime:selectedModel.start_time endTime:selectedModel.end_time];
+//    [self downLoadResWithModel:selectedModel];
 }
 
-- (void)downLoadFile:(TIoTDemoLocalFileModel *)filemodel {
-//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+#pragma mark - TIoTDemoLocalDayCustomCellDelegate
+- (void)downLoadResWithModel:(TIoTDemoLocalFileModel *)model {
     
-    NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:filemodel.file_name];
+    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"下载资源中"];
+    
+    NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:model.file_name];
     [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
     [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
     _saveDownloadFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
@@ -754,13 +758,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     //设置代理，接受《下载的视频数据》和《下载完成事件》代理
     [TIoTCoreXP2PBridge sharedInstance].delegate = self;
     
-    UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
-    fileTip.text = @"数据帧写文件中...";
-    fileTip.textAlignment = NSTextAlignmentCenter;
-    fileTip.textColor = [UIColor whiteColor];
-    [self.imageView addSubview:fileTip];
-    
-    NSString *fileurl = [NSString stringWithFormat:@"action=download&channel=0&file_name=%@&offset=%d",filemodel.file_name ,0];
+    NSString *fileurl = [NSString stringWithFormat:@"action=download&channel=0&file_name=%@&offset=%d",model.file_name ,0];
     [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:fileurl];
 }
 
@@ -779,6 +777,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
         NSLog(@"----videodataFFFFFFFFFinsi===%d",eventType);
         [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
         
+        [MBProgressHUD dismissInView:self.view];
         [MBProgressHUD showError:@"文件已下载完成"];
     }
 }

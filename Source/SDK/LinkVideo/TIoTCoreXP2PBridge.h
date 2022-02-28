@@ -18,6 +18,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
 
 /*
+ * ⚠️⚠️⚠️ 谨慎！！！ === 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程
+ *
  * 裸流接口使用方式:
  * 通过 startAvRecvService 和 stopAvRecvService 接口，可以启动和停止裸流传输
  * 客户端拉取到的裸流数据对应 data 参数
