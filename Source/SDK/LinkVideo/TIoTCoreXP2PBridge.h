@@ -22,19 +22,22 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 通过 startAvRecvService 和 stopAvRecvService 接口，可以启动和停止裸流传输
  * 客户端拉取到的裸流数据对应 data 参数
  */
-- (void)getVideoPacket:(uint8_t *)data len:(size_t)len;
+- (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len;
 
 
 /*
- * 设备主动发消息给app:
+ * ⚠️⚠️⚠️ 谨慎！！！ === 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程，返回值需立即返回
+ *
+ * 接口功能 === 设备主动发消息给app:
  * dev_name 和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
  * data是设备主动发过来的内容
  * 需注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
+ * char *返回值表示回复给设备的返回信息
  */
-- (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
+- (char *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
 
 /*
- * sdk 事件消息
+ * sdk 事件消息,事件对应类型与意义详见 XP2PType 类型说明
  */
 - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType;
 @end

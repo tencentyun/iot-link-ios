@@ -88,7 +88,7 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-        if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
+        if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
             [delegate reviceEventMsgWithID:DeviceName eventType:type];
         }
     });
@@ -96,9 +96,10 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
 }
 
 void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
     id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-    if ([delegate respondsToSelector:@selector(getVideoPacket:len:)]) {
-        [delegate getVideoPacket:recv_buf len:recv_len];
+    if ([delegate respondsToSelector:@selector(getVideoPacketWithID:data:len:)]) {
+        [delegate getVideoPacketWithID:DeviceName data:recv_buf len:recv_len];
     }
 }
 
@@ -109,12 +110,13 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
     NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
     NSData *DeviceData = [NSData dataWithBytes:recv_buf length:recv_len];
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-        if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
-            [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
+    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+    if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
+        char *replay = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
+        if (strlen(replay) > 0) {
+            return  replay;
         }
-    });
+    }
     return "";
 }
 

@@ -24,6 +24,8 @@ typedef void(^TIoTDemoMonthBlcok)(TIoTDemoCalendarCustomView *view,NSString *dat
 /// 选择月
 @property (nonatomic, copy)TIoTDemoMonthBlcok monthBlock;
 
+@property (nonatomic, assign)BOOL mustReturn;
+
 @end
 
 NS_ASSUME_NONNULL_END
