@@ -165,9 +165,23 @@
             }
         }else {
             [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
+            
+            if (self.mustReturn) {
+                [self dismissView];
+                if (self.choickDayDateBlock) {
+                    self.choickDayDateBlock(self.dayDateString?:self.defaultDateString);
+                }
+            }
         }
     }else {
         [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
+        
+        if (self.mustReturn) {
+            [self dismissView];
+            if (self.choickDayDateBlock) {
+                self.choickDayDateBlock(self.dayDateString?:self.defaultDateString);
+            }
+        }
     }
     
 }

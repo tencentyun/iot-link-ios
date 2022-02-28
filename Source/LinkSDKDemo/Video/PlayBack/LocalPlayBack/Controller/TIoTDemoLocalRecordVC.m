@@ -267,11 +267,13 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     __weak typeof(self) weakSelf = self;
-    self.choiceLocalDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116)];
+    self.choiceLocalDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116-72)];
+    self.choiceLocalDateView.clipsToBounds = YES;
     //从日历中选日期
     self.choiceLocalDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
         
         TIoTDemoCalendarCustomView *calendarView = [[TIoTDemoCalendarCustomView alloc]init];
+        calendarView.mustReturn = YES;
         //获取云存时间传给日历 此处为当前月云存日期数组
         calendarView.calendarDateArray = weakSelf.cloudCurrentMonthDateList;
         
@@ -749,6 +751,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
     _saveDownloadFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
     
+    //设置代理，接受《下载的视频数据》和《下载完成事件》代理
     [TIoTCoreXP2PBridge sharedInstance].delegate = self;
     
     UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
@@ -762,13 +765,15 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 }
 
 #pragma mark - TIoTCoreXP2PBridgeDelegate
-- (void)getVideoPacket:(uint8_t *)data len:(size_t)len {
+//下载的视频数据
+- (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len {
     NSLog(@"----videodata===%ld",len);
     [_saveDownloadFile writeData:[NSData dataWithBytes:data length:len]];
 }
 
-- (void)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {}
+- (char *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data { return "";}
 
+//下载完成事件
 - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType {
     if (eventType == XP2PTypeDownloadEnd) {//下载完成的事件
         NSLog(@"----videodataFFFFFFFFFinsi===%d",eventType);
@@ -838,7 +843,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
         [self.choiceLocalDateView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.imageView.mas_bottom);
             make.width.mas_equalTo(kScreenWidth);
-            make.height.mas_equalTo(116);
+            make.height.mas_equalTo(116-72);
         }];
         
         [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
