@@ -8,7 +8,12 @@
 #import "TIoTCoreXP2PBridge.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTAreaNetworkConfigVC.h"
-@interface TIoTDemoVideoVC ()
+
+#import <mobileffmpeg/MobileFFmpegConfig.h>
+#import <mobileffmpeg/MobileFFmpeg.h>
+
+
+@interface TIoTDemoVideoVC ()<ExecuteDelegate>
 
 @end
 
@@ -31,6 +36,22 @@
         make.left.equalTo(self.view).offset(16);
     }];
     
+    
+    NSString *downurl = @"https://file.m3u8";
+    NSString *saveurl = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"fifile.mp4"];
+    
+    NSString *cmdstr = [NSString stringWithFormat:@"-i %@ -codec copy %@", downurl, saveurl];
+    long executionId = [MobileFFmpeg executeAsync:cmdstr withCallback:self];
+}
+
+- (void)executeCallback:(long)executionId :(int)returnCode {
+    if (returnCode == RETURN_CODE_SUCCESS) {
+        NSLog(@"Async command execution completed successfully.\n");
+    } else if (returnCode == RETURN_CODE_CANCEL) {
+        NSLog(@"Async command execution cancelled by user.\n");
+    } else {
+        NSLog(@"Async command execution failed with rc=%d.\n", returnCode);
+    }
 }
 
 - (void)initVideoUI {
