@@ -93,6 +93,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 @property (nonatomic, strong) TIoTDemoCalendarCustomView *tempCustomView;
 @property (nonatomic, assign) BOOL isReAppearPause; //标记切换云存和本地录像
 @property (nonatomic, strong) NSFileHandle *saveDownloadFile;
+@property (nonatomic, assign) BOOL downLoading; //标记下载状态;
 @end
 
 @implementation TIoTDemoLocalRecordVC
@@ -746,6 +747,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 #pragma mark - TIoTDemoLocalDayCustomCellDelegate
 - (void)downLoadResWithModel:(TIoTDemoLocalFileModel *)model {
+    self.downLoading = YES;
     
     [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"下载资源中"];
@@ -774,11 +776,23 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 //下载完成事件
 - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType {
     if (eventType == XP2PTypeDownloadEnd) {//下载完成的事件
-        NSLog(@"----videodataFFFFFFFFFinsi===%d",eventType);
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
         
-        [MBProgressHUD dismissInView:self.view];
-        [MBProgressHUD showError:@"文件已下载完成"];
+        if (self.downLoading) {
+            NSLog(@"----videodataFinsish===%d",eventType);
+            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+            
+            [MBProgressHUD dismissInView:self.view];
+            [MBProgressHUD showError:@"文件已下载完成"];
+            
+            self.downLoading = NO;
+        }
+    }else if (eventType == XP2PTypeDisconnect) {
+        
+        if (self.downLoading) {
+            [MBProgressHUD dismissInView:self.view];
+            [MBProgressHUD showError:@"下载失败"];
+            self.downLoading = NO;
+        }
     }
 }
 #pragma mark - handler orientation event
