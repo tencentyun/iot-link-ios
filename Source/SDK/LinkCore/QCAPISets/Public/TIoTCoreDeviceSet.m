@@ -797,7 +797,7 @@
         failure(@"timePoint参数为空",nil,@{});
         return;
     }
-    if (repeat != 0 || repeat != 1) {
+    if (repeat != 0 && repeat != 1) {
         failure(@"repeat参数取值为0或1",nil,@{});
         return;
     }
