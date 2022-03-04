@@ -139,8 +139,8 @@ typedef NS_ENUM(NSInteger,TIotApiHost) {
 /// @param timerId 需修改的定时器 Id
 /// @param productId 定时任务所属产品 Id
 /// @param deviceName 定时任务控制的设备名称
-/// @param status 开关状态
-- (void)modifyTimerStatusWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName status:(BOOL)status success:(SRHandler)success failure:(FRHandler)failure;
+/// @param status 开关状态 （int 类型 0：关闭，1：开启）
+- (void)modifyTimerStatusWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName status:(NSInteger)status success:(SRHandler)success failure:(FRHandler)failure;
 
 /// 删除定时器
 - (void)deleteTimerWithProductId:(NSString *)productId deviceName:(NSString *)deviceName timerId:(NSString *)timerId success:(SRHandler)success failure:(FRHandler)failure;

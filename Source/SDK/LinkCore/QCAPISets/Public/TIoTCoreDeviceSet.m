@@ -826,7 +826,7 @@
     }];
 }
 
-- (void)modifyTimerStatusWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName status:(BOOL)status success:(SRHandler)success failure:(FRHandler)failure
+- (void)modifyTimerStatusWithTimerId:(NSString *)timerId productId:(NSString *)productId deviceName:(NSString *)deviceName status:(NSInteger)status success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
         failure(@"productId参数为空",nil,@{});
