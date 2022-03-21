@@ -787,6 +787,35 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     
+    //主动呼叫，开始拨打
+    TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
+    BOOL isTRTCDevice = NO;
+    for (NSString *prototype in deviceReport.allKeys) {
+        
+        NSString *protoValue = deviceReport[prototype];
+        if ([prototype isEqualToString:TIoTTRTCaudio_call_status] || [prototype isEqualToString:TIoTTRTCvideo_call_status]) {
+         
+            if (protoValue.intValue == 1) {
+                isTRTCDevice = YES;
+                
+                if ([prototype isEqualToString:TIoTTRTCaudio_call_status]) {
+                    audioORvideo = TIoTTRTCSessionCallType_audio;
+                }else {
+                    audioORvideo = TIoTTRTCSessionCallType_video;
+                }
+                break;
+            }
+        }
+    }
+    
+    //添加权限判断
+    BOOL isAccess = NO;
+    if (audioORvideo == TIoTTRTCSessionCallType_audio) {
+       isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeAudio];
+    }else {
+        isAccess = [TIoTCoreUtil requestMediaAuthorization:AVMediaTypeVideo];
+    }
+    
     NSMutableDictionary *trtcReport = [deviceReport mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
     if (userId) {
@@ -799,7 +828,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     NSDictionary *tmpDic = nil;
     
-    if (self.isP2PVideoDevice == NO) {
+    if (self.isP2PVideoDevice == NO && isAccess == YES) {
         
         if ([self.bleNewType isEqualToString:@"ble"]) {
             tmpDic = @{
@@ -828,26 +857,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
         }];
     }
-    //主动呼叫，开始拨打
-    TIoTTRTCSessionCallType audioORvideo = TIoTTRTCSessionCallType_audio;//audio
-    BOOL isTRTCDevice = NO;
-    for (NSString *prototype in deviceReport.allKeys) {
-        
-        NSString *protoValue = deviceReport[prototype];
-        if ([prototype isEqualToString:TIoTTRTCaudio_call_status] || [prototype isEqualToString:TIoTTRTCvideo_call_status]) {
-         
-            if (protoValue.intValue == 1) {
-                isTRTCDevice = YES;
-                
-                if ([prototype isEqualToString:TIoTTRTCaudio_call_status]) {
-                    audioORvideo = TIoTTRTCSessionCallType_audio;
-                }else {
-                    audioORvideo = TIoTTRTCSessionCallType_video;
-                }
-                break;
-            }
-        }
-    }
+    
     if (isTRTCDevice) {
 //        [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
 //
