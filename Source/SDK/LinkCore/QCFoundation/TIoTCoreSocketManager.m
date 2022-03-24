@@ -104,7 +104,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)startHeartBeatWith:(id)userInfo {
     
-    self.heartBeat = [NSTimer timerWithTimeInterval:60 target:self selector:@selector(ping:) userInfo:userInfo repeats:YES];
+    self.heartBeat = [NSTimer timerWithTimeInterval:50 target:self selector:@selector(ping:) userInfo:userInfo repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.heartBeat forMode:NSRunLoopCommonModes];
     [self.heartBeat fire];
 }
