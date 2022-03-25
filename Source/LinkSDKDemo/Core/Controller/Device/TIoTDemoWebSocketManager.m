@@ -123,7 +123,7 @@ static NSString *heartBeatReqID = @"5002";
 -(void)SRWebSocketOpen{
     
     [[TIoTCoreSocketManager shared] socketOpen];
-    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(callingHungupAction) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:[TIoTTRTCUIManage sharedManager] selector:@selector(trtcCallingHungupAction) object:nil];
 }
 
 -(void)SRWebSocketClose{

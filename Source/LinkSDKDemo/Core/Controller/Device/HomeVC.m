@@ -14,6 +14,7 @@
 #import "TIoTCoreUtil.h"
 #import "TIoTCoreRequestObject.h"
 #import "TIoTCoreAppEnvironment.h"
+#import "HXYNotice.h"
 
 static NSString *cellID = @"DODO";
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate>
@@ -156,6 +157,9 @@ static NSString *cellID = @"DODO";
             [[TIoTCoreDeviceSet shared] activePushWithDeviceIds:self.deviceIds complete:^(BOOL success, id data) {
                 
             }];
+            
+            [HXYNotice postHeartBeat:self.deviceIds];
+            [HXYNotice addActivePushPost:self.deviceIds];
         }
         
         [self.tab reloadData];
