@@ -3793,6 +3793,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //    }
     NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
     [MBProgressHUD showError:error_message];
-
+    
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
+    //退出面板页面，需要刷新后才能重建通道连接
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
