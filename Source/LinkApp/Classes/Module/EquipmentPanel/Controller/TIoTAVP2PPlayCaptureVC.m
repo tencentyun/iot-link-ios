@@ -396,6 +396,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]||[reportModel.params._sys_audio_call_status isEqualToString:@"0"]) {
         [self close];
 //        [self.navigationController popViewControllerAnimated:NO];
+        [MBProgressHUD showError:NSLocalizedString(@"other_part_hangup", @"对方已挂断...")];
         [self dismissViewControllerAnimated:NO completion:nil];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]|| [reportModel.params._sys_audio_call_status isEqualToString:@"2"]) {
         
