@@ -771,7 +771,16 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     [_saveDownloadFile writeData:[NSData dataWithBytes:data length:len]];
 }
 
-- (char *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data { return "";}
+- (char *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {
+    NSString *deviceMsg = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
+
+
+    char *mesg = new char[16];
+    memcpy(mesg, "reponseMsg", 16);
+    
+    return mesg;
+}
 
 //下载完成事件
 - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType {
