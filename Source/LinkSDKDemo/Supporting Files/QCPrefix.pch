@@ -19,6 +19,7 @@
 #import "UIButton+TIoTButtonFormatter.h"
 #import "UILabel+TIoTLableFormatter.h"
 #import "NSObject+additions.h"
+#import "YYModel.h"
 
 #import "LinkSDKDemo-Swift.h"
 #endif
