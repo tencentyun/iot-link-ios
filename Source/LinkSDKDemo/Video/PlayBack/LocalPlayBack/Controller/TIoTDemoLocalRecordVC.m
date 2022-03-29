@@ -777,7 +777,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 
     NSString *response = @"responseMES";
-    NSUInteger length = response.length;
+    NSUInteger length = strlen(response.UTF8String);
     
     char *response_msg = (char *)malloc(length + 1);
     strncpy(response_msg, response.UTF8String, length);
