@@ -3795,5 +3795,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [MBProgressHUD showError:error_message];
     
     [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
+    if (self.tipAlertView == nil) {
+        //退出面板页面，需要刷新后才能重建通道连接
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 @end
