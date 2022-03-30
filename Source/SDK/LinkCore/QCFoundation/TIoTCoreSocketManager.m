@@ -188,6 +188,8 @@ static NSString *heartBeatReqID = @"5002";
         DDLogWarn(@"************************** socket连接断开************************** ");
         DDLogWarn(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",(long)code,reason,wasClean);
         [self socketClose];
+        //重连
+        [self reConnect];
         if ([self.delegate respondsToSelector:@selector(socket:didCloseWithCode:reason:wasClean:)]) {
             [self.delegate socket:self didCloseWithCode:code reason:reason wasClean:wasClean];
         }
