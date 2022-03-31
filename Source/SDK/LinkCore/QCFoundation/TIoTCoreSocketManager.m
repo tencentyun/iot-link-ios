@@ -29,7 +29,7 @@ static NSString *heartBeatReqID = @"5002";
 @property (nonatomic, strong) TIoTCoreWebSocket *socket;
 @property (nonatomic, strong) NSTimer *heartBeat;
 @property (nonatomic, assign) NSTimeInterval reConnectTime;
-
+@property (nonatomic, strong) NSArray *deviceIds;
 
 @end
 
@@ -121,10 +121,9 @@ static NSString *heartBeatReqID = @"5002";
 //ping
 - (void)ping:(NSTimer *)timer {
     NSArray *deviceIds = timer.userInfo;
-
+    self.deviceIds = [NSArray arrayWithArray:deviceIds];
     if ([TIoTCoreSocketManager shared].socketReadyState == WC_OPEN) {
-        
-        NSData *data= [NSJSONSerialization dataWithJSONObject:[self heartData:deviceIds] options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *data= [NSJSONSerialization dataWithJSONObject:[self heartData:self.deviceIds] options:NSJSONWritingPrettyPrinted error:nil];
         NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
         [[TIoTCoreSocketManager shared] sendData:dataDic];
     }
@@ -175,7 +174,8 @@ static NSString *heartBeatReqID = @"5002";
         DDLogError(@"************************** socket 连接失败************************** ");
         //连接失败就重连
         [self reConnect];
-        
+        //重发心跳
+        [self reHeartStart];
         if ([self.delegate respondsToSelector:@selector(socket:didFailWithError:)]) {
             [self.delegate socket:self didFailWithError:error];
         }
@@ -188,6 +188,10 @@ static NSString *heartBeatReqID = @"5002";
         DDLogWarn(@"************************** socket连接断开************************** ");
         DDLogWarn(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",(long)code,reason,wasClean);
         [self socketClose];
+        //重连
+        [self reConnect];
+        //重发心跳
+        [self reHeartStart];
         if ([self.delegate respondsToSelector:@selector(socket:didCloseWithCode:reason:wasClean:)]) {
             [self.delegate socket:self didCloseWithCode:code reason:reason wasClean:wasClean];
         }
@@ -268,6 +272,14 @@ static NSString *heartBeatReqID = @"5002";
     
 }
 
+//重启心跳
+- (void)reHeartStart {
+    dispatch_main_async_safe(^{
+        if (!self.heartBeat) {
+            [self startHeartBeatWith:self.deviceIds];
+        }
+    })
+}
 
 - (void)sendData:(NSDictionary *)obj {
     
@@ -298,12 +310,13 @@ static NSString *heartBeatReqID = @"5002";
             } else if (weakself.socket.readyState == QC_CONNECTING) {
 
                 [weakself reConnect];
-                
+                [weakself reHeartStart];
             } else if (weakself.socket.readyState == QC_CLOSING || weakself.socket.readyState == QC_CLOSED) {
                 // websocket 断开了，调用 reConnect 方法重连
                 DDLogInfo(@"socket 重连");
                 
                 [weakself reConnect];
+                [weakself reHeartStart];
             }
         } else {
             // 这里要看你的具体业务需求；不过一般情况下，调用发送数据还是希望能把数据发送出去，所以可以再次打开链接；不用担心这里会有多个socketopen；因为如果当前有socket存在，会停止创建哒

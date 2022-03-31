@@ -144,6 +144,11 @@ static NSString *heartBeatReqID = @"5002";
     [self registerDevicecActive:nil];
 
     [HXYNotice addSocketConnectSucessPost];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [MBProgressHUD showSuccess:@"socket连接成功"];
+    });
+    
 }
 
 - (void)socket:(TIoTCoreSocketManager *)manager didFailWithError:(NSError *)error {
