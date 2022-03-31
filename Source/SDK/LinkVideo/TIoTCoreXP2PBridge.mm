@@ -112,12 +112,18 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
 
     id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
     if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
-        char *replay = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
-        if (strlen(replay) > 0) {
-            return  replay;
+        NSString *response = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
+        
+        if (response) {
+            NSUInteger length = strlen(response.UTF8String);
+            char *response_msg = (char *)malloc(length + 1);
+            strncpy(response_msg, response.UTF8String, length);
+            response_msg[length] = '\0';
+            
+            return response_msg;
         }
     }
-    return "";
+    return NULL;
 }
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
