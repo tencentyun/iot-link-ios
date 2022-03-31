@@ -188,6 +188,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, assign) BOOL isP2PVideoDevice;
 @property (nonatomic, strong) NSDictionary *objectModel; //保存物模型
 @property (nonatomic, strong) TIoTAVP2PPlayCaptureVC *p2pVideoVCCalled;
+@property (nonatomic, assign) BOOL p2pReady;//探测完成
 //@property (nonatomic, assign) BOOL isRefreshFromP2Player;
 @end
 
@@ -210,6 +211,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self checkfirmwarVersionWithFinish:NO];
     
 //    self.isRefreshFromP2Player = NO;
+    self.p2pReady = NO;
 }
 
 - (void)addNormalNotifications {
@@ -878,6 +880,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
         }else {
             
+            //video设备
+            if (!self.p2pReady) {
+                [MBProgressHUD showError:@"video 探测还未完成"];
+                return;
+            }
             [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
             [TIoTP2PCommunicateUIManage sharedManager].isP2PVideoCommun = self.isP2PVideoDevice;
             
@@ -3781,7 +3788,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         return;
     }
     
-    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+    [MBProgressHUD show:[NSString stringWithFormat:@"%@ 探测已完成，可拨打",selectedName] icon:@"" view:self.view];
+    self.p2pReady = YES;
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -3791,6 +3799,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //    if (![DeviceName isEqualToString:selectedName]) {
 //        return;
 //    }
+    
+    self.p2pReady = NO;
+    
     NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
     [MBProgressHUD showError:error_message];
     
