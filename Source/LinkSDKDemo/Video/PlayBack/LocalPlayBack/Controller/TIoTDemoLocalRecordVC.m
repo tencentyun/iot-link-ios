@@ -767,23 +767,17 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 #pragma mark - TIoTCoreXP2PBridgeDelegate
 //下载的视频数据
 - (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len {
-    NSLog(@"----videodata===%ld",len);
+    static NSUInteger total = 0;
+    total += len;
+    NSLog(@"----videodata===%ld total:%ld",len, total);
     [_saveDownloadFile writeData:[NSData dataWithBytes:data length:len]];
 }
 
-- (char *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {
+- (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {
     NSString *deviceMsg = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
 
-
-    NSString *response = @"responseMES";
-    NSUInteger length = strlen(response.UTF8String);
-    
-    char *response_msg = (char *)malloc(length + 1);
-    strncpy(response_msg, response.UTF8String, length);
-    response_msg[length] = '\0';
-    
-    return response_msg;
+    return @"responseMES";
 }
 
 //下载完成事件
