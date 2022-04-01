@@ -54,6 +54,16 @@
     
     //Bugly 统计
     [Bugly startWithAppId:model.BuglySDKAppId];
+    BuglyConfig *buglyConfig = [[BuglyConfig alloc]init];
+    buglyConfig.blockMonitorEnable = YES;
+    buglyConfig.blockMonitorTimeout = 2.0;
+    buglyConfig.unexpectedTerminatingDetectionEnable = YES;
+    buglyConfig.reportLogLevel = BuglyLogLevelWarn;
+    [Bugly startWithAppId:model.BuglySDKAppId config:buglyConfig];
+    //上报userID
+    if ([TIoTCoreUserManage shared].userId != nil) {
+        [Bugly setUserIdentifier:[TIoTCoreUserManage shared].userId];
+    }
     
     //打印日志配置
     [TIoTCoreServices shared].logEnable = true;
