@@ -1,4 +1,5 @@
 PODS:
+  - Bugly (2.5.91)
   - CocoaAsyncSocket (7.6.5)
   - CocoaLumberjack (3.7.2):
     - CocoaLumberjack/Core (= 3.7.2)
@@ -43,6 +44,7 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - Bugly (= 2.5.91)
   - CocoaAsyncSocket (= 7.6.5)
   - CocoaLumberjack (= 3.7.2)
   - FDFullscreenPopGesture (= 1.1)
@@ -68,6 +70,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Bugly
     - CocoaAsyncSocket
     - CocoaLumberjack
     - FDFullscreenPopGesture
@@ -99,6 +102,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
+  Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
@@ -125,6 +129,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 6004716d4f49b3c861d0bee8ab1beb537c4b4b53
+PODFILE CHECKSUM: e1914a66543d8d580a400a271bbf3fb8a16f5f9d
 
 COCOAPODS: 1.9.3

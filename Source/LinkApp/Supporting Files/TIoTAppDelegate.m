@@ -25,6 +25,7 @@
 #import <QMapKit/QMSSearchKit.h>
 #import "TIoTPrintLogManager.h"
 #import "TIoTCoreServices.h"
+#import <Bugly/Bugly.h>
 
 @implementation TIoTAppDelegate
 
@@ -50,6 +51,9 @@
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     [QMapServices sharedServices].APIKey = model.TencentMapSDKValue;
     [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
+    
+    //Bugly 统计
+    [Bugly startWithAppId:model.BuglySDKAppId];
     
     //打印日志配置
     [TIoTCoreServices shared].logEnable = true;

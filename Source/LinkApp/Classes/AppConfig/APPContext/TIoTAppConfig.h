@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSString *TencentMapSDKValue;
 
 @property NSString *HEweatherKey;
+
+@property NSString *BuglySDKAppId;
 @end
 
 @interface TIoTAppConfig : NSObject

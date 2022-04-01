@@ -30,6 +30,7 @@ target 'LinkApp' do
   pod 'TIoTLinkKit_TPNS', '1.0.1'
   pod 'TIoTLinkKit_WechatOpenSDK', '1.0.1'
   pod 'TIoTLinkKit_IJKPlayer', '1.0.5'
+  pod 'Bugly', '2.5.91'
 end
 
 
