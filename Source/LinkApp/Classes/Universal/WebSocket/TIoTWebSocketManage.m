@@ -33,6 +33,8 @@ static NSString *heartBeatReqID = @"5002";
 
 @property (nonatomic, strong) NSMutableDictionary *reqArray;
 @property (nonatomic, strong) NSMutableSet *trtcDeviceIds;
+@property (nonatomic, strong) NSMutableArray *videoDeviceIDArray;  //video 设备 deviceID 数组
+@property (nonatomic, assign) BOOL isPanel;
 @end
 
 @implementation TIoTWebSocketManage
@@ -61,6 +63,7 @@ static NSString *heartBeatReqID = @"5002";
 
 - (void)instanceSocketManager {
     self.trtcDeviceIds = [NSMutableSet set];
+    self.videoDeviceIDArray = [NSMutableArray new];
 //    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
     [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
     [TIoTCoreSocketManager shared].delegate = self;
@@ -185,15 +188,68 @@ static NSString *heartBeatReqID = @"5002";
     }
 }
 
+//分离 TRTC 设备 和 Video 设备
+- (void)separateTRTCVideoDeviceWith:(NSArray *)videoProductInfo withDeviceInfoArr:(NSArray *)deviceInfoArray{
+    
+    for (NSDictionary *dataTemplate in videoProductInfo?:@[]) {
+        if (dataTemplate[@"CategoryId"]) {
+            //deviceId
+            NSString *deviceID = @"";
+            
+            //找deviceID
+            for (NSDictionary *deviceInfoDic in deviceInfoArray) {
+                if (deviceInfoDic[@"ProductId"] && deviceInfoDic[@"AliasName"]) {
+                    NSString *devcieProductID = deviceInfoDic[@"ProductId"];
+                    NSString *devceiProductName = deviceInfoDic[@"AliasName"];
+                    
+                    if ([devcieProductID isEqualToString:dataTemplate[@"ProductId"]] && [devceiProductName isEqualToString:dataTemplate[@"Name"]]) {
+                        deviceID = deviceInfoDic[@"DeviceId"];
+                        
+                        //新增p2p双向通话
+                        id categoryID = dataTemplate[@"CategoryId"]?:@"";
+
+                        if ([categoryID isKindOfClass:[NSString class]]) {
+                            if ([categoryID isEqualToString:@"567"]) {
+                                
+                                if (![self.videoDeviceIDArray containsObject:deviceID]) {
+                                    [self.videoDeviceIDArray addObject:deviceID];
+                                }
+                            }
+                        }else if ([categoryID isKindOfClass:[NSNumber class]]){
+                            NSNumber * categoryIDNum = categoryID;
+                            if (categoryIDNum.intValue == 567) {
+                                if (![self.videoDeviceIDArray containsObject:deviceID]) {
+                                    [self.videoDeviceIDArray addObject:deviceID];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//控制只在设备详情页面开启，首页关闭
+- (void)setPanelVCBool:(BOOL)isPanelVC {
+    self.isPanel = isPanelVC;
+}
+
 //监听到的设备上报信息
 - (void)deviceInfo:(NSDictionary *)deviceInfo{
     [HXYNotice addReportDevicePost:deviceInfo];
     
 //    [[TIoTTRTCUIManage sharedManager] receiveDeviceData:deviceInfo?:@{}];
-    [[TIoTTRTCUIManage sharedManager] trtcReceiveDeviceData:deviceInfo?:@{}];
-    
-    [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
+    NSString *deviceID = deviceInfo[@"DeviceId"]?:@"";
+    if ([self.videoDeviceIDArray containsObject:deviceID]) {
+        //首页暂不调用被呼叫页面
+        if (self.isPanel == YES) {
+            [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateReceiveDeviceData:deviceInfo?:@{}];
+        }
+    }else  {
+        [[TIoTTRTCUIManage sharedManager] trtcReceiveDeviceData:deviceInfo?:@{}];
+    }
 }
 
 - (void)handleReceivedMessage:(id)message{

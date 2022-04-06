@@ -23,7 +23,8 @@ typedef void(^didReceiveMessage) (BOOL sucess, NSDictionary *data);
 - (void)SRWebSocketClose;//关闭连接
 //- (void)sendData:(NSDictionary *)paramDic withRequestURL:(NSString*)requestURL complete:(didReceiveMessage)sucess;//发送数据
 
-
+- (void)setPanelVCBool:(BOOL)isPanelVC;
+- (void)separateTRTCVideoDeviceWith:(NSArray *)videoProductInfo withDeviceInfoArr:(NSArray *)deviceInfoArray;
 /// 监听设备状态
 //- (void)registerDevicecActive;
 

@@ -198,6 +198,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    //开启p2p页面开关
+    [[TIoTWebSocketManage shared] setPanelVCBool:YES];
+    
     [self addNormalNotifications];
     
     [self addP2pNofitications];

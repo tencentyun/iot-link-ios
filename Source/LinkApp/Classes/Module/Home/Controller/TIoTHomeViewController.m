@@ -112,6 +112,11 @@ static CGFloat kHeaderViewHeight = 162;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.isHideWeatherView = NO;
+    //关闭p2p页面开关
+    [[TIoTWebSocketManage shared] setPanelVCBool:NO];
+    //防止video设备和TRTC设备切换呼叫，进入详情后返回首页需重置p2p通话开关判断
+    [TIoTTRTCUIManage sharedManager].isP2PVideoCommun = NO;
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1009,6 +1014,19 @@ static CGFloat kHeaderViewHeight = 162;
     }
 }
 
+- (void)getDeviceCategoryInfo:(NSArray *)productIDsArray {
+    [[TIoTRequestObject shared] post:AppGetProducts Param:@{@"ProductIds":productIDsArray?:@[]} success:^(id responseObject) {
+        NSArray *tmpArr = responseObject[@"Products"];
+        if (tmpArr.count > 0) {
+            
+            [[TIoTWebSocketManage shared] separateTRTCVideoDeviceWith:tmpArr withDeviceInfoArr:self.dataArr];
+        }
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        
+    }];
+}
+
 ///MARK: 分享设备列表请求
 - (void)getSharedDevicesList {
     
@@ -1222,6 +1240,9 @@ static CGFloat kHeaderViewHeight = 162;
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
 
     }];
+    
+    //为设备分类：TRTC Video  会调用两次，绑定设备列表和分享列表
+    [self getDeviceCategoryInfo:IdArray?:@[]];
 }
 
 #pragma mark - event
