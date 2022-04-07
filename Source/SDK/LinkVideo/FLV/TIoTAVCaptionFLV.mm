@@ -175,7 +175,9 @@ dispatch_queue_t muxerQueue;
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     if (connection == _videoConnection) {  // Video
 
-        [self.h264Encoder encode:sampleBuffer];
+        if (self.videoLocalView) { //开关打开，才推送视频
+            [self.h264Encoder encode:sampleBuffer];
+        }
     
     } else if (connection == _audioConnection) {  // Audio
         
@@ -332,7 +334,10 @@ int encodeFlvData(int type, NSData *packetData) {
 {
     [self.session startRunning];
     if (self.videoLocalView) {
+        _previewLayer.frame = self.videoLocalView.bounds;
         [self.videoLocalView.layer addSublayer:_previewLayer];
+    }else {
+        _previewLayer.frame = CGRectZero;
     }
 }
 

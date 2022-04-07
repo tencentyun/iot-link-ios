@@ -291,8 +291,10 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     if (systemAvCapture == nil) {
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
         systemAvCapture.videoLocalView = localView;
-        [systemAvCapture preStart];
     }
+    [systemAvCapture preStart];//配置声音和视频
+    
+    
     systemAvCapture.videoLocalView = localView;
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
@@ -302,6 +304,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     self.isSending = NO;
     
     systemAvCapture.delegate = nil;
+    systemAvCapture.videoLocalView = nil;
     [systemAvCapture stopCapture];
     
     int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
