@@ -20,3 +20,5 @@ pod 'TIoTLinkVideo'
 
 ### SDK相关文档
 * [iOS SDK说明](doc/iOS%20Video接入指引文档.md)
+* [PC 观看端直播场景延时优化](doc/win%20观看端直播场景延时优化.md)
+* [双向音视频延时测试](doc/双向音视频延时测试.md)
