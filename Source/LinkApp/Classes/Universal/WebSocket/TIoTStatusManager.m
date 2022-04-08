@@ -1003,6 +1003,9 @@
 - (void)callDeviceFromPanel: (TIoTTRTCSessionCallType)audioORvideo withDevideId:(NSString *)deviceIdString reportDeviceDic:(NSMutableDictionary *)deviceDic{
     _isActiveCall = YES; //表示主动呼叫
     _isActiveStatus = _isActiveCall;
+    if (self.isP2PVideoCommun == YES) {
+        self.isActiveOriginStatus = _isActiveStatus;
+    }
     if (self.isCommunicating == NO) {
         self.isActiveOriginStatus = _isActiveStatus;
     }
