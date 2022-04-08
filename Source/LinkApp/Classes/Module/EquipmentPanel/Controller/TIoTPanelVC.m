@@ -40,6 +40,7 @@
 #import <QCloudNetEnv.h>
 #import "UILabel+TIoTExtension.h"
 #import "UIButton+TIoTButtonFormatter.h"
+#import "ReachabilityManager.h"
 
 #import "TIoTLLSyncDeviceConfigModel.h"
 #import "TIoTFirmwareModel.h"
@@ -135,6 +136,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) NSDictionary *reportData;
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
 
+//断网标识判断
+@property (nonatomic, assign) BOOL isNetworkBreak;
+
 @property (nonatomic, strong) UIView *blueConnectView; //蓝牙设备是否连接控制view
 @property (nonatomic, strong) UILabel *blueTipLabel;
 @property (nonatomic, strong) UIButton *controlBlueDeviceButton;
@@ -201,6 +205,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //开启p2p页面开关
     [[TIoTWebSocketManage shared] setPanelVCBool:YES];
     
+    [self detectionNetworkStatus];
+    
     [self addNormalNotifications];
     
     [self addP2pNofitications];
@@ -223,6 +229,50 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //续传
     [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
+}
+
+- (void)detectionNetworkStatus  {
+    
+    self.isNetworkBreak = YES;
+    
+    [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
+        switch (status) {
+            case NetworkReachabilityStatusUnknown:
+                //"状态不知道"
+                self.isNetworkBreak = NO;
+                break;
+            case NetworkReachabilityStatusNotReachable:
+                //"没网络"
+                // RTC App端和设备端通话中 断网监听
+                self.isNetworkBreak = NO;
+                break;
+            case NetworkReachabilityStatusReachableViaWiFi:
+                //"WIFI"
+                if (self.isNetworkBreak == NO) {
+                    self.deviceInfo = nil;
+                    self.detailStructTpyeTimesDic = nil;
+                    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
+                    [self getProductsConfig];
+                }
+                self.isNetworkBreak = YES;
+                break;
+            case NetworkReachabilityStatusReachableViaWWAN:
+                //"移动网络"
+                if (self.isNetworkBreak == NO) {
+                    self.deviceInfo = nil;
+                    self.detailStructTpyeTimesDic = nil;
+                    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
+                    [self getProductsConfig];
+                }
+                self.isNetworkBreak = YES;
+                break;
+            default:
+                self.isNetworkBreak = NO;
+                break;
+        }
+    }];
+    
+    [[NetworkReachabilityManager sharedManager] startMonitoring];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -413,6 +463,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             BOOL timingProject = [self.deviceInfo.navBar[@"timingProject"] boolValue];
             
             if (templateId && templateId.length > 0) {
+                
+                if (self.stackView.subviews.count != 0) {
+                    for (UIView *view in self.stackView.subviews) {
+                        [view removeFromSuperview];
+                    }
+                }
+                
                 UIView *vv = [UIView new];
                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomBarLeftTap)];
                 [vv addGestureRecognizer:tap];
@@ -481,6 +538,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 
             }
             if (timingProject) {
+                
+                if (self.stackView.subviews.count != 0) {
+                    for (UIView *view in self.stackView.subviews) {
+                        [view removeFromSuperview];
+                    }
+                }
+                
                 UIView *vv = [UIView new];
                 UITapGestureRecognizer *tapT = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomBarRightTap)];
                 [vv addGestureRecognizer:tapT];
@@ -664,6 +728,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                     make.top.mas_equalTo(46);
                 }];
                 
+                if (self.blueConnectView == nil) {
+                    
                 [self.view addSubview:self.blueConnectView];
                 [self.blueConnectView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.right.equalTo(self.view);
@@ -689,6 +755,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                     make.bottom.equalTo(self.blueConnectView.mas_bottom).offset(-10);
                     make.right.equalTo(self.blueConnectView.mas_right).offset(-15);
                 }];
+                    
+                }
             }
             NSString *DataTemplate = tmpArr.firstObject[@"DataTemplate"];
             self.DataTemplateDic = [NSString jsonToObject:DataTemplate];
@@ -1179,6 +1247,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     CGFloat kButtonWidth = 146;
     
+    if (self.emptyImageView == nil) {
+        
     [self.view addSubview:self.emptyImageView];
     [self.emptyImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         CGFloat kSpaceHeight = 70; //距离中心偏移量
@@ -1216,6 +1286,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.view);
     }];
+    }
 }
 
 - (void)deleteDevice {
