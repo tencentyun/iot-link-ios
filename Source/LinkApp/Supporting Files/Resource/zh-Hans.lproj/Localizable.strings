@@ -975,3 +975,7 @@
 "agree_userAgreement_privacyPolicy" = "请同意用户协议和隐私协议后才能登录";
 "access_bluetooth_intro" = "如未能成功获取蓝牙状态，请尝试前往【设置】-【蓝牙】中开启，为了便于您访问蓝牙设备，因此腾讯连连需获取蓝牙权限";
 "would_lick_access_bluetooth" = "想要使用蓝牙";
+
+"no_netwrok_check_status" = "暂时无网络，请检查网络状态";
+"device_status_error" = "设备状态异常提示";
+"check_device_p2p_status" = "请检查设备网络和设备p2p状态是否正常";

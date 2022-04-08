@@ -34,4 +34,8 @@ typedef NS_ENUM (NSInteger,TIoTDeviceStatus){
             break;
     }
 }
+
++ (void)showDeviceStatusErrorWithTitle:(NSString *)title contentText:(NSString *)content {
+    [TIoTCoreUtil showSingleActionAlertWithTitle:title content:content confirmText:@"确定"];
+}
 @end

@@ -85,6 +85,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
     [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
     
+    //断网通知处理
+    [HXYNotice addCallingDisconnectNetLister:self reaction:@selector(noNetworkHungupAction)];
+    
     [self decetNetworkStatus];
     
     _is_init_alert = NO;
@@ -154,6 +157,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [[NetworkReachabilityManager sharedManager] startMonitoring];
     
+}
+
+//没网络 退出通话页面
+- (void)noNetworkHungupAction {
+    [MBProgressHUD showError:NSLocalizedString(@"no_netwrok_check_status", @"暂时无网络，请检查网络状态")];
+    [self close];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -390,7 +399,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     
                 }else {
                     //设备状态异常提示
-                    [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+                    if ([NetworkReachabilityManager sharedManager].networkReachabilityStatus == NetworkReachabilityStatusNotReachable) {
+                        [MBProgressHUD showError:NSLocalizedString(@"no_netwrok_check_status", @"暂时无网络，请检查网络状态")];
+                    }else {
+                        [TIoTCoreUtil showDeviceStatusErrorWithTitle:NSLocalizedString(@"device_status_error", @"设备状态异常提示") contentText:NSLocalizedString(@"check_device_p2p_status", @"请检查设备网络和设备p2p状态是否正常")];
+                    }
                 }
             }];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]||[reportModel.params._sys_audio_call_status isEqualToString:@"0"]) {

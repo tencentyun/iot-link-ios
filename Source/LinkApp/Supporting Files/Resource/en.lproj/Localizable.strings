@@ -980,3 +980,7 @@ If the problem still persists, we recommend you remove the device and add it aga
 "agree_userAgreement_privacyPolicy" = "请同意用户协议和隐私协议后才能登录";
 "access_bluetooth_intro" = "Trun on Bluetooth to scan for hardware";
 "would_lick_access_bluetooth" = "Would Like to Use Bluetooth";
+
+"no_netwrok_check_status" = "暂时无网络，请检查网络状态";
+"device_status_error" = "设备状态异常提示";
+"check_device_p2p_status" = "请检查设备网络和设备p2p状态是否正常";

@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TIoTCoreUtil (TIoTDemoDeviceStatus)
 + (void)showDeviceStatusError:(TIoTDemoDeviceStatusModel *)responseModel commandInfo:(NSString *)commandInfo;
++ (void)showDeviceStatusErrorWithTitle:(NSString *)title contentText:(NSString *)content;
 @end
 
 NS_ASSUME_NONNULL_END
