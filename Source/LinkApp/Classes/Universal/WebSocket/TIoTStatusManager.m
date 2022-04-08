@@ -523,6 +523,9 @@
     }
     
     [self cancelTimer];
+    
+    _deviceID = @"";
+    self.isCommunicating = NO;
 }
 
 #pragma mark- TRTCCallingViewDelegate ui决定是否进入房间
@@ -1343,6 +1346,7 @@
         [MBProgressHUD showError:tipString];
     }
     
+    _deviceID = @"";
     
 }
 
