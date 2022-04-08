@@ -95,10 +95,10 @@
         _isActiveStatus = _isActiveCall;
     }else {
         if (![NSString isNullOrNilWithObject:_deviceID] && ![_deviceID isEqualToString:deviceParam.deviceName]) {
-            _isActiveCall = YES;//表示主呼叫
+            _isActiveCall = NO;//表示被呼叫
             _isActiveStatus = _isActiveCall;
         }else {
-            _isActiveCall = NO;
+            _isActiveCall = YES;
             _isActiveStatus = _isActiveCall;
         }
             
