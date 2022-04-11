@@ -141,7 +141,7 @@ static NSString *heartBeatReqID = @"5002";
             @"AccessToken":[TIoTCoreUserManage shared].accessToken,
             @"RequestId":@"weichuan-client",
             @"ActionParams": @{
-                @"DeviceIds": deviceIds
+                    @"DeviceIds": deviceIds?:@[]
             }
         }
     };
