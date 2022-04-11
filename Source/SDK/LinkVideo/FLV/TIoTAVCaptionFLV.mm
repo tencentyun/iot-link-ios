@@ -34,8 +34,8 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, strong) TIoTH264Encoder                *h264Encoder;
 @property (nonatomic, strong) TIoTAACEncoder                 *aacEncoder;
-@property (nonatomic, strong) NSMutableData              *data;
-@property (nonatomic, copy  ) NSString                   *h264File;
+//@property (nonatomic, strong) NSMutableData              *data;
+//@property (nonatomic, copy  ) NSString                   *h264File;
 //@property (nonatomic, strong) NSFileHandle               *fileHandle;
 @property (nonatomic, assign) TIoTAVCaptionFLVAudioType     audioRate;
 @end
@@ -55,7 +55,7 @@ dispatch_queue_t muxerQueue;
 -(void) onInit{
     muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
     
-    _data = [NSMutableData new];
+//    _data = [NSMutableData new];
     _session = [AVCaptureSession new];
 }
 
@@ -231,7 +231,7 @@ dispatch_queue_t muxerQueue;
             if (encodedData) {
 //                NSLog(@"Audio data (%lu):%@", (unsigned long)encodedData.length,encodedData.description);
                 
-                [self.data appendData:encodedData];
+//                [self.data appendData:encodedData];
                 encodeFlvData(0, encodedData);
             }else {
 //                NSLog(@"Error encoding AAC: %@", error);
@@ -395,14 +395,14 @@ int encodeFlvData(int type, NSData *packetData) {
 //    _fileHandle = NULL;
 //
     // 获取程序Documents目录路径
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    /*NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
     NSMutableString * path = [[NSMutableString alloc]initWithString:documentsDirectory];
     [path appendString:@"/AACFile.aac"];
     
     [_data writeToFile:path atomically:YES];
-    
+    */
 }
 
 @end
