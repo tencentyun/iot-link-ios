@@ -20,5 +20,6 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 - (void)preStart;
 -(BOOL) startCapture;
 -(void) stopCapture;
+-(void)changeCameraPositon;
 @end
 

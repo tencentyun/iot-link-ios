@@ -26,7 +26,7 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, strong) dispatch_queue_t           AudioQueue;
 
 // 负责从 AVCaptureDevice 获得输入数据
-@property (nonatomic, strong) AVCaptureDeviceInput       *captureDeviceInput;
+@property (nonatomic, strong) AVCaptureDeviceInput       *deviceInput;
 @property (nonatomic, strong) AVCaptureVideoDataOutput   *videoOutput;
 @property (nonatomic, strong) AVCaptureConnection        *videoConnection;
 @property (nonatomic, strong) AVCaptureConnection        *audioConnection;
@@ -107,6 +107,51 @@ dispatch_queue_t muxerQueue;
     return nil;
 }
 
+/**
+ 切换前后摄像头
+ */
+-(void)changeCameraPositon{
+    //获取摄像头的数量（该方法会返回当前能够输入视频的全部设备，包括前后摄像头和外接设备）
+    NSInteger cameraCount = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count];
+    //摄像头的数量小于等于1的时候直接返回
+    if (cameraCount <= 1) {
+        return;
+    }
+    AVCaptureDevice *newCamera = nil;
+    AVCaptureDeviceInput *newInput = nil;
+    //获取当前相机的方向（前/后）
+    AVCaptureDevicePosition position = [[self.deviceInput device] position];
+    
+    if (position == AVCaptureDevicePositionFront) {
+        newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
+    }else if (position == AVCaptureDevicePositionBack){
+        newCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
+    }
+    //输入流
+    newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
+    if (newInput != nil) {
+        [self.session beginConfiguration];
+        //先移除原来的input
+        [self.session removeInput:self.deviceInput];
+        if ([self.session canAddInput:newInput]) {
+            [self.session addInput:newInput];
+            self.deviceInput = newInput;
+        }else{
+            //如果不能加现在的input，就加原来的input
+            [self.session addInput:self.deviceInput];
+        }
+        
+        self.session.sessionPreset = AVCaptureSessionPreset640x480;
+        // 保存Connection,用于SampleBufferDelegate中判断数据来源(video or audio?)
+        _videoConnection = [_videoOutput connectionWithMediaType:AVMediaTypeVideo];
+        [_videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+        
+        [self.session commitConfiguration];
+    }
+
+}
+
+
 #pragma mark - 设置视频 capture
 - (void)setupVideoCapture {
     if (self.h264Encoder) {
@@ -131,9 +176,9 @@ dispatch_queue_t muxerQueue;
     AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
 //    videoDevice = [self cameraWithPosition:AVCaptureDevicePositionBack];
-//    videoDevice.position = AVCaptureDevicePositionBack;
     //用设备初始化一个采集的输入对象
     AVCaptureDeviceInput *videoInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+    self.deviceInput = videoInput;
     if (error) {
         NSLog(@"Error getting video input device:%@",error.description);
         

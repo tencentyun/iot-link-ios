@@ -610,6 +610,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
+- (void)changeCameraPositon {
+    [[TIoTCoreXP2PBridge sharedInstance] changeCameraPositon];
+}
+
 -(void)onHungupClick{
     [HXYNotice postStatusManagerCommunicateType:0];
     
@@ -688,6 +692,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         _previewBottomView = [[UIView alloc]initWithFrame:CGRectMake(40, 100, 150, 200)];
         [self.view addSubview:_previewBottomView];
         [self.view sendSubviewToBack:_previewBottomView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCameraPositon)];
+        [_previewBottomView addGestureRecognizer:tap];
     }
     return _previewBottomView;
 }

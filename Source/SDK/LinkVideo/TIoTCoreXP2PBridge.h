@@ -110,7 +110,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 //音视频采样
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (XP2PErrCode)stopVoiceToServer;
-
+- (void)changeCameraPositon;
 
 
 /*

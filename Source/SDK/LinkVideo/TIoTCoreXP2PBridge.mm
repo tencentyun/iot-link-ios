@@ -300,6 +300,9 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     [systemAvCapture startCapture];
 }
 
+- (void)changeCameraPositon {
+    [systemAvCapture changeCameraPositon];
+}
 - (XP2PErrCode)stopVoiceToServer {
     self.isSending = NO;
     
