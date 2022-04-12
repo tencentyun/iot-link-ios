@@ -29,7 +29,7 @@
             
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
-            [UIApplication sharedApplication].keyWindow.rootViewController = vc;
+            [[UIApplication sharedApplication] delegate].window.rootViewController = vc;
             
             [self getUserInfo];
             
@@ -42,7 +42,7 @@
         [[TIoTCoreAccountSet shared] signInWithEmail:self.account.text password:self.password.text success:^(id  _Nonnull responseObject) {
             UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             UIViewController *vc = [sb instantiateInitialViewController];
-            [UIApplication sharedApplication].keyWindow.rootViewController = vc;
+            [[UIApplication sharedApplication] delegate].window.rootViewController = vc;
         } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
             
         }];

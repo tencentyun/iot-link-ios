@@ -590,7 +590,7 @@ typedef NS_ENUM(NSUInteger,WCLoginStyle){
 
 - (void)loginSuccess {
     if (self.isExpireAt) {
-        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";

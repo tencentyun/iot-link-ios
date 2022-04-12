@@ -315,7 +315,7 @@
         }];
         
     };
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    [av showInView:[[UIApplication sharedApplication] delegate].window];
 }
 
 - (IBAction)toTimer:(id)sender {
@@ -341,7 +341,7 @@
         }
     };
     av.defaultText = self.title;
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    [av showInView:[[UIApplication sharedApplication] delegate].window];
 }
 
 - (IBAction)toShareList:(id)sender {

@@ -21,7 +21,7 @@
 
 + (void)showLodingInView:(UIView *)view enabled:(BOOL)userEnabled message:(NSString *)message{
     if (view == nil) {
-        view = [UIApplication sharedApplication].keyWindow;
+        view = [[UIApplication sharedApplication] delegate].window;
     }
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
@@ -44,7 +44,7 @@
 
 + (void)dismissInView:(UIView *)view{
     if (view == nil) {
-        view = [UIApplication sharedApplication].keyWindow;
+        view = [[UIApplication sharedApplication] delegate].window;
     }
     
 //    MBProgressHUD *hud = [self HUDForView:view];
@@ -181,7 +181,7 @@
  */
 + (void)hideHUDForView:(UIView *)view
 {
-    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
+    if (view == nil) view = [[UIApplication sharedApplication] delegate].window;
 //    MBProgressHUD *hud = [self HUDForView:view];
 //    if ([hud.customView isKindOfClass:[XDPHudLoadingView class]]) {
 //        XDPHudLoadingView *loadingView = (XDPHudLoadingView*)hud.customView;
@@ -202,7 +202,7 @@
 + (void)show:(NSString *)text icon:(NSString *)icon view:(UIView *)view
 {
     
-    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
+    if (view == nil) view = [[UIApplication sharedApplication] delegate].window;
 
     [self hideHUDForView:view];
     // 快速显示一个提示信息
@@ -235,7 +235,7 @@
  */
 + (void)showAttributedString:(NSAttributedString *)text icon:(NSString *)icon view:(UIView *)view
 {
-    if (view == nil) view = [UIApplication sharedApplication].keyWindow;
+    if (view == nil) view = [[UIApplication sharedApplication] delegate].window;
     [self hideHUDForView:view];
     // 快速显示一个提示信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];

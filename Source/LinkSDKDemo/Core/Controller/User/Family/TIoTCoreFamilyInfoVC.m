@@ -98,7 +98,7 @@ static NSString *itemId2 = @"pfDDD";
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteFamily];
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        [av showInView:[[UIApplication sharedApplication] delegate].window];
         
     }
     else//退出
@@ -204,7 +204,7 @@ static NSString *itemId2 = @"pfDDD";
                         [self modifyFamily:text];
                     }
                 };
-                [av showInView:[UIApplication sharedApplication].keyWindow];
+                [av showInView:[[UIApplication sharedApplication] delegate].window];
             }
                 break;
             case 1:

@@ -316,7 +316,7 @@ static NSString *cellId = @"rv23244";
                         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                     }
                 };
-                [av showInView:[UIApplication sharedApplication].keyWindow];
+                [av showInView:[[UIApplication sharedApplication] delegate].window];
             }
                 break;
             case 1:

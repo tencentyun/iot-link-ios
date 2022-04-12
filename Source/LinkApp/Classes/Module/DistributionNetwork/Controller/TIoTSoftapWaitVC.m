@@ -405,7 +405,7 @@
         [self releaseAlloc];
         [self dismissViewControllerAnimated:YES completion:nil];
     };
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    [av showInView:[[UIApplication sharedApplication] delegate].window];
 }
 
 - (void)changeTypeClick:(id)sender{

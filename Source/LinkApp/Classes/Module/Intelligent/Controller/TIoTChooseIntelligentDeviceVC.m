@@ -171,7 +171,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     NSString *categoryKey = @"";
     if (indexPath.row != 0) {
         categoryKey = self.categoryArr[indexPath.row][@"RoomId"]?:@"";

@@ -186,7 +186,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *vcName = self.dataArr[indexPath.row][@"vc"];
     if ([vcName isEqualToString:@"TIoTWebVC"]) {
-        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             
             DDLogVerbose(@"AppGetTokenTicket responseObject%@", responseObject);

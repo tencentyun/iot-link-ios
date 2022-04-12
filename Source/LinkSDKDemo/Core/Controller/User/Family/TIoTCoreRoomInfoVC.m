@@ -95,7 +95,7 @@ static NSString *cellId = @"rc62368";
                 [self modifyRoom:text];
             }
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        [av showInView:[[UIApplication sharedApplication] delegate].window];
     }
 }
 

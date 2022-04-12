@@ -127,7 +127,7 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     };
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    [av showInView:[[UIApplication sharedApplication] delegate].window];
 }
 
 - (id)findViewController:(NSString*)className{

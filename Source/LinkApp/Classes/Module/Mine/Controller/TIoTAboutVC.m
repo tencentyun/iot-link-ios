@@ -166,9 +166,9 @@
 
 - (void)showNewVersionViewWithDict:(NSDictionary *)versionInfo {
     TIoTNewVersionTipView *newVersionView = [[TIoTNewVersionTipView alloc] initWithVersionInfo:versionInfo];
-    [[UIApplication sharedApplication].keyWindow addSubview:newVersionView];
+    [[[UIApplication sharedApplication] delegate].window addSubview:newVersionView];
     [newVersionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+        make.edges.equalTo([[UIApplication sharedApplication] delegate].window);
     }];
 }
 

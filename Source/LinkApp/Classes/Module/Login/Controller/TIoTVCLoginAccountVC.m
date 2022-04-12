@@ -1090,7 +1090,7 @@ static CGFloat const kVerificationBtnRightPadding = 24;//验证码按钮距离�
 
 - (void)loginSuccess {
     if (self.isExpireAt) {
-        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             
             NSString *ticket = responseObject[@"TokenTicket"]?:@"";

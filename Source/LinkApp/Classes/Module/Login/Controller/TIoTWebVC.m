@@ -450,7 +450,7 @@
 //    NSDictionary *itemParamDic =  @{@"articleId":bodyParamDic[@"ArticleId"],@"IsLike":bodyParamDic[@"IsLike"],@"LikeCount":bodyParamDic[@"LikeCount"],@"articleRoute":bodyParamDic[@"articleRoute"],@"articleTitle":bodyParamDic[@"articleTitle"]};
     NSString *itemParaString = [NSString objectToJson:bodyParamDic];
     NSString *itemJsonString = [NSString URLEncode:itemParaString];
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
         
         DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
@@ -483,7 +483,7 @@
 }
 
 - (void)goFeedBackWithMessage:(WKScriptMessage *)message {
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
         [self callBackResultWith:message];

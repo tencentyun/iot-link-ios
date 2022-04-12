@@ -107,7 +107,7 @@
     self.webVC = [TIoTWebVC new];
     self.webVC.requestTicketRefreshURLBlock = ^(TIoTWebVC * _Nonnull webController) {
         
-        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
             

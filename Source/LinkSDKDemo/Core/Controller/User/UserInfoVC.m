@@ -211,7 +211,7 @@
 
 - (IBAction)signOut:(id)sender {
     [[TIoTCoreAccountSet shared] signOutOnSuccess:^(id  _Nonnull responseObject) {
-        [UIApplication sharedApplication].keyWindow.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
+        [[UIApplication sharedApplication] delegate].window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];

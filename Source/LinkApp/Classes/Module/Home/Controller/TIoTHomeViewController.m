@@ -168,7 +168,7 @@ static CGFloat kHeaderViewHeight = 162;
     [self setupUI];
     [self setupRefreshView];
     
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     [self getFamilyList];
     
     [self registFeedBackRouterController];
@@ -228,7 +228,7 @@ static CGFloat kHeaderViewHeight = 162;
 //通过控制器的布局视图可以获取到控制器实例对象    modal的展现方式需要取到控制器的根视图
 - (UIViewController *)currentViewController
 {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *keyWindow = [[UIApplication sharedApplication] delegate].window;
     // modal展现方式的底层视图不同
     // 取到第一层时，取到的是UITransitionView，通过这个view拿不到控制器
     UIView *firstView = [keyWindow.subviews firstObject];
@@ -763,7 +763,7 @@ static CGFloat kHeaderViewHeight = 162;
 
 - (UIViewController *)topViewController {
     UIViewController *resultVC;
-    resultVC = [self _topViewController:[[UIApplication sharedApplication].keyWindow rootViewController]];
+    resultVC = [self _topViewController:[[[UIApplication sharedApplication] delegate].window rootViewController]];
     while (resultVC.presentedViewController) {
         resultVC = [self _topViewController:resultVC.presentedViewController];
     }
@@ -1497,7 +1497,7 @@ static CGFloat kHeaderViewHeight = 162;
                 
                 __weak typeof(self) weadkSelf= self;
                 
-                [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+                [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
                 [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
                     
                     DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);

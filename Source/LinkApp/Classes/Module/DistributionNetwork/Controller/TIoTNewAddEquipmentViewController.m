@@ -172,7 +172,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     self.discoverView = [[TIoTDiscoverProductView alloc] init];
     WeakObj(self)
     self.discoverView.helpAction = ^{
-        [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+        [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
         [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
             DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
@@ -315,7 +315,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 
 #pragma mark - request
 - (void)getCategoryList{
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetParentCategoryList Param:@{} success:^(id responseObject) {
         
         [self.categoryArr removeAllObjects];
@@ -436,7 +436,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     NSString *productIdString = productId?:@"";
     __weak typeof(self) weadkSelf= self;
     
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
         
         DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);
@@ -474,7 +474,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
     NSString *categoryKey = self.categoryArr[indexPath.row][@"CategoryKey"]?:@"";
     [self getProductList:categoryKey];
 }

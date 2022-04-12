@@ -113,7 +113,7 @@
                 
                 __weak typeof(self) weadkSelf= self;
                 
-                [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+                [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
                 [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
                     DDLogDebug(@"AppGetTokenTicket responseObject%@", responseObject);

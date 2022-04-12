@@ -203,7 +203,7 @@
 }
 
 - (void)moreErrorResult:(UIButton *)sender {
-    [MBProgressHUD showLodingNoneEnabledInView:[UIApplication sharedApplication].keyWindow withMessage:@""];
+    [MBProgressHUD showLodingNoneEnabledInView:[[UIApplication sharedApplication] delegate].window withMessage:@""];
             [[TIoTRequestObject shared] post:AppGetTokenTicket Param:@{} success:^(id responseObject) {
 
                 DDLogInfo(@"AppGetTokenTicket responseObject%@", responseObject);

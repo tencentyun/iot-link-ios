@@ -396,7 +396,7 @@ static CGFloat kScorllViewHeight = 4*48+4;
         TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTMainVC alloc] init]];
         [UIApplication sharedApplication].delegate.window.rootViewController = nav;
     };
-    [modifyAlertView showInView:[UIApplication sharedApplication].keyWindow];
+    [modifyAlertView showInView:[[UIApplication sharedApplication] delegate].window];
 }
 #pragma mark - TIoTModifyPasswordViewDelegate
 

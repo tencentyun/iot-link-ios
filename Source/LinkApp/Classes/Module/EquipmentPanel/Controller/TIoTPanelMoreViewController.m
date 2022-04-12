@@ -96,7 +96,7 @@
         av.doneAction = ^(NSString * _Nonnull text) {
             [self deleteDevice];
         };
-        [av showInView:[UIApplication sharedApplication].keyWindow];
+        [av showInView:[[UIApplication sharedApplication] delegate].window];
     };
     [tableFooterView addSubview:singleButton];
     [singleButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -140,7 +140,7 @@
     av.doneAction = ^(NSString * _Nonnull text) {
         [self deleteDevice];
     };
-    [av showInView:[UIApplication sharedApplication].keyWindow];
+    [av showInView:[[UIApplication sharedApplication] delegate].window];
     
 }
 
