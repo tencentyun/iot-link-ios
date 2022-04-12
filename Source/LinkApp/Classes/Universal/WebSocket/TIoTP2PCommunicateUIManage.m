@@ -944,6 +944,11 @@
     
     
     UIViewController *topVC = [TIoTCoreUtil topViewController];
+    NSString *selfClassName = NSStringFromClass(topVC.class);
+    BOOL isP2PVC = NO;
+    if ([selfClassName isEqualToString:@"TIoTAVP2PPlayCaptureVC"]) {
+        isP2PVC = YES;
+    }
     NSString *productID = [deviceIDString?:@"" componentsSeparatedByString:@"/"].firstObject?:@"";
     NSString *deviceName = [deviceIDString?:@"" componentsSeparatedByString:@"/"].lastObject?:@"";
     
@@ -997,7 +1002,7 @@
         _callP2PVideo.isCallIng = NO;
         _callP2PVideo.delegate = self;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
-        if (isAccess == YES) {
+        if (isAccess == YES && _callP2PVideo && isP2PVC == NO) {
             [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
         }
         
@@ -1033,7 +1038,7 @@
         _callP2PVideo.isCallIng = YES;
         _callP2PVideo.delegate = self;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
-        if (isAccess == YES) {
+        if (isAccess == YES && _callP2PVideo && isP2PVC == NO) {
             [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
         }
     }
