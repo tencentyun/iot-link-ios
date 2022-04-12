@@ -185,8 +185,8 @@ failure:(FailureResponseBlock)failure
     
     NSMutableDictionary *accessParam = nil;
     if (withoutToken == YES) {
-        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
-        [accessParam setValue:actionStr forKey:@"Action"];
+        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam?:@{}];
+        [accessParam setValue:actionStr?:@"" forKey:@"Action"];
         [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
         [accessParam setValue:self.customEnvrionmentAppSecretStirng ? self.customEnvrionmentAppSecretStirng : [TIoTCoreAppEnvironment shareEnvironment].appKey forKey:@"AppKey"];
         [accessParam setValue:@([[NSString getNowTimeString] integerValue]) forKey:@"Timestamp"];
@@ -194,17 +194,17 @@ failure:(FailureResponseBlock)failure
         [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Platform"];
         [accessParam setValue:self.customEnvrionmenPlatform ? self.customEnvrionmenPlatform : [TIoTCoreAppEnvironment shareEnvironment].platform forKey:@"Agent"];
     }else {
-        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam];
-        [accessParam setValue:actionStr forKey:@"Action"];
+        accessParam = [NSMutableDictionary dictionaryWithDictionary:baseAccessParam?:@{}];
+        [accessParam setValue:actionStr?:@"" forKey:@"Action"];
         [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
         if (![baseAccessParam.allKeys containsObject:@"AccessToken"]) {
-            [accessParam setValue:[TIoTCoreUserManage shared].accessToken forKey:@"AccessToken"];
+            [accessParam setValue:[TIoTCoreUserManage shared].accessToken?:@"" forKey:@"AccessToken"];
         }
         
     }
 
     if (![NSString isNullOrNilWithObject:[TIoTCoreUserManage shared].userRegionId]) {
-        [accessParam setValue:[TIoTCoreUserManage shared].userRegionId forKey:@"RegionId"];
+        [accessParam setValue:[TIoTCoreUserManage shared].userRegionId?:@"" forKey:@"RegionId"];
     }
     
     //接口中英文语言国际化返回判断参数
@@ -215,14 +215,14 @@ failure:(FailureResponseBlock)failure
     NSString *langStr = [[langAndRegionStr componentsSeparatedByString:@"_"] objectAtIndex:0];
     
     NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
-    [accessParam setValue:langValueString forKey:@"lang"];
+    [accessParam setValue:langValueString?:@"" forKey:@"lang"];
     
-    NSURL *urlString = nil;
+    NSURL *urlString = [NSURL new];
     
     if (urlAndBodyCustomSettingBlock != nil) {
         urlString = urlAndBodyCustomSettingBlock(accessParam, nil);
     }else {
-        urlString = url;
+        urlString = url?:[NSURL new];
     }
     
     DDLogVerbose(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
