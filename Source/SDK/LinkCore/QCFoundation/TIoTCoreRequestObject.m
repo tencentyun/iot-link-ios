@@ -242,6 +242,9 @@ failure:(FailureResponseBlock)failure
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data == nil) {
+            data = [[NSData alloc]init];
+        }
         DDLogDebug(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
