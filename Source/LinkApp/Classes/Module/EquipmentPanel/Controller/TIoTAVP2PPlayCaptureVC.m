@@ -53,6 +53,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval endPlayer;
 @property (nonatomic, assign) CFTimeInterval startIpcP2P;
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
+
+@property (nonatomic, assign) CFTimeInterval startP2PStream; //检查通话时长
+
 @property (nonatomic, assign) BOOL is_init_alert;
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 
@@ -406,10 +409,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     }
                 }
             }];
+        
+        self.startP2PStream = CACurrentMediaTime();
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"0"]||[reportModel.params._sys_audio_call_status isEqualToString:@"0"]) {
         [self close];
 //        [self.navigationController popViewControllerAnimated:NO];
-        [MBProgressHUD showError:NSLocalizedString(@"other_part_hangup", @"对方已挂断...")];
+        
+        CFTimeInterval endP2PStream = CACurrentMediaTime();
+//        endP2PStream - self.startP2PStream;
+        NSInteger streamTime = ((endP2PStream - self.startP2PStream)*1000);
+        if (streamTime < 5000) {
+            [MBProgressHUD showError:@"通道建立失败，请重新拨打"];
+        }else {
+            [MBProgressHUD showError:NSLocalizedString(@"other_part_hangup", @"对方已挂断...")];
+        }
         [self dismissViewControllerAnimated:NO completion:nil];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]|| [reportModel.params._sys_audio_call_status isEqualToString:@"2"]) {
         
@@ -577,7 +590,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
         
         IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-        
+        [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"];
+    
         self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
         self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.player.view.frame = self.imageView.bounds;

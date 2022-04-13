@@ -305,6 +305,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 - (void)dealloc {
+    NSLog(@"pannel_dealloc_%s", __func__);
     [TIoTCoreUserManage shared].sys_call_status = @"-1";
     [self.blueManager stopScan];
     [self.blueManager disconnectPeripheral];
