@@ -270,26 +270,26 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
         
         // 设置关键帧（GOPsize)间隔
-        int frameInterval = 10;
+        int frameInterval = 30;
         CFNumberRef  frameIntervalRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &frameInterval);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, frameIntervalRef);
         
         // 设置期望帧率
-        int fps = 10;
+        int fps = 5;
         CFNumberRef  fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &fps);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ExpectedFrameRate, fpsRef);
         
         
-        //设置码率，均值，单位是byte
-//        int bitRate = width * height * 3 * 4 * 8;
-//        CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
-//        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
-//        
-//        //设置码率，上限，单位是bps
-//        int bitRateLimit = width * height * 3 * 4;
-//        CFNumberRef bitRateLimitRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRateLimit);
-//        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_DataRateLimits, bitRateLimitRef);
+        //设置码率，均值，单位是bits per second
+//        int bitRate = width * height * 60;
+        int bitRate = 25000;
+        CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
+        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
         
+        //设置码率，上限，单位是bytes         1 Byte = 8 Bits
+        NSArray *bitRateLimit = @[@(bitRate/8),@(1)];
+        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)bitRateLimit);
+            
         // Tell the encoder to start encoding
         VTCompressionSessionPrepareToEncodeFrames(EncodingSession);
     });
