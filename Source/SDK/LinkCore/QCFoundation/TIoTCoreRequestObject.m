@@ -245,11 +245,12 @@ failure:(FailureResponseBlock)failure
         DDLogDebug(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
-            
+            data = nil;
             if (data == nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     failure(nil,error,@{});
-                    DDLogDebug(@"响应数据data 为空，URL：%@"，urlString);
+                    DDLogDebug(@"响应数据data 为空，URL：%@", urlString);
+                    return;
                 });
             }
             
