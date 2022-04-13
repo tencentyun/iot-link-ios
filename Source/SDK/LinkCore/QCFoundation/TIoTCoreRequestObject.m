@@ -217,12 +217,12 @@ failure:(FailureResponseBlock)failure
     NSString *langValueString = [NSString stringWithFormat:@"%@-%@",langStr,regionStr];
     [accessParam setValue:langValueString?:@"" forKey:@"lang"];
     
-    NSURL *urlString = [NSURL new];
+    NSURL *urlString = nil;
     
     if (urlAndBodyCustomSettingBlock != nil) {
         urlString = urlAndBodyCustomSettingBlock(accessParam, nil);
     }else {
-        urlString = url?:[NSURL new];
+        urlString = url;
     }
     
     DDLogVerbose(@"请求action==%@==%@",actionStr,[NSString objectToJson:accessParam]);
@@ -242,12 +242,17 @@ failure:(FailureResponseBlock)failure
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];
     
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (data == nil) {
-            data = [[NSData alloc]init];
-        }
         DDLogDebug(@"收到action==%@==%@",urlString,[[NSString alloc] initWithData:data encoding:4]);
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
+            
+            if (data == nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(nil,error,@{});
+                    DDLogDebug(@"响应数据data 为空，URL：%@"，urlString);
+                });
+            }
+            
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
             if (jsonerror == nil) {
