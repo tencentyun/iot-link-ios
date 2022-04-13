@@ -423,7 +423,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         }else {
             [MBProgressHUD showError:NSLocalizedString(@"other_part_hangup", @"对方已挂断...")];
         }
-//        [self dismissViewControllerAnimated:NO completion:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             UIViewController *topVC = [TIoTCoreUtil topViewController];
             NSString *selfClassName = NSStringFromClass(topVC.class);
