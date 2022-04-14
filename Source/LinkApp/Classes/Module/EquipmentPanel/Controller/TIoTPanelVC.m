@@ -3875,7 +3875,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //        return;
 //    }
     
-    self.p2pReady = NO;
+//    self.p2pReady = NO;
     
     NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
     [MBProgressHUD showError:error_message];
@@ -3885,5 +3885,34 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //        //退出面板页面，需要刷新后才能重建通道连接
 //        [self.navigationController popViewControllerAnimated:YES];
 //    }
+    
+    //重新拉取xp2pinfo
+    [self refushXP2Pinfo];
+}
+
+- (void)refushXP2Pinfo {
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
+        NSString *tmpStr = (NSString *)responseObject[@"Data"];
+        NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
+        self.objectModel = [NSDictionary dictionaryWithDictionary:tmpDic];
+
+        NSString *xp2pValue = @"";
+        if (self.objectModel != nil) {
+            
+            NSDictionary *xp2pDic = [NSDictionary new];
+            if ([self.objectModel.allKeys containsObject:@"_sys_xp2p_info"]) {
+                xp2pDic = self.objectModel[@"_sys_xp2p_info"]?:@{};
+            }
+            if ([xp2pDic.allKeys containsObject:@"Value"]) {
+                xp2pValue = xp2pDic[@"Value"]?:@"";
+            }
+        }
+        NSLog(@"refushXP2Pinfo_sys_xp2p_info : %@",xp2pValue);
+        
+        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:nil sec_key:nil xp2pinfo:xp2pValue];
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+    }];
 }
 @end

@@ -163,9 +163,9 @@ dispatch_queue_t muxerQueue;
 //    [self.h264Encoder start:480 height:640];
     self.h264Encoder.delegate = self;
 
-    if ([_session canSetSessionPreset:AVCaptureSessionPreset640x480]) {
+    if ([_session canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
         // 设置分辨率
-        _session.sessionPreset = AVCaptureSessionPreset640x480;
+        _session.sessionPreset = AVCaptureSessionPreset1280x720;
     }
 //
     //设置采集的 Video 和 Audio 格式，这两个是分开设置的，也就是说，你可以只采集视频。

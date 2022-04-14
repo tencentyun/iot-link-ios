@@ -435,10 +435,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //开启startservier
         
         if (self.isStart == NO) {
-            
+            self.isStart = YES;
+
             self.topView.hidden = YES;
             //            if (self.isCallIng == NO) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
                 
                 self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
@@ -450,7 +451,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 self.startPlayer = CACurrentMediaTime();
                 //            }
                 
-                self.isStart = YES;
                 
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
@@ -460,7 +460,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 
                 [self startAVCapture];
                 
-            });
+//            });
         }
     }
 }
