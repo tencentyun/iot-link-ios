@@ -423,13 +423,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         }else {
             [MBProgressHUD showError:NSLocalizedString(@"other_part_hangup", @"对方已挂断...")];
         }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UIViewController *topVC = [TIoTCoreUtil topViewController];
-            NSString *selfClassName = NSStringFromClass(topVC.class);
-            if ([selfClassName isEqualToString:@"TIoTAVP2PPlayCaptureVC"]) {
-                [self dismissViewControllerAnimated:NO completion:nil];
-            }
-        });
+        [self dismissViewControllerAnimated:NO completion:nil];
     }else if ([reportModel.params._sys_video_call_status isEqualToString:@"2"]|| [reportModel.params._sys_audio_call_status isEqualToString:@"2"]) {
         
         //开启startservier
