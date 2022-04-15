@@ -76,11 +76,17 @@
 #pragma mark - event
 
 - (void)requestDeviceList {
+    self.loginView.accessID.text = [self.loginView.accessID.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.loginView.accessToken.text = [self.loginView.accessToken.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.loginView.productID.text = [self.loginView.productID.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
+    self.loginView.secretIDString = [self.loginView.secretIDString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.loginView.secretKeyString = [self.loginView.secretKeyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.loginView.productIDString = [self.loginView.productIDString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     // 保存信息
     [self saveDeviceInfo];
     
-    if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString]) && (![NSString isNullOrNilWithObject:self.loginView.regionConettString] && ![NSString isFullSpaceEmpty:self.loginView.regionConettString])) {
+    if ((![NSString isNullOrNilWithObject:self.loginView.secretIDString] && ![NSString isFullSpaceEmpty:self.loginView.secretIDString]) && (![NSString isNullOrNilWithObject:self.loginView.secretKeyString] && ![NSString isFullSpaceEmpty:self.loginView.secretKeyString]) && (![NSString isNullOrNilWithObject:self.loginView.productIDString] && ![NSString isFullSpaceEmpty:self.loginView.productIDString]) ) {
         
         TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
         environment.cloudSecretId = self.loginView.secretIDString;

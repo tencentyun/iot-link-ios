@@ -22,7 +22,7 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
 //    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
 //    if (logEnable) {
-//        NSLog(@"XP2P log: %@\n", message);
+        NSLog(@"XP2P log: %@\n", message);
 //    }
 //    
 //    if (type == XP2PTypeLog) {
