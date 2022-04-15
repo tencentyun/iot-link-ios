@@ -91,7 +91,7 @@
     if (!_accessToken) {
         _accessToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"acsToken"];
     }
-    return _accessToken;
+    return _accessToken?:@"";
 }
 
 - (void)setAccessToken:(NSString *)accessToken
