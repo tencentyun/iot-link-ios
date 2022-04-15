@@ -128,6 +128,21 @@
 	  }
 	}
 	```
+	
+* 获取当前发送链路的连接模式      
+     
+     ```
+    //连接模式：0 无效；62 直连；63 转发
+    getStreamLinkMode(dev_name)
+     ```    
+     
+* 调试接口，用于iOS端保存播放器拉取数据流   
+
+   ``` 
+   startRecordPlayerStream(dev_name)
+   ```  
+    	
+	
 
 ##### iOS库调用方法
 * P2P通道初始化
@@ -207,6 +222,56 @@
 	}
 	```
 	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm)
+
+
+* 获取当前发送链路的连接模式
+   
+   ```
+   //返回模式标识：0 无效；62 直连；63 转发
+   int netmode = [TIoTCoreXP2PBridge getStreamLinkMode:dev_name]
+   ```
+  
+* 调试接口，用于iOS端保存播放器拉取数据流    
+
+   ```
+   //保存到 document 目录 video.data 文件，需打开writeFile开关
+   [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
+   [TIoTCoreXP2PBridge recordstream:dev_name];
+   ```
+   
+* P2P代理方法：设备的裸流数据回调    
+   **谨慎！！！ 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程**     
+   
+   ```
+   //通过 startAvRecvService 和 stopAvRecvService 接口，可以启动和停止裸流传输，客户端拉取到的裸流数据对应 data 参数
+   - (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len;
+  ```
+   
+* P2P代理方法： 接收设备主动发送消息回调    
+  **谨慎！！！ 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程，返回值需立即返回**     
+  
+   ```
+   /*
+     *dev_name 和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
+     *data是设备主动发过来的内容
+     *返回值表示回复给设备的返回信息
+  */
+   
+   //注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
+  - (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
+   ```
+  
+   
+* P2P代理方法：接收设备发送的事件消息   
+   
+  ```
+   /* 
+     *接收到设备发送事件 
+     *dev_name  和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
+     * XP2PType 可参考后文的 Video SDK接口参数说明
+  */  
+  - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType;
+  ```
 
 
 ### App Video SDK 与 Device Video SDK 版本对应说明
