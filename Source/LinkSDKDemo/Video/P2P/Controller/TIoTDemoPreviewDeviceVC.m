@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    self.qualityString = quality_standard;
+    self.qualityString = quality_high;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     if (self.isNVR == NO) {
