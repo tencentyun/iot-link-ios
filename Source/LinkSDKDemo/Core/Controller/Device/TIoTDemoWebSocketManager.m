@@ -82,6 +82,7 @@ static NSString *heartBeatReqID = @"5002";
                 break;
             case NetworkReachabilityStatusNotReachable:
                 DDLogWarn(@"没网络");
+                [MBProgressHUD showError:@"无网络"];
                 // RTC App端和设备端通话中 断网监听
                 [HXYNotice postCallingDisconnectNet];
                 break;
