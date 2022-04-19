@@ -49,6 +49,7 @@
 	
 	* demo app为了获取设备列表，需要客户填写腾讯云api的密钥，获取的设备信息是客户该产品所有的设备，不区分C端用户，真实使用场景是希望获取设备列表的操作在客户自建后台进行的，云api的secretID、secretKey不保存在app上，避免泄露风险
 
+	* **自建业务如何获取 xp2pInfo**： 自建服务器可通过 [此接口](https://cloud.tencent.com/document/product/1131/53100) 获取设备上传至 video 服务的 xp2pInfo
 
 
 * P2P通道传输音视频流
