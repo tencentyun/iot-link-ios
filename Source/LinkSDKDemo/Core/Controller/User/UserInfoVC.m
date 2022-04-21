@@ -7,7 +7,7 @@
 #import "UserInfoVC.h"
 #import "TIoTCoreUserManage.h"
 #import <UIImageView+WebCache.h>
-
+#import "TIoTDemoWebSocketManager.h"
 
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <QCloudCore/QCloudCore.h>
@@ -212,6 +212,7 @@
 - (IBAction)signOut:(id)sender {
     [[TIoTCoreAccountSet shared] signOutOnSuccess:^(id  _Nonnull responseObject) {
         [[UIApplication sharedApplication] delegate].window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"LoginVC") new]];
+        [[TIoTDemoWebSocketManager shared] SRWebSocketClose];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         
     }];

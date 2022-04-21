@@ -29,7 +29,7 @@
     TIoTCoreAppEnvironment *environment = [TIoTCoreAppEnvironment shareEnvironment];
     [environment setEnvironment];
     
-    [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
+//    [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
     
     environment.appKey = @"物联网开发平台申请的 App Key";
     environment.appSecret = @"物联网开发平台申请的 App Secret";

@@ -15,7 +15,8 @@
 #import "TIoTCoreRequestObject.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "HXYNotice.h"
-
+#import "TIoTDemoWebSocketManager.h"
+ 
 static NSString *cellID = @"DODO";
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tab;
@@ -42,6 +43,7 @@ static NSString *cellID = @"DODO";
     // Do any additional setup after loading the view.
 //    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,SDKGlobalDebugUin];
 
+    [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
     
     self.title = NSLocalizedString(@"main_tab_1", @"首页");
     [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
