@@ -57,6 +57,15 @@ jobs:
       env:
         RELEASE_PGYER_API_KEY: ${{ secrets.IOT_FIRIM_API_TOKEN }}
         
+    - name: upload dSYM
+      run: |
+        git clone https://github.com/tencentyun/iot-link-ios.wiki.git
+        cd iot-link-ios.wiki/uploadDSYM
+        cp ../../LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM ./
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        java -jar buglyqq-upload-symbol.jar $BUGLY_UPLOAD_SYMBOL_ARGS_OSS -bundleid com.tencent.iot.explorer.link.opensource -version &VERSION -platform IOS -inputSymbol LinkApp.app.dSYM
+      env:
+        BUGLY_UPLOAD_SYMBOL_ARGS_OSS: ${{ secrets.BUGLY_UPLOAD_SYMBOL_ARGS_OSS }}
 #    - name: upload dSYM
 #      run: |
 #        ./Pods/FirebaseCrashlytics/upload-symbols -gsp ./Source/LinkApp/Supporting\ Files/GoogleService-Info.plist -p ios ./LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM
