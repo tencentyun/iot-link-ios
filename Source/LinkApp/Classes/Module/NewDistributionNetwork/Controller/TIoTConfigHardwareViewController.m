@@ -29,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _networkToken = @"";
+    _networkToken = @""; 
 }
 
 - (void)setupUI{
