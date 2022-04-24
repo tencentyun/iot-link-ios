@@ -30,6 +30,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _networkToken = @"";
+    
+    
 }
 
 - (void)setupUI{
