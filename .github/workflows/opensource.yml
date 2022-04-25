@@ -59,11 +59,18 @@ jobs:
         
     - name: upload dSYM
       run: |
+        GIT_BRANCH_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        
+        rb=$GIT_BRANCH_VERSION
+        rc=$(git rev-parse --short HEAD)
         git clone https://github.com/tencentyun/iot-link-ios.wiki.git
         cd iot-link-ios.wiki/uploadDSYM
-        cp ../../LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM ./
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        java -jar buglyqq-upload-symbol.jar $BUGLY_UPLOAD_SYMBOL_ARGS_OSS -bundleid com.tencent.iot.explorer.link.opensource -version &VERSION -platform IOS -inputSymbol LinkApp.app.dSYM
+        mv ../../LinkApp.xcarchive/dSYMs/LinkApp.app.dSYM ./
+        VERSION=$rb+git.$rc
+        echo $rb
+        echo $rc
+        echo $VERSION
+        java -jar buglyqq-upload-symbol.jar $BUGLY_UPLOAD_SYMBOL_ARGS_OSS -bundleid com.tencent.iot.explorer.link.opensource -version $VERSION -platform IOS -inputSymbol LinkApp.app.dSYM
       env:
         BUGLY_UPLOAD_SYMBOL_ARGS_OSS: ${{ secrets.BUGLY_UPLOAD_SYMBOL_ARGS_OSS }}
 #    - name: upload dSYM
