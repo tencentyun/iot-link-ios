@@ -335,36 +335,6 @@ static NSString *heartBeatReqID = @"5002";
     [[TIoTCoreSocketManager shared] stopHeartBeat];
 }
 
-//ping
-- (void)ping:(NSTimer *)timer {
-    NSArray *deviceIds = timer.userInfo;
-
-    if ([TIoTCoreSocketManager shared].socketReadyState == WC_OPEN) {
-        
-        NSData *data= [NSJSONSerialization dataWithJSONObject:[self heartData:deviceIds] options:NSJSONWritingPrettyPrinted error:nil];
-        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-        [[TIoTCoreSocketManager shared] sendData:dataDic];
-    }
-    
-}
-
-
-//心跳数据
-- (NSDictionary *)heartData:(NSArray *)deviceIds {
-    return @{
-        @"action":[TIoTCoreAppEnvironment shareEnvironment].action,
-        @"reqId":[[NSUUID UUID] UUIDString],
-        @"params":@{
-            @"Action": @"AppDeviceTraceHeartBeat",
-            @"AccessToken":[TIoTCoreUserManage shared].accessToken,
-            @"RequestId":@"weichuan-client",
-            @"ActionParams": @{
-                @"DeviceIds": deviceIds
-            }
-        }
-    };
-}
-
 //判断是否重新登录
 - (BOOL)needLogin{
     
