@@ -1231,7 +1231,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.player.shouldShowHudView = YES;
         
         self.view.autoresizesSubviews = YES;
-        [self.imageView addSubview:self.player.view];
+        if (self.videoingView) {
+            [self.imageView insertSubview:self.player.view belowSubview:self.videoingView];
+        }else {
+            [self.imageView addSubview:self.player.view];
+        }
         [self.player resetHubFrame:self.player.view.frame];
         
         //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
