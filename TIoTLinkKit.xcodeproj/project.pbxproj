@@ -121,6 +121,9 @@
 		6DA0881C256D865400938CF4 /* TIoTDeviceDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA0881B256D865400938CF4 /* TIoTDeviceDetailModel.m */; };
 		6DA08870256E307700938CF4 /* TIoTLogErrorDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA0886F256E307600938CF4 /* TIoTLogErrorDetailCell.m */; };
 		6DA526AD264BD3E0000F9636 /* TIoTCustomTimeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA526AA264BC9A8000F9636 /* TIoTCustomTimeSlider.m */; };
+		6DA6CCA42825145B00CD8246 /* TIoTVideoParamSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA6CCA32825145B00CD8246 /* TIoTVideoParamSettingVC.m */; };
+		6DA6CCA828252A1500CD8246 /* TIoTSamplingReteChoiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA6CCA728252A1500CD8246 /* TIoTSamplingReteChoiceVC.m */; };
+		6DA6CCAC28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA6CCAB28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.m */; };
 		6DA91859262F0158005D9654 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DA91858262F0157005D9654 /* LaunchScreen.storyboard */; };
 		6DA918AD262F044D005D9654 /* AppLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6DA918AF262F044D005D9654 /* AppLaunch.png */; };
 		6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3A93D62379304600379AA7 /* NetworkExtension.framework */; };
@@ -721,6 +724,12 @@
 		6DA0886F256E307600938CF4 /* TIoTLogErrorDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTLogErrorDetailCell.m; sourceTree = "<group>"; };
 		6DA526A9264BC9A8000F9636 /* TIoTCustomTimeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTCustomTimeSlider.h; sourceTree = "<group>"; };
 		6DA526AA264BC9A8000F9636 /* TIoTCustomTimeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomTimeSlider.m; sourceTree = "<group>"; };
+		6DA6CCA22825145B00CD8246 /* TIoTVideoParamSettingVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTVideoParamSettingVC.h; sourceTree = "<group>"; };
+		6DA6CCA32825145B00CD8246 /* TIoTVideoParamSettingVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTVideoParamSettingVC.m; sourceTree = "<group>"; };
+		6DA6CCA628252A1500CD8246 /* TIoTSamplingReteChoiceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTSamplingReteChoiceVC.h; sourceTree = "<group>"; };
+		6DA6CCA728252A1500CD8246 /* TIoTSamplingReteChoiceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTSamplingReteChoiceVC.m; sourceTree = "<group>"; };
+		6DA6CCAA28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTResolutionRatioChoiceVC.h; sourceTree = "<group>"; };
+		6DA6CCAB28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTResolutionRatioChoiceVC.m; sourceTree = "<group>"; };
 		6DA91858262F0157005D9654 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DA918AE262F044D005D9654 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zh-Hans"; path = "zh-Hans.lproj/AppLaunch.png"; sourceTree = "<group>"; };
 		6DA918B1262F0453005D9654 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/AppLaunch.png; sourceTree = "<group>"; };
@@ -2626,6 +2635,12 @@
 				ED9C15B823B9AB3800CAC848 /* TIoTDeviceShareVC.xib */,
 				EDF126FF23BDC51A00FB1638 /* TIoTPanelVC.h */,
 				EDF1270023BDC51A00FB1638 /* TIoTPanelVC.m */,
+				6DA6CCA22825145B00CD8246 /* TIoTVideoParamSettingVC.h */,
+				6DA6CCA32825145B00CD8246 /* TIoTVideoParamSettingVC.m */,
+				6DA6CCAA28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.h */,
+				6DA6CCAB28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.m */,
+				6DA6CCA628252A1500CD8246 /* TIoTSamplingReteChoiceVC.h */,
+				6DA6CCA728252A1500CD8246 /* TIoTSamplingReteChoiceVC.m */,
 				6D79370D274CCCBB0079BA52 /* TIoTAVP2PPlayCaptureVC.h */,
 				6D79370E274CCCBB0079BA52 /* TIoTAVP2PPlayCaptureVC.m */,
 				ED3FDA7D2418890300EE60D5 /* TIoTModifyRoomVC.h */,
@@ -3625,6 +3640,7 @@
 				ED8D1F6F242B500300900B80 /* TIoTTipView.m in Sources */,
 				6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */,
 				6DC7F8D92552E394009508EE /* TIoTSettingIntelligentImageVC.m in Sources */,
+				6DA6CCAC28252A8400CD8246 /* TIoTResolutionRatioChoiceVC.m in Sources */,
 				D2A2CD39234ECC6D0039EB51 /* TIoTRefreshFooter.m in Sources */,
 				A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */,
 				D2E11EB82331CF4900C388A5 /* TIoTUserInfomationTableViewCell.m in Sources */,
@@ -3662,6 +3678,7 @@
 				ED9C15B023B984DB00CAC848 /* UIImage+Ex.m in Sources */,
 				6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */,
 				D2038B9F2331FD540036F6B9 /* TIoTRegisterViewController.m in Sources */,
+				6DA6CCA42825145B00CD8246 /* TIoTVideoParamSettingVC.m in Sources */,
 				6D70C2E125515A690069879E /* TIoTIntelligentCustomCell.m in Sources */,
 				6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */,
 				D23104D62330678F0003069D /* UIView+XDPGesture.m in Sources */,
@@ -3817,6 +3834,7 @@
 				6DD4D32125398C9B005272BE /* TIoTEvaluationSharedView.m in Sources */,
 				D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */,
 				ED6BA5B023C5B10700BE9EC9 /* TIoTRoomCell.m in Sources */,
+				6DA6CCA828252A1500CD8246 /* TIoTSamplingReteChoiceVC.m in Sources */,
 				6D982C8B24D2DB350080C961 /* TIoTBindAccountVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

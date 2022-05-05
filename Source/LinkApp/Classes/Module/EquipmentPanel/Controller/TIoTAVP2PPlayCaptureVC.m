@@ -16,7 +16,6 @@
 #import "TIoTUIProxy.h"
 #import "TIoTDemoDeviceStatusModel.h"
 #import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
-#import <AVFoundation/AVFoundation.h>
 #import "TIoTP2PCommunicateUIManage.h"
 #import "UILabel+TIoTLableFormatter.h"
 #import "ReachabilityManager.h"
@@ -617,11 +616,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 #pragma mark 事件
 - (void)startAVCapture {
+    TIoTAVCaptionFLVAudioType FLVAudioType = TIoTAVCaptionFLVAudio_8;
+    
+    if (self.samplingRate == 8) {
+        FLVAudioType = TIoTAVCaptionFLVAudio_8;
+    }else if (self.samplingRate == 16) {
+        FLVAudioType = TIoTAVCaptionFLVAudio_16;
+    }
+    
+    [[TIoTCoreXP2PBridge sharedInstance] resolutionRatio:self.resolutionRatio];
     
     if (self.callType == TIoTTRTCSessionCallType_audio) {
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:nil];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:nil];
     }else {
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8 withLocalPreviewView:self.previewBottomView];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView];
     }
 }
 

@@ -4,6 +4,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface TIoTVideoDeviceCollectionView : UICollectionView
 
@@ -31,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) TIOTtrtcPayloadParamModel *payloadParamModel; //被动呼叫才传
 @property (nonatomic, assign) BOOL isCallIng; //是否APP主叫 YES 主叫  NO 被叫
 //@property (nonatomic, copy) TIoTAVP2PStartServer isRefreshBlock;
+
+@property (nonatomic, strong) AVCaptureSessionPreset resolutionRatio; //p2pvideo 分辨率
+@property (nonatomic, assign) NSInteger samplingRate;    //p2pvideo 采样率
 
 - (void)hideTopView;
 

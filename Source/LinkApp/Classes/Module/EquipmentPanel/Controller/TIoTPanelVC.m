@@ -51,6 +51,8 @@
 
 #import "TIoTP2PCommunicateUIManage.h"
 
+#import "TIoTVideoParamSettingVC.h"
+
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
 #define kSectionInset UIEdgeInsetsMake(10, 16, 10, 16)
@@ -194,6 +196,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) TIoTAVP2PPlayCaptureVC *p2pVideoVCCalled;
 @property (nonatomic, assign) BOOL p2pReady;//探测完成
 //@property (nonatomic, assign) BOOL isRefreshFromP2Player;
+
+@property (nonatomic, strong) UIBarButtonItem *moreItem;
+@property (nonatomic, assign) NSInteger resolutionHeight;
+@property (nonatomic, strong) AVCaptureSessionPreset sessionPresetValue;
+@property (nonatomic, assign) NSInteger samplingRate;
 @end
 
 @implementation TIoTPanelVC
@@ -229,6 +236,17 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     //续传
     [HXYNotice addFirmwareUpdateDataLister:self reaction:@selector(continueSendData:)];
+    
+    //选择分辨率后通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveResolutionChanged:)
+                                                 name:@"kNotifyResolutionChangedValue"
+                                               object:nil];
+    //选择采样率后通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveSamplingRateChanged:)
+                                                 name:@"kNotifySamplingChangedValue"
+                                               object:nil];
 }
 
 - (void)detectionNetworkStatus  {
@@ -331,7 +349,29 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [HXYNotice removeListener:self];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"kNotifyResolutionChangedValue" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"kNotifySamplingChangedValue" object:nil];
 }
+
+- (void)receiveResolutionChanged:(NSNotification *)notification {
+    NSDictionary *dic = notification.userInfo;
+    NSString *sessionPresetString = [dic.allKeys containsObject:@"kResolutionHeightKey"] ? [dic objectForKey:@"kResolutionHeightKey"]: @"AVCaptureSessionPreset640x480";
+    NSRange range = [sessionPresetString rangeOfString:@"x"];
+    NSInteger resolutionHeightValue = [sessionPresetString substringFromIndex:range.location+1].integerValue;
+    self.resolutionHeight = resolutionHeightValue;
+    self.sessionPresetValue = sessionPresetString;
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateResolutionRatio:sessionPresetString];
+}
+
+- (void)receiveSamplingRateChanged:(NSNotification *)notification {
+    
+    NSDictionary *dic = notification.userInfo;
+    NSInteger value = [dic.allKeys containsObject:@"kSamplingRateKey"] ? [[dic objectForKey:@"kSamplingRateKey"] integerValue] : 8;
+    self.samplingRate = value;
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateSamplingRate:value];
+}
+
 - (void)configBlueManager {
     self.blueManager = [BluetoothCentralManager shareBluetooth];
     self.blueManager.delegate = self;
@@ -418,8 +458,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 {
     
     if (_isOwner) {
-        UIBarButtonItem *moreItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"moreIcon"] style:UIBarButtonItemStyleDone target:self action:@selector(moreClick:)];
-        self.navigationItem.rightBarButtonItem  = moreItem;
+        self.moreItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"moreIcon"] style:UIBarButtonItemStyleDone target:self action:@selector(moreClick:)];
+        self.navigationItem.rightBarButtonItem  = self.moreItem;
     }
     
     [self wr_setNavBarBackgroundAlpha:0];
@@ -776,6 +816,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 }
             }else {
                 self.isP2PVideoDevice = NO;
+            }
+            
+            if (self.isP2PVideoDevice == YES) {
+                        UIBarButtonItem *paramItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"parameter_setting", @"参数设置") style:UIBarButtonItemStyleDone target:self action:@selector(paramClick:)];
+                self.navigationItem.rightBarButtonItems = @[self.moreItem,paramItem];
             }
             
 //            TIoTDataTemplateModel *product = [TIoTDataTemplateModel yy_modelWithJSON:DataTemplate];
@@ -1402,6 +1447,14 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         
     };
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)paramClick:(UIButton *)sender {
+    TIoTVideoParamSettingVC *paramSetVC = [[TIoTVideoParamSettingVC alloc]init];
+    paramSetVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    paramSetVC.resolutionHeightValue = self.resolutionHeight?:720;
+    paramSetVC.samplingValue = self.samplingRate?:8;
+    [self.navigationController pushViewController:paramSetVC animated:YES];
 }
 
 //开关或者其他

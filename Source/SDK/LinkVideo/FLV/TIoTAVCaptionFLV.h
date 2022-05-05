@@ -1,6 +1,6 @@
 
 #import <UIKit/UIKit.h>
-
+#import <AVFoundation/AVFoundation.h>
 
 typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
     TIoTAVCaptionFLVAudio_8,
@@ -21,5 +21,6 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 -(BOOL) startCapture;
 -(void) stopCapture;
 -(void)changeCameraPositon;
+- (void)setResolutionRatio:(AVCaptureSessionPreset)resolutionValue;
 @end
 

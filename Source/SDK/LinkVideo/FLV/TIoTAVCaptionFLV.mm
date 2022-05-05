@@ -1,5 +1,4 @@
 
-#import <AVFoundation/AVFoundation.h>
 
 #import "TIoTAVCaptionFLV.h"
 #import "TIoTAACEncoder.h"
@@ -39,6 +38,7 @@ dispatch_queue_t muxerQueue;
 //@property (nonatomic, strong) NSFileHandle               *fileHandle;
 @property (nonatomic, assign) TIoTAVCaptionFLVAudioType     audioRate;
 @property (nonatomic, assign) int captureVideoFPS;
+@property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -66,12 +66,15 @@ dispatch_queue_t muxerQueue;
     
 //    _data = [NSMutableData new];
     _session = [AVCaptureSession new];
+    
+    self.resolutionRatioValue = AVCaptureSessionPreset640x480;
 }
 
 #pragma mark - 设置音频
 - (void)setupAudioCapture {
     
     if (self.aacEncoder) {
+        self.aacEncoder.audioType = _audioRate;
         return;
     }
     self.aacEncoder = [TIoTAACEncoder new];
@@ -218,6 +221,10 @@ dispatch_queue_t muxerQueue;
 #pragma mark - 设置视频 capture
 - (void)setupVideoCapture {
     if (self.h264Encoder) {
+        if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
+            // 设置分辨率
+            _session.sessionPreset = self.resolutionRatioValue;
+        }
         return;
     }
     self.h264Encoder = [TIoTH264Encoder new];
@@ -225,12 +232,12 @@ dispatch_queue_t muxerQueue;
     [self.h264Encoder initEncode:480 height:640];
 
     self.h264Encoder.delegate = self;
-
-    if ([_session canSetSessionPreset:AVCaptureSessionPreset640x480]) {
+   
+    if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
         // 设置分辨率
-        _session.sessionPreset = AVCaptureSessionPreset640x480;
+        _session.sessionPreset = self.resolutionRatioValue;
     }
-//
+    
     //设置采集的 Video 和 Audio 格式，这两个是分开设置的，也就是说，你可以只采集视频。
     //配置采集输入源(摄像头)
     
@@ -428,6 +435,7 @@ int encodeFlvData(int type, NSData *packetData) {
 #pragma mark - 录制
 - (void)preStart {
     [self setupAudioCapture];
+    
     if (self.videoLocalView) {
         //是否启动视频采集
         [self setupVideoCapture];
@@ -493,6 +501,14 @@ int encodeFlvData(int type, NSData *packetData) {
         videoDevice.activeVideoMinFrameDuration = CMTimeMake(1, fps);
         videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, fps);
         [videoDevice unlockForConfiguration];
+    }
+}
+
+- (void)setResolutionRatio:(AVCaptureSessionPreset )resolutionValue{
+    if (resolutionValue == nil || resolutionValue.length == 0) {
+        self.resolutionRatioValue = AVCaptureSessionPreset640x480;
+    }else {
+        self.resolutionRatioValue = resolutionValue;
     }
 }
 @end

@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TIoTTRTCSessionManager.h"
+#import <AVFoundation/AVFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -61,6 +62,10 @@ NS_ASSUME_NONNULL_BEGIN
 ///p2pVieo APP被叫 推出音、视频请求页面
 //- (void)showAppCalledVideoVC;
 - (void)p2pCommunicateShowAppCalledVideoVC;
+
+///p2pVieo 设置分辨率和采样率
+- (void)p2pCommunicateResolutionRatio:(AVCaptureSessionPreset )resolutionRatio;
+- (void)p2pCommunicateSamplingRate:(NSInteger)samplingRate;
 @end
 
 NS_ASSUME_NONNULL_END

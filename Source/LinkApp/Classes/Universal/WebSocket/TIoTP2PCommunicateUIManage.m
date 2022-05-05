@@ -37,6 +37,8 @@
 @property (nonatomic, strong) NSMutableDictionary *deviceOfflineDic;
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel; //监听设备上报
 @property (nonatomic, strong) TIoTStatusManager *statusManager;
+@property (nonatomic, strong) AVCaptureSessionPreset resolutionValue; //p2pVideo 分辨率
+@property (nonatomic, assign) NSInteger samplingValue;    //p2pVideo 采样率
 @end
 
 @implementation TIoTP2PCommunicateUIManage
@@ -1001,6 +1003,8 @@
         _callP2PVideo.payloadParamModel = model;  //(被叫才传)
         _callP2PVideo.isCallIng = NO;
         _callP2PVideo.delegate = self;
+        _callP2PVideo.resolutionRatio = self.resolutionValue;
+        _callP2PVideo.samplingRate = self.samplingValue;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
         if (isAccess == YES && _callP2PVideo && isP2PVC == NO) {
             [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
@@ -1037,6 +1041,8 @@
         _callP2PVideo.reportDataDic = reportDeviceDic;
         _callP2PVideo.isCallIng = YES;
         _callP2PVideo.delegate = self;
+        _callP2PVideo.resolutionRatio = self.resolutionValue;
+        _callP2PVideo.samplingRate = self.samplingValue;
         _callP2PVideo.modalPresentationStyle = UIModalPresentationFullScreen;
         if (isAccess == YES && _callP2PVideo && isP2PVC == NO) {
             [topVC presentViewController:_callP2PVideo animated:NO completion:^{}];
@@ -1361,4 +1367,11 @@
     [self.statusManager showAppCalledVideoVC];
 }
 
+///p2pVieo 设置分辨率和采样率
+- (void)p2pCommunicateResolutionRatio:(AVCaptureSessionPreset )resolutionRatio {
+    self.resolutionValue = resolutionRatio;
+}
+- (void)p2pCommunicateSamplingRate:(NSInteger)samplingRate {
+    self.samplingValue = samplingRate;
+}
 @end

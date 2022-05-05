@@ -112,6 +112,9 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 - (XP2PErrCode)stopVoiceToServer;
 - (void)changeCameraPositon;
 
+//设置分辨率，需在开启通话前设置
+- (void)resolutionRatio:(AVCaptureSessionPreset )resolutionValue;
+
 
 /*
  * 局域网相关接口

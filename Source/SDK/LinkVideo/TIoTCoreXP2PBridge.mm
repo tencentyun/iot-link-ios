@@ -131,6 +131,7 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
+@property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @end
 
 @implementation TIoTCoreXP2PBridge {
@@ -292,12 +293,18 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
         systemAvCapture.videoLocalView = localView;
     }
-    [systemAvCapture preStart];//配置声音和视频
-    
     
     systemAvCapture.videoLocalView = localView;
+    [systemAvCapture setResolutionRatio:self.resolution];
+    [systemAvCapture preStart];//配置声音和视频
+    
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
+}
+
+//设置分辨率，需在开启通话前设置
+- (void)resolutionRatio:(AVCaptureSessionPreset)resolutionValue {
+    self.resolution = resolutionValue;
 }
 
 - (void)changeCameraPositon {
