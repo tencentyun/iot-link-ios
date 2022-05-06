@@ -38,6 +38,7 @@ dispatch_queue_t muxerQueue;
 //@property (nonatomic, copy  ) NSString                   *h264File;
 //@property (nonatomic, strong) NSFileHandle               *fileHandle;
 @property (nonatomic, assign) TIoTAVCaptionFLVAudioType     audioRate;
+@property (nonatomic, assign) int captureVideoFPS;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -53,6 +54,14 @@ dispatch_queue_t muxerQueue;
 }
 
 -(void) onInit{
+    if (@available(iOS 10.0, *)) {
+        [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            NSLog(@"getfps=== %d", self.captureVideoFPS);
+        }];
+    } else {
+        // Fallback on earlier versions
+    }
+    
     muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
     
 //    _data = [NSMutableData new];
@@ -151,6 +160,59 @@ dispatch_queue_t muxerQueue;
 
 }
 
++ (AVCaptureDevice *)getCaptureDevicePosition:(AVCaptureDevicePosition)position {
+    NSArray *devices = nil;
+    
+    if (@available(iOS 10.0, *)) {
+        AVCaptureDeviceDiscoverySession *deviceDiscoverySession =  [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera] mediaType:AVMediaTypeVideo position:position];
+        devices = deviceDiscoverySession.devices;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+#pragma clang diagnostic pop
+    }
+    
+    for (AVCaptureDevice *device in devices) {
+        if (position == device.position) {
+            return device;
+        }
+    }
+    return NULL;
+}
+
++ (BOOL)setCameraFrameRateAndResolutionWithFrameRate:(int)frameRate andResolutionHeight:(CGFloat)resolutionHeight bySession:(AVCaptureSession *)session position:(AVCaptureDevicePosition)position videoFormat:(OSType)videoFormat {
+    AVCaptureDevice *captureDevice = [self getCaptureDevicePosition:position];
+    
+    BOOL isSuccess = NO;
+    for(AVCaptureDeviceFormat *vFormat in [captureDevice formats]) {
+        CMFormatDescriptionRef description = vFormat.formatDescription;
+        float maxRate = ((AVFrameRateRange*) [vFormat.videoSupportedFrameRateRanges objectAtIndex:0]).maxFrameRate;
+        if (maxRate >= frameRate && CMFormatDescriptionGetMediaSubType(description) == videoFormat) {
+            if ([captureDevice lockForConfiguration:NULL] == YES) {
+                // 对比镜头支持的分辨率和当前设置的分辨率
+                CMVideoDimensions dims = CMVideoFormatDescriptionGetDimensions(description);
+                if (dims.height == resolutionHeight) {
+                    [session beginConfiguration];
+                    if ([captureDevice lockForConfiguration:NULL]){
+                        captureDevice.activeFormat = vFormat;
+                        [captureDevice setActiveVideoMinFrameDuration:CMTimeMake(1, frameRate)];
+                        [captureDevice setActiveVideoMaxFrameDuration:CMTimeMake(1, frameRate)];
+                        [captureDevice unlockForConfiguration];
+                    }
+                    [session commitConfiguration];
+                    
+                    return YES;
+                }
+            }else {
+                NSLog(@"%s: lock failed!",__func__);
+            }
+        }
+    }
+    
+    NSLog(@"Set camera frame is success : %d, frame rate is %lu, resolution height = %f",isSuccess,(unsigned long)frameRate,resolutionHeight);
+    return NO;
+}
 
 #pragma mark - 设置视频 capture
 - (void)setupVideoCapture {
@@ -216,12 +278,30 @@ dispatch_queue_t muxerQueue;
     [self.videoLocalView.layer addSublayer:_previewLayer];
 }
 
+- (void)calculatorCaptureFPS {
+    static int count = 0;
+    static float lastTime = 0;
+    CMClockRef hostClockRef = CMClockGetHostTimeClock();
+    CMTime hostTime = CMClockGetTime(hostClockRef);
+    float nowTime = CMTimeGetSeconds(hostTime);
+    if(nowTime - lastTime >= 1) {
+        self.captureVideoFPS = count;
+        lastTime = nowTime;
+        count = 0;
+    }else {
+        count ++;
+    }
+}
+
+
 #pragma mark - 实现 AVCaptureOutputDelegate：
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     if (connection == _videoConnection) {  // Video
 
         if (self.videoLocalView) { //开关打开，才推送视频
             [self.h264Encoder encode:sampleBuffer];
+            
+            [self calculatorCaptureFPS];
         }
     
     } else if (connection == _audioConnection) {  // Audio
@@ -360,7 +440,7 @@ int encodeFlvData(int type, NSData *packetData) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths firstObject];
     
-//    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264.flv"];
+//    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264"];
 //    [fileManager removeItemAtPath:self.h264File error:nil];
 //    [fileManager createFileAtPath:self.h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.h264File];
@@ -377,6 +457,13 @@ int encodeFlvData(int type, NSData *packetData) {
 
 - (void) startCamera
 {
+    AVCaptureDevice *videoDevice = [self.deviceInput device];
+    if ([videoDevice lockForConfiguration:nil]) {
+        videoDevice.activeVideoMinFrameDuration = CMTimeMake(1, 15);
+        videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 15);
+        [videoDevice unlockForConfiguration];
+    }
+    
     [self.session startRunning];
     if (self.videoLocalView) {
         _previewLayer.frame = self.videoLocalView.bounds;

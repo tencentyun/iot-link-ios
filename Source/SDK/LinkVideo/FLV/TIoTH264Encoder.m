@@ -270,12 +270,18 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
         
         // 设置关键帧（GOPsize)间隔
-        int frameInterval = 30;
+        int frameInterval = 60;
         CFNumberRef  frameIntervalRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &frameInterval);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, frameIntervalRef);
         
+        
+        // 设置关键帧（GOPsize)间隔
+        int frameDur = 4;
+        CFNumberRef  frameDurRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &frameDur);
+        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, frameDurRef);
+        
         // 设置期望帧率
-        int fps = 5;
+        int fps = 15;
         CFNumberRef  fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &fps);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ExpectedFrameRate, fpsRef);
         
@@ -303,8 +309,11 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
         
         // Create properties
-        CMTime presentationTimeStamp = CMTimeMake(frameCount, 1000);
-        //CMTime duration = CMTimeMake(1, DURATION);
+        CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+//        CMTime presentationTimeStamp = CMTimeMake(frameCount, 1000);
+        CMTime duration = CMTimeMake(1, 15);
+//        CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
+//        NSLog(@"presentationTimeStamp === %lld, scale === %d, flag === %d, epoch === %lld", presentationTimeStamp.value, presentationTimeStamp.timescale, presentationTimeStamp.flags, presentationTimeStamp.epoch);
         VTEncodeInfoFlags flags;
         
         // Pass it to the encoder
@@ -318,14 +327,14 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
             NSLog(@"H264: VTCompressionSessionEncodeFrame failed with %d", (int)statusCode);
             error = @"H264: VTCompressionSessionEncodeFrame failed ";
             
-            // End the session
-//            VTCompressionSessionInvalidate(EncodingSession);
-//            CFRelease(EncodingSession);
-//            EncodingSession = NULL;
-//            error = NULL;
+            if (statusCode == kVTInvalidSessionErr) {
+                //kVTInvalidSessionErr = -12903Session失效 ，reset session
+                [self End];
+                [self initEncode:480 height:640];
+            }
+
             return;
         }
-        //            NSLog(@"H264: VTCompressionSessionEncodeFrame Success");
     });
     
     
