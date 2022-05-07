@@ -158,6 +158,7 @@ dispatch_queue_t muxerQueue;
         [self.session commitConfiguration];
     }
 
+    [self setCameraFPS:15];
 }
 
 + (AVCaptureDevice *)getCaptureDevicePosition:(AVCaptureDevicePosition)position {
@@ -222,7 +223,7 @@ dispatch_queue_t muxerQueue;
     self.h264Encoder = [TIoTH264Encoder new];
     [self.h264Encoder initWithConfiguration];
     [self.h264Encoder initEncode:480 height:640];
-//    [self.h264Encoder start:480 height:640];
+
     self.h264Encoder.delegate = self;
 
     if ([_session canSetSessionPreset:AVCaptureSessionPreset640x480]) {
@@ -457,13 +458,7 @@ int encodeFlvData(int type, NSData *packetData) {
 
 - (void) startCamera
 {
-    AVCaptureDevice *videoDevice = [self.deviceInput device];
-    if ([videoDevice lockForConfiguration:nil]) {
-        videoDevice.activeVideoMinFrameDuration = CMTimeMake(1, 15);
-        videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, 15);
-        [videoDevice unlockForConfiguration];
-    }
-    
+    [self setCameraFPS:15];
     [self.session startRunning];
     if (self.videoLocalView) {
         _previewLayer.frame = self.videoLocalView.bounds;
@@ -492,4 +487,12 @@ int encodeFlvData(int type, NSData *packetData) {
     */
 }
 
+- (void)setCameraFPS:(int)fps {
+    AVCaptureDevice *videoDevice = [self.deviceInput device];
+    if ([videoDevice lockForConfiguration:nil]) {
+        videoDevice.activeVideoMinFrameDuration = CMTimeMake(1, fps);
+        videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, fps);
+        [videoDevice unlockForConfiguration];
+    }
+}
 @end
