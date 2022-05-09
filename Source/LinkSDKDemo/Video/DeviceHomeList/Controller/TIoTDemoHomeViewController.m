@@ -39,6 +39,19 @@ static NSInteger const kLimit = 100;
 
 @implementation TIoTDemoHomeViewController
 
+- (void)dealloc {
+//    self.navigationController.navigationBarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *barApp = [[UINavigationBarAppearance alloc] init];
+        [barApp configureWithOpaqueBackground];
+        barApp.backgroundColor = [UIColor clearColor];
+        barApp.shadowColor = [UIColor clearColor];
+        self.navigationController.navigationBar.standardAppearance = barApp;
+        self.navigationController.navigationBar.scrollEdgeAppearance = barApp;
+    } else {
+        // Fallback on earlier versions
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -47,6 +60,18 @@ static NSInteger const kLimit = 100;
     [self setupUIViews];
     [self addRefreshControl];
     [self requestDeviceList];
+    
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *barApp = [[UINavigationBarAppearance alloc] init];
+        [barApp configureWithOpaqueBackground];
+        barApp.backgroundColor = [UIColor whiteColor];
+        barApp.shadowColor = [UIColor clearColor];
+        barApp.shadowImage = [UIImage new];
+        self.navigationController.navigationBar.standardAppearance = barApp;
+        self.navigationController.navigationBar.scrollEdgeAppearance = barApp;
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 - (void)setupNavBar {
@@ -71,7 +96,7 @@ static NSInteger const kLimit = 100;
     }else {
         [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"#FFFFFF"],NSFontAttributeName:[UIFont wcPfRegularFontOfSize:17]}];
         [self.navigationController.navigationBar setBackgroundImage:[UIImage getGradientImageWithColors:@[[UIColor colorWithHexString:@"#3D8BFF"],[UIColor colorWithHexString:@"#1242FF"]] imgSize:CGSizeMake(kScreenWidth, 44)] forBarMetrics:UIBarMetricsDefault];
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     }
     
 }
