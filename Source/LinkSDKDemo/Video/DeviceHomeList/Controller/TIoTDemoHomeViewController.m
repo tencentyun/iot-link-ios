@@ -244,7 +244,7 @@ static NSInteger const kLimit = 100;
         
         ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"回放");
-            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+            TIoTExploreOrVideoDeviceModel *model = weakSelf.dataArray[indexPath.row];
 //            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
 //            cloudStorageVC.deviceModel = model;
 //            [self.navigationController pushViewController:cloudStorageVC animated:YES];
@@ -252,11 +252,11 @@ static NSInteger const kLimit = 100;
             
             TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
             playBackVC.deviceModel = model;
-            playBackVC.isNVR = self.isNVR;
+            playBackVC.isNVR = weakSelf.isNVR;
             playBackVC.deviceName = model.DeviceName;
             playBackVC.isFromHome = YES;
             
-            [self.navigationController pushViewController:playBackVC animated:YES];
+            [weakSelf.navigationController pushViewController:playBackVC animated:YES];
             [customActionSheet removeFromSuperview];  
         };
         
@@ -335,10 +335,10 @@ static NSInteger const kLimit = 100;
                 make.top.leading.right.bottom.equalTo([UIApplication sharedApplication].delegate.window);
             }];
         }else {
-            if (self.selectedArray.count != 0) {
+            if (weakSelf.selectedArray.count != 0) {
                 TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
                 sameScreenVC.isNVRType = NO;
-                [sameScreenVC setupSameScreenArray:self.selectedArray];
+                [sameScreenVC setupSameScreenArray:weakSelf.selectedArray];
                 [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
                 [weakSelf resetDeviceListStatus];
             }else {
