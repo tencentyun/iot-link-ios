@@ -219,6 +219,18 @@ dispatch_queue_t muxerQueue;
 }
 
 #pragma mark - 设置视频 capture
+- (void)configEncode {
+    if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset352x288]) {
+        [self.h264Encoder initEncode:288 height:352];
+    }else if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset640x480]) {
+        [self.h264Encoder initEncode:480 height:640];
+    }else if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset1280x720]) {
+        [self.h264Encoder initEncode:720 height:1280];
+    }else if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset1920x1080]) {
+        [self.h264Encoder initEncode:1080 height:1920];
+    }
+}
+
 - (void)setupVideoCapture {
     if (self.h264Encoder) {
         if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
@@ -229,7 +241,7 @@ dispatch_queue_t muxerQueue;
     }
     self.h264Encoder = [TIoTH264Encoder new];
     [self.h264Encoder initWithConfiguration];
-    [self.h264Encoder initEncode:480 height:640];
+    [self configEncode];
 
     self.h264Encoder.delegate = self;
    
@@ -505,10 +517,18 @@ int encodeFlvData(int type, NSData *packetData) {
 }
 
 - (void)setResolutionRatio:(AVCaptureSessionPreset )resolutionValue{
+    if ([self.resolutionRatioValue isEqualToString:resolutionValue]) {
+        return;
+    }
+    
     if (resolutionValue == nil || resolutionValue.length == 0) {
         self.resolutionRatioValue = AVCaptureSessionPreset640x480;
     }else {
         self.resolutionRatioValue = resolutionValue;
     }
+    
+    //reset preset
+    [self.h264Encoder End];
+    [self configEncode];
 }
 @end

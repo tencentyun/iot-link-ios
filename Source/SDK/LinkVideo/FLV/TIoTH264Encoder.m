@@ -148,7 +148,8 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         
         //设置码率，均值，单位是bits per second
 //        int bitRate = width * height * 60;
-        int bitRate = 300000;
+//        int bitRate = 300000;
+        int bitRate = width * height;
         CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
         
@@ -162,6 +163,10 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 }
 - (void) encode:(CMSampleBufferRef )sampleBuffer
 {
+    if (EncodingSession == NULL) {
+        NSLog(@"EncodingSession is null");
+        return;
+    }
     dispatch_sync(aQueue, ^{
         
         frameCount++;
@@ -187,7 +192,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
             NSLog(@"H264: VTCompressionSessionEncodeFrame failed with %d", (int)statusCode);
             error = @"H264: VTCompressionSessionEncodeFrame failed ";
             
-            if (statusCode == kVTInvalidSessionErr) {
+            if (statusCode == kVTInvalidSessionErr || statusCode == kVTParameterErr) {
                 //kVTInvalidSessionErr = -12903Session失效 ，reset session
                 [self End];
                 [self initEncode:480 height:640];
