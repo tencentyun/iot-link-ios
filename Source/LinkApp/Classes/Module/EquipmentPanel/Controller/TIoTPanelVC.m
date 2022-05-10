@@ -356,7 +356,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 - (void)receiveResolutionChanged:(NSNotification *)notification {
     NSDictionary *dic = notification.userInfo;
-    NSString *sessionPresetString = [dic.allKeys containsObject:@"kResolutionHeightKey"] ? [dic objectForKey:@"kResolutionHeightKey"]: @"AVCaptureSessionPreset640x480";
+    NSString *sessionPresetString = [dic.allKeys containsObject:@"kResolutionHeightKey"] ? [dic objectForKey:@"kResolutionHeightKey"]: @"AVCaptureSessionPreset352x288";
     NSRange range = [sessionPresetString rangeOfString:@"x"];
     NSInteger resolutionHeightValue = [sessionPresetString substringFromIndex:range.location+1].integerValue;
     self.resolutionHeight = resolutionHeightValue;
@@ -1452,7 +1452,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)paramClick:(UIButton *)sender {
     TIoTVideoParamSettingVC *paramSetVC = [[TIoTVideoParamSettingVC alloc]init];
     paramSetVC.modalPresentationStyle = UIModalPresentationFullScreen;
-    paramSetVC.resolutionHeightValue = self.resolutionHeight?:720;
+    paramSetVC.resolutionHeightValue = self.resolutionHeight?:288;
     paramSetVC.samplingValue = self.samplingRate?:8;
     [self.navigationController pushViewController:paramSetVC animated:YES];
 }

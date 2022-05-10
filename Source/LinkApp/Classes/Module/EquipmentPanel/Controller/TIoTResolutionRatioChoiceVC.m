@@ -82,19 +82,19 @@ static NSString * const KResolutionRatioSetVCID = @"KResolutionRatioSetVCID";
             break;
         case 720:
             self.selectedResolutionHeight = 720;
-            break;;
+            break;
         case 1080:
             self.selectedResolutionHeight = 1080;
             break;
         default:
-            self.selectedResolutionHeight = 720;
+            self.selectedResolutionHeight = 288;
             break;
     }
     [self.tableView reloadData];
 }
 
 - (NSString *)getCaptureSessionPreset:(NSInteger)resolutionHeight {
-    NSString *sesstionPreset = AVCaptureSessionPreset640x480;
+    NSString *sesstionPreset = AVCaptureSessionPreset352x288;
     switch (resolutionHeight) {
         case 288:
             sesstionPreset = AVCaptureSessionPreset352x288;
