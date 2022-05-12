@@ -71,25 +71,10 @@ static NSString * const KResolutionRatioSetVCID = @"KResolutionRatioSetVCID";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    switch (cell.tag) {
-        case 288:
-            self.selectedResolutionHeight = 288;
-            break;
-        case 480:
-            self.selectedResolutionHeight = 480;
-            break;
-        case 720:
-            self.selectedResolutionHeight = 720;
-            break;
-        case 1080:
-            self.selectedResolutionHeight = 1080;
-            break;
-        default:
-            self.selectedResolutionHeight = 288;
-            break;
-    }
+    NSString *tempresu = self.resolutionArray[indexPath.row];
+    NSInteger resolution = [tempresu componentsSeparatedByString:@"x"].lastObject.integerValue;
+    self.selectedResolutionHeight = resolution;
     [self.tableView reloadData];
 }
 
