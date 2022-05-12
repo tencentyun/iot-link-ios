@@ -966,7 +966,7 @@
     }];
 }
 
-- (void)removeUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName shareDeviceToken:(NSString *)shareDeviceToken success:(SRHandler)success failure:(FRHandler)failure
+- (void)removeUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure
 {
     if (productId == nil) {
         failure(@"productId参数为空",nil,@{});
@@ -978,13 +978,13 @@
         return;
     }
     
-    if (shareDeviceToken == nil) {
-        failure(@"shareDeviceToken参数为空",nil,@{});
-        return;
-    }
+//    if (shareDeviceToken == nil) {
+//        failure(@"shareDeviceToken参数为空",nil,@{});
+//        return;
+//    }
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setValue:shareDeviceToken forKey:@"ShareDeviceToken"];
+//    [param setValue:shareDeviceToken forKey:@"ShareDeviceToken"];
     [param setValue:productId forKey:@"ProductId"];
     [param setValue:deviceName forKey:@"DeviceName"];
     

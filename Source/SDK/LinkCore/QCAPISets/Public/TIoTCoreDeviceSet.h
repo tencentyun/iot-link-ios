@@ -160,8 +160,7 @@ typedef NS_ENUM(NSInteger,TIotApiHost) {
 - (void)removeShareDeviceUserWithProductId:(NSString *)productId deviceName:(NSString *)deviceName userID:(NSString *)userID success:(SRHandler)success failure:(FRHandler)failure;
 
 /// 移除用户分享的设备
-/// @param shareDeviceToken 设备分享token
-- (void)removeUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName shareDeviceToken:(NSString *)shareDeviceToken success:(SRHandler)success failure:(FRHandler)failure;
+- (void)removeUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure;
 
 /// 绑定用户分享的设备
 - (void)bindUserShareDeviceWithProductId:(NSString *)productId deviceName:(NSString *)deviceName shareDeviceToken:(NSString *)shareDeviceToken success:(SRHandler)success failure:(FRHandler)failure;
