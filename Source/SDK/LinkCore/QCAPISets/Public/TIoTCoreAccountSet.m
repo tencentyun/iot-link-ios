@@ -235,7 +235,7 @@
         return;
     }
     
-    NSDictionary *tmpDic = @{@"code":[NSString stringWithFormat:@"%@",code],@"busi":@"studio"};
+    NSDictionary *tmpDic = @{@"WxOpenID":[NSString stringWithFormat:@"%@",code],@"busi":@"studio"};
     
     TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:AppGetTokenByWeiXin params:tmpDic useToken:NO];
     [TIoTCoreRequestClient sendRequestWithBuild:b.build success:^(id  _Nonnull responseObject) {
