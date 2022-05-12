@@ -1134,7 +1134,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                     }
                 }
             }
-        }else if ([line_status isEqualToString:@"Report"]) {  //设备操控面板上报，详情页收到socket需要刷新
+        }else if ([line_status isEqualToString:@"Report"] && [NSString isNullOrNilWithObject:self.reportModel.params._sys_video_call_status] && [NSString isNullOrNilWithObject:self.reportModel.params._sys_audio_call_status]) {  //设备操控面板上报，详情页收到socket需要刷新
             //
             if ([self.deviceReportPayload.allKeys containsObject:@"method"]) {
                 if ([self.deviceReportPayload[@"method"] isEqualToString:@"report"]) {  //判断设备上报数据是report类型
