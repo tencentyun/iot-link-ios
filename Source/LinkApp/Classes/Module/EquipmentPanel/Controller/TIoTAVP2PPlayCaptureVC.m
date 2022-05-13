@@ -71,6 +71,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIButton *refuseButton;
 @property (nonatomic, strong) UIButton *acceptButton;
 @property (nonatomic, strong) UILabel *tipLabel; //状态提示语
+
+@property (nonatomic, strong) NSDictionary *objectModel; //保存物模型
 @end
 
 @implementation TIoTAVP2PPlayCaptureVC
@@ -85,12 +87,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     
     [HXYNotice addP2PVideoReportDeviceLister:self reaction:@selector(deviceP2PVideoReport:)];
-    [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit)];
-    
-    //断网通知处理
-    [HXYNotice addCallingDisconnectNetLister:self reaction:@selector(noNetworkHungupAction)];
-    
-    [self decetNetworkStatus];
+    [HXYNotice addP2PVideoExitLister:self reaction:@selector(deviceP2PVideoDeviceExit:)];
     
     _is_init_alert = NO;
     _is_ijkPlayer_stream = YES;
@@ -131,39 +128,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //}
 
 - (void)dealloc {
-    [self close];
-}
-
-- (void)decetNetworkStatus{
-
-    [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
-        switch (status) {
-            case NetworkReachabilityStatusUnknown:
-                DDLogDebug(@"状态不知道");
-                break;
-            case NetworkReachabilityStatusNotReachable:
-                DDLogWarn(@"没网络");
-                // RTC App端和设备端通话中 断网监听
-                [HXYNotice postCallingDisconnectNet];
-                break;
-            case NetworkReachabilityStatusReachableViaWiFi:
-                DDLogDebug(@"WIFI");
-                break;
-            case NetworkReachabilityStatusReachableViaWWAN:
-                DDLogDebug(@"移动网络");
-                break;
-            default:
-                break;
-        }
-    }];
-    
-    [[NetworkReachabilityManager sharedManager] startMonitoring];
-    
-}
-
-//没网络 退出通话页面
-- (void)noNetworkHungupAction {
-    [MBProgressHUD showError:NSLocalizedString(@"no_netwrok_check_status", @"暂时无网络，请检查网络状态")];
     [self close];
 }
 
@@ -428,37 +392,43 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //开启startservier
         
         if (self.isStart == NO) {
-            self.isStart = YES;
-
-            self.topView.hidden = YES;
-            //            if (self.isCallIng == NO) {
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-                
-                self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                
-                [self configVideo];
-                [self.player prepareToPlay];
-                [self.player play];
-                
-                self.startPlayer = CACurrentMediaTime();
-                //            }
-                
-                
-                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-                [[AVAudioSession sharedInstance] setActive:YES error:nil];
-                                
-                [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
-                [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
-                
-                [self startAVCapture];
-                
-//            });
+            //拉流
+            [self preparePlayer];
+            
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+            [[AVAudioSession sharedInstance] setActive:YES error:nil];
+            
+            [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
+            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
+            
+            //推流
+            [self startAVCapture];
+            
         }
     }
 }
 
-- (void)deviceP2PVideoDeviceExit {
+- (void)preparePlayer {
+    self.isStart = YES;
+    
+    self.topView.hidden = YES;
+    
+    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+    
+    self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+    
+    [self configVideo];
+    [self.player prepareToPlay];
+    [self.player play];
+    
+    self.startPlayer = CACurrentMediaTime();
+}
+
+- (void)deviceP2PVideoDeviceExit:(NSNotification *)noti {
+    BOOL isOvertime = [noti.object boolValue];
+        if (isOvertime == YES) {
+            [MBProgressHUD showError:NSLocalizedString(@"linkOvertime_check_device_status", @"连接超时，请检查设备状态")];
+        }
     [self close];
 //    [self.navigationController popViewControllerAnimated:NO];
     [self dismissViewControllerAnimated:NO completion:nil];
@@ -509,6 +479,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [alertC dismissViewControllerAnimated:YES completion:NULL];
                 });
+                
+                //p2p连接成功通知
+                [HXYNotice postCallingConnectP2P];
                 
                 _is_init_alert = YES;
             }
@@ -626,6 +599,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         FLVAudioType = TIoTAVCaptionFLVAudio_16;
     }
     
+    self.resolutionRatio = [NSString isNullOrNilWithObject:self.resolutionRatio]?AVCaptureSessionPreset352x288:self.resolutionRatio;
+    
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateResolutionRatio:self.resolutionRatio];
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateSamplingRate:self.samplingRate?:8];
+    
     [[TIoTCoreXP2PBridge sharedInstance] resolutionRatio:self.resolutionRatio];
     
     if (self.callType == TIoTTRTCSessionCallType_audio) {
@@ -642,6 +620,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 -(void)onHungupClick{
     [HXYNotice postStatusManagerCommunicateType:0];
     
+    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateHungupRequestControlDevice];
     [self close];
     
 //    [self.navigationController popViewControllerAnimated:NO];
@@ -711,6 +690,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    [self hungUp];
 //    [self onRefuseClick];
 }
+
+//刷新播放器
+- (void)refreshPlayer {
+    if (self.player != nil) {
+        _is_init_alert = NO;
+        [self preparePlayer];
+        
+        self.resolutionRatio = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateResolutionRatio];
+        self.samplingRate = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateSamplingRate];
+        
+        [self startAVCapture];
+    }
+}
+
 #pragma mark - 懒加载
 -(UIView *)previewBottomView{
     if (!_previewBottomView) {

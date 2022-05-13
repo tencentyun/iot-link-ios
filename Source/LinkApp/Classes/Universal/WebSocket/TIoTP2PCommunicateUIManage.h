@@ -66,6 +66,19 @@ NS_ASSUME_NONNULL_BEGIN
 ///p2pVieo 设置分辨率和采样率
 - (void)p2pCommunicateResolutionRatio:(AVCaptureSessionPreset )resolutionRatio;
 - (void)p2pCommunicateSamplingRate:(NSInteger)samplingRate;
+
+///p2pVideo 获取设置分辨率和采样率
+- (AVCaptureSessionPreset)getP2pCommunicateResolutionRatio;
+- (NSInteger)getP2pCommunicateSamplingRate;
+
+///刷新播放器
+- (void)refreshP2PVideoPlayer;
+
+/// 判断当前top是不是p2p2VideoplayervaptureVC
+- (BOOL)isTopP2PVideoPlayerVC;
+
+///p2pVideo 通话中 APP主动挂断上报/60s超时页面退出后上报
+- (void)p2pCommunicateHungupRequestControlDevice;
 @end
 
 NS_ASSUME_NONNULL_END

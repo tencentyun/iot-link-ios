@@ -52,6 +52,7 @@
 #import "TIoTP2PCommunicateUIManage.h"
 
 #import "TIoTVideoParamSettingVC.h"
+#import "TIoTDeviceStatusModel.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -59,6 +60,9 @@ static CGFloat lineSpace = 9;
 
 static NSString *itemId2 = @"i_ooo223";
 static NSString *itemId3 = @"i_ooo454";
+
+static NSString *const action_live = @"live";
+static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
 
 #define FFE1UUIDString @"0000FFE1"
 #define FFE2UUIDString @"0000FFE2"
@@ -196,11 +200,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 @property (nonatomic, strong) TIoTAVP2PPlayCaptureVC *p2pVideoVCCalled;
 @property (nonatomic, assign) BOOL p2pReady;//探测完成
 //@property (nonatomic, assign) BOOL isRefreshFromP2Player;
+@property (nonatomic, assign) BOOL isDeviceTimerStart; //设备端断网，计时器开启标识
+@property (nonatomic, assign) BOOL isAppTimerStart; //APP断网，计时器开启标识
 
 @property (nonatomic, strong) UIBarButtonItem *moreItem;
 @property (nonatomic, assign) NSInteger resolutionHeight;
 @property (nonatomic, strong) AVCaptureSessionPreset sessionPresetValue;
 @property (nonatomic, assign) NSInteger samplingRate;
+
+@property (nonatomic, assign) BOOL isStartOvertime;
+@property (nonatomic, assign) BOOL is_reconnect_xp2p; //是否正在重连，指设备断网的重连，app重连不走这个
 @end
 
 @implementation TIoTPanelVC
@@ -228,9 +237,16 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
 //    self.isRefreshFromP2Player = NO;
     self.p2pReady = NO;
+    
+    self.isStartOvertime = NO;
+    self.is_reconnect_xp2p = NO;
 }
 
 - (void)addNormalNotifications {
+    
+    //p2p连接成功通知
+    [HXYNotice addCallingConnectP2PLister:self reaction:@selector(connectP2PSuccess)];
+    
     [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
     self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
     
@@ -263,24 +279,46 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 //"没网络"
                 // RTC App端和设备端通话中 断网监听
                 self.isNetworkBreak = NO;
+                //APP侧断网 p2p通话时断开，P2P 需要及时stop
+                if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && self.isP2PVideoDevice == YES) {
+                    [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+                }
+                
+                //APP侧断网提醒
+                [self noNetworkHungupAction];
+                
+                //APP侧断网，video && 通话页面 单独处理APP断网计时器 只走一次
+                [self disconnectedAppNetP2PStartTimer];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
                 //"WIFI"
                 if (self.isNetworkBreak == NO) {
+                    if (self.isP2PVideoDevice == YES) {
+                        //APP侧断网后重连 p2p 断网重连
+                        [self reconnectNetworkActioin];
+                    }else {
+                        //纯蓝牙断网重连
                     self.deviceInfo = nil;
                     self.detailStructTpyeTimesDic = nil;
                     self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
                     [self getProductsConfig];
+                    }
                 }
                 self.isNetworkBreak = YES;
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
                 //"移动网络"
                 if (self.isNetworkBreak == NO) {
+                    if (self.isP2PVideoDevice == YES) {
+                        //APP侧断网后重连 p2p 断网重连
+                        [self reconnectNetworkActioin];
+                    }else {
+                        //纯蓝牙断网重连
                     self.deviceInfo = nil;
                     self.detailStructTpyeTimesDic = nil;
                     self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
                     [self getProductsConfig];
+                    }
                 }
                 self.isNetworkBreak = YES;
                 break;
@@ -3946,6 +3984,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     [MBProgressHUD show:[NSString stringWithFormat:@"%@ 探测已完成，可拨打",selectedName] icon:@"" view:self.view];
     self.p2pReady = YES;
+    
+    //APP侧断网刚重连p2p成功后 重新拉流/推流
+    [self refreshP2PPlayerAndStartCapture];
+    
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupAction) object:nil];
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
@@ -3958,17 +4001,35 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
 //    self.p2pReady = NO;
     
-    NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
-    [MBProgressHUD showError:error_message];
     
-    [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
-//    if (self.tipAlertView == nil) {
-//        //退出面板页面，需要刷新后才能重建通道连接
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
+        [MBProgressHUD showError:error_message];
+    });
+     
+    if ([TIoTCoreUtil topViewController] != self) {
+        //设备端断网后，开启计时器
+        if (self.isDeviceTimerStart == NO) {
+            [self performSelector:@selector(startHungupActionDeviceDisconnect) withObject:nil afterDelay:60];
+            self.isDeviceTimerStart = YES;
+        }
+    }else {
+        //设备面板页面
+        if (self.isStartOvertime == YES) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionDeviceDisconnect) object:nil];
+            self.isStartOvertime = NO;
+        }
+    }
     
-    //重新拉取xp2pinfo
-    [self refushXP2Pinfo];
+    //设备断网时候，判断本地是否有网络，有就轮询重连
+    if (self.isNetworkBreak == YES && [[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
+        //重新拉取xp2pinfo
+        if (!self.is_reconnect_xp2p) {
+            self.is_reconnect_xp2p = YES;
+            [self refushXP2Pinfo];
+        }
+        
+    }
 }
 
 - (void)refushXP2Pinfo {
@@ -3992,8 +4053,156 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         
         int errorcode = [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:nil sec_key:nil xp2pinfo:xp2pValue];
         
+        //重新拉流/推流
+//        [self refreshP2PPlayerAndStartCapture];
+        
+        [self getDeviceStatusWithType:action_live qualityType:quality_standard completion:^(BOOL finished) {
+            if (finished) {
+                self.is_reconnect_xp2p = NO; //连通成功后，复位标记
+                //重新拉流/推流
+                [self refreshP2PPlayerAndStartCapture];
+            }else {
+                [self refushXP2Pinfo];
+            }
+            
+        }];
+        
+//        //当前如果还在通话页面，重连后刷新播放器
+//        [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+        
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 
     }];
 }
+
+//带回调的状态检测
+- (void)getDeviceStatusWithType:(NSString *)singleType qualityType:(NSString *)qualityType completion:(void (^ __nullable)(BOOL finished))completion {
+    
+    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
+    NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDeviceStatusModel class] json:jsonList];
+        TIoTDeviceStatusModel *responseModel = responseArray.firstObject;
+        if ([responseModel.status isEqualToString:@"0"]) {
+            
+            completion(YES);
+        }else {
+            //设备状态异常提示
+            completion(NO);
+        }
+    }];
+}
+
+//p2p成功连接后通知
+- (void)connectP2PSuccess {
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionAppDisconnect) object:nil];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionDeviceDisconnect) object:nil];
+    self.isDeviceTimerStart = NO;
+}
+
+//设备断网后，60s计时超时退出
+- (void)startHungupActionDeviceDisconnect {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //退出页面上报
+        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateHungupRequestControlDevice];
+        
+        if ([TIoTP2PCommunicateUIManage sharedManager].isTopP2PVideoPlayerVC) {
+            //退出通话页面
+            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
+        }
+        self.isDeviceTimerStart = NO;
+    });
+    
+    if ([TIoTP2PCommunicateUIManage sharedManager].isTopP2PVideoPlayerVC) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showError:NSLocalizedString(@"linkOvertime_check_device_status", @"连接超时，请检查设备状态")];
+        });
+    }
+}
+
+//APP侧断网后重连 p2p 断网重连
+- (void)reconnectNetworkActioin {
+    //还没退出通话页面, APP断网后，需要重新联网，重新起p2p
+    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
+        if (self.isP2PVideoDevice == YES) {
+            
+//            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionAppDisconnect) object:nil];
+            self.isAppTimerStart = NO;
+            
+            //更新objectModel里的p2pinfo 重起p2p服务
+            //先stopService 防止 WIFI 4G互切问题
+            [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+            [self restartP2PServer];
+            
+        }
+    }
+}
+
+//更新objectModel里的p2pinfo 重起p2p服务
+- (void)restartP2PServer {
+    [[TIoTRequestObject shared] post:AppGetDeviceData Param:@{@"ProductId":self.productId,@"DeviceName":self.deviceName} success:^(id responseObject) {
+        NSString *tmpStr = (NSString *)responseObject[@"Data"];
+        NSDictionary *tmpDic = [NSString jsonToObject:tmpStr];
+        self.objectModel = [NSDictionary dictionaryWithDictionary:tmpDic];
+        
+        if (self.isP2PVideoDevice == YES) {
+            [self starP2PServer];
+        }
+        
+    } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
+
+    }];
+}
+
+//没网络 退出通话页面提示
+- (void)noNetworkHungupAction {
+    [MBProgressHUD showError:NSLocalizedString(@"no_netwrok_check_status", @"暂时无网络，请检查网络状态")];
+}
+
+//APP侧断网，video && 通话页面 单独处理APP断网计时器 只走一次
+- (void)disconnectedAppNetP2PStartTimer {
+    
+    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && self.isP2PVideoDevice == YES) {
+        if (self.isAppTimerStart == NO) {
+            [self performSelector:@selector(startHungupActionAppDisconnect) withObject:nil afterDelay:60];
+            self.isAppTimerStart = YES;
+        }
+    }
+}
+
+//app侧断网后，60s超时退出页面
+- (void)startHungupActionAppDisconnect {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        //或直接发送postP2PVIdeoExit 通知
+        [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateHungupRequestControlDevice];
+        
+        //退出通话页面
+        if ([TIoTP2PCommunicateUIManage sharedManager].isTopP2PVideoPlayerVC) {
+            //退出通话页面
+            [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateRefuseAppCallingOrCalledEnterRoom];
+        }
+        self.isAppTimerStart = NO;
+    });
+    
+    if ([TIoTP2PCommunicateUIManage sharedManager].isTopP2PVideoPlayerVC) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showError:NSLocalizedString(@"linkOvertime_check_device_status", @"连接超时，请检查设备状态")];
+        });
+    }
+}
+
+//重新拉流/推流
+- (void)refreshP2PPlayerAndStartCapture {
+    if (self.isNetworkBreak == YES && [[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
+        //当前如果还在通话页面，重连后刷新播放器
+        [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+    }
+}
+
 @end

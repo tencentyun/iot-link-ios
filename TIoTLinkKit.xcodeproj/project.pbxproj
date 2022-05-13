@@ -191,6 +191,7 @@
 		6DE800F9254FE95F0093F925 /* TIoTIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE800F8254FE95F0093F925 /* TIoTIntelligentVC.m */; };
 		6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */; };
 		6DE8010925504DE70093F925 /* TIoTAddManualIntelligentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */; };
+		6DE8992728573AE8002EA402 /* TIoTDeviceStatusModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8992628573AE8002EA402 /* TIoTDeviceStatusModel.m */; };
 		6DEB0E76284DE59F00108D99 /* TIoTLLSyncChooseDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEB0E75284DE59D00108D99 /* TIoTLLSyncChooseDeviceVC.m */; };
 		6DEC06332487AC0E00902C9F /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC06322487AC0E00902C9F /* UIView+Extension.m */; };
 		6DEEB78025494DFD00247A66 /* TIoTH5CallResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEB77F25494DFD00247A66 /* TIoTH5CallResultModel.m */; };
@@ -859,6 +860,8 @@
 		6DE8010425503E5B0093F925 /* TIoTCustomSheetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTCustomSheetView.m; sourceTree = "<group>"; };
 		6DE8010725504DE70093F925 /* TIoTAddManualIntelligentVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAddManualIntelligentVC.h; sourceTree = "<group>"; };
 		6DE8010825504DE70093F925 /* TIoTAddManualIntelligentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAddManualIntelligentVC.m; sourceTree = "<group>"; };
+		6DE8992528573AE8002EA402 /* TIoTDeviceStatusModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDeviceStatusModel.h; sourceTree = "<group>"; };
+		6DE8992628573AE8002EA402 /* TIoTDeviceStatusModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDeviceStatusModel.m; sourceTree = "<group>"; };
 		6DEB0E74284DE59D00108D99 /* TIoTLLSyncChooseDeviceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTLLSyncChooseDeviceVC.h; sourceTree = "<group>"; };
 		6DEB0E75284DE59D00108D99 /* TIoTLLSyncChooseDeviceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTLLSyncChooseDeviceVC.m; sourceTree = "<group>"; };
 		6DEC06312487AC0E00902C9F /* UIView+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
@@ -2542,6 +2545,8 @@
 			isa = PBXGroup;
 			children = (
 				EDF126FC23BDBE8D00FB1638 /* TIoTWaterFlowLayout.h */,
+				6DE8992528573AE8002EA402 /* TIoTDeviceStatusModel.h */,
+				6DE8992628573AE8002EA402 /* TIoTDeviceStatusModel.m */,
 				EDF126FD23BDBE8D00FB1638 /* TIoTWaterFlowLayout.m */,
 				6D033CEC271FC27F00EBEE11 /* TIoTFirmwareModel.h */,
 				6D033CED271FC27F00EBEE11 /* TIoTFirmwareModel.m */,
@@ -3686,6 +3691,7 @@
 				D2038B9F2331FD540036F6B9 /* TIoTRegisterViewController.m in Sources */,
 				6DA6CCA42825145B00CD8246 /* TIoTVideoParamSettingVC.m in Sources */,
 				6D70C2E125515A690069879E /* TIoTIntelligentCustomCell.m in Sources */,
+				6DE8992728573AE8002EA402 /* TIoTDeviceStatusModel.m in Sources */,
 				6DE8010525503E5B0093F925 /* TIoTCustomSheetView.m in Sources */,
 				D23104D62330678F0003069D /* UIView+XDPGesture.m in Sources */,
 				D23104BE233066810003069D /* KeyChainUntil.m in Sources */,
@@ -4230,11 +4236,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/LinkApp/TenextCloud.entitlements;
-				CODE_SIGN_IDENTITY = "$(LinkAPP_BUNDLE_SIGN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4282,10 +4288,10 @@
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
+				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4302,11 +4308,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/LinkApp/TenextCloud.entitlements;
-				CODE_SIGN_IDENTITY = "$(LinkAPP_BUNDLE_SIGN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "$(LinkAPP_BUNDLE_TEAM)";
+				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4354,10 +4360,10 @@
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
 				MARKETING_VERSION = 1.0.20;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(LinkAPP_BUNDLE_ID)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(LinkAPP_BUNDLE_PROVISIONING)";
+				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

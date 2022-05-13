@@ -1003,3 +1003,4 @@ If the problem still persists, we recommend you remove the device and add it aga
 "device_binding_fial" = "绑定设备失败";
 "scan_no_specified_device" = "无法扫描到指定蓝牙设备";
 "click_binding_devcie" = "点击需要绑定的设备";
+"linkOvertime_check_device_status" = "连接超时，请检查设备状态";

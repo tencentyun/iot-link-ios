@@ -26,6 +26,7 @@ static NSString * const appEnterForeground   = @"appEnterForeground";
 static NSString * const receiveShareDevice   = @"receiveShareDevice";
 static NSString * const bluetoothStopLister  = @"bluetoothStopLister";
 static NSString * const callingDisconnectNet = @"callingDisconnectNet";
+static NSString * const callingConnectP2P    = @"callingConnectP2P";
 static NSString * const firmwareUpdateData   = @"firmwareUpdateData";
 static NSString * const P2PVideoDevice       = @"P2PVideoDevice";
 static NSString * const P2PVideoDeviceExit   = @"P2PVideoDeviceExit";
@@ -241,6 +242,15 @@ static NSString * const statusManagerCommuni = @"statusManagerCommuni";
     [[NSNotificationCenter defaultCenter] postNotificationName:callingDisconnectNet object:nil];
 }
 
+// P2P连接成功通知
++ (void)addCallingConnectP2PLister:(id)listener reaction:(SEL)selector {
+    [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:callingConnectP2P object:nil];
+}
+
++ (void)postCallingConnectP2P {
+    [[NSNotificationCenter defaultCenter] postNotificationName:callingConnectP2P object:nil];
+}
+
 // 开始下发固件升级
 + (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector {
     [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:firmwareUpdateData object:nil];
@@ -264,8 +274,8 @@ static NSString * const statusManagerCommuni = @"statusManagerCommuni";
     [[NSNotificationCenter defaultCenter] addObserver:listener selector:selector name:P2PVideoDeviceExit object:nil];
 }
 
-+ (void)postP2PVIdeoExit {
-    [[NSNotificationCenter defaultCenter] postNotificationName:P2PVideoDeviceExit object:nil];
++ (void)postP2PVIdeoExit:(BOOL)isOvertime {
+    [[NSNotificationCenter defaultCenter] postNotificationName:P2PVideoDeviceExit object:@(isOvertime)];
 }
 
 //statusManager 是否通话中或弹出通话页面

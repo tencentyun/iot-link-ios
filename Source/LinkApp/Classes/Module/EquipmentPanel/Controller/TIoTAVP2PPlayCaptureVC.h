@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)noAnswered;
 - (void)otherAnswered;
 - (void)hangupTapped;    //挂断
+- (void)refreshPlayer; //刷新播放器
 @end
 
 NS_ASSUME_NONNULL_END

@@ -67,7 +67,7 @@ dispatch_queue_t muxerQueue;
 //    _data = [NSMutableData new];
     _session = [AVCaptureSession new];
     
-    self.resolutionRatioValue = AVCaptureSessionPreset640x480;
+    self.resolutionRatioValue = AVCaptureSessionPreset352x288;
 }
 
 #pragma mark - 设置音频
@@ -534,7 +534,7 @@ int encodeFlvData(int type, NSData *packetData) {
     }
     
     if (resolutionValue == nil || resolutionValue.length == 0) {
-        self.resolutionRatioValue = AVCaptureSessionPreset640x480;
+        self.resolutionRatioValue = AVCaptureSessionPreset352x288;
     }else {
         self.resolutionRatioValue = resolutionValue;
     }

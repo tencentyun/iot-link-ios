@@ -423,7 +423,7 @@
 //            [_callAudioVC dismissViewControllerAnimated:NO completion:nil];
 //        }
         if (_callP2PVideo == topVC) {
-            [HXYNotice postP2PVIdeoExit];
+            [HXYNotice postP2PVIdeoExit:YES];
 //            [_callP2PVideo dismissViewControllerAnimated:NO completion:nil];
         }
 //        [HXYNotice postP2PVIdeoExit];
@@ -441,11 +441,11 @@
     }else { //APP被叫
         //接收被呼叫
         if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_video_call_status]) {
-            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus];
+            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus isp2pHungup:NO];
 
             [self acceptAppCallingOrCalledEnterRoom];
         }else if (![NSString isNullOrNilWithObject:self.statusManager.deviceParam._sys_audio_call_status]) {
-            [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus];
+            [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"1"} deviceID:self.statusManager.deviceIDTempStr isActive:self.statusManager.isActiveStatus isp2pHungup:NO];
             [self acceptAppCallingOrCalledEnterRoom ];
         }
 
@@ -577,10 +577,10 @@
 */
 
 - (void)statusManagerRefuseOtherCallWithDeviceReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus isp2pHungup:NO];
 }
 - (void)statusManagerrequestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID {
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:self.statusManager.isActiveStatus isp2pHungup:NO];
 }
 
 #pragma mark - 拒绝其他设备呼叫
@@ -589,10 +589,19 @@
 //    if (self.isP2PVideoCommun == YES) {
 //        [self exitRoom:@""];
 //    }
-    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:isActive];
+    [self requestControlDeviceDataWithReport:reportDic deviceID:deviceID isActive:isActive isp2pHungup:NO];
 }
 
-- (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID isActive:(BOOL)isActive{
+//p2pVideo 通话中 APP主动挂断上报、60s超时页面退出后上报
+- (void)p2pCommunicateHungupRequestControlDevice {
+    if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_audio) {
+        [self requestControlDeviceDataWithReport:@{@"_sys_audio_call_status":@"0"} deviceID:self.statusManager.deviceIDOriginStr isActive:self.statusManager.isActiveOriginStatus isp2pHungup:YES];
+    }else if (self.statusManager.preCallingType == TIoTTRTCSessionCallType_video) {
+            [self requestControlDeviceDataWithReport:@{@"_sys_video_call_status":@"0"} deviceID:self.statusManager.deviceIDOriginStr isActive:self.statusManager.isActiveOriginStatus isp2pHungup:YES];
+    }
+}
+
+- (void)requestControlDeviceDataWithReport:(NSDictionary *)reportDic deviceID:(NSString *)deviceID isActive:(BOOL)isActive isp2pHungup:(BOOL)isHungup {
     NSMutableDictionary *trtcReport = [reportDic mutableCopy];
     NSString *userId = [TIoTCoreUserManage shared].userId;
 //    if (userId) {
@@ -666,15 +675,19 @@
     [[TIoTRequestObject shared] post:AppControlDeviceData Param:tmpDic success:^(id responseObject) {
         DDLogDebug(@"AppControlDeviceData responseObject  %@",responseObject);
 //        if (self.isP2PVideoCommun == YES) {
+        if (isHungup == NO) {
             if (self.statusManager.isActiveStatus == YES) {
+                [HXYNotice postP2PVIdeoExit:NO];
                 [self exitRoom:@""];
-                [HXYNotice postP2PVIdeoExit];
             }
+        }
 //        }
     } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
 //        if (self.isP2PVideoCommun == YES) {
-        [self exitRoom:@""];
-            [HXYNotice postP2PVIdeoExit];
+        if (isHungup == NO) {
+            [HXYNotice postP2PVIdeoExit:NO];
+            [self exitRoom:@""];
+        }
 //        }
     }];
 }
@@ -1374,4 +1387,25 @@
 - (void)p2pCommunicateSamplingRate:(NSInteger)samplingRate {
     self.samplingValue = samplingRate;
 }
+
+- (AVCaptureSessionPreset)getP2pCommunicateResolutionRatio {
+    return self.resolutionValue;
+}
+- (NSInteger)getP2pCommunicateSamplingRate {
+    return self.samplingValue;
+}
+
+///刷新播放器
+- (void)refreshP2PVideoPlayer {
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callP2PVideo == topVC) {
+        [_callP2PVideo refreshPlayer];
+    }
+}
+
+/// 判断当前top是不是p2p2VideoplayervaptureVC
+- (BOOL)isTopP2PVideoPlayerVC {
+    return _callP2PVideo == [TIoTCoreUtil topViewController] ? YES : NO;
+}
+
 @end

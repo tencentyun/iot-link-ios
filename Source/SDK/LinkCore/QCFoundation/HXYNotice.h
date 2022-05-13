@@ -99,6 +99,10 @@
 + (void)addCallingDisconnectNetLister:(id)listener reaction:(SEL)selector;
 + (void)postCallingDisconnectNet;
 
+//P2P连接成功通知
++ (void)addCallingConnectP2PLister:(id)listener reaction:(SEL)selector;
++ (void)postCallingConnectP2P;
+
 // 开始下发固件升级
 + (void)addFirmwareUpdateDataLister:(id)listener reaction:(SEL)selector;
 + (void)postFirmwareUpdateData;
@@ -109,7 +113,7 @@
 
 //p2pVideo 结束退出通知
 + (void)addP2PVideoExitLister:(id)listener reaction:(SEL)selector;
-+ (void)postP2PVIdeoExit;
++ (void)postP2PVIdeoExit:(BOOL)isOvertime;
 
 //statusManager 是否通话中或弹出通话页面
 + (void)addStatusManagerCommunicateLister:(id)listener reaction:(SEL)selector;
