@@ -30,7 +30,7 @@ PODS:
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel (= 1.0.4)
   - TIoTLinkKit_FLV (2.2.3)
-  - TIoTLinkKit_IJKPlayer (1.0.5)
+  - TIoTLinkKit_IJKPlayer (1.0.6)
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
   - TIoTLinkKit_XP2P (2.4.25)
@@ -60,7 +60,7 @@ DEPENDENCIES:
   - Tencent-MapSDK (= 4.3.9)
   - TIoTLinkKit (from `./`)
   - TIoTLinkKit/LinkRTC (from `./`)
-  - TIoTLinkKit_IJKPlayer (= 1.0.5)
+  - TIoTLinkKit_IJKPlayer (= 1.0.6)
   - TIoTLinkKit_TPNS (= 1.0.1)
   - TIoTLinkKit_WechatOpenSDK (= 1.0.1)
   - TIoTLinkVideo (from `./`)
@@ -119,7 +119,7 @@ SPEC CHECKSUMS:
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 0386fb583c61765a02ad5cca810c7661d5a0bc53
   TIoTLinkKit_FLV: aec2b2ec9664990ec6c5b9f760fc1a9043d5a9a5
-  TIoTLinkKit_IJKPlayer: 33f22e40d59a5673a7c0ff0107189266e7986a1d
+  TIoTLinkKit_IJKPlayer: 1647869e6767d62419f6628ed23a9cc9fdd3aecf
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
   TIoTLinkKit_XP2P: 9203a4956332900f8423c97814409725c621dc3e
@@ -129,6 +129,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: e1914a66543d8d580a400a271bbf3fb8a16f5f9d
+PODFILE CHECKSUM: e44d030c7f25d061fcf9d1cd8a17216dc6ea9693
 
 COCOAPODS: 1.9.3
