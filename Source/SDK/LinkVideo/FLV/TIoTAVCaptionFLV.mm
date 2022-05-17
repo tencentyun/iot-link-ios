@@ -54,13 +54,13 @@ dispatch_queue_t muxerQueue;
 }
 
 -(void) onInit{
-    if (@available(iOS 10.0, *)) {
+    /*if (@available(iOS 10.0, *)) {
         [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
             NSLog(@"getfps=== %d", self.captureVideoFPS);
         }];
     } else {
         // Fallback on earlier versions
-    }
+    }*/
     
     muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
     

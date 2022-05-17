@@ -24,6 +24,7 @@
 #import "TIoTDemoPlaybackVC.h"
 #import "TIoTXp2pInfoModel.h"
 #import <AVFoundation/AVFoundation.h>
+#import "ReachabilityManager.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -83,6 +84,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.endPlayer = 0;
+        [self registerNetworkNotifications];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -1536,5 +1546,50 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     // Pass the selected object to the new view controller.
 }
 */
+
+//需注意此方法全局覆盖，别的地方就收不到断网通知了
+- (void)registerNetworkNotifications {
+    [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
+        switch (status) {
+            case NetworkReachabilityStatusUnknown:
+                DDLogVerbose(@"状态不知道");
+                break;
+            case NetworkReachabilityStatusNotReachable:
+                [MBProgressHUD showError:@"无网络"];
+                [self appNetWorkBreak];
+                break;
+            case NetworkReachabilityStatusReachableViaWiFi:
+                [MBProgressHUD showError:@"WIFI"];
+                [self appNetWorkResume];
+                break;
+            case NetworkReachabilityStatusReachableViaWWAN:
+                [MBProgressHUD showError:@"移动网络"];
+                [self appNetWorkResume];
+                break;
+            default:
+                break;
+        }
+    }];
+    
+    [[NetworkReachabilityManager sharedManager] startMonitoring];
+}
+
+- (void)appNetWorkBreak {
+    if (self.endPlayer == 0) { //正在直播中，断开才响应
+        return;
+    }
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+}
+
+- (void)appNetWorkResume {
+    if (self.endPlayer == 0) { //正在直播中，断开才响应
+        return;
+    }
+    //重连使用
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
+
+}
 
 @end
