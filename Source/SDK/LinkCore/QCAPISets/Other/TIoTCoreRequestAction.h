@@ -121,6 +121,7 @@ FOUNDATION_EXPORT NSString *const AppDescribeFirmwareUpdateStatus;//查询设备
 FOUNDATION_EXPORT NSString *const AppGetDeviceOTAInfo; //获取固件升级包URL
 FOUNDATION_EXPORT NSString *const AppReportOTAStatus; //上报设备OTA状态进度 （下载、更新升级、烧录）
 FOUNDATION_EXPORT NSString *const AppReportDeviceEvent; //设备事件上报
+FOUNDATION_EXPORT NSString *const AppDeviceDynamicRegister; //设备动态注册
 
 //MARK: 设备定时
 

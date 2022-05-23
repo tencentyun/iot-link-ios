@@ -111,6 +111,7 @@ NSString *const AppDescribeFirmwareUpdateStatus = @"AppDescribeFirmwareUpdateSta
 NSString *const AppGetDeviceOTAInfo = @"AppGetDeviceOTAInfo"; //获取固件升级包URL
 NSString *const AppReportOTAStatus = @"AppReportOTAStatus"; //上报设备OTA状态进度 （下载、更新升级、烧录）
 NSString *const AppReportDeviceEvent = @"AppReportDeviceEvent"; //设备事件上报
+NSString *const AppDeviceDynamicRegister = @"AppDeviceDynamicRegister"; //设备动态注册
 
 //===============设备定时
 

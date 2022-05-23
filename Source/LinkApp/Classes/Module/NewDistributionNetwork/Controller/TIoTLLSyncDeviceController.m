@@ -42,6 +42,7 @@
 @property (nonatomic, strong) CBPeripheral *currentSelectedPerpheral; //首页选中了个蓝牙设备，先记录。后面再连接
 @property (nonatomic, assign) BOOL realCommandStart; //表示正式开始已经回复E0
 @property (nonatomic, assign) BOOL repeatCurrentPerheral; //正在重复搜索
+@property (nonatomic, assign) BOOL isDynamicRegist; //选中设备是否支持动态注册
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -261,6 +262,8 @@
         NSString *productstr = [NSString stringFromHexString:producthex];
         self.currentProductId = productstr;
         
+        //设备是否支持动态注册
+        self.isDynamicRegist =  [self getBlueIsSupportDynamicRegist:hexstr];
         
         self.currentSelectedPerpheral = device;
 //        [self.blueManager connectBluetoothPeripheral:device];
@@ -287,6 +290,29 @@
     }
     return blueMac;
 }
+
+//获取设备是否支持动态注册
+- (BOOL)getBlueIsSupportDynamicRegist:(NSString *)deviceAdvHexStr {
+    BOOL isDynReg = NO;
+    if (![NSString isNullOrNilWithObject:deviceAdvHexStr]) {
+        NSString *deviceStatusHex = [deviceAdvHexStr substringWithRange:NSMakeRange(4, 2)];
+        
+        NSString *lenBinOriginString = [NSString getBinaryByHex:deviceStatusHex];
+        NSString *lenBinString = [NSString getFixedLengthValueWithOriginValue:lenBinOriginString bitString:@"00000000"];
+        NSString *dynregFlag = [lenBinString substringWithRange:NSMakeRange(5, 1)];
+        if (dynregFlag.intValue == 1) {
+            isDynReg = YES;
+        }else {
+            isDynReg = NO;
+        }
+        
+    }else {
+        isDynReg = NO;
+    }
+    
+    return isDynReg;
+}
+
 - (void)refushProductName{
     if (self.productNameDic.allKeys.count != 0) {
         [self.productNameDic removeAllObjects];
@@ -564,6 +590,33 @@
                     self.bindSliceString = @"";
                 }
             }
+        }else if ([cmdtype isEqualToString:@"0E"] || [cmdtype isEqualToString:@"0e"]) {
+            //支持动态注册,不支持动态注册，直接走之前连接成功 05
+            if (self.isDynamicRegist == YES) {
+                //总长度
+                NSString *lenHex = [hexstr substringWithRange:NSMakeRange(2, 4)];
+                NSInteger lenInt = [NSString getDecimalByHex:lenHex];  //字节数
+                //devicename 长度
+                NSString *devNameLenHex = [hexstr substringWithRange:NSMakeRange(6, 2)];
+                NSInteger devNameLenInt = [NSString getDecimalByHex:devNameLenHex]; //字节数
+                //devicename
+                NSString *deviceNameHex = [hexstr substringWithRange:NSMakeRange(8, devNameLenInt*2)];
+                NSString *deviceName = [NSString stringFromHexString:deviceNameHex];
+                //sign
+                NSString *signHex = [hexstr substringWithRange:NSMakeRange(8+devNameLenInt*2, (lenInt - 1 - devNameLenInt)*2)];
+                NSString *signStr = [NSString stringFromHexString:signHex];
+                
+                NSString *deviceId = [NSString stringWithFormat:@"%@/%@",self.currentProductId?:@"",deviceName?:@""];
+                
+                NSDictionary *param = @{@"DeviceId":deviceId?:@"",
+                                        @"DeviceTimestamp":@(self.tempTimeString.integerValue),
+                                        @"Nonce":@(self.andomNumString.integerValue),
+                                        @"Signature":signStr?:@"",
+                };
+                
+                //动态注册请求
+                [self requestDynamicRegistWithParam:param?:@{}];
+            }
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
@@ -571,6 +624,142 @@
     }
 }
 
+
+///MARK: 设备请求动态注册
+- (void)requestDynamicRegistWithParam:(NSDictionary *)dic {
+    
+    [[TIoTRequestObject shared] post:AppDeviceDynamicRegister Param:dic?:@{} success:^(id responseObject) {
+        TIotLLSyncDynamicRegist *dynregModel = [TIotLLSyncDynamicRegist yy_modelWithJSON:responseObject];
+        NSString *payloadHex = [NSString hexStringFromString:dynregModel.Payload?:@""];
+        
+        /// 动态注册获取payload 透传设备
+        [self spliceDynregPayloadInfo:payloadHex];
+        
+    } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
+        [self spliceDynregPayloadInfo:@""];
+    }];
+}
+
+///MARK: 动态注册获取payload 透传设备
+- (void)spliceDynregPayloadInfo:(NSString *)payloadHex {
+    NSString *typeHex = @"0B";
+    
+    NSString *andomNumHex = [NSString getHexByDecimal:self.andomNumString.integerValue];
+    NSString *tempTimeHex = [NSString getHexByDecimal:self.tempTimeString.integerValue];
+    
+    NSString *resultHex = [NSString isNullOrNilWithObject:payloadHex]? @"01": @"00";
+    
+    NSInteger payloadLen = payloadHex.length/2;
+    NSString *payloadLenHex = [NSString getHexByDecimal:payloadLen];
+    NSString *payloadLenStr = [NSString getFixedLengthValueWithOriginValue:payloadLenHex bitString:@"00"];
+    
+    NSString *valueHex = [NSString stringWithFormat:@"%@%@%@%@%@",resultHex,payloadLenStr,payloadHex.uppercaseString,andomNumHex,tempTimeHex];
+    
+    NSInteger valueLen = valueHex.length/2;
+    NSString *valueLenHex = [NSString getHexByDecimal:valueLen];
+    NSString *valueLenHexStr = [NSString getFixedLengthValueWithOriginValue:valueLenHex bitString:@"0000"];
+    
+    NSString *info = [NSString stringWithFormat:@"%@%@%@",typeHex,valueLenHexStr,valueHex];
+    
+    [self sendDynregValueToDevice:info?:@""];
+}
+
+- (void)sendDynregValueToDevice:(NSString *)info {
+    if (![NSString isNullOrNilWithObject:info]) {
+        [self sendSliceDataWithOriginHexString:info mutInt:17 UUIDString:@"0000FFE1" type:@"0B"];
+    }
+}
+
+- (void)sendSliceDataWithOriginHexString:(NSString *)sliceHexDataString mutInt:(NSInteger)mtu UUIDString:(NSString *)uuidString type:(NSString *)typeString {
+    NSString *sliceDataString = [sliceHexDataString?:@"" uppercaseString];  //原始数据 带type+len+value
+    NSInteger mtuInt = mtu;
+    NSString *uuid = uuidString?:@"";
+    NSString *type = typeString; //每片头string
+    NSString *lenBinaryBit = @"0000000000000";
+    
+    //获取value
+    NSString *valueString = @"";        //只有value （原始数据去除type和length）
+    if (sliceDataString.length >= 6) {
+        valueString = [sliceDataString substringFromIndex:6];  //6: type 1B len 2B
+    }
+    
+    //判断value是否>mtu
+    if (sliceDataString.length <= mtuInt) {
+        //直接发送  此处固定ffe1
+        [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:sliceDataString?:@""];
+    }else {
+       //分片发送
+        NSInteger sliceGroup = valueString.length/2/mtuInt; //分片组数
+        //计算满片长度的二进制
+        NSString *lenBinary = [NSString getBinaryByDecimal:mtuInt];
+        NSString *fixedLenBinary = [NSString getFixedLengthValueWithOriginValue:lenBinary bitString:lenBinaryBit];
+        
+        NSString *sliceHeaderBinary = @"";
+        
+        //是否有不满mtuintd的尾片
+        if (valueString.length/2%mtuInt != 0) {
+            
+            for (int i = 0; i<sliceGroup; i++) {
+                //每一片的slice value
+                NSString *itemSliceValue = [valueString substringWithRange:NSMakeRange(i*mtuInt*2, mtuInt*2)];
+                
+                if (i == 0) {
+                    //首片
+                    sliceHeaderBinary = @"010";
+                }else {
+                    //中间
+                    sliceHeaderBinary = @"100";
+                }
+                
+                //计算每一片完整数据
+                [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            }
+            //不满一片数据
+            NSInteger sliceValueLen = sliceGroup*mtuInt*2; //满片数据
+            NSString *itemSliceValue = [valueString substringFromIndex:sliceValueLen];  //不满一片数据
+            
+            NSString *lenBinary = [NSString getBinaryByDecimal:itemSliceValue.length];
+            NSString *fixedLenBinary = [NSString getFixedLengthValueWithOriginValue:lenBinary bitString:lenBinaryBit];
+            
+            //尾片
+            sliceHeaderBinary = @"110";
+            [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            
+        }else {
+            for (int i = 0; i<sliceGroup; i++) {
+                //每一片的slice value
+                NSString *itemSliceValue = [valueString substringWithRange:NSMakeRange(i*mtuInt*2, mtuInt*2)];
+                
+                if (i == 0) {
+                    //首片
+                    sliceHeaderBinary = @"010";
+                }else {
+                    //中间
+                    if (i == sliceGroup - 1) {
+                        sliceHeaderBinary = @"110";
+                    }else {
+                        sliceHeaderBinary = @"100";
+                    }
+                }
+                
+                //计算每一片完整数据
+                [self sendItemSliceDataWithType:type SliceHeaderBinary:sliceHeaderBinary fixedLenBinary:fixedLenBinary itemSliceValue:itemSliceValue UUIDString:uuid];
+            }
+        }
+    }
+}
+
+//发送分片数据
+- (void)sendItemSliceDataWithType:(NSString *)type SliceHeaderBinary:(NSString *)sliceHeaderBinary fixedLenBinary:(NSString *)fixedLenBinary itemSliceValue:(NSString *)itemSliceValue UUIDString:(NSString *)uuid {
+    NSString *lengthTypeBinary = [NSString stringWithFormat:@"%@%@",sliceHeaderBinary,fixedLenBinary];
+    NSString *lengthHexTemp = [NSString getHexByBinary:lengthTypeBinary];
+    NSString *lenHex = [NSString getFixedLengthValueWithOriginValue:lengthHexTemp bitString:@"0000"];
+    NSString *itemSliceData = [NSString stringWithFormat:@"%@%@%@",type,lenHex,itemSliceValue];
+    //此处固定ffe1
+    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:itemSliceData?:@""];
+}
+
+///MARK:请求绑定子设备
 - (void)bindSubDevice {
     
     NSString *deviceId = [NSString stringWithFormat:@"%@/%@",self.currentProductId,self.currentDevicename];
@@ -600,7 +789,16 @@
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.blueManager disconnectPeripheral];
-            [self.navigationController popViewControllerAnimated:YES];
+//            [self.navigationController popViewControllerAnimated:YES];
+            UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
+            if (vc) {
+                // 找到需要返回的控制器的处理方式
+                [self.navigationController popToViewController:vc animated:YES];
+            }else{
+                // 没找到需要返回的控制器的处理方式
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+            
             //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
             [self uploadLocalPsk:randomHex];
         });
@@ -675,6 +873,15 @@
     NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
     value = resultValue;
     return value;
+}
+
+- (id)findViewController:(NSString*)className{
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:NSClassFromString(className)]) {
+            return viewController;
+        }
+    }
+    return nil;
 }
 
 - (NSMutableDictionary *)productNameDic {

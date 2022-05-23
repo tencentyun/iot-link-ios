@@ -15,3 +15,7 @@
 @implementation TIoTLLSyncLocalPskModel
 
 @end
+
+@implementation TIotLLSyncDynamicRegist
+
+@end

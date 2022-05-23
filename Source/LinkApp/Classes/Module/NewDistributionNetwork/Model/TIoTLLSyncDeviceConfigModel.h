@@ -19,4 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *ble_psk_device_ket;
 @property (nonatomic, copy) NSString *ble_timestamp_device_ket;
 @end
+
+@interface TIotLLSyncDynamicRegist : NSObject
+@property (nonatomic, copy) NSString *Payload;
+@property (nonatomic, copy) NSString *Len;
+@end
 NS_ASSUME_NONNULL_END
