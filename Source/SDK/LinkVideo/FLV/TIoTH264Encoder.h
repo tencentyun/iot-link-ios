@@ -14,10 +14,12 @@
 - (void) initWithConfiguration;
 - (void) initEncode:(int)width  height:(int)height;
 - (void) encode:(CMSampleBufferRef )sampleBuffer;
+- (void) setEncoderBitrateBps:(uint32_t)bitRate;
 - (void) End;
 
 
 @property (weak, nonatomic) NSString *error;
 @property (weak, nonatomic) id<H264EncoderDelegate> delegate;
+@property (assign, nonatomic, readonly) uint32_t encoderBitrateBps; //当前码率
 
 @end

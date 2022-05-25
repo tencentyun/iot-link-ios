@@ -22,5 +22,7 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 -(void) stopCapture;
 -(void)changeCameraPositon;
 - (void)setResolutionRatio:(AVCaptureSessionPreset)resolutionValue;
+- (void)setVideoBitRate:(int32_t)bitRate;
+- (int32_t)getVideoBitRate;
 @end
 

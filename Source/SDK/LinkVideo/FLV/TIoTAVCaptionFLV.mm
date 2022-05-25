@@ -231,7 +231,20 @@ dispatch_queue_t muxerQueue;
     }
 }
 
+- (void)setVideoBitRate:(int32_t)bitRate {
+    
+//    int ret = (rand()%500+1)*1000;
+    int32_t ret = bitRate;
+    [self.h264Encoder setEncoderBitrateBps:ret];
+    NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
+}
+
+- (int32_t)getVideoBitRate {
+    return self.h264Encoder.encoderBitrateBps;
+}
+
 - (void)setupVideoCapture {
+    
     if (self.h264Encoder) {
         if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
             // 设置分辨率

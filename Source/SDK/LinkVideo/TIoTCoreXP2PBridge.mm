@@ -128,10 +128,43 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
+#define MAX_AVG_LENGTH 20
+typedef struct {
+    int32_t buf[MAX_AVG_LENGTH];
+    int32_t len;
+    int32_t index;
+} avg_context;
+
+static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
+{
+    int32_t sum = 0;
+    int32_t max = INT32_MIN;
+    int32_t min = INT32_MAX;
+    int32_t i = 0;
+
+    avg_ctx->buf[avg_ctx->index] = val;
+    avg_ctx->index = (avg_ctx->index + 1) % avg_ctx->len;
+
+    for (i = 0; i < avg_ctx->len; i++)
+    {
+        sum += avg_ctx->buf[i];
+        if (avg_ctx->buf[i] > max) {
+            max = avg_ctx->buf[i];
+        }
+        if (avg_ctx->buf[i] < min) {
+            min = avg_ctx->buf[i];
+        }
+    }
+    sum = sum - max - min;
+
+    return sum / (avg_ctx->len - 2);
+}
+
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
+@property (nonatomic, strong) NSTimer *getBufTimer;
 @end
 
 @implementation TIoTCoreXP2PBridge {
@@ -140,6 +173,8 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
 
     dispatch_source_t timer;
     void *_serverHandle;
+    
+    avg_context _p2p_wl_avg_ctx;
 }
 
 + (instancetype)sharedInstance {
@@ -300,8 +335,47 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
+    
+    _p2p_wl_avg_ctx = {0};
+    _p2p_wl_avg_ctx.len = 20;
+    _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
 }
 
+
+
+- (void)getSendBufSize {
+    
+    int32_t bufsize = (int32_t)getStreamBufSize(self.dev_name.UTF8String);
+    
+    
+    int32_t p2p_wl_avg = avg_max_min(&_p2p_wl_avg_ctx, bufsize);
+    
+    int32_t now_video_rate = systemAvCapture.getVideoBitRate;
+    
+    for (int i =0; i < _p2p_wl_avg_ctx.len; i++) {
+        printf("\n stream_buf_con==%d \n",_p2p_wl_avg_ctx.buf[i]);
+    }
+    NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
+    
+    // 降码率
+    // 当发现p2p的水线超过一定值时，降低视频码率，这是一个经验值，一般来说要大于 [视频码率/2]
+    // 实测设置为 80%视频码率 到 120%视频码率 比较理想
+    // 在10组数据中，获取到平均值，并将平均水位与当前码率比对。
+    
+    
+    int32_t video_rate_byte = (now_video_rate / 8) * 3 / 4;
+    if (p2p_wl_avg > video_rate_byte) {
+        
+        [systemAvCapture setVideoBitRate:video_rate_byte];
+        
+    }else if (p2p_wl_avg <  (now_video_rate / 8) / 3) {
+    
+    // 升码率
+    // 测试发现升码率的速度慢一些效果更好
+    // p2p水线经验值一般小于[视频码率/2]，网络良好的情况会小于 [视频码率/3] 甚至更低
+        [systemAvCapture setVideoBitRate:now_video_rate + 5];
+    }
+}
 //设置分辨率，需在开启通话前设置
 - (void)resolutionRatio:(AVCaptureSessionPreset)resolutionValue {
     self.resolution = resolutionValue;
@@ -311,6 +385,12 @@ typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, si
     [systemAvCapture changeCameraPositon];
 }
 - (XP2PErrCode)stopVoiceToServer {
+    
+    if (_getBufTimer) {
+        [_getBufTimer invalidate];
+        _getBufTimer = nil;
+    }
+        
     self.isSending = NO;
     
     systemAvCapture.delegate = nil;

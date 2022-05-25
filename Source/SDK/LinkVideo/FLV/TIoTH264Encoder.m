@@ -13,6 +13,9 @@
     int  frameCount;
     NSData *sps;
     NSData *pps;
+    
+    int _width;
+    int _height;
 }
 @synthesize error;
 
@@ -104,6 +107,9 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 
 - (void) initEncode:(int)width  height:(int)height
 {
+    _width = width;
+    _height = height;
+    
     dispatch_sync(aQueue, ^{
         
         // For testing out the logic, lets read from a file and then send it to encoder to create h264 stream
@@ -150,17 +156,34 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 //        int bitRate = width * height * 60;
 //        int bitRate = 300000;
         int bitRate = width * height;
+        _encoderBitrateBps = bitRate;
         CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
         
-        //设置码率，上限，单位是bytes         1 Byte = 8 Bits
-        NSArray *bitRateLimit = @[@(bitRate/8),@(1)];
+        //设置码率，上限1.1倍平均码率，单位是bytes         1 Byte = 8 Bits
+        NSArray *bitRateLimit = @[@(bitRate * 1.1 / 8),@(1)];
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)bitRateLimit);
             
         // Tell the encoder to start encoding
         VTCompressionSessionPrepareToEncodeFrames(EncodingSession);
     });
 }
+
+- (void)setEncoderBitrateBps:(uint32_t)bitRate {
+    
+    if (bitRate > _width * _height) {
+        return;
+    }
+    
+    _encoderBitrateBps = bitRate;
+    CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
+    VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
+    
+    //设置码率，上限1.1倍平均码率，单位是bytes         1 Byte = 8 Bits
+    NSArray *bitRateLimit = @[@(bitRate * 1.1 / 8),@(1)];
+    VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)bitRateLimit);
+}
+
 - (void) encode:(CMSampleBufferRef )sampleBuffer
 {
     if (EncodingSession == NULL) {
