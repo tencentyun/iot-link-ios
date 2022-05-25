@@ -987,3 +987,9 @@ If the problem still persists, we recommend you remove the device and add it aga
 "resolution_ratio" = "分辨率";
 "parameter_setting" = "参数设置";
 "sampling_rate" = "采样率";
+
+"device_safeBinding" = "设备安全绑定";
+"affirm_device_safeBinding" = "是否确认进行设备安全绑定";
+"cancel_device_binding" = "取消设备绑定";
+"device_binding_overtime" = "设备绑定超时";
+"device_reject_binding" = "设备拒绝绑定";

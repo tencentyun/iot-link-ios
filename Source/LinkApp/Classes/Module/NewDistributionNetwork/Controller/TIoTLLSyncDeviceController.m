@@ -43,6 +43,9 @@
 @property (nonatomic, assign) BOOL realCommandStart; //表示正式开始已经回复E0
 @property (nonatomic, assign) BOOL repeatCurrentPerheral; //正在重复搜索
 @property (nonatomic, assign) BOOL isDynamicRegist; //选中设备是否支持动态注册
+@property (nonatomic, strong) UIView *backMaskView; //超时弹框背景遮罩
+@property (nonatomic, assign) BOOL isSafeBinding; //是否支持设备安全绑定
+@property (nonatomic, assign) NSInteger safeBindingTimeout;
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -544,54 +547,24 @@
             NSString *lenBinOriginString = [NSString getBinaryByHex:lenHex];
             NSString *lenBinString = [NSString getFixedLengthValueWithOriginValue:lenBinOriginString bitString:@"0000000000000000"];
             NSString *lenSliceFlag = [lenBinString substringWithRange:NSMakeRange(0, 2)];
-            if ([lenSliceFlag isEqualToString:@"00"]) {
-                //不分片
-                //子设备绑定
-                if (hexstr.length >= 46) {
-                    NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
-                    NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
-                    self.currentDevicename = deviceName;
-                    NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
-                    NSString *signatureString = [preString substringFromIndex:6]?:@"";
-                    self.currentSignature = signatureString;
-                    [self bindSubDevice];
+            
+            NSString *bindingFlag = [lenBinString substringWithRange:NSMakeRange(2, 1)];
+            
+            if (self.isSafeBinding == YES) {
+                if (bindingFlag.integerValue == 1) {
+                    [self deviceRejectSafeBinding];
+                }else {
+                    [self showSafeBingdingAlertWithOriginHexData:hexstr lenSliceFlag:lenSliceFlag];
                 }
-            }else {
-                
-                if ([lenSliceFlag isEqualToString:@"01"]) {
-                    //首包
-                    if (hexstr.length>=6) {
-                        self.bindSliceString = [hexstr substringFromIndex:6]?:@"";
-                    }
-                }else if ([lenSliceFlag isEqualToString:@"10"]) {
-                    //中间包
-                    if (hexstr.length >= 6) {
-                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
-                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
-                    }
-                }else if ([lenSliceFlag isEqualToString:@"11"]) {
-                    //尾包
-                    if (hexstr.length >= 6) {
-                        NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
-                        self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
-                    }
-                    //050000 占位写死的作用，实际也是6字节
-                    NSString *resuleValue = [NSString stringWithFormat:@"050000%@",self.bindSliceString];
-                    
-                    if (resuleValue.length >= 46) {
-                        NSString *deviceNameHexString = [resuleValue substringFromIndex:46]?:@"";
-                        NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
-                        self.currentDevicename = deviceName;
-                        NSString *preString = [resuleValue substringWithRange:NSMakeRange(0, 46)]?:@"";
-                        NSString *signatureString = [preString substringFromIndex:6]?:@"";
-                        self.currentSignature = signatureString;
-                        [self bindSubDevice];
-                    }
-                    self.bindSliceString = @"";
-                }
+                self.isSafeBinding = NO;
+                return;
             }
+            
+            //接收绑签名后返回LLEvent数据包，并继续绑定
+            [self receiveSignatureVerficatedWithOriginHexData:hexstr lenSliceFlag:lenSliceFlag];
+            
         }else if ([cmdtype isEqualToString:@"0E"] || [cmdtype isEqualToString:@"0e"]) {
-            //支持动态注册,不支持动态注册，直接走之前连接成功 05
+            //支持动态注册,（如果设备不支持动态注册，直接走之前连接成功 05）
             if (self.isDynamicRegist == YES) {
                 //总长度
                 NSString *lenHex = [hexstr substringWithRange:NSMakeRange(2, 4)];
@@ -617,6 +590,13 @@
                 //动态注册请求
                 [self requestDynamicRegistWithParam:param?:@{}];
             }
+        }else if ([cmdtype isEqualToString:@"0D"] || [cmdtype isEqualToString:@"0d"]) {
+            //设备安全绑定
+            NSString *safeBindingTimeoutHex = [hexstr substringWithRange:NSMakeRange(6, 4)];
+            self.safeBindingTimeout = [NSString getDecimalByHex:safeBindingTimeoutHex];
+            
+            self.isSafeBinding = YES;
+            
         }else {
             //如果有失败的话，获取设备配网日志
 //            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
@@ -624,6 +604,160 @@
     }
 }
 
+///MARK:接收绑签名后返回数据包，并绑定
+- (void)receiveSignatureVerficatedWithOriginHexData:(NSString *)hexstr lenSliceFlag:(NSString *)lenSliceFlag {
+    if ([NSString isNullOrNilWithObject:hexstr] || [NSString isNullOrNilWithObject:lenSliceFlag]) {
+        return;
+    }
+
+    if ([lenSliceFlag isEqualToString:@"00"]) {
+        //不分片
+        //子设备绑定
+        if (hexstr.length >= 46) {
+            NSString *deviceNameHexString = [hexstr substringFromIndex:46]?:@"";
+            NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+            self.currentDevicename = deviceName;
+            NSString *preString = [hexstr substringWithRange:NSMakeRange(0, 46)]?:@"";
+            NSString *signatureString = [preString substringFromIndex:6]?:@"";
+            self.currentSignature = signatureString;
+            [self bindSubDevice];
+        }
+    }else {
+
+        if ([lenSliceFlag isEqualToString:@"01"]) {
+            //首包
+            if (hexstr.length>=6) {
+                self.bindSliceString = [hexstr substringFromIndex:6]?:@"";
+            }
+        }else if ([lenSliceFlag isEqualToString:@"10"]) {
+            //中间包
+            if (hexstr.length >= 6) {
+                NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+            }
+        }else if ([lenSliceFlag isEqualToString:@"11"]) {
+            //尾包
+            if (hexstr.length >= 6) {
+                NSString *midSlicesString = [hexstr substringFromIndex:6]?:@"";
+                self.bindSliceString = [self.bindSliceString stringByAppendingString:midSlicesString];
+            }
+            //050000 占位写死的作用，实际也是6字节
+            NSString *resuleValue = [NSString stringWithFormat:@"050000%@",self.bindSliceString];
+
+            if (resuleValue.length >= 46) {
+                NSString *deviceNameHexString = [resuleValue substringFromIndex:46]?:@"";
+                NSString *deviceName = [NSString stringFromHexString:deviceNameHexString]?:@"";
+                self.currentDevicename = deviceName;
+                NSString *preString = [resuleValue substringWithRange:NSMakeRange(0, 46)]?:@"";
+                NSString *signatureString = [preString substringFromIndex:6]?:@"";
+                self.currentSignature = signatureString;
+                [self bindSubDevice];
+            }
+            self.bindSliceString = @"";
+        }
+    }
+}
+
+
+- (void)showSafeBingdingAlertWithOriginHexData:hexstr lenSliceFlag:lenSliceFlag {
+    __weak typeof(self) weakself = self;
+    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+    [av alertWithTitle:NSLocalizedString(@"device_safeBinding", @"设备安全绑定") message:NSLocalizedString(@"affirm_device_safeBinding", @"是否确认进行设备安全绑定？")
+ cancleTitlt:NSLocalizedString(@"cancel", @"取消") doneTitle:NSLocalizedString(@"verify", @"确认")];
+    av.doneAction = ^(NSString * _Nonnull text) {
+        [weakself performSelector:@selector(deviceSafeBinging) withObject:nil afterDelay:weakself.safeBindingTimeout];
+        //接收绑签名后返回LLEvent数据包，并继续绑定
+        [self receiveSignatureVerficatedWithOriginHexData:hexstr lenSliceFlag:lenSliceFlag];
+    };
+
+    av.cancelAction = ^{
+
+        NSString *typeStr = @"0A";
+        NSString *resultStr = @"00";
+        NSString *writeInfo = [NSString stringWithFormat:@"%@%@",typeStr,resultStr];
+        [weakself.blueManager sendNewLLSynvWithPeripheral:weakself.currentConnectedPerpheral Characteristic:weakself.characteristicFFE1 LLDeviceInfo:writeInfo?:@""];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakself cancelSafeBinding];
+        });
+    };
+
+    self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+    [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+    [av showInView:self.backMaskView];
+
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+//    [self.backMaskView addGestureRecognizer:tap];
+}
+
+- (void)hideAlertView {
+    if (self.backMaskView != nil) {
+        [self.backMaskView removeFromSuperview];
+    }
+}
+
+///MARK: 设备安全绑定计时超时 回复消息
+- (void)deviceSafeBinging {
+    NSString *typeStr = @"0A";
+    NSString *resultStr = @"01";
+    NSString *writeInfo = [NSString stringWithFormat:@"%@%@",typeStr,resultStr];
+
+    [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo?:@""];
+
+    [self safeBindingOvertime];
+
+}
+
+- (void)cancelSafeBinding {
+    [MBProgressHUD dismissInView:self.view];
+    [MBProgressHUD showError:NSLocalizedString(@"cancel_device_binding", @"取消设备绑定")];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.blueManager disconnectPeripheral];
+        [self goBackAddDeviceVC];
+    });
+}
+
+- (void)safeBindingOvertime {
+    [MBProgressHUD dismissInView:self.view];
+    [MBProgressHUD showError:NSLocalizedString(@"device_binding_overtime", @"设备绑定超时")];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(deviceSafeBinging) object:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.blueManager disconnectPeripheral];
+        [self goBackAddDeviceVC];
+    });
+}
+
+- (void)deviceRejectSafeBinding {
+    [MBProgressHUD dismissInView:self.view];
+    [MBProgressHUD showError:NSLocalizedString(@"device_reject_binding", @"设备拒绝绑定")];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.blueManager disconnectPeripheral];
+        [self goBackAddDeviceVC];
+    });
+}
+
+- (void)goBackAddDeviceVC {
+
+    [self hideAlertView];
+
+    UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
+    if (vc) {
+        // 找到需要返回的控制器的处理方式
+        [self.navigationController popToViewController:vc animated:YES];
+    }else{
+        // 没找到需要返回的控制器的处理方式
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+- (id)findViewController:(NSString*)className{
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:NSClassFromString(className)]) {
+            return viewController;
+        }
+    }
+    return nil;
+}
 
 ///MARK: 设备请求动态注册
 - (void)requestDynamicRegistWithParam:(NSDictionary *)dic {
@@ -790,14 +924,10 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.blueManager disconnectPeripheral];
 //            [self.navigationController popViewControllerAnimated:YES];
-            UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
-            if (vc) {
-                // 找到需要返回的控制器的处理方式
-                [self.navigationController popToViewController:vc animated:YES];
-            }else{
-                // 没找到需要返回的控制器的处理方式
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            }
+            
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(deviceSafeBinging) object:nil];
+            
+            [self goBackAddDeviceVC];
             
             //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
             [self uploadLocalPsk:randomHex];
@@ -873,15 +1003,6 @@
     NSString *resultValue= [NSString stringWithFormat:@"%@%@",preTempValue,originValue];
     value = resultValue;
     return value;
-}
-
-- (id)findViewController:(NSString*)className{
-    for (UIViewController *viewController in self.navigationController.viewControllers) {
-        if ([viewController isKindOfClass:NSClassFromString(className)]) {
-            return viewController;
-        }
-    }
-    return nil;
 }
 
 - (NSMutableDictionary *)productNameDic {
