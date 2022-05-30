@@ -770,6 +770,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 }];
                 
                 if (self.blueConnectView == nil) {
+                
+                self.blueConnectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+                self.blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
                     
                 [self.view addSubview:self.blueConnectView];
                 [self.blueConnectView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -3890,13 +3893,13 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     return _deviceInfo;
 }
 
-- (UIView *)blueConnectView {
-    if (!_blueConnectView) {
-        _blueConnectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
-        _blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
-    }
-    return _blueConnectView;
-}
+//- (UIView *)blueConnectView {
+//    if (!_blueConnectView) {
+//        _blueConnectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+//        _blueConnectView.backgroundColor = [UIColor colorWithHexString:kNoSelectedHexColor];
+//    }
+//    return _blueConnectView;
+//}
 
 - (UILabel *)blueTipLabel {
     if (!_blueTipLabel) {

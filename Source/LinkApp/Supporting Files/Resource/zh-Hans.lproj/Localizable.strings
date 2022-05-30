@@ -988,3 +988,11 @@
 "cancel_device_binding" = "取消设备绑定";
 "device_binding_overtime" = "设备绑定超时";
 "device_reject_binding" = "设备拒绝绑定";
+"standard_ble_binding" = "标准蓝牙设备绑定";
+"start_binding" = "开始绑定";
+"default_pureble_reset_tip" = "重置设备";
+"default_pureble_reset_detail_tip" = "1. 设备保持电量充足。\n2. 长按复位键（开关），重新进入配对。";
+"reset_device_course" = "重置设备教程";
+"reset_device_course_describe" = "请打开手机蓝牙功能，并将待绑定的BLE设备置于可发现状态";
+"pureBle_binding_fail_tip" = "1.请确认蓝牙设备电量是否充足。\n2.请确认手机蓝牙功能已开启。\n3.如仍未成功，请尝试重启手机与设备蓝牙。";
+"device_binding_fial" = "绑定设备失败";

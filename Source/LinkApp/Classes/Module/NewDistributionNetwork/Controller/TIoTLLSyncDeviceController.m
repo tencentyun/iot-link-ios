@@ -9,6 +9,7 @@
 #import "TIoTLLSyncDeviceCell.h"
 #import "TIoTLLSyncViewController.h"
 #import "TIoTLLSyncDeviceConfigModel.h"
+#import "TIoTConfigResultViewController.h"
 
 @interface TIoTLLSyncDeviceController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BluetoothCentralManagerDelegate>
 
@@ -46,6 +47,7 @@
 @property (nonatomic, strong) UIView *backMaskView; //超时弹框背景遮罩
 @property (nonatomic, assign) BOOL isSafeBinding; //是否支持设备安全绑定
 @property (nonatomic, assign) NSInteger safeBindingTimeout;
+@property (nonatomic, assign) BOOL isPureBleLLsync; //是否是纯蓝牙
 @end
 
 @implementation TIoTLLSyncDeviceController
@@ -170,6 +172,7 @@
         vc.llsyncDeviceVC = self;
         vc.configurationData = self.configdata;
         vc.roomId = self.roomId?:@"";
+        vc.isPureBleLLSyncType = self.isPureBleLLsync;
         [self.navigationController pushViewController:vc animated:YES];
         
         return;
@@ -270,6 +273,21 @@
         
         self.currentSelectedPerpheral = device;
 //        [self.blueManager connectBluetoothPeripheral:device];
+        
+        
+        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+            NSArray *uuidsArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+            if (uuidsArray.count) {
+//                NSString *deviceUUID = uuidsArray[0];
+                CBUUID *deviceUUID = uuidsArray[0];
+                if ([deviceUUID.UUIDString isEqualToString:@"FFE0"]) { //llsync 配网
+                    self.isPureBleLLsync = YES;
+                }else if ([deviceUUID.UUIDString isEqualToString:@"FFF0"]) { //蓝牙辅助配网
+                    self.isPureBleLLsync = NO;
+                }
+            }
+        }
+        
         [self nextClick:nil]; //让跳下一页
     }
 }
@@ -668,6 +686,8 @@
         [weakself performSelector:@selector(deviceSafeBinging) withObject:nil afterDelay:weakself.safeBindingTimeout];
         //接收绑签名后返回LLEvent数据包，并继续绑定
         [self receiveSignatureVerficatedWithOriginHexData:hexstr lenSliceFlag:lenSliceFlag];
+        
+        [self hideAlertView];
     };
 
     av.cancelAction = ^{
@@ -680,6 +700,8 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakself cancelSafeBinding];
         });
+        
+        [self hideAlertView];
     };
 
     self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
@@ -713,7 +735,7 @@
     [MBProgressHUD showError:NSLocalizedString(@"cancel_device_binding", @"取消设备绑定")];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.blueManager disconnectPeripheral];
-        [self goBackAddDeviceVC];
+        [self bindingResultWith:NO];
     });
 }
 
@@ -723,7 +745,7 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(deviceSafeBinging) object:nil];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.blueManager disconnectPeripheral];
-        [self goBackAddDeviceVC];
+        [self bindingResultWith:NO];
     });
 }
 
@@ -732,13 +754,11 @@
     [MBProgressHUD showError:NSLocalizedString(@"device_reject_binding", @"设备拒绝绑定")];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.blueManager disconnectPeripheral];
-        [self goBackAddDeviceVC];
+        [self bindingResultWith:NO];
     });
 }
 
 - (void)goBackAddDeviceVC {
-
-    [self hideAlertView];
 
     UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
     if (vc) {
@@ -927,7 +947,8 @@
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(deviceSafeBinging) object:nil];
             
-            [self goBackAddDeviceVC];
+            //绑定成功
+            [self bindingResultWith:YES];
             
             //TODO: 将local psk 上传服务器,后续有用到（子设备连接有用）
             [self uploadLocalPsk:randomHex];
@@ -969,6 +990,19 @@
     } failure:^(NSString *reason, NSError *error, NSDictionary *dic) {
         
     }];
+}
+
+//MARK:绑定结果跳转
+- (void)bindingResultWith:(BOOL)isSuccess {
+    if (isSuccess) {
+        //绑定成功
+        TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:TIoTConfigHardwareStylePureBleLLsync success:YES devieceData:@{@"deviceName":self.currentDevicename ?:@""}];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else {
+        //绑定失败
+        TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:TIoTConfigHardwareStylePureBleLLsync success:NO devieceData:@{@"deviceName":self.currentDevicename ?:@""}];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (void)stopBlutoothScan {

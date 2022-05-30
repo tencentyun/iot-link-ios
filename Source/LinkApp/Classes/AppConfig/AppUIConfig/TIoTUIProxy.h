@@ -99,7 +99,8 @@ typedef NS_ENUM(NSInteger,WCThemeStyle) {
 typedef NS_ENUM(NSInteger, TIoTConfigHardwareStyle) {
     TIoTConfigHardwareStyleSmartConfig = 0,
     TIoTConfigHardwareStyleSoftAP = 1,
-    TIoTConfigHardwareStyleLLsync = 2
+    TIoTConfigHardwareStyleLLsync = 2, //ble辅助
+    TIoTConfigHardwareStylePureBleLLsync = 3, //纯蓝牙
 };
 
 

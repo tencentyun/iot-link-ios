@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong) UILabel *stepLabel;
 
+@property (nonatomic, strong) UIView *backMaskView; //重置设备教程弹框背景遮罩
+
 @end
 
 @implementation TIoTLLSyncViewController
@@ -32,7 +34,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _networkToken = @"";
-    self.title = NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网");
+    self.title = self.isPureBleLLSyncType? NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"): NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网");
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self setConfigHardwareStyle:TIoTConfigHardwareStyleLLsync];
@@ -41,7 +43,7 @@
 
 - (void)setupUI{
 //    self.title = [_dataDic objectForKey:@"title"];
-    self.title = NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网");
+    self.title = self.isPureBleLLSyncType? NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"): NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网");
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.scrollView];
@@ -78,7 +80,32 @@
 //        make.height.mas_equalTo(24);
     }];
     
+    UILabel *topicDetLabel = [[UILabel alloc]init];
+    UIButton *resetCourseButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
+    if (self.isPureBleLLSyncType == YES) { //纯蓝牙设备显示
+        //字体: 大小 颜色 行间距
+        NSMutableParagraphStyle *pureBleparagraph = [[NSMutableParagraphStyle alloc]init];
+        pureBleparagraph.lineSpacing = 6.0;
+        NSAttributedString *pureBleattributedStr = [[NSAttributedString alloc]initWithString:[_dataDic objectForKey:@"topicDes"] attributes:@{NSFontAttributeName:[UIFont wcPfRegularFontOfSize:14],NSForegroundColorAttributeName:kRGBColor(51, 51, 51),NSParagraphStyleAttributeName:pureBleparagraph}];
+        topicDetLabel.attributedText = pureBleattributedStr;
+        topicDetLabel.numberOfLines = 0;
+        [self.scrollView addSubview:topicDetLabel];
+        [topicDetLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(topicLabel);
+            make.top.equalTo(topicLabel.mas_bottom).offset(5);
+        }];
+        
+        [resetCourseButton setTitle:[_dataDic objectForKey:@"resetCource"] forState:UIControlStateNormal];
+        [resetCourseButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
+        resetCourseButton.titleLabel.font = [UIFont wcPfMediumFontOfSize:14];
+        [resetCourseButton addTarget:self action:@selector(resetDevcieCource) forControlEvents:UIControlEventTouchUpInside];
+        [self.scrollView addSubview:resetCourseButton];
+        [resetCourseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(topicLabel.mas_left);
+            make.top.equalTo(topicDetLabel.mas_bottom);
+        }];
+    }
     
     self.imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_distri_tip"]];
     UIImageView *bgmImageView = [[UIImageView alloc]initWithImage:self.imgView.image];
@@ -92,7 +119,11 @@
         make.centerX.equalTo(self.scrollView);
         make.leading.mas_greaterThanOrEqualTo(kPadding);
         make.trailing.mas_lessThanOrEqualTo(-kPadding);
-        make.top.equalTo(topicLabel.mas_bottom).offset(10);
+        if (self.isPureBleLLSyncType == YES) {
+            make.top.equalTo(resetCourseButton.mas_bottom).offset(10);
+        }else {
+            make.top.equalTo(topicLabel.mas_bottom).offset(10);
+        }
         make.height.mas_equalTo(kImageHeight/kImageWeitht*(kScreenWidth-2*kPadding));
     }];
     
@@ -202,14 +233,60 @@
 }
 
 - (void)nextClick:(UIButton *)sender {
-    TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
-    vc.llsyncDeviceVC = self.llsyncDeviceVC;
-    vc.step = 2;
-    vc.configConnentData = self.configurationData;
-    vc.currentDistributionToken = self.networkToken;
-    vc.roomId = self.roomId;
-    vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
-    [self.navigationController pushViewController:vc animated:YES];
+    if (self.isPureBleLLSyncType == NO) {
+        // 辅助蓝牙设备绑定
+        TIoTTargetWIFIViewController *vc = [[TIoTTargetWIFIViewController alloc] init];
+        vc.llsyncDeviceVC = self.llsyncDeviceVC;
+        vc.step = 2;
+        vc.configConnentData = self.configurationData;
+        vc.currentDistributionToken = self.networkToken;
+        vc.roomId = self.roomId;
+        vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else {
+        //纯蓝牙LLSync设备绑定
+        NSDictionary * wifiInfo = @{@"token":self.networkToken?:@""};
+        TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
+        vc.wifiInfo = wifiInfo;
+        vc.roomId = self.roomId;
+        vc.configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
+        vc.connectGuideData = self.configurationData;
+        [self.navigationController pushViewController:vc animated:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+            self.llsyncDeviceVC.roomId = self.roomId;
+            self.llsyncDeviceVC.currentDistributionToken = self.networkToken;
+            self.llsyncDeviceVC.wifiInfo = wifiInfo;
+            self.llsyncDeviceVC.connectGuideData = self.configurationData[@"WifiSoftAP"][@"connectApGuide"];
+            self.llsyncDeviceVC.configdata = self.configurationData;
+            [self.llsyncDeviceVC startConnectLLSync:vc];
+        });
+    }
+}
+
+///MARK:重置设备教程
+- (void)resetDevcieCource {
+//    __weak typeof(self) weakself = self;
+    TIoTAlertView *av = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];
+    [av alertWithTitle:NSLocalizedString(@"reset_device_course", @"重置设备教程") message:NSLocalizedString(@"reset_device_course_describe", @"请打开手机蓝牙功能，并将待绑定的BLE设备置于可发现状态")
+           cancleTitlt:@"" doneTitle:NSLocalizedString(@"verify", @"确认")];
+    [av showSingleConfrimButton];
+    av.doneAction = ^(NSString * _Nonnull text) {
+        
+    };
+    
+    self.backMaskView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.frame];
+    [[UIApplication sharedApplication].delegate.window addSubview:self.backMaskView];
+    [av showInView:self.backMaskView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideAlertView)];
+    [self.backMaskView addGestureRecognizer:tap];
+}
+
+- (void)hideAlertView {
+    if (self.backMaskView != nil) {
+        [self.backMaskView removeFromSuperview];
+    }
 }
 
 #pragma mark setter or getter
@@ -238,6 +315,18 @@
                      @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"chooseTargetWiFi", @"选择目标WiFi"), NSLocalizedString(@"start_distributionNetwork", @"开始配网")],
                      @"topic": NSLocalizedString(@"setupDevoice_SmartConfig_distributionNetwork", @"将设备设置为一键配网模式"),
                      @"stepDiscribe": smartExploreString
+        };
+    }
+    
+    if (self.isPureBleLLSyncType) {
+        _configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
+        
+        _dataDic = @{@"title":NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"),
+                     @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"start_binding", @"开始绑定")],
+                     @"topic": NSLocalizedString(@"default_pureble_reset_tip", @"重置设备"),
+                     @"topicDes": NSLocalizedString(@"default_pureble_reset_detail_tip", @"1. 设备保持电量充足。\n2. 长按复位键（开关），重新进入配对。"),
+                     @"resetCource":[NSString stringWithFormat:@"%@ >",NSLocalizedString(@"reset_device_course", @"重置设备教程")],
+                     @"stepDiscribe": @""
         };
     }
     

@@ -49,21 +49,54 @@
 }
 
 - (void)setupUI{
-    NSString *title = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAP_distributionNetwork", @"热点配网") : NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网");
+    NSString *title = @"";
+//    _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAP_distributionNetwork", @"热点配网") : NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网");
+    
+    switch (_configHardwareStyle) {
+        case TIoTConfigHardwareStyleSoftAP: {
+            title = NSLocalizedString(@"softAP_distributionNetwork", @"热点配网");
+            break;
+        }case TIoTConfigHardwareStyleSmartConfig: {
+            title = NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网");
+            break;
+        }case TIoTConfigHardwareStylePureBleLLsync: {
+            title = NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定");
+            break;
+        }case TIoTConfigHardwareStyleLLsync: {
+            title = NSLocalizedString(@"llsync_network_title", @"蓝牙辅助配网");
+            break;
+        }
+        default:
+            title = NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网");
+            break;
+    }
     self.title = title;
     self.view.backgroundColor = [UIColor whiteColor];
     
     NSString *imageName = _success ? @"new_distri_success" : @"new_distri_failure";
+    if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+        imageName = _success ? @"binding_success" : @"binding_failure";
+    }
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.image = [UIImage imageNamed:imageName];
     [self.view addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
         make.top.equalTo(self.view).offset(30*kScreenAllHeightScale + [TIoTUIProxy shareUIProxy].navigationBarHeight);
-        make.width.height.mas_equalTo(53.3);
+        if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+            make.width.mas_equalTo(256);
+            make.height.mas_equalTo(160);
+        }else {
+            make.width.height.mas_equalTo(53.3);
+        }
     }];
     
-    NSString *topic = _success ? NSLocalizedString(@"distributionNetworkSuccess_addDeviceSuccess", @"配网完成,设备添加成功") : NSLocalizedString(@"distributionNetwork_failure", @"配网失败");
+    NSString *topic = @"";
+    if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+        topic = _success ? NSLocalizedString(@"distributionNetworkSuccess_addDeviceSuccess", @"配网完成,设备添加成功") : NSLocalizedString(@"device_binding_fial", @"绑定设备失败");
+    }else {
+        topic = _success ? NSLocalizedString(@"distributionNetworkSuccess_addDeviceSuccess", @"配网完成,设备添加成功") : NSLocalizedString(@"distributionNetwork_failure", @"配网失败");
+    }
     UILabel *topicLabel = [[UILabel alloc] init];
     topicLabel.textColor = [UIColor blackColor];
     topicLabel.font = [UIFont wcPfMediumFontOfSize:17];
@@ -77,7 +110,7 @@
         make.height.mas_equalTo(24);
     }];
     
-    NSString *describe = _success ? [NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"device_name", @"设备名称"), [_devieceData objectForKey:@"deviceName"]] : NSLocalizedString(@"", @"请检查以下信息");
+    NSString *describe = _success ? [NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"device_name", @"设备名称"), [_devieceData objectForKey:@"deviceName"]] : NSLocalizedString(@"check_underMessage", @"请检查以下信息");
     UILabel *describeLabel = [[UILabel alloc] init];
     describeLabel.textColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     describeLabel.font = [UIFont wcPfRegularFontOfSize:14];
@@ -91,7 +124,15 @@
     }];
     
     UILabel *stepLabel = [[UILabel alloc] init];
-    NSString *stepLabelText = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAp_connected_failure", @"1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段") :  NSLocalizedString(@"config_connected_failure", @"1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段");
+    NSString *stepLabelText = @"";
+//    _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAp_connected_failure", @"1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段") :  NSLocalizedString(@"config_connected_failure", @"1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段");
+    
+    if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+        stepLabelText = NSLocalizedString(@"pureBle_binding_fail_tip", @"1.请确认蓝牙设备电量是否充足。\n2.请确认手机蓝牙功能已开启。\n3.如仍未成功，请尝试重启手机与设备蓝牙。");
+    }else {
+        stepLabelText = _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"softAp_connected_failure", @"1. 确认设备处于热点模式（指示灯慢闪）\n2. 确认是否成功连接到设备热点\n3. 核对家庭WiFi密码是否正确\n4. 确认路由设备是否为2.4G WiFi频段") :  NSLocalizedString(@"config_connected_failure", @"1. 确认设备处于一键配网模式（指示灯快闪）\n2. 核对家庭WiFi密码是否正确\n3. 确认路由设备是否为2.4G WiFi频段");
+    }
+    
     NSMutableParagraphStyle * paragraph = [[NSMutableParagraphStyle alloc]init];
     paragraph.lineSpacing = 6.0;
     // 字体: 大小 颜色 行间距
@@ -117,6 +158,10 @@
             make.left.equalTo(topicLabel);
             make.top.equalTo(stepLabel.mas_bottom).offset(5);
         }];
+        
+        if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+            moreResultBtn.hidden = YES;
+        }
     }
     
     NSString *changeTitle = _success ? NSLocalizedString(@"continue_addDevice", @"继续添加其他设备") : [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"changeTo", @"切换到"), _configHardwareStyle == TIoTConfigHardwareStyleSoftAP ? NSLocalizedString(@"smartConf_distributionNetwork", @"一键配网") : NSLocalizedString(@"softAP_distributionNetwork", @"热点配网")];
@@ -124,13 +169,28 @@
     [changeButton setTitle:changeTitle forState:UIControlStateNormal];
     [changeButton setTitleColor:[UIColor colorWithHexString:kIntelligentMainHexColor] forState:UIControlStateNormal];
     changeButton.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
-    [changeButton addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
+    if (_success) {
+        [changeButton addTarget:self action:@selector(changeClick:) forControlEvents:UIControlEventTouchUpInside];
+    }else {
+        if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+            [changeButton setTitle:@"" forState:UIControlStateNormal];
+            
+        }
+    }
     [self.view addSubview:changeButton];
     [changeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         if (_success) {
-            make.top.equalTo(describeLabel.mas_bottom).offset(291*kScreenAllHeightScale);
+            NSInteger successHeight = 291*kScreenAllHeightScale;
+            if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+                successHeight = 181*kScreenAllHeightScale;
+            }
+            make.top.equalTo(describeLabel.mas_bottom).offset(successHeight);
         }else {
-            make.top.equalTo(describeLabel.mas_bottom).offset(320*kScreenAllHeightScale);
+            NSInteger failHeight = 320*kScreenAllHeightScale;
+            if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+                failHeight = 210*kScreenAllHeightScale;
+            }
+            make.top.equalTo(describeLabel.mas_bottom).offset(failHeight);
         }
         
         make.centerX.equalTo(self.view);
@@ -145,7 +205,7 @@
     nextBtn.titleLabel.font = [UIFont wcPfRegularFontOfSize:17];
     [nextBtn addTarget:self action:@selector(nextClick:) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.backgroundColor = [UIColor colorWithHexString:kIntelligentMainHexColor];
-    nextBtn.layer.cornerRadius = 2;
+    nextBtn.layer.cornerRadius = 20;
     [self.view addSubview:nextBtn];
     [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(40);
@@ -160,6 +220,19 @@
     [self goBackClick:YES];
 }
 
+//MARK:返回特定控制器
+- (void)popTargetViewControllerWithClassName:(NSString *)callName {
+    UIViewController *vc = [self findViewController:callName?:@""];
+    if (vc) {
+        // 找到需要返回的控制器的处理方式
+        [self.navigationController popToViewController:vc animated:YES];
+    }else{
+        // 没找到需要返回的控制器的处理方式
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+//MARK: 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
 - (id)findViewController:(NSString*)className{
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:NSClassFromString(className)]) {
@@ -199,6 +272,11 @@
             [self changeConfig:NSLocalizedString(@"soft_ap", @"自助配网")];
         }
         
+    }else {
+         if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+             //返回特定控制器
+             [self popTargetViewControllerWithClassName:@"TIoTNewAddEquipmentViewController"];
+        }
     }
 }
 
@@ -226,15 +304,8 @@
 
 - (void)goBackClick:(BOOL)isBack {
     if (isBack) {
-        // 查找导航栏里的控制器数组,找到返回查找的控制器,没找到返回nil;
-        UIViewController *vc = [self findViewController:@"TIoTNewAddEquipmentViewController"];
-        if (vc) {
-            // 找到需要返回的控制器的处理方式
-            [self.navigationController popToViewController:vc animated:YES];
-        }else{
-            // 没找到需要返回的控制器的处理方式
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
+        //返回特定控制器
+        [self popTargetViewControllerWithClassName:@"TIoTNewAddEquipmentViewController"];
     }
 }
 
@@ -266,6 +337,9 @@
         }else if (_configHardwareStyle == TIoTConfigHardwareStyleSmartConfig) {
             
             [self changeConfig:NSLocalizedString(@"smart_config", @"智能配网")];
+        }else if (_configHardwareStyle == TIoTConfigHardwareStylePureBleLLsync) {
+            
+            [self popTargetViewControllerWithClassName:@"TIoTLLSyncViewController"];
         }
         
     } else {
