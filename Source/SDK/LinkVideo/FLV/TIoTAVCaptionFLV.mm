@@ -233,7 +233,6 @@ dispatch_queue_t muxerQueue;
 
 - (void)setVideoBitRate:(int32_t)bitRate {
     
-//    int ret = (rand()%500+1)*1000;
     int32_t ret = bitRate;
     [self.h264Encoder setEncoderBitrateBps:ret];
     NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
@@ -470,9 +469,9 @@ int encodeFlvData(int type, NSData *packetData) {
 
 -(BOOL) startCapture {
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths firstObject];
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths firstObject];
     
 //    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264"];
 //    [fileManager removeItemAtPath:self.h264File error:nil];

@@ -128,7 +128,7 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
-#define MAX_AVG_LENGTH 20
+#define MAX_AVG_LENGTH 10
 typedef struct {
     int32_t buf[MAX_AVG_LENGTH];
     int32_t len;
@@ -337,7 +337,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [systemAvCapture startCapture];
     
     _p2p_wl_avg_ctx = {0};
-    _p2p_wl_avg_ctx.len = 20;
+    _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
     _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
 }
 
@@ -352,9 +352,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     int32_t now_video_rate = systemAvCapture.getVideoBitRate;
     
-    for (int i =0; i < _p2p_wl_avg_ctx.len; i++) {
-        printf("\n stream_buf_con==%d \n",_p2p_wl_avg_ctx.buf[i]);
-    }
+//    for (int i =0; i < _p2p_wl_avg_ctx.len; i++) {
+//        printf("\n stream_buf_con==%d \n",_p2p_wl_avg_ctx.buf[i]);
+//    }
     NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
     
     // 降码率

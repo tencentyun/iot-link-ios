@@ -171,7 +171,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 
 - (void)setEncoderBitrateBps:(uint32_t)bitRate {
     
-    if (bitRate > _width * _height) {
+    if ((bitRate > _width * _height) || (bitRate < 10000) || (_encoderBitrateBps == bitRate)) {
         return;
     }
     
