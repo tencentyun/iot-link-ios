@@ -8,8 +8,7 @@
 #import "TIoTStepTipView.h"
 #import "TIoTTargetWIFIViewController.h"
 #import "UIImageView+WebCache.h"
-
-
+#import "TIoTLLSyncChooseDeviceVC.h"
 
 @interface TIoTLLSyncViewController ()
 
@@ -25,7 +24,6 @@
 @property (nonatomic, strong) UILabel *stepLabel;
 
 @property (nonatomic, strong) UIView *backMaskView; //重置设备教程弹框背景遮罩
-
 @end
 
 @implementation TIoTLLSyncViewController
@@ -244,23 +242,38 @@
         vc.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
         [self.navigationController pushViewController:vc animated:YES];
     }else {
-        //纯蓝牙LLSync设备绑定
-        NSDictionary * wifiInfo = @{@"token":self.networkToken?:@""};
-        TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
-        vc.wifiInfo = wifiInfo;
-        vc.roomId = self.roomId;
-        vc.configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
-        vc.connectGuideData = self.configurationData;
-        [self.navigationController pushViewController:vc animated:YES];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
-            self.llsyncDeviceVC.roomId = self.roomId;
-            self.llsyncDeviceVC.currentDistributionToken = self.networkToken;
-            self.llsyncDeviceVC.wifiInfo = wifiInfo;
-            self.llsyncDeviceVC.connectGuideData = self.configurationData[@"WifiSoftAP"][@"connectApGuide"];
-            self.llsyncDeviceVC.configdata = self.configurationData;
-            [self.llsyncDeviceVC startConnectLLSync:vc];
-        });
+        
+        if (self.isFromProductsList) {
+            //从发现设备页产品类别中跳转过来的
+            TIoTLLSyncChooseDeviceVC *choiceDevice = [[TIoTLLSyncChooseDeviceVC alloc]init];
+            choiceDevice.configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
+            choiceDevice.llsyncDeviceVC = self.llsyncDeviceVC;
+            choiceDevice.roomId = self.roomId;
+            choiceDevice.currentDistributionToken = self.networkToken;
+            choiceDevice.configdata = self.configurationData;
+            choiceDevice.isFromProductsList = self.isFromProductsList;
+            [self.navigationController pushViewController:choiceDevice animated:YES];
+            
+        }else {
+            //纯蓝牙LLSync设备绑定
+            NSDictionary * wifiInfo = @{@"token":self.networkToken?:@""};
+            TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
+            vc.wifiInfo = wifiInfo;
+            vc.roomId = self.roomId;
+            vc.configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
+            vc.connectGuideData = self.configurationData;
+            [self.navigationController pushViewController:vc animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.llsyncDeviceVC.configHardwareStyle = TIoTConfigHardwareStyleLLsync;
+                self.llsyncDeviceVC.roomId = self.roomId;
+                self.llsyncDeviceVC.currentDistributionToken = self.networkToken;
+                self.llsyncDeviceVC.wifiInfo = wifiInfo;
+                self.llsyncDeviceVC.connectGuideData = self.configurationData[@"WifiSoftAP"][@"connectApGuide"]?:@{};
+                self.llsyncDeviceVC.configdata = self.configurationData;
+                [self.llsyncDeviceVC startConnectLLSync:vc];
+            });
+            
+        }
     }
 }
 
@@ -323,6 +336,17 @@
         
         _dataDic = @{@"title":NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"),
                      @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"start_binding", @"开始绑定")],
+                     @"topic": NSLocalizedString(@"default_pureble_reset_tip", @"重置设备"),
+                     @"topicDes": NSLocalizedString(@"default_pureble_reset_detail_tip", @"1. 设备保持电量充足。\n2. 长按复位键（开关），重新进入配对。"),
+                     @"resetCource":[NSString stringWithFormat:@"%@ >",NSLocalizedString(@"reset_device_course", @"重置设备教程")],
+                     @"stepDiscribe": @""
+        };
+    }
+    
+    if (self.isFromProductsList) {
+        
+        _dataDic = @{@"title":NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"),
+                     @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"selected_Device",  @"选择设备"), NSLocalizedString(@"start_binding", @"开始绑定")],
                      @"topic": NSLocalizedString(@"default_pureble_reset_tip", @"重置设备"),
                      @"topicDes": NSLocalizedString(@"default_pureble_reset_detail_tip", @"1. 设备保持电量充足。\n2. 长按复位键（开关），重新进入配对。"),
                      @"resetCource":[NSString stringWithFormat:@"%@ >",NSLocalizedString(@"reset_device_course", @"重置设备教程")],

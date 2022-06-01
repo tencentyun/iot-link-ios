@@ -167,15 +167,35 @@
 
 - (void)nextClick:(UIButton *)sender {
     if (self.isFromHome) {
-        //从首页上方蓝牙模块进入的
-        TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
-        vc.llsyncDeviceVC = self;
-        vc.configurationData = self.configdata;
-        vc.roomId = self.roomId?:@"";
-        vc.isPureBleLLSyncType = self.isPureBleLLsync;
-        [self.navigationController pushViewController:vc animated:YES];
+        if (self.isFromProductList) {
+            //纯蓝牙LLSync设备绑定, 从设备发现页产品类别流程中进入
+            
+            NSDictionary * wifiInfo = @{@"token":self.currentDistributionToken?:@""};
+            TIoTStartConfigViewController *vc = [[TIoTStartConfigViewController alloc] init];
+            vc.wifiInfo = wifiInfo;
+            vc.roomId = self.roomId;
+            vc.isFromProductList = self.isFromProductList;
+            vc.configHardwareStyle = TIoTConfigHardwareStylePureBleLLsync;
+            vc.connectGuideData = self.configdata;
+            [self.navigationController pushViewController:vc animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                //LLSync纯蓝牙设备连接
+                [self startConnectLLSync:vc];
+            });
+            
+            return;
+        }else {
+            //从首页上方蓝牙模块进入的
+            TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
+            vc.llsyncDeviceVC = self;
+            vc.configurationData = self.configdata;
+            vc.roomId = self.roomId?:@"";
+            vc.isPureBleLLSyncType = self.isPureBleLLsync;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            return;
+        }
         
-        return;
     }
     
     self.resultvc = [[TIoTStartConfigViewController alloc] init];
@@ -349,13 +369,55 @@
             NSString *hexstr = [NSString transformStringWithData:manufacturerData];
             NSString *producthex = [hexstr substringWithRange:NSMakeRange(18, hexstr.length-18)];
             NSString *productstr = [NSString stringFromHexString:producthex];
-            [self.tempProductNameArray addObject:productstr];
             
-            if (self.currentProductId == nil) {
-                [self getProductsNameWithproductIDsArray:@[productstr]];
+            if (!self.isFromProductList) { //设备发现页顶部扫描进入
+                [self.tempProductNameArray addObject:productstr];
+                
+                if (self.currentProductId == nil) {
+                    [self getProductsNameWithproductIDsArray:@[productstr]];
+                }
+            }else { //从设备发现页产品类别中选中特定图标进入
+                if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+                    NSArray *uuidsArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+                    if (uuidsArray.count) {
+                        CBUUID *deviceUUID = uuidsArray[0];
+                        if ([deviceUUID.UUIDString isEqualToString:@"FFE0"]) { //llsync 配网
+                            [self.tempProductNameArray addObject:productstr];
+                            
+                            if (self.currentProductId == nil) {
+                                [self getProductsNameWithproductIDsArray:@[productstr]];
+                            }
+                        }
+                    }
+                }
+            }
+//            [self.tempProductNameArray addObject:productstr];
+//
+//            if (self.currentProductId == nil) {
+//                [self getProductsNameWithproductIDsArray:@[productstr]];
+//            }
+        }
+    }];
+}
+
+- (NSArray<CBPeripheral *> *)getPureBleScanDevices {
+    NSMutableArray<CBPeripheral *> * tempBlueDevices = [NSMutableArray new];
+    [self.originBlueDevices.allKeys enumerateObjectsUsingBlock:^(CBPeripheral * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CBPeripheral *device = (CBPeripheral*)obj;
+        NSDictionary<NSString *,id> *advertisementData = self.originBlueDevices[device];
+        
+        if ([advertisementData.allKeys containsObject:@"kCBAdvDataServiceUUIDs"]) {
+            NSArray *uuidsArray = advertisementData[@"kCBAdvDataServiceUUIDs"];
+            if (uuidsArray.count) {
+                CBUUID *deviceUUID = uuidsArray[0];
+                if ([deviceUUID.UUIDString isEqualToString:@"FFE0"]) { //llsync 配网
+                    [tempBlueDevices addObject:obj];
+                }
             }
         }
     }];
+
+    return tempBlueDevices;
 }
 
 #pragma mark - BluetoothCentralManagerDelegate
@@ -363,7 +425,12 @@
 - (void)scanPerpheralsUpdatePerpherals:(NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *)perphersArr {
     self.originBlueDevices = perphersArr;
     
-    self.blueDevices = perphersArr.allKeys;
+    if (self.isFromProductList) { //从设备发现页产品类别中选中特定图标进入
+        self.blueDevices = [self getPureBleScanDevices];
+    }else { //从发现设备页面顶部扫描设备进入
+        self.blueDevices = perphersArr.allKeys;
+    }
+    
     [self.collectionView reloadData];
     
     /*if (self.repeatCurrentPerheral) {
@@ -484,12 +551,19 @@
 }
 //首页蓝牙搜索头部调用
 - (void)startConnectLLSync:(TIoTStartConfigViewController *)startconfigVC {
+    
+    self.blueManager.delegate = self;
+    
     self.resultvc = startconfigVC;
     ///设置UI进度
     self.resultvc.connectStepTipView.step = 0;
     
+    if (self.currentSelectedPerpheral) {
     [self.blueManager connectBluetoothPeripheral:self.currentSelectedPerpheral];
     // 连接之后，会走到上面的send 接口发送E0
+    }else {
+        [MBProgressHUD showError:NSLocalizedString(@"scan_no_specified_device", @"无法扫描到指定蓝牙设备")];
+    }
 }
 
 //发送数据后，蓝牙回调
@@ -961,6 +1035,10 @@
             [MBProgressHUD showMessage:@"绑定纯蓝牙设备失败" icon:@""];
             [MBProgressHUD showMessage:NSLocalizedString(@"bind_LLSync_device_failure", @"绑定纯蓝牙设备失败") icon:@""];
             [self.blueManager disconnectPeripheral];
+            
+            TIoTConfigResultViewController *vc = [[TIoTConfigResultViewController alloc] initWithConfigHardwareStyle:TIoTConfigHardwareStylePureBleLLsync success:NO devieceData:self.configdata];
+            [self.navigationController pushViewController:vc animated:YES];
+            
         });
     }];
 }

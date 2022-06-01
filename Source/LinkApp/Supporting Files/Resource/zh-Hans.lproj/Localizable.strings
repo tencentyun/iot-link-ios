@@ -996,3 +996,5 @@
 "reset_device_course_describe" = "请打开手机蓝牙功能，并将待绑定的BLE设备置于可发现状态";
 "pureBle_binding_fail_tip" = "1.请确认蓝牙设备电量是否充足。\n2.请确认手机蓝牙功能已开启。\n3.如仍未成功，请尝试重启手机与设备蓝牙。";
 "device_binding_fial" = "绑定设备失败";
+"scan_no_specified_device" = "无法扫描到指定蓝牙设备";
+"click_binding_devcie" = "点击需要绑定的设备";

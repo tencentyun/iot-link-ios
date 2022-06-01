@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSDictionary *configdata; //所有数据
 
+@property (nonatomic, assign) BOOL isFromProductList; //llsync 纯蓝牙设备绑定是否从设备发现页产品类别流程中进入 
 //原始蓝牙扫描数据包含广播报文
 @property (nonatomic, copy) NSDictionary<CBPeripheral *,NSDictionary<NSString *,id> *> *originBlueDevices;
 - (void)changeContentArea ;

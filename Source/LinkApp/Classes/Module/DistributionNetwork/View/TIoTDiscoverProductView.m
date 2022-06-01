@@ -12,6 +12,12 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *productArr;
 @property (nonatomic, strong) UIView *tableFooterView;
+@property (nonatomic, strong) UIButton *discoverHelpBtn;
+@property (nonatomic, strong) UIButton *discoverScanBtn;
+@property (nonatomic, strong) UIButton *discoverHeaderHelpBtn;
+@property (nonatomic, strong) UIButton *discoverHeaderScanBtn;
+@property (nonatomic, strong) UIButton *notFoundHelpBtn;
+@property (nonatomic, strong) UIButton *notFoundScanBtn;
 @end
 
 @implementation TIoTDiscoverProductView
@@ -62,23 +68,23 @@
         make.width.height.mas_equalTo(23.1);
     }];
     
-    UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
-    [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:helpBtn];
-    [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.discoverHelpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.discoverHelpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
+    [self.discoverHelpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.discoverHelpBtn];
+    [self.discoverHelpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self).offset(-10);
         make.top.equalTo(self).offset(6.5);
         make.width.height.mas_equalTo(34);
     }];
     
-    UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
-    [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:scanBtn];
-    [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(helpBtn.mas_left).offset(-10);
-        make.top.width.height.equalTo(helpBtn);
+    self.discoverScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.discoverScanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
+    [self.discoverScanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.discoverScanBtn];
+    [self.discoverScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.discoverHelpBtn.mas_left).offset(-10);
+        make.top.width.height.equalTo(self.discoverHelpBtn);
     }];
 }
 
@@ -109,23 +115,23 @@
         make.centerY.equalTo(headerView);
     }];
     
-    UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
-    [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:helpBtn];
-    [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.discoverHeaderHelpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.discoverHeaderHelpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
+    [self.discoverHeaderHelpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:self.discoverHeaderHelpBtn];
+    [self.discoverHeaderHelpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(headerView).offset(-10);
         make.top.equalTo(headerView).offset(6);
         make.width.height.mas_equalTo(34);
     }];
     
-    UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
-    [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:scanBtn];
-    [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(helpBtn.mas_left).offset(-10);
-        make.top.width.height.equalTo(helpBtn);
+    self.discoverHeaderScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.discoverHeaderScanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
+    [self.discoverHeaderScanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:self.discoverHeaderScanBtn];
+    [self.discoverHeaderScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.discoverHeaderHelpBtn.mas_left).offset(-10);
+        make.top.width.height.equalTo(self.discoverHeaderHelpBtn);
     }];
     
     self.tableView.tableHeaderView = headerView;
@@ -156,23 +162,23 @@
         make.width.height.mas_equalTo(23.5);
     }];
 
-    UIButton *helpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
-    [helpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:helpBtn];
-    [helpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.notFoundHelpBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.notFoundHelpBtn setImage:[UIImage imageNamed:@"new_add_help"] forState:UIControlStateNormal];
+    [self.notFoundHelpBtn addTarget:self action:@selector(help) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.notFoundHelpBtn];
+    [self.notFoundHelpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self).offset(-10);
         make.top.equalTo(self).offset(6.5);
         make.width.height.mas_equalTo(34);
     }];
 
-    UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [scanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
-    [scanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:scanBtn];
-    [scanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(helpBtn.mas_left).offset(-10);
-        make.top.width.height.equalTo(helpBtn);
+    self.notFoundScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.notFoundScanBtn setImage:[UIImage imageNamed:@"new_add_scan"] forState:UIControlStateNormal];
+    [self.notFoundScanBtn addTarget:self action:@selector(scan) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.notFoundScanBtn];
+    [self.notFoundScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.notFoundHelpBtn.mas_left).offset(-10);
+        make.top.width.height.equalTo(self.notFoundHelpBtn);
     }];
 
     UIButton *retryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -262,4 +268,16 @@
     }
 }
 
+- (void)hideScanAction {
+    self.discoverScanBtn.hidden = YES;
+    self.discoverHeaderScanBtn.hidden = YES;
+    self.notFoundScanBtn.hidden = YES;
+    
+}
+
+- (void)hideHelpAction {
+    self.discoverHelpBtn.hidden = YES;
+    self.discoverHeaderHelpBtn.hidden = YES;
+    self.notFoundHelpBtn.hidden = YES;
+}
 @end

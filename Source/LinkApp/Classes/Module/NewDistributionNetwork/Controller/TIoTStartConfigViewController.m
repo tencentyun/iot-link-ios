@@ -395,10 +395,17 @@ static dispatch_once_t onceToken;
         }
         case TIoTConfigHardwareStylePureBleLLsync: {
             
+            NSArray *tipArr = @[];
+            if (self.isFromProductList) {
+                tipArr = @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"selected_Device",  @"选择设备"), NSLocalizedString(@"start_binding", @"开始绑定")];
+            }else {
+                tipArr = @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"start_binding", @"开始绑定")];
+            }
             _dataDic = @{@"title": NSLocalizedString(@"standard_ble_binding", @"标准蓝牙设备绑定"),
-                         @"stepTipArr": @[NSLocalizedString(@"setHardware",  @"配置硬件"), NSLocalizedString(@"start_binding", @"开始绑定")],
+                         @"stepTipArr": tipArr,
                          @"connectStepTipArr": @[NSLocalizedString(@"phone_device_connect", @"手机与设备连接成功"), NSLocalizedString(@"send_DeveceMassge", @"向设备发送信息成功"), NSLocalizedString(@"device_clound_connect", @"设备连接云端成功"), NSLocalizedString(@"init_success", @"初始化成功")]
             };
+            
             [self setupUI];
         }
             break;

@@ -262,11 +262,16 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)jumpllsyncVC {
+- (void)jumpllsyncVC:(BOOL)isPureBle {
     TIoTLLSyncViewController *vc = [[TIoTLLSyncViewController alloc] init];
     vc.configurationData = self.configData;
-    vc.llsyncDeviceVC = nil;
-        
+    if (isPureBle) {
+        vc.llsyncDeviceVC = self.llsyncDeviceVC;
+    }else {
+        vc.llsyncDeviceVC = nil;
+    }
+    vc.isFromProductsList = isPureBle; //纯蓝牙设备从产品类别列表中跳转（点击特定图标是纯蓝牙设备），纯蓝牙llsync 和 设备发现页产品类别列表 bool 一致
+    vc.isPureBleLLSyncType = isPureBle;
     vc.roomId = self.roomId?:@"";
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -382,6 +387,9 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                         if ([protocolTypeString isEqualToString:@"custom"] && [netTypeString isEqualToString:@"ble"]) {
                             //进入h5面板绑定蓝牙设备
                             [self enterBluetoothSearchWithProductID:productId];
+                        }else if ([protocolTypeString isEqualToString:@"standard"] && [netTypeString isEqualToString:@"ble"]) {
+                            //纯蓝牙LLSync 设备绑定
+                            [self jumpllsyncVC:YES];
                         }else {
                             //走正常配网流程
                             [self getProductsConfig:productId];
@@ -417,7 +425,7 @@ static NSString *headerId2 = @"TIoTProductSectionHeader2";
                     return;
                 }else if  ([configType isEqualToString:@"llsyncble"]) {
                     
-                    [self jumpllsyncVC];
+                    [self jumpllsyncVC:NO];
                     return;
                 }
             }

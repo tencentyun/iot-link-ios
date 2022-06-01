@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) DiscoverDeviceStatus status;
 
 - (void)changeTableFooterView:(UIView *)view;
+- (void)hideScanAction;
+- (void)hideHelpAction;
 @end
 
 NS_ASSUME_NONNULL_END
