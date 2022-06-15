@@ -1300,6 +1300,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self.player setOptionValue:@"8000" forKey:@"ar" ofCategory:kIJKFFOptionCategoryCodec];
 //        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
         
+        [self.player setAudioSpeed:1.5f];
+        
     }else {
         // 2.通过裸流服务拉流
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES; //是否保存到 document 目录 video.data 文件
