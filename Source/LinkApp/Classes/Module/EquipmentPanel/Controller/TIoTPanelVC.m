@@ -268,62 +268,62 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)detectionNetworkStatus  {
     
     self.isNetworkBreak = YES;
-    
+    __weak typeof(self)WeakSelf = self;
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
                 //"状态不知道"
-                self.isNetworkBreak = NO;
+                WeakSelf.isNetworkBreak = NO;
                 break;
             case NetworkReachabilityStatusNotReachable:
                 //"没网络"
                 // RTC App端和设备端通话中 断网监听
-                self.isNetworkBreak = NO;
+                WeakSelf.isNetworkBreak = NO;
                 //APP侧断网 p2p通话时断开，P2P 需要及时stop
-                if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && self.isP2PVideoDevice == YES) {
-                    [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+                if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && WeakSelf.isP2PVideoDevice == YES) {
+                    [[TIoTCoreXP2PBridge sharedInstance] stopService: WeakSelf.deviceName?:@""];
                 }
                 
                 //APP侧断网提醒
-                [self noNetworkHungupAction];
+                [WeakSelf noNetworkHungupAction];
                 
                 //APP侧断网，video && 通话页面 单独处理APP断网计时器 只走一次
-                [self disconnectedAppNetP2PStartTimer];
+                [WeakSelf disconnectedAppNetP2PStartTimer];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
                 //"WIFI"
-                if (self.isNetworkBreak == NO) {
-                    if (self.isP2PVideoDevice == YES) {
+                if (WeakSelf.isNetworkBreak == NO) {
+                    if (WeakSelf.isP2PVideoDevice == YES) {
                         //APP侧断网后重连 p2p 断网重连
-                        [self reconnectNetworkActioin];
+                        [WeakSelf reconnectNetworkActioin];
                     }else {
                         //纯蓝牙断网重连
-                    self.deviceInfo = nil;
-                    self.detailStructTpyeTimesDic = nil;
-                    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
-                    [self getProductsConfig];
+                        WeakSelf.deviceInfo = nil;
+                        WeakSelf.detailStructTpyeTimesDic = nil;
+                        WeakSelf.deviceInfo.deviceId = WeakSelf.deviceDic[@"DeviceId"];
+                    [WeakSelf getProductsConfig];
                     }
                 }
-                self.isNetworkBreak = YES;
+                WeakSelf.isNetworkBreak = YES;
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
                 //"移动网络"
-                if (self.isNetworkBreak == NO) {
-                    if (self.isP2PVideoDevice == YES) {
+                if (WeakSelf.isNetworkBreak == NO) {
+                    if (WeakSelf.isP2PVideoDevice == YES) {
                         //APP侧断网后重连 p2p 断网重连
-                        [self reconnectNetworkActioin];
+                        [WeakSelf reconnectNetworkActioin];
                     }else {
                         //纯蓝牙断网重连
-                    self.deviceInfo = nil;
-                    self.detailStructTpyeTimesDic = nil;
-                    self.deviceInfo.deviceId = self.deviceDic[@"DeviceId"];
-                    [self getProductsConfig];
+                        WeakSelf.deviceInfo = nil;
+                        WeakSelf.detailStructTpyeTimesDic = nil;
+                        WeakSelf.deviceInfo.deviceId = WeakSelf.deviceDic[@"DeviceId"];
+                    [WeakSelf getProductsConfig];
                     }
                 }
-                self.isNetworkBreak = YES;
+                WeakSelf.isNetworkBreak = YES;
                 break;
             default:
-                self.isNetworkBreak = NO;
+                WeakSelf.isNetworkBreak = NO;
                 break;
         }
     }];
