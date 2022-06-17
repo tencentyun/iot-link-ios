@@ -1339,4 +1339,14 @@
 - (void)trtcShowAppCalledVideoVC {
     [self.statusManager showAppCalledVideoVC];
 }
+
+///当前top是不是TRTC VC
+- (BOOL)trtcIsTopVC {
+    BOOL isTRTCTopVC = NO;
+    UIViewController *topVC = [TIoTCoreUtil topViewController];
+    if (_callVideoVC == topVC || _callAudioVC == topVC) {
+        isTRTCTopVC = YES;
+    }
+    return isTRTCTopVC;
+}
 @end

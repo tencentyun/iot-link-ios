@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)otherAnswered;
 - (void)hangupTapped;    //挂断
 - (void)refreshPlayer; //刷新播放器
+- (BOOL)isEnterRoom; //是否在通话页面中
 @end
 
 NS_ASSUME_NONNULL_END

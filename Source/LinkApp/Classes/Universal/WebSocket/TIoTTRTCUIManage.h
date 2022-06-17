@@ -65,6 +65,9 @@ typedef void(^TIoTAddSocketNotifitionBlock)(NSArray *devIds);
 ///p2pVieo APP被叫 推出音、视频请求页面
 //- (void)showAppCalledVideoVC;
 - (void)trtcShowAppCalledVideoVC;
+
+///当前top是不是TRTC VC
+- (BOOL)trtcIsTopVC;
 @end
 
 NS_ASSUME_NONNULL_END

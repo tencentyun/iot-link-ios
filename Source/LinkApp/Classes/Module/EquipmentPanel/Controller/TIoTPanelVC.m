@@ -458,7 +458,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 - (void)showOfflineTip
 {
-    
+    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] || [[TIoTTRTCUIManage sharedManager] trtcIsTopVC]) {
+        [MBProgressHUD showMessage:NSLocalizedString(@"device_offline", @"设备已离线") icon:@""];
+        return;
+    }
 //        TIoTTipView *vc = [[TIoTTipView alloc] init];
         __weak typeof(self)WeakSelf = self;
     self.tipAlertView = [[TIoTAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds withTopImage:nil];

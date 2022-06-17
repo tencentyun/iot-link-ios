@@ -704,6 +704,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
 }
 
+//是否在通话页面中
+- (BOOL)isEnterRoom {
+    if (self.topView) {
+        return self.topView.hidden;
+    }else {
+        return NO;
+    }
+}
+
 #pragma mark - 懒加载
 -(UIView *)previewBottomView{
     if (!_previewBottomView) {
