@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) CFTimeInterval endIpcP2P;
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @property (nonatomic, assign) BOOL is_reconnect_xp2p; //是否正在重连，指设备断网的重连，app重连不走这个
+@property (nonatomic, assign) BOOL is_reconnect_break; //退出页面，停止重连
 @end
 
 @implementation TIoTDemoPreviewDeviceVC
@@ -99,7 +100,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    self.is_reconnect_break = NO;
+    
     _is_ijkPlayer_stream = YES;
     //关闭日志
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
@@ -197,6 +199,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self ratetePortrait];
     
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self addRotateNotification];
 }
 
 - (void)dealloc{
@@ -1181,6 +1188,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)resconnectXp2pRequestInfo:(NSString *)DeviceName {
+    if (self.is_reconnect_break) {
+        //退出页面，停止重连
+        return;
+    }
+    
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
@@ -1240,6 +1252,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)nav_customBack {
+    self.is_reconnect_break = YES;
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     [self.navigationController popViewControllerAnimated:YES];
@@ -1594,6 +1607,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 //需注意此方法全局覆盖，别的地方就收不到断网通知了
 - (void)registerNetworkNotifications {
+    __weak typeof(self)WeakSelf = self;
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
             case NetworkReachabilityStatusUnknown:
@@ -1601,15 +1615,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 break;
             case NetworkReachabilityStatusNotReachable:
                 [MBProgressHUD showError:@"无网络"];
-                [self appNetWorkBreak];
+                [WeakSelf appNetWorkBreak];
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
                 [MBProgressHUD showError:@"WIFI"];
-                [self appNetWorkResume];
+                [WeakSelf appNetWorkResume];
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
                 [MBProgressHUD showError:@"移动网络"];
-                [self appNetWorkResume];
+                [WeakSelf appNetWorkResume];
                 break;
             default:
                 break;
