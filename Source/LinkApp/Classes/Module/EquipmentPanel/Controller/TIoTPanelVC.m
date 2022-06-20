@@ -4058,14 +4058,14 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         
         //重新拉流/推流
 //        [self refreshP2PPlayerAndStartCapture];
-        
+        __weak typeof(self)WeakSelf = self;
         [self getDeviceStatusWithType:action_live qualityType:quality_standard completion:^(BOOL finished) {
             if (finished) {
-                self.is_reconnect_xp2p = NO; //连通成功后，复位标记
+                WeakSelf.is_reconnect_xp2p = NO; //连通成功后，复位标记
                 //重新拉流/推流
-                [self refreshP2PPlayerAndStartCapture];
+                [WeakSelf refreshP2PPlayerAndStartCapture];
             }else {
-                [self refushXP2Pinfo];
+                [WeakSelf refushXP2Pinfo];
             }
             
         }];
