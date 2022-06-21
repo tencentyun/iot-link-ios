@@ -1434,6 +1434,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         //解绑请求成功
         if ([self.bleNewType isEqualToString:@"ble"]) {
             [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:@"07"];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.blueManager disconnectPeripheral];
+            });
         }
         
         [HXYNotice addUpdateDeviceListPost];
@@ -1483,6 +1487,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 //失败
                 [weakSelf.blueManager sendNewLLSynvWithPeripheral:weakSelf.currentConnectedPerpheral Characteristic:weakSelf.characteristicFFE1 LLDeviceInfo:@"08"];
             }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.blueManager disconnectPeripheral];
+            });
         }
         
     };
@@ -1734,7 +1741,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [self writeLinkResultInDeviceWithSuccess:YES];
         }else if ([cmdtype isEqualToString:@"07"]) {
             //解除鉴权成功 （解除绑定）
-            [self.blueManager disconnectPeripheral];
+//            [self.blueManager disconnectPeripheral];
         }else if ([cmdtype isEqualToString:@"08"]) {
             
             //连接蓝牙设备成功
@@ -2871,7 +2878,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *writeInfo = [NSString stringWithFormat:@"040014%@",unBindedRequestSignInfo];
     if (self.characteristicFFE1 != nil) {
         [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:self.characteristicFFE1 LLDeviceInfo:writeInfo];
-        [self.blueManager disconnectPeripheral];
+//        [self.blueManager disconnectPeripheral];
     }
 }
 
