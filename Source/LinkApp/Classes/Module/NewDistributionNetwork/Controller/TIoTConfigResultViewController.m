@@ -229,6 +229,7 @@
     }else{
         // 没找到需要返回的控制器的处理方式
         [self.navigationController popToRootViewControllerAnimated:YES];
+        self.navigationController.tabBarController.tabBar.hidden = NO;
     }
 }
 
@@ -344,6 +345,7 @@
         
     } else {
         [self.navigationController popToRootViewControllerAnimated:YES];
+        self.navigationController.tabBarController.tabBar.hidden = NO;
     }
 }
 
