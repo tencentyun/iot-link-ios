@@ -62,6 +62,7 @@ static NSString *itemId2 = @"i_ooo223";
 static NSString *itemId3 = @"i_ooo454";
 
 static NSString *const action_live = @"live";
+static NSString *const action_voice = @"voice";
 static NSString *const quality_standard = @"ipc.flv?action=live&quality=standard";
 
 #define FFE1UUIDString @"0000FFE1"
@@ -4013,7 +4014,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *error_message = [NSString stringWithFormat:@"%@通道已断开，请重新拨打",DeviceName];
+        NSString *error_message = [NSString stringWithFormat:@"%@%@",DeviceName,NSLocalizedString(@"channel_disconnect_reconnection_inprogress", @"通道已断开，正在重连中")];
         [MBProgressHUD showError:error_message];
     });
      
@@ -4210,8 +4211,15 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //重新拉流/推流
 - (void)refreshP2PPlayerAndStartCapture {
     if (self.isNetworkBreak == YES && [[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
-        //当前如果还在通话页面，重连后刷新播放器
-        [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+//        __weak typeof(self)WeakSelf = self;
+        [self getDeviceStatusWithType:action_voice qualityType:quality_standard completion:^(BOOL finished) {
+            if (finished) {
+                //当前如果还在通话页面，重连后刷新播放器
+                [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+            }else {
+                [MBProgressHUD showMessage:NSLocalizedString(@"reconnectFail_check_device_status", @"重连失败,请检查设备状态") icon:@""];
+            }
+        }];
     }
 }
 
