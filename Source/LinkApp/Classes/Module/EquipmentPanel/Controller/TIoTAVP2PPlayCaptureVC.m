@@ -587,6 +587,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:1 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
     
         [self.player setAudioSpeed:1.5f];
+        [self.player setMaxPacketNum:2];
 }
 
 #pragma mark 事件

@@ -1314,6 +1314,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
         
         [self.player setAudioSpeed:1.5f];
+        [self.player setMaxPacketNum:2];
         
     }else {
         // 2.通过裸流服务拉流
