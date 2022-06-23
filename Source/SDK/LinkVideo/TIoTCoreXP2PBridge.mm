@@ -338,6 +338,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     _p2p_wl_avg_ctx = {0};
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
+    //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
+    if (_getBufTimer) {
+        [_getBufTimer invalidate];
+        _getBufTimer = nil;
+    }
     _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
 }
 
