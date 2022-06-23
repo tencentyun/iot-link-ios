@@ -15,6 +15,14 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PType
 NSFileHandle *p2pOutLogFile;
 NSFileHandle *fileHandle;
 
+@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
+@property (nonatomic, strong) NSString *dev_name;
+@property (nonatomic, assign) BOOL isSending;
+@property (nonatomic, strong) AVCaptureSessionPreset resolution;
+@property (nonatomic, strong) NSTimer *getBufTimer;
+- (void)cancelTimer;
+@end
+
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
         return nullptr;
@@ -49,7 +57,7 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         
     }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
         NSLog(@"XP2P log: disconnect %@\n", message);
-        
+        [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [p2pOutLogFile synchronizeFile];
             [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
@@ -160,12 +168,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return sum / (avg_ctx->len - 2);
 }
 
-@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
-@property (nonatomic, strong) NSString *dev_name;
-@property (nonatomic, assign) BOOL isSending;
-@property (nonatomic, strong) AVCaptureSessionPreset resolution;
-@property (nonatomic, strong) NSTimer *getBufTimer;
-@end
+
 
 @implementation TIoTCoreXP2PBridge {
     
@@ -339,10 +342,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     _p2p_wl_avg_ctx = {0};
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
     //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
-    if (_getBufTimer) {
-        [_getBufTimer invalidate];
-        _getBufTimer = nil;
-    }
+    [self cancelTimer];
     _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
 }
 
@@ -391,10 +391,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 - (XP2PErrCode)stopVoiceToServer {
     
-    if (_getBufTimer) {
-        [_getBufTimer invalidate];
-        _getBufTimer = nil;
-    }
+    [self cancelTimer];
         
     self.isSending = NO;
     
@@ -416,6 +413,13 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     //关闭文件
     [fileHandle closeFile];
     fileHandle = NULL;
+}
+
+- (void)cancelTimer {
+    if (_getBufTimer) {
+        [_getBufTimer invalidate];
+        _getBufTimer = nil;
+    }
 }
 
 #pragma mark -AWAVCaptureDelegate

@@ -139,6 +139,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 获取当前发送链路的连接模式：0 无效；62 直连；63 转发
  */
 + (int)getStreamLinkMode:(NSString *)dev_name;
+
 @end
 
 NS_ASSUME_NONNULL_END
