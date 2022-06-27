@@ -53,6 +53,7 @@
 
 #import "TIoTVideoParamSettingVC.h"
 #import "TIoTDeviceStatusModel.h"
+#import "UIViewController+GetController.h"
 
 static CGFloat itemSpace = 9;
 static CGFloat lineSpace = 9;
@@ -459,7 +460,12 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 - (void)showOfflineTip
 {
-    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] || [[TIoTTRTCUIManage sharedManager] trtcIsTopVC]) {
+//    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] || [[TIoTTRTCUIManage sharedManager] trtcIsTopVC]) {
+//        [MBProgressHUD showMessage:NSLocalizedString(@"device_offline", @"设备已离线") icon:@""];
+//        return;
+//    }
+    NSString *selfClass = NSStringFromClass([UIViewController getCurrentViewController].class);
+    if (![selfClass isEqualToString:@"TIoTPanelVC"]) {
         [MBProgressHUD showMessage:NSLocalizedString(@"device_offline", @"设备已离线") icon:@""];
         return;
     }
