@@ -146,7 +146,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 //断网标识判断
 @property (nonatomic, assign) BOOL isNetworkBreak;
-
+@property (nonatomic, assign) BOOL isWifiOrWWAN;
 @property (nonatomic, strong) UIView *blueConnectView; //蓝牙设备是否连接控制view
 @property (nonatomic, strong) UILabel *blueTipLabel;
 @property (nonatomic, strong) UIButton *controlBlueDeviceButton;
@@ -270,6 +270,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)detectionNetworkStatus  {
     
     self.isNetworkBreak = YES;
+    self.isWifiOrWWAN = NO;
     __weak typeof(self)WeakSelf = self;
     [[NetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(NetworkReachabilityStatus status) {
         switch (status) {
@@ -294,7 +295,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 break;
             case NetworkReachabilityStatusReachableViaWiFi:
                 //"WIFI"
-                if (WeakSelf.isNetworkBreak == NO) {
+                if (WeakSelf.isNetworkBreak == NO || WeakSelf.isWifiOrWWAN == YES) {
                     if (WeakSelf.isP2PVideoDevice == YES) {
                         //APP侧断网后重连 p2p 断网重连
                         [WeakSelf reconnectNetworkActioin];
@@ -307,10 +308,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                     }
                 }
                 WeakSelf.isNetworkBreak = YES;
+                WeakSelf.isWifiOrWWAN = YES;
                 break;
             case NetworkReachabilityStatusReachableViaWWAN:
                 //"移动网络"
-                if (WeakSelf.isNetworkBreak == NO) {
+                if (WeakSelf.isNetworkBreak == NO || WeakSelf.isWifiOrWWAN == YES) {
                     if (WeakSelf.isP2PVideoDevice == YES) {
                         //APP侧断网后重连 p2p 断网重连
                         [WeakSelf reconnectNetworkActioin];
@@ -323,6 +325,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                     }
                 }
                 WeakSelf.isNetworkBreak = YES;
+                WeakSelf.isWifiOrWWAN = YES;
                 break;
             default:
                 WeakSelf.isNetworkBreak = NO;
