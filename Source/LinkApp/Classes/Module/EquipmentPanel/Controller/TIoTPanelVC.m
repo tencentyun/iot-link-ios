@@ -4147,7 +4147,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 //APP侧断网后重连 p2p 断网重连
 - (void)reconnectNetworkActioin {
     //还没退出通话页面, APP断网后，需要重新联网，重新起p2p
-    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
+//    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
         if (self.isP2PVideoDevice == YES) {
             
 //            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionAppDisconnect) object:nil];
@@ -4159,7 +4159,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             [self restartP2PServer];
             
         }
-    }
+//    }
 }
 
 //更新objectModel里的p2pinfo 重起p2p服务
