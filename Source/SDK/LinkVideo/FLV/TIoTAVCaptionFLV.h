@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 @interface TIoTAVCaptionFLV : NSObject
 @property (nonatomic, weak) id<TIoTAVCaptionFLVDelegate> delegate;
 @property (nonatomic, assign)UIView *videoLocalView;
+@property (nonatomic, assign)BOOL isEchoCancel;
 -(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate;
 
 - (void)preStart;

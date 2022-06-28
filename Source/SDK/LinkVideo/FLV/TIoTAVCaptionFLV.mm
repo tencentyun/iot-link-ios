@@ -11,6 +11,7 @@
 #import "flv-muxer.h"
 
 #include <iostream>
+#import "TIoTPCMXEchoRecord.h"
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
@@ -39,6 +40,7 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, assign) TIoTAVCaptionFLVAudioType     audioRate;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
+@property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -48,6 +50,7 @@ dispatch_queue_t muxerQueue;
     if (self) {
         tAVCaptionFLV = self;
         _audioRate = audioSampleRate;
+        _isEchoCancel = NO;
         [self onInit];
     }
     return self;
@@ -78,6 +81,18 @@ dispatch_queue_t muxerQueue;
         return;
     }
     AudioStreamBasicDescription inAudioStreamBasicDescription;
+    if (_isEchoCancel) {
+        
+        self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] init];
+        [self.pcmRecord set_record_callback:record_callback user:(__bridge void * _Nonnull)(self)];
+//        [self.record start_record];
+        
+        inAudioStreamBasicDescription = self.pcmRecord.pcmStreamDescription;
+        self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
+        self.aacEncoder.delegate = self;
+        self.aacEncoder.audioType = _audioRate;
+        return;
+    }
     self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
     self.aacEncoder.delegate = self;
     self.aacEncoder.audioType = _audioRate;
@@ -344,6 +359,16 @@ dispatch_queue_t muxerQueue;
     }
 }
 
+#pragma mark - PCM XEcho record_callback
+static void record_callback(uint8_t *buffer, int size, void *u)
+{
+    TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
+    
+    NSData *data = [NSData dataWithBytes:buffer length:size];
+    [vc.aacEncoder encodePCMData:data];
+}
+
+
 #pragma mark - H264EncoderDelegate
 - (void)gotSpsPps:(NSData*)sps pps:(NSData*)pps {
     
@@ -479,6 +504,10 @@ int encodeFlvData(int type, NSData *packetData) {
     flv_init_load();
 
     [self startCamera];
+    
+    if (_isEchoCancel) {
+        [self.pcmRecord start_record];
+    }
     return YES;
 }
 

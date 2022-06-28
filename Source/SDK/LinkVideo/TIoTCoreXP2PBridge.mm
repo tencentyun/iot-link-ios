@@ -330,6 +330,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (systemAvCapture == nil) {
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
         systemAvCapture.videoLocalView = localView;
+        systemAvCapture.isEchoCancel = YES;
     }
     
     systemAvCapture.videoLocalView = localView;
