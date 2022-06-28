@@ -4,13 +4,16 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "TIoTAVCaptionFLV.h"
 
-@interface TIoTAACEncoder : NSObject
+@protocol TIoTAACEncoderDelegate <NSObject>
+- (void)getEncoderAACData:(NSData *)data;
+@end
 
-@property (nonatomic) dispatch_queue_t encoderQueue;
-@property (nonatomic) dispatch_queue_t callbackQueue;
+@interface TIoTAACEncoder : NSObject
+@property (nonatomic,weak) id<TIoTAACEncoderDelegate> delegate;
 @property (nonatomic) TIoTAVCaptionFLVAudioType audioType;
 
-- (void) encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer completionBlock:(void (^)(NSData *encodedData, NSError* error))completionBlock;
+- (instancetype)initWithAudioDescription:(AudioStreamBasicDescription)inAudioDes;
 
-
+- (void)encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+- (void)encodePCMData:(NSData *)pcmdata;
 @end

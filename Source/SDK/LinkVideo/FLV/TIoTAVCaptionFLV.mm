@@ -17,7 +17,7 @@ static flv_muxer_t* flvMuxer = nullptr;
 dispatch_queue_t muxerQueue;
 //NSFileHandle *_fileHandle;
 
-@interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate>
+@interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate,TIoTAACEncoderDelegate>
 // 负责输如何输出设备之间的数据传递
 @property (nonatomic, strong) AVCaptureSession           *session;
 // 队列
@@ -77,7 +77,9 @@ dispatch_queue_t muxerQueue;
         self.aacEncoder.audioType = _audioRate;
         return;
     }
-    self.aacEncoder = [TIoTAACEncoder new];
+    AudioStreamBasicDescription inAudioStreamBasicDescription;
+    self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
+    self.aacEncoder.delegate = self;
     self.aacEncoder.audioType = _audioRate;
     
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
@@ -338,17 +340,7 @@ dispatch_queue_t muxerQueue;
     
     } else if (connection == _audioConnection) {  // Audio
         
-        [self.aacEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
-            
-            if (encodedData) {
-//                NSLog(@"Audio data (%lu):%@", (unsigned long)encodedData.length,encodedData.description);
-                
-//                [self.data appendData:encodedData];
-                encodeFlvData(0, encodedData);
-            }else {
-//                NSLog(@"Error encoding AAC: %@", error);
-            }
-        }];
+        [self.aacEncoder encodeSampleBuffer:sampleBuffer];
     }
 }
 
@@ -391,6 +383,12 @@ dispatch_queue_t muxerQueue;
 //    }
     
 }
+
+#pragma mark - TIoTAACEncoderDelegate
+- (void)getEncoderAACData:(NSData *)data {
+    encodeFlvData(0, data);
+}
+
 
 void flv_init_load() {
     void *w = flv_writer_create2(1, 1, flv_onwrite, nullptr);

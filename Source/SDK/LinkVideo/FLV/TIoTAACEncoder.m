@@ -1,184 +1,238 @@
-
 #import "TIoTAACEncoder.h"
 
-@interface TIoTAACEncoder()
-@property (nonatomic) AudioConverterRef audioConverter;
-@property (nonatomic) uint8_t *aacBuffer;
-@property (nonatomic) NSUInteger aacBufferSize;
-@property (nonatomic) char *pcmBuffer;
-@property (nonatomic) size_t pcmBufferSize;
+typedef struct {
+    //pcm数据指针
+    void *source;
+    //pcm数据的长度
+    UInt32 sourceSize;
+    //声道数
+    UInt32 channelCount;
+    AudioStreamPacketDescription *packetDescription;
+}FillComplexInputParm;
 
+typedef struct {
+    AudioConverterRef converter;
+    int samplerate;
+    int channles;
+}ConverterContext;
+
+//AudioConverter的提供数据的回调函数
+OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,UInt32 *ioNumberDataPacket,AudioBufferList *ioData,AudioStreamPacketDescription **outDataPacketDescription,void *inUserData) {
+    //ioData用来接收需要转换的pcm数据給converter进行编码
+    FillComplexInputParm *param = (FillComplexInputParm *)inUserData;
+//    NSLog(@"ccccccccccc----->%d, ssss---->%d, cocococo--->%d",*ioNumberDataPacket, param->sourceSize,param->channelCount);
+    if (param->sourceSize <= 0) {
+        *ioNumberDataPacket = 0;
+        return -1;
+    }
+    ioData->mBuffers[0].mData = param->source;
+    ioData->mBuffers[0].mDataByteSize = param->sourceSize;
+    ioData->mBuffers[0].mNumberChannels = param->channelCount;
+    *ioNumberDataPacket = 1;
+    param->sourceSize = 0;
+    return noErr;
+}
+
+@interface TIoTAACEncoder () {
+    ConverterContext *convertContext;
+    dispatch_queue_t encodeQueue;
+    AudioStreamBasicDescription inAudioStreamBasicDescription;
+}
 @end
 
 @implementation TIoTAACEncoder
 
-- (void) dealloc {
-    AudioConverterDispose(_audioConverter);
-    free(_aacBuffer);
-}
-
-- (id) init {
-    if (self = [super init]) {
-        _encoderQueue = dispatch_queue_create("AAC Encoder Queue", DISPATCH_QUEUE_SERIAL);
-        _callbackQueue = dispatch_queue_create("AAC Encoder Callback Queue", DISPATCH_QUEUE_SERIAL);
-        _audioConverter = NULL;
-        _pcmBufferSize = 0;
-        _pcmBuffer = NULL;
-        _aacBufferSize = 1024;
-        _aacBuffer = malloc(_aacBufferSize * sizeof(uint8_t));
-        memset(_aacBuffer, 0, _aacBufferSize);
+- (instancetype)initWithAudioDescription:(AudioStreamBasicDescription)inAudioDes {
+    if ( self = [super init]) {
+        encodeQueue = dispatch_queue_create("com.audio.encode", DISPATCH_QUEUE_SERIAL);
+        inAudioStreamBasicDescription = inAudioDes;
     }
     return self;
 }
 
-- (void) setupEncoderFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    AudioStreamBasicDescription inAudioStreamBasicDescription = *CMAudioFormatDescriptionGetStreamBasicDescription((CMAudioFormatDescriptionRef)CMSampleBufferGetFormatDescription(sampleBuffer));
-    
-    AudioStreamBasicDescription outAudioStreamBasicDescription = {0}; // Always initialize the fields of a new audio stream basic description structure to zero, as shown here: ...
-    outAudioStreamBasicDescription.mSampleRate = 16000;//inAudioStreamBasicDescription.mSampleRate; // The number of frames per second of the data in the stream, when the stream is played at normal speed. For compressed formats, this field indicates the number of frames per second of equivalent decompressed data. The mSampleRate field must be nonzero, except when this structure is used in a listing of supported formats (see “kAudioStreamAnyRate”).
+- (void)setUpConverter {
+    //开始构造输出的asbd
+    AudioStreamBasicDescription outAudioStreamBasicDescription = {0};
+    //对于压缩格式必须设置为0
+    outAudioStreamBasicDescription.mBitsPerChannel = 0;
+    outAudioStreamBasicDescription.mBytesPerFrame = 0;
+    outAudioStreamBasicDescription.mFramesPerPacket = 1024;
+    //设定声道数为1
+    outAudioStreamBasicDescription.mChannelsPerFrame = 1;
+    //设定采样率为16000
+//    outAudioStreamBasicDescription.mSampleRate = inAudioStreamBasicDescription.mSampleRate;
     if (self.audioType == TIoTAVCaptionFLVAudio_8) {
         outAudioStreamBasicDescription.mSampleRate = 8000;
     }else if (self.audioType == TIoTAVCaptionFLVAudio_16) {
         outAudioStreamBasicDescription.mSampleRate = 16000;
     }
-//    else if (self.audioType == TIoTAVCaptionFLVAudio_441) {
-//        outAudioStreamBasicDescription.mSampleRate = 441000;
-//    }
-    outAudioStreamBasicDescription.mFormatID = kAudioFormatMPEG4AAC; // kAudioFormatMPEG4AAC_HE does not work. Can't find `AudioClassDescription`. `mFormatFlags` is set to 0.
-    outAudioStreamBasicDescription.mFormatFlags = kMPEG4Object_AAC_LC; // Format-specific flags to specify details of the format. Set to 0 to indicate no format flags. See “Audio Data Format Identifiers” for the flags that apply to each format.
-    outAudioStreamBasicDescription.mBytesPerPacket = 0; // The number of bytes in a packet of audio data. To indicate variable packet size, set this field to 0. For a format that uses variable packet size, specify the size of each packet using an AudioStreamPacketDescription structure.
-    outAudioStreamBasicDescription.mFramesPerPacket = 1024; // The number of frames in a packet of audio data. For uncompressed audio, the value is 1. For variable bit-rate formats, the value is a larger fixed number, such as 1024 for AAC. For formats with a variable number of frames per packet, such as Ogg Vorbis, set this field to 0.
-    outAudioStreamBasicDescription.mBytesPerFrame = 0; // The number of bytes from the start of one frame to the start of the next frame in an audio buffer. Set this field to 0 for compressed formats. ...
-    outAudioStreamBasicDescription.mChannelsPerFrame = 1; // The number of channels in each frame of audio data. This value must be nonzero.
-    outAudioStreamBasicDescription.mBitsPerChannel = 0; // ... Set this field to 0 for compressed formats.
-    outAudioStreamBasicDescription.mReserved = 0; // Pads the structure out to force an even 8-byte alignment. Must be set to 0.
-    AudioClassDescription *description = [self
-                                          getAudioClassDescriptionWithType:kAudioFormatMPEG4AAC
-                                          fromManufacturer:kAppleSoftwareAudioCodecManufacturer];
-    
-    OSStatus status = AudioConverterNewSpecific(&inAudioStreamBasicDescription, &outAudioStreamBasicDescription, 1, description, &_audioConverter);
-    if (status != 0) {
-        NSLog(@"setup converter: %d", (int)status);
-    }
-}
-
-- (AudioClassDescription *)getAudioClassDescriptionWithType:(UInt32)type
-                                           fromManufacturer:(UInt32)manufacturer
-{
-    static AudioClassDescription desc;
-    
-    UInt32 encoderSpecifier = type;
-    OSStatus st;
-    
-    UInt32 size;
-    st = AudioFormatGetPropertyInfo(kAudioFormatProperty_Encoders,
-                                    sizeof(encoderSpecifier),
-                                    &encoderSpecifier,
-                                    &size);
-    if (st) {
-        NSLog(@"error getting audio format propery info: %d", (int)(st));
-        return nil;
-    }
-    
-    unsigned int count = size / sizeof(AudioClassDescription);
-    AudioClassDescription descriptions[count];
-    st = AudioFormatGetProperty(kAudioFormatProperty_Encoders,
-                                sizeof(encoderSpecifier),
-                                &encoderSpecifier,
-                                &size,
-                                descriptions);
-    if (st) {
-        NSLog(@"error getting audio format propery: %d", (int)(st));
-        return nil;
-    }
-    
-    for (unsigned int i = 0; i < count; i++) {
-        if ((type == descriptions[i].mSubType) &&
-            (manufacturer == descriptions[i].mManufacturer)) {
-            memcpy(&desc, &(descriptions[i]), sizeof(desc));
-            return &desc;
+    //设定输出音频的格式
+    outAudioStreamBasicDescription.mFormatID = kAudioFormatMPEG4AAC;
+    outAudioStreamBasicDescription.mFormatFlags = kMPEG4Object_AAC_LC;
+    outAudioStreamBasicDescription.mReserved = 0;
+    //填充输出的音频格式
+    UInt32 size = sizeof(outAudioStreamBasicDescription);
+    AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, &size, &outAudioStreamBasicDescription);
+    //选择aac的编码器（用来描述一个已经安装的编解码器）
+    AudioClassDescription audioClassDes;
+    //初始化为0
+    memset(&audioClassDes, 0, sizeof(audioClassDes));
+    //获取满足要求的aac编码器的总大小
+    UInt32 countSize = 0;
+    AudioFormatGetPropertyInfo(kAudioFormatProperty_Encoders, sizeof(outAudioStreamBasicDescription.mFormatID), &outAudioStreamBasicDescription.mFormatID, &countSize);
+    //用来计算aac的编解码器的个数
+    int cout = countSize/sizeof(audioClassDes);
+    //创建一个包含有cout个数的编码器数组
+    AudioClassDescription descriptions[cout];
+    //将编码器数组信息写入到descriptions中
+    AudioFormatGetProperty(kAudioFormatProperty_Encoders, sizeof(outAudioStreamBasicDescription.mFormatID), &outAudioStreamBasicDescription.mFormatID, &countSize, descriptions);
+    for (int i = 0; i < cout; cout++) {
+        AudioClassDescription temp = descriptions[i];
+        if (temp.mManufacturer==kAppleSoftwareAudioCodecManufacturer
+            &&temp.mSubType==outAudioStreamBasicDescription.mFormatID) {
+            audioClassDes = temp;
+            break;
         }
     }
+    //创建convertcontext用来保存converter的信息
+    ConverterContext *context = malloc(sizeof(ConverterContext));
+    self->convertContext = context;
     
-    return nil;
-}
-
-static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
-{
-    TIoTAACEncoder *encoder = (__bridge TIoTAACEncoder *)(inUserData);
-    UInt32 requestedPackets = *ioNumberDataPackets;
-    //NSLog(@"Number of packets requested: %d", (unsigned int)requestedPackets);
-    size_t copiedSamples = [encoder copyPCMSamplesIntoBuffer:ioData];
-    if (copiedSamples < requestedPackets) {
-        //NSLog(@"PCM buffer isn't full enough!");
-        *ioNumberDataPackets = 0;
-        return -1;
+    OSStatus result = AudioConverterNewSpecific(&inAudioStreamBasicDescription, &outAudioStreamBasicDescription, 1, &audioClassDes, &(context->converter));
+    if (result == noErr) {
+        //创建编解码器成功
+//        AudioConverterRef converter = context->converter;
+//        //设置编码器属性
+//        UInt32 temp = kAudioConverterQuality_Max;
+//        AudioConverterSetProperty(converter, kAudioConverterCodecQuality, sizeof(temp), &temp);
+//        //设置比特率
+//        UInt32 bitRate = 64000;
+//        result = AudioConverterSetProperty(converter, kAudioConverterEncodeBitRate, sizeof(bitRate), &bitRate);
+//        if (result != noErr) {
+            NSLog(@"设置比特率成功");
+//        }
+    }else{
+        //创建编解码器失败
+        free(context);
+        context = NULL;
+        NSLog(@"创建编解码器失败");
     }
-    *ioNumberDataPackets = 1;
-    //NSLog(@"Copied %zu samples into ioData", copiedSamples);
-    return noErr;
 }
 
-- (size_t) copyPCMSamplesIntoBuffer:(AudioBufferList*)ioData {
-    size_t originalBufferSize = _pcmBufferSize;
-    if (!originalBufferSize) {
-        return 0;
+//编码samplebuffer数据
+-(void)encodePCMData:(NSData *)pcmdata {
+    if (!self->convertContext) {
+        [self setUpConverter];
     }
-    ioData->mBuffers[0].mData = _pcmBuffer;
-    ioData->mBuffers[0].mDataByteSize = _pcmBufferSize;
-    _pcmBuffer = NULL;
-    _pcmBufferSize = 0;
-    return originalBufferSize;
+    ConverterContext *cxt = self->convertContext;
+    if (cxt && cxt->converter) {
+
+        dispatch_async(encodeQueue, ^{
+
+            NSUInteger pcmLength = pcmdata.length;
+            void *pcmData = pcmdata.bytes;
+            
+            if (pcmdata == nil) {
+                NSLog(@"获取pcm数据失败");
+                return;
+            } else {
+                //在堆区分配内存用来保存编码后的aac数据
+                char *outputBuffer = malloc(pcmLength);
+                memset(outputBuffer, 0, pcmLength);
+                UInt32 packetSize = 1;
+                AudioStreamPacketDescription *outputPacketDes = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) *packetSize);
+                //使用fillcomplexinputparm来保存pcm数据
+                FillComplexInputParm userParam;
+                userParam.source = pcmData;
+                userParam.sourceSize = (UInt32)pcmLength;
+                userParam.channelCount = 1;
+                userParam.packetDescription = NULL;
+                //在堆区创建audiobufferlist
+                AudioBufferList outputBufferList;
+                outputBufferList.mNumberBuffers = 1;
+                outputBufferList.mBuffers[0].mData = outputBuffer;
+                outputBufferList.mBuffers[0].mDataByteSize = (UInt32)pcmLength;
+                outputBufferList.mBuffers[0].mNumberChannels = 1;
+                //编码
+                OSStatus status = AudioConverterFillComplexBuffer(self->convertContext->converter, audioConverterComplexInputDataProc, &userParam, &packetSize, &outputBufferList, outputPacketDes);
+                free(outputPacketDes);
+                outputPacketDes = NULL;
+                if (status == noErr) {
+                    //获取原始的aac数据
+                    NSData *rawAAC = [NSData dataWithBytes:outputBufferList.mBuffers[0].mData length:outputBufferList.mBuffers[0].mDataByteSize];
+                    NSData *adtsHeader = [self adtsDataForPacketLength:rawAAC.length];
+                    NSMutableData *fullData = [NSMutableData dataWithData:adtsHeader];
+                    [fullData appendData:rawAAC];
+                    [self.delegate getEncoderAACData:fullData];
+                }
+                free(outputBuffer);
+                outputBuffer = NULL;
+            }
+        });
+    }
 }
 
 
-- (void) encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer completionBlock:(void (^)(NSData * encodedData, NSError* error))completionBlock {
+- (void) encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    if (!self->convertContext) {
+        inAudioStreamBasicDescription = *CMAudioFormatDescriptionGetStreamBasicDescription((CMAudioFormatDescriptionRef)CMSampleBufferGetFormatDescription(sampleBuffer));
+        [self setUpConverter];
+    }
     CFRetain(sampleBuffer);
-    dispatch_async(_encoderQueue, ^{
-        if (!_audioConverter) {
-            [self setupEncoderFromSampleBuffer:sampleBuffer];
-        }
+    dispatch_async(encodeQueue, ^{
+        
         CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
         CFRetain(blockBuffer);
-        OSStatus status = CMBlockBufferGetDataPointer(blockBuffer, 0, NULL, &_pcmBufferSize, &_pcmBuffer);
-        NSError *error = nil;
-        if (status != kCMBlockBufferNoErr) {
-            error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+        size_t pcmLength;
+        char *pcmData = NULL;
+        CMBlockBufferGetDataPointer(blockBuffer, 0, NULL, &pcmLength, &pcmData);
+        if (pcmLength == 0 || !pcmData) {
+            return;
         }
-        //NSLog(@"PCM Buffer Size: %zu", _pcmBufferSize);
         
-        memset(_aacBuffer, 0, _aacBufferSize);
-        AudioBufferList outAudioBufferList = {0};
-        outAudioBufferList.mNumberBuffers = 1;
-        outAudioBufferList.mBuffers[0].mNumberChannels = 1;
-        outAudioBufferList.mBuffers[0].mDataByteSize = _aacBufferSize;
-        outAudioBufferList.mBuffers[0].mData = _aacBuffer;
-        AudioStreamPacketDescription *outPacketDescription = NULL;
-        UInt32 ioOutputDataPacketSize = 1;
-        status = AudioConverterFillComplexBuffer(_audioConverter, inInputDataProc, (__bridge void *)(self), &ioOutputDataPacketSize, &outAudioBufferList, outPacketDescription);
-        //NSLog(@"ioOutputDataPacketSize: %d", (unsigned int)ioOutputDataPacketSize);
-        NSData *data = nil;
-        if (status == 0) {
-            NSData *rawAAC = [NSData dataWithBytes:outAudioBufferList.mBuffers[0].mData length:outAudioBufferList.mBuffers[0].mDataByteSize];
+        
+        
+        //在堆区分配内存用来保存编码后的aac数据
+        char *outputBuffer = malloc(pcmLength);
+        memset(outputBuffer, 0, pcmLength);
+        UInt32 packetSize = 1;
+        AudioStreamPacketDescription *outputPacketDes = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) *packetSize);
+        //使用fillcomplexinputparm来保存pcm数据
+        FillComplexInputParm userParam;
+        userParam.source = pcmData;
+        userParam.sourceSize = (UInt32)pcmLength;
+        userParam.channelCount = 1;
+        userParam.packetDescription = NULL;
+        //在堆区创建audiobufferlist
+        AudioBufferList outputBufferList;
+        outputBufferList.mNumberBuffers = 1;
+        outputBufferList.mBuffers[0].mData = outputBuffer;
+        outputBufferList.mBuffers[0].mDataByteSize = (UInt32)pcmLength;
+        outputBufferList.mBuffers[0].mNumberChannels = 1;
+        //编码
+        OSStatus status = AudioConverterFillComplexBuffer(self->convertContext->converter, audioConverterComplexInputDataProc, &userParam, &packetSize, &outputBufferList, outputPacketDes);
+        free(outputPacketDes);
+        outputPacketDes = NULL;
+        if (status == noErr) {
+            //获取原始的aac数据
+            NSData *rawAAC = [NSData dataWithBytes:outputBufferList.mBuffers[0].mData length:outputBufferList.mBuffers[0].mDataByteSize];
             NSData *adtsHeader = [self adtsDataForPacketLength:rawAAC.length];
             NSMutableData *fullData = [NSMutableData dataWithData:adtsHeader];
             [fullData appendData:rawAAC];
-            data = fullData;
-        } else {
-            error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+            [self.delegate getEncoderAACData:fullData];
         }
-        if (completionBlock) {
-//            dispatch_async(_callbackQueue, ^{
-                completionBlock(data, error);
-//            });
-        }
+        free(outputBuffer);
+        outputBuffer = NULL;
+        
+        
+        
         CFRelease(sampleBuffer);
         CFRelease(blockBuffer);
     });
 }
 
 
-
+#pragma mark - HEADER
 /**
  *  Add ADTS header at the beginning of each and every AAC packet.
  *  This is needed as MediaCodec encoder generates a packet of raw
@@ -216,6 +270,4 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
     NSData *data = [NSData dataWithBytesNoCopy:packet length:adtsLength freeWhenDone:YES];
     return data;
 }
-
-
 @end
