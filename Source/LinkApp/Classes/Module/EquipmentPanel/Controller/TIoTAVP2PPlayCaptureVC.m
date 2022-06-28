@@ -395,8 +395,18 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             //拉流
             [self preparePlayer];
             
-            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-            [[AVAudioSession sharedInstance] setActive:YES error:nil];
+            AVAudioSession *session = [AVAudioSession sharedInstance];
+            BOOL active = YES;
+            NSError *outError;
+            AVAudioSessionSetActiveOptions options = active ? 0 : AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation;
+            
+            [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker|AVAudioSessionCategoryOptionAllowBluetooth error:&outError];
+            [session setMode:AVAudioSessionModeVoiceChat error:&outError];
+            [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&outError];
+            [session setActive:active withOptions:options error:nil];
+            
+//            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+//            [[AVAudioSession sharedInstance] setActive:YES error:nil];
             
             [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
             [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
