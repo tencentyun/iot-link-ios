@@ -513,6 +513,9 @@ int encodeFlvData(int type, NSData *packetData) {
 
 -(void) stopCapture{
     [self stopCarmera];
+    if (_isEchoCancel) {
+        [self.pcmRecord stop_record];
+    }
 }
 
 - (void) startCamera
