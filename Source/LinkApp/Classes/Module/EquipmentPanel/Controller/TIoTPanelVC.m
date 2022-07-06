@@ -927,7 +927,11 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     NSLog(@"_sys_xp2p_info  xp2pValue : %@",xp2pValue);
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    __block int errorcode = 0;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    });
+//    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -4006,7 +4010,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     self.p2pReady = YES;
     
     //APP侧断网刚重连p2p成功后 重新拉流/推流
-    [self refreshP2PPlayerAndStartCapture];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self refreshP2PPlayerAndStartCapture];
+    });
+//    [self refreshP2PPlayerAndStartCapture];
     
 //    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupAction) object:nil];
 }
@@ -4156,7 +4163,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             //更新objectModel里的p2pinfo 重起p2p服务
             //先stopService 防止 WIFI 4G互切问题
             [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
-            [self restartP2PServer];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self restartP2PServer];
+            });
+            
             
         }
 //    }
@@ -4224,7 +4234,10 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         [self getDeviceStatusWithType:action_voice qualityType:quality_standard completion:^(BOOL finished) {
             if (finished) {
                 //当前如果还在通话页面，重连后刷新播放器
-                [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
+//                });
+//                [[TIoTP2PCommunicateUIManage sharedManager] refreshP2PVideoPlayer];
             }else {
                 [MBProgressHUD showMessage:NSLocalizedString(@"reconnectFail_check_device_status", @"重连失败,请检查设备状态") icon:@""];
             }
