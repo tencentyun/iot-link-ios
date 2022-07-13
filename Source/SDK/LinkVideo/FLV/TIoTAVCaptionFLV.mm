@@ -51,6 +51,7 @@ dispatch_queue_t muxerQueue;
         tAVCaptionFLV = self;
         _audioRate = audioSampleRate;
         _isEchoCancel = NO;
+        _devicePosition = AVCaptureDevicePositionBack;
         [self onInit];
     }
     return self;
@@ -284,9 +285,9 @@ dispatch_queue_t muxerQueue;
     
     NSError *error = nil;
     //获得一个采集设备, 例如前置/后置摄像头
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-//    videoDevice = [self cameraWithPosition:AVCaptureDevicePositionBack];
+    AVCaptureDevice *videoDevice = [self cameraWithPosition:self.devicePosition];
     //用设备初始化一个采集的输入对象
     AVCaptureDeviceInput *videoInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
     self.deviceInput = videoInput;

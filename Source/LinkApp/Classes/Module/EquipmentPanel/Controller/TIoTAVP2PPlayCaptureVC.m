@@ -620,7 +620,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (self.callType == TIoTTRTCSessionCallType_audio) {
         [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:nil];
     }else {
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView];
+        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView videoPosition:AVCaptureDevicePositionFront];
     }
 }
 
