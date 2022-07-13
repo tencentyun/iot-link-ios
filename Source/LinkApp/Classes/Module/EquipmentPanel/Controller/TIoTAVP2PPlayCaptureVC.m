@@ -704,28 +704,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 //刷新播放器
 - (void)refreshPlayer {
-    
-        if (self.player != nil) {
-            _is_init_alert = NO;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self preparePlayer];
-            });
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.resolutionRatio = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateResolutionRatio];
-                self.samplingRate = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateSamplingRate];
-                [self startAVCapture];
-            });
-        }
-//    if (self.player != nil) {
-//        _is_init_alert = NO;
-//        [self preparePlayer];
-//
-//        self.resolutionRatio = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateResolutionRatio];
-//        self.samplingRate = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateSamplingRate];
-//
-//        [self startAVCapture];
-//    }
+    if (self.player != nil) {
+        _is_init_alert = NO;
+        [self preparePlayer];
+        
+        self.resolutionRatio = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateResolutionRatio];
+        self.samplingRate = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateSamplingRate];
+        
+        [self startAVCapture];
+    }
 }
 
 //是否在通话页面中
