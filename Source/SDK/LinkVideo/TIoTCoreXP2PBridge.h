@@ -110,8 +110,10 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 //音视频采样
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition;
-
+//刷新本地预览视图
+- (void)refreshLocalView:(UIView *)localView;
 - (XP2PErrCode)stopVoiceToServer;
+//切换前后摄像头
 - (void)changeCameraPositon;
 
 //设置分辨率，需在开启通话前设置

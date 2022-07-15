@@ -531,6 +531,15 @@ int encodeFlvData(int type, NSData *packetData) {
     }
 }
 
+- (void)refreshLocalPreviewView {
+    if (self.videoLocalView) {
+        _previewLayer.frame = self.videoLocalView.bounds;
+        [self.videoLocalView.layer addSublayer:_previewLayer];
+    }else {
+        _previewLayer.frame = CGRectZero;
+    }
+}
+
 - (void) stopCarmera
 {
 //    [_h264Encoder End];

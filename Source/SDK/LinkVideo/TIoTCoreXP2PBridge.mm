@@ -391,6 +391,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     self.resolution = resolutionValue;
 }
 
+- (void)refreshLocalView:(UIView *)localView {
+    systemAvCapture.videoLocalView = localView;
+    [systemAvCapture refreshLocalPreviewView];
+}
+
 - (void)changeCameraPositon {
     [systemAvCapture changeCameraPositon];
 }
