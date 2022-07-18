@@ -54,7 +54,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, assign)BOOL writeFile;
 
 /*
- * 是否打印 SDK Log，默认打开
+ * 是否打印 SDK Log，默认关
  */
 @property (nonatomic, assign)BOOL logEnable;
 
@@ -110,8 +110,12 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 //音视频采样
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition;
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel;
+//刷新本地预览视图
+- (void)refreshLocalView:(UIView *)localView;
 
 - (XP2PErrCode)stopVoiceToServer;
+//切换前后摄像头
 - (void)changeCameraPositon;
 
 //设置分辨率，需在开启通话前设置

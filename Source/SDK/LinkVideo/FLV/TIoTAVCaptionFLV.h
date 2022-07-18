@@ -20,9 +20,10 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 -(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate;
 
 - (void)preStart;
--(BOOL) startCapture;
--(void) stopCapture;
--(void)changeCameraPositon;
+- (BOOL)startCapture;
+- (void)stopCapture;
+- (void)refreshLocalPreviewView;
+- (void)changeCameraPositon;
 - (void)setResolutionRatio:(AVCaptureSessionPreset)resolutionValue;
 - (void)setVideoBitRate:(int32_t)bitRate;
 - (int32_t)getVideoBitRate;

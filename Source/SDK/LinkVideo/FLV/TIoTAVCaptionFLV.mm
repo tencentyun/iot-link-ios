@@ -246,6 +246,8 @@ dispatch_queue_t muxerQueue;
         [self.h264Encoder initEncode:720 height:1280];
     }else if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset1920x1080]) {
         [self.h264Encoder initEncode:1080 height:1920];
+    }else {
+        [self.h264Encoder initEncode:288 height:352];
     }
 }
 
@@ -253,7 +255,7 @@ dispatch_queue_t muxerQueue;
     
     int32_t ret = bitRate;
     [self.h264Encoder setEncoderBitrateBps:ret];
-    NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
+//    NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
 }
 
 - (int32_t)getVideoBitRate {
@@ -523,6 +525,15 @@ int encodeFlvData(int type, NSData *packetData) {
 {
     [self setCameraFPS:15];
     [self.session startRunning];
+    if (self.videoLocalView) {
+        _previewLayer.frame = self.videoLocalView.bounds;
+        [self.videoLocalView.layer addSublayer:_previewLayer];
+    }else {
+        _previewLayer.frame = CGRectZero;
+    }
+}
+
+- (void)refreshLocalPreviewView {
     if (self.videoLocalView) {
         _previewLayer.frame = self.videoLocalView.bounds;
         [self.videoLocalView.layer addSublayer:_previewLayer];

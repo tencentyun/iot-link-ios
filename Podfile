@@ -2,6 +2,7 @@ platform :ios, '9.0'
 #inhibit_all_warnings!
 use_frameworks!
 #source 'https://cdn.cocoapods.org/'
+#source 'https://github.com/CocoaPods/Specs.git'
 def common_all_pods
   pod 'Masonry', '1.1.0'
   pod 'MBProgressHUD', '1.1.0'

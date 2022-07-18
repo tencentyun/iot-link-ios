@@ -400,7 +400,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             NSError *outError;
             AVAudioSessionSetActiveOptions options = active ? 0 : AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation;
             
-            [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker|AVAudioSessionCategoryOptionAllowBluetooth error:&outError];
+            [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker|AVAudioSessionCategoryOptionAllowBluetooth|AVAudioSessionCategoryOptionMixWithOthers error:&outError];
             [session setMode:AVAudioSessionModeVoiceChat error:&outError];
             [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&outError];
             [session setActive:active withOptions:options error:nil];

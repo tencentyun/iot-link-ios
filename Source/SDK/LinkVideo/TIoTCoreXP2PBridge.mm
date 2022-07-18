@@ -13,7 +13,7 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PType
 NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
 
 NSFileHandle *p2pOutLogFile;
-NSFileHandle *fileHandle;
+//NSFileHandle *fileHandle;
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
@@ -28,18 +28,18 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         return nullptr;
     }
     NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-//    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
-//    if (logEnable) {
-//        NSLog(@"XP2P log: %@\n", message);
-//    }
-//    
-//    if (type == XP2PTypeLog) {
-//        if (logEnable) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
-//            });
-//        }
-//    }
+    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
+    if (logEnable) {
+        NSLog(@"XP2P log: %@\n", message);
+    }
+    
+    if (type == XP2PTypeLog) {
+        if (logEnable) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
+            });
+        }
+    }
     
     NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
     
@@ -192,8 +192,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 - (instancetype)init {
     self =  [super init];
     if (self) {
-        //默认打开log开关
-        _logEnable = YES;
+        //默认关log开关
+        _logEnable = NO;
         
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
@@ -319,10 +319,14 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition {
-    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
-    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:videoPosition isEchoCancel:NO];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel {
+//    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
+//    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+//    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+//    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     
     self.isSending = YES;
     
@@ -334,7 +338,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (systemAvCapture == nil) {
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
         systemAvCapture.videoLocalView = localView;
-        systemAvCapture.isEchoCancel = YES;
+        systemAvCapture.isEchoCancel = isEchoCancel;
     }
     systemAvCapture.devicePosition = videoPosition;
     systemAvCapture.videoLocalView = localView;
@@ -348,7 +352,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
     //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
     [self cancelTimer];
-    _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
+    if (localView != nil) {
+        _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
+    }
 }
 
 
@@ -365,7 +371,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    for (int i =0; i < _p2p_wl_avg_ctx.len; i++) {
 //        printf("\n stream_buf_con==%d \n",_p2p_wl_avg_ctx.buf[i]);
 //    }
-    NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
+//    NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
     
     // 降码率
     // 当发现p2p的水线超过一定值时，降低视频码率，这是一个经验值，一般来说要大于 [视频码率/2]
@@ -389,6 +395,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //设置分辨率，需在开启通话前设置
 - (void)resolutionRatio:(AVCaptureSessionPreset)resolutionValue {
     self.resolution = resolutionValue;
+}
+
+- (void)refreshLocalView:(UIView *)localView {
+    systemAvCapture.videoLocalView = localView;
+    [systemAvCapture refreshLocalPreviewView];
 }
 
 - (void)changeCameraPositon {
@@ -416,8 +427,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     [p2pOutLogFile synchronizeFile];
     //关闭文件
-    [fileHandle closeFile];
-    fileHandle = NULL;
+//    [fileHandle closeFile];
+//    fileHandle = NULL;
 }
 
 - (void)cancelTimer {
