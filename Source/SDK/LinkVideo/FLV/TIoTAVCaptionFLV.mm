@@ -255,7 +255,7 @@ dispatch_queue_t muxerQueue;
     
     int32_t ret = bitRate;
     [self.h264Encoder setEncoderBitrateBps:ret];
-    NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
+//    NSLog(@"-------------------------setEncoderBitrateBps---%d-----------------",ret);
 }
 
 - (int32_t)getVideoBitRate {

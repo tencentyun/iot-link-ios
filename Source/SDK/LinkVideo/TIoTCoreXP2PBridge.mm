@@ -319,6 +319,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition {
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:videoPosition isEchoCancel:NO];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel {
     NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
     [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
     [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
@@ -334,7 +338,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (systemAvCapture == nil) {
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
         systemAvCapture.videoLocalView = localView;
-        systemAvCapture.isEchoCancel = YES;
+        systemAvCapture.isEchoCancel = isEchoCancel;
     }
     systemAvCapture.devicePosition = videoPosition;
     systemAvCapture.videoLocalView = localView;
@@ -367,7 +371,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    for (int i =0; i < _p2p_wl_avg_ctx.len; i++) {
 //        printf("\n stream_buf_con==%d \n",_p2p_wl_avg_ctx.buf[i]);
 //    }
-    NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
+//    NSLog(@"send_bufsize==%d, now_video_rate==%d, avg_index==%d",bufsize, now_video_rate, p2p_wl_avg);
     
     // 降码率
     // 当发现p2p的水线超过一定值时，降低视频码率，这是一个经验值，一般来说要大于 [视频码率/2]
