@@ -54,7 +54,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, assign)BOOL writeFile;
 
 /*
- * 是否打印 SDK Log，默认打开
+ * 是否打印 SDK Log，默认关
  */
 @property (nonatomic, assign)BOOL logEnable;
 

@@ -28,18 +28,18 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         return nullptr;
     }
     NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-//    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
-//    if (logEnable) {
-//        NSLog(@"XP2P log: %@\n", message);
-//    }
-//    
-//    if (type == XP2PTypeLog) {
-//        if (logEnable) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
-//            });
-//        }
-//    }
+    BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
+    if (logEnable) {
+        NSLog(@"XP2P log: %@\n", message);
+    }
+    
+    if (type == XP2PTypeLog) {
+        if (logEnable) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
+            });
+        }
+    }
     
     NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
     
@@ -192,8 +192,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 - (instancetype)init {
     self =  [super init];
     if (self) {
-        //默认打开log开关
-        _logEnable = YES;
+        //默认关log开关
+        _logEnable = NO;
         
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
