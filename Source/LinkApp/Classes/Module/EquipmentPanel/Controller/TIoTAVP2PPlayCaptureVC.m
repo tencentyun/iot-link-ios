@@ -557,7 +557,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)configVideo {
 
     // 1.通过播放器发起的拉流
-    [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+//    [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -588,8 +588,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         [self.player resetHubFrame:CGRectMake(hubFrame.origin.x, hubFrame.origin.y, hubFrame.size.width, hubFrame.size.height/2)];
         
-//        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
-        [self.player setOptionIntValue:100 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+    if (self.callType == TIoTTRTCSessionCallType_audio) { //音频
+//        [self.player setOptionIntValue:1000 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+        [self.player setOptionIntValue:256 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+    }else { //视频
+        [self.player setOptionIntValue:25 * 1024 forKey:@"probesize" ofCategory:kIJKFFOptionCategoryFormat];
+    }
         [self.player setOptionIntValue:0 forKey:@"packet-buffering" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];

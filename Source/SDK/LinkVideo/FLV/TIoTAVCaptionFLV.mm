@@ -247,6 +247,7 @@ dispatch_queue_t muxerQueue;
     }else if ([self.resolutionRatioValue isEqualToString: AVCaptureSessionPreset1920x1080]) {
         [self.h264Encoder initEncode:1080 height:1920];
     }else {
+        self.resolutionRatioValue = AVCaptureSessionPreset352x288;
         [self.h264Encoder initEncode:288 height:352];
     }
 }
