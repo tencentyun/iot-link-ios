@@ -250,8 +250,8 @@ failure:(FailureResponseBlock)failure
                 dispatch_async(dispatch_get_main_queue(), ^{
                     failure(nil,error,@{});
                     DDLogDebug(@"响应数据data 为空，URL：%@", urlString);
-                    return;
                 });
+                return;
             }
             
             NSError *jsonerror = nil;
