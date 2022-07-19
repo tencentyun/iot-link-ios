@@ -573,7 +573,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         IJKFFOptions *options = [IJKFFOptions optionsByDefault];
         [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"];
-    
+        
         self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
         self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.player.view.frame = self.imageView.bounds;

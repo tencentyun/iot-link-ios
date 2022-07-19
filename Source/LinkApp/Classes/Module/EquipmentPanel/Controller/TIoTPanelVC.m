@@ -212,6 +212,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 
 @property (nonatomic, assign) BOOL isStartOvertime;
 @property (nonatomic, assign) BOOL is_reconnect_xp2p; //是否正在重连，指设备断网的重连，app重连不走这个
+@property (nonatomic, assign) CFTimeInterval startNotReacable;
 @end
 
 @implementation TIoTPanelVC
@@ -282,6 +283,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 //"没网络"
                 // RTC App端和设备端通话中 断网监听
                 WeakSelf.isNetworkBreak = NO;
+                //断网开始计时
+                WeakSelf.startNotReacable = CACurrentMediaTime();
+                                             
                 //APP侧断网 p2p通话时断开，P2P 需要及时stop
                 if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && WeakSelf.isP2PVideoDevice == YES) {
                     [[TIoTCoreXP2PBridge sharedInstance] stopService: WeakSelf.deviceName?:@""];
@@ -298,13 +302,23 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                 if (WeakSelf.isNetworkBreak == NO || WeakSelf.isWifiOrWWAN == YES) {
                     if (WeakSelf.isP2PVideoDevice == YES) {
                         //APP侧断网后重连 p2p 断网重连
-                        [WeakSelf reconnectNetworkActioin];
+                        NSInteger duraReconnectNetwork = (NSInteger)(CACurrentMediaTime() - WeakSelf.startNotReacable);
+                        //判断断网到恢复网络，间隔大于一定时间5s
+                        if (duraReconnectNetwork <= 5) {
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [WeakSelf reconnectNetworkActioin];
+                            });
+                        }else {
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [WeakSelf reconnectNetworkActioin];
+                            });
+                        }
                     }else {
                         //纯蓝牙断网重连
                         WeakSelf.deviceInfo = nil;
                         WeakSelf.detailStructTpyeTimesDic = nil;
                         WeakSelf.deviceInfo.deviceId = WeakSelf.deviceDic[@"DeviceId"];
-                    [WeakSelf getProductsConfig];
+                        [WeakSelf getProductsConfig];
                     }
                 }
                 WeakSelf.isNetworkBreak = YES;
