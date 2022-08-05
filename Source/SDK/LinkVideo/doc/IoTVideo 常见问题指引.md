@@ -114,3 +114,33 @@ conf.qvb.qcloud.com
 zylcb.iotvideo.tencentcs.com（云存）
 +客户的自建后台域名
 ```
+
+
+**Q**：iOS 视频通话场景中如何切换扬声器与听筒？
+
+**A**：调用接口如下，另建议如有其他音频需求请自行调节AVAudioSession：
+
+```
+1、sdk 内部并没有处理AVAudioSession 接口设置。 如果使用AVAudioSessionPortOverrideSpeaker和AVAudioSessionCategoryPlayAndRecord的话，会无视其他设置进行话筒录音和扬声器播放，不过会在重新调用这个方法并且参数为AVAudioSessionPortOverrideNone时失效
+
+2、建议尝试使用这个接口切换
+if (_isSpeakerMode) {//扬声器模式
+　　[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+
+}else{
+
+//　在PlayAndRecord这个category下，听筒会成为默认的输出设备
+　　[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:0 error:nil];
+}
+```
+
+**Q**：iOS 视频通话开启AEC后，扬声器声音会变小？
+
+**A**：排查方法如下：
+
+```
+1、出现该问题主要是由于 iOS AVAudioSession 接口设置错误导致，建议设置场景适合的 AVAudioSession，AVAudioSession 的管理并不是从始至终的，需要根据合适的场景做切换
+2、检查 AVAudioSession 接口设置的 category、categoryOptions、以及mode
+3、参考事例 TIoTAVP2PPlayCaptureVC.m 中的 AVAudioSession 接口设置
+```
+
