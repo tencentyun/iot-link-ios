@@ -43,14 +43,26 @@ static NSInteger const maxLimitDeviceNumber = 4;
         make.width.height.mas_equalTo(kIconSize);
     }];
 
-    self.moreFuncBtn = [[UIButton alloc]init];
-    [self.moreFuncBtn setImage:[UIImage imageNamed:@"more_function"] forState:UIControlStateNormal];
-    [self.moreFuncBtn addTarget:self action:@selector(showMoreFunction) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:self.moreFuncBtn];
-    [self.moreFuncBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIImageView *moreFuncBtnIMG = [[UIImageView alloc]init];
+    [moreFuncBtnIMG setImage:[UIImage imageNamed:@"more_function"]];
+    [self.contentView addSubview:moreFuncBtnIMG];
+    [moreFuncBtnIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.contentView.mas_right).offset(-kPadding);
         make.top.equalTo(self.contentView.mas_top).offset(20);
         make.width.height.mas_equalTo(kMoreFuncBtnSize);
+    }];
+    
+    self.moreFuncBtn = [[UIButton alloc]init];
+//    [self.moreFuncBtn setImage:[UIImage imageNamed:@"more_function"] forState:UIControlStateNormal];
+    [self.moreFuncBtn addTarget:self action:@selector(showMoreFunction) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:self.moreFuncBtn];
+//    [self.moreFuncBtn setBackgroundColor:[UIColor redColor]];
+    [self.moreFuncBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.right.equalTo(self.contentView.mas_right).offset(-kPadding);
+//        make.top.equalTo(self.contentView.mas_top).offset(20);
+//        make.width.height.mas_equalTo(kMoreFuncBtnSize);
+        make.left.right.top.bottom.equalTo(self.contentView);
+//        make.width.height.equalTo(self.contentView);
     }];
     
     self.deviceNameLabel = [[UILabel alloc]init];

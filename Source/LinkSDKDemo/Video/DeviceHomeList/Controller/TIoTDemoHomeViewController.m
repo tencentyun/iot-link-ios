@@ -23,6 +23,7 @@
 #import "TIoTDemoProductDetailModel.h"
 #import "TIoTDemoNVRSubDeviceVC.h"
 #import "TIoTDemoPlaybackVC.h"
+#import "TIoTDemoPreviewMJPEGVC.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
@@ -229,7 +230,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"预览",@"回放",@"取消"];
+        NSArray *actionTitleArray = @[@"预览",@"回放",@"图片流（mjpeg）",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"预览");
@@ -260,11 +261,24 @@ static NSInteger const kLimit = 100;
             [customActionSheet removeFromSuperview];  
         };
         
+        ChooseFunctionBlock mjpegVideoBlock = ^(TIoTDemoCustomSheetView *view){
+            DDLogVerbose(@"图片流mjpeg");
+//            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
+//            TIoTExploreOrVideoDeviceModel *model = weakSelf.dataArray[indexPath.row];
+            TIoTDemoPreviewMJPEGVC *previewDeviceVC = [[TIoTDemoPreviewMJPEGVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = NO;
+            
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
+            [weakSelf resetDeviceListStatus];
+            [customActionSheet removeFromSuperview];
+        };
+        
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
             DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,mjpegVideoBlock,cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];

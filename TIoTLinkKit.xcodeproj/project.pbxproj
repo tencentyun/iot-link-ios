@@ -410,6 +410,7 @@
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
 		F4833EC724E29BC20033FAB2 /* TIoTLogTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */; };
 		F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */; };
+		F4AC6BB928A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AC6BB828A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m */; };
 		F4AD73122553D5A6003267FC /* TIoTVercheckTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */; };
 		F4AD73162553F797003267FC /* TIoTAppUtilOC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73152553F797003267FC /* TIoTAppUtilOC.m */; };
 		F4B39F602541767200C0DD6E /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
@@ -1260,6 +1261,8 @@
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
 		F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLogTask.swift; sourceTree = "<group>"; };
 		F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAppUtil.swift; sourceTree = "<group>"; };
+		F4AC6BB728A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTDemoPreviewMJPEGVC.h; sourceTree = "<group>"; };
+		F4AC6BB828A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoPreviewMJPEGVC.m; sourceTree = "<group>"; };
 		F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTVercheckTask.swift; sourceTree = "<group>"; };
 		F4AD73142553F797003267FC /* TIoTAppUtilOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppUtilOC.h; sourceTree = "<group>"; };
 		F4AD73152553F797003267FC /* TIoTAppUtilOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppUtilOC.m; sourceTree = "<group>"; };
@@ -1868,6 +1871,7 @@
 		6DF4A6A2269824C30094044A /* P2P */ = {
 			isa = PBXGroup;
 			children = (
+				F4AC6BB628A354CC00FFA634 /* Mjpeg */,
 				6DF0C5A3279A9FA400B4FE22 /* Model */,
 				6DF4A6B826983E100094044A /* View */,
 				6DF4A6B726983E0A0094044A /* Controller */,
@@ -3090,6 +3094,15 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		F4AC6BB628A354CC00FFA634 /* Mjpeg */ = {
+			isa = PBXGroup;
+			children = (
+				F4AC6BB728A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.h */,
+				F4AC6BB828A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m */,
+			);
+			path = Mjpeg;
+			sourceTree = "<group>";
+		};
 		F4D48B822520834C00CE90AC /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -3877,6 +3890,7 @@
 				6D50E92A26B1933700DF12A5 /* TIoTTRTCUIManage.m in Sources */,
 				F4F3D7BF24938EBE005D3396 /* TIoTCoreFamilyInfoVC.m in Sources */,
 				F4F3D7A924938EBE005D3396 /* TIoTCoreTimerCell.m in Sources */,
+				F4AC6BB928A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m in Sources */,
 				6DF0C5AB279AA16700B4FE22 /* TIoTXp2pInfoModel.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				F477671927C7691D00F37F39 /* TIoTAreaNetworkDeviceCell.m in Sources */,
