@@ -80,6 +80,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -395,25 +397,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             //拉流
             [self preparePlayer];
             
-            AVAudioSession *session = [AVAudioSession sharedInstance];
-            BOOL active = YES;
-            NSError *outError;
-            AVAudioSessionSetActiveOptions options = active ? 0 : AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation;
-            
-            [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker|AVAudioSessionCategoryOptionAllowBluetooth|AVAudioSessionCategoryOptionMixWithOthers error:&outError];
-            [session setMode:AVAudioSessionModeVoiceChat error:&outError];
-            [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&outError];
-            [session setActive:active withOptions:options error:nil];
-            
-//            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-//            [[AVAudioSession sharedInstance] setActive:YES error:nil];
             
             [[TIoTP2PCommunicateUIManage sharedManager] setStatusManager];
             [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateAcceptAppCallingOrCalledEnterRoom];
             
             //推流
-            [self startAVCapture];
-            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self startAVCapture];
+            });
         }
     }
 }
