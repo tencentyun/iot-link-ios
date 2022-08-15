@@ -101,10 +101,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [self setupUIViews];
     
     //获取具有云存日期
-    [self requestCloudStorageDateList];
+//    [self requestCloudStorageDateList];
     
     //获取某一天云存时间轴
-    [self requestCloudStorageDayDate];
+//    [self requestCloudStorageDayDate];
     
     //云存事件列表
     [self requestCloudStoreVideoList];
@@ -234,7 +234,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.view.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     
     __weak typeof(self) weakSelf = self;
-    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116)];
+    self.choiceDateView = [[TIoTDemoCustomChoiceDateView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.width * 9 / 16, kScreenWidth, 116-72)];
+    self.choiceDateView.clipsToBounds = YES;
     //从日历中选日期
     self.choiceDateView.chooseDateBlock = ^(UIButton * _Nonnull button) {
         
@@ -252,7 +253,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             weakSelf.isInnerScroll = NO;
             weakSelf.cloudIsHidePlayBtn = YES;
             weakSelf.cloudIsPause = NO;
-            [weakSelf requestCloudStorageDayDate];
+//            [weakSelf requestCloudStorageDayDate];
             [weakSelf requestCloudStoreVideoList];
             
             
@@ -590,6 +591,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.device_xp2p_info containsString:@"m"]) {
+        NSLog(@"是mjpeg设备");
+        return;
+    }
     self.currentTime = 0;
     self.cloudIsHidePlayBtn = YES;
     self.scrollDuraionTime = self.currentTime;
@@ -639,6 +644,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 ///MARK: viewarray 约束更新适配屏幕
 - (void)resetScreenSubviewsWithLandscape:(BOOL)rotation {
+    return;
     if (rotation == YES) { //横屏
         self.choiceDateView.hidden = YES;
         self.tableView.hidden = YES;

@@ -835,6 +835,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 ///MARK: viewarray 约束更新适配屏幕
 - (void)resetScreenSubviewsWithLandscape:(BOOL)rotation {
+    return;
     if (rotation == YES) { //横屏
         self.choiceLocalDateView.hidden = YES;
         self.tableView.hidden = YES;

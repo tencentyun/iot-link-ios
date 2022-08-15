@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @property (nonatomic, assign) BOOL is_reconnect_xp2p; //是否正在重连，指设备断网的重连，app重连不走这个
 @property (nonatomic, assign) BOOL is_reconnect_break; //退出页面，停止重连
-
+@property (nonatomic, strong) NSString *device_xp2p_info;
 @property (nonatomic, strong) WKWebView *webView;
 @end
 
@@ -174,6 +174,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
         TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
         NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
+        self.device_xp2p_info = xp2pInfoString;
         [self requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         [self requestDiffDeviceDataWithXp2pInfo:@""];
@@ -1002,6 +1003,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     //跳转回看页面，并播放当前选中事件视频，滚动条滑动相应位置
     TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
     TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.device_xp2p_info = self.device_xp2p_info;
     playBackVC.eventItemModel = itemModel;
     playBackVC.deviceModel = self.selectedModel;
     playBackVC.isNVR = self.isNVR;
@@ -1209,7 +1211,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
         TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
         NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
-        
+        self.device_xp2p_info = xp2pInfoString;
         [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:xp2pInfoString?:@""];
 //        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
@@ -1265,6 +1267,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)stopPlayMovie {
+    [self.webView stopLoading];
+    
     if (self.player != nil) {
         [self.player stop];
         [self.player shutdown];

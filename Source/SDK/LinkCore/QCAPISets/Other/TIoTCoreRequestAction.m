@@ -153,6 +153,7 @@ NSString *const DescribeCloudStorageThumbnail = @"DescribeCloudStorageThumbnail"
 NSString *const GenerateSignedVideoURL = @"GenerateSignedVideoURL";//获取视频防盗链播放URL
 NSString *const DescribeProduct = @"DescribeProduct";//获取产品详情
 NSString *const DescribeDeviceData = @"DescribeDeviceData"; //获取设备属性数据
+NSString *const DescribeCloudStorageStreamData = @"DescribeCloudStorageStreamData"; //拉取图片流数据
 
 //MARK:Explore
 NSString *const GetDeviceList = @"GetDeviceList";//Explore 设备列表 

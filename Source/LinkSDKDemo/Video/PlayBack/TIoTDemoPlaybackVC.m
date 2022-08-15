@@ -176,6 +176,7 @@
         
         self.cloudStorageVC.deviceModel = self.deviceModel;
         self.cloudStorageVC.eventItemModel = self.eventItemModel;
+        self.cloudStorageVC.device_xp2p_info = self.device_xp2p_info;
         self.localRecordVC.deviceModel = self.deviceModel;
         self.localRecordVC.isNVR = self.isNVR;
         self.localRecordVC.deviceName = self.deviceName;

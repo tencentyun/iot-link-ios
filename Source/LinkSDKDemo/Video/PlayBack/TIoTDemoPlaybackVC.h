@@ -21,6 +21,7 @@ typedef void(^TIoTDemoPlayerReloadBlock)(void);
 @property (nonatomic, assign) BOOL isNVR;
 @property (nonatomic, copy) NSString *deviceName;
 @property (nonatomic, assign) BOOL isFromHome;
+@property (nonatomic, strong) NSString *device_xp2p_info;
 @end
 
 NS_ASSUME_NONNULL_END
