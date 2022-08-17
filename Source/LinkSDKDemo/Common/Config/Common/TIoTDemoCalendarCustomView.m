@@ -174,14 +174,14 @@
             }
         }
     }else {
-        [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
+//        [MBProgressHUD showMessage:@"当前日期无录像" icon:@"overstep_device"];
         
-        if (self.mustReturn) {
+//        if (self.mustReturn) {
             [self dismissView];
             if (self.choickDayDateBlock) {
                 self.choickDayDateBlock(self.dayDateString?:self.defaultDateString);
             }
-        }
+//        }
     }
     
 }

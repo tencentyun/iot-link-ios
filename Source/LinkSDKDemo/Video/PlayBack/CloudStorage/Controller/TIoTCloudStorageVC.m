@@ -39,6 +39,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, strong) UIImageView *cloudImageView;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (atomic, retain) IJKFFMoviePlayerController *cloudPlayer;
+@property (atomic, retain) IJKFFMoviePlayerController *cloudAudioPlayer;
 
 @property (nonatomic, strong) UIView *playView; //player 开始播放按钮背景遮罩
 @property (nonatomic, strong) UIView *pauseTipView; //暂停提示View
@@ -51,6 +52,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, strong) UILabel *currentLabel; //当期时间
 @property (nonatomic, strong) UILabel *totalLabel; //总时间
 @property (nonatomic, strong) NSString *videoUrl;
+@property (nonatomic, strong) NSString *audioUrl;
 @property (nonatomic, strong) NSArray *timeList; //原始时间
 @property (nonatomic, strong) NSMutableArray *modelArray; //重组后存放时间数组
 
@@ -80,6 +82,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 @property (nonatomic, assign) NSInteger startStamp;
 @property (nonatomic, assign) BOOL isInnerScroll;
 @property (nonatomic, assign) BOOL cloudIsPause; //是否暂停
+
+@property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) NSURLSessionDataTask *mjpegDataTask;
+@property (nonatomic, strong) NSURLSessionDataTask *audioDataTask;
 @end
 
 @implementation TIoTCloudStorageVC
@@ -514,6 +520,48 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }];
 }
 
+
+///MARK: 获取mjpeg两路音视频
+- (void)getMJPEGVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange {
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
+    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
+    paramDic[@"Version"] = @"2021-11-25";
+    paramDic[@"DeviceName"] = self.deviceModel.DeviceName?:@"";
+    paramDic[@"StartTime"] = [NSNumber numberWithInteger:timeModel.StartTime.integerValue];
+
+    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageStreamData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
+
+        TIoTDemoCloudStoreMJPEGUrl *mjpegURl = [TIoTDemoCloudStoreMJPEGUrl yy_modelWithJSON:responseObject];
+        mjpegURl.StartTime = timeModel.StartTime;
+        DDLogDebug(@"--audioURL--%@\n--videoURL--%@",mjpegURl.AudioStream,mjpegURl.VideoStream);
+
+        //=====1.下载资源下来后再次点击播放。 需注意⚠️下载后本地播放需要改播放器为 fileURLWithPath
+//        [self loadInputStream:mjpegURl];
+        
+        //=====2.不下载资源直接在线点击播放
+        self.videoUrl = mjpegURl.VideoStream;
+        self.audioUrl = mjpegURl.AudioStream;
+        if (self.cloudIsHidePlayBtn == YES) {
+
+            [self configVideo];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.cloudPlayer prepareToPlay];
+                [self.cloudPlayer play];
+            });
+            
+            [self.cloudAudioPlayer prepareToPlay];
+            [self.cloudAudioPlayer play];
+            
+            [self autoHideControlView];
+        }
+        
+        [MBProgressHUD dismissInView:self.view];
+    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
+        [MBProgressHUD dismissInView:self.view];
+    }];
+}
+
 ///MARK: 云存事件列表
 - (void)requestCloudStoreVideoList {
     
@@ -591,8 +639,39 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
     if ([self.device_xp2p_info containsString:@"m"]) {
         NSLog(@"是mjpeg设备");
+        
+        //下载下来播放-----start
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths firstObject];
+        NSString *mjpegFile = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mjpeg",selectedModel.StartTime]];
+        NSString *audioFile = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.aac",selectedModel.StartTime]];
+        if ([fileManager fileExistsAtPath:mjpegFile]) {
+            //存在开始播 视频播放
+            self.videoUrl = mjpegFile;
+            self.audioUrl = audioFile;
+            if (self.cloudIsHidePlayBtn == YES) {
+
+                [self configVideo];
+                
+                [self.cloudPlayer prepareToPlay];
+                [self.cloudPlayer play];
+                
+                [self.cloudAudioPlayer prepareToPlay];
+                [self.cloudAudioPlayer play];
+                
+                [self autoHideControlView];
+            }
+            return;
+        }
+        //下载下来播放-----end
+        
+        
+        //否则开始下载
+        [self getMJPEGVideoURLWithPartURL:self.listModel.VideoURL withTime:selectedModel isChangeModel:YES];
         return;
     }
     self.currentTime = 0;
@@ -600,7 +679,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.scrollDuraionTime = self.currentTime;
     self.isInnerScroll = NO;
     self.cloudIsPause = NO;
-    TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
     
     if ([selectedModel.EndTime integerValue] == 0) {
         NSString *currentStamp = [NSString getNowTimeString];
@@ -1194,7 +1272,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_cloudPlayer.playbackState);
             if (self.cloudIsPause == NO) {
             }
-            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
+//            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             [MBProgressHUD dismissInView:self.view];
             break;
         }
@@ -1221,7 +1299,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 //计时器
 - (void)startPlayVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
-    
+    return;
     if (self.cloudTimer) {
         if (self.cloudIsTimerSuspend == YES) {
             dispatch_resume(self.cloudTimer);
@@ -1352,7 +1430,11 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
         IJKFFOptions *options = [IJKFFOptions optionsByDefault];
 
+//    if ([self.device_xp2p_info containsString:@"m"]) {
+//        self.cloudPlayer = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:self.videoUrl] withOptions:options];
+//    }else {
         self.cloudPlayer = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+//    }
         self.cloudPlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.cloudPlayer.view.frame = self.cloudImageView.bounds;
         self.cloudPlayer.scalingMode = IJKMPMovieScalingModeAspectFit;
@@ -1363,11 +1445,28 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         [self.cloudImageView addSubview:self.cloudPlayer.view];
         [self.cloudPlayer resetHubFrame:self.cloudPlayer.view.frame];
 //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
+    
+    
+    if ([self.device_xp2p_info containsString:@"m"]) {
+        NSLog(@"是mjpeg设备");
+        self.cloudAudioPlayer = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.audioUrl] withOptions:options];
+        self.cloudAudioPlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.cloudAudioPlayer.view.frame = self.cloudImageView.bounds;
+        self.cloudAudioPlayer.scalingMode = IJKMPMovieScalingModeAspectFit;
+        self.cloudAudioPlayer.shouldAutoplay = YES;
+        self.cloudAudioPlayer.shouldShowHudView = NO;
+    }
+    
+    [IJKFFMoviePlayerController setLogReport:YES];
+    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_UNKNOWN];
 }
 
 - (void)stopCloudPlayMovie {
     [self.cloudPlayer stop];
     self.cloudPlayer = nil;
+    
+    [self.cloudAudioPlayer stop];
+    self.cloudAudioPlayer = nil;
 }
 
 #pragma mark - lazy loading
@@ -1410,4 +1509,81 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 */
 
+
+//=====================================download session========================================
+#pragma mark - DownLoad MJPEG
+
+NSFileHandle *_mjpegfileHandle;
+NSFileHandle *_audiofileHandle;
+
+- (void )loadInputStream:(TIoTDemoCloudStoreMJPEGUrl *)mjpegURl{
+    
+    DDLogDebug(@"--audioURL--%@\n--videoURL--%@",mjpegURl.AudioStream,mjpegURl.VideoStream);
+
+    
+    //视频播放
+    self.videoUrl = mjpegURl.VideoStream;
+    self.audioUrl = mjpegURl.AudioStream;
+
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *mjpegFile = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mjpeg",mjpegURl.StartTime]];
+    //        [fileManager removeItemAtPath:h264File error:nil];
+    [fileManager createFileAtPath:mjpegFile contents:nil attributes:nil];
+    _mjpegfileHandle = [NSFileHandle fileHandleForWritingAtPath:mjpegFile];
+    
+    
+    NSString *audioFile = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.aac",mjpegURl.StartTime]];
+    [fileManager createFileAtPath:audioFile contents:nil attributes:nil];
+    _audiofileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    
+    
+    //download audio mjpeg
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:mjpegURl.VideoStream]];
+    [request setHTTPMethod:@"GET"];
+    self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    self.mjpegDataTask = [self.session dataTaskWithRequest:request];
+    [self.mjpegDataTask resume];
+    
+    NSMutableURLRequest *request_audio = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:mjpegURl.AudioStream]];
+    [request_audio setHTTPMethod:@"GET"];
+    self.audioDataTask = [self.session dataTaskWithRequest:request_audio];
+    [self.audioDataTask resume];
+}
+
+//1.接收到服务器响应的时候调用
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler{
+    NSLog(@"接收响应");
+    //必须告诉系统是否接收服务器返回的数据
+    //默认是completionHandler(NSURLSessionResponseAllow)
+    //可以再这边通过响应的statusCode来判断否接收服务器返回的数据
+    completionHandler(NSURLSessionResponseAllow);
+}
+//2.接受到服务器返回数据的时候调用,可能被调用多次
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data{
+    NSLog(@"接收到数据==%ld",data.length);//self.imageView
+    
+    if (self.mjpegDataTask == dataTask) {
+        [_mjpegfileHandle writeData:data];
+    }else {
+        [_audiofileHandle writeData:data];
+    }
+}
+//3.请求完成或者是失败的时候调用
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error{
+    NSLog(@"请求完成或者是失败");
+    
+    if ((self.mjpegDataTask.state == NSURLSessionTaskStateCompleted) && (self.audioDataTask.state == NSURLSessionTaskStateCompleted)) {
+        //下载完成
+        NSLog(@"mjpeg下载完成");
+    }
+}
+//4.将要缓存响应的时候调用（必须是默认会话模式，GET请求才可以）
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask willCacheResponse:(NSCachedURLResponse *)proposedResponse completionHandler:(void (^)(NSCachedURLResponse * _Nullable cachedResponse))completionHandler{
+    //可以在这边更改是否缓存，默认的话是completionHandler(proposedResponse)
+    //不想缓存的话可以设置completionHandler(nil)
+    completionHandler(proposedResponse);
+}
 @end

@@ -9,3 +9,7 @@
 @implementation TIoTDemoCloudStoreFullVideoUrl
 
 @end
+
+@implementation TIoTDemoCloudStoreMJPEGUrl
+
+@end

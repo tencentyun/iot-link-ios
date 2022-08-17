@@ -655,6 +655,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)clickPlayback:(UIButton *)button {
     
     TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.device_xp2p_info = self.device_xp2p_info;
     playBackVC.deviceModel = self.selectedModel;
     playBackVC.isNVR = self.isNVR;
     playBackVC.deviceName = self.deviceName;
