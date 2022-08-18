@@ -541,7 +541,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         //=====2.不下载资源直接在线点击播放
         self.videoUrl = mjpegURl.VideoStream;
         self.audioUrl = mjpegURl.AudioStream;
-        if (self.cloudIsHidePlayBtn == YES) {
 
             [self configVideo];
             
@@ -554,7 +553,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [self.cloudAudioPlayer play];
             
             [self autoHideControlView];
-        }
         
         [MBProgressHUD dismissInView:self.view];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
