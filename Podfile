@@ -2,7 +2,7 @@ platform :ios, '9.0'
 #inhibit_all_warnings!
 use_frameworks!
 #source 'https://cdn.cocoapods.org/'
-#source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
 def common_all_pods
   pod 'Masonry', '1.1.0'
   pod 'MBProgressHUD', '1.1.0'
@@ -30,7 +30,7 @@ target 'LinkApp' do
   pod 'CocoaAsyncSocket', '7.6.5'
   pod 'TIoTLinkKit_TPNS', '1.0.1'
   pod 'TIoTLinkKit_WechatOpenSDK', '1.0.1'
-  pod 'TIoTLinkKit_IJKPlayer', '~> 2.0.7-beta.202207121233'
+  pod 'TIoTLinkKit_IJKPlayer', '2.0.7' #~> 2.0.7-beta.202208251730
   pod 'Bugly', '2.5.91'
 end
 
@@ -42,5 +42,5 @@ target 'LinkSDKDemo' do
   pod 'TIoTLinkKit/LinkRTC', :path => './'
   
   pod 'TIoTLinkVideo', :path => './'
-  pod 'TIoTLinkKit_IJKPlayer', '~> 2.0.7-beta.202207121233'
+  pod 'TIoTLinkKit_IJKPlayer', '2.0.7'
 end
