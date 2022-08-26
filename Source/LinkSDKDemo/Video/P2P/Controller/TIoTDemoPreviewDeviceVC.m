@@ -1309,7 +1309,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:1 forKey:@"start-on-prepared" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"threads" ofCategory:kIJKFFOptionCategoryCodec];
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
-        [self.player setOptionIntValue:1 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
+        [self.player setOptionIntValue:1 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];//iformat_name
 //        [self.player setOptionValue:@"8000" forKey:@"ar" ofCategory:kIJKFFOptionCategoryCodec];
 //        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
         

@@ -552,7 +552,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             [self.cloudAudioPlayer prepareToPlay];
             [self.cloudAudioPlayer play];
             
-            [self autoHideControlView];
+
+            self.videoPlayBtn.hidden = YES;
+        self.customControlVidwoView.hidden = NO;
+        self.playPauseBtn.hidden = NO;
         
         [MBProgressHUD dismissInView:self.view];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
