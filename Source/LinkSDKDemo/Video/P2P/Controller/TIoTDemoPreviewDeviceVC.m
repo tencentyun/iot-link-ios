@@ -163,14 +163,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
     paramDic[@"DeviceName"] = self.deviceName?:@"";
     
+    __weak typeof(self) weakSelf = self;
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
         NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
         TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
         NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
-        [self requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
+        [weakSelf requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        [self requestDiffDeviceDataWithXp2pInfo:@""];
+        [weakSelf requestDiffDeviceDataWithXp2pInfo:@""];
         [MBProgressHUD showError:@"xp2pInfo api请求失败"];
     }];
 }
@@ -235,27 +236,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
     }
     
+    __weak typeof(self) weakSelf = self;
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
         TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
             if ([singleType isEqualToString:action_live]) {
                 //直播
-                [self setVieoPlayerStartPlayWith:qualityType];
+                [weakSelf setVieoPlayerStartPlayWith:qualityType];
             }else if ([singleType isEqualToString:action_voice]) {
                 //对讲
                 NSString *channel = @"";
-                if (self.isNVR == NO) {
+                if (weakSelf.isNVR == NO) {
                     channel = @"channel=0";
                 }else {
-                    NSString *channelNum = self.selectedModel.Channel?:@"0";
+                    NSString *channelNum = weakSelf.selectedModel.Channel?:@"0";
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
                 
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
                 
-                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:channel];
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
             }
             
         }else {
@@ -276,13 +278,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
     }
     
+    __weak typeof(self) weakSelf = self;
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
         TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
             if ([singleType isEqualToString:action_live]) {
                 //直播
-                [self setVieoPlayerStartPlayWith:qualityType];
+                [weakSelf setVieoPlayerStartPlayWith:qualityType];
             }else if ([singleType isEqualToString:action_voice]) {
                 //对讲
             }
@@ -1515,9 +1518,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 ///MARK: 切换live 清晰度
 - (void)resetVideoPlayerWithQuality:(NSString *)qualityString {
     
-    [self.player stop];
-    [self.player shutdown];
-    self.player = nil;
+    [self stopPlayMovie];
     
     if (self.isNVR == NO) {
         

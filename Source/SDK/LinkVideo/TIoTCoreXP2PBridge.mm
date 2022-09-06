@@ -12,7 +12,7 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preco
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PTypeDeviceMsgArrived"; //收到设备端的请求数据
 NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
 
-NSFileHandle *p2pOutLogFile;
+FILE *p2pOutLogFile;
 //NSFileHandle *fileHandle;
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
@@ -27,79 +27,75 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (idd == nullptr) {
         return nullptr;
     }
-    NSString *message = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    
     BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
     if (logEnable) {
-        NSLog(@"XP2P log: %@\n", message);
+        printf("XP2P log: %s\n", msg);
     }
     
     if (type == XP2PTypeLog) {
         if (logEnable) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [p2pOutLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
+            fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
+        }
+    }
+    
+    @autoreleasepool {
+        
+        NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
+        
+        if (type == XP2PTypeSaveFileOn) {
+            
+            BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
+            return (isWriteFile?"1":"0");
+        }else if (type == XP2PTypeSaveFileUrl) {
+            
+            NSString *fileName = @"video.data";
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentDirectory = paths.firstObject;
+            NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+            return saveFilePath.UTF8String;
+            
+        }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
+            [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
+            });
+        }else if (type == XP2PTypeDetectReady) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:@{@"id": DeviceName}];
             });
         }
-    }
-    
-    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
-    
-    if (type == XP2PTypeSaveFileOn) {
-        
-        BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
-        return (isWriteFile?"1":"0");
-    }else if (type == XP2PTypeSaveFileUrl) {
-        
-        NSString *fileName = @"video.data";
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentDirectory = paths.firstObject;
-        NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-        return saveFilePath.UTF8String;
-        
-    }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
-        NSLog(@"XP2P log: disconnect %@\n", message);
-        [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [p2pOutLogFile synchronizeFile];
-            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
-        });
-    }else if (type == XP2PTypeDetectReady) {
-        NSLog(@"XP2P log: ready %@\n", message);
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [p2pOutLogFile synchronizeFile];
-            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:@{@"id": DeviceName}];
-        });
-    }
-    else if (type == XP2PTypeDeviceMsgArrived) {
-        // 设备端向App发消息,
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDeviceMsg object:nil userInfo:@{@"id": DeviceName, @"msg": message}];
-//        });
-    }
-    else if (type == XP2PTypeCmdNOReturn) {
-        //设备自定义信令未回复内容
-        NSLog(@"设备自定义信令未回复内容: %@", message);
-    }
-    else if (type == XP2PTypeStreamEnd) {
-        // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
-        });
-    }
-    else if (type == XP2PTypeDownloadEnd) {
-        // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
-        });
-    }
-    
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-        if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
-            [delegate reviceEventMsgWithID:DeviceName eventType:type];
+        else if (type == XP2PTypeDeviceMsgArrived) {
+            // 设备端向App发消息,
+            //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDeviceMsg object:nil userInfo:@{@"id": DeviceName, @"msg": message}];
+            //        });
         }
-    });
+        else if (type == XP2PTypeCmdNOReturn) {
+            //设备自定义信令未回复内容
+            printf("设备自定义信令未回复内容: %s", msg);
+        }
+        else if (type == XP2PTypeStreamEnd) {
+            // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
+            });
+        }
+        else if (type == XP2PTypeDownloadEnd) {
+            // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationStreamEnd object:nil userInfo:@{@"id": DeviceName}];
+            });
+        }
+        
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
+            if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
+                [delegate reviceEventMsgWithID:DeviceName eventType:type];
+            }
+        });
+    }
     return nullptr;
 }
 
@@ -198,7 +194,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
         [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
-        p2pOutLogFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
+        p2pOutLogFile = fopen(logFile.UTF8String, "wb");
     }
     return self;
 }
@@ -417,7 +413,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
     
-    [p2pOutLogFile synchronizeFile];
     return (XP2PErrCode)errorcode;
 }
 
@@ -425,7 +420,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
-    [p2pOutLogFile synchronizeFile];
     //关闭文件
 //    [fileHandle closeFile];
 //    fileHandle = NULL;
