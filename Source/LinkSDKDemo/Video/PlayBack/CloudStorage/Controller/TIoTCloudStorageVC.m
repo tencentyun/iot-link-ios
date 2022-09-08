@@ -167,10 +167,10 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    [self closeTime];
     
     [self stopCloudPlayMovie];
     
-    [self closeTime];
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 
@@ -375,7 +375,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
                     if (weakSelf.cloudPlayer.isPlaying == NO) {
                         [weakSelf tapCloudVideoView:weakSelf.playPauseBtn];
                     }
-                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
+//                    [weakSelf startPlayVideoWithStartTime:currentModel.StartTime.integerValue endTime:currentModel.EndTime.integerValue sliderValue:weakSelf.currentTime];
                 }
                 
             }else {
@@ -523,6 +523,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 ///MARK: 获取mjpeg两路音视频
 - (void)getMJPEGVideoURLWithPartURL:(NSString *)videoPartURL withTime:(TIoTDemoCloudEventModel *)timeModel isChangeModel:(BOOL)isChange {
+    self.videoTimeModel = timeModel;
+    
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2021-11-25";
@@ -547,11 +549,13 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.cloudPlayer prepareToPlay];
                 [self.cloudPlayer play];
+                
+                [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:0];
+                self.slider.maximumValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
             });
             
             [self.cloudAudioPlayer prepareToPlay];
             [self.cloudAudioPlayer play];
-            
 
             self.videoPlayBtn.hidden = YES;
         self.customControlVidwoView.hidden = NO;
@@ -641,7 +645,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     TIoTDemoCloudEventModel *selectedModel = self.dataArray[indexPath.row];
-    if ([self.device_xp2p_info containsString:@"m"]) {
+    if (self.isMJPEG) {
         NSLog(@"是mjpeg设备");
         
         //下载下来播放-----start
@@ -898,6 +902,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         [self configVideo];
         [self.cloudPlayer prepareToPlay];
         [self.cloudPlayer play];
+        [self.cloudAudioPlayer prepareToPlay];
+        [self.cloudAudioPlayer play];
         [self autoHideControlView];
         
         self.cloudIsHidePlayBtn = YES;
@@ -907,6 +913,8 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
         [self configVideo];
         [self.cloudPlayer prepareToPlay];
         [self.cloudPlayer play];
+        [self.cloudAudioPlayer prepareToPlay];
+        [self.cloudAudioPlayer play];
         [self autoHideControlView];
     }
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@""];
@@ -1273,7 +1281,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
             DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_cloudPlayer.playbackState);
             if (self.cloudIsPause == NO) {
             }
-//            [self startPlayVideoWithStartTime:self.videoTimeModel.StartTime.integerValue endTime:self.videoTimeModel.EndTime.integerValue sliderValue:self.currentTime];
             [MBProgressHUD dismissInView:self.view];
             break;
         }
@@ -1300,7 +1307,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 //计时器
 - (void)startPlayVideoWithStartTime:(NSInteger )startTime endTime:(NSInteger )endTime sliderValue:(NSInteger)sliderValue{
-    return;
+//    return;
     if (self.cloudTimer) {
         if (self.cloudIsTimerSuspend == YES) {
             dispatch_resume(self.cloudTimer);
@@ -1314,11 +1321,14 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     }
     //播放时长 时间戳差值
     
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     
     __block NSInteger time = sliderValue; //计时开始
     
     NSInteger durationValue = self.cloudPlayer.duration;
+    if (durationValue < 1) {
+        durationValue = endTime - startTime;
+    }
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
     
@@ -1326,36 +1336,37 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     self.slider.maximumValue = durationValue;
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    weakSelf.cloudTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    self.cloudTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     
-    dispatch_source_set_timer(weakSelf.cloudTimer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
+    dispatch_source_set_timer(self.cloudTimer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行
     
-    dispatch_source_set_event_handler(weakSelf.cloudTimer, ^{
+    dispatch_source_set_event_handler(self.cloudTimer, ^{
         
         if(time >= durationValue){ //计时结束，关闭
             
-            dispatch_source_cancel(weakSelf.cloudTimer);
+            dispatch_source_cancel(self.cloudTimer);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf stopCloudPlayMovie];
+//                [weakSelf stopCloudPlayMovie];
                 //起始时间等于duration
-                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
-                weakSelf.currentLabel.text = weakSelf.totalLabel.text;
-                DDLogDebug(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.cloudPlayer.currentPlaybackTime,self.cloudPlayer.duration,self.cloudPlayer.playableDuration);
+                self.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];
+                self.currentLabel.text = self.totalLabel.text;
+                NSLog(@"over:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.cloudPlayer.currentPlaybackTime,self.cloudPlayer.duration,self.cloudPlayer.playableDuration);
             });
             
         }else{
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
-                weakSelf.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
-                weakSelf.slider.value = time;
-                DDLogDebug(@"duration:-----sliderValue:%f---currentTime:%f----totalTime:%f----playduratio:%f",self.slider.value,self.cloudPlayer.currentPlaybackTime,self.cloudPlayer.duration,self.cloudPlayer.playableDuration);
+                self.slider.maximumValue = durationValue;
+                self.currentLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",time/60,time%60];
+                self.totalLabel.text = [NSString stringWithFormat:@"%02ld:%02ld",minuteValue,secondValue];;
+                self.slider.value = (float)time;
+                NSLog(@"duration:-----sliderValue:%f---slidermax:%f---currentTime:%f----totalTime:%ld----playduratio:%f",self.slider.value,self.slider.maximumValue,self.cloudPlayer.currentPlaybackTime,(long)time,self.cloudPlayer.playableDuration);
             });
             time++;
             
         }
     });
-    dispatch_resume(weakSelf.cloudTimer);
+    dispatch_resume(self.cloudTimer);
 }
 
 - (void)cloudMoviePlayBackDidFinish:(NSNotification*)notification
@@ -1448,7 +1459,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 //        [self.player setOptionIntValue:10 * 1000 forKey:@"analyzeduration" ofCategory:kIJKFFOptionCategoryFormat];
     
     
-    if ([self.device_xp2p_info containsString:@"m"]) {
+    if (self.isMJPEG) {
         NSLog(@"是mjpeg设备");
         self.cloudAudioPlayer = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.audioUrl] withOptions:options];
         self.cloudAudioPlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
@@ -1463,11 +1474,16 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 }
 
 - (void)stopCloudPlayMovie {
-    [self.cloudPlayer stop];
-    self.cloudPlayer = nil;
-    
-    [self.cloudAudioPlayer stop];
-    self.cloudAudioPlayer = nil;
+    if (self.cloudPlayer != nil) {
+        [self.cloudPlayer stop];
+        [self.cloudPlayer.view removeFromSuperview];
+        self.cloudPlayer = nil;
+    }
+    if (self.cloudAudioPlayer != nil) {
+        [self.cloudAudioPlayer stop];
+        [self.cloudAudioPlayer.view removeFromSuperview];
+        self.cloudAudioPlayer = nil;
+    }
 }
 
 #pragma mark - lazy loading

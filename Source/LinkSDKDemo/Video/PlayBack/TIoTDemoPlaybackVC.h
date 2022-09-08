@@ -22,6 +22,7 @@ typedef void(^TIoTDemoPlayerReloadBlock)(void);
 @property (nonatomic, copy) NSString *deviceName;
 @property (nonatomic, assign) BOOL isFromHome;
 @property (nonatomic, strong) NSString *device_xp2p_info;
+@property (nonatomic, assign) BOOL isMJPEG;
 @end
 
 NS_ASSUME_NONNULL_END

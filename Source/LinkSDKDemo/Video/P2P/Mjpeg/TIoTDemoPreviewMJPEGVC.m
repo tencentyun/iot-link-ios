@@ -655,6 +655,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)clickPlayback:(UIButton *)button {
     
     TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.isMJPEG = YES;
     playBackVC.device_xp2p_info = self.device_xp2p_info;
     playBackVC.deviceModel = self.selectedModel;
     playBackVC.isNVR = self.isNVR;
@@ -1004,6 +1005,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     //跳转回看页面，并播放当前选中事件视频，滚动条滑动相应位置
     TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
     TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
+    playBackVC.isMJPEG = YES;
     playBackVC.device_xp2p_info = self.device_xp2p_info;
     playBackVC.eventItemModel = itemModel;
     playBackVC.deviceModel = self.selectedModel;

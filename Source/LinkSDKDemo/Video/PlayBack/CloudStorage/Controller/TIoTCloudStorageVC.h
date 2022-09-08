@@ -21,6 +21,7 @@ typedef void(^TIoTDemoCloudPlayerReloadBlock)(void);
 @property (nonatomic, strong) TIoTDemoCloudEventModel *eventItemModel; // 选择具体某个事件model
 @property (nonatomic, copy) TIoTDemoCloudPlayerReloadBlock playerReloadBlock;
 @property (nonatomic, strong) NSString *device_xp2p_info;
+@property (nonatomic, assign) BOOL isMJPEG;
 - (void)clearMessage;
 @end
 

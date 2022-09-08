@@ -169,6 +169,7 @@
     if (!_childControllers) {
         
         self.cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
+        self.cloudStorageVC.isMJPEG = self.isMJPEG;
         self.localRecordVC = [[TIoTDemoLocalRecordVC alloc]init];
         
         self.cloudStorageVC.title = @"云记录";
