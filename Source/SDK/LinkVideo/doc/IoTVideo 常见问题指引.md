@@ -1,4 +1,4 @@
-## ToT Video 常见问题
+## IoT Video 常见问题
 
 
 
@@ -97,7 +97,8 @@ APP 画面卡住主要有以下几点原因：
 ```
 国内域名
 设备端：
-stun.iotvideo.tencentcs.com   
+stun.iotvideo.tencentcs.com  
+gateway.iotvideo.tencentcs.com 
 *.iotcloud.tencentdevices.com
 log.qvb.qcloud.com
 conf.qvb.qcloud.com
