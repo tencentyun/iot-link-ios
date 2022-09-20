@@ -257,7 +257,17 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
                 [[AVAudioSession sharedInstance] setActive:YES error:nil];
                 
-                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
+//                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
+                TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+                audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
+                audio_config.channels = 1;
+                audio_config.isEchoCancel = NO;
+                
+                TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+                video_config.localView = nil;
+                video_config.videoPosition = AVCaptureDevicePositionFront;
+                
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
             }
             
         }else {

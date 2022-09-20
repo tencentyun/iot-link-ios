@@ -10,15 +10,14 @@
 @interface TIoTPCMXEchoRecord()
 {
     AudioUnit audioUnit;
-    std::queue<std::pair<std::shared_ptr<char>, int>> queue;
-    std::mutex mutex;
     RecordCallback callback;
     void *user;
 }
 
 @end
+
 @implementation TIoTPCMXEchoRecord
-- (instancetype)init
+- (instancetype)initWithChannel:(int)channel isEcho:(BOOL)isEcho
 {
     self = [super init];
     if (!self) return nil;
@@ -28,7 +27,11 @@
     des.componentFlagsMask = 0;
     des.componentManufacturer = kAudioUnitManufacturer_Apple;
     des.componentType = kAudioUnitType_Output;
-    des.componentSubType = kAudioUnitSubType_VoiceProcessingIO; //kAudioUnitSubType_RemoteIO;
+    if (isEcho) {
+        des.componentSubType = kAudioUnitSubType_VoiceProcessingIO; //kAudioUnitSubType_RemoteIO;
+    }else {
+        des.componentSubType = kAudioUnitSubType_RemoteIO;
+    }
     
     AudioComponent audioComponent;
     audioComponent = AudioComponentFindNext(NULL, &des);
@@ -41,10 +44,10 @@
     outStreamDes.mFormatID = kAudioFormatLinearPCM;
     outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger;
     outStreamDes.mFramesPerPacket = 1;
-    outStreamDes.mChannelsPerFrame = 1;
+    outStreamDes.mChannelsPerFrame = channel;
     outStreamDes.mBitsPerChannel = 16;
-    outStreamDes.mBytesPerFrame = 2;
-    outStreamDes.mBytesPerPacket = 2;
+    outStreamDes.mBytesPerFrame = 2 * channel;
+    outStreamDes.mBytesPerPacket = 2 * channel;
     outStreamDes.mReserved = 0;
     _pcmStreamDescription = outStreamDes;
     
@@ -76,11 +79,12 @@
 
 #define kTVURecoderPCMMaxBuffSize 2048
 static int          pcm_buffer_size = 0;
-static uint8_t      pcm_buffer[kTVURecoderPCMMaxBuffSize*2];
+static uint8_t      pcm_buffer[kTVURecoderPCMMaxBuffSize*4];
 
 static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrame, AudioBufferList *__nullable ioData)
 {
     TIoTPCMXEchoRecord *r = (__bridge TIoTPCMXEchoRecord *)(inRefCon);
+    int channel = r->_pcmStreamDescription.mChannelsPerFrame;
 
     AudioBufferList list;
     list.mNumberBuffers = 1;
@@ -107,13 +111,13 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     memcpy(pcm_buffer+pcm_buffer_size, bufferData, bufferSize);
     pcm_buffer_size = pcm_buffer_size + bufferSize;
     
-    if(pcm_buffer_size >= kTVURecoderPCMMaxBuffSize) {
+    if(pcm_buffer_size >= (kTVURecoderPCMMaxBuffSize*channel)) {
         if (r->callback)
             r->callback(pcm_buffer, pcm_buffer_size, r->user);
         
         // 因为采样不可能每次都精准的采集到1024个样点，所以如果大于2048大小就先填满2048，剩下的跟着下一次采集一起送给转换器
-        memcpy(pcm_buffer, pcm_buffer + kTVURecoderPCMMaxBuffSize, pcm_buffer_size - kTVURecoderPCMMaxBuffSize);
-        pcm_buffer_size = pcm_buffer_size - kTVURecoderPCMMaxBuffSize;
+        memcpy(pcm_buffer, pcm_buffer + (kTVURecoderPCMMaxBuffSize*channel), pcm_buffer_size - (kTVURecoderPCMMaxBuffSize*channel));
+        pcm_buffer_size = pcm_buffer_size - (kTVURecoderPCMMaxBuffSize*channel);
     }
     
     return error;
@@ -125,15 +129,14 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 - (void)start_record
 {
+    pcm_buffer_size = 0;
     AudioOutputUnitStart(audioUnit);
 }
 
 - (void)stop_record
 {
     AudioOutputUnitStop(audioUnit);
-    std::unique_lock<std::mutex> lock(mutex);
-    decltype(queue) empty;
-    std::swap(empty, queue);
+    pcm_buffer_size = 0;
 }
 
 - (void)set_record_callback:(RecordCallback)c user:(nonnull void *)u
@@ -146,5 +149,7 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 {
     callback = NULL;
     user = NULL;
+    [self stop_record];
+    AudioComponentInstanceDispose(audioUnit);
 }
 @end
