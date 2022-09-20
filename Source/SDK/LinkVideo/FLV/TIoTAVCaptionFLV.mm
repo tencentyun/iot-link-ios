@@ -23,21 +23,17 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, strong) AVCaptureSession           *session;
 // 队列
 @property (nonatomic, strong) dispatch_queue_t           videoQueue;
-@property (nonatomic, strong) dispatch_queue_t           AudioQueue;
 
 // 负责从 AVCaptureDevice 获得输入数据
 @property (nonatomic, strong) AVCaptureDeviceInput       *deviceInput;
 @property (nonatomic, strong) AVCaptureVideoDataOutput   *videoOutput;
 @property (nonatomic, strong) AVCaptureConnection        *videoConnection;
-@property (nonatomic, strong) AVCaptureConnection        *audioConnection;
 // 拍摄预览图层
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, strong) TIoTH264Encoder                *h264Encoder;
 @property (nonatomic, strong) TIoTAACEncoder                 *aacEncoder;
-//@property (nonatomic, strong) NSMutableData              *data;
-//@property (nonatomic, copy  ) NSString                   *h264File;
-//@property (nonatomic, strong) NSFileHandle               *fileHandle;
 @property (nonatomic, assign) TIoTAVCaptionFLVAudioType     audioRate;
+@property (nonatomic, assign) int channel;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
@@ -45,11 +41,12 @@ dispatch_queue_t muxerQueue;
 
 @implementation TIoTAVCaptionFLV
 
--(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate {
+-(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate channel:(int)channel {
     self = [super init];
     if (self) {
         tAVCaptionFLV = self;
         _audioRate = audioSampleRate;
+        _channel = channel;
         _isEchoCancel = NO;
         _devicePosition = AVCaptureDevicePositionBack;
         [self onInit];
@@ -68,7 +65,6 @@ dispatch_queue_t muxerQueue;
     
     muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
     
-//    _data = [NSMutableData new];
     _session = [AVCaptureSession new];
     
     self.resolutionRatioValue = AVCaptureSessionPreset352x288;
@@ -82,52 +78,17 @@ dispatch_queue_t muxerQueue;
         return;
     }
     AudioStreamBasicDescription inAudioStreamBasicDescription;
-    if (_isEchoCancel) {
         
-        self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] init];
-        [self.pcmRecord set_record_callback:record_callback user:(__bridge void * _Nonnull)(self)];
-//        [self.record start_record];
-        
-        inAudioStreamBasicDescription = self.pcmRecord.pcmStreamDescription;
-        self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
-        self.aacEncoder.delegate = self;
-        self.aacEncoder.audioType = _audioRate;
-        return;
-    }
+    self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:_channel isEcho:_isEchoCancel];
+    [self.pcmRecord set_record_callback:record_callback user:(__bridge void * _Nonnull)(self)];
+    //        [self.record start_record];
+    
+    inAudioStreamBasicDescription = self.pcmRecord.pcmStreamDescription;
     self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
     self.aacEncoder.delegate = self;
     self.aacEncoder.audioType = _audioRate;
-    
-    AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
-    
-    NSError *error = nil;
-    
-    AVCaptureDeviceInput *audioInput = [[AVCaptureDeviceInput alloc]initWithDevice:audioDevice error:&error];
-    
-    if (error) {
-        
-        NSLog(@"Error getting audio input device:%@",error.description);
-    }
-    
-    if ([self.session canAddInput:audioInput]) {
-        
-        [self.session addInput:audioInput];
-    }
-    
-    self.AudioQueue = dispatch_queue_create("Audio Capture Queue", DISPATCH_QUEUE_SERIAL);
-    
-    AVCaptureAudioDataOutput *audioOutput = [AVCaptureAudioDataOutput new];
-    [audioOutput setSampleBufferDelegate:self queue:self.AudioQueue];
-    
-    if ([self.session canAddOutput:audioOutput]) {
-        
-        [self.session addOutput:audioOutput];
-    }
-    
-    self.audioConnection = [audioOutput connectionWithMediaType:AVMediaTypeAudio];
-    
-
 }
+
 - (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -349,17 +310,10 @@ dispatch_queue_t muxerQueue;
 
 #pragma mark - 实现 AVCaptureOutputDelegate：
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    if (connection == _videoConnection) {  // Video
-
-        if (self.videoLocalView) { //开关打开，才推送视频
-            [self.h264Encoder encode:sampleBuffer];
-            
-            [self calculatorCaptureFPS];
-        }
-    
-    } else if (connection == _audioConnection) {  // Audio
+    if (self.videoLocalView) { //开关打开，才推送视频
+        [self.h264Encoder encode:sampleBuffer];
         
-        [self.aacEncoder encodeSampleBuffer:sampleBuffer];
+        [self calculatorCaptureFPS];
     }
 }
 
@@ -415,6 +369,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 
 #pragma mark - TIoTAACEncoderDelegate
 - (void)getEncoderAACData:(NSData *)data {
+//    [_fileHandle writeData:data];
     encodeFlvData(0, data);
 }
 
@@ -500,26 +455,22 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
     
-//    self.h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.h264"];
-//    [fileManager removeItemAtPath:self.h264File error:nil];
-//    [fileManager createFileAtPath:self.h264File contents:nil attributes:nil];
-//    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.h264File];
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.aac"];
+//    [fileManager removeItemAtPath:h264File error:nil];
+//    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
+//    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
         
     flv_init_load();
 
     [self startCamera];
     
-    if (_isEchoCancel) {
-        [self.pcmRecord start_record];
-    }
+    [self.pcmRecord start_record];
     return YES;
 }
 
 -(void) stopCapture{
     [self stopCarmera];
-    if (_isEchoCancel) {
-        [self.pcmRecord stop_record];
-    }
+    [self.pcmRecord stop_record];
 }
 
 - (void) startCamera
@@ -551,15 +502,6 @@ int encodeFlvData(int type, NSData *packetData) {
 //    [_fileHandle closeFile];
 //    _fileHandle = NULL;
 //
-    // 获取程序Documents目录路径
-    /*NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    NSMutableString * path = [[NSMutableString alloc]initWithString:documentsDirectory];
-    [path appendString:@"/AACFile.aac"];
-    
-    [_data writeToFile:path atomically:YES];
-    */
 }
 
 - (void)setCameraFPS:(int)fps {

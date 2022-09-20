@@ -2,7 +2,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "TIoTAVCaptionFLV.h"
+#import "TIoTCoreAudioConfig.h"
 
 @protocol TIoTAACEncoderDelegate <NSObject>
 - (void)getEncoderAACData:(NSData *)data;

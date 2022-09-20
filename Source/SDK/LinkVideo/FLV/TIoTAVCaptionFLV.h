@@ -1,11 +1,7 @@
 
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
-
-typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
-    TIoTAVCaptionFLVAudio_8,
-    TIoTAVCaptionFLVAudio_16
-};
+#import "TIoTCoreAudioConfig.h"
+#import "TIoTCoreVideoConfig.h"
 
 @protocol TIoTAVCaptionFLVDelegate <NSObject>
 -(void) capture:(uint8_t *)data len:(size_t) size;
@@ -17,7 +13,7 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
 @property (nonatomic, assign)UIView *videoLocalView;
 @property (nonatomic, assign)BOOL isEchoCancel;
 @property (nonatomic, assign)AVCaptureDevicePosition devicePosition;
--(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate;
+-(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate channel:(int)channel;
 
 - (void)preStart;
 - (BOOL)startCapture;

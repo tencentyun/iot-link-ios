@@ -319,6 +319,18 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel {
+    TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+    audio_config.sampleRate = audio_rate;
+    audio_config.channels = 1;
+    audio_config.isEchoCancel = isEchoCancel;
+    
+    TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+    video_config.localView = localView;
+    video_config.videoPosition = videoPosition;
+    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_config videoConfig:video_config];
+}
+
+- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config {
 //    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
@@ -332,12 +344,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     
     if (systemAvCapture == nil) {
-        systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_rate];
-        systemAvCapture.videoLocalView = localView;
-        systemAvCapture.isEchoCancel = isEchoCancel;
+        systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_config.sampleRate channel:audio_config.channels];
+        systemAvCapture.videoLocalView = video_config.localView;
+        systemAvCapture.isEchoCancel = audio_config.isEchoCancel;
     }
-    systemAvCapture.devicePosition = videoPosition;
-    systemAvCapture.videoLocalView = localView;
+    systemAvCapture.devicePosition = video_config.videoPosition;
+    systemAvCapture.videoLocalView = video_config.localView;
     [systemAvCapture setResolutionRatio:self.resolution];
     [systemAvCapture preStart];//配置声音和视频
     
@@ -348,7 +360,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
     //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
     [self cancelTimer];
-    if (localView != nil) {
+    if (video_config.localView != nil) {
         _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
     }
 }

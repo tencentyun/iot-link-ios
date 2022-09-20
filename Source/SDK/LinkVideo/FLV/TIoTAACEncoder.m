@@ -58,7 +58,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     outAudioStreamBasicDescription.mBytesPerFrame = 0;
     outAudioStreamBasicDescription.mFramesPerPacket = 1024;
     //设定声道数为1
-    outAudioStreamBasicDescription.mChannelsPerFrame = 1;
+    outAudioStreamBasicDescription.mChannelsPerFrame = inAudioStreamBasicDescription.mChannelsPerFrame;
     //设定采样率为16000
 //    outAudioStreamBasicDescription.mSampleRate = inAudioStreamBasicDescription.mSampleRate;
     if (self.audioType == TIoTAVCaptionFLVAudio_8) {
@@ -145,14 +145,14 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
                 FillComplexInputParm userParam;
                 userParam.source = pcmData;
                 userParam.sourceSize = (UInt32)pcmLength;
-                userParam.channelCount = 1;
+                userParam.channelCount = self->inAudioStreamBasicDescription.mChannelsPerFrame;
                 userParam.packetDescription = NULL;
                 //在堆区创建audiobufferlist
                 AudioBufferList outputBufferList;
                 outputBufferList.mNumberBuffers = 1;
                 outputBufferList.mBuffers[0].mData = outputBuffer;
                 outputBufferList.mBuffers[0].mDataByteSize = (UInt32)pcmLength;
-                outputBufferList.mBuffers[0].mNumberChannels = 1;
+                outputBufferList.mBuffers[0].mNumberChannels = self->inAudioStreamBasicDescription.mChannelsPerFrame;
                 //编码
                 OSStatus status = AudioConverterFillComplexBuffer(self->convertContext->converter, audioConverterComplexInputDataProc, &userParam, &packetSize, &outputBufferList, outputPacketDes);
                 free(outputPacketDes);
@@ -257,7 +257,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
 //    else if (self.audioType == TIoTAVCaptionFLVAudio_441) {
 //        freqIdx = 4;
 //    }
-    int chanCfg = 1;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
+    int chanCfg = inAudioStreamBasicDescription.mChannelsPerFrame;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
     NSUInteger fullLength = adtsLength + packetLength;
     // fill in ADTS data
     packet[0] = (char)0xFF; // 11111111     = syncword
