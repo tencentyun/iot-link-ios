@@ -12,6 +12,7 @@
 
 #include <iostream>
 #import "TIoTPCMXEchoRecord.h"
+#include "ijksoundtouch_wrap.h"
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
@@ -48,6 +49,7 @@ dispatch_queue_t muxerQueue;
         _audioRate = audioSampleRate;
         _channel = channel;
         _isEchoCancel = NO;
+        _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
         [self onInit];
     }
@@ -320,9 +322,25 @@ dispatch_queue_t muxerQueue;
 #pragma mark - PCM XEcho record_callback
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
+//    printf("pcm_size_callback: %d\n", size);
+    int ret_len = size;
+    // Sets pitch change in semi-tones compared to the original pitch
+    // (-12 .. +12)
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
+    if (vc.pitch != 0) {
+        static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
+        static int pitch = ((vc.pitch >= -12) && (vc.pitch <= 12 ))?vc.pitch:-6;
+        static void *ijk_soundtouch_handle = ijk_soundtouch_create(1.0, pitch, tmpChannel, 16000);
+        ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)buffer, size/2, 2, tmpChannel);
+        if (ret_len<1) {
+            return;
+        }
+    }
+//    printf("pcm_size_callback_translate: %d\n", ret_len);
     
-    NSData *data = [NSData dataWithBytes:buffer length:size];
+
+    NSData *data = [NSData dataWithBytes:buffer length:ret_len];
+//    [_fileHandle writeData:data];
     [vc.aacEncoder encodePCMData:data];
 }
 
@@ -455,7 +473,7 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
     
-//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.aac"];
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.pcm"];
 //    [fileManager removeItemAtPath:h264File error:nil];
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];

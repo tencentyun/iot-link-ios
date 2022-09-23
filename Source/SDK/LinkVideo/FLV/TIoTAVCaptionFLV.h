@@ -12,6 +12,7 @@
 @property (nonatomic, weak) id<TIoTAVCaptionFLVDelegate> delegate;
 @property (nonatomic, assign)UIView *videoLocalView;
 @property (nonatomic, assign)BOOL isEchoCancel;
+@property (nonatomic, assign)int pitch;
 @property (nonatomic, assign)AVCaptureDevicePosition devicePosition;
 -(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate channel:(int)channel;
 

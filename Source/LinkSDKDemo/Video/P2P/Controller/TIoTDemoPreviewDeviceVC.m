@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
-    self.qualityString = quality_high;
+    self.qualityString = quality_standard;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     if (self.isNVR == NO) {
@@ -261,7 +261,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
                 audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
                 audio_config.channels = 1;
-                audio_config.isEchoCancel = NO;
+                audio_config.isEchoCancel = YES;
+                audio_config.pitch =  -6; //声音会变粗一点
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
                 video_config.localView = nil;
