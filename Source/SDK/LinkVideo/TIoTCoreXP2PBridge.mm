@@ -323,6 +323,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     audio_config.sampleRate = audio_rate;
     audio_config.channels = 1;
     audio_config.isEchoCancel = isEchoCancel;
+    audio_config.pitch = 0;
     
     TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
     video_config.localView = localView;
@@ -347,6 +348,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_config.sampleRate channel:audio_config.channels];
         systemAvCapture.videoLocalView = video_config.localView;
         systemAvCapture.isEchoCancel = audio_config.isEchoCancel;
+        systemAvCapture.pitch = audio_config.pitch;
     }
     systemAvCapture.devicePosition = video_config.videoPosition;
     systemAvCapture.videoLocalView = video_config.localView;

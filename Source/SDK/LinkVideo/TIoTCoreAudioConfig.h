@@ -30,6 +30,12 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
  */
 @property (nonatomic,assign) BOOL isEchoCancel;
 
+/**
+ *  是否变声， Sets pitch change in semi-tones compared to the original pitch
+ *  (-12 .. +12)，默认为0不变声
+ */
+@property (nonatomic,assign) int pitch;
+
 @end
 
 NS_ASSUME_NONNULL_END
