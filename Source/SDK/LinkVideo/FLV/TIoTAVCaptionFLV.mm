@@ -320,6 +320,18 @@ dispatch_queue_t muxerQueue;
 }
 
 #pragma mark - PCM XEcho record_callback
+void *ijk_soundtouch_handle = NULL;
+- (void)setPitch:(int)pitch {
+    _pitch = ((pitch >= -12) && (pitch <= 12 ))?pitch:-6;
+    NSLog(@"设置变调参数:%d<===>修正为:%d",pitch, _pitch);
+    int tmpChannel = _channel;
+    
+    if (ijk_soundtouch_handle != NULL) {
+        ijk_soundtouch_destroy(ijk_soundtouch_handle);
+    }
+    ijk_soundtouch_handle = ijk_soundtouch_create(1.0, _pitch, tmpChannel, 16000);
+}
+
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    printf("pcm_size_callback: %d\n", size);
@@ -329,8 +341,6 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
     if (vc.pitch != 0) {
         static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
-        static int pitch = ((vc.pitch >= -12) && (vc.pitch <= 12 ))?vc.pitch:-6;
-        static void *ijk_soundtouch_handle = ijk_soundtouch_create(1.0, pitch, tmpChannel, 16000);
         ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)buffer, size/2, 2, tmpChannel);
         if (ret_len<1) {
             return;
