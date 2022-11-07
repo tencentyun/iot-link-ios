@@ -12,7 +12,7 @@
 
 #include <iostream>
 #import "TIoTPCMXEchoRecord.h"
-#include "ijksoundtouch_wrap.h"
+#import <SoundTouchiOS/ijksoundtouch_wrap.h>
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
