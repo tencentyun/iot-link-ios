@@ -36,6 +36,11 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
  */
 @property (nonatomic,assign) int pitch;
 
+/**
+ *  需要重启录音器和编码器设置为yes
+ */
+@property (nonatomic,assign) BOOL refreshSession;
+
 @end
 
 NS_ASSUME_NONNULL_END

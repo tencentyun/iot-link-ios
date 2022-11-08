@@ -7,6 +7,9 @@
 
 #import <AudioUnit/AudioUnit.h>
 
+static int kOutputBus = 0;
+static int kInputBus = 1;
+
 @interface TIoTPCMXEchoRecord()
 {
     AudioUnit audioUnit;
@@ -51,12 +54,22 @@
     outStreamDes.mReserved = 0;
     _pcmStreamDescription = outStreamDes;
     
-    UInt32 flags = 1;
-    ret = AudioUnitSetProperty(audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &flags, sizeof(flags));
+    UInt32 enableOutput = 1;
+    ret = AudioUnitSetProperty(audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, kOutputBus, &enableOutput, sizeof(enableOutput));
     if (ret != noErr)
         return nil;
     
-    ret = AudioUnitSetProperty(audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &outStreamDes, sizeof(outStreamDes));
+    ret = AudioUnitSetProperty(audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, kInputBus, &outStreamDes, sizeof(outStreamDes));
+    if (ret != noErr)
+        return nil;
+    
+    ret = AudioUnitSetProperty(audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, kOutputBus, &outStreamDes, sizeof(outStreamDes));
+    if (ret != noErr)
+        return nil;
+    
+    // Enable the microphone input
+    UInt32 enableInput = 1;
+    ret = AudioUnitSetProperty(audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, kInputBus, &enableInput, sizeof(enableInput));
     if (ret != noErr)
         return nil;
     
@@ -74,8 +87,9 @@
     if (ret != noErr)
         return nil;
     
-    return self;
-}
+    AudioUnitInitialize(audioUnit);
+    
+    return self;}
 
 #define kTVURecoderPCMMaxBuffSize 2048
 static int          pcm_buffer_size = 0;

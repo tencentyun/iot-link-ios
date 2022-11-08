@@ -25,6 +25,7 @@
 #import "TIoTXp2pInfoModel.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ReachabilityManager.h"
+#import "TIoTSessionManager.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -107,7 +108,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
-    self.qualityString = quality_standard;
+    self.qualityString = quality_high;
     self.screenRect = [UIApplication sharedApplication].delegate.window.frame;
     
     if (self.isNVR == NO) {
@@ -214,6 +215,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     if (self.isNVR == NO) {
         [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+        
+        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
@@ -254,21 +257,28 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
                 
-                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-                [[AVAudioSession sharedInstance] setActive:YES error:nil];
-                
 //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
+                [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
+                
+                static int tt_pitch = -6;
                 TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+                audio_config.refreshSession = YES;
                 audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
                 audio_config.channels = 1;
                 audio_config.isEchoCancel = YES;
-                audio_config.pitch =  -6; //声音会变粗一点
+                audio_config.pitch =  tt_pitch; // -6声音会变粗一点;    6声音会变细一点
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
                 video_config.localView = nil;
                 video_config.videoPosition = AVCaptureDevicePositionFront;
                 
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
+                
+                if(tt_pitch == 6){
+                    tt_pitch = -6;
+                }else {
+                    tt_pitch = 6;
+                }
             }
             
         }else {
@@ -654,6 +664,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
         [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+        
+        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
     
     button.selected = !button.selected;
