@@ -612,11 +612,25 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [[TIoTCoreXP2PBridge sharedInstance] resolutionRatio:self.resolutionRatio];
     
+    /*
     if (self.callType == TIoTTRTCSessionCallType_audio) {
         [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:nil];
     }else {
         [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView videoPosition:AVCaptureDevicePositionFront];
     }
+     */
+    TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+    audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
+    audio_config.channels = 1;
+    audio_config.isEchoCancel = YES;
+    audio_config.pitch =  0;
+    
+    TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+    if (self.callType == TIoTTRTCSessionCallType_video) {
+        video_config.localView = self.previewBottomView;
+        video_config.videoPosition = AVCaptureDevicePositionFront;
+    }
+    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:audio_config videoConfig:video_config];
 }
 
 - (void)changeCameraPositon {
