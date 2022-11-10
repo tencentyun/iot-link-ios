@@ -100,6 +100,31 @@ dispatch_queue_t muxerQueue;
     return nil;
 }
 
+- (void)changeCameraWithPositon:(AVCaptureDevicePosition)position {
+    AVCaptureDevice *newCamera = [self cameraWithPosition:position];
+    AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:newCamera error:nil];
+    if (newInput != nil) {
+        [self.session beginConfiguration];
+        //先移除原来的input
+        [self.session removeInput:self.deviceInput];
+        if ([self.session canAddInput:newInput]) {
+            [self.session addInput:newInput];
+            self.deviceInput = newInput;
+        }else{
+            //如果不能加现在的input，就加原来的input
+            [self.session addInput:self.deviceInput];
+        }
+        
+        self.session.sessionPreset = self.resolutionRatioValue;
+        // 保存Connection,用于SampleBufferDelegate中判断数据来源(video or audio?)
+        _videoConnection = [_videoOutput connectionWithMediaType:AVMediaTypeVideo];
+        [_videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+        
+        [self.session commitConfiguration];
+    }
+
+    [self setCameraFPS:15];
+}
 /**
  切换前后摄像头
  */
@@ -232,6 +257,9 @@ dispatch_queue_t muxerQueue;
         if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
             // 设置分辨率
             _session.sessionPreset = self.resolutionRatioValue;
+            
+            //设置传入的position
+            [self changeCameraWithPositon:self.devicePosition];
         }
         return;
     }
