@@ -14,6 +14,8 @@
 @property (nonatomic, assign)BOOL isEchoCancel;
 @property (nonatomic, assign)int pitch;
 @property (nonatomic, assign)AVCaptureDevicePosition devicePosition;
+@property (nonatomic, strong)TIoTCoreAudioConfig *audioConfig;
+@property (nonatomic, strong)TIoTCoreVideoConfig *videoConfig;
 -(instancetype) initWithAudioConfig:(TIoTAVCaptionFLVAudioType)audioSampleRate channel:(int)channel;
 
 - (void)preStart;

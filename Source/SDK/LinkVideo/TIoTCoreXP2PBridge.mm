@@ -344,11 +344,13 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
     
     
-    if (systemAvCapture == nil || audio_config.refreshSession) {
+    if (systemAvCapture == nil) {
         systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_config.sampleRate channel:audio_config.channels];
         systemAvCapture.videoLocalView = video_config.localView;
         systemAvCapture.isEchoCancel = audio_config.isEchoCancel;
     }
+    systemAvCapture.audioConfig = audio_config;
+    systemAvCapture.videoConfig = video_config;
     systemAvCapture.pitch = audio_config.pitch;
     systemAvCapture.devicePosition = video_config.videoPosition;
     systemAvCapture.videoLocalView = video_config.localView;

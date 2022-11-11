@@ -396,6 +396,7 @@
 		F42B874E27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B874D27229E9D0002FD5C /* TIoTAlertAuthorsizeView.m */; };
 		F42B875127268F610002FD5C /* TIoTRegionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B875027268F610002FD5C /* TIoTRegionViewController.m */; };
 		F42D023A291A405800E1B36B /* TIoTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F42D0238291A405800E1B36B /* TIoTSessionManager.m */; };
+		F42D023D291DF1CB00E1B36B /* TIoTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F42D0238291A405800E1B36B /* TIoTSessionManager.m */; };
 		F44D679F25B6D96D001B413C /* TIoTPlayMovieVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F44D679D25B6D96D001B413C /* TIoTPlayMovieVC.m */; };
 		F44D67A025B6D96D001B413C /* TIoTPlayMovieVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44D679E25B6D96D001B413C /* TIoTPlayMovieVC.xib */; };
 		F46FE31B26A5735700543EFD /* TIoTLLSyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F46FE31A26A5735700543EFD /* TIoTLLSyncViewController.m */; };
@@ -3703,6 +3704,7 @@
 				ED71C4BF23CD930C001464EF /* CHDWaveView.m in Sources */,
 				6D79370F274CCCBB0079BA52 /* TIoTAVP2PPlayCaptureVC.m in Sources */,
 				ED6BA5BF23C5C8AF00BE9EC9 /* TIoTMemberInfoVC.m in Sources */,
+				F42D023D291DF1CB00E1B36B /* TIoTSessionManager.m in Sources */,
 				D210C7CF2340932B00A53B08 /* TIoTBingPasswordViewController.m in Sources */,
 				ED9C15B023B984DB00CAC848 /* UIImage+Ex.m in Sources */,
 				6DEEB7842549504500247A66 /* TIoTWebVC+TIoTWebVCCategory.m in Sources */,
