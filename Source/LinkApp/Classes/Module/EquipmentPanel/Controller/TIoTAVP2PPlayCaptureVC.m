@@ -19,6 +19,7 @@
 #import "TIoTP2PCommunicateUIManage.h"
 #import "UILabel+TIoTLableFormatter.h"
 #import "ReachabilityManager.h"
+#import "TIoTSessionManager.h"
 
 static NSString *const action_left = @"action=user_define&cmd=ptz_left";
 static NSString *const action_right = @"action=user_define&cmd=ptz_right";
@@ -80,8 +81,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -131,6 +133,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)dealloc {
     [self close];
+
+    [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
+    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -620,6 +625,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
      */
     TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+    audio_config.refreshSession = YES;
     audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
     audio_config.channels = 1;
     audio_config.isEchoCancel = YES;

@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  视频采集前后摄像头位置
  */
 @property (nonatomic,assign) AVCaptureDevicePosition videoPosition;
+
+/**
+ *  需要重启采集器和编码器设置为yes
+ */
+@property (nonatomic,assign) BOOL refreshSession;
+
 @end
 
 NS_ASSUME_NONNULL_END

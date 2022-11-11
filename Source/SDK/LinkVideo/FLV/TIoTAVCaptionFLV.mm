@@ -75,7 +75,7 @@ dispatch_queue_t muxerQueue;
 #pragma mark - 设置音频
 - (void)setupAudioCapture {
     
-    if (self.aacEncoder) {
+    if (self.aacEncoder && !self.audioConfig.refreshSession) {
         self.aacEncoder.audioType = _audioRate;
         return;
     }
@@ -253,7 +253,7 @@ dispatch_queue_t muxerQueue;
 
 - (void)setupVideoCapture {
     
-    if (self.h264Encoder) {
+    if (self.h264Encoder && !self.videoConfig.refreshSession) {
         if ([_session canSetSessionPreset:self.resolutionRatioValue]) {
             // 设置分辨率
             _session.sessionPreset = self.resolutionRatioValue;
