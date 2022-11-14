@@ -220,7 +220,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+//    [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
     //开启p2p页面开关
     [[TIoTWebSocketManage shared] setPanelVCBool:YES];
     
