@@ -81,9 +81,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
+//    [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -134,8 +132,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)dealloc {
     [self close];
 
-    [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
-    printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
+//    [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
+    printf("debugdeinit---%s,%s,%d\n", __FILE__, __FUNCTION__, __LINE__);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -596,12 +594,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:0 forKey:@"sync-av-start" ofCategory:kIJKFFOptionCategoryPlayer];
         [self.player setOptionIntValue:1 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
     
-        [self.player setAudioSpeed:1.5f];
-        [self.player setMaxPacketNum:2];
+        [self.player setAudioSpeed:1.2f];
+        [self.player setMaxPacketNum:5];
 }
 
 #pragma mark 事件
 - (void)startAVCapture {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
     TIoTAVCaptionFLVAudioType FLVAudioType = TIoTAVCaptionFLVAudio_8;
     
     if (self.samplingRate == 8) {
@@ -674,6 +675,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
     
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+
     if (self.previewBottomView != nil) {
         [self.previewBottomView removeFromSuperview];
     }
@@ -726,7 +730,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.resolutionRatio = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateResolutionRatio];
         self.samplingRate = [[TIoTP2PCommunicateUIManage sharedManager] getP2pCommunicateSamplingRate];
         
+        //推流
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self startAVCapture];
+        });
     }
 }
 

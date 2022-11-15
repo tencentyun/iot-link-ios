@@ -221,6 +221,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 //    [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
+//    [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     //开启p2p页面开关
     [[TIoTWebSocketManage shared] setPanelVCBool:YES];
     
@@ -4026,6 +4027,9 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
 //    NSString *selectedName = self.deviceName?:@"";
     
@@ -4163,7 +4167,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     //还没退出通话页面, APP断网后，需要重新联网，重新起p2p
 //    if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC]) {
         if (self.isP2PVideoDevice == YES) {
-            
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+            [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startHungupActionAppDisconnect) object:nil];
             self.isAppTimerStart = NO;
             
