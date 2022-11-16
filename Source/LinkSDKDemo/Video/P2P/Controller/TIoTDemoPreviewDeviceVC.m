@@ -260,12 +260,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
                 [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
                 
-                static int tt_pitch = -6;
+                static int tt_pitch = 0;
                 TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
-                audio_config.refreshSession = YES;
-                audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
+                audio_config.refreshSession = NO;
+                audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
                 audio_config.channels = 1;
-                audio_config.isEchoCancel = YES;
+                audio_config.isEchoCancel = NO;
                 audio_config.pitch =  tt_pitch; // -6声音会变粗一点;    6声音会变细一点
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
@@ -274,11 +274,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
                 
-                if(tt_pitch == 6){
+                /*if(tt_pitch == 6){
                     tt_pitch = -6;
                 }else {
                     tt_pitch = 6;
-                }
+                }*/
             }
             
         }else {
