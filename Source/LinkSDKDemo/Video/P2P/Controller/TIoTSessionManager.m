@@ -96,8 +96,12 @@ static AVAudioSessionCategoryOptions cachedCategoryOptions = 0;
         if (@available(iOS 10.0, *)) {
             categoryOptions |= AVAudioSessionCategoryOptionAllowBluetooth;
         }
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:categoryOptions error:nil];
-        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:categoryOptions error:nil];
+//        [session setPreferredSampleRate:16000 error:nil];
+//        [session setPreferredInputNumberOfChannels:1 error:nil];
+//        [session setPreferredIOBufferDuration:0.064 error:nil]; //16000*0.032*2=1024字节
+        [session setActive:YES error:nil];
     }
 }
 //功能结束时重置audioSession,重置到缓存的audioSession设置

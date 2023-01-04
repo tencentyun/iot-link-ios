@@ -127,7 +127,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     ConverterContext *cxt = self->convertContext;
     if (cxt && cxt->converter) {
 
-        dispatch_async(encodeQueue, ^{
+//        dispatch_async(encodeQueue, ^{
 
             NSUInteger pcmLength = pcmdata.length;
             void *pcmData = pcmdata.bytes;
@@ -168,7 +168,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
                 free(outputBuffer);
                 outputBuffer = NULL;
             }
-        });
+//        });
     }
 }
 
