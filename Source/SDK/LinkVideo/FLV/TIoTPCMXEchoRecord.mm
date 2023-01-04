@@ -74,6 +74,7 @@
     if (ret != noErr)
         return nil;
     
+    AudioUnitInitialize(audioUnit);
     return self;
 }
 
