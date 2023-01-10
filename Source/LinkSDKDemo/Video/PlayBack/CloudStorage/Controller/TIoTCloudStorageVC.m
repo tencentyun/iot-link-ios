@@ -140,6 +140,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [self stopCloudPlayMovie];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     
     [self recoverNavigationBar];
@@ -169,7 +170,6 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [self closeTime];
     
-    [self stopCloudPlayMovie];
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -1476,6 +1476,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 - (void)stopCloudPlayMovie {
     if (self.cloudPlayer != nil) {
         [self.cloudPlayer stop];
+        [self.cloudPlayer shutdown];
         [self.cloudPlayer.view removeFromSuperview];
         self.cloudPlayer = nil;
     }

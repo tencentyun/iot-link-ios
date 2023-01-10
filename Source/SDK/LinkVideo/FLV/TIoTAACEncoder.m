@@ -28,7 +28,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     ioData->mBuffers[0].mData = param->source;
     ioData->mBuffers[0].mDataByteSize = param->sourceSize;
     ioData->mBuffers[0].mNumberChannels = param->channelCount;
-    *ioNumberDataPacket = 1;
+    *ioNumberDataPacket = 1024;
     param->sourceSize = 0;
     return noErr;
 }
@@ -127,7 +127,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     ConverterContext *cxt = self->convertContext;
     if (cxt && cxt->converter) {
 
-        dispatch_async(encodeQueue, ^{
+//        dispatch_async(encodeQueue, ^{
 
             NSUInteger pcmLength = pcmdata.length;
             void *pcmData = pcmdata.bytes;
@@ -168,7 +168,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
                 free(outputBuffer);
                 outputBuffer = NULL;
             }
-        });
+//        });
     }
 }
 
