@@ -12,13 +12,14 @@
 
 #include <iostream>
 #import "TIoTPCMXEchoRecord.h"
-#import <SoundTouchiOS/ijksoundtouch_wrap.h>
+//#import <SoundTouchiOS/ijksoundtouch_wrap.h>
+#import <SoundTouchiOS/TRAESoundTouch.h>
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
 dispatch_queue_t muxerQueue;
 //NSFileHandle *_fileHandle;
-
+//NSFileHandle *_originfileHandle;
 @interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate,TIoTAACEncoderDelegate>
 // 负责输如何输出设备之间的数据传递
 @property (nonatomic, strong) AVCaptureSession           *session;
@@ -349,35 +350,35 @@ dispatch_queue_t muxerQueue;
 
 #pragma mark - PCM XEcho record_callback
 void *ijk_soundtouch_handle = NULL;
+//trae_voice_changer_t *trae_voice_handle = NULL;
 - (void)setPitch:(int)pitch {
-    _pitch = ((pitch >= -12) && (pitch <= 12 ))?pitch:-6;
+    _pitch = ((pitch >= 0) && (pitch <= 3 ))?pitch:2; //0 NONE  2萝莉，3 大叔
     NSLog(@"设置变调参数:%d<===>修正为:%d",pitch, _pitch);
     int tmpChannel = _channel;
-    
-    if (ijk_soundtouch_handle != NULL) {
-        ijk_soundtouch_destroy(ijk_soundtouch_handle);
-    }
-    ijk_soundtouch_handle = ijk_soundtouch_create(1.0, _pitch, tmpChannel, 16000);
+        
+    [TRAESoundTouch voice_handle_open:_pitch channels:tmpChannel];
 }
 
+static uint8_t  trae_pcm_buffer[640];
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
-//    printf("pcm_size_callback: %d\n", size);
-    int ret_len = size;
-    // Sets pitch change in semi-tones compared to the original pitch
-    // (-12 .. +12)
+//    NSData *oridata = [NSData dataWithBytes:buffer length:size];
+//    [_originfileHandle writeData:oridata];
+    
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
+    memset(trae_pcm_buffer, 0, 640);
+    UInt32 len = [vc.pcmRecord getData:trae_pcm_buffer :640];
+    if (len < 640) {
+        return;
+    }
     if (vc.pitch != 0) {
         static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
-        ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)buffer, size/2, 2, tmpChannel);
-        if (ret_len<1) {
-            return;
-        }
+//        int put_n_sample = (size/2) / tmpChannel;
+//        [TRAESoundTouch voice_handle_process:(short *)buffer output:(short *)trae_pcm_buffer frames:320];
+        [TRAESoundTouch voice_handle_process:(short *)trae_pcm_buffer output:(short *)trae_pcm_buffer frames:320];
     }
-//    printf("pcm_size_callback_translate: %d\n", ret_len);
-    
 
-    NSData *data = [NSData dataWithBytes:buffer length:ret_len];
+    NSData *data = [NSData dataWithBytes:trae_pcm_buffer length:640];
 //    [_fileHandle writeData:data];
     [vc.aacEncoder encodePCMData:data];
 }
@@ -510,11 +511,17 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSFileManager *fileManager = [NSFileManager defaultManager];
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
-    
-//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.pcm"];
+//
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"out.pcm"];
 //    [fileManager removeItemAtPath:h264File error:nil];
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
+//
+//
+//    NSString *originFile = [documentsDirectory stringByAppendingPathComponent:@"origin.pcm"];
+//    [fileManager removeItemAtPath:originFile error:nil];
+//    [fileManager createFileAtPath:originFile contents:nil attributes:nil];
+//    _originfileHandle = [NSFileHandle fileHandleForWritingAtPath:originFile];
         
     flv_init_load();
 

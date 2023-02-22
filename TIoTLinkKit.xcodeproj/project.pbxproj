@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00ACEA8F26F0CC9D0055EA36 /* TIoTAllDevicesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ACEA8E26F0CC9D0055EA36 /* TIoTAllDevicesVC.m */; };
+		170431D21DA016E82CA276E2 /* Pods_LinkSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A35D6B5140A62FDC1675A8F2 /* Pods_LinkSDKDemo.framework */; };
 		6D01E86B24F8EE7400234872 /* TIoTUserConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86824F8EE7400234872 /* TIoTUserConfigModel.m */; };
 		6D01E86C24F8EE7400234872 /* TIoTUserRegionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E86A24F8EE7400234872 /* TIoTUserRegionModel.m */; };
 		6D033CEE271FC28000EBEE11 /* TIoTFirmwareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D033CED271FC27F00EBEE11 /* TIoTFirmwareModel.m */; };
@@ -61,7 +62,7 @@
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
 		6D50E91226B18CE300DF12A5 /* TIoTDemoWebSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D50E91126B18CE300DF12A5 /* TIoTDemoWebSocketManager.m */; };
-		6D50E91426B18F0600DF12A5 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		6D50E91426B18F0600DF12A5 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		6D50E91F26B1911300DF12A5 /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED5767162410AED70070D218 /* ReachabilityManager.m */; };
 		6D50E92426B1924800DF12A5 /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
 		6D50E92626B192E300DF12A5 /* TIoTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */; };
@@ -201,8 +202,6 @@
 		6DF0C5AB279AA16700B4FE22 /* TIoTXp2pInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF0C5AA279AA16700B4FE22 /* TIoTXp2pInfoModel.m */; };
 		6DF4A6AB26982EB50094044A /* TIoTDemoHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF4A6A926982EB50094044A /* TIoTDemoHomeViewController.m */; };
 		6DF4AA0D269F2AC00094044A /* TIoTCoreUtil+TIoTDemoDeviceStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF4AA0C269F2AC00094044A /* TIoTCoreUtil+TIoTDemoDeviceStatus.m */; };
-		8B92813569D959EFE08FFA8A /* Pods_LinkSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */; };
-		9A55D54345C86CE785C386E3 /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */; };
 		A40565E424D040C900A15699 /* TIoTConfigHardwareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */; };
 		A40565E724D040EE00A15699 /* TIoTStepTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40565E624D040EE00A15699 /* TIoTStepTipView.m */; };
 		A40574A724E2AF1E00836FB7 /* TIoTNewVersionTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40574A624E2AF1E00836FB7 /* TIoTNewVersionTipView.m */; };
@@ -220,6 +219,7 @@
 		A4F5B12224D25BD900F83B5F /* TIoTWIFITipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F5B12124D25BD900F83B5F /* TIoTWIFITipViewController.m */; };
 		A4F5B12524D263CA00F83B5F /* TIoTConfigResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F5B12424D263CA00F83B5F /* TIoTConfigResultViewController.m */; };
 		A4F5B12B24D2A7DB00F83B5F /* TIoTStartConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F5B12A24D2A7DB00F83B5F /* TIoTStartConfigViewController.m */; };
+		C7213B40F404B97C9CE443C8 /* Pods_LinkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6F80D72208FFB1841F7CDC /* Pods_LinkApp.framework */; };
 		D2038B8C2331D5F10036F6B9 /* TIoTMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B8B2331D5F10036F6B9 /* TIoTMessageViewController.m */; };
 		D2038B922331DBC30036F6B9 /* TIoTHelpCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B912331DBC30036F6B9 /* TIoTHelpCenterViewController.m */; };
 		D2038B952331DBCD0036F6B9 /* TIoTFeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2038B942331DBCD0036F6B9 /* TIoTFeedBackViewController.m */; };
@@ -525,7 +525,6 @@
 		00ACEA8E26F0CC9D0055EA36 /* TIoTAllDevicesVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAllDevicesVC.m; sourceTree = "<group>"; };
 		0A58AA4A144CEE9B3B027556 /* Pods-LinkSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
 		253144D80CC8A037F5D90897 /* Pods-TIoTLinkKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKitDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKitDemo/Pods-TIoTLinkKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEC5EAB97F68CE0E6741FE2 /* Pods-TIoTLinkKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit.release.xcconfig"; sourceTree = "<group>"; };
 		580CE396098E50E9FB7555F0 /* Pods-TIoTLinkKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TIoTLinkKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TIoTLinkKit/Pods-TIoTLinkKit.debug.xcconfig"; sourceTree = "<group>"; };
 		68F59A43D64F4A4A70D0E659 /* Pods-LinkSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -885,6 +884,7 @@
 		6DF4AA0C269F2AC00094044A /* TIoTCoreUtil+TIoTDemoDeviceStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TIoTCoreUtil+TIoTDemoDeviceStatus.m"; sourceTree = "<group>"; };
 		703DCAE6FD26F5C155D7B2DE /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		A1D3AFD349501B3087E3BF6B /* Pods-LinkApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinkApp/Pods-LinkApp.release.xcconfig"; sourceTree = "<group>"; };
+		A35D6B5140A62FDC1675A8F2 /* Pods_LinkSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A40565E224D040C900A15699 /* TIoTConfigHardwareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTConfigHardwareViewController.h; sourceTree = "<group>"; };
 		A40565E324D040C900A15699 /* TIoTConfigHardwareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTConfigHardwareViewController.m; sourceTree = "<group>"; };
 		A40565E524D040EE00A15699 /* TIoTStepTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTStepTipView.h; sourceTree = "<group>"; };
@@ -922,6 +922,7 @@
 		ADFDE60EA26FD8690CFB93FF /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
 		C58BD7948DBCA9A9650F6CA7 /* Pods-TenextCloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.release.xcconfig"; sourceTree = "<group>"; };
 		C6770FC7B2DE12C08C524BF2 /* Pods-LinkApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinkApp/Pods-LinkApp.debug.xcconfig"; sourceTree = "<group>"; };
+		CB6F80D72208FFB1841F7CDC /* Pods_LinkApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEFA75EB664302F51AF9F173 /* Pods-TenextCloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TenextCloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TenextCloud/Pods-TenextCloud.debug.xcconfig"; sourceTree = "<group>"; };
 		D2038B8A2331D5F10036F6B9 /* TIoTMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTMessageViewController.h; sourceTree = "<group>"; };
 		D2038B8B2331D5F10036F6B9 /* TIoTMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTMessageViewController.m; sourceTree = "<group>"; };
@@ -1383,7 +1384,6 @@
 		F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTBaseModel.swift; sourceTree = "<group>"; };
 		F4F4347F2546BA2000C44471 /* TIoTProductsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTProductsModel.swift; sourceTree = "<group>"; };
 		F4F434D425480B7100C44471 /* TIoTDeviceDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTDeviceDataModel.swift; sourceTree = "<group>"; };
-		F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF67F585247EB7480075C5C1 /* TIoTProductTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTProductTableViewCell.h; sourceTree = "<group>"; };
 		FF67F586247EB7480075C5C1 /* TIoTProductTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTProductTableViewCell.m; sourceTree = "<group>"; };
 		FF831E0024D1CC9100F797EA /* TIoTWIFITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTWIFITableViewCell.h; sourceTree = "<group>"; };
@@ -1405,7 +1405,7 @@
 				D2E97691233C499700182443 /* UserNotifications.framework in Frameworks */,
 				D2614E632350872900D7D7E7 /* ExternalAccessory.framework in Frameworks */,
 				ED3A93D72379304600379AA7 /* NetworkExtension.framework in Frameworks */,
-				9A55D54345C86CE785C386E3 /* Pods_LinkApp.framework in Frameworks */,
+				C7213B40F404B97C9CE443C8 /* Pods_LinkApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1414,7 +1414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DADCDBD24C1438B00B95D83 /* NetworkExtension.framework in Frameworks */,
-				8B92813569D959EFE08FFA8A /* Pods_LinkSDKDemo.framework in Frameworks */,
+				170431D21DA016E82CA276E2 /* Pods_LinkSDKDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2226,8 +2226,8 @@
 				D2E97694233C49AD00182443 /* SystemConfiguration.framework */,
 				D2E97692233C49A300182443 /* CoreTelephony.framework */,
 				D2E97690233C499700182443 /* UserNotifications.framework */,
-				F787CF9DAEFAB7249AEBE745 /* Pods_LinkApp.framework */,
-				43EF7275574707E3B3D4F776 /* Pods_LinkSDKDemo.framework */,
+				CB6F80D72208FFB1841F7CDC /* Pods_LinkApp.framework */,
+				A35D6B5140A62FDC1675A8F2 /* Pods_LinkSDKDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3313,8 +3313,8 @@
 				D2C7A9ED232F6AA4005E8006 /* Resources */,
 				D2E976AB233C4EDB00182443 /* Embed App Extensions */,
 				F4F3D55424935D75005D3396 /* Embed Frameworks */,
-				50ABE041C31296DBF30D9DC8 /* [CP] Embed Pods Frameworks */,
 				7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */,
+				B2E10FBFDC3B05F14C27B153 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3333,7 +3333,7 @@
 				F4F3D52524935BD3005D3396 /* Sources */,
 				F4F3D52624935BD3005D3396 /* Frameworks */,
 				F4F3D52724935BD3005D3396 /* Resources */,
-				2EC0ED5670A11587790F0BD1 /* [CP] Embed Pods Frameworks */,
+				FB0C7696048A57D42958EFB7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3514,40 +3514,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2EC0ED5670A11587790F0BD1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		50ABE041C31296DBF30D9DC8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3563,6 +3529,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2E10FBFDC3B05F14C27B153 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FAA5A328888AFA13C2885AD0 /* [CP] Check Pods Manifest.lock */ = {
@@ -3585,6 +3568,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB0C7696048A57D42958EFB7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3901,7 +3901,7 @@
 				6DF0C5AB279AA16700B4FE22 /* TIoTXp2pInfoModel.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				F477671927C7691D00F37F39 /* TIoTAreaNetworkDeviceCell.m in Sources */,
-				6D50E91426B18F0600DF12A5 /* (null) in Sources */,
+				6D50E91426B18F0600DF12A5 /* BuildFile in Sources */,
 				6D98FE1625C2E6AA00518AC7 /* TIoTCustomCalendarScrollView.m in Sources */,
 				6D9D9788268468320085BCC2 /* TIoTDemoVideoVC.m in Sources */,
 				6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,

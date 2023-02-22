@@ -17,12 +17,15 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
-
+#  s.vendored_libraries    = 'Source/SDK/LinkVideo/include/*.a'
+#  s.vendored_frameworks   = 'Source/SDK/LinkVideo/include/TRAESoundTouch.framework'
+#  s.vendored_frameworks   = 'Source/SDK/LinkVideo/include/SoundTouchiOS.framework'
+  
   s.dependency 'TIoTLinkKit_XP2P', '2.4.34-beta.202211150834' #~> 2.4.21-beta.202202101145   https://github.com/tencentyun/iot-thirdparty-ios/tree/xp2p-v2.4.34-beta.202211150834
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
-  s.dependency 'TIoTLinkKit_SoundTouch', '0.0.4'
-  
+  s.dependency 'TIoTLinkKit_SoundTouch', '0.0.5'
+  s.dependency 'TPCircularBuffer', '1.6.1' 
   s.pod_target_xcconfig = {
     'VALID_ARCHS'  => 'arm64'
   }
