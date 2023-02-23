@@ -62,7 +62,7 @@
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
 		6D50E91226B18CE300DF12A5 /* TIoTDemoWebSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D50E91126B18CE300DF12A5 /* TIoTDemoWebSocketManager.m */; };
-		6D50E91426B18F0600DF12A5 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		6D50E91426B18F0600DF12A5 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		6D50E91F26B1911300DF12A5 /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED5767162410AED70070D218 /* ReachabilityManager.m */; };
 		6D50E92426B1924800DF12A5 /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
 		6D50E92626B192E300DF12A5 /* TIoTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */; };
@@ -3901,7 +3901,7 @@
 				6DF0C5AB279AA16700B4FE22 /* TIoTXp2pInfoModel.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				F477671927C7691D00F37F39 /* TIoTAreaNetworkDeviceCell.m in Sources */,
-				6D50E91426B18F0600DF12A5 /* BuildFile in Sources */,
+				6D50E91426B18F0600DF12A5 /* (null) in Sources */,
 				6D98FE1625C2E6AA00518AC7 /* TIoTCustomCalendarScrollView.m in Sources */,
 				6D9D9788268468320085BCC2 /* TIoTDemoVideoVC.m in Sources */,
 				6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,
@@ -4402,6 +4402,7 @@
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
@@ -4411,11 +4412,13 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
 				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = linkdemo;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4436,6 +4439,7 @@
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4444,11 +4448,13 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
 				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = linkdemo;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

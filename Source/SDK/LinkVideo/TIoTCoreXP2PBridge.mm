@@ -339,7 +339,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [avsession setPreferredInputNumberOfChannels:audio_config.channels error:nil];
     
     //16khz * 1channel * notEcho = 640frame 设置为0.03
-    NSTimeInterval duration = 0.015;
+    NSTimeInterval duration = 0.03;
     if (audio_config.isEchoCancel) {
         duration = duration*2; //回音消除打开会减少采样
     }

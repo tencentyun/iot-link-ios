@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.dependency 'TIoTLinkKit_XP2P', '2.4.34-beta.202211150834' #~> 2.4.21-beta.202202101145   https://github.com/tencentyun/iot-thirdparty-ios/tree/xp2p-v2.4.34-beta.202211150834
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
-  s.dependency 'TIoTLinkKit_SoundTouch', '0.0.5'
+  s.dependency 'TIoTLinkKit_SoundTouch', '0.0.6'
   s.dependency 'TPCircularBuffer', '1.6.1' 
   s.pod_target_xcconfig = {
     'VALID_ARCHS'  => 'arm64'

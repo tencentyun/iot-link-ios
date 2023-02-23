@@ -260,7 +260,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
                 [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
                 
-                static int tt_pitch = 3; 
+                static int tt_pitch = 2;  //2 萝莉 3大叔
                 TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
                 audio_config.refreshSession = NO;
                 audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
