@@ -102,7 +102,7 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     UInt32   bufferSize = list.mBuffers[0].mDataByteSize;
     uint8_t *bufferData = (uint8_t *)list.mBuffers[0].mData;
 //    NSLog(@"record_callback__________size : %d", bufferSize);
-    [r addData:bufferData :bufferSize];
+    [r addData:&pcm_circularBuffer :bufferData :bufferSize];
     if (r->callback)
         r->callback(bufferData, bufferSize, r->user);
     return error;
@@ -137,7 +137,7 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 - (void)start_record
 {
-    [self Init_buffer:4096];
+    [self Init_buffer:&pcm_circularBuffer :4096];
     pcm_buffer_size = 0;
     AudioOutputUnitStart(audioUnit);
 }
@@ -146,7 +146,7 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 {
     AudioOutputUnitStop(audioUnit);
     pcm_buffer_size = 0;
-    [self Destory_buffer];
+    [self Destory_buffer:&pcm_circularBuffer];
 }
 
 - (void)set_record_callback:(RecordCallback)c user:(nonnull void *)u
@@ -165,38 +165,38 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 
 
--(BOOL)Init_buffer:(UInt32)size_
+-(BOOL) Init_buffer:(TPCircularBuffer*)buffer_ :(UInt32)size_
 {
-     return TPCircularBufferInit(&pcm_circularBuffer, size_ );
+     return TPCircularBufferInit(buffer_, size_ );
 }
 
--(void)Destory_buffer
+-(void) Destory_buffer:(TPCircularBuffer*)buffer_
 {
-    TPCircularBufferCleanup(&pcm_circularBuffer );
+    TPCircularBufferCleanup(buffer_ );
 }
 
--(UInt32)addData:(void *)buf_ :(UInt32)size_
+-(UInt32)addData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
 {
     uint32_t availableBytes = 0;
-    TPCircularBufferHead(&pcm_circularBuffer, &availableBytes);
+    TPCircularBufferHead(buffer_, &availableBytes);
     if (availableBytes <= 0)
           return 0;
      
     UInt32 len =  (availableBytes >= size_ ? size_ : availableBytes);
-    TPCircularBufferProduceBytes(&pcm_circularBuffer, (void*)buf_, size_);
+    TPCircularBufferProduceBytes(buffer_, (void*)buf_, size_);
     return len;
 }
 
--(UInt32)getData:(void *)buf_ :(UInt32)size_
+-(UInt32)getData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
 {
     uint32_t availableBytes = 0;
-    void *bufferTail = TPCircularBufferTail(&pcm_circularBuffer, &availableBytes);
+    void *bufferTail = TPCircularBufferTail(buffer_, &availableBytes);
     if (availableBytes >= size_)
     {
         UInt32 len = 0;
         len = (size_ > availableBytes ? availableBytes : size_);
         memcpy(buf_, bufferTail, len);
-        TPCircularBufferConsume(&pcm_circularBuffer, len);
+        TPCircularBufferConsume(buffer_, len);
 //        NSLog(@"ggggggggggg=====len = %ld", len);
         return len;
     }

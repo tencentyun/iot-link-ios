@@ -39,6 +39,8 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
+
+@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -52,6 +54,8 @@ dispatch_queue_t muxerQueue;
         _isEchoCancel = NO;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
+        
+        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
         [self onInit];
     }
     return self;
@@ -350,6 +354,8 @@ dispatch_queue_t muxerQueue;
 
 #pragma mark - PCM XEcho record_callback
 void *ijk_soundtouch_handle = NULL;
+TPCircularBuffer aac_circularBuffer;
+
 //trae_voice_changer_t *trae_voice_handle = NULL;
 - (void)setPitch:(int)pitch {
     _pitch = ((pitch >= 0) && (pitch <= 3 ))?pitch:2; //0 NONE  2萝莉，3 大叔
@@ -360,6 +366,7 @@ void *ijk_soundtouch_handle = NULL;
 }
 
 static uint8_t  trae_pcm_buffer[640];
+static uint8_t  trae_aac_buffer[8192];
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    NSData *oridata = [NSData dataWithBytes:buffer length:size];
@@ -367,20 +374,28 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
     memset(trae_pcm_buffer, 0, 640);
-    UInt32 len = [vc.pcmRecord getData:trae_pcm_buffer :640];
+    UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :trae_pcm_buffer :640];
     if (len < 640) {
         return;
     }
     if (vc.pitch != 0) {
-        static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
+        
 //        int put_n_sample = (size/2) / tmpChannel;
 //        [TRAESoundTouch voice_handle_process:(short *)buffer output:(short *)trae_pcm_buffer frames:320];
         [TRAESoundTouch voice_handle_process:(short *)trae_pcm_buffer output:(short *)trae_pcm_buffer frames:320];
     }
 
-    NSData *data = [NSData dataWithBytes:trae_pcm_buffer length:640];
-//    [_fileHandle writeData:data];
-    [vc.aacEncoder encodePCMData:data];
+    [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :640];
+    dispatch_async(vc.audioEncodeQueue, ^{
+        static int tmpChannelDataLen = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
+        UInt32 aaclen = [vc.pcmRecord getData:&aac_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
+        if (aaclen < tmpChannelDataLen) {
+            return;
+        }
+        NSData *data = [NSData dataWithBytes:trae_aac_buffer length:tmpChannelDataLen];
+        //    [_fileHandle writeData:data];
+        [vc.aacEncoder encodePCMData:data];
+    });
 }
 
 
@@ -522,7 +537,8 @@ int encodeFlvData(int type, NSData *packetData) {
 //    [fileManager removeItemAtPath:originFile error:nil];
 //    [fileManager createFileAtPath:originFile contents:nil attributes:nil];
 //    _originfileHandle = [NSFileHandle fileHandleForWritingAtPath:originFile];
-        
+    [self.pcmRecord Init_buffer:&aac_circularBuffer :8192];
+
     flv_init_load();
 
     [self startCamera];
@@ -534,6 +550,8 @@ int encodeFlvData(int type, NSData *packetData) {
 -(void) stopCapture{
     [self stopCarmera];
     [self.pcmRecord stop_record];
+    
+    [self.pcmRecord Destory_buffer:&aac_circularBuffer];
 }
 
 - (void) startCamera
