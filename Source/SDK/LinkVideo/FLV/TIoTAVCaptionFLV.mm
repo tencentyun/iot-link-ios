@@ -387,7 +387,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 
     [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :640];
     dispatch_async(vc.audioEncodeQueue, ^{
-        static int tmpChannelDataLen = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
+        static int tmpChannelDataLen = 1024;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
         UInt32 aaclen = [vc.pcmRecord getData:&aac_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
         if (aaclen < tmpChannelDataLen) {
             return;
