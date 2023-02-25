@@ -231,7 +231,13 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     });
 }
 
-
+- (void)dealloc {
+    ConverterContext *cxt = self->convertContext;
+    if (cxt && cxt->converter) {
+        AudioConverterDispose(cxt->converter);
+        cxt->converter = NULL;
+    }
+}
 #pragma mark - HEADER
 /**
  *  Add ADTS header at the beginning of each and every AAC packet.
