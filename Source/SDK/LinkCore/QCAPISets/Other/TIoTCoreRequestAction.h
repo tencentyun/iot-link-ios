@@ -155,6 +155,7 @@ FOUNDATION_EXPORT NSString *const AppDescribeAutomation;//获取自动智能场�
 FOUNDATION_EXPORT NSString *const AppGetSceneAndAutomationLogs;//智能联动执行日志
 
 //MARK: Video
+FOUNDATION_EXPORT NSString *const CallTRTCDevice;//呼叫TRTC设备
 FOUNDATION_EXPORT NSString *const DescribeDevices;//Video 设备列表
 FOUNDATION_EXPORT NSString *const DescribeCloudStorageEvents;//云存事件列表
 FOUNDATION_EXPORT NSString *const DescribeCloudStorageThumbnail;//云存缩略图

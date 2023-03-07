@@ -33,4 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *video_codec;
 @end
 
+
+@interface TIoTTRTCParamModel : NSObject
+@property (nonatomic, strong) NSNumber *SdkAppId;
+@property (nonatomic, strong) NSString *UserId;
+@property (nonatomic, strong) NSString *UserSig;
+@property (nonatomic, strong) NSString *StrRoomId;
+@property (nonatomic, strong) NSString *PrivateMapKey;
+@end
+
 NS_ASSUME_NONNULL_END

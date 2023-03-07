@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  本地预览UI
  */
 @property (nonatomic,strong) UIView *localView;
+/**
+ *  远端预览UI
+ */
+@property (nonatomic,strong) UIView *remoteView;
 
 /**
  *  视频采集前后摄像头位置

@@ -172,6 +172,9 @@ typedef NS_ENUM(NSInteger,TIotApiHost) {
 - (void)sendInvitationToEmail:(NSString *)email withFamilyId:(NSString *)familyId productId:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure;
 
 #pragma mark - SDK Demo 播放
+///呼叫trtc设备
+- (void)callTRTCDevice:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure;
+
 ///video 获取设备列表
 - (void)getVideoDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId returnModel:(BOOL)returnModel success:(SRHandler)success failure:(FRHandler)failure;
 

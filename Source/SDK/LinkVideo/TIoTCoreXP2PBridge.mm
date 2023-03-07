@@ -15,11 +15,13 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PType
 FILE *p2pOutLogFile;
 //NSFileHandle *fileHandle;
 
-@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
+@interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate, TRTCCloudDelegate>
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
+@property (nonatomic, strong)TIoTCoreAudioConfig *audioConfig;
+@property (nonatomic, strong)TIoTCoreVideoConfig *videoConfig;
 - (void)cancelTimer;
 @end
 
@@ -204,6 +206,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+    
+    [self startAppWith:pro_id dev_name:dev_name];
+    return XP2P_ERR_NONE;
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
@@ -218,6 +223,23 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
+    if (!self.params) {
+        NSLog(@"⚠️⚠️⚠️⚠️⚠️⚠️⚠️请在startApp之前，提前设置params参数。例如：[TIoTCoreXP2PBridge sharedInstance].params = XXX;");
+    }
+    
+    TRTCVideoEncParam *videoEncParam = [[TRTCVideoEncParam alloc] init];
+    videoEncParam.videoResolution = TRTCVideoResolution_320_240;
+    videoEncParam.videoFps = 15;
+    videoEncParam.videoBitrate = 250;
+    videoEncParam.resMode = TRTCVideoResolutionModePortrait;
+    videoEncParam.enableAdjustRes = true;
+    [[TRTCCloud sharedInstance] setVideoEncoderParam:videoEncParam];
+    
+    [TRTCCloud sharedInstance].delegate = self;
+    [[TRTCCloud sharedInstance] enterRoom:self.params appScene:TRTCAppSceneVideoCall];
+    return XP2P_ERR_NONE;
+    
+    
 //    setStunServerToXp2p("11.11.11.11", 111);
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
@@ -229,7 +251,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo {
-    
+    return XP2P_ERR_NONE;
     if (xp2pinfo == nil || [xp2pinfo isEqualToString:@""]) {
         if ((sec_id == nil || [sec_id isEqualToString:@""])   ||  (sec_key == nil || [sec_key isEqualToString:@""])) {
             NSLog(@"请输入正确的scretId和secretKey，或者xp2pInfo");
@@ -243,6 +265,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
+//    [[TRTCCloud sharedInstance] startRemoteView:<#(nonnull NSString *)#> streamType:<#(TRTCVideoStreamType)#> view:<#(nullable TXView *)#>];
+    return @"";
     const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
     NSLog(@"httpflv---%s",httpflv);
     if (httpflv) {
@@ -275,6 +299,13 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
+    NSData *cmddata = [cmd?:@"" dataUsingEncoding:NSUTF8StringEncoding];
+    [[TRTCCloud sharedInstance] sendCustomCmdMsg:1 data:cmddata reliable:YES ordered:YES];
+    if (completion) {
+        NSString *jsondata = @"[{\"status\":\"0\",\"appConnectNum\":\"2\"}]";
+        completion(jsondata);
+    }
+    return;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -295,10 +326,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd {
+    return;
     startAvRecvService(dev_name.UTF8String, cmd.UTF8String, false);
 }
 
 - (XP2PErrCode)stopAvRecvService:(NSString *)dev_name {
+    return XP2P_ERR_NONE;
     return (XP2PErrCode)stopAvRecvService(dev_name.UTF8String, nullptr);
 }
 
@@ -336,6 +369,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    self.audioConfig = audio_config;
+    self.videoConfig = video_config;
+    [[TRTCCloud sharedInstance] startLocalPreview:(video_config.videoPosition == AVCaptureDevicePositionFront)?YES:NO view:video_config.localView];
+    [[TRTCCloud sharedInstance] startLocalAudio:TRTCAudioQualitySpeech];
+    return;
     
     self.isSending = YES;
     
@@ -410,14 +448,22 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)refreshLocalView:(UIView *)localView {
+    [[TRTCCloud sharedInstance] updateLocalView:localView];
+    return;
     systemAvCapture.videoLocalView = localView;
     [systemAvCapture refreshLocalPreviewView];
 }
 
 - (void)changeCameraPositon {
+    TXDeviceManager *device = [[TRTCCloud sharedInstance] getDeviceManager];
+    [device switchCamera:device.isFrontCamera?NO:YES];
+    return;
     [systemAvCapture changeCameraPositon];
 }
 - (XP2PErrCode)stopVoiceToServer {
+    [[TRTCCloud sharedInstance] stopLocalAudio];
+    [[TRTCCloud sharedInstance] stopLocalPreview];
+    return XP2P_ERR_NONE;
     
     [self cancelTimer];
         
@@ -433,6 +479,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)stopService:(NSString *)dev_name {
+    [[TRTCCloud sharedInstance] stopAllRemoteView];
+    [[TRTCCloud sharedInstance] exitRoom];
+    return;
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
@@ -469,4 +518,54 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 + (int)getStreamLinkMode:(NSString *)dev_name {
     return getStreamLinkMode(dev_name.UTF8String);
 }
+
+
+
+
+
+#pragma mark -TRTCCloudDelegate
+- (void)onEnterRoom:(NSInteger)result {
+    if (result > 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
+        });
+    }
+}
+
+- (void)onRemoteUserEnterRoom:(NSString *)userId {
+    
+}
+
+- (void)onRemoteUserLeaveRoom:(NSString *)userId reason:(NSInteger)reason {
+    //0表示用户主动退出房间，1表示用户超时退出，2表示被踢出房间，3表示主播因切换到观众退出房间。
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:nil];
+    });
+    
+}
+
+- (void)onUserVideoAvailable:(NSString *)userId available:(BOOL)available {
+    if (available) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[TRTCCloud sharedInstance] startRemoteView:userId streamType:TRTCVideoStreamTypeSmall view:self.videoConfig.remoteView];
+        });
+    }
+}
+
+- (void)onRecvCustomCmdMsgUserId:(NSString *)userId cmdID:(NSInteger)cmdID seq:(UInt32)seq message:(NSData *)message {
+    id<TIoTCoreXP2PBridgeDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
+        NSString *response = [delegate reviceDeviceMsgWithID:userId data:message];
+        /*
+        if (response) {
+            NSUInteger length = strlen(response.UTF8String);
+            char *response_msg = (char *)malloc(length + 1);
+            strncpy(response_msg, response.UTF8String, length);
+            response_msg[length] = '\0';
+            
+            return response_msg;
+        }*/
+    }
+}
+
 @end

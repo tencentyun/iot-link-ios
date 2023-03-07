@@ -147,6 +147,7 @@ NSString *const AppDescribeAutomation = @"AppDescribeAutomation";//获取自动�
 NSString *const AppGetSceneAndAutomationLogs = @"AppGetSceneAndAutomationLogs";//智能联动执行日志
 
 //MARK:Video
+NSString *const CallTRTCDevice = @"CallTRTCDevice";//呼叫TRTC设备
 NSString *const DescribeDevices = @"DescribeDevices";//Video 设备列表
 NSString *const DescribeCloudStorageEvents = @"DescribeCloudStorageEvents";//云存事件列表
 NSString *const DescribeCloudStorageThumbnail = @"DescribeCloudStorageThumbnail";//云存缩略图

@@ -1117,6 +1117,41 @@
 
 
 #pragma mark - 云端存储
+///呼叫trtc设备
+- (void)callTRTCDevice:(NSString *)productId deviceName:(NSString *)deviceName success:(SRHandler)success failure:(FRHandler)failure{
+    NSDictionary *commonParams = [self commonParamsForV3AuthenticationWithAction:CallTRTCDevice withVersioinData:@"2021-11-25" regionString:[TIoTCoreAppEnvironment shareEnvironment].deviceRegion];
+    
+    NSMutableDictionary *thisInterfaceParams = [NSMutableDictionary dictionary];
+    thisInterfaceParams[@"ProductId"] = productId?:@"";
+    thisInterfaceParams[@"DeviceName"] = deviceName?:@"";
+    
+    NSMutableDictionary *allParams = [[NSMutableDictionary alloc] init];
+    [allParams addEntriesFromDictionary:commonParams];
+    [allParams addEntriesFromDictionary:thisInterfaceParams];
+
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretKey forKey:@"secretKey"];
+    [allParams setValue:[TIoTCoreAppEnvironment shareEnvironment].cloudSecretId forKey:@"secretId"];
+    
+    
+    NSString *urlString = [TIoTCoreAppEnvironment shareEnvironment].videoHostApi;
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *urlDomain = [url host];
+    NSString *firstDomainString = [urlDomain componentsSeparatedByString:@"."].firstObject?:@"";
+    
+    //V3签名
+    NSString *authorization = [TIoTCoreUtil generateSignature:thisInterfaceParams params:allParams server:firstDomainString];
+    allParams[@"Authorization"] = authorization;
+    
+    TIoTCoreRequestBuilder *b = [[TIoTCoreRequestBuilder alloc] initWtihAction:CallTRTCDevice params:allParams useToken:YES];
+    
+    [TIoTCoreRequestClient sendVideoOrExploreRequestWithBuild:b.build urlString:urlString success:^(id  _Nonnull responseObject) {
+        success(responseObject);
+    } failure:^(NSString * _Nonnull reason, NSError * _Nonnull error, NSDictionary * _Nonnull dic) {
+        failure(reason,error,dic);
+    }];
+    
+    
+}
 ///获取Video设备列表
 - (void)getVideoDeviceListLimit:(NSInteger )limit offset:(NSInteger )offset productId:(NSString *)productId returnModel:(BOOL)returnModel success:(SRHandler)success failure:(FRHandler)failure{
     

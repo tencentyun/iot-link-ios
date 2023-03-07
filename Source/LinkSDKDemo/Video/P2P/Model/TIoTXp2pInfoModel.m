@@ -24,3 +24,6 @@
 
 @end
 
+@implementation TIoTTRTCParamModel
+
+@end

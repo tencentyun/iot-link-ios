@@ -9,6 +9,7 @@
 #import "TIoTCoreVideoConfig.h"
 #import "TIoTAVCaptionFLV.h"
 #include "AppWrapper.h"
+#import <TXLiteAVSDK_TRTC/TRTCCloud.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg;
 extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
-
+@optional
 /*
  * ⚠️⚠️⚠️ 谨慎！！！ === 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程
  *
@@ -59,6 +60,9 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 是否打印 SDK Log，默认关
  */
 @property (nonatomic, assign)BOOL logEnable;
+
+//需在startApp之前，提前设置params参数。例如：[TIoTCoreXP2PBridge sharedInstance].params = XXX;
+@property (nonatomic, strong)TRTCParams *params;
 
 /*
  * 获取版本号
