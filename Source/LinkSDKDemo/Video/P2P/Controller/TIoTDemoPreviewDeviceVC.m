@@ -1219,8 +1219,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //        [IJKFFMoviePlayerController setLogReport:YES];
         //        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
 #else
-        [IJKFFMoviePlayerController setLogReport:NO];
-        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
+//        [IJKFFMoviePlayerController setLogReport:NO];
+//        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
 #endif
         
         
