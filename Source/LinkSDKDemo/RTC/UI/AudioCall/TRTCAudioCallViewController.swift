@@ -220,7 +220,7 @@ class TRTCCallingAuidoViewController: UIViewController, CallingViewControllerRes
             if let dis = self.dismissBlock {
                 dis()
             }
-            TRTCCalling.shareInstance().hangup()
+//            TRTCCalling.shareInstance().hangup()
             UIApplication.shared.isIdleTimerDisabled = false
         }
     }
@@ -299,7 +299,7 @@ extension TRTCCallingAuidoViewController {
     }
     
     @objc func remoteDismiss() {
-        TRTCCalling.shareInstance().hangup()
+//        TRTCCalling.shareInstance().hangup()
        self.disMiss()
     }
     
@@ -377,8 +377,8 @@ extension TRTCCallingAuidoViewController {
     }
     
     @objc func hangupTapped() {
-        TRTCCalling.shareInstance()
-        TRTCCalling.shareInstance().hangup()
+//        TRTCCalling.shareInstance()
+//        TRTCCalling.shareInstance().hangup()
         if let delegate = self.actionDelegate {
             delegate.didRefuseedRoom()
         }
@@ -402,7 +402,7 @@ extension TRTCCallingAuidoViewController {
     
     @objc func muteTapped () {
         self.isMicMute = !self.isMicMute
-        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
+//        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
         self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text
@@ -415,7 +415,7 @@ extension TRTCCallingAuidoViewController {
     
     @objc func handsfreeTapped() {
         self.isHandsFreeOn = !self.isHandsFreeOn
-        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
+//        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
         self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text

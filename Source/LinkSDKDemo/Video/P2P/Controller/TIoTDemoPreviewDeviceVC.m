@@ -48,7 +48,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIotDemoDeviceDirectionDown,
 };
 
-@interface TIoTDemoPreviewDeviceVC ()<TIoTCoreXP2PBridgeDelegate, UITableViewDelegate,UITableViewDataSource>
+@interface TIoTDemoPreviewDeviceVC ()<TIoTCoreXP2PBridgeDelegate, TRTCCallingViewDelegate, UITableViewDelegate,UITableViewDataSource> {
+    TRTCCallingAuidoViewController *_callVideoVC;
+}
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *actionBottomView; //功能操作底层view
@@ -103,7 +105,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     _is_ijkPlayer_stream = YES;
     //关闭日志
-//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    //    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     self.qualityString = quality_high;
@@ -117,14 +119,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     [self installMovieNotificationObservers];
-
+    
     [self initializedVideo];
     
     [self addRotateNotification];
     
     [self setupPreViewViews];
     
-//    [self requestXp2pInfo];
+    //    [self requestXp2pInfo];
     
     NSString *productId = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     NSString *deviceName= self.deviceName?:@"";
@@ -140,13 +142,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)requestDiffDeviceDataWithXp2pInfo:(TRTCParams *)xp2pInfo {
     if (self.isNVR == NO) {
         //云存事件列表
-//        [self requestCloudStoreVideoList];
+        //        [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         
         [TIoTCoreXP2PBridge sharedInstance].params = xp2pInfo;
         int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-//        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+        //        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
         
         if (errorcode == XP2P_ERR_VERSION) {
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -215,6 +217,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)dealloc{
+    //UI挂断
+    if (_callVideoVC) {
+        [_callVideoVC remoteDismiss];
+        _callVideoVC = nil;
+    }
+    
     
     [self stopPlayMovie];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
@@ -238,12 +246,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)getDeviceStatusWithType:(NSString *)singleType qualityType:(NSString *)qualityType{
     
     NSString *actionString = @"sendToDevice";//内容随意定制即可，设备可以收到
-//    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
-//    if (self.isNVR == YES) {
-//        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=%@&%@",self.selectedModel.Channel,singleType?:@"",qualityTypeString?:@""];
-//    }else {
-//        actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
-//    }
+    //    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
+    //    if (self.isNVR == YES) {
+    //        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=%@&%@",self.selectedModel.Channel,singleType?:@"",qualityTypeString?:@""];
+    //    }else {
+    //        actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
+    //    }
     
     __weak typeof(self) weakSelf = self;
     [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
@@ -263,7 +271,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
                 
-//                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
+                //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
                 [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
                 
                 static int tt_pitch = 0;
@@ -282,10 +290,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
                 
                 /*if(tt_pitch == 6){
-                    tt_pitch = -6;
-                }else {
-                    tt_pitch = 6;
-                }*/
+                 tt_pitch = -6;
+                 }else {
+                 tt_pitch = 6;
+                 }*/
             }
             
         }else {
@@ -385,7 +393,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         make.centerX.equalTo(self.talkbackIcon);
         make.top.equalTo(self.talkbackIcon.mas_bottom).offset(kActionIconTopPadding);
     }];
-
+    
     //回放功能
     UIImageView *playbackImage = [[UIImageView alloc]init];
     playbackImage.userInteractionEnabled = YES;
@@ -422,7 +430,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         make.centerX.equalTo(playbackIcon);
         make.top.equalTo(playbackIcon.mas_bottom).offset(kActionIconTopPadding);
     }];
-
+    
     //录像
     UIImageView *videoImage = [[UIImageView alloc]init];
     videoImage.image = [UIImage imageNamed:@"video"];
@@ -456,7 +464,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         make.centerX.equalTo(self.videoIcon);
         make.top.equalTo(self.videoIcon.mas_bottom).offset(kActionIconTopPadding);
     }];
-
+    
     //拍照
     UIImageView *photographImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"photograph"]];
     photographImageView.userInteractionEnabled = YES;
@@ -555,8 +563,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.remoteView.backgroundColor = [UIColor colorWithHexString:KActionSheetBackgroundColor];
     [self.view addSubview:self.remoteView];
     [self.remoteView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(currentWeekTip.mas_bottom).offset(8);
-//        make.left.right.bottom.equalTo(self.view);
+        //        make.top.equalTo(currentWeekTip.mas_bottom).offset(8);
+        //        make.left.right.bottom.equalTo(self.view);
         make.top.equalTo(self.imageView.mas_bottom).offset(kPadding);
         make.left.right.bottom.equalTo(self.view);
     }];
@@ -639,7 +647,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         make.bottom.equalTo(self.rotateBtn.mas_bottom);
         make.right.equalTo(self.rotateBtn.mas_left).offset(-kInterval);
     }];
-
+    
     self.definitionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     if ([self.qualityString isEqualToString:quality_standard]) {
         [self.definitionBtn setButtonFormateWithTitlt:@"标清" titleColorHexString:@"#ffffff" font:[UIFont wcPfRegularFontOfSize:12]];
@@ -717,16 +725,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         appDelegate.isRotation = YES;
         [self rotateLandscapeRight];
     }
-//    [self resetScreenSubviewsWithLandscape:appDelegate.isRotation];
+    //    [self resetScreenSubviewsWithLandscape:appDelegate.isRotation];
 }
 
 - (void)controlVoice:(UIButton *)button {
     if (!button.selected) {
         [button setImage:[UIImage imageNamed:@"voice_close"] forState:UIControlStateNormal];
-//        self.player.playbackVolume = 0;
+        //        self.player.playbackVolume = 0;
     }else {
         [button setImage:[UIImage imageNamed:@"voice_open"] forState:UIControlStateNormal];
-//        self.player.playbackVolume = 1;
+        //        self.player.playbackVolume = 1;
     }
     button.selected = !button.selected;
 }
@@ -851,7 +859,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             [self setNavigationBarTransparency];
             [self resetScreenSubviewsWithLandscape:YES];
             break;
-            }
+        }
         case UIDeviceOrientationLandscapeRight: {
             //屏幕向右橫置
             appDelegate.isRotation = YES;
@@ -975,7 +983,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         }
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-
+        
     }];
     
 }
@@ -991,7 +999,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
         TIoTDemoCloudEventModel *tuumbnailModel = [TIoTDemoCloudEventModel yy_modelWithJSON:responseObject];
         eventModel.ThumbnailURL = tuumbnailModel.ThumbnailURL;
-//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        //        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         
     }];
@@ -1055,7 +1063,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {
     NSString *deviceMsg = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
+    
+    
+    //设备回复消息了，可以按照自定义意义表示接通了或者拒绝了
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self->_callVideoVC remoteDismiss];
 
+        self->_callVideoVC = nil;
+    });
     return @"";
 }
 
@@ -1082,24 +1097,27 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
         /*
          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-             
-             self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-             
-             [self configVideo];
-             [self.player prepareToPlay];
-             [self.player play];
-             
-             self.startPlayer = CACurrentMediaTime();
+         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+         
+         self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
+         
+         [self configVideo];
+         [self.player prepareToPlay];
+         [self.player play];
+         
+         self.startPlayer = CACurrentMediaTime();
          });
          */
         [self setVieoPlayerStartPlayWith:self.qualityString];
         
-//        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
+        //        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
 }
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [MBProgressHUD showError:@"对方已挂断"];
+    return;
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     NSString *selectedName = self.deviceName?:@"";
     
@@ -1134,10 +1152,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
         
         [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:xp2pInfoString?:@""];
-//        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求成功"];
+        //        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求成功"];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:@""];
-//        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
+        //        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
     }];
 }
 
@@ -1190,16 +1208,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)configVideo {
-
+    
     // 1.通过播放器发起的拉流
     if (_is_ijkPlayer_stream) {
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
         [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
-
+        
         [self stopPlayMovie];
 #ifdef DEBUG
-//        [IJKFFMoviePlayerController setLogReport:YES];
-//        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+        //        [IJKFFMoviePlayerController setLogReport:YES];
+        //        [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
 #else
         [IJKFFMoviePlayerController setLogReport:NO];
         [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
@@ -1428,7 +1446,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         [self configVideo];
-
+        
         
         /// 播放器出图开始时间
         self.startPlayer = CACurrentMediaTime();
@@ -1449,49 +1467,49 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     BOOL runLoopFind = YES;
     while (runLoopFind) {
         if (currentViewController.presentedViewController) {
-
+            
             currentViewController = currentViewController.presentedViewController;
         } else if ([currentViewController isKindOfClass:[UINavigationController class]]) {
-
-          UINavigationController* navigationController = (UINavigationController* )currentViewController;
+            
+            UINavigationController* navigationController = (UINavigationController* )currentViewController;
             currentViewController = [navigationController.childViewControllers lastObject];
-
+            
         } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
-
-          UITabBarController* tabBarController = (UITabBarController* )currentViewController;
+            
+            UITabBarController* tabBarController = (UITabBarController* )currentViewController;
             currentViewController = tabBarController.selectedViewController;
         } else {
             NSUInteger childViewControllerCount = currentViewController.childViewControllers.count;
-                    if (childViewControllerCount > 0) {
-
-                        currentViewController = currentViewController.childViewControllers.lastObject;
-
-                        return currentViewController;
-                    } else {
-
-                        return currentViewController;
-                    }
-                }
-
+            if (childViewControllerCount > 0) {
+                
+                currentViewController = currentViewController.childViewControllers.lastObject;
+                
+                return currentViewController;
+            } else {
+                
+                return currentViewController;
             }
-            return currentViewController;
+        }
+        
+    }
+    return currentViewController;
 }
 
 - (UIViewController *)getRootViewController{
-
+    
     UIWindow* window = [[[UIApplication sharedApplication] delegate] window];
     NSAssert(window, @"The window is empty");
     return window.rootViewController;
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 //需注意此方法全局覆盖，别的地方就收不到断网通知了
 - (void)registerNetworkNotifications {
@@ -1537,11 +1555,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
-
+    
 }
-
-
-
 
 
 
@@ -1550,8 +1565,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 #pragma mark - 新版本sdk
 - (void)callDevice:(NSString *)productid devicename:(NSString *)devicename {
-//    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    //paramDic[@"DeviceName"] = self.deviceName?:@"";
     
     __weak typeof(self) weakSelf = self;
     [[TIoTCoreDeviceSet shared] callTRTCDevice:productid deviceName:devicename success:^(id  _Nonnull responseObject) {
@@ -1576,6 +1589,26 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         [MBProgressHUD showError:@"callDevice api请求失败"];
     }];
+    
+    
+    //UI
+    _callVideoVC = [[TRTCCallingAuidoViewController alloc] initWithOcUserID:nil];
+    _callVideoVC.deviceName = devicename;
+    _callVideoVC.actionDelegate = self;
+    _callVideoVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[TIoTCoreUtil topViewController] presentViewController:_callVideoVC animated:NO completion:nil];
 }
 
+#pragma mark TRTCCallingViewDelegate
+- (void)didAcceptJoinRoom {
+    
+}
+- (void)didRefuseedRoom {
+    //UI挂断
+    [_callVideoVC remoteDismiss];
+
+    _callVideoVC = nil;
+    
+    [self nav_customBack];
+}
 @end

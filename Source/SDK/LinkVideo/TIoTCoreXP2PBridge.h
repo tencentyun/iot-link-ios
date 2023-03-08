@@ -127,7 +127,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 //设置分辨率，需在开启通话前设置
 - (void)resolutionRatio:(AVCaptureSessionPreset )resolutionValue;
-
+//设置听筒还是扬声器模式，yes=扬声器，no=听筒
+- (void)setAudioRoute:(BOOL)isHandsFree ;
 
 /*
  * 局域网相关接口

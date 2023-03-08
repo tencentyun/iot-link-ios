@@ -478,7 +478,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return (XP2PErrCode)errorcode;
 }
 
+- (void)setAudioRoute:(BOOL)isHandsFree {
+    [[TRTCCloud sharedInstance] setAudioRoute:isHandsFree ? TRTCAudioModeSpeakerphone : TRTCAudioModeEarpiece];
+}
+
 - (void)stopService:(NSString *)dev_name {
+    [self stopVoiceToServer];
     [[TRTCCloud sharedInstance] stopAllRemoteView];
     [[TRTCCloud sharedInstance] exitRoom];
     return;

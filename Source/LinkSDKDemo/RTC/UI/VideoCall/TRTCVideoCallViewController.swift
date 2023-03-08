@@ -198,7 +198,7 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
     }
     
     deinit {
-        TRTCCalling.shareInstance().closeCamara()
+//        TRTCCalling.shareInstance().closeCamara()
 //        TRTCCallingVideoViewController.renderViews = nil
         UIApplication.shared.isIdleTimerDisabled = false
         debugPrint("deinit \(self)")
@@ -267,8 +267,8 @@ class TRTCCallingVideoViewController: UIViewController, CallingViewControllerRes
                 dis()
             }
             
-            TRTCCalling.shareInstance().hangup()
-            TRTCCalling.shareInstance().closeCamara()
+//            TRTCCalling.shareInstance().hangup()
+//            TRTCCalling.shareInstance().closeCamara()
             UIApplication.shared.isIdleTimerDisabled = false
         }
     }
@@ -387,7 +387,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
 
         if let renderView = TRTCCallingVideoViewController.renderViews {
             renderView.userModel = user
-            TRTCCalling.shareInstance().startRemoteView(userId: user.userId, view: renderView)
+//            TRTCCalling.shareInstance().startRemoteView(userId: user.userId, view: renderView)
             
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(tap:)))
@@ -399,7 +399,7 @@ extension TRTCCallingVideoViewController: UICollectionViewDelegate, UICollection
     }
     
     func leaveUser(user: CallingUserModel) {
-        TRTCCalling.shareInstance().stopRemoteView(userId: user.userId)
+//        TRTCCalling.shareInstance().stopRemoteView(userId: user.userId)
         
         if let index = userList.firstIndex(where: { (model) -> Bool in
             model.userId == user.userId
@@ -558,7 +558,7 @@ extension TRTCCallingVideoViewController {
         autoSetUIByState()
         accept.isHidden = (curSponsor == nil)
         AppUtils.shared.alertUserTips(self)
-        TRTCCalling.shareInstance().openCamera(frontCamera: true, view: localPreView)
+//        TRTCCalling.shareInstance().openCamera(frontCamera: true, view: localPreView)
     }
     
     func setupSponsorPanel(topPadding: CGFloat) {
@@ -616,7 +616,7 @@ extension TRTCCallingVideoViewController {
     }
     
     @objc func remoteDismiss() {
-        TRTCCalling.shareInstance().hangup()
+//        TRTCCalling.shareInstance().hangup()
        self.disMiss()
     }
     
@@ -693,7 +693,7 @@ extension TRTCCallingVideoViewController {
     }
     
     @objc func hangupTapped () {
-        TRTCCalling.shareInstance().hangup()
+//        TRTCCalling.shareInstance().hangup()
         if let delegate = self.actionDelegate {
             delegate.didRefuseedRoom()
         }
@@ -714,7 +714,7 @@ extension TRTCCallingVideoViewController {
     
     @objc func muteTapped () {
         self.isMicMute = !self.isMicMute
-        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
+//        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
         self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text
@@ -728,7 +728,7 @@ extension TRTCCallingVideoViewController {
     
     @objc func handsfreeTapped () {
         self.isHandsFreeOn = !self.isHandsFreeOn
-        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
+//        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
         self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
         let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         indicator.mode = MBProgressHUDMode.text
