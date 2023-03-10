@@ -579,4 +579,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     }
 }
 
+- (void)onFirstVideoFrame:(NSString *)userId streamType:(TRTCVideoStreamType)streamType width:(int)width height:(int)height {
+    id<TIoTCoreXP2PBridgeDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(onFirstVideoFrame)]) {
+        [delegate onFirstVideoFrame];
+    }
+}
 @end

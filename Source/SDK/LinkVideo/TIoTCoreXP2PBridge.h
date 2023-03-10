@@ -45,6 +45,11 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * sdk 事件消息,事件对应类型与意义详见 XP2PType 类型说明
  */
 - (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType;
+
+/*
+ * 第一帧过来时候触发
+ */
+- (void)onFirstVideoFrame;
 @end
 
 

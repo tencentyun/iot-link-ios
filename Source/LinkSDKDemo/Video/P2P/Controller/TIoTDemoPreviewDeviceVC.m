@@ -590,6 +590,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
     
     self.imageView.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didReceiveTapClick:)];
+    [self.imageView addGestureRecognizer:tap];
+}
+
+- (void)didReceiveTapClick:(UITapGestureRecognizer *)tap {
+    [[TIoTCoreXP2PBridge sharedInstance] changeCameraPositon];
 }
 
 - (void)initVideoParamView {
@@ -1069,7 +1076,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSString *deviceMsg = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
     
-    
     //1.设备回复消息了，可以按照自定义意义表示接通了或者拒绝了
     dispatch_async(dispatch_get_main_queue(), ^{
         [self->_callVideoVC remoteDismiss];
@@ -1079,8 +1085,27 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         //2.开始推流
         [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
         
+        [MBProgressHUD showError:@"已接通"];
     });
+
+    /// 统计出图开始时间
+    self.startPlayer = CACurrentMediaTime();
     return @"";
+}
+
+- (void)onFirstVideoFrame {
+    //统计出图开始时间 弹框
+    CFTimeInterval endPlayer = CACurrentMediaTime();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *messageString = [NSString stringWithFormat: @"画面显示时间: %ld(ms)",(NSInteger)((endPlayer - self.startPlayer)*1000)];
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+    });
 }
 
 - (void)refushVideo:(NSNotification *)notify {
