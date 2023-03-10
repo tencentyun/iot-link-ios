@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSString *deviceName= self.deviceName?:@"";
     [self callDevice:productId devicename:deviceName];
     
-    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"静音" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView:)];
     self.navigationItem.rightBarButtonItem = right;
     
     //设置代理，接受设备消息
@@ -186,7 +186,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }];
 }
 
-- (void)showHudView {
+- (void)showHudView:(UIBarButtonItem *)item {
+    static BOOL audiomute = YES;
+    NSLog(@"静音设置====>%d",audiomute);
+    [[TIoTCoreXP2PBridge sharedInstance] muteLocalAudio:audiomute];
+    item.title = audiomute?@"恢复声音":@"静音";
+    audiomute = !audiomute;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -230,7 +235,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (self.isNVR == NO) {
         [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
         
-        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
+//        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
@@ -272,7 +277,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 }
                 
                 //                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
-                [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
+//                [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
                 
                 static int tt_pitch = 0;
                 TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
@@ -677,7 +682,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
         [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
         
-        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
+//        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
     
     button.selected = !button.selected;
@@ -1065,18 +1070,22 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
     
     
-    //设备回复消息了，可以按照自定义意义表示接通了或者拒绝了
+    //1.设备回复消息了，可以按照自定义意义表示接通了或者拒绝了
     dispatch_async(dispatch_get_main_queue(), ^{
         [self->_callVideoVC remoteDismiss];
 
         self->_callVideoVC = nil;
+        
+        //2.开始推流
+        [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
+        
     });
     return @"";
 }
 
 - (void)refushVideo:(NSNotification *)notify {
     //开始发送信令
-    [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
+//    [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
     return;
     
     UIViewController *view = [self getCurrentViewController];
@@ -1117,6 +1126,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)responseP2PdisConnect:(NSNotification *)notify {
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     [MBProgressHUD showError:@"对方已挂断"];
+    
+    [self didRefuseedRoom];
     return;
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     NSString *selectedName = self.deviceName?:@"";

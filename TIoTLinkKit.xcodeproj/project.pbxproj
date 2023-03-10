@@ -61,7 +61,7 @@
 		6D4E1E8A25189BC5003BE1D9 /* Main_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1E8C25189BC5003BE1D9 /* Main_logo.png */; };
 		6D4E1EE12518AE40003BE1D9 /* ConfigHardware_WiFi.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E1EE32518AE40003BE1D9 /* ConfigHardware_WiFi.png */; };
 		6D50E91226B18CE300DF12A5 /* TIoTDemoWebSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D50E91126B18CE300DF12A5 /* TIoTDemoWebSocketManager.m */; };
-		6D50E91426B18F0600DF12A5 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		6D50E91426B18F0600DF12A5 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		6D50E91F26B1911300DF12A5 /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED5767162410AED70070D218 /* ReachabilityManager.m */; };
 		6D50E92426B1924800DF12A5 /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
 		6D50E92626B192E300DF12A5 /* TIoTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4347B2546B2C600C44471 /* TIoTBaseModel.swift */; };
@@ -3308,6 +3308,7 @@
 			buildConfigurationList = D2C7AA1B232F6AA6005E8006 /* Build configuration list for PBXNativeTarget "LinkApp" */;
 			buildPhases = (
 				1805E9362A06B178133EC800 /* [CP] Check Pods Manifest.lock */,
+				82D31F8BDC52CF48B67C0478 /* [CP] Prepare Artifacts */,
 				D2C7A9EB232F6AA4005E8006 /* Sources */,
 				D2C7A9EC232F6AA4005E8006 /* Frameworks */,
 				D2C7A9ED232F6AA4005E8006 /* Resources */,
@@ -3330,6 +3331,7 @@
 			buildConfigurationList = F4F3D54124935BD3005D3396 /* Build configuration list for PBXNativeTarget "LinkSDKDemo" */;
 			buildPhases = (
 				FAA5A328888AFA13C2885AD0 /* [CP] Check Pods Manifest.lock */,
+				1EB06F8B0AF8672CF359914A /* [CP] Prepare Artifacts */,
 				F4F3D52524935BD3005D3396 /* Sources */,
 				F4F3D52624935BD3005D3396 /* Frameworks */,
 				F4F3D52724935BD3005D3396 /* Resources */,
@@ -3514,6 +3516,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1EB06F8B0AF8672CF359914A /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2EC0ED5670A11587790F0BD1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3563,6 +3582,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		82D31F8BDC52CF48B67C0478 /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FAA5A328888AFA13C2885AD0 /* [CP] Check Pods Manifest.lock */ = {
@@ -3901,7 +3937,7 @@
 				6DF0C5AB279AA16700B4FE22 /* TIoTXp2pInfoModel.m in Sources */,
 				F4F3D7C524938EBE005D3396 /* FeedbackVC.m in Sources */,
 				F477671927C7691D00F37F39 /* TIoTAreaNetworkDeviceCell.m in Sources */,
-				6D50E91426B18F0600DF12A5 /* (null) in Sources */,
+				6D50E91426B18F0600DF12A5 /* BuildFile in Sources */,
 				6D98FE1625C2E6AA00518AC7 /* TIoTCustomCalendarScrollView.m in Sources */,
 				6D9D9788268468320085BCC2 /* TIoTDemoVideoVC.m in Sources */,
 				6D2049EB2653C189007F6F27 /* TIoTCloudStorageDayTimeListModel.m in Sources */,

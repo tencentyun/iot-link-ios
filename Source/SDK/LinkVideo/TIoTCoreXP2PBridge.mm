@@ -482,6 +482,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [[TRTCCloud sharedInstance] setAudioRoute:isHandsFree ? TRTCAudioModeSpeakerphone : TRTCAudioModeEarpiece];
 }
 
+- (void)muteLocalAudio:(BOOL)mute {
+    [[TRTCCloud sharedInstance] muteLocalAudio:mute];
+}
+
 - (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
     [[TRTCCloud sharedInstance] stopAllRemoteView];
@@ -531,14 +535,16 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 #pragma mark -TRTCCloudDelegate
 - (void)onEnterRoom:(NSInteger)result {
     if (result > 0) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
-        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
+//        });
     }
 }
 
 - (void)onRemoteUserEnterRoom:(NSString *)userId {
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
+    });
 }
 
 - (void)onRemoteUserLeaveRoom:(NSString *)userId reason:(NSInteger)reason {
