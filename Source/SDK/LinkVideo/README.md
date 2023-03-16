@@ -48,7 +48,7 @@ pod 'TIoTLinkVideo'
                 
 	[[TIoTCoreXP2PBridge sharedInstance]sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
 	```
-* 3、设备接听后，APP通过信令通道接受接听或拒绝消息（可自定义信令含义，demo演示为接收到消息表示接听）
+* 3、SDK 其他功能接口
 
 	```
 	//刷新本地预览UI接口
