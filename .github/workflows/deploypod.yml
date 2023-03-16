@@ -29,8 +29,8 @@ jobs:
         echo $VERSION
         export LIB_VERSION=$VERSION
                 
-        pod lib lint TIoTLinkKit.podspec --verbose --allow-warnings --skip-import-validation
-        pod trunk push TIoTLinkKit.podspec --verbose --allow-warnings --skip-import-validation
+        pod lib lint TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries
+        pod trunk push TIoTLinkKit.podspec --verbose --allow-warnings --use-libraries
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
 
@@ -54,7 +54,7 @@ jobs:
         export LIB_VERSION=$version
         perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" TIoTLinkVideo.podspec
                 
-        pod lib lint TIoTLinkVideo.podspec --verbose --allow-warnings --use-libraries
-        pod trunk push TIoTLinkVideo.podspec --verbose --allow-warnings --use-libraries
+        pod lib lint TIoTLinkVideo.podspec --verbose --allow-warnings --skip-import-validation
+        pod trunk push TIoTLinkVideo.podspec --verbose --allow-warnings --skip-import-validation
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
