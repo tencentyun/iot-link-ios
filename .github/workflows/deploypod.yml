@@ -52,7 +52,7 @@ jobs:
         echo $version
 
         export LIB_VERSION=$version
-        perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" TIoTLinkVideo.podspec
+        perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" IoTVideoAdvanced.podspec
                 
         pod lib lint IoTVideoAdvanced.podspec --verbose --allow-warnings --skip-import-validation
         pod trunk push IoTVideoAdvanced.podspec --verbose --allow-warnings --skip-import-validation
