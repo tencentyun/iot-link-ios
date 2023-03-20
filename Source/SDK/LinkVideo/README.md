@@ -59,6 +59,12 @@ pod 'TIoTLinkVideo'
 	- (void)muteLocalAudio:(BOOL)mute;
 	```
 
+* 4、结束通话：
+
+	主动结束： [stopService](https://github.com/tencentyun/iot-link-ios/blob/4e322172a949725f7d6ea4a1daa17a288cbc00e6/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.h#L147-L150)  
+	对方结束： [disConnect通知](https://github.com/tencentyun/iot-link-ios/blob/4e322172a949725f7d6ea4a1daa17a288cbc00e6/Source/LinkSDKDemo/Video/P2P/Controller/TIoTDemoPreviewDeviceVC.m#L1151-L1155)
+
+
 
 ### SDK相关文档
 * [iOS SDK说明](doc/iOS%20Video接入指引文档.md)
