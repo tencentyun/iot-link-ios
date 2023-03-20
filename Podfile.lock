@@ -5,6 +5,12 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - FDFullscreenPopGesture (1.1)
+  - IoTVideoAdvanced (1.0.0):
+    - CocoaAsyncSocket (= 7.6.5)
+    - TIoTLinkKit_FLV (= 2.2.3)
+    - TIoTLinkKit_SoundTouch (= 0.0.4)
+    - TIoTLinkKit_XP2P (= 2.4.34-beta.202211150834)
+    - TXLiteAVSDK_TRTC (= 11.0.14016)
   - IQKeyboardManager (6.1.1)
   - KeychainAccess (4.2.0)
   - lottie-ios (3.1.8)
@@ -35,12 +41,6 @@ PODS:
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
   - TIoTLinkKit_XP2P (2.4.34-beta.202211150834)
-  - TIoTLinkVideo (1.0.0):
-    - CocoaAsyncSocket (= 7.6.5)
-    - TIoTLinkKit_FLV (= 2.2.3)
-    - TIoTLinkKit_SoundTouch (= 0.0.4)
-    - TIoTLinkKit_XP2P (= 2.4.34-beta.202211150834)
-    - TXLiteAVSDK_TRTC (= 11.0.14016)
   - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (11.0.14016):
     - TXLiteAVSDK_TRTC/TRTC (= 11.0.14016)
@@ -53,6 +53,7 @@ DEPENDENCIES:
   - CocoaAsyncSocket (= 7.6.5)
   - CocoaLumberjack (= 3.7.2)
   - FDFullscreenPopGesture (= 1.1)
+  - IoTVideoAdvanced (from `./`)
   - IQKeyboardManager (= 6.1.1)
   - KeychainAccess (= 4.2.0)
   - lottie-ios (= 3.1.8)
@@ -68,7 +69,6 @@ DEPENDENCIES:
   - TIoTLinkKit_IJKPlayer (= 2.0.8-beta.202212290234)
   - TIoTLinkKit_TPNS (= 1.0.1)
   - TIoTLinkKit_WechatOpenSDK (= 1.0.1)
-  - TIoTLinkVideo (from `./`)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
   - YYModel (= 1.0.4)
@@ -102,9 +102,9 @@ SPEC REPOS:
     - YYModel
 
 EXTERNAL SOURCES:
-  TIoTLinkKit:
+  IoTVideoAdvanced:
     :path: "./"
-  TIoTLinkVideo:
+  TIoTLinkKit:
     :path: "./"
 
 SPEC CHECKSUMS:
@@ -112,6 +112,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
+  IoTVideoAdvanced: a721841c8dfbd0d3ad1ea6007be24d037d1643d4
   IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
@@ -130,12 +131,11 @@ SPEC CHECKSUMS:
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
   TIoTLinkKit_XP2P: a5409ccbbaa2de3faf8aa82bf98b0c3df193541a
-  TIoTLinkVideo: 59742ad821597e7c17a0dcca7393d5230d4b41e8
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: 4d1630935b105ace857839e65f4c2ce092cb94f0
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 0dd225e3f9c24b91b41d0868f8e749f6802ed208
+PODFILE CHECKSUM: 0fee9c8c7bada7c4986486f593aa9bb5c709ebbc
 
 COCOAPODS: 1.9.3

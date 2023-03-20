@@ -1,6 +1,6 @@
 
 Pod::Spec.new do |s|
-  s.name             = 'TIoTLinkVideo'
+  s.name             = 'IoTVideoAdvanced'
   s.version          = ENV['LIB_VERSION'] || '1.0.0'
   s.summary          = '腾讯连连Video SDK是腾讯云物联网平台提供，应用开发厂商可通过该 SDK 快速搭建起 OEM 版本 APP，进行物联网音视频业务开发'
   

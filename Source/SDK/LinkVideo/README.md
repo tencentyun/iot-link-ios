@@ -1,15 +1,15 @@
 ### 概述
-Video SDK 主要提供了 APP 端 P2P 接入、实时监控、语音对讲、本地回放等基本能力。
+IoT Video Advanced SDK 主要提供了 APP 端与设备通话、信令发送接收等基本能力。
 
 
-## iOS 接入流程
+## IoT Video Advanced 客户SDK（iOS）开发指南
 
 1、在 App 的 Podfile 文件中添加如下依赖项
 
 ```
-pod 'TIoTLinkVideo'
+pod 'IoTVideoAdvanced'
 ```
-具体版本号可参考 [LinkVideo](TODO: sdk发布页url)
+具体版本号可参考 [LinkVideo](https://github.com/tencentyun/iot-link-ios/releases)
 
 
 2、运行SDKDemo 

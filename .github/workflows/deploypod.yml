@@ -54,7 +54,7 @@ jobs:
         export LIB_VERSION=$version
         perl -i -pe "s#.*s.source           =.*#\ts.source           = { :git => 'https://github.com/tencentyun/iot-link-ios.git', :tag => \"$temptag\" }#g" TIoTLinkVideo.podspec
                 
-        pod lib lint TIoTLinkVideo.podspec --verbose --allow-warnings --skip-import-validation
-        pod trunk push TIoTLinkVideo.podspec --verbose --allow-warnings --skip-import-validation
+        pod lib lint IoTVideoAdvanced.podspec --verbose --allow-warnings --skip-import-validation
+        pod trunk push IoTVideoAdvanced.podspec --verbose --allow-warnings --skip-import-validation
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.IOT_COCOAPODS_TRUNK_TOKEN }}
