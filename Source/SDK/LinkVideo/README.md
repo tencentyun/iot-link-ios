@@ -57,6 +57,8 @@ pod 'IoTVideoAdvanced'
 	- (void)setAudioRoute:(BOOL)isHandsFree ;
 	//静音或恢复音频   
 	- (void)muteLocalAudio:(BOOL)mute;
+	//参数cmd发送具体信令内容，每秒最多能发送30条消息。每个包最大为 1KB，超过则很有可能会被中间路由器或者服务器丢弃。每个客户端每秒最多能发送总计 8KB 数据。
+	- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd ...;
 	```
 
 * 4、结束通话：
@@ -66,10 +68,3 @@ pod 'IoTVideoAdvanced'
 
 
 
-### SDK相关文档
-* [iOS SDK说明](doc/iOS%20Video接入指引文档.md)
-* [PC 观看端直播场景延时优化](doc/win%20观看端直播场景延时优化.md)
-* [双向音视频延时测试](doc/双向音视频延时测试.md)
-* [双向通话延时参数说明](doc/双向延时参数说明.md)
-* [双向码率自适应说明](doc/双向码率自适应.md)
-* [双向通话断网流程](doc/双向通话断网流程.md)
