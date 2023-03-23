@@ -29,7 +29,7 @@ pod 'IoTVideoAdvanced'
 	[[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
 	```
 * <u>***SecretId、SecretKey、ProductId 用于访问 物联网智能视频服务，此处的使用方式仅为演示，请勿将 SecretId、SecretKey 保存在客户端，避免泄露，建议通过自建服务获取 params 传递给 SDK***</u>
-* 2、设备接听后，APP通过信令通道接受接听或拒绝消息（可自定义信令含义，demo演示为接收到消息表示接听）
+* 2、设备接听流程，APP通过信令通道接受接听或拒绝消息（可自定义信令含义，demo演示为接收到消息表示接听）
 
 	```
 	#pragma mark - TIoTCoreXP2PBridgeDelegate
@@ -58,7 +58,11 @@ pod 'IoTVideoAdvanced'
 	- (void)changeCameraPositon;
 	//静音或恢复音频   
 	- (void)muteLocalAudio:(BOOL)mute;
-	//参数cmd发送具体信令内容，每秒最多能发送30条消息。每个包最大为 1KB，超过则很有可能会被中间路由器或者服务器丢弃。每个客户端每秒最多能发送总计 8KB 数据。
+	/*
+	 * 发送信令接口,需startAppWith后再发送
+	 * 参数cmd发送具体信令内容
+	 * 每秒最多能发送30条消息。每个包最大为 1KB，超过则很有可能会被中间路由器或者服务器丢弃。每个客户端每秒最多能发送总计 8KB 数据。
+	 */
 	- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd ...;
 	```
 
