@@ -343,7 +343,7 @@ dispatch_queue_t muxerQueue;
     if (self.videoLocalView) { //开关打开，才推送视频
         [self.h264Encoder encode:sampleBuffer];
         
-        [self calculatorCaptureFPS];
+//        [self calculatorCaptureFPS];
     }
 }
 
@@ -496,6 +496,10 @@ int encodeFlvData(int type, NSData *packetData) {
 
 #pragma mark - 录制
 - (void)preStart {
+    if (self.videoConfig.isExternal) {
+        return;//走外部采集数据发送
+    }
+    
     [self setupAudioCapture];
     
     if (self.videoLocalView) {
@@ -517,7 +521,9 @@ int encodeFlvData(int type, NSData *packetData) {
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
         
     flv_init_load();
-
+    if (self.videoConfig.isExternal) {
+        return YES;//走外部采集数据发送
+    }
     [self startCamera];
     
     [self.pcmRecord start_record];

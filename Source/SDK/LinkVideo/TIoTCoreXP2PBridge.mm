@@ -356,9 +356,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     systemAvCapture.videoLocalView = video_config.localView;
     [systemAvCapture setResolutionRatio:self.resolution];
     [systemAvCapture preStart];//配置声音和视频
+    [systemAvCapture setVideoBitRate:video_config.bitRate];
     
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
+    
     
     _p2p_wl_avg_ctx = {0};
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
@@ -458,6 +460,23 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     }
 }
 
+// 发布外部视频数据(自定义采集，自定义编码，h264数据)
+- (void)SendExternalVideoPacket:(NSData *)videoPacket {
+    if (self.isSending && systemAvCapture.videoConfig.isExternal) {
+        encodeFlvData(1, videoPacket);
+    }else {
+        NSLog(@"没有开启推流服务，请调用 sendVoiceToServer 并打开isExternal");
+    }
+}
+// 发布外部视频数据(自定义采集，自定义编码，aac数据)
+- (void)SendExternalAudioPacket:(NSData *)audioPacket {
+    if (self.isSending && systemAvCapture.audioConfig.isExternal) {
+        encodeFlvData(0, audioPacket);
+    }else {
+        NSLog(@"没有开启推流服务，请调用 sendVoiceToServer 并打开isExternal");
+    }
+}
+                                 
 + (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }

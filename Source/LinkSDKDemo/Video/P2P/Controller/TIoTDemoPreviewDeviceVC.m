@@ -1137,13 +1137,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (self.isNVR == NO) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(refushVideo:)
-                                                     name:@"xp2preconnect"
+                                                     name:TIoTCoreXP2PBridgeNotificationReady
                                                    object:nil];
         
     }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(responseP2PdisConnect:)
-                                                 name:@"xp2disconnect"
+                                                 name:TIoTCoreXP2PBridgeNotificationDisconnect
                                                object:nil];
 }
 
@@ -1170,7 +1170,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             return;
         }
         
-        [MBProgressHUD show:[NSString stringWithFormat:@"%@ 通道建立成功",selectedName] icon:@"" view:self.view];
+        [MBProgressHUD show:[NSString stringWithFormat:@"%@ 本地服务已ready，可发起拉流或推流",selectedName] icon:@"" view:self.view];
         
         //计算IPC打洞时间
         self.endIpcP2P = CACurrentMediaTime();
