@@ -149,6 +149,18 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  */
 + (int)getStreamLinkMode:(NSString *)dev_name;
 
+/*
+ * 获取当前发送音视频水位大小，正常水位保持在低位大约（0～1000）
+ * 自适应码率可以参考demo 升降码率逻辑 https://github.com/tencentyun/iot-link-ios/blob/video-v2.4.x/Source/SDK/LinkVideo/TIoTCoreXP2PBridge.mm#L374-L406
+ * // 降码率
+    // 当发现p2p的水线超过一定值时，降低视频码率，这是一个经验值，一般来说要大于 [视频码率/2]
+    // 实测设置为 80%视频码率 到 120%视频码率 比较理想
+    // 在10组数据中，获取到平均值，并将平均水位与当前码率比对。
+ * // 升码率
+    // 测试发现升码率的速度慢一些效果更好
+    // p2p水线经验值一般小于[视频码率/2]，网络良好的情况会小于 [视频码率/3] 甚至更低
+ */
+- (int32_t)getSendingBufSize;
 @end
 
 NS_ASSUME_NONNULL_END

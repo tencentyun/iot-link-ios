@@ -361,7 +361,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     systemAvCapture.delegate = self;
     [systemAvCapture startCapture];
     
-    
+    if (video_config.isExternal) {
+        return;//走外部自适应码率逻辑，提供getSendingBufSize获取实时发送水位大小
+    }
     _p2p_wl_avg_ctx = {0};
     _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
     //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
@@ -372,6 +374,13 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 
+- (int32_t)getSendingBufSize {
+    int32_t bufsize = 0;
+    if (self.isSending) {
+        bufsize = (int32_t)getStreamBufSize(self.dev_name.UTF8String);
+    }
+    return bufsize;
+}
 
 - (void)getSendBufSize {
     
