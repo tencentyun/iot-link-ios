@@ -412,9 +412,11 @@
 		F4833EC524E17E340033FAB2 /* TIoTAPPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */; };
 		F4833EC724E29BC20033FAB2 /* TIoTLogTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */; };
 		F4A0833A2519F5BF00B556B3 /* TIoTAppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */; };
+		F4AC04FB29E3B4F700330473 /* TIoTDemoVideoPushVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AC04FA29E3B4F700330473 /* TIoTDemoVideoPushVC.m */; };
 		F4AC6BB928A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AC6BB828A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m */; };
 		F4AD73122553D5A6003267FC /* TIoTVercheckTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */; };
 		F4AD73162553F797003267FC /* TIoTAppUtilOC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AD73152553F797003267FC /* TIoTAppUtilOC.m */; };
+		F4B141C929DFF428005BC7FD /* TIoTDemoVideoCallVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F4B141C829DFF428005BC7FD /* TIoTDemoVideoCallVC.m */; };
 		F4B39F602541767200C0DD6E /* TIoTProductsConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */; };
 		F4C5A42227C783C900F797A8 /* TIoTDemoLocalDayCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C5A42027C783C900F797A8 /* TIoTDemoLocalDayCustomCell.m */; };
 		F4C5DE0E24A0B7C50098F18B /* app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = F4C5DE0D24A0B7C40098F18B /* app-config.json */; };
@@ -1265,11 +1267,15 @@
 		F4833EC424E17E340033FAB2 /* TIoTAPPConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAPPConfig.swift; sourceTree = "<group>"; };
 		F4833EC624E29BC20033FAB2 /* TIoTLogTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TIoTLogTask.swift; sourceTree = "<group>"; };
 		F4A083392519F5BF00B556B3 /* TIoTAppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTAppUtil.swift; sourceTree = "<group>"; };
+		F4AC04F929E3B4F700330473 /* TIoTDemoVideoPushVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoVideoPushVC.h; sourceTree = "<group>"; };
+		F4AC04FA29E3B4F700330473 /* TIoTDemoVideoPushVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoVideoPushVC.m; sourceTree = "<group>"; };
 		F4AC6BB728A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTDemoPreviewMJPEGVC.h; sourceTree = "<group>"; };
 		F4AC6BB828A3551100FFA634 /* TIoTDemoPreviewMJPEGVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoPreviewMJPEGVC.m; sourceTree = "<group>"; };
 		F4AD73112553D5A6003267FC /* TIoTVercheckTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTVercheckTask.swift; sourceTree = "<group>"; };
 		F4AD73142553F797003267FC /* TIoTAppUtilOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTAppUtilOC.h; sourceTree = "<group>"; };
 		F4AD73152553F797003267FC /* TIoTAppUtilOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTAppUtilOC.m; sourceTree = "<group>"; };
+		F4B141C729DFF428005BC7FD /* TIoTDemoVideoCallVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TIoTDemoVideoCallVC.h; sourceTree = "<group>"; };
+		F4B141C829DFF428005BC7FD /* TIoTDemoVideoCallVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoVideoCallVC.m; sourceTree = "<group>"; };
 		F4B39F5F2541767200C0DD6E /* TIoTProductsConfigModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIoTProductsConfigModel.swift; sourceTree = "<group>"; };
 		F4C5A42027C783C900F797A8 /* TIoTDemoLocalDayCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIoTDemoLocalDayCustomCell.m; sourceTree = "<group>"; };
 		F4C5A42127C783C900F797A8 /* TIoTDemoLocalDayCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIoTDemoLocalDayCustomCell.h; sourceTree = "<group>"; };
@@ -1981,6 +1987,10 @@
 				6DF4A6CC269842B00094044A /* PreviousPath */,
 				6DAF8B77266B937500CD0328 /* TIoTDemoPreviewDeviceVC.h */,
 				6DAF8B78266B937500CD0328 /* TIoTDemoPreviewDeviceVC.m */,
+				F4B141C729DFF428005BC7FD /* TIoTDemoVideoCallVC.h */,
+				F4B141C829DFF428005BC7FD /* TIoTDemoVideoCallVC.m */,
+				F4AC04F929E3B4F700330473 /* TIoTDemoVideoPushVC.h */,
+				F4AC04FA29E3B4F700330473 /* TIoTDemoVideoPushVC.m */,
 				6D204D4C265F8A2D007F6F27 /* TIoTDemoSameScreenVC.h */,
 				6D204D4D265F8A2D007F6F27 /* TIoTDemoSameScreenVC.m */,
 				F42D0239291A405800E1B36B /* TIoTSessionManager.h */,
@@ -3884,6 +3894,7 @@
 				6D98FE1B25C2E6B200518AC7 /* TIoTCustomCalendarCell.m in Sources */,
 				F4F3265825919C6D00A4CAAB /* TIoTVIdeoQRScanDistributionNet.m in Sources */,
 				6DAF8DD3266F453900CD0328 /* UIImageView+TIoTDemoWebImage.m in Sources */,
+				F4B141C929DFF428005BC7FD /* TIoTDemoVideoCallVC.m in Sources */,
 				6D98FE7D25C2E8F000518AC7 /* NSDate+TIoTCustomCalendar.m in Sources */,
 				6D204C87265CBDBC007F6F27 /* UIImage+TIoTDemoExtension.m in Sources */,
 				F4F3D7A824938EBE005D3396 /* TIoTCoreSlideView.m in Sources */,
@@ -3993,6 +4004,7 @@
 				F4F3D7A524938EBE005D3396 /* TIoTCoreFamilyMemberCell.m in Sources */,
 				6D127BC9268C8A3A0081542D /* TIoTDemoDeviceStatusModel.m in Sources */,
 				6D50E92C26B1937100DF12A5 /* TIoTDeviceDataModel.swift in Sources */,
+				F4AC04FB29E3B4F700330473 /* TIoTDemoVideoPushVC.m in Sources */,
 				F4F3265725919C6D00A4CAAB /* TIoTVideoConfigNetVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4402,6 +4414,7 @@
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
@@ -4411,11 +4424,13 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
 				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = VideoDemo;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4436,6 +4451,7 @@
 				CODE_SIGN_ENTITLEMENTS = Source/LinkSDKDemo/LinkSDKDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4444,11 +4460,13 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Source/LinkSDKDemo/Supporting Files/QCPrefix.pch";
 				INFOPLIST_FILE = "Source/LinkSDKDemo/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = VideoDemo;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.sdkdemo;
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

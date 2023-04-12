@@ -3,6 +3,8 @@
 #import "TIoTCoreAudioConfig.h"
 #import "TIoTCoreVideoConfig.h"
 
+int encodeFlvData(int type, NSData *packetData);
+
 @protocol TIoTAVCaptionFLVDelegate <NSObject>
 -(void) capture:(uint8_t *)data len:(size_t) size;
 @end

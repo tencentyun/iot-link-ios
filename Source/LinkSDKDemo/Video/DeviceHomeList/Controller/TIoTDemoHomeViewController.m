@@ -24,6 +24,8 @@
 #import "TIoTDemoNVRSubDeviceVC.h"
 #import "TIoTDemoPlaybackVC.h"
 #import "TIoTDemoPreviewMJPEGVC.h"
+#import "TIoTDemoVideoCallVC.h"
+#import "TIoTDemoVideoPushVC.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
@@ -230,7 +232,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"预览",@"回放",@"图片流（mjpeg）",@"取消"];
+        NSArray *actionTitleArray = @[@"预览", @"IPC双向通话", @"IPC双向通话-只推流", @"回放",@"图片流（mjpeg）",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"预览");
@@ -242,6 +244,29 @@ static NSInteger const kLimit = 100;
             [weakSelf resetDeviceListStatus];
             [customActionSheet removeFromSuperview];
         };
+        
+        ChooseFunctionBlock videoCallBlock = ^(TIoTDemoCustomSheetView *view){
+            DDLogVerbose(@"IPC双向通话");
+            
+            TIoTDemoVideoCallVC *previewDeviceVC = [[TIoTDemoVideoCallVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = NO;
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
+            [weakSelf resetDeviceListStatus];
+            [customActionSheet removeFromSuperview];
+        };
+        
+        ChooseFunctionBlock videoPushBlock = ^(TIoTDemoCustomSheetView *view){
+            DDLogVerbose(@"IPC双向通话");
+            
+            TIoTDemoVideoPushVC *previewDeviceVC = [[TIoTDemoVideoPushVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = NO;
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
+            [weakSelf resetDeviceListStatus];
+            [customActionSheet removeFromSuperview];
+        };
+        
         
         ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"回放");
@@ -278,7 +303,7 @@ static NSInteger const kLimit = 100;
             DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,mjpegVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock, videoCallBlock, videoPushBlock, playbackVideoBlock,mjpegVideoBlock,cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];

@@ -41,6 +41,11 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
  */
 @property (nonatomic,assign) BOOL refreshSession;
 
+/**
+ *  是否通过外部采集编码自定义数据发送
+ */
+@property (nonatomic,assign) BOOL isExternal;
+
 @end
 
 NS_ASSUME_NONNULL_END
