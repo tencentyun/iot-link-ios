@@ -161,6 +161,18 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
     // p2p水线经验值一般小于[视频码率/2]，网络良好的情况会小于 [视频码率/3] 甚至更低
  */
 - (int32_t)getSendingBufSize;
+
+/*
+ * 发布外部视频数据(自定义采集，自定义编码，h264数据),请设置TIoTCoreAudioConfig中 isExternal = YES
+ * 需注意该接口在sendVoiceToServer之后再调用发送
+ */
+- (void)SendExternalVideoPacket:(NSData *)videoPacket;
+
+/*
+ * 发布外部视频数据(自定义采集，自定义编码，aac数据),请设置TIoTCoreVideoConfig中 isExternal = YES
+ * 需注意该接口在sendVoiceToServer之后再调用发送
+ */
+- (void)SendExternalAudioPacket:(NSData *)audioPacket;
 @end
 
 NS_ASSUME_NONNULL_END
