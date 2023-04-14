@@ -130,13 +130,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     NSString *productId = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     NSString *deviceName= self.deviceName?:@"";
-    [self callDevice:productId devicename:deviceName];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self callDevice:productId devicename:deviceName];
+//    });
     
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"静音" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView:)];
     self.navigationItem.rightBarButtonItem = right;
     
     //设置代理，接受设备消息
     [TIoTCoreXP2PBridge sharedInstance].delegate = self;
+//    [[TIoTCoreXP2PBridge sharedInstance] openCamera:AVCaptureDevicePositionFront view:self.imageView];
 }
 
 - (void)requestDiffDeviceDataWithXp2pInfo:(TRTCParams *)xp2pInfo {

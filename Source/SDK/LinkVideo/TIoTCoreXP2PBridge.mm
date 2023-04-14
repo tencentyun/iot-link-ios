@@ -237,6 +237,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     [TRTCCloud sharedInstance].delegate = self;
     [[TRTCCloud sharedInstance] enterRoom:self.params appScene:TRTCAppSceneVideoCall];
+    
+    [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:YES];
     return XP2P_ERR_NONE;
     
     
@@ -371,7 +373,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     self.audioConfig = audio_config;
     self.videoConfig = video_config;
+    [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:NO];
+    [[TRTCCloud sharedInstance] stopLocalPreview];
     [[TRTCCloud sharedInstance] startLocalPreview:(video_config.videoPosition == AVCaptureDevicePositionFront)?YES:NO view:video_config.localView];
+    
     [[TRTCCloud sharedInstance] startLocalAudio:TRTCAudioQualitySpeech];
     return;
     
@@ -529,8 +534,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 
-
-
+- (void)openCamera:(AVCaptureDevicePosition)videoPosition view:(UIView *)previewView {
+    [[TRTCCloud sharedInstance] startLocalPreview:(videoPosition == AVCaptureDevicePositionFront)?YES:NO view:previewView];
+}
 
 #pragma mark -TRTCCloudDelegate
 - (void)onEnterRoom:(NSInteger)result {

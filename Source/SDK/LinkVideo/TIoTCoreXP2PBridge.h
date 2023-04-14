@@ -160,6 +160,10 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  */
 + (int)getStreamLinkMode:(NSString *)dev_name;
 
+/*
+ * 打开本地预览
+ */
+- (void)openCamera:(AVCaptureDevicePosition)videoPosition view:(UIView *)previewView;
 @end
 
 NS_ASSUME_NONNULL_END
