@@ -184,18 +184,28 @@
 	[self.player prepareToPlay];
 	[self.player play];
 	```
-	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/LinkSDKDemo/Home/Controllers/Device/TIoTPlayMovieVC.m)
+	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/LinkSDKDemo/Video/P2P/Controller/TIoTDemoVideoCallVC.m)
 
 * 发送语音对讲数据
 	
 	```
 	//开始对讲
-	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:dev_name];
+	TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+      audio_config.isExternal = YES;
+	TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+      video_config.isExternal = YES;
+	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:dev_name channel:nil audioConfig:audio_config videoConfig:video_config]];
+	
+	// 发布外部视频数据(自定义采集，自定义编码，h264数据)
+	- (void)SendExternalVideoPacket:(NSData *)videoPacket;
+	// 发布外部视频数据(自定义采集，自定义编码，aac数据)
+	- (void)SendExternalAudioPacket:(NSData *)audioPacket;
+	
 	
 	//结束对讲
 	[[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
 	```
-	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/LinkSDKDemo/Home/Controllers/Device/TIoTPlayMovieVC.m)
+	[示例代码](https://github.com/tencentyun/iot-link-ios/blob/master/Source/LinkSDKDemo/Video/P2P/Controller/TIoTDemoVideoCallVC.m)
 
 * P2P通道传输自定义数据
 	
