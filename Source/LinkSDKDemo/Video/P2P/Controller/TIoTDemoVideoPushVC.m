@@ -17,6 +17,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import "ReachabilityManager.h"
 #import "TIoTSessionManager.h"
+#import "TIoTPCMXEchoRecord.h"
+#import "TIoTAACEncoder.h"
+#import "TIoTH264Encoder.h"
 
 static CGFloat const kPadding = 16;
 static NSString *const kPreviewDeviceCellID = @"kPreviewDeviceCellID";
@@ -41,7 +44,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 };
 
 
-@interface TIoTDemoVideoPushVC ()
+@interface TIoTDemoVideoPushVC ()<H264EncoderDelegate,TIoTAACEncoderDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *remoteVideoView; //录像中提示view
@@ -61,6 +64,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, assign) BOOL is_ijkPlayer_stream; //通过播放器 还是 通过裸流拉取数据
 @property (nonatomic, assign) BOOL is_reconnect_xp2p; //是否正在重连，指设备断网的重连，app重连不走这个
 @property (nonatomic, assign) BOOL is_reconnect_break; //退出页面，停止重连
+
+@property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
+@property (nonatomic, strong) TIoTAACEncoder *aacEncoder;
 @end
 
 @implementation TIoTDemoVideoPushVC
@@ -102,6 +108,36 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self initVideoParamView];
             
     [self requestXp2pInfo];
+    
+    if (NO) {
+        //走外部的采集编码来发送的话，打开开关即可，最终通过  SendExternalAudioPacket 发送数据
+        //打开之后需将下面代码 isExternal 参数也打开即可
+        [self configAudioVideo];
+    }
+}
+
+- (void)configAudioVideo {
+    self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:1 isEcho:YES];
+    [self.pcmRecord set_record_callback:record_callback user:(__bridge void * _Nonnull)(self)];
+    //        [self.record start_record];
+    
+    AudioStreamBasicDescription inAudioStreamBasicDescription = self.pcmRecord.pcmStreamDescription;
+    self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
+    self.aacEncoder.delegate = self;
+    self.aacEncoder.audioType = TIoTAVCaptionFLVAudio_8;
+}
+static void record_callback(uint8_t *buffer, int size, void *u)
+{
+    TIoTDemoVideoPushVC *vc = (__bridge TIoTDemoVideoPushVC *)(u);
+    printf("pcm_size_callback: %d\n", size);
+    NSData *data = [NSData dataWithBytes:buffer length:size];
+//    [_fileHandle writeData:data];
+    [vc.aacEncoder encodePCMData:data];
+}
+#pragma mark - TIoTAACEncoderDelegate
+- (void)getEncoderAACData:(NSData *)data {
+//    [_fileHandle writeData:data];
+    [[TIoTCoreXP2PBridge sharedInstance] SendExternalAudioPacket:data];
 }
 
 - (void)requestDiffDeviceDataWithXp2pInfo:(NSString *)xp2pInfo {
@@ -199,7 +235,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 //直播
             }else if ([singleType isEqualToString:action_voice]) {
                 //对讲
-                NSString *channel = @"";
+                NSString *channel = @""; //channel 请求参数采用 key1=value&key2=value2
                 if (weakSelf.isNVR == NO) {
                     channel = @"channel=0";
                 }else {
@@ -216,12 +252,14 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 audio_config.channels = 1;
                 audio_config.isEchoCancel = YES;
                 audio_config.pitch =  tt_pitch; // -6声音会变粗一点;    6声音会变细一点
+//                audio_config.isExternal = YES;
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
                 video_config.localView = self.remoteVideoView;
                 video_config.videoPosition = AVCaptureDevicePositionFront;
                 video_config.bitRate = 250000;
-                
+//                video_config.isExternal = YES;
+
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
                 
                 /*if(tt_pitch == 6){
@@ -229,6 +267,13 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 }else {
                     tt_pitch = 6;
                 }*/
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (video_config.isExternal) { //走外部就用外部的采集器发送aac
+                        [self.pcmRecord start_record];
+                    }else {
+                        //否则走SDK本身的采样编码发送
+                    }
+                });
             }
             
         }else {

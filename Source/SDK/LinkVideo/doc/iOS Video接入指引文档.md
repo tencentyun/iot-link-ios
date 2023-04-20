@@ -194,7 +194,7 @@
       audio_config.isExternal = YES;
 	TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
       video_config.isExternal = YES;
-	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:dev_name channel:nil audioConfig:audio_config videoConfig:video_config]];
+	[[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:dev_name channel:@"channel=0" audioConfig:audio_config videoConfig:video_config]];
 	
 	// 发布外部视频数据(自定义采集，自定义编码，h264数据)
 	- (void)SendExternalVideoPacket:(NSData *)videoPacket;

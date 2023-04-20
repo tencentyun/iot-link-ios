@@ -88,7 +88,7 @@ dispatch_queue_t muxerQueue;
     inAudioStreamBasicDescription = self.pcmRecord.pcmStreamDescription;
     self.aacEncoder = [[TIoTAACEncoder alloc] initWithAudioDescription:inAudioStreamBasicDescription];
     self.aacEncoder.delegate = self;
-    self.aacEncoder.audioType = _audioRate;
+    self.aacEncoder.audioType = self.audioConfig.sampleRate;
 }
 
 - (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
