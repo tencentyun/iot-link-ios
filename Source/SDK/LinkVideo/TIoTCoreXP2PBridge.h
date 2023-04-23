@@ -136,6 +136,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 - (void)setAudioRoute:(BOOL)isHandsFree ;
 //静音或回复音频   
 - (void)muteLocalAudio:(BOOL)mute;
+//静音或回复音频
+- (void)muteLocalVideo:(BOOL)mute;
 /*
  * 局域网相关接口
  */

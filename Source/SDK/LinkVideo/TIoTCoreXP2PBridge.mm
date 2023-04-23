@@ -490,6 +490,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 - (void)muteLocalAudio:(BOOL)mute {
     [[TRTCCloud sharedInstance] muteLocalAudio:mute];
 }
+- (void)muteLocalVideo:(BOOL)mute {
+    [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:mute];
+}
 
 - (void)stopService:(NSString *)dev_name {
     [self stopVoiceToServer];
