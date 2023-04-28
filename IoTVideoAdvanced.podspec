@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   s.dependency 'TIoTLinkKit_SoundTouch', '0.0.4'
-  s.dependency 'TXLiteAVSDK_TRTC', '11.0.14016'
+  s.dependency 'TXLiteAVSDK_TRTC', '11.1.14143'
   s.pod_target_xcconfig = {
     'VALID_ARCHS'  => 'arm64'
   }
