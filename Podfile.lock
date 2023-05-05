@@ -5,7 +5,7 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - FDFullscreenPopGesture (1.1)
-  - IoTVideoAdvanced (1.0.0):
+  - IoTVideoCloud (1.0.0):
     - CocoaAsyncSocket (= 7.6.5)
     - TIoTLinkKit_FLV (= 2.2.3)
     - TIoTLinkKit_SoundTouch (= 0.0.4)
@@ -53,7 +53,7 @@ DEPENDENCIES:
   - CocoaAsyncSocket (= 7.6.5)
   - CocoaLumberjack (= 3.7.2)
   - FDFullscreenPopGesture (= 1.1)
-  - IoTVideoAdvanced (from `./`)
+  - IoTVideoCloud (from `./`)
   - IQKeyboardManager (= 6.1.1)
   - KeychainAccess (= 4.2.0)
   - lottie-ios (= 3.1.8)
@@ -102,7 +102,7 @@ SPEC REPOS:
     - YYModel
 
 EXTERNAL SOURCES:
-  IoTVideoAdvanced:
+  IoTVideoCloud:
     :path: "./"
   TIoTLinkKit:
     :path: "./"
@@ -112,7 +112,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
-  IoTVideoAdvanced: 8184a9a34b822d3614f7eb6cfe75fa4dc555713b
+  IoTVideoCloud: 49a68b8919818d81144642375c6d806a53b71600
   IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
@@ -136,6 +136,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 0fee9c8c7bada7c4986486f593aa9bb5c709ebbc
+PODFILE CHECKSUM: 8191314e7d387c03a8c6e4dba9f665a2e55cb0e0
 
 COCOAPODS: 1.9.3

@@ -11,7 +11,7 @@
 #import "TIoTDemoCustomSheetView.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTCoreDeviceSet.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "TIoTDemoSameScreenVC.h"
 
 #import "TIoTExploreDeviceListModel.h"

@@ -8,7 +8,7 @@
 #import "TIoTVideoConfigNetVC.h"
 #import "TIoTPlayConfigVC.h"
 #import "TIoTPlayListVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "TIoTPlayConfigVC.h"
 
 @interface TIoTVideoVC ()
@@ -21,7 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    NSString *appVersion = [IoTVideoCloud getSDKVersion];
     _versionLB.text = [NSString stringWithFormat:@"v%@",appVersion];
     
 }

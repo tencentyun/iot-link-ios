@@ -5,7 +5,7 @@
 
 #import "TIoTAVP2PPlayCaptureVC.h"
 #import "AppDelegate.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import <YYModel.h>
@@ -362,7 +362,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if ([reportModel.params._sys_video_call_status isEqualToString:@"1"] || [reportModel.params._sys_audio_call_status isEqualToString:@"1"]) {
             //p2p请求设备状态  app 通过信令 get_device_state 请求设备p2p的
             NSString *actionString = @"action=inner_define&channel=0&cmd=get_device_st&type=live&quality=standard";
-            [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
                 NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
                 TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
                 if ([responseModel.status isEqualToString:@"0"]) {
@@ -417,7 +417,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.topView.hidden = YES;
     
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+    NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:self.deviceName]?:@"";
     
     self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
     
@@ -551,7 +551,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)configVideo {
 
     // 1.通过播放器发起的拉流
-//    [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+//    [IoTVideoCloud recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -615,17 +615,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateResolutionRatio:self.resolutionRatio];
     [[TIoTP2PCommunicateUIManage sharedManager] p2pCommunicateSamplingRate:self.samplingRate?:8];
-    
-    [[TIoTCoreXP2PBridge sharedInstance] resolutionRatio:self.resolutionRatio];
-    
+
     /*
     if (self.callType == TIoTTRTCSessionCallType_audio) {
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:nil];
+        [[IoTVideoCloud sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:nil];
     }else {
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView videoPosition:AVCaptureDevicePositionFront];
+        [[IoTVideoCloud sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:FLVAudioType withLocalPreviewView:self.previewBottomView videoPosition:AVCaptureDevicePositionFront];
     }
      */
-    TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+    /*TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
     audio_config.refreshSession = YES;
     audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
     audio_config.channels = 1;
@@ -636,12 +634,12 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (self.callType == TIoTTRTCSessionCallType_video) {
         video_config.localView = self.previewBottomView;
         video_config.videoPosition = AVCaptureDevicePositionFront;
-    }
-    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:audio_config videoConfig:video_config];
+    }*/
+    [[IoTVideoCloud sharedInstance] startLocalStream:self.deviceName];
 }
 
 - (void)changeCameraPositon {
-    [[TIoTCoreXP2PBridge sharedInstance] changeCameraPositon];
+    [[IoTVideoCloud sharedInstance] changeCameraPositon];
 }
 
 -(void)onHungupClick{
@@ -673,7 +671,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self stopPlayMovie];
     [self removeMovieNotificationObservers];
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+    [[IoTVideoCloud sharedInstance] stopLocalStream];
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];

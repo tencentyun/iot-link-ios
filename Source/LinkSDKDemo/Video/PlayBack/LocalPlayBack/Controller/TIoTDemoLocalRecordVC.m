@@ -25,7 +25,7 @@
 #import "AppDelegate.h"
 #import "UIDevice+TIoTDemoRotateScreen.h"
 
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "NSString+Extension.h"
 #import "TIoTDemoLocalDayTimeListModel.h"
 #import "TIoTDemoDeviceStatusModel.h"
@@ -39,7 +39,7 @@ static CGFloat const kScreenScale = 0.5625; //9/16 高宽比
 
 static NSString *const kPlayback = @"ipc.flv?action=playback";
 
-@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, TIoTCoreXP2PBridgeDelegate, TIoTDemoLocalDayCustomCellDelegate>
+@interface TIoTDemoLocalRecordVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, IoTVideoCloudDelegate, TIoTDemoLocalDayCustomCellDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) NSString *dayDateString; //选择天日期
 @property (nonatomic, strong) UIImageView *imageView;
@@ -462,7 +462,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     
     NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_month_record&time=%@",channel,time];
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         
         TIoTDemoDeviceStatusModel *data = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
         DDLogDebug(@"jsonList:%@",jsonList);
@@ -539,7 +539,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 ///MARK:查询时间后，获取数据
 - (void)getLocalDayFileListDataWithCmd:(NSString *)actionString {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         TIoTDemoLocalDayFileListModel *data = [TIoTDemoLocalDayFileListModel yy_modelWithJSON:jsonList];
         DDLogDebug(@"jsonList:%@",jsonList);
         if (![NSString isNullOrNilWithObject:jsonList] && data.file_list.count != 0) {
@@ -555,7 +555,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 }
 ///MARK:查询时间后，获取数据
 - (void)getLocalDayTimeListDataWithCmd:(NSString *)actionString {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         TIoTDemoLocalDayTimeListModel *data = [TIoTDemoLocalDayTimeListModel yy_modelWithJSON:jsonList];
         DDLogDebug(@"jsonList:%@",jsonList);
         if (![NSString isNullOrNilWithObject:jsonList] && data.video_list.count != 0) {
@@ -633,7 +633,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_seek&time=%@",channel,currentTime];
             
-            [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+            [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
                 
                 TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
                 if ([responseModel.status isEqualToString:@"0"]) {
@@ -662,7 +662,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
             actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=playback_resume",channel];
         }
 
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
             
             TIoTDemoDeviceStatusModel *responseModel = [TIoTDemoDeviceStatusModel yy_modelWithJSON:jsonList];
             if ([responseModel.status isEqualToString:@"0"]) {
@@ -697,7 +697,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
             channalID = [NSString stringWithFormat:@"%@&channel=0&start_time=%@&end_time=%@",kPlayback,startTime,endTime];
         }
         
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:self.deviceName?:@""];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,channalID?:@""];
         
@@ -749,7 +749,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 - (void)downLoadResWithModel:(TIoTDemoLocalFileModel *)model {
     self.downLoading = YES;
     
-    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    [IoTVideoCloud sharedInstance].logEnable = NO;
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"下载资源中"];
     
     NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:model.file_name];
@@ -758,10 +758,10 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     _saveDownloadFile = [NSFileHandle fileHandleForWritingAtPath:logFile];
     
     //设置代理，接受《下载的视频数据》和《下载完成事件》代理
-    [TIoTCoreXP2PBridge sharedInstance].delegate = self;
+    [IoTVideoCloud sharedInstance].delegate = self;
     
     NSString *fileurl = [NSString stringWithFormat:@"action=download&channel=0&file_name=%@&offset=%d",model.file_name ,0];
-    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:fileurl];
+    [[IoTVideoCloud sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:fileurl];
 }
 
 #pragma mark - TIoTCoreXP2PBridgeDelegate
@@ -786,7 +786,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
         
         if (self.downLoading) {
             NSLog(@"----videodataFinsish===%d",eventType);
-            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+            [[IoTVideoCloud sharedInstance] stopAvRecvService:self.deviceName?:@""];
             
             [MBProgressHUD dismissInView:self.view];
             [MBProgressHUD showError:@"文件已下载完成"];
@@ -1593,7 +1593,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[IoTVideoCloud sharedInstance] stopAppService: DeviceName];
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
@@ -1618,8 +1618,13 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
+    
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfoString?:@"";
+    
+    [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 #pragma mark Remove Movie Notification Handlers

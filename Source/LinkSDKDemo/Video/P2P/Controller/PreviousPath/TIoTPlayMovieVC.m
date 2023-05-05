@@ -5,7 +5,7 @@
 //
 
 #import "TIoTPlayMovieVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import <YYModel.h>
 #import "TIoTPlayBackListModel.h"
 #import "NSString+Extension.h"
@@ -51,7 +51,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         
         NSString *cmdString = [NSString stringWithFormat:@"action=inner_define&cmd=get_record_index&channel=0&starttime=%@&endtime=%@",startTimestampString,endTimestampString];
         
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:cmdString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName cmd:cmdString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
 
             self.dataArray = [NSArray yy_modelArrayWithClass:[TIoTPlayBackListModel class] json:jsonList];
             [self.tableView reloadData];
@@ -73,14 +73,14 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
 - (void)configVideo {
     
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+    if ([IoTVideoCloud sharedInstance].writeFile) {
         UILabel *fileTip = [[UILabel alloc] initWithFrame:self.imageView.bounds];
         fileTip.text = @"数据帧写文件中...";
         fileTip.textAlignment = NSTextAlignmentCenter;
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         
-        [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName cmd:@"action=live"];
+        [[IoTVideoCloud sharedInstance] startAvRecvService:self.deviceName cmd:@"action=live"];
     }else {
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -132,7 +132,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 }
 
 - (void)testCustomSignalling {
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName cmd:@"action=user_define&cmd=custom_cmd&channel=0" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName cmd:@"action=user_define&cmd=custom_cmd&channel=0" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         [MBProgressHUD showMessage:jsonList icon:@""];
     }];
 }
@@ -162,7 +162,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         return;
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+        NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:self.deviceName]?:@"";
         
         if (self.playType == TIotPLayTypePlayback) {
             self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=playback&channel=0",urlString];
@@ -181,11 +181,11 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
         return;
     }
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[IoTVideoCloud sharedInstance] stopAppService: DeviceName];
 
 //    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+//    [[IoTVideoCloud sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+//    [[IoTVideoCloud sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
     
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
@@ -209,8 +209,12 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfoString?:@"";
+    
+    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -219,8 +223,8 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     [self.player shutdown];
     [self removeMovieNotificationObservers];
     
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName];
+    if ([IoTVideoCloud sharedInstance].writeFile) {
+        [[IoTVideoCloud sharedInstance] stopAvRecvService:self.deviceName];
     }
 }
 
@@ -234,12 +238,12 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     if ([sender.currentTitle isEqualToString:@"开始对讲"]) {
         
         [sender setTitle:@"结束对讲" forState:UIControlStateNormal];
-        [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName channel:@"voice?channel=0"];
+        [[IoTVideoCloud sharedInstance] startLocalStream:self.deviceName];
     
     }else {
         
         [sender setTitle:@"开始对讲" forState:UIControlStateNormal];
-        [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+        [[IoTVideoCloud sharedInstance] stopLocalStream];
     }
     
 }
@@ -267,7 +271,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
     
     [self stopPlayMovie];
     
-    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName];
+    NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:self.deviceName];
     
     TIoTPlayBackListModel *model = self.dataArray[indexPath.row];
     
@@ -470,7 +474,7 @@ static NSString * const kPlaybackCellID = @"kPlaybackCellID";
 - (void)dealloc
 {
     [self stopPlayMovie];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName];
+    [[IoTVideoCloud sharedInstance] stopAppService:self.deviceName];
     
     DDLogInfo(@"debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }

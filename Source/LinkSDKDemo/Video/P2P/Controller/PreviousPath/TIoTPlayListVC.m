@@ -10,7 +10,7 @@
 #import "TIoTCloudStorageVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTCoreDeviceSet.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 
 #import "TIoTExploreDeviceListModel.h"
 #import "TIoTVideoDeviceListModel.h"
@@ -103,8 +103,13 @@
     
 - (void)requestXp2pInfoWithDeviceName:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo{
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfo?:@"";
+    
+    [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 /// video 设备列表
 - (void)requestVideoList {

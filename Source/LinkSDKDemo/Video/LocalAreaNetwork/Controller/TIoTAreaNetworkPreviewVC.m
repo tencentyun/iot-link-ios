@@ -3,7 +3,7 @@
 //  LinkSDKDemo
 
 #import "TIoTAreaNetworkPreviewVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import "TIoTCoreAppEnvironment.h"
@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.deviceName = self.model.params.deviceName;
     
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
+    int errorcode = [[IoTVideoCloud sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
     
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self setVieoPlayerStartPlayWith:self.qualityString];
@@ -142,7 +142,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self stopPlayMovie];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[IoTVideoCloud sharedInstance] stopAppService:self.deviceName?:@""];
     
     printf("debugdeinit---%s,%s,%d", __FILE__, __FUNCTION__, __LINE__);
 }
@@ -156,7 +156,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 /// 对讲post请求
 - (void)voicePostRequest {
     
-    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8];
+    [[IoTVideoCloud sharedInstance] startLocalStream:self.deviceName?:@""];
 }
 
 - (void)setupPreViewViews {
@@ -482,7 +482,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self voicePostRequest];
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
-        [[TIoTCoreXP2PBridge sharedInstance] stopVoiceToServer];
+        [[IoTVideoCloud sharedInstance] stopLocalStream];
         
         [self.player play];
     }
@@ -621,7 +621,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)sendDeivecWithSignalling:(NSString *)singleText {
     NSString *singleString = [NSString stringWithFormat:@"%@?_protocol=tcp",singleText];
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:singleString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:singleString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         if (![NSString isNullOrNilWithObject:jsonList] || ![NSString isFullSpaceEmpty:jsonList]) {
             [MBProgressHUD showMessage:jsonList icon:@""];
         }
@@ -892,7 +892,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 #warning 开启p2p
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+//        [[IoTVideoCloud sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
         [self setVieoPlayerStartPlayWith:self.qualityString];
     });
 
@@ -901,11 +901,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        int proxyPort = [[IoTVideoCloud sharedInstance] getLanProxyPort:self.deviceName];
         NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
         
         // 获取URL 起播放器
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[IoTVideoCloud sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         
@@ -1123,11 +1123,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        int proxyPort = [[IoTVideoCloud sharedInstance] getLanProxyPort:self.deviceName];
         NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
         
         // 获取URL 起播放器
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[IoTVideoCloud sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
         
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
@@ -1146,8 +1146,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
     // 1.通过播放器发起的拉流
     if (_is_ijkPlayer_stream) {
-        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
-        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+        [IoTVideoCloud sharedInstance].writeFile = YES;
+        [IoTVideoCloud recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
 #ifdef DEBUG

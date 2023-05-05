@@ -30,6 +30,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,assign) BOOL refreshSession;
 
+/**
+ *  视频采集分辨率
+ */
+@property (nonatomic,assign)AVCaptureSessionPreset resolutionValue;
+
+/**
+ *  设置视频码率，在此基础上内部有自适应码率设置  https://cloud.tencent.com/document/product/647/79634#3825556cfc4b34e62b5348f82ed093b4
+ */
+@property (nonatomic,assign) int32_t bitRate;
+
 @end
 
 NS_ASSUME_NONNULL_END

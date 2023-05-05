@@ -11,7 +11,7 @@
 #import "NSString+Extension.h"
 #import "TIoTPlayListVC.h"
 #import "TIoTCoreAppEnvironment.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 
 @interface TIoTPlayConfigVC ()<UITextFieldDelegate>
 
@@ -104,7 +104,7 @@
 }
 
 - (void)changeWriteFileSwitch:(UISwitch *)sender {
-    [TIoTCoreXP2PBridge sharedInstance].writeFile = sender.on;
+    [IoTVideoCloud sharedInstance].writeFile = sender.on;
 }
 
 - (void)hideKeyBoard {

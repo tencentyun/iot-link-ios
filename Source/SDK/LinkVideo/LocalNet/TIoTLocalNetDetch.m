@@ -1,5 +1,5 @@
 //
-//  TIoTCoreXP2PBridge.m
+//  IoTVideoCloud.m
 //  TIoTLinkKitDemo
 //
 //

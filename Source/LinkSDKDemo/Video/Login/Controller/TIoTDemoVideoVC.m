@@ -5,7 +5,7 @@
 
 #import "TIoTDemoVideoVC.h"
 #import "TIoTDemoPlayConfigVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTAreaNetworkConfigVC.h"
 @interface TIoTDemoVideoVC ()
@@ -22,7 +22,7 @@
     
     [self initVideoUI];
     
-    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    NSString *appVersion = [IoTVideoCloud getSDKVersion];
     UILabel *versionLB = [[UILabel alloc]init];
     versionLB.text = [NSString stringWithFormat:@"%@",appVersion];
     [self.view addSubview:versionLB];

@@ -9,7 +9,7 @@
 #import "TIoTDemoDeviceHeaderView.h"
 #import "TIoTDemoCustomSheetView.h"
 #import <YYModel.h>
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "TIoTDemoSameScreenVC.h"
 #import "TIoTDemoPreviewDeviceVC.h"
 #import "TIoTCoreAppEnvironment.h"
@@ -80,7 +80,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 
 ///MARK: 结束连接
 - (void)stopSrviceRemoveObserver {
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.selectedModel.DeviceName?:@""];
+    [[IoTVideoCloud sharedInstance] stopAppService:self.selectedModel.DeviceName?:@""];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -101,8 +101,8 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     
 
 //    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.selectedModel.DeviceName?:@""];
-//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.selectedModel.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+//    [[IoTVideoCloud sharedInstance] startAppWith:env.cloudProductId dev_name:self.selectedModel.DeviceName?:@""];
+//    [[IoTVideoCloud sharedInstance] setXp2pInfo:self.selectedModel.DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
     [self requestXp2pInfoWithDeviceName:self.selectedModel.DeviceName?:@"" isReconnection:NO];
     
     CFTimeInterval startP2PTime = CACurrentMediaTime();
@@ -116,11 +116,11 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
         return;
     }
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[IoTVideoCloud sharedInstance] stopAppService: DeviceName];
     
 //    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+//    [[IoTVideoCloud sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+//    [[IoTVideoCloud sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
     
     [self requestXp2pInfoWithDeviceName:DeviceName?:@"" isReconnection:YES];
 }
@@ -140,7 +140,7 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     
     DDLogInfo(@"%@", [NSString stringWithFormat:@"****** %@ ended: %f millisecond start: %f interval: %ld ******\n",NSStringFromSelector(_cmd),self.endP2P,self.startP2P,(long)((self.endP2P - self.startP2P)*1000)]);
     
-        [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+        [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.selectedModel.DeviceName?:@"" cmd:action_NVRSubdeviceList timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
             
             NSArray<TIoTExploreOrVideoDeviceModel *> *subdeviceList = [NSArray yy_modelArrayWithClass:TIoTExploreOrVideoDeviceModel.class json:jsonList];
             [self.dataArray removeAllObjects];
@@ -185,8 +185,13 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
+    
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfoString?:@"";
+    
+    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 - (void)setupUIViews {

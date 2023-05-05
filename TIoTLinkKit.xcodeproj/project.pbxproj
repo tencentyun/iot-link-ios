@@ -3315,7 +3315,7 @@
 				D2E976AB233C4EDB00182443 /* Embed App Extensions */,
 				F4F3D55424935D75005D3396 /* Embed Frameworks */,
 				50ABE041C31296DBF30D9DC8 /* [CP] Embed Pods Frameworks */,
-				7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */,
+				2C8ABDC94EC3FBF805BBDB19 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3533,6 +3533,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkSDKDemo/Pods-LinkSDKDemo-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		2C8ABDC94EC3FBF805BBDB19 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2EC0ED5670A11587790F0BD1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3565,23 +3582,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		82D31F8BDC52CF48B67C0478 /* [CP] Prepare Artifacts */ = {

@@ -8,7 +8,7 @@
 #import "CMPageTitleView.h"
 #import "TIoTCloudStorageVC.h"
 #import "TIoTDemoLocalRecordVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTXp2pInfoModel.h"
 #import "NSString+Extension.h"
@@ -45,7 +45,7 @@
 - (void)nav_customBack {
     if (self.isFromHome) {
         if (self.isNVR == NO) {
-            [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+            [[IoTVideoCloud sharedInstance] stopAppService:self.deviceName?:@""];
         }
         [self removeMovieNotificationObservers];
     }
@@ -60,7 +60,7 @@
     
     if (self.isNVR == NO) {
         if (self.isFromHome) {
-            [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+            [[IoTVideoCloud sharedInstance] stopAppService:self.deviceName?:@""];
         }
     }
     
@@ -92,8 +92,12 @@
         if (self.isNVR == NO) {
             
             TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-            int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-            [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+            IoTVideoParams *videoparams = [IoTVideoParams new];
+            videoparams.productid = env.cloudProductId;
+            videoparams.devicename = self.deviceName?:@"";
+            videoparams.xp2pinfo = xp2pInfo?:@"";
+            
+            int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
             
             if (errorcode == XP2P_ERR_VERSION) {
                 UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -230,11 +234,11 @@
         //计算IPC打洞时间
 //        self.endIpcP2P = CACurrentMediaTime();
         
-        //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+        //NSString *appVersion = [IoTVideoCloud getSDKVersion];
         // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
         /*
          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
+             NSString *urlString = [[IoTVideoCloud sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
              
              self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
              
@@ -261,7 +265,7 @@
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName];
+    [[IoTVideoCloud sharedInstance] stopAppService: DeviceName];
 
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
@@ -284,8 +288,12 @@
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfoString?:@"";
+    
+    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 - (UIViewController *)getCurrentViewController

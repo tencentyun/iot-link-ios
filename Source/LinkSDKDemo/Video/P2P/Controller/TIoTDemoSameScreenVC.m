@@ -8,7 +8,7 @@
 #import "UIDevice+TIoTDemoRotateScreen.h"
 #import "AppDelegate.h"
 #import "UIImage+TIoTDemoExtension.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "NSString+Extension.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import "TIoTCoreAppEnvironment.h"
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
         if (self.isNVRType == NO) {
-            [[TIoTCoreXP2PBridge sharedInstance] stopService:model.DeviceName?:@""];
+            [[IoTVideoCloud sharedInstance] stopAppService:model.DeviceName?:@""];
         }
     }];
     
@@ -614,7 +614,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
         actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
     }
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.NVRDeviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.NVRDeviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
         TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
@@ -622,11 +622,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
                 if (self.isNVRType == YES) {
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.NVRDeviceName?:@""];
+                    NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:self.NVRDeviceName?:@""];
                     NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=%@&quality=high",urlString,model.Channel?:@""];
                     [self playVideoWithIndex:index-1 deviceName:self.NVRDeviceName withUrlString:urlStringTemp];
                 }else {
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
+                    NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:model.DeviceName?:@""];
                     NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
                     [self playVideoWithIndex:index-1 deviceName:model.DeviceName withUrlString:urlStringTemp];
                 }
@@ -666,8 +666,12 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfoString {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfoString?:@""];
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = env.cloudProductId;
+    videoparams.devicename = deviceName?:@"";
+    videoparams.xp2pinfo = xp2pInfoString?:@"";
+    
+    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 #pragma mark -IJKPlayer
@@ -867,27 +871,27 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 
 - (void)responseP2PdisConnect:(NSNotification *)notify {
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    [[TIoTCoreXP2PBridge sharedInstance] stopService: DeviceName?:@""];
+    [[IoTVideoCloud sharedInstance] stopAppService: DeviceName?:@""];
 
     [self requestXp2pInfoWithDeviceName:DeviceName?:@"" isReconnection:YES];
     
 //    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
-//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+//    [[IoTVideoCloud sharedInstance] startAppWith:env.cloudProductId dev_name:DeviceName?:@""];
+//    [[IoTVideoCloud sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
 }
 
 - (void)refushVideo:(NSNotification *)notify {
     
     NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
     
-    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
+    NSString *appVersion = [IoTVideoCloud getSDKVersion];
     if (appVersion.floatValue < 2.1) {
         
         [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
             if ([DeviceName isEqualToString:model.DeviceName]) {
 
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
+                NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:model.DeviceName]?:@"";
                 
                 NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
                 [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
@@ -902,11 +906,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                 NSString *qualityTypeString = @"quality=high";
                 NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
                 
-                [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+                [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
                     NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
                     TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
                     if ([responseModel.status isEqualToString:@"0"]) {
-                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
+                        NSString *urlString = [[IoTVideoCloud sharedInstance] startRemoteStream:model.DeviceName?:@""];
                         NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
                         [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
                     }else {
@@ -984,11 +988,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     
     [self removeMovieNotificationObservers];
     
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+    if ([IoTVideoCloud sharedInstance].writeFile) {
         [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TIoTExploreOrVideoDeviceModel *model = obj;
             if (self.isNVRType == NO) {
-                [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:model.DeviceName];
+                [[IoTVideoCloud sharedInstance] stopAvRecvService:model.DeviceName];
             }
             
         }];
@@ -1027,7 +1031,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 }
 
 - (void)configVideo {
-    if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+    if ([IoTVideoCloud sharedInstance].writeFile) {
 
         switch (self.videoArray.count) {
             case TIoTDemoSameScreenOne: {
@@ -1080,10 +1084,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
             [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 TIoTExploreOrVideoDeviceModel *model = obj;
                 
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                    [[IoTVideoCloud sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
             }];
         }else {
-            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+            [[IoTVideoCloud sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
         }
         
     }else {
@@ -1187,7 +1191,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
     switch (type) {
         case TIoTDemoSameScreenOne: {
             
-            if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+            if ([IoTVideoCloud sharedInstance].writeFile) {
                 
                 UILabel *fileTipOne = [[UILabel alloc] initWithFrame:self.viewOne.bounds];
                 [fileTipOne setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
@@ -1197,11 +1201,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         TIoTExploreOrVideoDeviceModel *model = obj;
                         
-                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                            [[IoTVideoCloud sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
                         
                     }];
                 }else {
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                    [[IoTVideoCloud sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
                 }
             }else {
                 [self stopPlayerOne];
@@ -1213,7 +1217,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
         }
         case TIoTDemoSameScreenTwo: {
             
-            if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+            if ([IoTVideoCloud sharedInstance].writeFile) {
                 UILabel *fileTipTwo = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
                 [fileTipTwo setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
                 [self.viewTwo addSubview:fileTipTwo];
@@ -1222,10 +1226,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         TIoTExploreOrVideoDeviceModel *model = obj;
                         
-                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                            [[IoTVideoCloud sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
                     }];
                 }else {
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                    [[IoTVideoCloud sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
                 }
                 
                 
@@ -1239,7 +1243,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
         }
         case TIoTDemoSameScreenThree: {
             
-            if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+            if ([IoTVideoCloud sharedInstance].writeFile) {
                 
                 UILabel *fileTipThree = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
                 [fileTipThree setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
@@ -1249,10 +1253,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         TIoTExploreOrVideoDeviceModel *model = obj;
                         
-                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                            [[IoTVideoCloud sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
                     }];
                 }else {
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                    [[IoTVideoCloud sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
                 }
                 
             }else {
@@ -1266,7 +1270,7 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
         }
         case TIoTDemoSameScreenFour: {
             
-            if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
+            if ([IoTVideoCloud sharedInstance].writeFile) {
                 
                 UILabel *fileTipFour = [[UILabel alloc] initWithFrame:self.viewTwo.bounds];
                 [fileTipFour setLabelFormateTitle:@"数据帧写文件中..." font:[UIFont wcPfRegularFontOfSize:14] titleColorHexString:@"#ffffff" textAlignment:NSTextAlignmentCenter];
@@ -1276,10 +1280,10 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
                     [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         TIoTExploreOrVideoDeviceModel *model = obj;
                         
-                            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
+                            [[IoTVideoCloud sharedInstance] startAvRecvService:model.DeviceName cmd:@"action=live"];
                     }];
                 }else {
-                    [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
+                    [[IoTVideoCloud sharedInstance] startAvRecvService:self.NVRDeviceName cmd:@"action=live"];
                 }
             }else {
                 [self stopPlayerFour];

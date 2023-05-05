@@ -5,7 +5,7 @@
 //
 
 #import "TIoTLoginCustomView.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 #import "TIoTAccessIDPickerView.h"
 #import "TIoTCoreUserManage.h"
 #import "TIoTRegionPickerView.h"
@@ -302,7 +302,7 @@
 }
 
 - (void)changeWriteFileSwitch:(UISwitch *)sender {
-    [TIoTCoreXP2PBridge sharedInstance].writeFile = sender.on;
+    [IoTVideoCloud sharedInstance].writeFile = sender.on;
 }
 
 - (void)chooseAccessID {

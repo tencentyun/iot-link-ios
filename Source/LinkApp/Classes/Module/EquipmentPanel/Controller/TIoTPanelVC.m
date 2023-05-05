@@ -47,7 +47,7 @@
 #include <zlib.h>
 
 #import "TIoTAVP2PPlayCaptureVC.h"
-#import "TIoTCoreXP2PBridge.h"
+#import "IoTVideoCloud.h"
 
 #import "TIoTP2PCommunicateUIManage.h"
 
@@ -289,7 +289,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
                                              
                 //APP侧断网 p2p通话时断开，P2P 需要及时stop
                 if ([[TIoTP2PCommunicateUIManage sharedManager] isTopP2PVideoPlayerVC] && WeakSelf.isP2PVideoDevice == YES) {
-                    [[TIoTCoreXP2PBridge sharedInstance] stopService: WeakSelf.deviceName?:@""];
+                    [[IoTVideoCloud sharedInstance] stopAppService: WeakSelf.deviceName?:@""];
                 }
                 
                 //APP侧断网提醒
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     [self.blueManager disconnectPeripheral];
     [self removeNotifications];
     if (self.isP2PVideoDevice == YES) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService: self.deviceName?:@""];
+        [[IoTVideoCloud sharedInstance] stopAppService: self.deviceName?:@""];
     }
 }
 
@@ -942,7 +942,27 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     NSLog(@"_sys_xp2p_info  xp2pValue : %@",xp2pValue);
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    
+    IoTVideoParams *videoparams = [IoTVideoParams new];
+    videoparams.productid = self.productId;
+    videoparams.devicename = self.deviceName;
+    videoparams.xp2pinfo = xp2pValue;
+    
+    TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+    audio_config.refreshSession = YES;
+    audio_config.sampleRate = TIoTAVCaptionFLVAudio_16;
+    audio_config.channels = 1;
+    audio_config.isEchoCancel = YES;
+    audio_config.pitch =  0;
+    
+    TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+    video_config.localView = self.view;
+    video_config.videoPosition = AVCaptureDevicePositionFront;
+    
+    videoparams.audioConfig = audio_config;
+    videoparams.videoConfig = video_config;
+    
+    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -4089,7 +4109,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
         NSLog(@"refushXP2Pinfo_sys_xp2p_info : %@",xp2pValue);
         
-        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:nil sec_key:nil xp2pinfo:xp2pValue];
+        int errorcode = [[IoTVideoCloud sharedInstance] setXp2pInfo:self.deviceName?:@"" xp2pinfo:xp2pValue];
         
         //重新拉流/推流
 //        [self refreshP2PPlayerAndStartCapture];
@@ -4119,7 +4139,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
     NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
     NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDeviceStatusModel class] json:jsonList];
         TIoTDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
@@ -4174,7 +4194,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
             
             //更新objectModel里的p2pinfo 重起p2p服务
             //先stopService 防止 WIFI 4G互切问题
-            [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+            [[IoTVideoCloud sharedInstance] stopAppService:self.deviceName?:@""];
             [self restartP2PServer];
             
         }
