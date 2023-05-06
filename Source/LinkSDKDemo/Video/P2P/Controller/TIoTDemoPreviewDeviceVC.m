@@ -154,6 +154,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         videoparams.devicename = self.deviceName;
         videoparams.rtcparams = xp2pInfo;
         
+        TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+        audio_config.refreshSession = NO;
+        audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
+        audio_config.channels = 1;
+        audio_config.isEchoCancel = NO;
+        audio_config.pitch = 0; // -6声音会变粗一点;    6声音会变细一点
+        videoparams.audioConfig = audio_config;
+        
+        TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+        video_config.localView = self.imageView;
+        video_config.remoteView = self.remoteView;
+        video_config.videoPosition = AVCaptureDevicePositionFront;
+        videoparams.videoConfig = video_config;
+        
         int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
         //        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
         
