@@ -19,6 +19,7 @@ FILE *p2pOutLogFile;
 
 @interface IoTVideoCloud ()<TIoTAVCaptionFLVDelegate, TRTCCloudDelegate>
 @property (nonatomic, strong) IoTVideoParams *videoParams;
+@property (nonatomic, assign) BOOL isRTC;
 @property (nonatomic, strong) NSString *dev_name;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
@@ -194,6 +195,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     self =  [super init];
     if (self) {
         //默认关log开关
+        _isRTC = NO;
         _logEnable = NO;
         _resolution = AVCaptureSessionPreset352x288;
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
@@ -206,35 +208,43 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 
 
 - (XP2PErrCode)startAppWith:(IoTVideoParams *)params {
-    self.videoParams = params;
     if (!params) {
         NSLog(@"⚠️⚠️⚠️⚠️⚠️⚠️⚠️请在设置params参数。根据参数选择p2p模式/rtc模式");
+        return XP2P_ERR_INIT_PRM;
     }
     
-    TRTCVideoEncParam *videoEncParam = [[TRTCVideoEncParam alloc] init];
-    videoEncParam.videoResolution = TRTCVideoResolution_320_240;
-    videoEncParam.videoFps = 15;
-    videoEncParam.videoBitrate = 250;
-    videoEncParam.resMode = TRTCVideoResolutionModePortrait;
-    videoEncParam.enableAdjustRes = true;
-    [[TRTCCloud sharedInstance] setVideoEncoderParam:videoEncParam];
-    
-    [TRTCCloud sharedInstance].delegate = self;
-    [[TRTCCloud sharedInstance] enterRoom:params.rtcparams appScene:TRTCAppSceneVideoCall];
-    
-    [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:YES];
-    return XP2P_ERR_NONE;
+    self.videoParams = params;
+    if (self.videoParams.rtcparams && (self.videoParams.rtcparams.sdkAppId >0) && self.videoParams.rtcparams.userId) {
+        self.isRTC = YES;
+    }
     
     
-//    setStunServerToXp2p("11.11.11.11", 111);
-    //注册回调
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
-    
-    //1.配置IOT_P2P SDK
-    self.dev_name = params.devicename;
-    int ret = startService(params.devicename.UTF8String, params.productid.UTF8String, params.devicename.UTF8String);
-    setDeviceXp2pInfo(params.devicename.UTF8String, params.xp2pinfo.UTF8String);
-    return (XP2PErrCode)ret;
+    if (self.isRTC) {
+        TRTCVideoEncParam *videoEncParam = [[TRTCVideoEncParam alloc] init];
+        videoEncParam.videoResolution = TRTCVideoResolution_320_240;
+        videoEncParam.videoFps = 15;
+        videoEncParam.videoBitrate = 250;
+        videoEncParam.resMode = TRTCVideoResolutionModePortrait;
+        videoEncParam.enableAdjustRes = true;
+        [[TRTCCloud sharedInstance] setVideoEncoderParam:videoEncParam];
+        
+        [TRTCCloud sharedInstance].delegate = self;
+        [[TRTCCloud sharedInstance] enterRoom:params.rtcparams appScene:TRTCAppSceneVideoCall];
+        
+        [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:YES];
+        return XP2P_ERR_NONE;
+    }else {
+        
+        //    setStunServerToXp2p("11.11.11.11", 111);
+        //注册回调
+        setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
+        
+        //1.配置IOT_P2P SDK
+        self.dev_name = params.devicename;
+        int ret = startService(params.devicename.UTF8String, params.productid.UTF8String, params.devicename.UTF8String);
+        setDeviceXp2pInfo(params.devicename.UTF8String, params.xp2pinfo.UTF8String);
+        return (XP2PErrCode)ret;
+    }
 }
 
 - (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
@@ -244,42 +254,45 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (NSString *)startRemoteStream:(NSString *)dev_name {
-//    [[TRTCCloud sharedInstance] startRemoteView:<#(nonnull NSString *)#> streamType:<#(TRTCVideoStreamType)#> view:<#(nullable TXView *)#>];
-    return @"";
-    const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
-    NSLog(@"httpflv---%s",httpflv);
-    if (httpflv) {
-        return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
+    
+    if (!self.isRTC) {
+        const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
+        NSLog(@"httpflv---%s",httpflv);
+        if (httpflv) {
+            return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
+        }
     }
     return @"";
 }
 
 
 - (void)sendCustomCmdMsg:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
-    NSData *cmddata = [cmd?:@"" dataUsingEncoding:NSUTF8StringEncoding];
-    [[TRTCCloud sharedInstance] sendCustomCmdMsg:1 data:cmddata reliable:YES ordered:YES];
-    if (completion) {
-        NSString *jsondata = @"[{\"status\":\"0\",\"appConnectNum\":\"2\"}]";
-        completion(jsondata);
-    }
-    return;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    if (self.isRTC) {
+        NSData *cmddata = [cmd?:@"" dataUsingEncoding:NSUTF8StringEncoding];
+        [[TRTCCloud sharedInstance] sendCustomCmdMsg:1 data:cmddata reliable:YES ordered:YES];
+        if (completion) {
+            NSString *jsondata = @"[{\"status\":\"0\",\"appConnectNum\":\"2\"}]";
+            completion(jsondata);
+        }
+    }else {
         
-        unsigned char *bbuf = nullptr;
-        size_t len = 0;
-        NSString *tempCmd = cmd?:@"";
-        NSData *data = [tempCmd dataUsingEncoding:NSUTF8StringEncoding];
-        size_t cmdLen = data.length;
-        
-//        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
-        postCommandRequestSync(dev_name.UTF8String, (const unsigned char *)cmd.UTF8String, cmdLen, &bbuf, &len, timeout);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion && bbuf) {
-                completion([NSString stringWithUTF8String:(char *)bbuf]);
-            }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            unsigned char *bbuf = nullptr;
+            size_t len = 0;
+            NSString *tempCmd = cmd?:@"";
+            NSData *data = [tempCmd dataUsingEncoding:NSUTF8StringEncoding];
+            size_t cmdLen = data.length;
+            
+            //        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
+            postCommandRequestSync(dev_name.UTF8String, (const unsigned char *)cmd.UTF8String, cmdLen, &bbuf, &len, timeout);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion && bbuf) {
+                    completion([NSString stringWithUTF8String:(char *)bbuf]);
+                }
+            });
         });
-    });
+    }
 }
 
 - (void)startLocalStream:(NSString *)dev_name {
@@ -300,42 +313,46 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
     self.audioConfig = audio_config;
     self.videoConfig = video_config;
-    [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:NO];
-    [[TRTCCloud sharedInstance] stopLocalPreview];
-    [[TRTCCloud sharedInstance] startLocalPreview:(video_config.videoPosition == AVCaptureDevicePositionFront)?YES:NO view:video_config.localView];
     
-    [[TRTCCloud sharedInstance] startLocalAudio:TRTCAudioQualitySpeech];
-    return;
-    
-    self.isSending = YES;
-    
-    self.dev_name = dev_name;
-    const char *channel = [channel_number UTF8String];
-    _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
-    
-    
-    if (systemAvCapture == nil) {
-        systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_config.sampleRate channel:audio_config.channels];
+    if (self.isRTC) {
+        [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:NO];
+        [[TRTCCloud sharedInstance] stopLocalPreview];
+        [[TRTCCloud sharedInstance] startLocalPreview:(video_config.videoPosition == AVCaptureDevicePositionFront)?YES:NO view:video_config.localView];
+        
+        [[TRTCCloud sharedInstance] startLocalAudio:TRTCAudioQualitySpeech];
+    }else {
+        
+        [[TRTCCloud sharedInstance] stopLocalPreview];//以防opencamera
+        self.isSending = YES;
+        
+        self.dev_name = dev_name;
+        const char *channel = [channel_number UTF8String];
+        _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
+        
+        
+        if (systemAvCapture == nil) {
+            systemAvCapture = [[TIoTAVCaptionFLV alloc] initWithAudioConfig:audio_config.sampleRate channel:audio_config.channels];
+            systemAvCapture.videoLocalView = video_config.localView;
+            systemAvCapture.isEchoCancel = audio_config.isEchoCancel;
+        }
+        systemAvCapture.audioConfig = audio_config;
+        systemAvCapture.videoConfig = video_config;
+        systemAvCapture.pitch = audio_config.pitch;
+        systemAvCapture.devicePosition = video_config.videoPosition;
         systemAvCapture.videoLocalView = video_config.localView;
-        systemAvCapture.isEchoCancel = audio_config.isEchoCancel;
-    }
-    systemAvCapture.audioConfig = audio_config;
-    systemAvCapture.videoConfig = video_config;
-    systemAvCapture.pitch = audio_config.pitch;
-    systemAvCapture.devicePosition = video_config.videoPosition;
-    systemAvCapture.videoLocalView = video_config.localView;
-    [systemAvCapture setResolutionRatio:self.resolution];
-    [systemAvCapture preStart];//配置声音和视频
-    
-    systemAvCapture.delegate = self;
-    [systemAvCapture startCapture];
-    
-    _p2p_wl_avg_ctx = {0};
-    _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
-    //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
-    [self cancelTimer];
-    if (video_config.localView != nil) {
-        _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
+        [systemAvCapture setResolutionRatio:self.resolution];
+        [systemAvCapture preStart];//配置声音和视频
+        
+        systemAvCapture.delegate = self;
+        [systemAvCapture startCapture];
+        
+        _p2p_wl_avg_ctx = {0};
+        _p2p_wl_avg_ctx.len = MAX_AVG_LENGTH;
+        //每次send时，先销毁之前已存在timer，保证多次send内部只持有一个timer
+        [self cancelTimer];
+        if (video_config.localView != nil) {
+            _getBufTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getSendBufSize) userInfo:nil repeats:YES];
+        }
     }
 }
 
@@ -377,33 +394,39 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 
 
 - (void)refreshLocalView:(UIView *)localView {
-    [[TRTCCloud sharedInstance] updateLocalView:localView];
-    return;
-    systemAvCapture.videoLocalView = localView;
-    [systemAvCapture refreshLocalPreviewView];
+    if (self.isRTC) {
+        [[TRTCCloud sharedInstance] updateLocalView:localView];
+        
+    }else {
+        systemAvCapture.videoLocalView = localView;
+        [systemAvCapture refreshLocalPreviewView];
+    }
 }
 
 - (void)changeCameraPositon {
-    TXDeviceManager *device = [[TRTCCloud sharedInstance] getDeviceManager];
-    [device switchCamera:device.isFrontCamera?NO:YES];
-    return;
-    [systemAvCapture changeCameraPositon];
+    if (self.isRTC) {
+        TXDeviceManager *device = [[TRTCCloud sharedInstance] getDeviceManager];
+        [device switchCamera:device.isFrontCamera?NO:YES];
+    }else {
+        [systemAvCapture changeCameraPositon];
+    }
 }
 - (void)stopLocalStream {
-    [[TRTCCloud sharedInstance] stopLocalAudio];
-    [[TRTCCloud sharedInstance] stopLocalPreview];
-    
-    
-    [self cancelTimer];
+    if (self.isRTC) {
+        [[TRTCCloud sharedInstance] stopLocalAudio];
+        [[TRTCCloud sharedInstance] stopLocalPreview];
+    }else {
         
-    self.isSending = NO;
-    
-    systemAvCapture.delegate = nil;
-    systemAvCapture.videoLocalView = nil;
-    [systemAvCapture stopCapture];
-    
-    int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
-    
+        [self cancelTimer];
+        
+        self.isSending = NO;
+        
+        systemAvCapture.delegate = nil;
+        systemAvCapture.videoLocalView = nil;
+        [systemAvCapture stopCapture];
+        
+        int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
+    }
 //    return (XP2PErrCode)errorcode;
 }
 
@@ -419,13 +442,15 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)stopAppService:(NSString *)dev_name {
-    [self stopLocalStream];
-    [[TRTCCloud sharedInstance] stopAllRemoteView];
-    [[TRTCCloud sharedInstance] exitRoom];
-    return;
-    [self stopLocalStream];
-    stopService(dev_name.UTF8String);
-    
+    if (self.isRTC) {
+        [self stopLocalStream];
+        [[TRTCCloud sharedInstance] stopAllRemoteView];
+        [[TRTCCloud sharedInstance] exitRoom];
+        
+    }else {
+        [self stopLocalStream];
+        stopService(dev_name.UTF8String);
+    }
     //关闭文件
 //    [fileHandle closeFile];
 //    fileHandle = NULL;
