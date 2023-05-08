@@ -159,7 +159,11 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         if (bitRate > MAX_BITRATE_LENGTH) {
             bitRate = MAX_BITRATE_LENGTH;
         }
-        _encoderBitrateBps = bitRate;
+        if ((_encoderBitrateBps > 0) && (_encoderBitrateBps < MAX_BITRATE_LENGTH)) {
+            bitRate = _encoderBitrateBps;
+        }else {
+            _encoderBitrateBps = bitRate;
+        }
         CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &bitRate);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);
         
@@ -174,7 +178,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
 
 - (void)setEncoderBitrateBps:(uint32_t)bitRate {
     
-    if ((bitRate > _width * _height) || (bitRate < 10000) || (_encoderBitrateBps == bitRate) || (bitRate > MAX_BITRATE_LENGTH)) {
+    if ((bitRate < 10000) || (_encoderBitrateBps == bitRate) || (bitRate > MAX_BITRATE_LENGTH)) {
         return;
     }
     

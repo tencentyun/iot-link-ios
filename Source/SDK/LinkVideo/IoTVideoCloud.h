@@ -18,6 +18,12 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationReady;
 extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg;
 extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
+typedef enum {
+    RTCTypeDisconnect       = 3000,     //对端退出
+    RTCTypeDetectReady      = 3001,     //对端已进房
+    RTCTypeDetectError      = 3002      //进房链路初始化失败
+} IoTVideoEventType;
+
 @protocol IoTVideoCloudDelegate <NSObject>
 @optional
 /*

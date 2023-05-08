@@ -20,6 +20,6 @@
 
 @property (weak, nonatomic) NSString *error;
 @property (weak, nonatomic) id<H264EncoderDelegate> delegate;
-@property (assign, nonatomic, readonly) uint32_t encoderBitrateBps; //当前码率
+@property (assign, nonatomic) uint32_t encoderBitrateBps; //当前码率
 
 @end

@@ -436,9 +436,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 
 - (void)muteLocalAudio:(BOOL)mute {
     [[TRTCCloud sharedInstance] muteLocalAudio:mute];
+    systemAvCapture.audioConfig.isMute = mute;
 }
 - (void)muteLocalVideo:(BOOL)mute {
     [[TRTCCloud sharedInstance] muteLocalVideo:TRTCVideoStreamTypeBig mute:mute];
+    systemAvCapture.videoConfig.isMute = mute;
 }
 
 - (void)stopAppService:(NSString *)dev_name {
@@ -484,12 +486,26 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
 //        });
+    }else {
+        
+        id<IoTVideoCloudDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
+            [delegate reviceEventMsgWithID:[NSString stringWithFormat:@"%ld",result] eventType:(XP2PType)RTCTypeDetectError];
+        }
     }
 }
 
 - (void)onRemoteUserEnterRoom:(NSString *)userId {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationReady object:nil userInfo:nil];
+
+        id<IoTVideoCloudDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
+            
+            [delegate reviceEventMsgWithID:userId eventType:(XP2PType)RTCTypeDetectReady];
+            
+        }
+        
     });
 }
 
@@ -497,6 +513,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     //0表示用户主动退出房间，1表示用户超时退出，2表示被踢出房间，3表示主播因切换到观众退出房间。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:nil];
+    
+        id<IoTVideoCloudDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
+            [delegate reviceEventMsgWithID:[NSString stringWithFormat:@"%ld",(long)reason] eventType:(XP2PType)RTCTypeDisconnect];
+        }
+        
     });
     
 }

@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
  */
 @property (nonatomic,assign) BOOL refreshSession;
 
+@property (nonatomic,assign) BOOL isMute;//是否静音
+
 @end
 
 NS_ASSUME_NONNULL_END

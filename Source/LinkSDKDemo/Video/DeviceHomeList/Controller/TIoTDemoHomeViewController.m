@@ -230,7 +230,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"拨打设备",@"回放",@"图片流（mjpeg）",@"取消"];
+        NSArray *actionTitleArray = @[@"RTC拨打设备",@"回放",@"图片流（mjpeg）",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"预览");

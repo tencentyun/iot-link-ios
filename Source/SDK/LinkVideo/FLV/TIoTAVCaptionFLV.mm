@@ -264,6 +264,11 @@ dispatch_queue_t muxerQueue;
         return;
     }
     self.h264Encoder = [TIoTH264Encoder new];
+    
+    if (self.videoConfig.bitRate > 0) {
+        self.h264Encoder.encoderBitrateBps = self.videoConfig.bitRate;  // 初始化码率
+    }
+    
     [self.h264Encoder initWithConfiguration];
     [self configEncode];
 
@@ -385,6 +390,9 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 
 #pragma mark - H264EncoderDelegate
 - (void)gotSpsPps:(NSData*)sps pps:(NSData*)pps {
+    if (self.videoConfig.isMute) {
+        return;
+    }
     
     const char bytes[] = "\x00\x00\x00\x01";
     size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
@@ -403,7 +411,9 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     
 }
 - (void)gotEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame {
-    
+    if (self.videoConfig.isMute) {
+        return;
+    }
 //    NSLog(@"Video data (%lu):%@", (unsigned long)data.length,data.description);
     
 //    if (_fileHandle != NULL)
@@ -425,6 +435,9 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 
 #pragma mark - TIoTAACEncoderDelegate
 - (void)getEncoderAACData:(NSData *)data {
+    if (self.audioConfig.isMute) {
+        return;
+    }
 //    [_fileHandle writeData:data];
     encodeFlvData(0, data);
 }

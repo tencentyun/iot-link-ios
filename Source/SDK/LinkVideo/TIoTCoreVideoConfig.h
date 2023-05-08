@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,assign) int32_t bitRate;
 
+@property (nonatomic,assign) BOOL isMute;//是否停止恢复推流
 @end
 
 NS_ASSUME_NONNULL_END
