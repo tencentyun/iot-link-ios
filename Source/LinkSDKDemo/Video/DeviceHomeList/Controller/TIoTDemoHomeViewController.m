@@ -24,6 +24,7 @@
 #import "TIoTDemoNVRSubDeviceVC.h"
 #import "TIoTDemoPlaybackVC.h"
 #import "TIoTDemoPreviewMJPEGVC.h"
+#import "TIoTDemoPreviewP2PVC.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
@@ -230,12 +231,23 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"RTC拨打设备",@"回放",@"图片流（mjpeg）",@"取消"];
+        NSArray *actionTitleArray = @[@"RTC拨打设备", @"P2P拨打设备", @"回放",@"图片流（mjpeg）",@"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            DDLogVerbose(@"预览");
+            DDLogVerbose(@"RTC拨打");
             
             TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
+            previewDeviceVC.selectedModel = model;
+            previewDeviceVC.isNVR = NO;
+            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
+            [weakSelf resetDeviceListStatus];
+            [customActionSheet removeFromSuperview];
+        };
+        
+        ChooseFunctionBlock P2PVideoBlock = ^(TIoTDemoCustomSheetView *view){
+            DDLogVerbose(@"p2p通话预览");
+            
+            TIoTDemoPreviewP2PVC *previewDeviceVC = [[TIoTDemoPreviewP2PVC alloc]init];
             previewDeviceVC.selectedModel = model;
             previewDeviceVC.isNVR = NO;
             [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
@@ -278,7 +290,7 @@ static NSInteger const kLimit = 100;
             DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock,playbackVideoBlock,mjpegVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock,P2PVideoBlock,playbackVideoBlock,mjpegVideoBlock,cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
