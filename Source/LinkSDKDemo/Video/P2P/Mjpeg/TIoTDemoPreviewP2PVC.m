@@ -1041,8 +1041,98 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 
 #pragma mark Install Movie Notifications
+#pragma mark -IJKPlayer
+- (void)loadStateDidChange:(NSNotification*)notification {
+    //    MPMovieLoadStateUnknown        = 0,
+    //    MPMovieLoadStatePlayable       = 1 << 0,
+    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
+    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
+
+    IJKMPMovieLoadState loadState = _player.loadState;
+
+    if ((loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStatePlaythroughOK: %d", (int)loadState);
+        [self initVideoParamView];
+    } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
+        DDLogInfo(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d", (int)loadState);
+    } else {
+        DDLogInfo(@"loadStateDidChange: ???: %d", (int)loadState);
+    }
+}
+
+
+- (void)moviePlayBackStateDidChange:(NSNotification*)notification {
+    switch (_player.playbackState)
+    {
+        case IJKMPMoviePlaybackStateStopped: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: stoped %p", (int)_player.playbackState,_player);
+            break;
+        }
+        case IJKMPMoviePlaybackStatePlaying: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: playing", (int)_player.playbackState);
+            
+            // 播放器加载完出图时间
+            self.endPlayer = CACurrentMediaTime();
+            //p2p 连接时间
+            NSInteger p2pConnectTime = 0;
+            if (self.isNVR == NO) {
+                p2pConnectTime = (NSInteger)((self.endIpcP2P - self.startIpcP2P)*1000);
+            }else {
+                if (![NSString isNullOrNilWithObject:self.deviceName]) {
+                    NSDictionary *p2pTimeDic = [[NSUserDefaults standardUserDefaults] objectForKey:self.deviceName?:@""];
+                    NSNumber *p2pTime = p2pTimeDic[@"p2pConnectTime"];
+                    p2pConnectTime = p2pTime.integerValue;
+                }
+            }
+            
+            /*//弹框
+            NSString *messageString = [NSString stringWithFormat: @"P2P连接时间:  %ld(ms)\n画面显示时间: %ld(ms)",(long)p2pConnectTime,(NSInteger)((self.endPlayer - self.startPlayer)*1000)];
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"设备名:%@",self.deviceName?:@""] message:messageString preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+            */
+            //获取当前发送链路的连接模式：0 无效；62 直连；63 转发
+            int netmode = [IoTVideoCloud getStreamLinkMode:self.deviceName];
+            NSLog(@"nnnnnn---netmode==%d",netmode);
+            
+            //推流
+            [[IoTVideoCloud sharedInstance] startLocalStream:self.deviceName];
+            break;
+        }
+        case IJKMPMoviePlaybackStatePaused: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateInterrupted: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: interrupted", (int)_player.playbackState);
+            break;
+        }
+        case IJKMPMoviePlaybackStateSeekingForward:
+        case IJKMPMoviePlaybackStateSeekingBackward: {
+            DDLogInfo(@"IJKMPMoviePlayBackStateDidChange %d: seeking", (int)_player.playbackState);
+            break;
+        }
+        default: {
+            DDLogWarn(@"IJKMPMoviePlayBackStateDidChange %d: unknown", (int)_player.playbackState);
+            break;
+        }
+    }
+}
 -(void)installMovieNotificationObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:IJKMPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:_player];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadStateDidChange:)
+                                                 name:IJKMPMoviePlayerLoadStateDidChangeNotification
+                                               object:_player];
     if (self.isNVR == NO) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(refushVideo:)
@@ -1061,8 +1151,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2preconnect" object:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"xp2disconnect" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TIoTCoreXP2PBridgeNotificationReady object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TIoTCoreXP2PBridgeNotificationDisconnect object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
