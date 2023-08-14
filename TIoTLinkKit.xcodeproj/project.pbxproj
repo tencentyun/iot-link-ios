@@ -4275,6 +4275,7 @@
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4326,6 +4327,7 @@
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_app;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4347,6 +4349,7 @@
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4398,6 +4401,7 @@
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_app;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4417,6 +4421,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4435,6 +4440,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_demo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4453,6 +4459,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4471,6 +4478,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_demo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

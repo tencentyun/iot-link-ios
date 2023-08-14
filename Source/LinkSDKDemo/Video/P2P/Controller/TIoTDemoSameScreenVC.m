@@ -542,13 +542,16 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 - (void)initVideoPlayer {
     
     if (self.videoArray.count != 0) {
-        [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TIoTExploreOrVideoDeviceModel *model = obj;
-            if (self.isNVRType == NO) {
-                
-                [self requestXp2pInfoWithDeviceName:model.DeviceName?:@"" isReconnection:NO];
-            }
-        }];
+//        [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            TIoTExploreOrVideoDeviceModel *model = obj;
+//            if (self.isNVRType == NO) {
+           
+        
+//                [self requestXp2pInfoWithDeviceName:model.DeviceName?:@"" isReconnection:NO];
+        [self requestXp2pInfoWithDeviceName:self.NVRDeviceName isReconnection:NO];
+        
+//            }
+//        }];
         
         switch (self.videoArray.count) {
             case TIoTDemoSameScreenOne: {
@@ -605,38 +608,38 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 ///MARK: 获取ipc/nvr设备状态，是否可以推流（type 参数区分直播和对讲）
 - (void)getDeviceStatusWithIndex:(NSInteger)index model:(TIoTExploreOrVideoDeviceModel *)model {
     
-    NSString *qualityTypeString = @"quality=high";
-    NSString *actionString = @"";
-    
-    if (self.isNVRType == YES) {
-        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=live&%@",model.Channel?:@"",qualityTypeString];
-    }else {
-        actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
-    }
-    
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.NVRDeviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-        if ([responseModel.status isEqualToString:@"0"]) {
+//    NSString *qualityTypeString = @"quality=high";
+//    NSString *actionString = @"";
+//
+//    if (self.isNVRType == YES) {
+//        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=live&%@",model.Channel?:@"",qualityTypeString];
+//    }else {
+//        actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
+//    }
+//
+//    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.NVRDeviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+//        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
+//        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
+//        if ([responseModel.status isEqualToString:@"0"]) {
             //直播
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
-                if (self.isNVRType == YES) {
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.NVRDeviceName?:@""];
-                    NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=%@&quality=high",urlString,model.Channel?:@""];
-                    [self playVideoWithIndex:index-1 deviceName:self.NVRDeviceName withUrlString:urlStringTemp];
-                }else {
-                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
-                    NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
-                    [self playVideoWithIndex:index-1 deviceName:model.DeviceName withUrlString:urlStringTemp];
-                }
+//                if (self.isNVRType == YES) {
+//                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.NVRDeviceName?:@""];
+//                    NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=%@&quality=high",urlString,model.Channel?:@""];
+//                    [self playVideoWithIndex:index-1 deviceName:self.NVRDeviceName withUrlString:urlStringTemp];
+//                }else {
+//                    NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
+//                    NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
+//                    [self playVideoWithIndex:index-1 deviceName:model.DeviceName withUrlString:urlStringTemp];
+//                }
                 
-            });
-        }else {
-            //设备状态异常提示
-            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-        }
-    }];
+//            });
+//        }else {
+//            //设备状态异常提示
+//            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
+//        }
+//    }];
 }
 
 - (void)requestXp2pInfoWithDeviceName:(NSString *)deviceName isReconnection:(BOOL)isReconnection {
@@ -878,45 +881,11 @@ typedef NS_ENUM(NSInteger,TIoTDemoSameScreen) {
 
 - (void)refushVideo:(NSNotification *)notify {
     
-    NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-    
-    NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-    if (appVersion.floatValue < 2.1) {
-        
-        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TIoTExploreOrVideoDeviceModel *model = obj;
-            if ([DeviceName isEqualToString:model.DeviceName]) {
-
-                NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName]?:@"";
-                
-                NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-                [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
-            }
-        }];
-        
-    }else {
-        [self.videoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TIoTExploreOrVideoDeviceModel *model = obj;
-            if ([DeviceName isEqualToString:model.DeviceName]) {
-                
-                NSString *qualityTypeString = @"quality=high";
-                NSString *actionString = [NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=live&%@",qualityTypeString];
-                
-                [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:model.DeviceName cmd:actionString timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-                    NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-                    TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-                    if ([responseModel.status isEqualToString:@"0"]) {
-                        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:model.DeviceName?:@""];
-                        NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=0&quality=high",urlString];
-                        [self playVideoWithIndex:idx deviceName:model.DeviceName withUrlString:urlStringTemp];
-                    }else {
-                        //设备状态异常提示
-                        [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-                    }
-                }];
-            }
-        }];
-    }
+    [self.videoArray enumerateObjectsUsingBlock:^(TIoTExploreOrVideoDeviceModel *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.NVRDeviceName];
+        NSString *urlStringTemp = [NSString stringWithFormat:@"%@ipc.flv?action=live&channel=%@&quality=high",urlString,obj.Channel];
+        [self playVideoWithIndex:idx deviceName:obj.DeviceName withUrlString:urlStringTemp];
+    }];
 }
 
 - (void)playVideoWithIndex:(NSInteger)idx deviceName:(NSString *)deviceName withUrlString:(NSString *)urlString {

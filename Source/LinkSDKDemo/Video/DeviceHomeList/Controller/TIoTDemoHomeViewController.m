@@ -32,12 +32,30 @@ static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
 static NSString *const kVIdeoDeviceListHeaderID = @"kVIdeoDeviceListHeaderID";
 static NSInteger const kLimit = 100;
 
-@interface TIoTDemoHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+
+@interface MutiUITableViewCell : UITableViewCell
+@end
+@implementation MutiUITableViewCell
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.multipleSelectionBackgroundView = [UIView new];
+        self.tintColor = [UIColor redColor];
+    }
+    return self;
+}
+@end
+
+@interface TIoTDemoHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) BOOL isShowSameScreenChoiceIcon;
 @property (nonatomic, strong) NSMutableArray *selectedArray;
 @property (nonatomic, assign) BOOL isNVR;
+
+@property (strong, nonatomic) UIView       *contxtTableView;
+@property (strong, nonatomic) UITableView       *tableView;
+@property (strong, nonatomic) NSMutableArray    *listData;
+@property (strong, nonatomic) NSString    *currentDeviceName;
 @end
 
 @implementation TIoTDemoHomeViewController
@@ -232,7 +250,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"预览", @"IPC双向通话", @"IPC双向通话-只推流", @"回放",@"图片流（mjpeg）",@"取消"];
+        NSArray *actionTitleArray = @[@"预览", @"IPC双向通话", @"IPC双向通话-只推流", @"回放",@"图片流（mjpeg）", @"多通道选择", @"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"预览");
@@ -299,11 +317,30 @@ static NSInteger const kLimit = 100;
             [customActionSheet removeFromSuperview];
         };
         
+        ChooseFunctionBlock channelVideoBlock = ^(TIoTDemoCustomSheetView *view){
+            DDLogVerbose(@"多通道");
+//            TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+//            sameScreenVC.isNVRType = YES;
+//            sameScreenVC.NVRDeviceName = model.DeviceName;
+//            [sameScreenVC setupSameScreenArray:self.selectedArray];
+//            [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
+//            [weakSelf resetDeviceListStatus];
+            
+            weakSelf.currentDeviceName = model.DeviceName;
+            [weakSelf.view addSubview:weakSelf.contxtTableView];
+            [UIView animateWithDuration:0.3 animations:^{
+                [weakSelf.contxtTableView setFrame:CGRectMake(0, 0, kScreenWidth, weakSelf.view.bounds.size.height)];
+//                [weakSelf.view layoutIfNeeded];
+            }];
+            
+            [customActionSheet removeFromSuperview];
+        };
+        
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
             DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock, videoCallBlock, videoPushBlock, playbackVideoBlock,mjpegVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock, videoCallBlock, videoPushBlock, playbackVideoBlock,mjpegVideoBlock, channelVideoBlock, cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
@@ -440,14 +477,127 @@ static NSInteger const kLimit = 100;
     return _selectedArray;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - 多选
+- (void)dismissCancle {
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.contxtTableView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight)];
+    }];
 }
-*/
+
+- (UIView *)contxtTableView {
+    if (!_contxtTableView) {
+        _contxtTableView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight)];
+        [_contxtTableView setBackgroundColor:UIColor.clearColor];
+        [_contxtTableView addSubview:self.tableView];
+
+        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(_contxtTableView);
+            make.height.mas_equalTo(370);
+        }];
+        [self.tableView setEditing:YES animated:NO];
+    }
+    return _contxtTableView;
+}
+
+- (UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 370)];
+        _tableView.dataSource      = self;
+        _tableView.delegate        = self;
+        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView registerClass:[MutiUITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    }
+    return _tableView;
+}
+
+#pragma mark -- UITabelViewDelegate And DataSource
+- (void)sectionHeaderSureClick {
+    [self sectionHeaderCancelClick];
+
+    NSMutableArray *models = [[NSMutableArray alloc]init];
+    [[self.tableView indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        TIoTExploreOrVideoDeviceModel *modell = [TIoTExploreOrVideoDeviceModel new];
+        modell.DeviceName = self.currentDeviceName;
+        modell.Channel = [NSString stringWithFormat:@"%d",(int)obj.row];
+        [models addObject:modell];
+    }];
+    
+    if (models.count < 1) {
+        return;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
+        sameScreenVC.isNVRType = NO;
+        sameScreenVC.NVRDeviceName = self.currentDeviceName;
+        [sameScreenVC setupSameScreenArray:models];
+        [self.navigationController pushViewController:sameScreenVC animated:YES];
+    });
+}
+
+- (void)sectionHeaderCancelClick {
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.contxtTableView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, self.view.bounds.size.height)];
+    } completion:^(BOOL finished) {
+        [self.contxtTableView removeFromSuperview];
+    }];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 50.0; // 返回你的 header view 的高度
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    static NSString *headerReuseIdentifier = @"TableSectionHeaderViewIdentifier";
+    UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:headerReuseIdentifier];
+    if (!headerView) {
+        headerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:headerReuseIdentifier];
+    }
+    headerView.textLabel.text = @"通道选择";
+    
+    UIButton *bt1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    bt1.backgroundColor = UIColor.yellowColor;
+    bt1.frame = CGRectMake(kScreenWidth-90, 0, 80, 50);
+    [bt1 setTitle:@"确定" forState:UIControlStateNormal];
+    [bt1 addTarget:self action:@selector(sectionHeaderSureClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *bt2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    bt2.backgroundColor = UIColor.orangeColor;
+    bt2.frame = CGRectMake(kScreenWidth-90-90, 0, 80, 50);
+    [bt2 setTitle:@"取消" forState:UIControlStateNormal];
+    [bt2 addTarget:self action:@selector(sectionHeaderCancelClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    [headerView.contentView addSubview:bt1];
+    [headerView.contentView addSubview:bt2];
+    return headerView;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 4;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    MutiUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    cell.textLabel.text = [NSString stringWithFormat:@"第%ld条",(long)indexPath.row+1];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 80;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView.isEditing) {
+        return;
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
+}
 
 @end
