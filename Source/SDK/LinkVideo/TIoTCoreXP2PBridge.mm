@@ -37,25 +37,24 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         if (logEnable) {
             fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
         }
+    }else if (type == XP2PTypeSaveFileOn) {
+        
+        BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
+        return (isWriteFile?"1":"0");
+    }else if (type == XP2PTypeSaveFileUrl) {
+        
+        NSString *fileName = @"video.data";
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentDirectory = paths.firstObject;
+        NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+        return saveFilePath.UTF8String;
     }
     
     @autoreleasepool {
         
         NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
         
-        if (type == XP2PTypeSaveFileOn) {
-            
-            BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
-            return (isWriteFile?"1":"0");
-        }else if (type == XP2PTypeSaveFileUrl) {
-            
-            NSString *fileName = @"video.data";
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *documentDirectory = paths.firstObject;
-            NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-            return saveFilePath.UTF8String;
-            
-        }else if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
+        if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
             [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
