@@ -266,7 +266,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
                 audio_config.channels = 1;
                 audio_config.isEchoCancel = YES;
-                audio_config.pitch =  tt_pitch; // -6声音会变粗一点;    6声音会变细一点
+                audio_config.pitch =  0;//tt_pitch; // -6声音会变粗一点;    6声音会变细一点
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
                 video_config.localView = nil;

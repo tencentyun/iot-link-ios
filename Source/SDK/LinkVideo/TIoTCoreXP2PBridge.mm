@@ -330,7 +330,26 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_config videoConfig:video_config];
 }
 
+- (void)setupAVAudioSession:(TIoTCoreAudioConfig *)audio_config {
+    AVAudioSession *avsession = [AVAudioSession sharedInstance];
+    [avsession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [avsession setPreferredSampleRate:16000 error:nil];
+    [avsession setPreferredInputNumberOfChannels:audio_config.channels error:nil];
+    
+    //16khz * 1channel * notEcho = 640frame 设置为0.03
+    NSTimeInterval duration = 0.015;
+    if (audio_config.isEchoCancel) {
+        duration = duration*2; //回音消除打开会减少采样
+    }
+    if (audio_config.channels == 2) {
+        duration = duration/2;
+    }
+    [avsession setPreferredIOBufferDuration:duration error:nil];
+    [avsession setActive:YES error:nil];
+}
+
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config {
+    [self setupAVAudioSession:audio_config];
 //    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
@@ -438,6 +457,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [systemAvCapture stopCapture];
     
     int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
+    
+    AVAudioSession *avsession = [AVAudioSession sharedInstance];
+    [avsession setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+    [avsession setActive:YES error:nil];
     
     return (XP2PErrCode)errorcode;
 }

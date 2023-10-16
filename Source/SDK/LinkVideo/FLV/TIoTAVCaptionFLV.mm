@@ -11,12 +11,14 @@
 #import "flv-muxer.h"
 
 #include <iostream>
+#include "wb_vad.h"
 #import "TIoTPCMXEchoRecord.h"
 #import <SoundTouchiOS/ijksoundtouch_wrap.h>
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
 dispatch_queue_t muxerQueue;
+static VadVars *vadstate = nullptr;
 //NSFileHandle *_fileHandle;
 
 @interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate,TIoTAACEncoderDelegate>
@@ -38,6 +40,8 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
+@property (nonatomic, assign) BOOL isVadRecongize;
+@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -49,8 +53,11 @@ dispatch_queue_t muxerQueue;
         _audioRate = audioSampleRate;
         _channel = channel;
         _isEchoCancel = NO;
+        _isVadRecongize = NO;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
+        
+        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
         [self onInit];
     }
     return self;
@@ -79,6 +86,7 @@ dispatch_queue_t muxerQueue;
         self.aacEncoder.audioType = _audioRate;
         return;
     }
+    wb_vad_init(&(vadstate));
     AudioStreamBasicDescription inAudioStreamBasicDescription;
         
     self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:_channel isEcho:_isEchoCancel];
@@ -360,26 +368,63 @@ void *ijk_soundtouch_handle = NULL;
     ijk_soundtouch_handle = ijk_soundtouch_create(1.0, _pitch, tmpChannel, 16000);
 }
 
+static uint8_t trae_pcm_buffer[512];
+static uint8_t  trae_aac_buffer[8192];
+float indata[FRAME_LEN];
+TPCircularBuffer aac_circularBuffer;
+
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    printf("pcm_size_callback: %d\n", size);
-    int ret_len = size;
-    // Sets pitch change in semi-tones compared to the original pitch
-    // (-12 .. +12)
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
-    if (vc.pitch != 0) {
-        static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
-        ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)buffer, size/2, 2, tmpChannel);
-        if (ret_len<1) {
+    memset(trae_pcm_buffer, 0, 512);
+    UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :trae_pcm_buffer :512];
+    if (len < 512) {
+        return;
+    }
+    
+    // check vad
+    int temp;
+    for(int i = 0; i< FRAME_LEN; i++) {
+        indata[i]=0;
+        temp = 0;
+        memcpy(&temp, trae_pcm_buffer + 2 * i, 2);
+        indata[i]=(short)temp;
+        if (indata[i] > 65535/2)
+            indata[i] = indata[i]-65536;
+    }
+    Word16 vad = wb_vad(vadstate, indata);
+//    printf("vadvadvadvadvadvad: %d\n",vad);
+    if(vad == 1) {
+        vc.isVadRecongize = YES;
+    }
+    if (!vc.isVadRecongize) {
+        return;
+    }
+    
+    //pcm=>aac
+    [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :512];
+    dispatch_async(vc.audioEncodeQueue, ^{
+        static int tmpChannelDataLen = 2048;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
+        UInt32 aaclen = [vc.pcmRecord getData:&aac_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
+        if (aaclen < tmpChannelDataLen) {
             return;
         }
-    }
-//    printf("pcm_size_callback_translate: %d\n", ret_len);
-    
 
-    NSData *data = [NSData dataWithBytes:buffer length:ret_len];
-//    [_fileHandle writeData:data];
-    [vc.aacEncoder encodePCMData:data];
+        // Sets pitch change in semi-tones compared to the original pitch
+        // (-12 .. +12)
+        if (vc.pitch != 0) {
+            static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
+            int ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)trae_aac_buffer, 1024, 2, tmpChannel);
+            if (ret_len<1) {
+                return;
+            }
+        }
+        
+        NSData *data = [NSData dataWithBytes:trae_aac_buffer length:tmpChannelDataLen];
+//        [_fileHandle writeData:data];
+        [vc.aacEncoder encodePCMData:data];
+    });
 }
 
 
@@ -514,12 +559,14 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSFileManager *fileManager = [NSFileManager defaultManager];
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
-    
-//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"lyh.pcm"];
+//
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.pcm"];
 //    [fileManager removeItemAtPath:h264File error:nil];
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
-        
+    
+    self.isVadRecongize = NO;
+    [self.pcmRecord Init_buffer:&aac_circularBuffer :8192];
     flv_init_load();
     if (self.videoConfig.isExternal) {
         return YES;//走外部采集数据发送
@@ -533,6 +580,10 @@ int encodeFlvData(int type, NSData *packetData) {
 -(void) stopCapture{
     [self stopCarmera];
     [self.pcmRecord stop_record];
+    
+    [self.pcmRecord Destory_buffer:&aac_circularBuffer];
+    wb_vad_exit(&vadstate);
+    self.isVadRecongize = NO;
 }
 
 - (void) startCamera

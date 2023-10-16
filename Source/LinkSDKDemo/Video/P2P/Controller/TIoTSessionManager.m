@@ -81,6 +81,7 @@ static AVAudioSessionCategoryOptions cachedCategoryOptions = 0;
 
 //需要录音时，AudioSession的设置代码如下：
 - (void)resumeRTCAudioSession {
+    return;
     self.session = [AVAudioSession sharedInstance];
     if (self.session.category != AVAudioSessionCategoryPlayAndRecord) {
         [self cacheCurrentAudioSession]; //先缓存之前的
@@ -102,6 +103,7 @@ static AVAudioSessionCategoryOptions cachedCategoryOptions = 0;
 }
 //功能结束时重置audioSession,重置到缓存的audioSession设置
 - (void)resetToCachedAudioSession {
+    return;
     if (!cachedCategory) {
         return;
     }

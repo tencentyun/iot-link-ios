@@ -78,9 +78,7 @@
     return self;
 }
 
-#define kTVURecoderPCMMaxBuffSize 2048
-static int          pcm_buffer_size = 0;
-static uint8_t      pcm_buffer[kTVURecoderPCMMaxBuffSize*4];
+TPCircularBuffer pcm_circularBuffer;
 
 static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrame, AudioBufferList *__nullable ioData)
 {
@@ -99,28 +97,10 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     UInt32   bufferSize = list.mBuffers[0].mDataByteSize;
     uint8_t *bufferData = (uint8_t *)list.mBuffers[0].mData;
-    
-//    if (size > 0 && src)
-//    {
-//        char *dst = (char*)calloc(1, size);
-//        memcpy(dst, src, size);
-//        if (r->callback)
-//            r->callback(dst, size, r->user);
-//    }
-    
-    // 由于PCM转成AAC的转换器每次需要有1024个采样点（每一帧2个字节）才能完成一次转换，所以每次需要2048大小的数据，这里定义的pcm_buffer用来累加每次存储的bufferData
-    memcpy(pcm_buffer+pcm_buffer_size, bufferData, bufferSize);
-    pcm_buffer_size = pcm_buffer_size + bufferSize;
-    
-    if(pcm_buffer_size >= (kTVURecoderPCMMaxBuffSize*channel)) {
-        if (r->callback)
-            r->callback(pcm_buffer, pcm_buffer_size, r->user);
-        
-        // 因为采样不可能每次都精准的采集到1024个样点，所以如果大于2048大小就先填满2048，剩下的跟着下一次采集一起送给转换器
-        memcpy(pcm_buffer, pcm_buffer + (kTVURecoderPCMMaxBuffSize*channel), pcm_buffer_size - (kTVURecoderPCMMaxBuffSize*channel));
-        pcm_buffer_size = pcm_buffer_size - (kTVURecoderPCMMaxBuffSize*channel);
-    }
-    
+//    NSLog(@"record_callback__________size : %d", bufferSize);
+    [r addData:&pcm_circularBuffer :bufferData :bufferSize];
+    if (r->callback)
+        r->callback(bufferData, bufferSize, r->user);
     return error;
 }
 
@@ -130,14 +110,14 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 - (void)start_record
 {
-    pcm_buffer_size = 0;
+    [self Init_buffer:&pcm_circularBuffer :4096];
     AudioOutputUnitStart(audioUnit);
 }
 
 - (void)stop_record
 {
     AudioOutputUnitStop(audioUnit);
-    pcm_buffer_size = 0;
+    [self Destory_buffer:&pcm_circularBuffer];
 }
 
 - (void)set_record_callback:(RecordCallback)c user:(nonnull void *)u
@@ -153,4 +133,45 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
     [self stop_record];
     AudioComponentInstanceDispose(audioUnit);
 }
+
+
+
+-(BOOL) Init_buffer:(TPCircularBuffer*)buffer_ :(UInt32)size_
+{
+     return TPCircularBufferInit(buffer_, size_ );
+}
+
+-(void) Destory_buffer:(TPCircularBuffer*)buffer_
+{
+    TPCircularBufferCleanup(buffer_ );
+}
+
+-(UInt32)addData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
+{
+    uint32_t availableBytes = 0;
+    TPCircularBufferHead(buffer_, &availableBytes);
+    if (availableBytes <= 0)
+          return 0;
+     
+    UInt32 len =  (availableBytes >= size_ ? size_ : availableBytes);
+    TPCircularBufferProduceBytes(buffer_, (void*)buf_, size_);
+    return len;
+}
+
+-(UInt32)getData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
+{
+    uint32_t availableBytes = 0;
+    void *bufferTail = TPCircularBufferTail(buffer_, &availableBytes);
+    if (availableBytes >= size_)
+    {
+        UInt32 len = 0;
+        len = (size_ > availableBytes ? availableBytes : size_);
+        memcpy(buf_, bufferTail, len);
+        TPCircularBufferConsume(buffer_, len);
+//        NSLog(@"ggggggggggg=====len = %ld", len);
+        return len;
+    }
+    return 0;
+}
+
 @end
