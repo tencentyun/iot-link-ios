@@ -39,7 +39,7 @@ jobs:
       run: |
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         export GIT_BRANCH_IMAGE_VERSION=$VERSION
-        
+        sh .github/script/archive.sh Debug
         sh .github/script/sdkDemoArchive.sh Debug
         
         ls -l
