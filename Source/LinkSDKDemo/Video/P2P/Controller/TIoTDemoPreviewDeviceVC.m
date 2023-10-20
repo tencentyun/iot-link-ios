@@ -126,8 +126,15 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupPreViewViews];
     
-    [self requestXp2pInfo];
-    
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
+    if (errorcode == XP2P_ERR_VERSION) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertC addAction:alertA];
+        [self presentViewController:alertC animated:YES completion:nil];
+    }
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
 }
@@ -138,16 +145,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
         [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
-        
-        if (errorcode == XP2P_ERR_VERSION) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alertC addAction:alertA];
-            [self presentViewController:alertC animated:YES completion:nil];
-        }
+        [self setVieoPlayerStartPlayWith:self.qualityString];
         
         //计算IPC打洞开始时间
         self.startIpcP2P = CACurrentMediaTime();
@@ -1190,7 +1189,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
              self.startPlayer = CACurrentMediaTime();
          });
          */
-        [self setVieoPlayerStartPlayWith:self.qualityString];
+        [self requestXp2pInfo];
+//        [self setVieoPlayerStartPlayWith:self.qualityString];
         
 //        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
@@ -1666,6 +1666,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)appNetWorkResume {
+    return;
     if (self.endPlayer == 0) { //正在直播中，断开才响应
         return;
     }

@@ -382,7 +382,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     if (len < 512) {
         return;
     }
-    
+    /*
     // check vad
     int temp;
     for(int i = 0; i< FRAME_LEN; i++) {
@@ -401,6 +401,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     if (!vc.isVadRecongize) {
         return;
     }
+     */
     
     //pcm=>aac
     [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :512];
