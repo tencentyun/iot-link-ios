@@ -9,7 +9,7 @@
    https://github.com/tencentyun/iot-thirdparty-ios/tree/master/Source/XP2P-iOS
 
 * 工程如何引用： 
- 
+
    将所有.a与AppWrapper.h 加入工程中，加入libc++, libsqlite3, libz系统库
 
 ##### 使用iOS库方法
@@ -36,7 +36,7 @@
 	
    //2.配置IOT_P2P SDK,demoapp作为演示需要配置第二步，客户正式发布的app不建议配置第二步，需通过自建业务服务获取xp2pInfo传入第三步的参数中
    setQcloudApiCred(sec_id, sec_key);   //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-
+	
 	//3.启动p2p通道,此处id参数传入了dev_name，用户也可以维护一套自己区分不同设备的id;最后的参数在正式发布版本中需传xp2p_info，所有接口的参数含义可以参考本文档最底下链接
    startServiceWithXp2pInfo(dev_name, pro_id, dev_name, "");
 	
@@ -131,30 +131,31 @@
 	```
 	
 * 获取当前发送链路的连接模式      
-     
+  
      ```
     //连接模式：0 无效；62 直连；63 转发
     getStreamLinkMode(dev_name)
-     ```    
-     
+    ```
+    
 * 调试接口，用于iOS端保存播放器拉取数据流   
 
    ``` 
    startRecordPlayerStream(dev_name)
-   ```  
-    	
+   ```
+   
 	
 
 ##### iOS库调用方法
 * P2P通道初始化
 	
 	```
-	[[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:@"" dev_name:@""];
+	//sensor_timeout: 探测失败切换tcp的超时时间,最小3s，默认5s
+	[[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:@"" dev_name:@"" sensor_timeout:6]; 
 	```
 	**注意事项：**
-
+	
 	* demo app为了获取设备列表，需要客户填写腾讯云api的密钥，获取的设备信息是客户该产品所有的设备，不区分C端用户，真实使用场景是希望获取设备列表的操作在客户自建后台进行的，云api的secretID、secretKey不保存在app上，避免泄露风险
-
+	
 * P2P通道传输音视频流
 	
 	```
@@ -236,7 +237,7 @@
 
 
 * 获取当前发送链路的连接模式
-   
+  
    ```
    //返回模式标识：0 无效；62 直连；63 转发
    int netmode = [TIoTCoreXP2PBridge getStreamLinkMode:dev_name]
@@ -257,7 +258,7 @@
    //通过 startAvRecvService 和 stopAvRecvService 接口，可以启动和停止裸流传输，客户端拉取到的裸流数据对应 data 参数
    - (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len;
   ```
-   
+  
 * P2P代理方法： 接收设备主动发送消息回调    
   **谨慎！！！ 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程，返回值需立即返回**     
   
@@ -272,9 +273,8 @@
   - (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
    ```
   
-   
 * P2P代理方法：接收设备发送的事件消息   
-   
+  
   ```
    /* 
      *接收到设备发送事件 

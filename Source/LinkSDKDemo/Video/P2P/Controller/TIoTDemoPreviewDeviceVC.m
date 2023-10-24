@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     _is_ijkPlayer_stream = YES;
     //关闭日志
-//    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     self.qualityString = quality_high;
@@ -127,7 +127,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self setupPreViewViews];
     
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
+    //sensor_timeout:6 表示6s后没ready就切tcp模式
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@"" sensor_timeout:6];
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
         UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {

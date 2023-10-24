@@ -9,6 +9,7 @@
 
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
 NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preconnect"; //app本地已ready，表示探测完成，可以发起请求了
+NSNotificationName const TIoTCoreXP2PBridgeNotificationDetectError  = @"xp2detecterror"; //探测失败，网络不正常表示探测完成，可以发起请求了
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg    = @"XP2PTypeDeviceMsgArrived"; //收到设备端的请求数据
 NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PTypeStreamEnd"; // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
 
@@ -54,10 +55,15 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         
         NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
         
-        if (type == XP2PTypeDisconnect || type == XP2PTypeDetectError) {
+        if (type == XP2PTypeDisconnect) {
             [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDisconnect object:nil userInfo:@{@"id": DeviceName}];
+            });
+        }else if (type == XP2PTypeDetectError) {
+            [[TIoTCoreXP2PBridge sharedInstance] cancelTimer];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:TIoTCoreXP2PBridgeNotificationDetectError object:nil userInfo:@{@"id": DeviceName}];
             });
         }else if (type == XP2PTypeDetectReady) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -209,21 +215,23 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, 5);
     setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
 
 
-
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
+    return [self startAppWith:pro_id dev_name:dev_name sensor_timeout:5];
+}
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name sensor_timeout:(int)sensor_timeout{
 //    setStunServerToXp2p("11.11.11.11", 111);
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, sensor_timeout);
     return (XP2PErrCode)ret;
 }
 
