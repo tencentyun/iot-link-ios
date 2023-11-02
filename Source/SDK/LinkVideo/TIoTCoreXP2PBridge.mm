@@ -96,8 +96,8 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-            if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:)]) {
-                [delegate reviceEventMsgWithID:DeviceName eventType:type];
+            if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:msg:)]) {
+                [delegate reviceEventMsgWithID:DeviceName eventType:type msg:msg];
             }
         });
     }
@@ -116,23 +116,25 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
     char *msg = (char *)recv_buf;
     printf("device feedback ==> %s\n",msg);
 
-    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
-    NSData *DeviceData = [NSData dataWithBytes:recv_buf length:recv_len];
-
+    NSString *response = @"{\"status\":0}"; //默认返回值
+    
     id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
     if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
-        NSString *response = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
         
-        if (response) {
-            NSUInteger length = strlen(response.UTF8String);
-            char *response_msg = (char *)malloc(length + 1);
-            strncpy(response_msg, response.UTF8String, length);
-            response_msg[length] = '\0';
-            
-            return response_msg;
+        NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
+        NSData *DeviceData = [NSData dataWithBytes:recv_buf length:recv_len];
+        NSString *res = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
+        if (res) {
+            response = res;
         }
     }
-    return NULL;
+    
+    NSUInteger length = strlen(response.UTF8String);
+    char *response_msg = (char *)malloc(length + 1);
+    strncpy(response_msg, response.UTF8String, length);
+    response_msg[length] = '\0';
+    
+    return response_msg;
 }
 
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
@@ -357,7 +359,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config {
-    [self setupAVAudioSession:audio_config];
+//    [self setupAVAudioSession:audio_config];
 //    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
@@ -465,11 +467,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [systemAvCapture stopCapture];
     
     int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
-    
-    AVAudioSession *avsession = [AVAudioSession sharedInstance];
-    [avsession setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-    [avsession setActive:YES error:nil];
-    
     return (XP2PErrCode)errorcode;
 }
 

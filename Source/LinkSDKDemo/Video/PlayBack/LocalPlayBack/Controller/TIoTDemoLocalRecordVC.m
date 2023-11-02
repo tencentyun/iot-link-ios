@@ -781,7 +781,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 }
 
 //下载完成事件
-- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType {
+- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType msg:(nonnull const char *)msg{
     if (eventType == XP2PTypeDownloadEnd) {//下载完成的事件
         
         if (self.downLoading) {

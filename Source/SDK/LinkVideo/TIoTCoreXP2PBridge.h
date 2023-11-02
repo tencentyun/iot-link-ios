@@ -43,8 +43,9 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 /*
  * sdk 事件消息,事件对应类型与意义详见 XP2PType 类型说明
+ * msg 事件详情
  */
-- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType;
+- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType msg:(const char*) msg;
 @end
 
 

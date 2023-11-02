@@ -368,7 +368,7 @@ void *ijk_soundtouch_handle = NULL;
     ijk_soundtouch_handle = ijk_soundtouch_create(1.0, _pitch, tmpChannel, 16000);
 }
 
-static uint8_t trae_pcm_buffer[512];
+//static uint8_t trae_pcm_buffer[512];
 static uint8_t  trae_aac_buffer[8192];
 float indata[FRAME_LEN];
 TPCircularBuffer aac_circularBuffer;
@@ -377,12 +377,12 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    printf("pcm_size_callback: %d\n", size);
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
-    memset(trae_pcm_buffer, 0, 512);
+    /*memset(trae_pcm_buffer, 0, 512);
     UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :trae_pcm_buffer :512];
     if (len < 512) {
         return;
     }
-    /*
+    
     // check vad
     int temp;
     for(int i = 0; i< FRAME_LEN; i++) {
@@ -401,13 +401,13 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     if (!vc.isVadRecongize) {
         return;
     }
+    [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :512];
      */
     
     //pcm=>aac
-    [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :512];
     dispatch_async(vc.audioEncodeQueue, ^{
         static int tmpChannelDataLen = 2048;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
-        UInt32 aaclen = [vc.pcmRecord getData:&aac_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
+        UInt32 aaclen = [vc.pcmRecord getData:&pcm_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
         if (aaclen < tmpChannelDataLen) {
             return;
         }

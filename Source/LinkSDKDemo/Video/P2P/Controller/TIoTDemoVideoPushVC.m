@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 };
 
 
-@interface TIoTDemoVideoPushVC ()<H264EncoderDelegate,TIoTAACEncoderDelegate>
+@interface TIoTDemoVideoPushVC ()<H264EncoderDelegate,TIoTAACEncoderDelegate, TIoTCoreXP2PBridgeDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *remoteVideoView; //录像中提示view
@@ -81,6 +81,30 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     return self;
 }
 
+#pragma mark - TIoTCoreXP2PBridgeDelegate
+- (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data {
+    NSString *deviceMsg = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    NSLog(@"接收到设备主动发的消息==%@", deviceMsg);
+
+    return @"responseMES";
+}
+
+//下载完成事件
+- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType msg:(const char *)msg {
+    if (eventType == XP2PTypeClose) {
+        
+        NSString *msgDetail = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+        if ([msgDetail containsString:@"2000"]) {
+            [MBProgressHUD dismissInView:self.view];
+            [MBProgressHUD showError:@"语音对讲服务关闭"];
+        }
+        NSLog(@"msgDDD=%@",msgDetail);
+    }
+}
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -89,6 +113,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     _is_ijkPlayer_stream = YES;
     //关闭日志
+    [TIoTCoreXP2PBridge sharedInstance].delegate = self;
+
     [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
