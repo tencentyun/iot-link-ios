@@ -222,6 +222,8 @@ static void record_callback(uint8_t *buffer, int size, void *u)
     [self recoverNavigationBar];
         
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
