@@ -57,7 +57,7 @@ static VadVars *vadstate = nullptr;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
         
-        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
+//        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
         [self onInit];
     }
     return self;
@@ -405,7 +405,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
      */
     
     //pcm=>aac
-    dispatch_async(vc.audioEncodeQueue, ^{
+//    dispatch_async(vc.audioEncodeQueue, ^{
         static int tmpChannelDataLen = 2048;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
         UInt32 aaclen = [vc.pcmRecord getData:&pcm_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
         if (aaclen < tmpChannelDataLen) {
@@ -425,7 +425,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
         NSData *data = [NSData dataWithBytes:trae_aac_buffer length:tmpChannelDataLen];
 //        [_fileHandle writeData:data];
         [vc.aacEncoder encodePCMData:data];
-    });
+//    });
 }
 
 
