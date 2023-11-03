@@ -110,7 +110,7 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 - (void)start_record
 {
-    [self Init_buffer:&pcm_circularBuffer :4096];
+    [self Init_buffer:&pcm_circularBuffer :8192];
     AudioOutputUnitStart(audioUnit);
 }
 
