@@ -518,14 +518,14 @@ int encodeFlvData(int type, NSData *packetData) {
         NSLog(@"Please init flv muxer first.");
         return -1;
     }
-    
+    __block NSData *blockData = packetData;
     dispatch_async(muxerQueue, ^{
         
         CFTimeInterval timestamp = CACurrentMediaTime();
         uint32_t pts = timestamp*1000;
         
-        const void *c_data = packetData.bytes;
-        NSUInteger len = packetData.length;
+        const void *c_data = blockData.bytes;
+        NSUInteger len = blockData.length;
         //    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
         
         
