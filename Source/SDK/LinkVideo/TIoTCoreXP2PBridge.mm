@@ -211,29 +211,39 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+    NSString *fileName = @"stun.txt";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths.firstObject;
+    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+    setStunServerToXp2p(saveFilePath.UTF8String, 20002);
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, 5);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, XP2P_PROTOCOL_AUTO);
     setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
 
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
-    return [self startAppWith:pro_id dev_name:dev_name sensor_timeout:5];
+    return [self startAppWith:pro_id dev_name:dev_name type:XP2P_PROTOCOL_AUTO];
 }
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name sensor_timeout:(int)sensor_timeout{
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type{
 //    setStunServerToXp2p("11.11.11.11", 111);
+    NSString *fileName = @"stun.txt";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths.firstObject;
+    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+    setStunServerToXp2p(saveFilePath.UTF8String, 20002);
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //1.配置IOT_P2P SDK
     self.dev_name = dev_name;
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, sensor_timeout);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, type);
     return (XP2PErrCode)ret;
 }
 

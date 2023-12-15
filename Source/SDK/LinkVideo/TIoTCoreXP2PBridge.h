@@ -77,7 +77,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * sensor_timeout: 探测失败切换tcp的超时时间,最小3s，默认5s
  */
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name;
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name sensor_timeout:(int)sensor_timeout;
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type;
 
 /*
  * 此接口慎重：需注意 正式版app发布时候不需要传入secretid和secretkey，避免将这两个参数放置在app中，防止账号泄露，此处仅为演示功能

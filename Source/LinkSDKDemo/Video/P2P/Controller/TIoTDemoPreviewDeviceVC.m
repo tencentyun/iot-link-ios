@@ -1302,6 +1302,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
+        
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
 #ifdef DEBUG
         [IJKFFMoviePlayerController setLogReport:YES];
         [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
@@ -1339,6 +1342,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self.player setOptionIntValue:1 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];//iformat_name
 //        [self.player setOptionValue:@"8000" forKey:@"ar" ofCategory:kIJKFFOptionCategoryCodec];
 //        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
+//        [self.player setOptionIntValue:0 forKey:@"seek-at-start" ofCategory:kIJKFFOptionCategoryPlayer];
+//        [self.player setOptionIntValue:25 * 1024 forKey:@"max-buffer-size" ofCategory:kIJKFFOptionCategoryPlayer];
         
         [self.player setAudioSpeed:1.5f];
         [self.player setMaxPacketNum:2];
