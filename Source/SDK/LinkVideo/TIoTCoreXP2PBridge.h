@@ -74,7 +74,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 /*
  * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
- * sensor_timeout: 探测失败切换tcp的超时时间,最小3s，默认5s
+ * type: 默认auto模式，udp探测不通自动切换至tcp
  */
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name;
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type;
