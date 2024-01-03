@@ -264,10 +264,10 @@
 
 - (void)copyLink {
     
-    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
-    pastboard.string = self.webShareURLString;
+//    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+//    pastboard.string = self.webShareURLString;
     
-    [MBProgressHUD showSuccess:NSLocalizedString(@"evaluation_copyLink_success", @"已复制到剪切板")];
+    [MBProgressHUD showSuccess:NSLocalizedString(@"evaluation_copyLink_success", @"请打开注释复制链接")];
 
     [self dismissView];
     

@@ -37,7 +37,7 @@
 #import "TIoTAlertAuthorsizeView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "TIoTP2PCommunicateUIManage.h"
-#import <Bugly/Bugly.h>
+//#import <Bugly/Bugly.h>
 
 @import Lottie;
 
@@ -830,7 +830,7 @@ static CGFloat kHeaderViewHeight = 162;
             NSDictionary *data = responseObject[@"Data"];
             [[TIoTCoreUserManage shared] saveUserInfo:data];
             //上报userID
-            [Bugly setUserIdentifier:[TIoTCoreUserManage shared].userId];
+//            [Bugly setUserIdentifier:[TIoTCoreUserManage shared].userId];
         } failure:^(NSString *reason, NSError *error,NSDictionary *dic) {
             
         }];

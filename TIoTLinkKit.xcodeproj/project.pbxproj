@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3324,7 +3324,6 @@
 				D2E976AB233C4EDB00182443 /* Embed App Extensions */,
 				F4F3D55424935D75005D3396 /* Embed Frameworks */,
 				50ABE041C31296DBF30D9DC8 /* [CP] Embed Pods Frameworks */,
-				7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3556,23 +3555,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7AFFBDFC4E223BDEB0254F9F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LinkApp/Pods-LinkApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FAA5A328888AFA13C2885AD0 /* [CP] Check Pods Manifest.lock */ = {
@@ -4275,6 +4257,7 @@
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4321,11 +4304,12 @@
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WeChatSDK",
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
-				MARKETING_VERSION = 1.0.20;
+				MARKETING_VERSION = 1.2.20;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_app;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4347,6 +4331,7 @@
 				CURRENT_PROJECT_VERSION = 6.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4393,11 +4378,12 @@
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WeChatSDK",
 					"$(PROJECT_DIR)/Source/LinkApp/Classes/Universal/WechatOpenSDK_NoPay",
 				);
-				MARKETING_VERSION = 1.0.20;
+				MARKETING_VERSION = 1.2.20;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.iot.explorer.link.opensource;
 				PRODUCT_MODULE_NAME = LinkApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_app;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkApp/Supporting Files/LinkApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4417,6 +4403,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4435,6 +4422,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_demo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4453,6 +4441,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89W69LHLD3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 89W69LHLD3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4471,6 +4460,7 @@
 				PRODUCT_MODULE_NAME = LinkSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = iot_sdk_dev_test;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iot_sdk_demo;
 				SWIFT_OBJC_BRIDGING_HEADER = "Source/LinkSDKDemo/Supporting Files/LinkSDKDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

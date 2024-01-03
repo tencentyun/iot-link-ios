@@ -21,11 +21,11 @@
 #import <UserNotifications/UserNotifications.h>
 #import "TIoTScanlViewController.h"
 #import "TIoTAppUtilOC.h"
-#import <QMapKit/QMapKit.h>
-#import <QMapKit/QMSSearchKit.h>
+//#import <QMapKit/QMapKit.h>
+//#import <QMapKit/QMSSearchKit.h>
 #import "TIoTPrintLogManager.h"
 #import "TIoTCoreServices.h"
-#import <Bugly/Bugly.h>
+//#import <Bugly/Bugly.h>
 
 @implementation TIoTAppDelegate
 
@@ -36,7 +36,6 @@
     self.isDebug = true;
 #endif
     [[TIoTAppEnvironment shareEnvironment] selectEnvironmentType];
-    [[TIoTWebSocketManage shared] SRWebSocketOpen];
     
     //注册键盘全局事件
     [KeyboardManage registerIQKeyboard];
@@ -49,20 +48,20 @@
     [[WxManager sharedWxManager] registerApp]; 
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    [QMapServices sharedServices].APIKey = model.TencentMapSDKValue;
-    [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
-    
-    //Bugly 统计
-    [Bugly startWithAppId:model.BuglySDKAppId];
-    BuglyConfig *buglyConfig = [[BuglyConfig alloc]init];
-    buglyConfig.blockMonitorEnable = YES;
-    buglyConfig.blockMonitorTimeout = 2.0;
-    buglyConfig.unexpectedTerminatingDetectionEnable = YES;
-    buglyConfig.reportLogLevel = BuglyLogLevelWarn;
-    [Bugly startWithAppId:model.BuglySDKAppId config:buglyConfig];
+//    [QMapServices sharedServices].APIKey = model.TencentMapSDKValue;
+//    [QMSSearchServices sharedServices].apiKey = model.TencentMapSDKValue;
+//    
+//    //Bugly 统计
+//    [Bugly startWithAppId:model.BuglySDKAppId];
+//    BuglyConfig *buglyConfig = [[BuglyConfig alloc]init];
+//    buglyConfig.blockMonitorEnable = YES;
+//    buglyConfig.blockMonitorTimeout = 2.0;
+//    buglyConfig.unexpectedTerminatingDetectionEnable = YES;
+//    buglyConfig.reportLogLevel = BuglyLogLevelWarn;
+//    [Bugly startWithAppId:model.BuglySDKAppId config:buglyConfig];
     //上报userID
     if ([TIoTCoreUserManage shared].userId != nil) {
-        [Bugly setUserIdentifier:[TIoTCoreUserManage shared].userId];
+//        [Bugly setUserIdentifier:[TIoTCoreUserManage shared].userId];
     }
     
     //打印日志配置
@@ -86,6 +85,7 @@
 //        TIoTNavigationController *nav = [[TIoTNavigationController alloc] initWithRootViewController:[[TIoTTabBarViewController alloc] init]];
         self.window.rootViewController = [[TIoTTabBarViewController alloc] init];
 //        self.window.rootViewController = nav;
+        [[TIoTWebSocketManage shared] SRWebSocketOpen];
     }
     else{
         

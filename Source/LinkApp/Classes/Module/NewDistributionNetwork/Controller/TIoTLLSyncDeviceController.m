@@ -477,6 +477,8 @@
                 NSString *andomNumHex = [NSString getHexByDecimal:andomNum.integerValue];
                 NSString *tempTimeHex = [NSString getHexByDecimal:tempTime.integerValue];
 
+                [self nextUIStep:nil];
+                return;
                 NSString *writeInfo = [NSString stringWithFormat:@"000008%@%@",andomNumHex,tempTimeHex];
                 [self.blueManager sendNewLLSynvWithPeripheral:self.currentConnectedPerpheral Characteristic:characteristic LLDeviceInfo:writeInfo];
                 break;
@@ -579,11 +581,28 @@
             
             self.realCommandStart = YES;
             //设备信息返回了，此时需要下一步设置wifi模式
-            NSString *devicenamehex = [hexstr substringWithRange:NSMakeRange(14, hexstr.length-14)];
-            NSString *devicenamestr = [NSString stringFromHexString:devicenamehex];
-            self.currentDevicename = devicenamestr;
             
-            [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E101"];
+            NSData *data = characteristic.value;
+            Byte messageHeader[2]; //取头3个字节，第一个字节type，第二三个字节length
+            [data getBytes:messageHeader length:2];
+            int messageType = (int) (messageHeader[1]>>6); //第二个字节中的前两位00不分片 01、10、11首中尾包
+            
+            if (messageType == 0 || messageType == 1) { //不分包或者首包就正常解析devicename
+                NSData *contentData = [data subdataWithRange:NSMakeRange(7, data.length-7)];
+                NSString *aStr = [[NSString alloc] initWithData:contentData encoding:NSUTF8StringEncoding];
+                self.currentDevicename = aStr;
+            }else if (messageType == 2) { //中包或尾包 就lenght字段后直接跟内容(没有首包的llsyncversion&MTU Filed等)
+                NSData *contentData = [data subdataWithRange:NSMakeRange(3, data.length-3)];
+                NSString *aStr = [[NSString alloc] initWithData:contentData encoding:NSUTF8StringEncoding];
+                self.currentDevicename = [self.currentDevicename stringByAppendingString:aStr];
+            }else if (messageType == 3) {
+                NSData *contentData = [data subdataWithRange:NSMakeRange(3, data.length-3)];
+                NSString *aStr = [[NSString alloc] initWithData:contentData encoding:NSUTF8StringEncoding];
+                self.currentDevicename = [self.currentDevicename stringByAppendingString:aStr];
+            }
+            if (messageType == 0 || messageType == 3){
+                [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E101"];
+            }
         }else if ([cmdtype isEqualToString:@"E0"] || [cmdtype isEqualToString:@"e0"]) {
             //设备WIFI设置模式成功了，此时需要下一步设置wifi pass下发给设备
             NSString *wifiname = self.wifiInfo[@"name"];

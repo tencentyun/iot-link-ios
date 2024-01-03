@@ -5,7 +5,7 @@
 //
 
 #import "WxManager.h"
-#import "WXApi.h"
+//#import "WXApi.h"
 #import "TIoTAppEnvironment.h"
 #import "TIoTAppConfig.h"
 
@@ -13,7 +13,7 @@
 
 //////bundleId com.tencent.cloudiot   com.Tenext.TenextCloud
 
-@interface WxManager()<WXApiDelegate>
+@interface WxManager()//<WXApiDelegate>
 
 @property (nonatomic,copy)WxBlock authBlk;
 @property (nonatomic,copy)WxBlock payBlk;
@@ -35,24 +35,24 @@
 
 + (BOOL)isWXAppInstalled
 {
-    return [WXApi isWXAppInstalled];
+    return NO;//[WXApi isWXAppInstalled];
 }
 
 - (void)registerApp
 {
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
-    [WXApi registerApp:model.WXAccessAppId universalLink:@"https://iot.cloud.tencent.com/"];
+//    [WXApi registerApp:model.WXAccessAppId universalLink:@"https://iot.cloud.tencent.com/"];
 }
 
 
 - (BOOL)handleOpenURL:(NSURL *) url
 {
-    return [WXApi handleOpenURL:url delegate:self];
+    return NO;//[WXApi handleOpenURL:url delegate:self];
 }
 
 
 - (BOOL)handleOpenUniversalLink:(NSUserActivity *)userActivity {
-    return [WXApi handleOpenUniversalLink:userActivity delegate:self];
+    return NO;//[WXApi handleOpenUniversalLink:userActivity delegate:self];
 }
 
 - (void)authFromWxComplete:(WxBlock)blk
@@ -61,48 +61,48 @@
 
         self.authBlk = blk;
     }
-    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
-        SendAuthReq *req = [[SendAuthReq alloc] init];
-        req.scope = @"snsapi_userinfo";
-        req.state = @"app";
-        [WXApi sendReq:req completion:^(BOOL success) {
-            
-        }];
-    }else {
-        [MBProgressHUD showError:NSLocalizedString(@"uninstalled_LastestWeiChat", @"未安装微信或版本过低")];
-    }
+//    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
+//        SendAuthReq *req = [[SendAuthReq alloc] init];
+//        req.scope = @"snsapi_userinfo";
+//        req.state = @"app";
+//        [WXApi sendReq:req completion:^(BOOL success) {
+//            
+//        }];
+//    }else {
+//        [MBProgressHUD showError:NSLocalizedString(@"uninstalled_LastestWeiChat", @"未安装微信或版本过低")];
+//    }
 }
 
-- (void)requestWxInfoWitAuthResp:(BaseResp *)resp
-{
-    SendAuthResp *aresp = (SendAuthResp *)resp;
-    if (aresp.errCode != WXSuccess)
-    {
-        if (self.authBlk) {
-            NSError  * error   = nil;
-            error = [NSError errorWithDomain:WxManagerError code:aresp.errCode userInfo:@{NSLocalizedDescriptionKey : aresp.errStr?aresp.errStr:[self errorReason:aresp.errCode]}];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.authBlk(nil,error);
-            });
-            [MBProgressHUD showError:[self errorReason:aresp.errCode] toView:nil];
-        }
-    }else {
-        NSString * code = aresp.code;
-        if (code.length > 0) {
-            
-            if (self.authBlk) {
-                self.authBlk(code, nil);
-            }
-        }
-        else{
-            NSError  * error   = nil;
-            error = [NSError errorWithDomain:WxManagerError code:aresp.errCode userInfo:@{NSLocalizedDescriptionKey : aresp.errStr?aresp.errStr:[self errorReason:aresp.errCode]}];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.authBlk(nil,error);
-            });
-        }
-    }
-}
+//- (void)requestWxInfoWitAuthResp:(BaseResp *)resp
+//{
+//    SendAuthResp *aresp = (SendAuthResp *)resp;
+//    if (aresp.errCode != WXSuccess)
+//    {
+//        if (self.authBlk) {
+//            NSError  * error   = nil;
+//            error = [NSError errorWithDomain:WxManagerError code:aresp.errCode userInfo:@{NSLocalizedDescriptionKey : aresp.errStr?aresp.errStr:[self errorReason:aresp.errCode]}];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                self.authBlk(nil,error);
+//            });
+//            [MBProgressHUD showError:[self errorReason:aresp.errCode] toView:nil];
+//        }
+//    }else {
+//        NSString * code = aresp.code;
+//        if (code.length > 0) {
+//            
+//            if (self.authBlk) {
+//                self.authBlk(code, nil);
+//            }
+//        }
+//        else{
+//            NSError  * error   = nil;
+//            error = [NSError errorWithDomain:WxManagerError code:aresp.errCode userInfo:@{NSLocalizedDescriptionKey : aresp.errStr?aresp.errStr:[self errorReason:aresp.errCode]}];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                self.authBlk(nil,error);
+//            });
+//        }
+//    }
+//}
 
 
 - (void)shareWebPageToWXSceneTimelineWithTitle:(NSString *)title
@@ -110,23 +110,23 @@
                                     thumbImage:(UIImage*)image
                                         webUrl:(NSString *)url  // 分享到朋友圈
 {
-    WXMediaMessage * message = [WXMediaMessage message];
-    message.title = title?title:@"";
-    message.description = description?description:@"";
-    if (image) {
-        [message setThumbImage:image];
-    }
-    WXWebpageObject * webPage = [WXWebpageObject object];
-    webPage.webpageUrl = url;
-    message.mediaObject = webPage;
-    
-    SendMessageToWXReq * req = [[SendMessageToWXReq alloc]init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = WXSceneTimeline;
-    [WXApi sendReq:req completion:^(BOOL success) {
-        
-    }];
+//    WXMediaMessage * message = [WXMediaMessage message];
+//    message.title = title?title:@"";
+//    message.description = description?description:@"";
+//    if (image) {
+//        [message setThumbImage:image];
+//    }
+//    WXWebpageObject * webPage = [WXWebpageObject object];
+//    webPage.webpageUrl = url;
+//    message.mediaObject = webPage;
+//    
+//    SendMessageToWXReq * req = [[SendMessageToWXReq alloc]init];
+//    req.bText = NO;
+//    req.message = message;
+//    req.scene = WXSceneTimeline;
+//    [WXApi sendReq:req completion:^(BOOL success) {
+//        
+//    }];
 }
 
 
@@ -135,23 +135,23 @@
                                    thumbImage:(UIImage*)image
                                        webUrl:(NSString *)url   // 分享到聊天界面
 {
-    WXMediaMessage * message = [WXMediaMessage message];
-    message.title = title?title:@"";
-    message.description = description?description:@"";
-    if (image) {
-        [message setThumbImage:image];
-    }
-    WXWebpageObject * webPage = [WXWebpageObject object];
-    webPage.webpageUrl = url;
-    message.mediaObject = webPage;
-    
-    SendMessageToWXReq * req = [[SendMessageToWXReq alloc]init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = WXSceneSession;
-    [WXApi sendReq:req completion:^(BOOL success) {
-        
-    }];
+//    WXMediaMessage * message = [WXMediaMessage message];
+//    message.title = title?title:@"";
+//    message.description = description?description:@"";
+//    if (image) {
+//        [message setThumbImage:image];
+//    }
+//    WXWebpageObject * webPage = [WXWebpageObject object];
+//    webPage.webpageUrl = url;
+//    message.mediaObject = webPage;
+//    
+//    SendMessageToWXReq * req = [[SendMessageToWXReq alloc]init];
+//    req.bText = NO;
+//    req.message = message;
+//    req.scene = WXSceneSession;
+//    [WXApi sendReq:req completion:^(BOOL success) {
+//        
+//    }];
 }
 
 - (void)shareMiniProgramToWXSceneSessionWithTitle:(NSString *)title
@@ -166,56 +166,56 @@
         self.shareBlk = blk;
     }
     
-    WXMiniProgramObject *object = [WXMiniProgramObject object];
-    if (webPageUrl.length == 0) {
-        object.webpageUrl = @"";
-    }
-    else{
-        object.webpageUrl = webPageUrl;
-    }
-    
-    if (path.length == 0) {
-        object.path = @"/pages/index/index";
-    }
-    else{
-        object.path = path;
-    }
-    
-    if (userName.length == 0) {
-//        object.userName = [WCAppEnvironment shareEnvironment].microProgramId;
-    }
-    else{
-        object.userName = userName;
-    }
-
-//    object.miniProgramType = [TIoTAppEnvironment shareEnvironment].wxShareType;;
-    
-    if (image == nil) {
-
-    }
-    else{
-        object.hdImageData = [self compressQualityWithLengthLimit:120*1024 image:image];
-        [self shareMiniProgramToWXSceneSessionWithTitle:title description:description miniProgramObject:object];
-    }
+//    WXMiniProgramObject *object = [WXMiniProgramObject object];
+//    if (webPageUrl.length == 0) {
+//        object.webpageUrl = @"";
+//    }
+//    else{
+//        object.webpageUrl = webPageUrl;
+//    }
+//    
+//    if (path.length == 0) {
+//        object.path = @"/pages/index/index";
+//    }
+//    else{
+//        object.path = path;
+//    }
+//    
+//    if (userName.length == 0) {
+////        object.userName = [WCAppEnvironment shareEnvironment].microProgramId;
+//    }
+//    else{
+//        object.userName = userName;
+//    }
+//
+////    object.miniProgramType = [TIoTAppEnvironment shareEnvironment].wxShareType;;
+//    
+//    if (image == nil) {
+//
+//    }
+//    else{
+//        object.hdImageData = [self compressQualityWithLengthLimit:120*1024 image:image];
+//        [self shareMiniProgramToWXSceneSessionWithTitle:title description:description miniProgramObject:object];
+//    }
     
 }
 
-- (void)shareMiniProgramToWXSceneSessionWithTitle:(NSString *)title description:(NSString *)description miniProgramObject:(WXMiniProgramObject *)object{
-    WXMediaMessage *message = [WXMediaMessage message];
-    message.title = title;
-    message.description = description;
-    message.thumbData = nil;  //兼容旧版本节点的图片，小于32KB，新版本优先
-    //使用WXMiniProgramObject的hdImageData属性
-    message.mediaObject = object;
-    
-    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = WXSceneSession;  //目前只支持会话
-    [WXApi sendReq:req completion:^(BOOL success) {
-        
-    }];
-}
+//- (void)shareMiniProgramToWXSceneSessionWithTitle:(NSString *)title description:(NSString *)description miniProgramObject:(WXMiniProgramObject *)object{
+//    WXMediaMessage *message = [WXMediaMessage message];
+//    message.title = title;
+//    message.description = description;
+//    message.thumbData = nil;  //兼容旧版本节点的图片，小于32KB，新版本优先
+//    //使用WXMiniProgramObject的hdImageData属性
+//    message.mediaObject = object;
+//    
+//    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+//    req.bText = NO;
+//    req.message = message;
+//    req.scene = WXSceneSession;  //目前只支持会话
+//    [WXApi sendReq:req completion:^(BOOL success) {
+//        
+//    }];
+//}
 
 - (NSData *)compressQualityWithLengthLimit:(NSInteger)maxLength image:(UIImage *)image{
     NSData *tmpdata = UIImageJPEGRepresentation(image, 1);
@@ -241,69 +241,69 @@
 }
 
 #pragma mark Delegate
--(void) onReq:(BaseReq*)req
-{
-    DDLogDebug(@"发送");
-}
+//-(void) onReq:(BaseReq*)req
+//{
+//    DDLogDebug(@"发送");
+//}
 
--(void) onResp:(BaseResp*)resp
-{
-    // 授权
-    if ([resp isKindOfClass:[SendAuthResp class]]) //判断是否为授权请求，否则与微信支付等功能发生冲突
-    {
-        [self requestWxInfoWitAuthResp:resp];
-    }
-    
-    // 分享
-    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {  // 分享
-        SendMessageToWXResp*response=(SendMessageToWXResp*)resp;
-        if (response.errCode == WXSuccess) {
-            [MBProgressHUD showSuccess:NSLocalizedString(@"share_success", @"分享成功")];
-            if (self.shareBlk) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.shareBlk(nil,nil);
-                });
-            }
-        }else {
-            NSError  * error   = nil;
-            int errCode = response.errCode;
-            NSString * errStr = [self errorReason:errCode];
-            error = [NSError errorWithDomain:WxManagerError code:errCode userInfo:@{NSLocalizedDescriptionKey : errStr}];
-            [MBProgressHUD showError:errStr];
-            if (self.shareBlk) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.payBlk(nil,error);
-                });
-            }
-        }
-    }
-}
+//-(void) onResp:(BaseResp*)resp
+//{
+//    // 授权
+//    if ([resp isKindOfClass:[SendAuthResp class]]) //判断是否为授权请求，否则与微信支付等功能发生冲突
+//    {
+//        [self requestWxInfoWitAuthResp:resp];
+//    }
+//    
+//    // 分享
+//    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {  // 分享
+//        SendMessageToWXResp*response=(SendMessageToWXResp*)resp;
+//        if (response.errCode == WXSuccess) {
+//            [MBProgressHUD showSuccess:NSLocalizedString(@"share_success", @"分享成功")];
+//            if (self.shareBlk) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    self.shareBlk(nil,nil);
+//                });
+//            }
+//        }else {
+//            NSError  * error   = nil;
+//            int errCode = response.errCode;
+//            NSString * errStr = [self errorReason:errCode];
+//            error = [NSError errorWithDomain:WxManagerError code:errCode userInfo:@{NSLocalizedDescriptionKey : errStr}];
+//            [MBProgressHUD showError:errStr];
+//            if (self.shareBlk) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    self.payBlk(nil,error);
+//                });
+//            }
+//        }
+//    }
+//}
 
 
 - (NSString *)errorReason:(int)code
 {
-    int errCode = code;
+//    int errCode = code;
     NSString * errStr = @"";
-    switch (errCode) {
-        case WXErrCodeCommon:
-            errStr = NSLocalizedString(@"generalType_error", @"普通错误类型");
-            break;
-        case WXErrCodeUserCancel:
-            errStr = NSLocalizedString(@"cancel_Weichat_action", @"取消微信操作");
-            break;
-        case WXErrCodeSentFail:
-            errStr = NSLocalizedString(@"sendFailure", @"发送失败");
-            break;
-        case WXErrCodeAuthDeny:
-            errStr = NSLocalizedString(@"auth_failed", @"授权失败");
-            break;
-        case WXErrCodeUnsupport:
-            errStr = NSLocalizedString(@"Weichat_nonsupport", @"微信不支持");
-            break;
-        default:
+//    switch (errCode) {
+//        case WXErrCodeCommon:
+//            errStr = NSLocalizedString(@"generalType_error", @"普通错误类型");
+//            break;
+//        case WXErrCodeUserCancel:
+//            errStr = NSLocalizedString(@"cancel_Weichat_action", @"取消微信操作");
+//            break;
+//        case WXErrCodeSentFail:
+//            errStr = NSLocalizedString(@"sendFailure", @"发送失败");
+//            break;
+//        case WXErrCodeAuthDeny:
+//            errStr = NSLocalizedString(@"auth_failed", @"授权失败");
+//            break;
+//        case WXErrCodeUnsupport:
+//            errStr = NSLocalizedString(@"Weichat_nonsupport", @"微信不支持");
+//            break;
+//        default:
             errStr = NSLocalizedString(@"unknown_error", @"未知错误");
-            break;
-    }
+//            break;
+//    }
     return errStr;
 }
 

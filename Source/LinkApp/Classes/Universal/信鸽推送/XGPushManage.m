@@ -6,8 +6,8 @@
 
 #import "XGPushManage.h"
 #import <UserNotifications/UserNotifications.h>
-#import "XGPush.h"
-#import "XGPushPrivate.h"  /// 如果是海外集群需要导入此头文件
+//#import "XGPush.h"
+//#import "XGPushPrivate.h"  /// 如果是海外集群需要导入此头文件
 #import "TIoTRouter.h"
 #import "TIoTFeedBackViewController.h"
 #import "TIoTAppConfig.h"
@@ -15,7 +15,7 @@
 #import "TIoTTRTCUIManage.h"
 #import "TIoTP2PCommunicateUIManage.h"
 
-@interface XGPushManage ()<XGPushDelegate,UNUserNotificationCenterDelegate>
+@interface XGPushManage ()//<XGPushDelegate,UNUserNotificationCenterDelegate>
 
 @property (nonatomic, copy) NSString *deviceToken;
 
@@ -34,29 +34,29 @@
 
 - (void)startPushService{
     
-#ifdef DEBUG
-    [XGPush.defaultManager setEnableDebug:YES];
-#endif
-    [XGPush.defaultManager stopXGNotification];
+//#ifdef DEBUG
+//    [XGPush.defaultManager setEnableDebug:YES];
+//#endif
+//    [XGPush.defaultManager stopXGNotification];
     
     TIoTAppConfigModel *model = [TIoTAppConfig loadLocalConfigList];
     NSString *regionID = [TIoTCoreUserManage shared].userRegionId;
     if ([regionID isEqualToString:@"1"]) {
-        [XGPush.defaultManager startXGWithAccessID:model.XgAccessId.intValue accessKey:model.XgAccessKey delegate:self];
+//        [XGPush.defaultManager startXGWithAccessID:model.XgAccessId.intValue accessKey:model.XgAccessKey delegate:self];
     }else {
         
-        [XGPush.defaultManager configureClusterDomainName:@"tpns.hk.tencent.com"];
-        [XGPush.defaultManager startXGWithAccessID:model.XgUSAAccessId.intValue accessKey:model.XgUSAAccessKey delegate:self];
+//        [XGPush.defaultManager configureClusterDomainName:@"tpns.hk.tencent.com"];
+//        [XGPush.defaultManager startXGWithAccessID:model.XgUSAAccessId.intValue accessKey:model.XgUSAAccessKey delegate:self];
     }
     
-    if (XGPush.defaultManager.xgApplicationBadgeNumber > 0) {
-        [XGPush.defaultManager setXgApplicationBadgeNumber:0];
-    }
+//    if (XGPush.defaultManager.xgApplicationBadgeNumber > 0) {
+//        [XGPush.defaultManager setXgApplicationBadgeNumber:0];
+//    }
     
 }
 
 - (void)stopPushService{
-    [XGPush.defaultManager stopXGNotification];
+//    [XGPush.defaultManager stopXGNotification];
     
     [[TIoTRequestObject shared] post:@"AppUnBindXgToken" Param:@{@"Token":self.deviceToken?:@"",@"Platform":@"ios",@"Agent":@"ios"} success:^(id responseObject) {
         

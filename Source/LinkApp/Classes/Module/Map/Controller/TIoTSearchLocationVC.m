@@ -12,7 +12,7 @@
 #import "TIoTMapLocationModel.h"
 #import "TIoTAddressParseModel.h"
 #import <MJRefresh.h>
-#import <QMapKit/QMapKit.h>
+//#import <QMapKit/QMapKit.h>
 #import "UIButton+LQRelayout.h"
 
 static CGFloat kSearchViewHeight = 64;   //searchView 高度
@@ -35,7 +35,7 @@ static CGFloat kSearchViewHeight = 64;   //searchView 高度
 @property (nonatomic, strong) NSString *inputAddress;
 @property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, assign) NSInteger pageNumber;
-@property (nonatomic, assign) CLLocationCoordinate2D addressLocation;
+//@property (nonatomic, assign) CLLocationCoordinate2D addressLocation;
 @end
 
 @implementation TIoTSearchLocationVC

@@ -25,13 +25,13 @@ target 'LinkApp' do
   pod 'TZImagePickerController', '3.2.1'
   pod 'TrueTime','5.0.3'
   pod 'KeychainAccess', '4.2.0'
-  pod 'Tencent-MapSDK', '4.3.9'
+#  pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
   pod 'CocoaAsyncSocket', '7.6.5'
-  pod 'TIoTLinkKit_TPNS', '1.0.1'
-  pod 'TIoTLinkKit_WechatOpenSDK', '1.0.1'
+#  pod 'TIoTLinkKit_TPNS', '1.0.1'
+#  pod 'TIoTLinkKit_WechatOpenSDK', '1.0.1'
   pod 'TIoTLinkKit_IJKPlayer', '2.0.8-beta.202212290234' #~> 2.0.7-beta.202208251730   https://github.com/tencentyun/iot-thirdparty-ios/tree/ijkplayer-v2.0.8-beta.202212280818
-  pod 'Bugly', '2.5.91'
+#  pod 'Bugly', '2.5.91'
 end
 
 

@@ -6,7 +6,8 @@
 
 #import <Foundation/Foundation.h>
 #import "TRTCCallingModel.h"
-#import "TRTCCloud.h"
+#import <TXLiteAVSDK_TRTC/TRTCCloud.h>
+//#import "TRTCCloud.h"
 #import "TRTCCallingDelegate.h"
 
 

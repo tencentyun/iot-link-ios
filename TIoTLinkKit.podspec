@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   #实时音视频，引入则开启
   s.subspec 'LinkRTC' do |ss|
     ss.source_files  = 'Source/SDK/LinkRTC/**/*.{h,m,c}'
-    ss.dependency 'TXLiteAVSDK_TRTC', '8.0.9644'
+    ss.dependency 'TXLiteAVSDK_TRTC', '11.5.14702' #'8.0.9644'
     ss.dependency 'YYModel', '1.0.4'
     ss.dependency 'TIoTLinkKit/LinkCore'
     ss.pod_target_xcconfig = {

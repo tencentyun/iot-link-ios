@@ -5,7 +5,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface TIoTBaseMapViewController ()<CLLocationManagerDelegate>
-@property (nonatomic, strong, readwrite) QMapView *mapView;
+//@property (nonatomic, strong, readwrite) QMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @end
 
@@ -38,24 +38,24 @@
 
 - (void)setupMapView
 {
-    self.mapView = [[QMapView alloc]
-                    initWithFrame: CGRectMake(0,
-                                              0,
-                                              CGRectGetWidth(self.view.frame),
-                                              CGRectGetHeight(self.view.frame) - CGRectGetMaxY(self.navigationController.navigationBar.frame))];
-    self.mapView.delegate = self;
-    
-    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(39.901268, 116.403854);
-    self.mapView.zoomLevel        = 11;
-    
-    // 开启定位
-    [self.mapView setShowsUserLocation:YES];
-    self.mapView.userTrackingMode = QUserTrackingModeFollow;
+//    self.mapView = [[QMapView alloc]
+//                    initWithFrame: CGRectMake(0,
+//                                              0,
+//                                              CGRectGetWidth(self.view.frame),
+//                                              CGRectGetHeight(self.view.frame) - CGRectGetMaxY(self.navigationController.navigationBar.frame))];
+//    self.mapView.delegate = self;
+//    
+//    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(39.901268, 116.403854);
+//    self.mapView.zoomLevel        = 11;
+//    
+//    // 开启定位
+//    [self.mapView setShowsUserLocation:YES];
+//    self.mapView.userTrackingMode = QUserTrackingModeFollow;
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            self.mapView.centerCoordinate = self.mapView.userLocation.location.coordinate;
 //    });
     
-    [self.view addSubview:self.mapView];
+//    [self.view addSubview:self.mapView];
 }
 
 #pragma mark - Life Cycle
@@ -74,11 +74,11 @@
     if (@available(iOS 12.0, *)) {
         if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
         {
-            self.mapView.mapType = QMapTypeDark;
+//            self.mapView.mapType = QMapTypeDark;
         }
         else
         {
-            self.mapView.mapType = QMapTypeStandard;
+//            self.mapView.mapType = QMapTypeStandard;
         }
     } else {
         // Fallback on earlier versions
@@ -97,11 +97,11 @@
     if (@available(iOS 12.0, *)) {
         if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
         {
-            self.mapView.mapType = QMapTypeDark;
+//            self.mapView.mapType = QMapTypeDark;
         }
         else
         {
-            self.mapView.mapType = QMapTypeStandard;
+//            self.mapView.mapType = QMapTypeStandard;
         }
     } else {
         // Fallback on earlier versions

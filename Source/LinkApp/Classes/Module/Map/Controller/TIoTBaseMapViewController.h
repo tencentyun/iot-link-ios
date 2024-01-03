@@ -3,8 +3,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <QMapKit/QMapKit.h>
-#import <QMapKit/QMSSearchKit.h>
+//#import <QMapKit/QMapKit.h>
+//#import <QMapKit/QMSSearchKit.h>
 
 @protocol TIoTBaseMapViewControllerDelegate <NSObject>
 
@@ -15,9 +15,9 @@
 - (void)enterforegoundAuthorized;
 @end
 
-@interface TIoTBaseMapViewController : UIViewController <QMapViewDelegate>
+@interface TIoTBaseMapViewController : UIViewController //<QMapViewDelegate>
 
-@property (nonatomic, strong, readonly) QMapView *mapView;
+//@property (nonatomic, strong, readonly) QMapView *mapView;
 
 @property (nonatomic, weak) id<TIoTBaseMapViewControllerDelegate>delegate;
 

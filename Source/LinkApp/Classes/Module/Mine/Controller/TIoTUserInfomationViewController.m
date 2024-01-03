@@ -72,8 +72,8 @@ static CGFloat const kRightPadding = 16; //右边距
 }
 
 - (void)tapGesture:(UITapGestureRecognizer *)gesture {
-    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
-    pastboard.string = TIoTAPPConfig.GlobalDebugUin;
+//    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+//    pastboard.string = TIoTAPPConfig.GlobalDebugUin;
 }
 
 - (void)printLogAlert:(UITapGestureRecognizer *)tapGesture{
@@ -680,18 +680,18 @@ static CGFloat const kRightPadding = 16; //右边距
 /// 点击菜单中选项会调用
 - (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     if (action == @selector(copy:)) {
-        UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+//        UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
         NSString *userID = [TIoTCoreUserManage shared].userId;
-        pastboard.string = (userID != nil ? userID : @"");
+//        pastboard.string = (userID != nil ? userID : @"");
         [MBProgressHUD showSuccess:NSLocalizedString(@"content_copy_success", @"内容已复制")];
     }
 }
 
 #pragma mark - cell delegate
 - (void)clickCopyUserid {
-    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
+//    UIPasteboard *pastboard = [UIPasteboard generalPasteboard];
     NSString *userID = [TIoTCoreUserManage shared].userId;
-    pastboard.string = (userID != nil ? userID : @"");
+//    pastboard.string = (userID != nil ? userID : @"");
     [MBProgressHUD showSuccess:NSLocalizedString(@"content_copy_success", @"内容已复制")];
 }
 

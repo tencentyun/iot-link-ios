@@ -5,11 +5,12 @@
 //
 
 #import "TIoTMapVC.h"
-#import <QMapKit/QMSSearchOption.h>
-#import <QMapKit/QMSSearcher.h>
-#import <QMapKit/QMSSearchServices.h>
+//#import <QMapKit/QMapKit.h>
+//#import <QMapKit/QMSSearchOption.h>
+//#import <QMapKit/QMSSearcher.h>
+//#import <QMapKit/QMSSearchServices.h>
+#import <CoreLocation/CoreLocation.h>
 #import "TIoTChooseLocationCell.h"
-#import <QMapKit/QMapKit.h>
 #import "TIoTMapLocationModel.h"
 #import <MJRefresh.h>
 #import "TIoTIntelligentBottomActionView.h"
@@ -29,15 +30,15 @@ static CGFloat const kLocationBtnWidthOrHeight = 60;  //定位按钮宽、高
 static CGFloat const kIntervalHeight = 25;  //定位按钮距离tableview 距离
 static CGFloat const kRightPadding = 0; //定位按钮右边距
 
-@interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,QMSSearchDelegate,TIoTBaseMapViewControllerDelegate>
+@interface TIoTMapVC ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UISearchBarDelegate,/*QMSSearchDelegate,*/TIoTBaseMapViewControllerDelegate>
 @property (nonatomic, strong) TIoTIntelligentBottomActionView *bottomActionView;
 @property (nonatomic, assign) BOOL isLoaded;
 @property (nonatomic, assign) BOOL isFirstLocatePin;   //首次进入定位大头针判断
-@property (nonatomic, strong) QMSSearcher *mapSearcher;
-
-@property (nonatomic, strong) QPointAnnotation *annotation;
-@property (nonatomic, strong) QPinAnnotationView *pinView;
-@property (nonatomic, assign) CLLocationCoordinate2D lastLocation;
+//@property (nonatomic, strong) QMSSearcher *mapSearcher;
+//
+//@property (nonatomic, strong) QPointAnnotation *annotation;
+//@property (nonatomic, strong) QPinAnnotationView *pinView;
+//@property (nonatomic, assign) CLLocationCoordinate2D lastLocation;
 @property (nonatomic, strong) UIView *searchView;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UILabel *searchTipLabel;
@@ -62,20 +63,20 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.mapView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kMapVisualMaxHeight);
+//    self.mapView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kMapVisualMaxHeight);
     
     [self resetRequestPragma];
     
-    self.mapView.zoomLevel = 15.0;
+//    self.mapView.zoomLevel = 15.0;
     [self setupPointAnnotation];
     [self setupKeyboardNotification];
     [self setupBottomView];
     
     [self setupRefreshView];
     
-    self.mapView.delegate = self;
-    [self.mapView setUserLocationHidden:NO];
-    [self.mapView setShowsUserLocation:YES];
+//    self.mapView.delegate = self;
+//    [self.mapView setUserLocationHidden:NO];
+//    [self.mapView setShowsUserLocation:YES];
     
     self.isSearchLocationVCBack = NO;
     self.searchLocationModel = nil;
@@ -112,10 +113,10 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 }
 - (void)setupMapCenter {
     
-    [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate];
+//    [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate];
     [self.searchResultArray removeAllObjects];
     [self resetRequestPragma];
-    [self requestLocationList:self.mapView.userLocation.location.coordinate];
+//    [self requestLocationList:self.mapView.userLocation.location.coordinate];
 }
 
 #pragma mark - overide
@@ -130,8 +131,8 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 #pragma mark - Custom method
 
 - (void)setupPointAnnotation {
-    _annotation = [[QPointAnnotation alloc] init];
-    [self.mapView addAnnotation:_annotation];
+//    _annotation = [[QPointAnnotation alloc] init];
+//    [self.mapView addAnnotation:_annotation];
     
 }
 
@@ -145,7 +146,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         CLLocationCoordinate2D addressLocation = CLLocationCoordinate2DMake(lat,lng);
         
         //定位大头针
-        [self.mapView setCenterCoordinate:addressLocation];
+//        [self.mapView setCenterCoordinate:addressLocation];
         
         //刷新地点列表
         [self resetRequestPragma];
@@ -162,7 +163,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
             CLLocationCoordinate2D addressLocation = CLLocationCoordinate2DMake(addressModel.location.lat,addressModel.location.lng);
             
             //定位大头针
-            [self.mapView setCenterCoordinate:addressLocation];
+//            [self.mapView setCenterCoordinate:addressLocation];
             
             //刷新地点列表
             [self resetRequestPragma];
@@ -182,12 +183,12 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     self.locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.locationBtn setImage:[UIImage imageNamed:@"location_choose"] forState:UIControlStateNormal];
     [self.locationBtn addTarget:self action:@selector(setupMapCenter) forControlEvents:UIControlEventTouchUpInside];
-    [self.mapView addSubview:self.locationBtn];
-    [self.locationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
-        make.right.equalTo(self.view.mas_right).offset(-kRightPadding);
-        make.bottom.equalTo(self.mapView.mas_bottom).offset(-kIntervalHeight);
-    }];
+//    [self.mapView addSubview:self.locationBtn];
+//    [self.locationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.height.width.mas_equalTo(kLocationBtnWidthOrHeight);
+//        make.right.equalTo(self.view.mas_right).offset(-kRightPadding);
+//        make.bottom.equalTo(self.mapView.mas_bottom).offset(-kIntervalHeight);
+//    }];
     
     
     //
@@ -218,11 +219,11 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     CGFloat kWidthPadding = 16;
     //searchview
     [self.view addSubview:self.searchView];
-    [self.searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.mapView);
-        make.height.mas_equalTo(kSearchViewHeight);
-        make.top.equalTo(self.mapView.mas_bottom).offset(-kSearchTopMap);
-    }];
+//    [self.searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.mapView);
+//        make.height.mas_equalTo(kSearchViewHeight);
+//        make.top.equalTo(self.mapView.mas_bottom).offset(-kSearchTopMap);
+//    }];
     
     UIButton *searchLocationBtn = [[UIButton alloc]init];
     searchLocationBtn.backgroundColor = [UIColor colorWithHexString:@"#eeeeeF"];//F3F3F5
@@ -291,7 +292,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
 
 - (void)loadMoreData {
     
-    [self requestLocationList:_annotation.coordinate];
+//    [self requestLocationList:_annotation.coordinate];
 }
 
 - (void)searchLocaion {
@@ -300,18 +301,18 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     TIoTSearchLocationVC *searchVC = [[TIoTSearchLocationVC alloc]init];
     searchVC.chooseLocBlcok = ^(TIoTPoisModel * _Nonnull posiModel) {
         CLLocationCoordinate2D chooseLocation =  CLLocationCoordinate2DMake(posiModel.location.lat,posiModel.location.lng);
-        weakSelf.annotation.coordinate = chooseLocation;
-        [weakSelf.mapView setCenterCoordinate:chooseLocation];
+//        weakSelf.annotation.coordinate = chooseLocation;
+//        [weakSelf.mapView setCenterCoordinate:chooseLocation];
         
         weakSelf.isSearchLocationVCBack = YES;
         weakSelf.searchLocationModel = posiModel;
         
         [weakSelf resetRequestPragma];
-        [weakSelf requestLocationList:weakSelf.mapView.centerCoordinate];
+//        [weakSelf requestLocationList:weakSelf.mapView.centerCoordinate];
     };
     [self.navigationController pushViewController:searchVC animated:YES];
 }
-
+/*
 #pragma mark - QMapViewDelegate
 
 - (void)mapView:(QMapView *)mapView didUpdateUserLocation:(QUserLocation *)userLocation fromHeading:(BOOL)fromHeading {
@@ -398,7 +399,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     }
     _annotation.coordinate = mapView.centerCoordinate;
 }
-
+ */
 #pragma mark - network request
 - (void)requestLocationList:(CLLocationCoordinate2D )location {
     
@@ -555,7 +556,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     TIoTPoisModel *cellModel = _searchResultArray[indexPath.row];
     
     // 更新位置
-    [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(cellModel.location.lat, cellModel.location.lng) animated:YES];
+//    [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(cellModel.location.lat, cellModel.location.lng) animated:YES];
 
     [self.searchResultTableView reloadData];
 }
@@ -571,21 +572,21 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     CGFloat kOrigionY = - (kSearchViewHeight + KScrolledHeight);
     
     if (scrollOffSetY <= -kTableViewHeadrHeight) {
-        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY);
-
-        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight);
+//        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY);
+//
+//        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight);
         
     }else if (scrollOffSetY >-kTableViewHeadrHeight && scrollOffSetY < kOrigionY) {
 
 //        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY - (kTableViewHeadrHeight+scrollOffSetY));
         
-        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+scrollOffSetY));
+//        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+scrollOffSetY));
         
     }else if (scrollOffSetY >= kOrigionY) {
 
 //        self.mapView.center = CGPointMake(kScreenWidth/2, kHeaderViewOrigionY - (kTableViewHeadrHeight+kOrigionY));
         
-        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+kOrigionY));
+//        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, kTableViewHeadrHeight - (kTableViewHeadrHeight+kOrigionY));
     }
     
 }
@@ -618,7 +619,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
         weakSelf.searchResultTableView.frame = CGRectMake(0, weakSelf.searchBar.frame.size.height, [UIScreen mainScreen].bounds.size.width, weakSelf.searchView.frame.size.height - weakSelf.searchBar.frame.size.height);
     }];
 }
-
+/*
 #pragma mark - QMSSearchDelegate
 - (void)searchWithReverseGeoCodeSearchOption:(QMSReverseGeoCodeSearchOption *)reverseGeoCodeSearchOption didReceiveResult:(QMSReverseGeoCodeSearchResult *)reverseGeoCodeSearchResult {
 }
@@ -638,7 +639,7 @@ static CGFloat const kRightPadding = 0; //定位按钮右边距
     
     return _mapSearcher;
 }
-
+*/
 - (NSMutableArray *)searchResultArray {
     if (!_searchResultArray) {
         _searchResultArray = [[NSMutableArray alloc]init];
