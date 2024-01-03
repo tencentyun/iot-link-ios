@@ -9,7 +9,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.tencent.iot.explorer.link.sdkdemo</key>
-		<string>iot_sdk_dev_test</string>
+		<string>iot_sdk_demo</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Development: Chao Ren (45U44KXTL9)</string>
