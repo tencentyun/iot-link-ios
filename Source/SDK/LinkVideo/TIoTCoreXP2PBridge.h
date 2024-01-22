@@ -177,6 +177,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 需注意该接口在sendVoiceToServer之后再调用发送
  */
 - (void)SendExternalAudioPacket:(NSData *)audioPacket;
+
+- (void)setRemoteAudioFrame:(void *)pcmdata len:(int)pcmlen;
 @end
 
 NS_ASSUME_NONNULL_END

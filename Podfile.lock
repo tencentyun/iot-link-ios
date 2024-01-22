@@ -30,6 +30,7 @@ PODS:
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel (= 1.0.4)
   - TIoTLinkKit_FLV (2.2.3)
+  - TIoTLinkKit_GVoiceSE (1.0.0)
   - TIoTLinkKit_IJKPlayer (2.0.8-beta.202211101252)
   - TIoTLinkKit_SoundTouch (1.0.0)
   - TIoTLinkKit_TPNS (1.0.1)
@@ -38,6 +39,7 @@ PODS:
   - TIoTLinkVideo (1.0.0):
     - CocoaAsyncSocket (= 7.6.5)
     - TIoTLinkKit_FLV (= 2.2.3)
+    - TIoTLinkKit_GVoiceSE (= 1.0.0)
     - TIoTLinkKit_SoundTouch (= 1.0.0)
     - TIoTLinkKit_XP2P (= 2.4.45)
     - TPCircularBuffer (= 1.6.1)
@@ -90,6 +92,7 @@ SPEC REPOS:
     - SocketRocket
     - Tencent-MapSDK
     - TIoTLinkKit_FLV
+    - TIoTLinkKit_GVoiceSE
     - TIoTLinkKit_IJKPlayer
     - TIoTLinkKit_SoundTouch
     - TIoTLinkKit_TPNS
@@ -125,12 +128,13 @@ SPEC CHECKSUMS:
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 0386fb583c61765a02ad5cca810c7661d5a0bc53
   TIoTLinkKit_FLV: aec2b2ec9664990ec6c5b9f760fc1a9043d5a9a5
+  TIoTLinkKit_GVoiceSE: 32bac0a7adb24c52f8218a36424f72164bc54c29
   TIoTLinkKit_IJKPlayer: bb729eab4aa73b2a9ea9ecd87eee3a961afe47c4
   TIoTLinkKit_SoundTouch: cf79ae182b6c2349ff65bac7a338974bc538fa77
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
   TIoTLinkKit_XP2P: d9e422a3dbb19485e68206442e49f0e2c2fdb09d
-  TIoTLinkVideo: 837f603519ce9787a6775cbec9645aa443760343
+  TIoTLinkVideo: 43e3cf8853dc0399e1fcfca8678400ae7d2934aa
   TPCircularBuffer: c13243556527551c4d320709c7b14a6d20cdc30a
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d

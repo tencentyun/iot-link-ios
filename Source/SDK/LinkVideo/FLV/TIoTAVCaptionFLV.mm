@@ -14,6 +14,7 @@
 #include "wb_vad.h"
 #import "TIoTPCMXEchoRecord.h"
 #import <SoundTouchiOS/ijksoundtouch_wrap.h>
+#import <GVoiceSEiOS/GVoiceSE.h>
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
@@ -57,7 +58,7 @@ static VadVars *vadstate = nullptr;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
         
-//        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
+        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
         [self onInit];
     }
     return self;
@@ -368,64 +369,67 @@ void *ijk_soundtouch_handle = NULL;
     ijk_soundtouch_handle = ijk_soundtouch_create(1.0, _pitch, tmpChannel, 16000);
 }
 
-//static uint8_t trae_pcm_buffer[512];
-static uint8_t  trae_aac_buffer[8192];
+- (void)setRemoteAudioFrame:(void *)pcmdata len:(int)pcmlen {
+    [self.pcmRecord addData:&circularBuf_gvoice_pcm :pcmdata :pcmlen];
+}
+
+static uint8_t pcm_buffer_origin[640];
+static uint8_t pcm_buffer_gvoice[640];
+static uint8_t pcm_buffer_result[8192];
 float indata[FRAME_LEN];
-TPCircularBuffer aac_circularBuffer;
+TPCircularBuffer circularBuf_gvoice_pcm;
+TPCircularBuffer circularBuf_result_pcm;
 
 static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    printf("pcm_size_callback: %d\n", size);
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
-    /*memset(trae_pcm_buffer, 0, 512);
-    UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :trae_pcm_buffer :512];
-    if (len < 512) {
-        return;
-    }
+    dispatch_async(vc.audioEncodeQueue, ^{
+        
+        //1. get origin pcm
+        memset(pcm_buffer_origin, 0, 640);
+        UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :pcm_buffer_origin :640];
+        if (len < 640) {
+            return;
+        }
+        
+        //2. =>aec pcm
+        memset(pcm_buffer_gvoice, 0, 640);
+        [vc.pcmRecord getData:&circularBuf_gvoice_pcm :pcm_buffer_gvoice :640];
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            
+            NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"dse_v1_239-119-oneref-e.nn" ofType:nil];
+            const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
+            printf("%s\n", model_file);
+            [GVoiceSE voice_handle_open:model_file];
+        });
+        [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice];
     
-    // check vad
-    int temp;
-    for(int i = 0; i< FRAME_LEN; i++) {
-        indata[i]=0;
-        temp = 0;
-        memcpy(&temp, trae_pcm_buffer + 2 * i, 2);
-        indata[i]=(short)temp;
-        if (indata[i] > 65535/2)
-            indata[i] = indata[i]-65536;
-    }
-    Word16 vad = wb_vad(vadstate, indata);
-//    printf("vadvadvadvadvadvad: %d\n",vad);
-    if(vad == 1) {
-        vc.isVadRecongize = YES;
-    }
-    if (!vc.isVadRecongize) {
-        return;
-    }
-    [vc.pcmRecord addData:&aac_circularBuffer :trae_pcm_buffer :512];
-     */
+        //3. pcm=>aac
+        [vc.pcmRecord addData:&circularBuf_result_pcm :pcm_buffer_origin :640];
     
-    //pcm=>aac
-//    dispatch_async(vc.audioEncodeQueue, ^{
         static int tmpChannelDataLen = 2048;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
-        UInt32 aaclen = [vc.pcmRecord getData:&pcm_circularBuffer :trae_aac_buffer :tmpChannelDataLen];
+        UInt32 aaclen = [vc.pcmRecord getData:&circularBuf_result_pcm :pcm_buffer_result :tmpChannelDataLen];
         if (aaclen < tmpChannelDataLen) {
             return;
         }
-
+        
         // Sets pitch change in semi-tones compared to the original pitch
         // (-12 .. +12)
         if (vc.pitch != 0) {
             static int tmpChannel = vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame;
-            int ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)trae_aac_buffer, 1024, 2, tmpChannel);
+            int ret_len = ijk_soundtouch_translate(ijk_soundtouch_handle, (short *)pcm_buffer_result, 1024, 2, tmpChannel);
             if (ret_len<1) {
                 return;
             }
         }
         
-        NSData *data = [NSData dataWithBytes:trae_aac_buffer length:tmpChannelDataLen];
+        NSData *data = [NSData dataWithBytes:pcm_buffer_result length:tmpChannelDataLen];
 //        [_fileHandle writeData:data];
         [vc.aacEncoder encodePCMData:data];
-//    });
+    });
 }
 
 
@@ -567,7 +571,8 @@ int encodeFlvData(int type, NSData *packetData) {
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
     
     self.isVadRecongize = NO;
-    [self.pcmRecord Init_buffer:&aac_circularBuffer :8192];
+    [self.pcmRecord Init_buffer:&circularBuf_gvoice_pcm :1920];
+    [self.pcmRecord Init_buffer:&circularBuf_result_pcm :1920];
     flv_init_load();
     if (self.videoConfig.isExternal) {
         return YES;//走外部采集数据发送
@@ -582,7 +587,8 @@ int encodeFlvData(int type, NSData *packetData) {
     [self stopCarmera];
     [self.pcmRecord stop_record];
     
-    [self.pcmRecord Destory_buffer:&aac_circularBuffer];
+    [self.pcmRecord Destory_buffer:&circularBuf_gvoice_pcm];
+    [self.pcmRecord Destory_buffer:&circularBuf_result_pcm];
     wb_vad_exit(&vadstate);
     self.isVadRecongize = NO;
 }

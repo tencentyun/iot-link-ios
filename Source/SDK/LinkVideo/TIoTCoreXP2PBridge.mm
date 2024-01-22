@@ -374,7 +374,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
-    
+    audio_config.channels = 1;
     self.isSending = YES;
     
     self.dev_name = dev_name;
@@ -522,7 +522,13 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         NSLog(@"没有开启推流服务，请调用 sendVoiceToServer 并打开isExternal");
     }
 }
-                                 
+ 
+- (void)setRemoteAudioFrame:(void *)pcmdata len:(int)pcmlen {
+    if (self.isSending) {
+        [systemAvCapture setRemoteAudioFrame:pcmdata len:pcmlen];
+    }
+}
+
 + (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }

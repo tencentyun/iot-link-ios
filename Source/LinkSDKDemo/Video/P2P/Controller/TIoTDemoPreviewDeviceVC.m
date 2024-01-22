@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIotDemoDeviceDirectionDown,
 };
 
-@interface TIoTDemoPreviewDeviceVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface TIoTDemoPreviewDeviceVC ()<UITableViewDelegate,UITableViewDataSource, IJKMediaNativeInvokeDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *actionBottomView; //功能操作底层view
@@ -1056,6 +1056,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
 {
+    NSString *seicontent = [notification.userInfo objectForKey:@"FFP_MSG_VIDEO_SEI_CONTENT"];
+    if (seicontent) {
+        return;
+    }
+    
     //    MPMoviePlaybackStateStopped,
     //    MPMoviePlaybackStatePlaying,
     //    MPMoviePlaybackStatePaused,
@@ -1293,11 +1298,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.player = nil;
     }
 }
-
+NSFileHandle *_fileHandle;
 - (void)configVideo {
 
     // 1.通过播放器发起的拉流
     if (_is_ijkPlayer_stream) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths firstObject];
+        
+        NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"ijkplayerbbb.pcm"];
+        [fileManager removeItemAtPath:h264File error:nil];
+        [fileManager createFileAtPath:h264File contents:nil attributes:nil];
+        _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
+
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
         [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
@@ -1319,6 +1333,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         IJKFFOptions *options = [IJKFFOptions optionsByDefault];
         
         self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.videoUrl] withOptions:options];
+        self.player.nativeInvokeDelegate = self;
         self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.player.view.frame = self.imageView.bounds;
         self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
@@ -1346,7 +1361,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 //        [self.player setOptionIntValue:25 * 1024 forKey:@"max-buffer-size" ofCategory:kIJKFFOptionCategoryPlayer];
         
         [self.player setAudioSpeed:1.5f];
-        [self.player setMaxPacketNum:2];
+        [self.player setMaxPacketNum:5];
         
     }else {
         // 2.通过裸流服务拉流
@@ -1362,6 +1377,16 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         }
         
     }
+}
+
+#pragma mark - IJKMediaNativeInvokeDelegate
+- (int)invoke:(IJKMediaEvent)event attributes:(NSDictionary *)attributes {
+    return 0;
+}
+- (void)onRemoteUserAudioFrame:(void *)pcmdata len:(int)pcmlen {
+//    NSData *data = [NSData dataWithBytes:pcmdata length:pcmlen];
+//    [_fileHandle writeData:data];
+    [[TIoTCoreXP2PBridge sharedInstance] setRemoteAudioFrame:pcmdata len:pcmlen];
 }
 
 #pragma mark - lazy loading

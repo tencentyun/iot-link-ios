@@ -28,5 +28,7 @@ int encodeFlvData(int type, NSData *packetData);
 - (void)setResolutionRatio:(AVCaptureSessionPreset)resolutionValue;
 - (void)setVideoBitRate:(int32_t)bitRate;
 - (int32_t)getVideoBitRate;
+
+- (void)setRemoteAudioFrame:(void *)pcmdata len:(int)pcmlen;
 @end
 
