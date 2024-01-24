@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   s.dependency 'TIoTLinkKit_SoundTouch', '1.0.0'
-  s.dependency 'TIoTLinkKit_GVoiceSE', '1.0.3'
+  s.dependency 'TIoTLinkKit_GVoiceSE', '1.0.2'
   s.dependency 'TPCircularBuffer', '1.6.1'
   
   s.pod_target_xcconfig = {

@@ -1360,7 +1360,7 @@ NSFileHandle *_fileHandle;
 //        [self.player setOptionIntValue:0 forKey:@"seek-at-start" ofCategory:kIJKFFOptionCategoryPlayer];
 //        [self.player setOptionIntValue:25 * 1024 forKey:@"max-buffer-size" ofCategory:kIJKFFOptionCategoryPlayer];
         
-        [self.player setAudioSpeed:1.5f];
+        [self.player setAudioSpeed:1.2f];
         [self.player setMaxPacketNum:5];
         
     }else {
