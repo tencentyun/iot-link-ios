@@ -11,7 +11,6 @@
 #import "flv-muxer.h"
 
 #include <iostream>
-#include "wb_vad.h"
 #import "TIoTPCMXEchoRecord.h"
 #import <SoundTouchiOS/ijksoundtouch_wrap.h>
 #import <GVoiceSEiOS/GVoiceSE.h>
@@ -19,7 +18,6 @@
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
 dispatch_queue_t muxerQueue;
-static VadVars *vadstate = nullptr;
 //NSFileHandle *_fileHandle;
 
 @interface TIoTAVCaptionFLV ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,H264EncoderDelegate,TIoTAACEncoderDelegate>
@@ -41,7 +39,6 @@ static VadVars *vadstate = nullptr;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
-@property (nonatomic, assign) BOOL isVadRecongize;
 //@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
 @end
 
@@ -54,7 +51,6 @@ static VadVars *vadstate = nullptr;
         _audioRate = audioSampleRate;
         _channel = channel;
         _isEchoCancel = NO;
-        _isVadRecongize = NO;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
         
@@ -87,7 +83,6 @@ static VadVars *vadstate = nullptr;
         self.aacEncoder.audioType = _audioRate;
         return;
     }
-    wb_vad_init(&(vadstate));
     AudioStreamBasicDescription inAudioStreamBasicDescription;
         
     self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:_channel isEcho:_isEchoCancel];
@@ -376,7 +371,7 @@ void *ijk_soundtouch_handle = NULL;
 static uint8_t pcm_buffer_origin[640];
 static uint8_t pcm_buffer_gvoice[640];
 static uint8_t pcm_buffer_result[8192];
-float indata[FRAME_LEN];
+
 TPCircularBuffer circularBuf_gvoice_pcm;
 TPCircularBuffer circularBuf_result_pcm;
 
@@ -570,7 +565,6 @@ int encodeFlvData(int type, NSData *packetData) {
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
     
-    self.isVadRecongize = NO;
     [self.pcmRecord Init_buffer:&circularBuf_gvoice_pcm :1920];
     [self.pcmRecord Init_buffer:&circularBuf_result_pcm :1920];
     flv_init_load();
@@ -589,8 +583,6 @@ int encodeFlvData(int type, NSData *packetData) {
     
     [self.pcmRecord Destory_buffer:&circularBuf_gvoice_pcm];
     [self.pcmRecord Destory_buffer:&circularBuf_result_pcm];
-    wb_vad_exit(&vadstate);
-    self.isVadRecongize = NO;
 }
 
 - (void) startCamera
