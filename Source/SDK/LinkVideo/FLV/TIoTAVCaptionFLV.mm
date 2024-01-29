@@ -42,7 +42,7 @@ static VadVars *vadstate = nullptr;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
 @property (nonatomic, assign) BOOL isVadRecongize;
-@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
+//@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
 @end
 
 @implementation TIoTAVCaptionFLV
@@ -58,7 +58,7 @@ static VadVars *vadstate = nullptr;
         _pitch = 0;
         _devicePosition = AVCaptureDevicePositionBack;
         
-        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
+//        _audioEncodeQueue = dispatch_queue_create("com.audio.aacencode", DISPATCH_QUEUE_SERIAL);
         [self onInit];
     }
     return self;
@@ -384,7 +384,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 {
 //    printf("pcm_size_callback: %d\n", size);
     TIoTAVCaptionFLV *vc = (__bridge TIoTAVCaptionFLV *)(u);
-    dispatch_async(vc.audioEncodeQueue, ^{
+//    dispatch_async(vc.audioEncodeQueue, ^{
         
         //1. get origin pcm
         memset(pcm_buffer_origin, 0, 640);
@@ -429,7 +429,7 @@ static void record_callback(uint8_t *buffer, int size, void *u)
         NSData *data = [NSData dataWithBytes:pcm_buffer_result length:tmpChannelDataLen];
 //        [_fileHandle writeData:data];
         [vc.aacEncoder encodePCMData:data];
-    });
+//    });
 }
 
 
