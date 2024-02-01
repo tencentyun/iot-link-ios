@@ -395,9 +395,8 @@ static void record_callback(uint8_t *buffer, int size, void *u)
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             
-            NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"dse_v1_239-119-oneref-e.nn" ofType:nil];
+            NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"GvoiceSE_v1_239-119-oneref-e.nn" ofType:nil];
             const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
-            printf("%s\n", model_file);
             [GVoiceSE voice_handle_open:model_file];
         });
         [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice];

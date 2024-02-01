@@ -17,13 +17,13 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
-  s.resource = 'Source/SDK/LinkVideo/FLV/asset/dse_v1_239-119-oneref-e.nn'
+  s.resource = 'Source/SDK/LinkVideo/FLV/asset/GvoiceSE_v1_239-119-oneref-e.nn'
   
   s.dependency 'TIoTLinkKit_XP2P', '2.4.45'
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   s.dependency 'TIoTLinkKit_SoundTouch', '1.0.0'
-  s.dependency 'TIoTLinkKit_GVoiceSE', '1.0.2'
+  s.dependency 'TIoTLinkKit_GVoiceSE', '1.0.4'
   s.dependency 'TPCircularBuffer', '1.6.1'
   
   s.pod_target_xcconfig = {
