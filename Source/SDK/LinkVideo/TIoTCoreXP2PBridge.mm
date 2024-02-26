@@ -25,19 +25,17 @@ FILE *p2pOutLogFile;
 @end
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
-    if (idd == nullptr) {
-        return nullptr;
-    }
     
     BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
     if (logEnable) {
-        printf("XP2P log: %s\n", msg);
+        printf("XP2P log: %s", msg);
     }
     
     if (type == XP2PTypeLog) {
         if (logEnable) {
             fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
         }
+        return nullptr;
     }else if (type == XP2PTypeSaveFileOn) {
         
         BOOL isWriteFile = [TIoTCoreXP2PBridge sharedInstance].writeFile;
@@ -211,6 +209,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
+//    setLogEnable(false, false);
+    
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = paths.firstObject;
@@ -233,6 +233,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type{
 //    setStunServerToXp2p("11.11.11.11", 111);
+//    setLogEnable(false, false);
+    
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = paths.firstObject;
