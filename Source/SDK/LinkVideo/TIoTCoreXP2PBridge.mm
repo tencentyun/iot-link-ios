@@ -21,6 +21,7 @@ FILE *p2pOutLogFile;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
+@property (nonatomic, strong) NSTimer *reportTimer;
 - (void)cancelTimer;
 @end
 
@@ -227,13 +228,28 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return (XP2PErrCode)ret;
 }
 
+- (const char *)dicConvertString:(NSDictionary *)dic {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
+    NSString *jsonString = @"";
+    if (!error) {
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    return jsonString.UTF8String;
+}
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
     return [self startAppWith:pro_id dev_name:dev_name type:XP2P_PROTOCOL_AUTO];
 }
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type{
-//    setStunServerToXp2p("11.11.11.11", 111);
-//    setLogEnable(false, false);
+    //    setStunServerToXp2p("11.11.11.11", 111);
+    //    setLogEnable(false, false);
+    
+//    const char* str_user_id = getUserID();
+//    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":[NSString stringWithCString:str_user_id]}],
+//                     [self dicConvertString:@{@"better": @"afternnn"}]);
+//    const char* tmpcontent = getContentData();
+//    printf("wwwwww===%s\n",tmpcontent);
     
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
