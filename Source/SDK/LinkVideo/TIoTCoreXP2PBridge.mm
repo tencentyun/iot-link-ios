@@ -79,6 +79,9 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             //设备自定义信令未回复内容
             printf("设备自定义信令未回复内容: %s", msg);
         }
+        else if (type == XP2PTypeStreamRefush) {
+            printf("校验失败,info撞库防止串流: %s", msg);
+        }
         else if (type == XP2PTypeStreamEnd) {
             // 设备主动停止推流，或者由于达到设备最大连接数，拒绝推流
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
