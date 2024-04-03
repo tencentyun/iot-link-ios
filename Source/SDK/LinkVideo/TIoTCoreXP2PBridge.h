@@ -167,6 +167,11 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 - (int32_t)getSendingBufSize;
 
 /*
+ * 获取app_uuid
+ */
+- (NSString *)getAppUUID;
+
+/*
  * 发布外部视频数据(自定义采集，自定义编码，h264数据),请设置TIoTCoreAudioConfig中 isExternal = YES
  * 需注意该接口在sendVoiceToServer之后再调用发送
  */

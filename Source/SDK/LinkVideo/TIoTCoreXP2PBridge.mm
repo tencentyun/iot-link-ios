@@ -213,20 +213,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
-//    setLogEnable(false, false);
-    
-    NSString *fileName = @"stun.txt";
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = paths.firstObject;
-    NSString *saveFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-    setStunServerToXp2p(saveFilePath.UTF8String, 20002);
-    //注册回调
-    setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
-    
-    //1.配置IOT_P2P SDK
-    self.dev_name = dev_name;
     setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, XP2P_PROTOCOL_AUTO);
+    int ret = [self startAppWith:pro_id dev_name:dev_name type:XP2P_PROTOCOL_AUTO];
     setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
@@ -248,11 +236,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     //    setStunServerToXp2p("11.11.11.11", 111);
     //    setLogEnable(false, false);
     
-//    const char* str_user_id = getUserID();
-//    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":[NSString stringWithCString:str_user_id]}],
-//                     [self dicConvertString:@{@"better": @"afternnn"}]);
-//    const char* tmpcontent = getContentData();
-//    printf("wwwwww===%s\n",tmpcontent);
+    NSString *nsstr_user_id = [self getAppUUID];
+    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":nsstr_user_id }],
+                     [self dicConvertString:@{@"better": @"afternnn"}]);
+    [self stopReport];
+    _reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(doTick) userInfo:nil repeats:YES];
     
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -502,6 +490,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)stopService:(NSString *)dev_name {
+    [self stopReport];
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
@@ -516,7 +505,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         _getBufTimer = nil;
     }
 }
-
+-  (void)stopReport {
+    if (_reportTimer) {
+        [_reportTimer invalidate];
+        _reportTimer = nil;
+    }
+}
 #pragma mark -AWAVCaptureDelegate
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
@@ -548,6 +542,83 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (self.isSending) {
         [systemAvCapture setRemoteAudioFrame:pcmdata len:pcmlen];
     }
+}
+
+static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APPUUID";
+- (NSString *)getAppUUID {
+    NSString *uuidString = [self readKeychainValue:_appUUIDUnitlKeyChainKey];
+    NSString *nsstr_user_id;
+    if (uuidString.length) {
+        nsstr_user_id = uuidString;
+    }else{
+        const char* str_user_id = getUserID();
+        nsstr_user_id = [NSString stringWithCString:str_user_id encoding:NSASCIIStringEncoding];
+        
+        [self saveKeychainValue:nsstr_user_id key:_appUUIDUnitlKeyChainKey];
+    }
+    return nsstr_user_id;
+}
+
+- (NSMutableDictionary *)getKeychainQuery:(NSString *)service{
+    return [NSMutableDictionary dictionaryWithObjectsAndKeys:
+            (__bridge_transfer id)kSecClassGenericPassword,
+            (__bridge_transfer id)kSecClass,service,
+            (__bridge_transfer id)kSecAttrService,service,
+            (__bridge_transfer id)kSecAttrAccount,
+            (__bridge_transfer id)kSecAttrAccessibleAfterFirstUnlock,
+            (__bridge_transfer id)kSecAttrAccessible,
+            nil];
+}
+
+- (void)saveKeychainValue:(NSString *)sValue key:(NSString *)sKey{
+    NSMutableDictionary * keychainQuery = [self getKeychainQuery:sKey];
+    SecItemDelete((__bridge_retained CFDictionaryRef)keychainQuery);
+    
+    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:sValue] forKey:(__bridge_transfer id)kSecValueData];
+    
+    SecItemAdd((__bridge_retained CFDictionaryRef)keychainQuery, NULL);
+    
+}
+
+- (NSString *)readKeychainValue:(NSString *)sKey
+{
+    NSString *ret = nil;
+    NSMutableDictionary *keychainQuery = [self getKeychainQuery:sKey];
+    [keychainQuery setObject:(id)kCFBooleanTrue forKey:(__bridge_transfer id)kSecReturnData];
+    [keychainQuery setObject:(__bridge_transfer id)kSecMatchLimitOne forKey:(__bridge_transfer id)kSecMatchLimit];
+    CFDataRef keyData = NULL;
+    if (SecItemCopyMatching((__bridge CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
+        @try {
+            ret = (NSString *)[NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+        } @catch (NSException *e) {
+            NSLog(@"Unarchive of %@ failed: %@", sKey, e);
+        } @finally {
+        }
+    }
+    if (keyData)
+        CFRelease(keyData);
+    return ret;
+}
+
+- (void)doTick {
+    data_report_t tmpcontent = getContentData();
+    printf("wwwwww===%s\n",tmpcontent.report_buf);
+    NSData *body = [NSData dataWithBytes:tmpcontent.report_buf length:tmpcontent.report_size];
+    
+    NSURL *urlString = [NSURL URLWithString:@"http://log.qvb.qcloud.com/reporter/vlive"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    [request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = body;
+    
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200) {
+            NSLog(@"log event: %@",response);
+        }
+    }];
+    [task resume];
 }
 
 + (NSString *)getSDKVersion {
