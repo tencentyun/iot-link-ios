@@ -39,6 +39,7 @@ dispatch_queue_t muxerQueue;
 @property (nonatomic, assign) int captureVideoFPS;
 @property (nonatomic, strong) AVCaptureSessionPreset resolutionRatioValue;
 @property (nonatomic, strong) TIoTPCMXEchoRecord *pcmRecord;
+@property (nonatomic, assign) int trae_is_valid;
 //@property (nonatomic, strong) dispatch_queue_t audioEncodeQueue;
 @end
 
@@ -68,7 +69,7 @@ dispatch_queue_t muxerQueue;
     } else {
         // Fallback on earlier versions
     }*/
-    
+    self.trae_is_valid = 0;
     muxerQueue = dispatch_queue_create("FLV_Muxer_Queue", DISPATCH_QUEUE_SERIAL);
     
     _session = [AVCaptureSession new];
@@ -83,9 +84,13 @@ dispatch_queue_t muxerQueue;
         self.aacEncoder.audioType = _audioRate;
         return;
     }
+    NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"GvoiceSE_v1_239-119-oneref-e.nn" ofType:nil];
+    const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
+    self.trae_is_valid = [GVoiceSE voice_handle_open:model_file];
+    
     AudioStreamBasicDescription inAudioStreamBasicDescription;
         
-    self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:_channel isEcho:_isEchoCancel];
+    self.pcmRecord  = [[TIoTPCMXEchoRecord alloc] initWithChannel:_channel isEcho:(self.trae_is_valid==-1 && _isEchoCancel)?YES:NO];
     [self.pcmRecord set_record_callback:record_callback user:(__bridge void * _Nonnull)(self)];
     //        [self.record start_record];
     
@@ -392,14 +397,10 @@ static void record_callback(uint8_t *buffer, int size, void *u)
         memset(pcm_buffer_gvoice, 0, 640);
         [vc.pcmRecord getData:&circularBuf_gvoice_pcm :pcm_buffer_gvoice :640];
         
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            
-            NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"GvoiceSE_v1_239-119-oneref-e.nn" ofType:nil];
-            const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
-            [GVoiceSE voice_handle_open:model_file];
-        });
-        [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice];
+        //trae gvoice inout pcm_buffer_origin
+        if (vc.isEchoCancel && vc.trae_is_valid == 0) {
+            [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice];
+        }
     
         //3. pcm=>aac
         [vc.pcmRecord addData:&circularBuf_result_pcm :pcm_buffer_origin :640];

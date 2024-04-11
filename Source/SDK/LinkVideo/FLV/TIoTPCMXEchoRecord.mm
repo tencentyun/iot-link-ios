@@ -27,11 +27,11 @@
     des.componentFlagsMask = 0;
     des.componentManufacturer = kAudioUnitManufacturer_Apple;
     des.componentType = kAudioUnitType_Output;
-//    if (isEcho) {
-//        des.componentSubType = kAudioUnitSubType_VoiceProcessingIO; //kAudioUnitSubType_RemoteIO;
-//    }else {
+    if (isEcho) {
+        des.componentSubType = kAudioUnitSubType_VoiceProcessingIO; //kAudioUnitSubType_RemoteIO;
+    }else {
         des.componentSubType = kAudioUnitSubType_RemoteIO;
-//    }
+    }
     
     AudioComponent audioComponent;
     audioComponent = AudioComponentFindNext(NULL, &des);
