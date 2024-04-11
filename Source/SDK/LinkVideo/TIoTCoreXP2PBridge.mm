@@ -236,11 +236,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     //    setStunServerToXp2p("11.11.11.11", 111);
     //    setLogEnable(false, false);
     
-    NSString *nsstr_user_id = [self getAppUUID];
-    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":nsstr_user_id }],
-                     [self dicConvertString:@{@"better": @"afternnn"}]);
-    [self stopReport];
-    _reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(doTick) userInfo:nil repeats:YES];
+//    NSString *nsstr_user_id = [self getAppUUID];
+//    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":nsstr_user_id }],
+//                     [self dicConvertString:@{@"better": @"afternnn"}]);
+//    [self stopReport];
+//    _reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(doTick) userInfo:nil repeats:YES];
     
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -600,7 +600,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     return ret;
 }
 
-- (void)doTick {
+- (void)doTick {/*
     data_report_t tmpcontent = getContentData();
     printf("wwwwww===%s\n",tmpcontent.report_buf);
     NSData *body = [NSData dataWithBytes:tmpcontent.report_buf length:tmpcontent.report_size];
@@ -618,7 +618,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
             NSLog(@"log event: %@",response);
         }
     }];
-    [task resume];
+    [task resume];*/
 }
 
 + (NSString *)getSDKVersion {
