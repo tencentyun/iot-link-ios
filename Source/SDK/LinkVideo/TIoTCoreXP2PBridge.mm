@@ -21,8 +21,8 @@ FILE *p2pOutLogFile;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
-@property (nonatomic, strong) NSTimer *reportTimer;
 - (void)cancelTimer;
+- (void)doTick:(uint8_t *)recv_buf len:(size_t)recv_len;
 @end
 
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
@@ -139,6 +139,12 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
     return response_msg;
 }
 
+void XP2PReciveLogReportDataHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
+//    NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
+    [[TIoTCoreXP2PBridge sharedInstance] doTick:recv_buf len:recv_len];
+}
+
+
 typedef char *(*device_data_recv_handle_t)(const char *id, uint8_t *recv_buf, size_t recv_len);
 
 #define MAX_AVG_LENGTH 10
@@ -235,12 +241,11 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type{
     //    setStunServerToXp2p("11.11.11.11", 111);
     //    setLogEnable(false, false);
-    
-//    NSString *nsstr_user_id = [self getAppUUID];
-//    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":nsstr_user_id }],
-//                     [self dicConvertString:@{@"better": @"afternnn"}]);
-//    [self stopReport];
-//    _reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(doTick) userInfo:nil repeats:YES];
+    NSString *bundleid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+    NSString *nsstr_user_id = [self getAppUUID];
+    setContentDetail([self dicConvertString:@{@"good":@"morning", @"str_user_id":nsstr_user_id, @"version":@"video-v2.4.30_beta1", @"str_package_name": bundleid}],
+                     [self dicConvertString:@{@"punch_cost": @510}],
+                     XP2PReciveLogReportDataHandle);
     
     NSString *fileName = @"stun.txt";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -490,7 +495,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (void)stopService:(NSString *)dev_name {
-    [self stopReport];
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
@@ -503,12 +507,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (_getBufTimer) {
         [_getBufTimer invalidate];
         _getBufTimer = nil;
-    }
-}
--  (void)stopReport {
-    if (_reportTimer) {
-        [_reportTimer invalidate];
-        _reportTimer = nil;
     }
 }
 #pragma mark -AWAVCaptureDelegate
@@ -600,10 +598,12 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     return ret;
 }
 
-- (void)doTick {/*
-    data_report_t tmpcontent = getContentData();
-    printf("wwwwww===%s\n",tmpcontent.report_buf);
-    NSData *body = [NSData dataWithBytes:tmpcontent.report_buf length:tmpcontent.report_size];
+- (void)doTick:(uint8_t *)recv_buf len:(size_t)recv_len {
+    if (recv_len < 2) {
+        return;
+    }
+
+    NSData *body = [NSData dataWithBytes:recv_buf length:recv_len];
     
     NSURL *urlString = [NSURL URLWithString:@"http://log.qvb.qcloud.com/reporter/vlive"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
@@ -618,7 +618,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
             NSLog(@"log event: %@",response);
         }
     }];
-    [task resume];*/
+    [task resume];
 }
 
 + (NSString *)getSDKVersion {
