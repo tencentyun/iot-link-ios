@@ -5,6 +5,7 @@
 //
 
 #import "TIoTCoreXP2PBridge.h"
+#import "TIoTCoreLogger.h"
 #include <string.h>
 
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
@@ -23,6 +24,7 @@ FILE *p2pOutLogFile;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
 @property (nonatomic, assign) NSInteger startTime;
+@property (nonatomic, strong) TIoTCoreLogger *logger;
 - (void)cancelTimer;
 - (void)doTick:(data_report_t)data_buf;
 @end
@@ -37,6 +39,9 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (type == XP2PTypeLog) {
         if (logEnable) {
             fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
+            @autoreleasepool {
+                [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
+            }
         }
         return nullptr;
     }else if (type == XP2PTypeSaveFileOn) {
@@ -256,6 +261,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     setStunServerToXp2p(saveFilePath.UTF8String, 20002);
     //注册回调
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
+    
+    //启动logger
+    self.logger = [[TIoTCoreLogger alloc] init];
+    self.logger.appuuid = nsstr_user_id;
+    self.logger.version = [TIoTCoreXP2PBridge getSDKVersion];
+    [self.logger startLogging];
     
     //1.配置IOT_P2P SDK
     self.pro_id = pro_id;
@@ -505,6 +516,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     stopService(dev_name.UTF8String);
     
     [self reportUserList:0 status:@"end"];
+    [self.logger stopLogging];
     //关闭文件
 //    [fileHandle closeFile];
 //    fileHandle = NULL;
@@ -625,7 +637,9 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }];
     [task resume];
     
-    [self reportUserList:data_buf.xntp_size status:@"bytecount"];
+    if (data_buf.xntp_size > 0) {
+        [self reportUserList:data_buf.xntp_size status:@"bytecount"];
+    }
 }
 
 - (void)reportUserList:(size_t)xntp_size status:(NSString *)status {
@@ -633,7 +647,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     static NSString *reqid = [[NSUUID UUID] UUIDString];
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
     [accessParam setValue:@"P2PReport" forKey:@"Action"];
-    [accessParam setValue:@"byteCount" forKey:@"Status"];
+    [accessParam setValue:status forKey:@"Status"];
     [accessParam setValue:@"live" forKey:@"DataAction"];
     [accessParam setValue:reqid forKey:@"UniqueId"];
     [accessParam setValue:@(self.startTime) forKey:@"StartTime"];
@@ -660,6 +674,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }];
     [tasklog resume];
 }
+
 + (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
