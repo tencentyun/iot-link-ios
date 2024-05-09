@@ -263,10 +263,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
     //启动logger
-    self.logger = [[TIoTCoreLogger alloc] init];
-    self.logger.appuuid = nsstr_user_id;
-    self.logger.version = [TIoTCoreXP2PBridge getSDKVersion];
-    [self.logger startLogging];
+    if (self.logger == nil) {
+        self.logger = [[TIoTCoreLogger alloc] init];
+        self.logger.appuuid = nsstr_user_id;
+        self.logger.version = [TIoTCoreXP2PBridge getSDKVersion];
+        [self.logger startLogging];
+    }
     
     //1.配置IOT_P2P SDK
     self.pro_id = pro_id;
@@ -516,7 +518,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     stopService(dev_name.UTF8String);
     
     [self reportUserList:0 status:@"end"];
-    [self.logger stopLogging];
+//    [self.logger stopLogging];
     //关闭文件
 //    [fileHandle closeFile];
 //    fileHandle = NULL;

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong)NSString *version;
 
 - (void)startLogging;
-- (void)stopLogging;
+//- (void)stopLogging;
 - (void)addLog:(NSString *)message;
 //- (void)reportLog;
 
