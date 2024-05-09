@@ -632,7 +632,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
-            NSLog(@"log event: %@",response);
+//            NSLog(@"log event: %@",response);
         }
     }];
     [task resume];
@@ -669,7 +669,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
-            NSLog(@"app log: %@",response);
+//            NSLog(@"app log: %@",response);
         }
     }];
     [tasklog resume];

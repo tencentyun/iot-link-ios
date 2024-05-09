@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
-            NSLog(@"log event: %@",response);
+//            NSLog(@"log event: %@",response);
         }
     }];
     [task resume];
