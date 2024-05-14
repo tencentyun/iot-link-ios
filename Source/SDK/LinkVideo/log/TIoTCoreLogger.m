@@ -35,8 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)addLog:(NSString *)message {
-    [self.log appendString:message];
-//    [self.log appendString:@"\n"];
+    @synchronized(self.log) {
+        [self.log appendString:message];
+    }
 }
 
 - (void)reportLog {
@@ -59,7 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
     }];
     [task resume];
 
-    [self.log setString:@""];  // 清空日志
+    @synchronized(self.log) {
+        [self.log setString:@""];  // 清空日志
+    }
 }
 
 @end

@@ -39,9 +39,7 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     if (type == XP2PTypeLog) {
         if (logEnable) {
             fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
-            @autoreleasepool {
-                [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
-            }
+            [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
         }
         return nullptr;
     }else if (type == XP2PTypeSaveFileOn) {
@@ -290,7 +288,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     
     self.startTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
-    [self reportUserList:0 status:@"start"];
     return (XP2PErrCode)ret;
 }
 
@@ -517,7 +514,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [self stopVoiceToServer];
     stopService(dev_name.UTF8String);
     
-    [self reportUserList:0 status:@"end"];
 //    [self.logger stopLogging];
     //关闭文件
 //    [fileHandle closeFile];
@@ -620,6 +616,8 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 }
 
 - (void)doTick:(data_report_t)data_buf {
+    [self reportUserList:data_buf];
+    
     if (data_buf.report_size < 2) {
         return;
     }
@@ -638,19 +636,17 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         }
     }];
     [task resume];
-    
-    if (data_buf.xntp_size > 0) {
-        [self reportUserList:data_buf.xntp_size status:@"bytecount"];
-    }
 }
 
-- (void)reportUserList:(size_t)xntp_size status:(NSString *)status {
+- (void)reportUserList:(data_report_t)report {
     
-    static NSString *reqid = [[NSUUID UUID] UUIDString];
+    NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];//@"8f3d545eabe165ed52247f1c89ad5acd";//[[NSUUID UUID] UUIDString];
+    NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
+    NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
     [accessParam setValue:@"P2PReport" forKey:@"Action"];
     [accessParam setValue:status forKey:@"Status"];
-    [accessParam setValue:@"live" forKey:@"DataAction"];
+    [accessParam setValue:dataaction forKey:@"DataAction"];
     [accessParam setValue:reqid forKey:@"UniqueId"];
     [accessParam setValue:@(self.startTime) forKey:@"StartTime"];
     [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue]) forKey:@"Time"];
@@ -660,8 +656,8 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     [accessParam setValue:[self getAppUUID] forKey:@"UserId"];
     [accessParam setValue:self.pro_id forKey:@"ProductId"];
     [accessParam setValue:self.dev_name forKey:@"DeviceName"];
-    [accessParam setValue:@(xntp_size) forKey:@"ByteCount"];
-    [accessParam setValue:@(1) forKey:@"Channel"];
+    [accessParam setValue:@(report.live_size) forKey:@"ByteCount"];
+    [accessParam setValue:@(0) forKey:@"Channel"];
     NSURL *url = [NSURL URLWithString:@"https://applog.iotcloud.tencentiotcloud.com/api/xp2p_ops/applog"];
     NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -671,7 +667,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         if (httpResponse.statusCode == 200) {
-//            NSLog(@"app log: %@",response);
+//            NSLog(@"app log: %@---req-%@",response, accessParam);
         }
     }];
     [tasklog resume];
