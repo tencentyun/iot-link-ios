@@ -24,6 +24,7 @@ FILE *p2pOutLogFile;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
 @property (nonatomic, assign) NSInteger startTime;
+@property (nonatomic, assign) NSInteger startVoiceTime;
 @property (nonatomic, strong) TIoTCoreLogger *logger;
 - (void)cancelTimer;
 - (void)doTick:(data_report_t)data_buf;
@@ -286,8 +287,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     }
 
     int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
-    
-    self.startTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
     return (XP2PErrCode)ret;
 }
 
@@ -643,12 +642,22 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];//@"8f3d545eabe165ed52247f1c89ad5acd";//[[NSUUID UUID] UUIDString];
     NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
+    
+    if ([status isEqualToString:@"start"]) {
+        if ([dataaction isEqualToString:@"voice"]) {
+            self.startVoiceTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
+        }else {
+            self.startTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
+        }
+    }
+    
+    NSInteger startTime = [dataaction isEqualToString:@"voice"]? self.startVoiceTime:self.startTime;
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
     [accessParam setValue:@"P2PReport" forKey:@"Action"];
     [accessParam setValue:status forKey:@"Status"];
     [accessParam setValue:dataaction forKey:@"DataAction"];
     [accessParam setValue:reqid forKey:@"UniqueId"];
-    [accessParam setValue:@(self.startTime) forKey:@"StartTime"];
+    [accessParam setValue:@(startTime) forKey:@"StartTime"];
     [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue]) forKey:@"Time"];
     [accessParam setValue:@"ios" forKey:@"System"];
     [accessParam setValue:@"app" forKey:@"Platform"];

@@ -749,7 +749,7 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
 - (void)downLoadResWithModel:(TIoTDemoLocalFileModel *)model {
     self.downLoading = YES;
     
-    [TIoTCoreXP2PBridge sharedInstance].logEnable = NO;
+    [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     [MBProgressHUD showLodingNoneEnabledInView:self.view withMessage:@"下载资源中"];
     
     NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:model.file_name];

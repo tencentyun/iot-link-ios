@@ -26,7 +26,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initSubViews];
-    
+    [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     [self requestXp2pInfo];
 }
 
