@@ -10,7 +10,7 @@ sed -i "" "s/LinkSDKDemo_VERSION.*/LinkSDKDemo_VERSION = $rb+git.$rc/g" Source/L
     
 xcodebuild clean -workspace TIoTLinkKit.xcworkspace -scheme LinkSDKDemo -configuration Release
 
-xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkSDKDemo -configuration Release -archivePath LinkSDKDemo.xcarchive -UseModernBuildSystem=NO
+xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkSDKDemo -destination 'platform=iOS Simulator,name=iPhone 15' -configuration Release -archivePath LinkSDKDemo.xcarchive #-UseModernBuildSystem=NO
 
 xcodebuild -exportArchive -archivePath LinkSDKDemo.xcarchive -exportOptionsPlist .github/script/ExportOptionsSDKDemoDevelop.plist  -exportPath ./
 

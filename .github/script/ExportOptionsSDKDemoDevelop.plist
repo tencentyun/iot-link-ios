@@ -5,7 +5,7 @@
 	<key>compileBitcode</key>
 	<false/>
 	<key>method</key>
-	<string>development</string>
+	<string>debugging</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.tencent.iot.explorer.link.sdkdemo</key>

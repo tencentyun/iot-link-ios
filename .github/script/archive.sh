@@ -41,7 +41,7 @@ rm *.ipa
 
 xcodebuild clean -workspace TIoTLinkKit.xcworkspace -scheme LinkApp -configuration Release
  
-xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkApp -configuration Release -archivePath LinkApp.xcarchive -UseModernBuildSystem=NO
+xcodebuild archive -workspace TIoTLinkKit.xcworkspace -scheme LinkApp -destination 'platform=iOS Simulator,name=iPhone 15' -configuration Release -archivePath LinkApp.xcarchive #-UseModernBuildSystem=NO
  
 if [ $1 == 'Debug' ]; then
     xcodebuild -exportArchive -archivePath LinkApp.xcarchive -exportOptionsPlist .github/script/ExportOptionsDevelop.plist  -exportPath ./
