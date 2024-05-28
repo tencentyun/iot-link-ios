@@ -1476,6 +1476,9 @@ static NSString *const kPlayback = @"ipc.flv?action=playback";
     NSInteger durationValue = self.videoTimeModel.EndTime.integerValue - self.videoTimeModel.StartTime.integerValue;
     NSInteger minuteValue = durationValue / 60;
     NSInteger secondValue = durationValue % 60;
+    if (durationValue == 0) {
+        return;
+    }
     
     self.slider.minimumValue = 0;
     self.slider.maximumValue = durationValue;

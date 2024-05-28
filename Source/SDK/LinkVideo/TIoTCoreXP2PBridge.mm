@@ -23,8 +23,7 @@ FILE *p2pOutLogFile;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
-@property (nonatomic, assign) NSInteger startTime;
-@property (nonatomic, assign) NSInteger startVoiceTime;
+@property (nonatomic, strong) NSMutableDictionary *uniReqStartTime;
 @property (nonatomic, strong) TIoTCoreLogger *logger;
 - (void)cancelTimer;
 - (void)doTick:(data_report_t)data_buf;
@@ -216,6 +215,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
         [[NSFileManager defaultManager] createFileAtPath:logFile contents:nil attributes:nil];
         p2pOutLogFile = fopen(logFile.UTF8String, "wb");
+        
+        _uniReqStartTime = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -622,7 +623,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }
 
     NSData *body = [NSData dataWithBytes:data_buf.report_buf length:data_buf.report_size];
-    NSURL *urlString = [NSURL URLWithString:@"http://log.qvb.qcloud.com/reporter/vlive"];
+    NSURL *urlString = [NSURL URLWithString:@"https://log.qvb.qcloud.com/reporter/vlive"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlString cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     [request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
     request.HTTPMethod = @"POST";
@@ -644,14 +645,14 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
     
     if ([status isEqualToString:@"start"]) {
-        if ([dataaction isEqualToString:@"voice"]) {
-            self.startVoiceTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
-        }else {
-            self.startTime = [[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue];
-        }
+        [self.uniReqStartTime setObject:[TIoTCoreXP2PBridge getNowTimeTimestamp] forKey:reqid];
     }
     
-    NSInteger startTime = [dataaction isEqualToString:@"voice"]? self.startVoiceTime:self.startTime;
+    NSInteger startTime = [[self.uniReqStartTime objectForKey:reqid] integerValue];
+    if (startTime == 0) {
+        return;
+    }
+    
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
     [accessParam setValue:@"P2PReport" forKey:@"Action"];
     [accessParam setValue:status forKey:@"Status"];
@@ -680,6 +681,10 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         }
     }];
     [tasklog resume];
+    
+    if ([status isEqualToString:@"end"]) {
+        [self.uniReqStartTime removeObjectForKey:reqid];
+    }
 }
 
 + (NSString *)getSDKVersion {

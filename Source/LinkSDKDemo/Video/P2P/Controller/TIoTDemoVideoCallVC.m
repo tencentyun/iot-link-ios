@@ -378,6 +378,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification {
+    NSString *seicontent = [notification.userInfo objectForKey:@"FFP_MSG_VIDEO_SEI_CONTENT"];
+    if (seicontent) {
+        return;
+    }
+    
     switch (_player.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
