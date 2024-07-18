@@ -617,7 +617,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 
 - (void)doTick:(data_report_t)data_buf {
     [self reportUserList:data_buf];
-    
+    return;
     if (data_buf.report_size < 2) {
         return;
     }
@@ -640,7 +640,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 
 - (void)reportUserList:(data_report_t)report {
     
-    NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];//@"8f3d545eabe165ed52247f1c89ad5acd";//[[NSUUID UUID] UUIDString];
+    NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];
     NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
     
@@ -655,6 +655,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     
     NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
     [accessParam setValue:@"P2PReport" forKey:@"Action"];
+    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
     [accessParam setValue:status forKey:@"Status"];
     [accessParam setValue:dataaction forKey:@"DataAction"];
     [accessParam setValue:reqid forKey:@"UniqueId"];
