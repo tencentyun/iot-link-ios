@@ -25,6 +25,7 @@ FILE *p2pOutLogFile;
 @property (nonatomic, strong) NSTimer *getBufTimer;
 @property (nonatomic, strong) NSMutableDictionary *uniReqStartTime;
 @property (nonatomic, strong) TIoTCoreLogger *logger;
+@property (nonatomic, assign) CFTimeInterval start_voice_time;
 - (void)cancelTimer;
 - (void)doTick:(data_report_t)data_buf;
 @end
@@ -210,6 +211,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     if (self) {
         //默认关log开关
         _logEnable = NO;
+        _start_voice_time = 0;
         
         NSString *logFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TIoTXP2P.log"];
         [[NSFileManager defaultManager] removeItemAtPath:logFile error:nil];
@@ -404,6 +406,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
 //    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
 //    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    CFTimeInterval timestamp = CACurrentMediaTime();
+    if ((timestamp - self.start_voice_time)<1.5) {
+        return;
+    }
+    self.start_voice_time = timestamp;
+    
     audio_config.channels = 1;
     self.isSending = YES;
     

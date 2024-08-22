@@ -84,9 +84,13 @@ dispatch_queue_t muxerQueue;
         self.aacEncoder.audioType = _audioRate;
         return;
     }
-    NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"GvoiceSE_v1_239-119-oneref-e.nn" ofType:nil];
-    const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
-    self.trae_is_valid = [GVoiceSE voice_handle_open:model_file];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString* NSmodel_file = [[NSBundle mainBundle] pathForResource:@"GvoiceSE_v1_239-119-oneref-e.nn" ofType:nil];
+        const char *model_file = [NSmodel_file cStringUsingEncoding : NSUTF8StringEncoding];
+        self.trae_is_valid = [GVoiceSE voice_handle_open:model_file];
+    });
     
     AudioStreamBasicDescription inAudioStreamBasicDescription;
         
