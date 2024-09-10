@@ -520,7 +520,7 @@
     self = [super init];
     if (self) {
         self.portString = port?:@"7838"; //需要更改接入端口号
-        self.addressString = address?:@"239.0.0.255"; //需要更改接入IP
+        self.addressString = address?:@""; //需要更改接入IP
     }
     return self;
 }

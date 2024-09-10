@@ -12,9 +12,6 @@
 
 #import "TIoTCoreAddDevice.h"
 
-#define APIP @"192.168.4.1"
-#define APPort 8266
-
 @interface TIoTSoftapWaitVC ()<GCDAsyncUdpSocketDelegate,TIoTCoreAddDeviceDelegate>
 @property (strong, nonatomic) GCDAsyncUdpSocket *socket;
 @property (strong, nonatomic) dispatch_queue_t delegateQueue;

@@ -139,7 +139,7 @@
     self.wifiPasswordString = @"";
     self.tokenString = @"";
     self.portString = @"7838";
-    self.addressIDString = @"239.0.0.255";
+    self.addressIDString = @"";
 }
 
 - (void)initInformation {
