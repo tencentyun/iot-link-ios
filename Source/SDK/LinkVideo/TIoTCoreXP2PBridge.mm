@@ -797,6 +797,9 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 
     [self saveKeychainValue:tmp_p2p_log_enabled key:@"p2p_log_enabled"];
     [self saveKeychainValue:tmp_ops_report_enabled key:@"ops_report_enabled"];
+    
+    p2p_log_enabled = tmp_p2p_log_enabled.boolValue;
+    ops_report_enabled = tmp_ops_report_enabled.boolValue;
 }
 
 + (NSString *)getSDKVersion {
