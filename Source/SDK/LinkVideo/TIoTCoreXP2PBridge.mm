@@ -7,6 +7,8 @@
 #import "TIoTCoreXP2PBridge.h"
 #import "TIoTCoreLogger.h"
 #include <string.h>
+#include <CommonCrypto/CommonDigest.h>
+#include <CommonCrypto/CommonHMAC.h>
 
 NSNotificationName const TIoTCoreXP2PBridgeNotificationDisconnect   = @"xp2disconnect"; //p2p通道断开
 NSNotificationName const TIoTCoreXP2PBridgeNotificationReady        = @"xp2preconnect"; //app本地已ready，表示探测完成，可以发起请求了
@@ -16,6 +18,10 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PType
 
 FILE *p2pOutLogFile;
 //NSFileHandle *fileHandle;
+static BOOL p2p_log_enabled = NO;
+static BOOL ops_report_enabled = NO;
+@implementation TIoTP2PAPPConfig
+@end
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
@@ -38,8 +44,8 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     }
     
     if (type == XP2PTypeLog) {
-        if (logEnable) {
-            fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
+        if (p2p_log_enabled) {
+//            fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
             [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
         }
         return nullptr;
@@ -219,6 +225,8 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         p2pOutLogFile = fopen(logFile.UTF8String, "wb");
         
         _uniReqStartTime = [NSMutableDictionary dictionary];
+        
+        [self getAppConfig];
     }
     return self;
 }
@@ -288,9 +296,90 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         }
         setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候不需要传入secretid和secretkey，避免泄露secretid和secretkey，此处仅为演示
     }
+    
+    TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
+    config.appkey = @"appkey"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.appsecret = @"appsecret"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.userid = [self getAppUUID];
+    [self setXp2pInfo:dev_name xp2pinfo:xp2pinfo appconfig:config];
+    return XP2P_ERR_INIT_PRM;
+}
 
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig {
+    if (!appconfig || appconfig.appkey.length < 1 || appconfig.appsecret.length < 1 || appconfig.userid.length < 1) {
+        NSLog(@"请输入正确的appconfig");
+        return XP2P_ERR_INIT_PRM;
+    }
+    if (xp2pinfo == nil || xp2pinfo.length < 1) {
+        NSLog(@"请输入正确的xp2pInfo");
+        return XP2P_ERR_INIT_PRM;
+    }
+    [self appGetUserConfig:appconfig];
     int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
+}
+
+NSString *createSortedQueryString(NSMutableDictionary *params) {
+    NSArray *sortedKeys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSMutableArray *keyValuePairs = [NSMutableArray array];
+    for (NSString *key in sortedKeys) {
+        NSString *value = [params objectForKey:key];
+        NSString *keyValuePair = [NSString stringWithFormat:@"%@=%@", key, value];
+        [keyValuePairs addObject:keyValuePair];
+    }
+    NSString *queryString = [keyValuePairs componentsJoinedByString:@"&"];
+    return queryString;
+}
+- (NSString *)signMessage:(NSString *)message withSecret:(NSString *)secret {
+    @try {
+        // Base64 解码
+        const char *cKey  = [secret cStringUsingEncoding:NSASCIIStringEncoding];
+        const char *cData = [message cStringUsingEncoding:NSASCIIStringEncoding];
+
+        //sha1
+        unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
+
+        NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:sizeof(cHMAC)];
+
+        NSString *hash = [HMAC base64EncodedStringWithOptions:0];//将加密结果进行一次BASE64编码。
+        return hash;
+    } @catch (NSException *exception) {
+        NSLog(@"签名错误：%@", exception);
+    }
+    return nil;
+}
+
+- (void)appGetUserConfig:(TIoTP2PAPPConfig *)appconfig {
+    NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
+    [accessParam setValue:@"AppDescribeLogLevel" forKey:@"Action"];
+    [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestampSec] integerValue]) forKey:@"Timestamp"];
+    [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
+    [accessParam setValue:appconfig.appkey forKey:@"AppKey"];
+    [accessParam setValue:appconfig.userid forKey:@"UserId"];
+    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
+    
+    NSString *content = createSortedQueryString(accessParam);
+    NSString *signature = [self signMessage:content withSecret:appconfig.appsecret];
+    [accessParam setValue:signature forKey:@"Signature"];
+    
+    
+    NSURL *url = [NSURL URLWithString:@"http://localhost:80/appapiv1"];
+    NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    reqlog.HTTPMethod = @"POST";
+    reqlog.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];;
+    NSURLSessionDataTask *tasklog = [[NSURLSession sharedSession] dataTaskWithRequest:reqlog completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200) {
+            NSError *jsonerror = nil;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
+//            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
+            [self setAppConfig:[[dic objectForKey:@"Response"] objectForKey:@"Data"]];
+        }
+    }];
+    [tasklog resume];
 }
 
 - (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
@@ -647,7 +736,9 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 }
 
 - (void)reportUserList:(data_report_t)report {
-    
+    if (!ops_report_enabled) {
+        return;
+    }
     NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];
     NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
@@ -696,6 +787,18 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }
 }
 
+- (void)getAppConfig {
+    p2p_log_enabled = [self readKeychainValue:@"p2p_log_enabled"].boolValue;
+    ops_report_enabled = [self readKeychainValue:@"ops_report_enabled"].boolValue;
+}
+- (void)setAppConfig:(NSDictionary *)appconfig {
+    NSString * tmp_p2p_log_enabled = [appconfig objectForKey:@"P2PLogEnabled"];
+    NSString * tmp_ops_report_enabled = [appconfig objectForKey:@"OpsLogEnabled"];
+
+    [self saveKeychainValue:tmp_p2p_log_enabled key:@"p2p_log_enabled"];
+    [self saveKeychainValue:tmp_ops_report_enabled key:@"ops_report_enabled"];
+}
+
 + (NSString *)getSDKVersion {
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
@@ -713,5 +816,9 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)([datenow timeIntervalSince1970]*1000)];
     return timeSp;
 }
-
++(NSString *)getNowTimeTimestampSec {
+    NSDate *datenow = [NSDate date];
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
+    return timeSp;
+}
 @end

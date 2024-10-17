@@ -18,6 +18,12 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDetectError;
 extern NSNotificationName const TIoTCoreXP2PBridgeNotificationDeviceMsg;
 extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
+@interface TIoTP2PAPPConfig : NSObject
+@property (nonatomic, strong)NSString *appkey; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+@property (nonatomic, strong)NSString *appsecret; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai)
+@property (nonatomic, strong)NSString *userid; //用户纬度（每个手机区分开）使用用户自有的账号系统userid；若无请配置为[TIoTCoreXP2PBridge sharedInstance].getAppUUID; 查找日志是需提供此userid字段
+@end
+
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
 
 /*
@@ -84,7 +90,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 此接口只二者选一：传入xp2pinfo 就不需要填写 secretid和secretkey，xp2pinfo可从自建服务获取；
  * 仅跑通流程的话，可设置 secretid和secretkey 两个参数，xp2pinfo传“”即可
  */
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo;
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -setXp2pInfo: xp2pinfo:")));
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig;
 
 /*
  * 使用播放器播放时，需先等待 SDK 初始化完成，ready事件(xp2preconnect 通知)之后，即可获取到 http-url
