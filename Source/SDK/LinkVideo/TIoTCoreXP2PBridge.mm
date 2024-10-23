@@ -364,7 +364,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     [accessParam setValue:signature forKey:@"Signature"];
     
     
-    NSURL *url = [NSURL URLWithString:@"http://localhost:80/appapiv1"];
+    NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/exploreropen/appapi"];
     NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     reqlog.HTTPMethod = @"POST";
@@ -376,7 +376,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
-            [self setAppConfig:[[dic objectForKey:@"Response"] objectForKey:@"Data"]];
+            [self setAppConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
         }
     }];
     [tasklog resume];
