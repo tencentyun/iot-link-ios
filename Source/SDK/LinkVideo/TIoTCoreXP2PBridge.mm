@@ -742,7 +742,14 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];
     NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];
-    
+    NSString *appPeerName = @"";
+    if (report.appPeerName != NULL) {
+        appPeerName = [NSString stringWithCString:(const char *)report.appPeerName encoding:NSASCIIStringEncoding];
+    }
+    NSString *deviceP2PInfo = @"";
+    if (report.deviceP2PInfo != NULL) {
+        deviceP2PInfo = [NSString stringWithCString:(const char *)report.deviceP2PInfo encoding:NSASCIIStringEncoding];
+    }
     if ([status isEqualToString:@"start"]) {
         [self.uniReqStartTime setObject:[TIoTCoreXP2PBridge getNowTimeTimestamp] forKey:reqid];
     }
@@ -762,6 +769,8 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue]) forKey:@"Time"];
     [accessParam setValue:@"ios" forKey:@"System"];
     [accessParam setValue:@"app" forKey:@"Platform"];
+    [accessParam setValue:appPeerName forKey:@"AppPeerName"];
+    [accessParam setValue:deviceP2PInfo forKey:@"DeviceP2PInfo"];
     [accessParam setValue:[self getAppUUID] forKey:@"Uuid"];
     [accessParam setValue:[self getAppUUID] forKey:@"UserId"];
     [accessParam setValue:self.pro_id forKey:@"ProductId"];
