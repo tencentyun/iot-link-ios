@@ -769,14 +769,30 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestamp] integerValue]) forKey:@"Time"];
     [accessParam setValue:@"ios" forKey:@"System"];
     [accessParam setValue:@"app" forKey:@"Platform"];
-    [accessParam setValue:appPeerName forKey:@"AppPeerName"];
-    [accessParam setValue:deviceP2PInfo forKey:@"DeviceP2PInfo"];
     [accessParam setValue:[self getAppUUID] forKey:@"Uuid"];
     [accessParam setValue:[self getAppUUID] forKey:@"UserId"];
     [accessParam setValue:self.pro_id forKey:@"ProductId"];
     [accessParam setValue:self.dev_name forKey:@"DeviceName"];
     [accessParam setValue:@(report.live_size) forKey:@"ByteCount"];
     [accessParam setValue:@(0) forKey:@"Channel"];
+    [accessParam setValue:appPeerName forKey:@"AppPeerNameFromApp"];
+    [accessParam setValue:deviceP2PInfo forKey:@"DeviceP2PInfoFromApp"];
+    [accessParam setValue:@(report.appUpByte) forKey:@"AppUpByte"];
+    [accessParam setValue:@(report.appDownByte) forKey:@"AppDownByte"];
+    [accessParam setValue:[TIoTCoreXP2PBridge getSDKVersion] forKey:@"AppVersion"];
+    if ([status isEqualToString:@"fail"]) {
+        [accessParam setValue:@"err" forKey:@"AppResult"];
+        [accessParam setValue:@(report.errorcode) forKey:@"AppFailMsg"];
+        
+    }else {
+        [accessParam setValue:@"succ" forKey:@"AppResult"];
+    }
+    NSString *appConnectIp = @"";
+    if (report.appConnectIp != NULL) {
+        appConnectIp = [NSString stringWithCString:(const char *)report.appConnectIp encoding:NSASCIIStringEncoding];
+    }
+    [accessParam setValue:appConnectIp forKey:@"AppConnectIp"];
+    
     NSURL *url = [NSURL URLWithString:@"https://applog.iotcloud.tencentiotcloud.com/api/xp2p_ops/applog"];
     NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -791,7 +807,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }];
     [tasklog resume];
     
-    if ([status isEqualToString:@"end"]) {
+    if ([status isEqualToString:@"end"] || [status isEqualToString:@"fail"]) {
         [self.uniReqStartTime removeObjectForKey:reqid];
     }
 }
