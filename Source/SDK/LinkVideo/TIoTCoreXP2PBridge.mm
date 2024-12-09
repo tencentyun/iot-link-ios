@@ -295,6 +295,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
             return XP2P_ERR_INIT_PRM;
         }
         setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候不需要传入secretid和secretkey，避免泄露secretid和secretkey，此处仅为演示
+        NSLog(@"⚠️⚠️⚠️ 请使用下面接口，本接口即将作废。 setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig");
     }
     
     TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
