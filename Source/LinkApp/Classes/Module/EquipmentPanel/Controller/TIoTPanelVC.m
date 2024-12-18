@@ -942,7 +942,8 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     NSLog(@"_sys_xp2p_info  xp2pValue : %@",xp2pValue);
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:@"" sec_key:@"" pro_id:self.productId?:@"" dev_name:self.deviceName?:@"" xp2pinfo:xp2pValue];
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:self.productId?:@"" dev_name:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName xp2pinfo:xp2pValue];
     
     if (errorcode == XP2P_ERR_VERSION) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -4089,7 +4090,7 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
         NSLog(@"refushXP2Pinfo_sys_xp2p_info : %@",xp2pValue);
         
-        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:nil sec_key:nil xp2pinfo:xp2pValue];
+        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" xp2pinfo:xp2pValue];
         
         //重新拉流/推流
 //        [self refreshP2PPlayerAndStartCapture];
