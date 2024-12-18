@@ -104,7 +104,7 @@
 - (void)requestXp2pInfoWithDeviceName:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo{
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:deviceName?:@""];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
 }
 /// video 设备列表
 - (void)requestVideoList {

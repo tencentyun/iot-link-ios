@@ -144,7 +144,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@""];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
         
         if (errorcode == XP2P_ERR_VERSION) {
             UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
@@ -1225,7 +1225,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
     
     [self getDeviceStatusWithType:action_live qualityType:self.qualityString completion:^(BOOL finished) {
         if (finished) {
@@ -1695,7 +1695,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     //重连使用
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
+    [self requestXp2pInfo];// 重新获取info，启动p2p
+//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
 
 }
 

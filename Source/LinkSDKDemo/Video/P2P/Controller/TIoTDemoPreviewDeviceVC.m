@@ -146,7 +146,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
         [self setVieoPlayerStartPlayWith:self.qualityString];
         
         //计算IPC打洞开始时间
@@ -1246,7 +1246,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
     
     [self getDeviceStatusWithType:action_live qualityType:self.qualityString completion:^(BOOL finished) {
         if (finished) {
@@ -1704,7 +1704,8 @@ NSFileHandle *_fileHandle;
     //重连使用
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
+    [self requestXp2pInfo];// 重新获取info，启动p2p
+//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
 
 }
 

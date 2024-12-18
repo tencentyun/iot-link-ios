@@ -231,7 +231,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return self;
 }
 
-
+/*
 - (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
     return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
 }
@@ -241,7 +241,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
-
+*/
 - (const char *)dicConvertString:(NSDictionary *)dic {
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
@@ -253,11 +253,22 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
 }
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name {
-    return [self startAppWith:pro_id dev_name:dev_name type:XP2P_PROTOCOL_AUTO];
+    TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
+    config.appkey = @"appkey"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.appsecret = @"appsecret"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.userid = [self getAppUUID];
+    
+    config.type = XP2P_PROTOCOL_AUTO;
+    config.crossStunTurn = YES;
+    return [self startAppWith:pro_id dev_name:dev_name appconfig:config];
 }
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type{
-    //    setStunServerToXp2p("11.11.11.11", 111);
-    //    setLogEnable(false, false);
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
+    if (!appconfig || appconfig.appkey.length < 1 || appconfig.appsecret.length < 1 || appconfig.userid.length < 1) {
+        NSLog(@"请输入正确的appconfig");
+        return XP2P_ERR_INIT_PRM;
+    }
+    [self appGetUserConfig:appconfig]; //get config
+    
     NSString *bundleid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]?:@"";
     NSString *nsstr_user_id = [self getAppUUID];
     setContentDetail([self dicConvertString:@{@"str_user_id":nsstr_user_id, @"version":@"video-v2.4.30_beta1", @"str_package_name": bundleid}],
@@ -280,13 +291,19 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         [self.logger startLogging];
     }
     
+    // 配置是否启用双中转
+    if (appconfig.crossStunTurn) {
+        setCrossStunTurn(true);
+    }
+    
     //1.配置IOT_P2P SDK
     self.pro_id = pro_id;
     self.dev_name = dev_name;
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, type);
+    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, appconfig.type);
     return (XP2PErrCode)ret;
 }
 
+/*
 - (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo {
     
     if (xp2pinfo == nil || [xp2pinfo isEqualToString:@""]) {
@@ -305,17 +322,14 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     [self setXp2pInfo:dev_name xp2pinfo:xp2pinfo appconfig:config];
     return XP2P_ERR_INIT_PRM;
 }
+*/
 
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig {
-    if (!appconfig || appconfig.appkey.length < 1 || appconfig.appsecret.length < 1 || appconfig.userid.length < 1) {
-        NSLog(@"请输入正确的appconfig");
-        return XP2P_ERR_INIT_PRM;
-    }
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
     if (xp2pinfo == nil || xp2pinfo.length < 1) {
         NSLog(@"请输入正确的xp2pInfo");
         return XP2P_ERR_INIT_PRM;
     }
-    [self appGetUserConfig:appconfig];
+    
     int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }

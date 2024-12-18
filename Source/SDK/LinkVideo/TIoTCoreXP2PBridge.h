@@ -22,6 +22,9 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, strong)NSString *appkey; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
 @property (nonatomic, strong)NSString *appsecret; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai)
 @property (nonatomic, strong)NSString *userid; //用户纬度（每个手机区分开）使用用户自有的账号系统userid；若无请配置为[TIoTCoreXP2PBridge sharedInstance].getAppUUID; 查找日志是需提供此userid字段
+
+@property (nonatomic, assign)BOOL crossStunTurn; //是否打开双中转开关，默认false
+@property (nonatomic, assign)XP2PProtocolType type; //通信协议，默认auto
 @end
 
 @protocol TIoTCoreXP2PBridgeDelegate <NSObject>
@@ -74,24 +77,17 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 + (NSString *)getSDKVersion;
 + (instancetype)sharedInstance ;
 
-// 不建议使用下面两个start接口，避免泄漏您的secretid和secretkey，会造成您的账户泄漏，demo仅用此接口做演示使用
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -startAppWith & -setXp2pInfo")));
-
 /*
  * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
  * type: 默认auto模式，udp探测不通自动切换至tcp
  */
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name;
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name type:(XP2PProtocolType)type;
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name; __attribute__((deprecated("Use -startAppWith: dev_name: appconfig:")));
+- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig;
 
 /*
- * 此接口慎重：需注意 正式版app发布时候不需要传入secretid和secretkey，避免将这两个参数放置在app中，防止账号泄露，此处仅为演示功能
- * 此接口只二者选一：传入xp2pinfo 就不需要填写 secretid和secretkey，xp2pinfo可从自建服务获取；
- * 仅跑通流程的话，可设置 secretid和secretkey 两个参数，xp2pinfo传“”即可
+ * 设置设备 xp2pinfo ，ready 回调之后，即可开始（拉流、发信令、对讲等）
  */
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key xp2pinfo:(NSString *)xp2pinfo __attribute__((deprecated("Use -setXp2pInfo: xp2pinfo:")));
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig;
+- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo;
 
 /*
  * 使用播放器播放时，需先等待 SDK 初始化完成，ready事件(xp2preconnect 通知)之后，即可获取到 http-url

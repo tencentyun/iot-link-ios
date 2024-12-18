@@ -892,7 +892,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 #warning 开启p2p
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:@""];
+        //TODO 重新拉取 p2pinfo 后，setxp2pinfo
+        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" xp2pinfo:@"请重新拉取xp2pinfo，填入此处"];
         [self setVieoPlayerStartPlayWith:self.qualityString];
     });
 
