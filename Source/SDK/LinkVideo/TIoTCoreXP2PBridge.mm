@@ -259,7 +259,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     config.userid = [self getAppUUID];
     
     config.type = XP2P_PROTOCOL_AUTO;
-    config.crossStunTurn = YES;
+    config.crossStunTurn = NO;
     return [self startAppWith:pro_id dev_name:dev_name appconfig:config];
 }
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
