@@ -19,7 +19,7 @@ NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd    = @"XP2PType
 FILE *p2pOutLogFile;
 //NSFileHandle *fileHandle;
 static BOOL p2p_log_enabled = NO;
-static BOOL ops_report_enabled = NO;
+static BOOL ops_report_enabled = YES;
 @implementation TIoTP2PAPPConfig
 @end
 
@@ -292,6 +292,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     }
     
     // 配置是否启用双中转
+    setCrossStunTurn(false);
     if (appconfig.crossStunTurn) {
         setCrossStunTurn(true);
     }
@@ -828,8 +829,15 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 }
 
 - (void)getAppConfig {
-    p2p_log_enabled = [self readKeychainValue:@"p2p_log_enabled"].boolValue;
-    ops_report_enabled = [self readKeychainValue:@"ops_report_enabled"].boolValue;
+    NSString * tmp_p2p_log_enabled = [self readKeychainValue:@"p2p_log_enabled"];
+    NSString * tmp_ops_report_enabled = [self readKeychainValue:@"ops_report_enabled"];
+    
+    if (tmp_p2p_log_enabled) {
+        p2p_log_enabled = tmp_p2p_log_enabled.boolValue;
+    }
+    if (tmp_ops_report_enabled) {
+        ops_report_enabled = tmp_ops_report_enabled.boolValue;
+    }
 }
 - (void)setAppConfig:(NSDictionary *)appconfig {
     NSString * tmp_p2p_log_enabled = [appconfig objectForKey:@"P2PLogEnabled"];
