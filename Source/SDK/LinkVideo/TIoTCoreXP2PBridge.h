@@ -23,6 +23,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, strong)NSString *appsecret; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai)
 @property (nonatomic, strong)NSString *userid; //用户纬度（每个手机区分开）使用用户自有的账号系统userid；若无请配置为[TIoTCoreXP2PBridge sharedInstance].getAppUUID; 查找日志是需提供此userid字段
 
+@property (nonatomic, assign)BOOL autoConfigFromDevice; //是否跟随对应设备配置,YES 后下面的配置（cross、type等）不生效
 @property (nonatomic, assign)BOOL crossStunTurn; //是否打开双中转开关，默认false
 @property (nonatomic, assign)XP2PProtocolType type; //通信协议，默认auto
 @end

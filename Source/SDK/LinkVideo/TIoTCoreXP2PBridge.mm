@@ -231,17 +231,6 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return self;
 }
 
-/*
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name {
-    return [self startAppWith:sec_id sec_key:sec_key pro_id:pro_id dev_name:dev_name xp2pinfo:@""];
-}
-- (XP2PErrCode)startAppWith:(NSString *)sec_id sec_key:(NSString *)sec_key pro_id:(NSString *)pro_id dev_name:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
-    setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候需要去掉，避免泄露secretid和secretkey，此处仅为演示
-    int ret = [self startAppWith:pro_id dev_name:dev_name type:XP2P_PROTOCOL_AUTO];
-    setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
-    return (XP2PErrCode)ret;
-}
-*/
 - (const char *)dicConvertString:(NSDictionary *)dic {
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:kNilOptions error:&error];
@@ -258,6 +247,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     config.appsecret = @"appsecret"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
     config.userid = [self getAppUUID];
     
+    config.autoConfigFromDevice = NO;
     config.type = XP2P_PROTOCOL_AUTO;
     config.crossStunTurn = NO;
     return [self startAppWith:pro_id dev_name:dev_name appconfig:config];
@@ -293,14 +283,30 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     
     // 配置是否启用双中转
     setCrossStunTurn(false);
-    if (appconfig.crossStunTurn) {
-        setCrossStunTurn(true);
-    }
     
     //1.配置IOT_P2P SDK
     self.pro_id = pro_id;
     self.dev_name = dev_name;
-    int ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, appconfig.type);
+    
+    int ret = XP2P_ERR_NONE;
+    
+    if (appconfig.autoConfigFromDevice) {
+        [self appGeDeviceConfig:appconfig]; //get config
+        
+    }else {
+        app_config_t config_ = {
+            .server = "",
+            .ip = "",
+            .port = 20002,
+            .type = appconfig.type
+        };
+        
+        if (appconfig.crossStunTurn) {
+            setCrossStunTurn(true);
+        }
+        ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, config_);
+    }
+    
     return (XP2PErrCode)ret;
 }
 
@@ -394,6 +400,75 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
             [self setAppConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
         }
+    }];
+    [tasklog resume];
+}
+
+- (void)appGeDeviceConfig:(TIoTP2PAPPConfig *)appconfig {
+    NSMutableDictionary *accessParam = [NSMutableDictionary dictionary];
+    [accessParam setValue:@"AppDescribeConfigureDeviceP2P" forKey:@"Action"];
+    [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestampSec] integerValue]) forKey:@"Timestamp"];
+    [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
+    [accessParam setValue:appconfig.appkey forKey:@"AppKey"];
+    [accessParam setValue:self.pro_id forKey:@"ProductId"];
+    [accessParam setValue:self.dev_name forKey:@"DeviceName"];
+    [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
+    
+    NSString *content = createSortedQueryString(accessParam);
+    NSString *signature = [self signMessage:content withSecret:appconfig.appsecret];
+    [accessParam setValue:signature forKey:@"Signature"];
+    
+    
+    NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/exploreropen/appapi"];
+    NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
+    [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    reqlog.HTTPMethod = @"POST";
+    reqlog.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];;
+    NSURLSessionDataTask *tasklog = [[NSURLSession sharedSession] dataTaskWithRequest:reqlog completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        app_config_t config_ = {
+            .server = "",
+            .ip = "",
+            .port = 20002,
+            .type = appconfig.type,
+            .cross = false
+        };
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200) {
+            NSError *jsonerror = nil;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
+//            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
+            NSDictionary *deviceconfig = [[dic objectForKey:@"data"] objectForKey:@"Config"];
+            
+            bool enableCrossStunTurn = [[deviceconfig objectForKey:@"EnableCrossStunTurn"] boolValue];
+            int stunPort = [[deviceconfig objectForKey:@"StunPort"] intValue];
+            NSString *stunHost = [deviceconfig objectForKey:@"StunHost"];
+            NSString *stunIP = [deviceconfig objectForKey:@"StunIP"];
+            NSString *protocol = [deviceconfig objectForKey:@"Protocol"];
+            
+            config_.cross = enableCrossStunTurn;
+            if (stunPort) {
+                config_.port = stunPort;
+            }
+            if (stunHost.length > 0) {
+                config_.server = stunHost.UTF8String;
+            }
+            if (stunIP.length > 0) {
+                config_.ip = stunIP.UTF8String;
+            }
+            if ([protocol isEqualToString:@"TCP"]) {
+                config_.type = XP2P_PROTOCOL_TCP;
+            }else {
+                config_.type = XP2P_PROTOCOL_AUTO;
+            }
+        }
+        
+        
+        if (config_.cross) {
+            setCrossStunTurn(true);
+        }
+        startService(self.dev_name.UTF8String, self.pro_id.UTF8String, self.dev_name.UTF8String, config_);
     }];
     [tasklog resume];
 }
@@ -845,9 +920,6 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
 
     [self saveKeychainValue:tmp_p2p_log_enabled key:@"p2p_log_enabled"];
     [self saveKeychainValue:tmp_ops_report_enabled key:@"ops_report_enabled"];
-    
-    p2p_log_enabled = tmp_p2p_log_enabled.boolValue;
-    ops_report_enabled = tmp_ops_report_enabled.boolValue;
 }
 
 + (NSString *)getSDKVersion {
