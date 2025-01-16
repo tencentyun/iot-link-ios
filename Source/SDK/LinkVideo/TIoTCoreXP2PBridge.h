@@ -82,7 +82,6 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
  * type: 默认auto模式，udp探测不通自动切换至tcp
  */
-- (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name; __attribute__((deprecated("Use -startAppWith: dev_name: appconfig:")));
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig;
 
 /*

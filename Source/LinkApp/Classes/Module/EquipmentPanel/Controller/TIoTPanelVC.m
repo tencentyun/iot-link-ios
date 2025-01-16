@@ -942,7 +942,18 @@ typedef NS_ENUM(NSInteger, TIoTLLDataFixedHeaderDataTemplateType) {
         }
     }
     NSLog(@"_sys_xp2p_info  xp2pValue : %@",xp2pValue);
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:self.productId?:@"" dev_name:self.deviceName?:@""];
+    
+    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+    TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
+    config.appkey = env.appKey;         //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.appsecret = env.appSecret;   //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+    config.userid = [[TIoTCoreXP2PBridge sharedInstance] getAppUUID];
+    
+    config.autoConfigFromDevice = NO;
+    config.type = XP2P_PROTOCOL_AUTO;
+    config.crossStunTurn = NO;
+    
+    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:self.productId dev_name:self.deviceName?:@"" appconfig:config];
     [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName xp2pinfo:xp2pValue];
     
     if (errorcode == XP2P_ERR_VERSION) {
