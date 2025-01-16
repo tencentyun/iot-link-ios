@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.source_files  = 'Source/SDK/LinkVideo/**/*.{h,m,c,mm}'
   s.resource = 'Source/SDK/LinkVideo/FLV/asset/GvoiceSE_v1_239-119-oneref-e.nn'
   
-  s.dependency 'TIoTLinkKit_XP2P', '2.4.53-beta.202501160208'
+  s.dependency 'TIoTLinkKit_XP2P', '2.4.53-beta.202501160957'
   s.dependency 'TIoTLinkKit_FLV', '2.2.3'
   s.dependency 'CocoaAsyncSocket', '7.6.5'
   s.dependency 'TIoTLinkKit_SoundTouch', '1.0.0'
