@@ -23,6 +23,8 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, strong)NSString *appsecret; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai)
 @property (nonatomic, strong)NSString *userid; //用户纬度（每个手机区分开）使用用户自有的账号系统userid；若无请配置为[TIoTCoreXP2PBridge sharedInstance].getAppUUID; 查找日志是需提供此userid字段
 
+@property (nonatomic, strong)NSString *xp2pinfo; //被连接设备的p2p_info
+
 @property (nonatomic, assign)BOOL autoConfigFromDevice; //是否跟随对应设备配置,YES 后下面的配置（cross、type等）不生效
 @property (nonatomic, assign)BOOL crossStunTurn; //是否打开双中转开关，默认false
 @property (nonatomic, assign)XP2PProtocolType type; //通信协议，默认auto
@@ -81,13 +83,10 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 /*
  * 启动 sdk 服务，productid和devicename可以从video控制台创建得倒
  * type: 默认auto模式，udp探测不通自动切换至tcp
+ * ready 回调之后，即可开始（拉流、发信令、对讲等）
  */
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig;
 
-/*
- * 设置设备 xp2pinfo ，ready 回调之后，即可开始（拉流、发信令、对讲等）
- */
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo;
 
 /*
  * 使用播放器播放时，需先等待 SDK 初始化完成，ready事件(xp2preconnect 通知)之后，即可获取到 http-url

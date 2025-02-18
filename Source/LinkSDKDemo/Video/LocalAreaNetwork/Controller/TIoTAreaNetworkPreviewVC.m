@@ -893,7 +893,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         //TODO 重新拉取 p2pinfo 后，setxp2pinfo
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" xp2pinfo:@"请重新拉取xp2pinfo，填入此处"];
+//        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:DeviceName?:@"" xp2pinfo:@"请重新拉取xp2pinfo，填入此处"];
         [self setVieoPlayerStartPlayWith:self.qualityString];
     });
 

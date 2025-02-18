@@ -246,6 +246,10 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         NSLog(@"请输入正确的appconfig");
         return XP2P_ERR_INIT_PRM;
     }
+    if (appconfig.xp2pinfo.length < 1) {
+        NSLog(@"请输入正确的xp2pInfo");
+        return XP2P_ERR_INIT_PRM;
+    }
     [self appGetUserConfig:appconfig]; //get config
     
     NSString *bundleid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]?:@"";
@@ -294,39 +298,9 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
             setCrossStunTurn(true);
         }
         ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, config_);
+        setDeviceXp2pInfo(dev_name.UTF8String, appconfig.xp2pinfo.UTF8String);
     }
     
-    return (XP2PErrCode)ret;
-}
-
-/*
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name sec_id:(NSString *)sec_id sec_key:(NSString *)sec_key  xp2pinfo:(NSString *)xp2pinfo {
-    
-    if (xp2pinfo == nil || [xp2pinfo isEqualToString:@""]) {
-        if ((sec_id == nil || [sec_id isEqualToString:@""])   ||  (sec_key == nil || [sec_key isEqualToString:@""])) {
-            NSLog(@"请输入正确的scretId和secretKey，或者xp2pInfo");
-            return XP2P_ERR_INIT_PRM;
-        }
-        setQcloudApiCred([sec_id UTF8String], [sec_key UTF8String]); //正式版app发布时候不需要传入secretid和secretkey，避免泄露secretid和secretkey，此处仅为演示
-        NSLog(@"⚠️⚠️⚠️ 请使用下面接口，本接口即将作废。 setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo appconfig:(TIoTP2PAPPConfig *)appconfig");
-    }
-    
-    TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
-    config.appkey = @"appkey"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
-    config.appsecret = @"appsecret"; //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
-    config.userid = [self getAppUUID];
-    [self setXp2pInfo:dev_name xp2pinfo:xp2pinfo appconfig:config];
-    return XP2P_ERR_INIT_PRM;
-}
-*/
-
-- (XP2PErrCode)setXp2pInfo:(NSString *)dev_name xp2pinfo:(NSString *)xp2pinfo {
-    if (xp2pinfo == nil || xp2pinfo.length < 1) {
-        NSLog(@"请输入正确的xp2pInfo");
-        return XP2P_ERR_INIT_PRM;
-    }
-    
-    int ret = setDeviceXp2pInfo(dev_name.UTF8String, xp2pinfo.UTF8String);
     return (XP2PErrCode)ret;
 }
 
@@ -458,6 +432,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
             setCrossStunTurn(true);
         }
         startService(self.dev_name.UTF8String, self.pro_id.UTF8String, self.dev_name.UTF8String, config_);
+        setDeviceXp2pInfo(self.dev_name.UTF8String, appconfig.xp2pinfo.UTF8String);
     }];
     [tasklog resume];
 }

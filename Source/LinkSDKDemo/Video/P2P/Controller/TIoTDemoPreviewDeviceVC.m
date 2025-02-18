@@ -126,25 +126,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     [self setupPreViewViews];
     
+    [self requestXp2pInfo];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     
-    TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
-    config.appkey = env.appKey;         //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
-    config.appsecret = env.appSecret;   //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
-    config.userid = [[TIoTCoreXP2PBridge sharedInstance] getAppUUID];
-    
-    config.autoConfigFromDevice = YES;
-    config.type = XP2P_PROTOCOL_AUTO;
-    config.crossStunTurn = NO;
-    
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@"" appconfig:config];
-    if (errorcode == XP2P_ERR_VERSION) {
-        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
-        UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alertC addAction:alertA];
-        [self presentViewController:alertC animated:YES completion:nil];
-    }
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"播放调试面板" style:UIBarButtonItemStylePlain target:self action:@selector(showHudView)];
     self.navigationItem.rightBarButtonItem = right;
 }
@@ -155,8 +139,27 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
-        [self setVieoPlayerStartPlayWith:self.qualityString];
+        
+        TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
+        config.appkey = env.appKey;         //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+        config.appsecret = env.appSecret;   //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
+        config.userid = [[TIoTCoreXP2PBridge sharedInstance] getAppUUID];
+        
+        
+        config.xp2pinfo = xp2pInfo;
+        
+        config.autoConfigFromDevice = NO;
+        config.type = XP2P_PROTOCOL_AUTO;
+        config.crossStunTurn = NO;
+        
+        int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@"" appconfig:config];
+        if (errorcode == XP2P_ERR_VERSION) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+        }
         
         //计算IPC打洞开始时间
         self.startIpcP2P = CACurrentMediaTime();
@@ -1186,28 +1189,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         [MBProgressHUD show:[NSString stringWithFormat:@"%@ 本地服务已ready，可发起拉流或推流",selectedName] icon:@"" view:self.view];
         
+        [self setVieoPlayerStartPlayWith:self.qualityString];
         //计算IPC打洞时间
         self.endIpcP2P = CACurrentMediaTime();
         
-        //NSString *appVersion = [TIoTCoreXP2PBridge getSDKVersion];
-        // appVersion.floatValue < 2.1 旧设备直接播放，不用发送信令验证设备状态和添加参数
-        /*
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName]?:@"";
-             
-             self.videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live",urlString];
-             
-             [self configVideo];
-             [self.player prepareToPlay];
-             [self.player play];
-             
-             self.startPlayer = CACurrentMediaTime();
-         });
-         */
-        [self requestXp2pInfo];
-//        [self setVieoPlayerStartPlayWith:self.qualityString];
-        
-//        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
     }
 }
 
@@ -1255,7 +1240,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
+//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
     
     [self getDeviceStatusWithType:action_live qualityType:self.qualityString completion:^(BOOL finished) {
         if (finished) {
