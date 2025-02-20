@@ -8,6 +8,7 @@
 #import "TIoTCoreXP2PBridge.h"
 #import "UILabel+TIoTExtension.h"
 #import "TIoTAreaNetworkConfigVC.h"
+#import "TIoTDeviceInfoVC.h"
 @interface TIoTDemoVideoVC ()
 
 @end
@@ -86,9 +87,10 @@
     }];
     
     UIButton *industryVersionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [industryVersionBtn setButtonFormateWithTitlt:@"IoT Video（行业版）" titleColorHexString:kVideoDemoMainThemeColor font:[UIFont wcPfRegularFontOfSize:17]];
+    [industryVersionBtn setButtonFormateWithTitlt:@"IoT Video（直连设备）" titleColorHexString:kVideoDemoMainThemeColor font:[UIFont wcPfRegularFontOfSize:17]];
     industryVersionBtn.layer.borderColor = [UIColor colorWithHexString:kVideoDemoMainThemeColor].CGColor;
     industryVersionBtn.layer.borderWidth = 1;
+    [industryVersionBtn addTarget:self action:@selector(jumpOnlyDevice) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:industryVersionBtn];
     [industryVersionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(consumerVersionBtn);
@@ -110,6 +112,11 @@
 - (void)jumpPlaying {
     TIoTDemoPlayConfigVC *demoPlayListVC = [[TIoTDemoPlayConfigVC alloc]init];
     [self.navigationController pushViewController:demoPlayListVC animated:YES];
+}
+
+- (void)jumpOnlyDevice {
+    TIoTDeviceInfoVC *areaNetVC = [[TIoTDeviceInfoVC alloc]init];
+    [self.navigationController pushViewController:areaNetVC animated:YES];
 }
 
 - (void)jumpLocalAreaNetwork {

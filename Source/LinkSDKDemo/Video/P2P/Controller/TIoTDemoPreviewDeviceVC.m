@@ -134,17 +134,20 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)requestDiffDeviceDataWithXp2pInfo:(NSString *)xp2pInfo {
+    if (xp2pInfo.length < 1) {
+        return;
+    }
     if (self.isNVR == NO) {
         //云存事件列表
         [self requestCloudStoreVideoList];
         
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
+        [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
         
         TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
         config.appkey = env.appKey;         //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
         config.appsecret = env.appSecret;   //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
         config.userid = [[TIoTCoreXP2PBridge sharedInstance] getAppUUID];
-        
         
         config.xp2pinfo = xp2pInfo;
         
@@ -171,6 +174,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)requestXp2pInfo {
     
+    if (self.mXp2pInfo.length > 1) {
+        [self requestDiffDeviceDataWithXp2pInfo:self.mXp2pInfo];
+        return;
+    }
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
     paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
     paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
@@ -184,7 +191,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
         [weakSelf requestDiffDeviceDataWithXp2pInfo:xp2pInfoString];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        [weakSelf requestDiffDeviceDataWithXp2pInfo:@""];
         [MBProgressHUD showError:@"xp2pInfo api请求失败"];
     }];
 }
@@ -1048,10 +1054,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 #pragma mark -IJKPlayer
 - (void)loadStateDidChange:(NSNotification*)notification
 {
-    //    MPMovieLoadStateUnknown        = 0,
-    //    MPMovieLoadStatePlayable       = 1 << 0,
-    //    MPMovieLoadStatePlaythroughOK  = 1 << 1, // Playback will be automatically started in this state when shouldAutoplay is YES
-    //    MPMovieLoadStateStalled        = 1 << 2, // Playback will be automatically paused in this state, if started
 
     IJKMPMovieLoadState loadState = _player.loadState;
 
@@ -1072,13 +1074,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     if (seicontent) {
         return;
     }
-    
-    //    MPMoviePlaybackStateStopped,
-    //    MPMoviePlaybackStatePlaying,
-    //    MPMoviePlaybackStatePaused,
-    //    MPMoviePlaybackStateInterrupted,
-    //    MPMoviePlaybackStateSeekingForward,
-    //    MPMoviePlaybackStateSeekingBackward
 
     switch (_player.playbackState)
     {
@@ -1207,50 +1202,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSLog(@"通道断开，正在重连");
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
-    if (!self.is_reconnect_xp2p) {
-        self.is_reconnect_xp2p = YES;
-        [self resconnectXp2pRequestInfo:DeviceName];
-    }
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [self requestXp2pInfo];// 重新获取info，启动p2p
 }
 
-- (void)resconnectXp2pRequestInfo:(NSString *)DeviceName {
-    if (self.is_reconnect_break) {
-        //退出页面，停止重连
-        return;
-    }
-    
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
-    paramDic[@"DeviceName"] = self.deviceName?:@"";
-    
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeDeviceData vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        TIoTXp2pInfoModel *model = [TIoTXp2pInfoModel yy_modelWithJSON:responseObject];
-        NSDictionary *p2pInfo = [NSString jsonToObject:model.Data?:@""];
-        TIoTXp2pModel *infoModel = [TIoTXp2pModel yy_modelWithJSON:p2pInfo];
-        NSString *xp2pInfoString = infoModel._sys_xp2p_info.Value?:@"";
-        
-        [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:xp2pInfoString?:@""];
-//        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求成功"];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        [self resconnectXp2pWithDevicename:DeviceName?:@"" xp2pInfo:@""];
-//        [MBProgressHUD showError:@"p2p重连 xp2pInfo api请求失败"];
-    }];
-}
-
-- (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
-    TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-//    [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
-    
-    [self getDeviceStatusWithType:action_live qualityType:self.qualityString completion:^(BOOL finished) {
-        if (finished) {
-            self.is_reconnect_xp2p = NO; //连通成功后，复位标记
-        }else {
-            [self resconnectXp2pRequestInfo:deviceName];
-        }
-        
-    }];
-}
 
 /// MARK:新设备
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
@@ -1354,8 +1309,8 @@ NSFileHandle *_fileHandle;
 //        [self.player setOptionIntValue:0 forKey:@"seek-at-start" ofCategory:kIJKFFOptionCategoryPlayer];
 //        [self.player setOptionIntValue:25 * 1024 forKey:@"max-buffer-size" ofCategory:kIJKFFOptionCategoryPlayer];
         
-        [self.player setAudioSpeed:1.2f];
-        [self.player setMaxPacketNum:5];
+//        [self.player setAudioSpeed:1.2f];
+//        [self.player setMaxPacketNum:5];
         
     }else {
         // 2.通过裸流服务拉流
@@ -1645,15 +1600,6 @@ NSFileHandle *_fileHandle;
     NSAssert(window, @"The window is empty");
     return window.rootViewController;
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 //需注意此方法全局覆盖，别的地方就收不到断网通知了
 - (void)registerNetworkNotifications {
@@ -1691,7 +1637,6 @@ NSFileHandle *_fileHandle;
 }
 
 - (void)appNetWorkResume {
-    return;
     if (self.endPlayer == 0) { //正在直播中，断开才响应
         return;
     }
@@ -1699,8 +1644,6 @@ NSFileHandle *_fileHandle;
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     [self requestXp2pInfo];// 重新获取info，启动p2p
-//    [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudSecretId sec_key:env.cloudSecretKey pro_id:env.cloudProductId dev_name:self.deviceName?:@""];
-
 }
 
 @end
