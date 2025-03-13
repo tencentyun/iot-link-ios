@@ -20,8 +20,12 @@ FILE *p2pOutLogFile;
 //NSFileHandle *fileHandle;
 static BOOL p2p_log_enabled = NO;
 static BOOL ops_report_enabled = YES;
+@interface TIoTP2PAPPConfig ()
+@property (nonatomic, strong)NSString *userid;
+@end
 @implementation TIoTP2PAPPConfig
 @end
+
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
 @property (nonatomic, strong) NSString *dev_name;
@@ -241,7 +245,46 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
     return jsonString.UTF8String;
 }
 
+// 判断版本号是否小于 2.4.49
+BOOL isVersionLessThanTarget(NSString *version, NSString *targetVersion) {
+    // 将版本号拆分为数组
+    NSArray *versionComponents = [version componentsSeparatedByString:@"."];
+    NSArray *targetComponents = [targetVersion componentsSeparatedByString:@"."];
+    
+    // 逐个比较版本号
+    for (NSInteger i = 0; i < MIN(versionComponents.count, targetComponents.count); i++) {
+        NSInteger versionPart = [versionComponents[i] integerValue];
+        NSInteger targetPart = [targetComponents[i] integerValue];
+        
+        if (versionPart < targetPart) {
+            return YES; // 当前部分小于目标部分
+        } else if (versionPart > targetPart) {
+            return NO; // 当前部分大于目标部分
+        }
+    }
+    
+    // 如果前面的部分都相等，就返回不小于（NO表示大于等于）
+    return NO;
+}
+
+// 提取 % 后面的子字符串并判断版本
+BOOL checkVersionAfterPercent(NSString *input) {
+    // 查找 % 的位置
+    NSRange percentRange = [input rangeOfString:@"%"];
+    if (percentRange.location == NSNotFound) {
+        NSLog(@"未找到 % 符号");
+        return NO;
+    }
+    
+    // 提取 % 后面的子字符串
+    NSString *versionString = [input substringFromIndex:percentRange.location + 1];
+    
+    // 判断版本是否小于 2.4.49
+    return isVersionLessThanTarget(versionString, @"2.4.49");
+}
+
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
+    appconfig.userid = [self getAppUUID];
     if (!appconfig || appconfig.appkey.length < 1 || appconfig.appsecret.length < 1 || appconfig.userid.length < 1) {
         NSLog(@"请输入正确的appconfig");
         return XP2P_ERR_INIT_PRM;
@@ -250,6 +293,12 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         NSLog(@"请输入正确的xp2pInfo");
         return XP2P_ERR_INIT_PRM;
     }
+    BOOL result = checkVersionAfterPercent(appconfig.xp2pinfo);
+    if (result) {
+        appconfig.autoConfigFromDevice = NO;
+    }
+    
+    
     [self appGetUserConfig:appconfig]; //get config
     
     NSString *bundleid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"]?:@"";
@@ -320,7 +369,9 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
         // Base64 解码
         const char *cKey  = [secret cStringUsingEncoding:NSASCIIStringEncoding];
         const char *cData = [message cStringUsingEncoding:NSASCIIStringEncoding];
-
+        if (cKey == NULL || cData == NULL) {
+            return nil;
+        }
         //sha1
         unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
         CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cData, strlen(cData), cHMAC);

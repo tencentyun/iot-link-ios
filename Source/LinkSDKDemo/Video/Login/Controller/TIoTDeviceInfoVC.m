@@ -195,8 +195,6 @@
     
     self.productID.text = [TIoTCoreUserManage shared].demoAreaNetProductID;
     self.devicenname.text =  [TIoTCoreUserManage shared].demoAreaNetClientToken;
-    self.xp2pinfo.text =  [TIoTCoreUserManage shared].demoAreaNetClientToken;
-
 }
 
 - (void)saveInputInfo {

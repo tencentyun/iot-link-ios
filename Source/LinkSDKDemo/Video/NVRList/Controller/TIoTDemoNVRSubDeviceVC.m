@@ -189,7 +189,6 @@ static NSString *const action_NVRSubdeviceList = @"action=inner_define&cmd=get_n
     TIoTP2PAPPConfig *config = [TIoTP2PAPPConfig new];
     config.appkey = env.appKey;         //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
     config.appsecret = env.appSecret;   //为explorer平台注册的应用信息(https://console.cloud.tencent.com/iotexplorer/v2/instance/app/detai) explorer控制台- 应用开发 - 选对应的应用下的 appkey/appsecret
-    config.userid = [[TIoTCoreXP2PBridge sharedInstance] getAppUUID];
     
     config.xp2pinfo = xp2pInfoString;
     
