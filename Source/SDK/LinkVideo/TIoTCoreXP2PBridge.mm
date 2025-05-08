@@ -232,7 +232,7 @@ static int32_t avg_max_min(avg_context *avg_ctx, int32_t val)
         
         _uniReqStartTime = [NSMutableDictionary dictionary];
         
-        [self getAppConfig];
+        [self getAppLogConfig];
     }
     return self;
 }
@@ -419,7 +419,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
-            [self setAppConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
+            [self setAppLogConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
         }
     }];
     [tasklog resume];
@@ -929,7 +929,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     }
 }
 
-- (void)getAppConfig {
+- (void)getAppLogConfig {
     NSString * tmp_p2p_log_enabled = [self readKeychainValue:@"p2p_log_enabled"];
     NSString * tmp_ops_report_enabled = [self readKeychainValue:@"ops_report_enabled"];
     
@@ -940,7 +940,7 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
         ops_report_enabled = tmp_ops_report_enabled.boolValue;
     }
 }
-- (void)setAppConfig:(NSDictionary *)appconfig {
+- (void)setAppLogConfig:(NSDictionary *)appconfig {
     NSString * tmp_p2p_log_enabled = [appconfig objectForKey:@"P2PLogEnabled"];
     NSString * tmp_ops_report_enabled = [appconfig objectForKey:@"OpsLogEnabled"];
 
