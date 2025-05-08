@@ -22,14 +22,16 @@ static BOOL p2p_log_enabled = NO;
 static BOOL ops_report_enabled = YES;
 @interface TIoTP2PAPPConfig ()
 @property (nonatomic, strong)NSString *userid;
+@property (nonatomic, strong)NSString *pro_id;
+@property (nonatomic, strong)NSString *dev_name;
 @end
 @implementation TIoTP2PAPPConfig
 @end
 
 
 @interface TIoTCoreXP2PBridge ()<TIoTAVCaptionFLVDelegate>
-@property (nonatomic, strong) NSString *dev_name;
-@property (nonatomic, strong) NSString *pro_id;
+@property (nonatomic, strong) NSString *talk_dev_name;
+@property (nonatomic, strong) TIoTP2PAPPConfig *appConfig;
 @property (nonatomic, assign) BOOL isSending;
 @property (nonatomic, strong) AVCaptureSessionPreset resolution;
 @property (nonatomic, strong) NSTimer *getBufTimer;
@@ -285,6 +287,10 @@ BOOL checkVersionAfterPercent(NSString *input) {
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
     appconfig.userid = [self getAppUUID];
+    appconfig.pro_id = pro_id;
+    appconfig.dev_name = dev_name;
+    self.appConfig = appconfig;
+    
     if (!appconfig || appconfig.appkey.length < 1 || appconfig.appsecret.length < 1 || appconfig.userid.length < 1) {
         NSLog(@"请输入正确的appconfig");
         return XP2P_ERR_INIT_PRM;
@@ -327,8 +333,6 @@ BOOL checkVersionAfterPercent(NSString *input) {
     setCrossStunTurn(false);
     
     //1.配置IOT_P2P SDK
-    self.pro_id = pro_id;
-    self.dev_name = dev_name;
     
     int ret = XP2P_ERR_NONE;
     
@@ -346,8 +350,11 @@ BOOL checkVersionAfterPercent(NSString *input) {
         if (appconfig.crossStunTurn) {
             setCrossStunTurn(true);
         }
-        ret = startService(dev_name.UTF8String, pro_id.UTF8String, dev_name.UTF8String, config_);
-        setDeviceXp2pInfo(dev_name.UTF8String, appconfig.xp2pinfo.UTF8String);
+
+        // 拼接新的参数
+        NSString *combinedId = [NSString stringWithFormat:@"%@/%@", pro_id, dev_name];
+        ret = startService(combinedId.UTF8String, pro_id.UTF8String, dev_name.UTF8String, config_);
+        setDeviceXp2pInfo(combinedId.UTF8String, appconfig.xp2pinfo.UTF8String);
     }
     
     return (XP2PErrCode)ret;
@@ -424,8 +431,8 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     [accessParam setValue:@([[TIoTCoreXP2PBridge getNowTimeTimestampSec] integerValue]) forKey:@"Timestamp"];
     [accessParam setValue:@(arc4random()) forKey:@"Nonce"];
     [accessParam setValue:appconfig.appkey forKey:@"AppKey"];
-    [accessParam setValue:self.pro_id forKey:@"ProductId"];
-    [accessParam setValue:self.dev_name forKey:@"DeviceName"];
+    [accessParam setValue:appconfig.pro_id forKey:@"ProductId"];
+    [accessParam setValue:appconfig.dev_name forKey:@"DeviceName"];
     [accessParam setValue:[[NSUUID UUID] UUIDString] forKey:@"RequestId"];
     
     NSString *content = createSortedQueryString(accessParam);
@@ -482,14 +489,17 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
         if (config_.cross) {
             setCrossStunTurn(true);
         }
-        startService(self.dev_name.UTF8String, self.pro_id.UTF8String, self.dev_name.UTF8String, config_);
-        setDeviceXp2pInfo(self.dev_name.UTF8String, appconfig.xp2pinfo.UTF8String);
+        
+        NSString *combinedId = [NSString stringWithFormat:@"%@/%@", appconfig.pro_id, appconfig.dev_name];
+
+        startService(combinedId.UTF8String, appconfig.pro_id.UTF8String, appconfig.dev_name.UTF8String, config_);
+        setDeviceXp2pInfo(combinedId.UTF8String, appconfig.xp2pinfo.UTF8String);
     }];
     [tasklog resume];
 }
 
-- (NSString *)getUrlForHttpFlv:(NSString *)dev_name {
-    const char *httpflv =  delegateHttpFlv(dev_name.UTF8String);
+- (NSString *)getUrlForHttpFlv:(NSString *)combinedId {
+    const char *httpflv =  delegateHttpFlv(combinedId.UTF8String);
     NSLog(@"httpflv---%s",httpflv);
     if (httpflv) {
         return [NSString stringWithCString:httpflv encoding:[NSString defaultCStringEncoding]];
@@ -497,7 +507,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     return @"";
 }
 
-
+/*
 - (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port {
     setUserCallbackToXp2p(XP2PDataMsgHandle, XP2PMsgHandle, XP2PReviceDeviceCustomMsgHandle);
     
@@ -519,8 +529,9 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     int proxyPort = getLanProxyPort(dev_name.UTF8String);
     return proxyPort;
 }
+*/
 
-- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
+- (void)getCommandRequestWithAsync:(NSString *)combinedId cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion{
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -531,7 +542,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
         size_t cmdLen = data.length;
         
 //        getCommandRequestWithSync(dev_name.UTF8String, cmd.UTF8String, &buf, &len, timeout);
-        postCommandRequestSync(dev_name.UTF8String, (const unsigned char *)cmd.UTF8String, cmdLen, &bbuf, &len, timeout);
+        postCommandRequestSync(combinedId.UTF8String, (const unsigned char *)cmd.UTF8String, cmdLen, &bbuf, &len, timeout);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion && bbuf) {
                 completion([NSString stringWithUTF8String:(char *)bbuf]);
@@ -540,31 +551,31 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     });
 }
 
-- (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd {
-    startAvRecvService(dev_name.UTF8String, cmd.UTF8String, false);
+- (void)startAvRecvService:(NSString *)combinedId cmd:(NSString *)cmd {
+    startAvRecvService(combinedId.UTF8String, cmd.UTF8String, false);
 }
 
-- (XP2PErrCode)stopAvRecvService:(NSString *)dev_name {
-    return (XP2PErrCode)stopAvRecvService(dev_name.UTF8String, nullptr);
+- (XP2PErrCode)stopAvRecvService:(NSString *)combinedId {
+    return (XP2PErrCode)stopAvRecvService(combinedId.UTF8String, nullptr);
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number {
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:TIoTAVCaptionFLVAudio_8];
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number {
+    [self sendVoiceToServer:combinedId channel:channel_number audioConfig:TIoTAVCaptionFLVAudio_8];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate{
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:nil];
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate{
+    [self sendVoiceToServer:combinedId channel:channel_number audioConfig:audio_rate withLocalPreviewView:nil];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView {
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:AVCaptureDevicePositionBack];
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView {
+    [self sendVoiceToServer:combinedId channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:AVCaptureDevicePositionBack];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition {
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:videoPosition isEchoCancel:NO];
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition {
+    [self sendVoiceToServer:combinedId channel:channel_number audioConfig:audio_rate withLocalPreviewView:localView videoPosition:videoPosition isEchoCancel:NO];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel {
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel {
     TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
     audio_config.sampleRate = audio_rate;
     audio_config.channels = 1;
@@ -574,7 +585,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
     video_config.localView = localView;
     video_config.videoPosition = videoPosition;
-    [self sendVoiceToServer:dev_name channel:channel_number audioConfig:audio_config videoConfig:video_config];
+    [self sendVoiceToServer:combinedId channel:channel_number audioConfig:audio_config videoConfig:video_config];
 }
 
 - (void)setupAVAudioSession:(TIoTCoreAudioConfig *)audio_config {
@@ -595,7 +606,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     [avsession setActive:YES error:nil];
 }
 
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config {
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config {
 //    [self setupAVAudioSession:audio_config];
 //    NSString *audioFile = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"testVideoStreamfile.flv"];
 //    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
@@ -610,9 +621,9 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     audio_config.channels = 1;
     self.isSending = YES;
     
-    self.dev_name = dev_name;
+    self.talk_dev_name = combinedId;
     const char *channel = [channel_number UTF8String];
-    _serverHandle = runSendService(dev_name.UTF8String, channel, false); //发送数据前需要告知http proxy
+    _serverHandle = runSendService(combinedId.UTF8String, channel, false); //发送数据前需要告知http proxy
     
     
     if (systemAvCapture == nil) {
@@ -648,14 +659,14 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
 - (int32_t)getSendingBufSize {
     int32_t bufsize = 0;
     if (self.isSending) {
-        bufsize = (int32_t)getStreamBufSize(self.dev_name.UTF8String);
+        bufsize = (int32_t)getStreamBufSize(self.talk_dev_name.UTF8String);
     }
     return bufsize;
 }
 
 - (void)getSendBufSize {
     
-    int32_t bufsize = (int32_t)getStreamBufSize(self.dev_name.UTF8String);
+    int32_t bufsize = (int32_t)getStreamBufSize(self.talk_dev_name.UTF8String);
     
     
     int32_t p2p_wl_avg = avg_max_min(&_p2p_wl_avg_ctx, bufsize);
@@ -709,13 +720,13 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     systemAvCapture.videoLocalView = nil;
     [systemAvCapture stopCapture];
     
-    int errorcode = stopSendService(self.dev_name.UTF8String, nullptr);
+    int errorcode = stopSendService(self.talk_dev_name.UTF8String, nullptr);
     return (XP2PErrCode)errorcode;
 }
 
-- (void)stopService:(NSString *)dev_name {
+- (void)stopService:(NSString *)combinedId {
     [self stopVoiceToServer];
-    stopService(dev_name.UTF8String);
+    stopService(combinedId.UTF8String);
     
 //    [self.logger stopLogging];
     //关闭文件
@@ -733,7 +744,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
 - (void)capture:(uint8_t *)data len:(size_t)size {
     if (self.isSending) {
 //        NSLog(@"vide stream data:%s  size:%zu",data,size);
-        dataSend(self.dev_name.UTF8String, data, size);
+        dataSend(self.talk_dev_name.UTF8String, data, size);
 //        NSData *dataTag = [NSData dataWithBytes:data length:size];
 //        [fileHandle writeData:dataTag];
     }
@@ -877,8 +888,8 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     [accessParam setValue:@"app" forKey:@"Platform"];
     [accessParam setValue:[self getAppUUID] forKey:@"Uuid"];
     [accessParam setValue:[self getAppUUID] forKey:@"UserId"];
-    [accessParam setValue:self.pro_id forKey:@"ProductId"];
-    [accessParam setValue:self.dev_name forKey:@"DeviceName"];
+    [accessParam setValue:self.appConfig.pro_id forKey:@"ProductId"];
+    [accessParam setValue:self.appConfig.dev_name forKey:@"DeviceName"];
     [accessParam setValue:@(report.live_size) forKey:@"ByteCount"];
     [accessParam setValue:@(0) forKey:@"Channel"];
     [accessParam setValue:appPeerName forKey:@"AppPeerNameFromApp"];
@@ -941,12 +952,12 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     return [NSString stringWithUTF8String:VIDEOSDKVERSION];
 }
 
-+ (void)recordstream:(NSString *)dev_name {
-    startRecordPlayerStream(dev_name.UTF8String);
++ (void)recordstream:(NSString *)combinedId {
+    startRecordPlayerStream(combinedId.UTF8String);
 }
 
-+ (int)getStreamLinkMode:(NSString *)dev_name {
-    return getStreamLinkMode(dev_name.UTF8String);
++ (int)getStreamLinkMode:(NSString *)combinedId {
+    return getStreamLinkMode(combinedId.UTF8String);
 }
 
 +(NSString *)getNowTimeTimestamp {

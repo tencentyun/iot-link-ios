@@ -38,25 +38,25 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * 通过 startAvRecvService 和 stopAvRecvService 接口，可以启动和停止裸流传输
  * 客户端拉取到的裸流数据对应 data 参数
  */
-- (void)getVideoPacketWithID:(NSString *)dev_name data:(uint8_t *)data len:(size_t)len;
+- (void)getVideoPacketWithID:(NSString *)combinedId data:(uint8_t *)data len:(size_t)len;
 
 
 /*
  * ⚠️⚠️⚠️ 谨慎！！！ === 此接口切勿执行耗时操作，耗时操作请切换线程，切勿卡住当前线程，返回值需立即返回
  *
  * 接口功能 === 设备主动发消息给app:
- * dev_name 和所有接口的dev_name参数是保持一致，表示给那个哪个设备发的流
+ * combinedId 和所有接口的combinedId 参数是保持一致，表示给那个哪个设备发的流
  * data是设备主动发过来的内容
  * 需注意使用场景：只能在直播，回看或对讲期间设备才可以主动发
  * char *返回值表示回复给设备的返回信息
  */
-- (NSString *)reviceDeviceMsgWithID:(NSString *)dev_name data:(NSData *)data;
+- (NSString *)reviceDeviceMsgWithID:(NSString *)combinedId data:(NSData *)data;
 
 /*
  * sdk 事件消息,事件对应类型与意义详见 XP2PType 类型说明
  * msg 事件详情
  */
-- (void)reviceEventMsgWithID:(NSString *)dev_name eventType:(XP2PType)eventType msg:(const char*) msg;
+- (void)reviceEventMsgWithID:(NSString *)combinedId eventType:(XP2PType)eventType msg:(const char*) msg;
 @end
 
 
@@ -88,37 +88,36 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 
 /*
+ * ⚠️⚠️⚠️ 注意！！！ 所有涉及combinedId ，都使用 productid/devicename 拼接表达。 例如 "pro_id/dev_name"
  * 使用播放器播放时，需先等待 SDK 初始化完成，ready事件(xp2preconnect 通知)之后，即可获取到 http-url
  */
-- (NSString *)getUrlForHttpFlv:(NSString *)dev_name;
+- (NSString *)getUrlForHttpFlv:(NSString *)combinedId;
 
 /*
+ * ⚠️⚠️⚠️ 注意！！！ 所有涉及combinedId ，都使用 productid/devicename 拼接表达。 例如 "pro_id/dev_name"
  * 与设备信令交互接口
  * 1.设备端回复 app 的消息没有限制
  * 2.app 发送给设备的信令，要求不带&符号，信令长度不超过3000个字节
  *
  * 事例 cmd 参数（action=inner_define&cmd=get_nvr_list）
  */
-- (void)getCommandRequestWithAsync:(NSString *)dev_name cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
+- (void)getCommandRequestWithAsync:(NSString *)combinedId cmd:(NSString *)cmd timeout:(uint64_t)timeout completion:(void (^ __nullable)(NSString * jsonList))completion;
 
 /*
+ * ⚠️⚠️⚠️ 注意！！！ 所有涉及combinedId ，都使用 productid/devicename 拼接表达。 例如 "pro_id/dev_name"
  * 开始停止裸流传输接口，通过代理 getVideoPacket 返回裸流数据
  */
-- (void)startAvRecvService:(NSString *)dev_name cmd:(NSString *)cmd;
-- (XP2PErrCode)stopAvRecvService:(NSString *)dev_name;
+- (void)startAvRecvService:(NSString *)combinedId cmd:(NSString *)cmd;
+- (XP2PErrCode)stopAvRecvService:(NSString *)combinedId;
 
 /*
+ * ⚠️⚠️⚠️ 注意！！！ 所有涉及combinedId ，都使用 productid/devicename 拼接表达。 例如 "pro_id/dev_name"
  * 语音对讲开始结束接口
  */
 //对讲音频默认采样率
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number;
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number;
 //可通过此接口 audio_onfig 参数既可设置对讲音频码率（bitrate）、采样率（sampleRate）、channelCount、sampleSize
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate;
-//音视频采样
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView;                                                                                       __attribute__((deprecated("Use -sendVoiceToServer: channel: audioConfig: videoConfig:")));
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition;                                  __attribute__((deprecated("Use -sendVoiceToServer: channel: audioConfig: videoConfig:")));
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTAVCaptionFLVAudioType)audio_rate withLocalPreviewView:(UIView *)localView videoPosition:(AVCaptureDevicePosition)videoPosition isEchoCancel:(BOOL)isEchoCancel;  __attribute__((deprecated("Use -sendVoiceToServer: channel: audioConfig: videoConfig:")));
-- (void)sendVoiceToServer:(NSString *)dev_name channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config;
+- (void)sendVoiceToServer:(NSString *)combinedId channel:(NSString *)channel_number audioConfig:(TIoTCoreAudioConfig *)audio_config videoConfig:(TIoTCoreVideoConfig *)video_config;
 //刷新本地预览视图
 - (void)refreshLocalView:(UIView *)localView;
 
@@ -131,28 +130,20 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 
 
 /*
- * 局域网相关接口
- */
-- (XP2PErrCode)startLanAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name remote_host:(NSString *)remote_host remote_port:(NSString *)remote_port;
-- (NSString *)getLanUrlForHttpFlv:(NSString *)dev_name;
-- (int)getLanProxyPort:(NSString *)dev_name;
-
-
-/*
  * 退出 SDK 服务
  */
-- (void)stopService:(NSString *)dev_name;
+- (void)stopService:(NSString *)combinedId;
 
 /*
  * 调试接口，录制通过播放器拉取的数据流并行保存到 Document 目录的 video.data 文件
  * 需提前打开 writeFile 开关
  */
-+ (void)recordstream:(NSString *)dev_name;
++ (void)recordstream:(NSString *)combinedId;
 
 /*
  * 获取当前发送链路的连接模式：0 无效；62 直连；63 转发
  */
-+ (int)getStreamLinkMode:(NSString *)dev_name;
++ (int)getStreamLinkMode:(NSString *)combinedId;
 
 /*
  * 获取当前发送音视频水位大小，正常水位保持在低位大约（0～1000）

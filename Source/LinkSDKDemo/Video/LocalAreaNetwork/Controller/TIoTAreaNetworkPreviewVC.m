@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     self.deviceName = self.model.params.deviceName;
     
-    int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
+    int errorcode = 0;//[[TIoTCoreXP2PBridge sharedInstance] startLanAppWith:self.productID?:@"" dev_name:self.deviceName?:@"" remote_host:self.model.params.address?:@"" remote_port:self.model.params.port?:@""];
     
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self setVieoPlayerStartPlayWith:self.qualityString];
@@ -156,7 +156,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 /// 对讲post请求
 - (void)voicePostRequest {
     
-    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0" audioConfig:TIoTAVCaptionFLVAudio_8];
+    [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:self.deviceName?:@"" channel:@"channel=0"];
 }
 
 - (void)setupPreViewViews {
@@ -902,11 +902,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 - (void)setVieoPlayerStartPlayWith:(NSString *)qualityString {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        int proxyPort = 0;//[[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
         NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
         
         // 获取URL 起播放器
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = nil;//[[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         
@@ -1124,11 +1124,11 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        int proxyPort = [[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
+        int proxyPort = 0;//[[TIoTCoreXP2PBridge sharedInstance] getLanProxyPort:self.deviceName];
         NSString *qualityID = [NSString stringWithFormat:@"%@&channel=0&_protocol=tcp&_port=%d&_crypto=off",qualityString,proxyPort];
         
         // 获取URL 起播放器
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = nil;//[[TIoTCoreXP2PBridge sharedInstance] getLanUrlForHttpFlv:self.deviceName?:@""];
         
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
