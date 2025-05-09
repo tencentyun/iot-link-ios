@@ -76,6 +76,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 @property (nonatomic, strong) NSString *saveFilePath; //视频保存路径
 @property (nonatomic, strong) NSString *deviceName; //设备名称 NVR 和 IPC model有区别
+@property (nonatomic, strong) NSString *productId;
+
+@property (nonatomic, strong) NSString *combinedId;
 
 @property (nonatomic, assign) CFTimeInterval startPlayer;
 @property (nonatomic, assign) CFTimeInterval endPlayer;
@@ -104,6 +107,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.is_reconnect_break = NO;
     
     _is_ijkPlayer_stream = YES;
+    
+    self.productId = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId;
     //关闭日志
     [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
@@ -117,6 +122,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }else {
         self.deviceName = self.deviceNameNVR?:@"";
     }
+    
+    self.combinedId = [NSString stringWithFormat:@"%@/%@", self.productId, self.deviceName];
     
     [self installMovieNotificationObservers];
 
@@ -231,7 +238,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     if (self.isNVR == NO) {
-        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+        [[TIoTCoreXP2PBridge sharedInstance] stopService:self.combinedId];
         
         [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
@@ -257,7 +264,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     __weak typeof(self) weakSelf = self;
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.combinedId cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
         TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
@@ -274,7 +281,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                     channel = [NSString stringWithFormat:@"channel=%d",channelNum.intValue];
                 }
                 
-//                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel];
+
                 [[TIoTSessionManager sharedInstance] resumeRTCAudioSession];
                 
                 static int tt_pitch = -6;
@@ -289,7 +296,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 video_config.localView = nil;
                 video_config.videoPosition = AVCaptureDevicePositionFront;
                 
-                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.deviceName?:@"" channel:channel audioConfig:audio_config videoConfig:video_config];
+                [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.combinedId channel:channel audioConfig:audio_config videoConfig:video_config];
                 
                 if(tt_pitch == 6){
                     tt_pitch = -6;
@@ -317,7 +324,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     }
     
     __weak typeof(self) weakSelf = self;
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.combinedId cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
         TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
         if ([responseModel.status isEqualToString:@"0"]) {
@@ -856,7 +863,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         singleString = [NSString stringWithFormat:@"%@&channel=0",singleText];
     }
     
-    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.deviceName?:@"" cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
+    [[TIoTCoreXP2PBridge sharedInstance] getCommandRequestWithAsync:self.combinedId cmd:singleText?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
         if (![NSString isNullOrNilWithObject:jsonList] || ![NSString isFullSpaceEmpty:jsonList]) {
             [MBProgressHUD showMessage:jsonList icon:@""];
         }
@@ -1108,7 +1115,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             [self presentViewController:alertC animated:YES completion:nil];
             
             //获取当前发送链路的连接模式：0 无效；62 直连；63 转发
-            int netmode = [TIoTCoreXP2PBridge getStreamLinkMode:self.deviceName];
+            int netmode = [TIoTCoreXP2PBridge getStreamLinkMode:self.combinedId];
             NSLog(@"nnnnnn---netmode==%d",netmode);
             
             break;
@@ -1201,7 +1208,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     NSLog(@"通道断开，正在重连");
     [MBProgressHUD showError:@"通道断开，正在重连"];
     
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.combinedId];
     [self requestXp2pInfo];// 重新获取info，启动p2p
 }
 
@@ -1218,7 +1225,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
             qualityID = [NSString stringWithFormat:@"%@&channel=0",qualityString];
         }
         
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.combinedId];
         
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         
@@ -1261,7 +1268,7 @@ NSFileHandle *_fileHandle;
         _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
 
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
-        [TIoTCoreXP2PBridge recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+        [TIoTCoreXP2PBridge recordstream:self.combinedId]; //保存到 document 目录 video.data 文件，需打开writeFile开关
 
         [self stopPlayMovie];
         
@@ -1321,7 +1328,7 @@ NSFileHandle *_fileHandle;
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
         if (self.isNVR == NO) {
-            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
+            [[TIoTCoreXP2PBridge sharedInstance] startAvRecvService:self.combinedId cmd:@"action=live"];
         }
         
     }
@@ -1525,7 +1532,7 @@ NSFileHandle *_fileHandle;
     if (self.isNVR == NO) {
         
         if ([TIoTCoreXP2PBridge sharedInstance].writeFile) {
-            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.deviceName?:@""];
+            [[TIoTCoreXP2PBridge sharedInstance] stopAvRecvService:self.combinedId];
         }
     }
     
@@ -1539,7 +1546,7 @@ NSFileHandle *_fileHandle;
     
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.deviceName?:@""];
+        NSString *urlString = [[TIoTCoreXP2PBridge sharedInstance] getUrlForHttpFlv:self.combinedId];
         self.videoUrl = [NSString stringWithFormat:@"%@%@",urlString,qualityID?:@""];
         [self configVideo];
 
@@ -1632,7 +1639,7 @@ NSFileHandle *_fileHandle;
     if (self.endPlayer == 0) { //正在直播中，断开才响应
         return;
     }
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.combinedId];
 }
 
 - (void)appNetWorkResume {
@@ -1640,7 +1647,7 @@ NSFileHandle *_fileHandle;
         return;
     }
     //重连使用
-    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.deviceName?:@""];
+    [[TIoTCoreXP2PBridge sharedInstance] stopService:self.combinedId];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     [self requestXp2pInfo];// 重新获取info，启动p2p
 }
