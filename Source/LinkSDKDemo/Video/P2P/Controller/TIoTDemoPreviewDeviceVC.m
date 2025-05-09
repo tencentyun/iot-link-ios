@@ -1182,7 +1182,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     UIViewController *view = [self getCurrentViewController];
     if ([view isMemberOfClass:[TIoTDemoPreviewDeviceVC class]]) {
         NSString *DeviceName = [notify.userInfo objectForKey:@"id"];
-        NSString *selectedName = self.deviceName?:@"";
+        NSString *selectedName = self.combinedId;
         
         if (![DeviceName isEqualToString:selectedName]) {
             return;
