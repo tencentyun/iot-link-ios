@@ -42,6 +42,7 @@ static BOOL ops_report_enabled = YES;
 - (void)doTick:(data_report_t)data_buf;
 @end
 
+__unsafe_unretained id<TIoTCoreXP2PBridgeDelegate> BridgeDelegate = nil;
 const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
     
     BOOL logEnable = [TIoTCoreXP2PBridge sharedInstance].logEnable;
@@ -113,22 +114,23 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             });
         }
         
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-            if ([delegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:msg:)]) {
-                [delegate reviceEventMsgWithID:DeviceName eventType:type msg:msg];
-            }
-        });
+        __weak typeof(id<TIoTCoreXP2PBridgeDelegate>) weakDelegate = BridgeDelegate;
+        if (weakDelegate) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (weakDelegate && [weakDelegate respondsToSelector:@selector(reviceEventMsgWithID:eventType:msg:)]) {
+                    [weakDelegate reviceEventMsgWithID:DeviceName eventType:type msg:msg];
+                }
+            });
+        }
     }
     return nullptr;
 }
 
 void XP2PDataMsgHandle(const char *idd, uint8_t* recv_buf, size_t recv_len) {
     NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
-    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-    if ([delegate respondsToSelector:@selector(getVideoPacketWithID:data:len:)]) {
-        [delegate getVideoPacketWithID:DeviceName data:recv_buf len:recv_len];
+    __weak typeof(id<TIoTCoreXP2PBridgeDelegate>) weakDelegate = BridgeDelegate;
+    if (weakDelegate && [weakDelegate respondsToSelector:@selector(getVideoPacketWithID:data:len:)]) {
+        [weakDelegate getVideoPacketWithID:DeviceName data:recv_buf len:recv_len];
     }
 }
 
@@ -138,12 +140,12 @@ char* XP2PReviceDeviceCustomMsgHandle(const char *idd, uint8_t* recv_buf, size_t
 
     NSString *response = @"{\"status\":0}"; //默认返回值
     
-    id<TIoTCoreXP2PBridgeDelegate> delegate = [TIoTCoreXP2PBridge sharedInstance].delegate;
-    if ([delegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
+    __weak typeof(id<TIoTCoreXP2PBridgeDelegate>) weakDelegate = BridgeDelegate;
+    if (weakDelegate && [weakDelegate respondsToSelector:@selector(reviceDeviceMsgWithID:data:)]) {
         
         NSString *DeviceName = [NSString stringWithCString:idd encoding:[NSString defaultCStringEncoding]]?:@"";
         NSData *DeviceData = [NSData dataWithBytes:recv_buf length:recv_len];
-        NSString *res = [delegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
+        NSString *res = [weakDelegate reviceDeviceMsgWithID:DeviceName data:DeviceData];
         if (res) {
             response = res;
         }
@@ -283,6 +285,11 @@ BOOL checkVersionAfterPercent(NSString *input) {
     
     // 判断版本是否小于 2.4.49
     return isVersionLessThanTarget(versionString, @"2.4.49");
+}
+
+- (void)setDelegate:(id<TIoTCoreXP2PBridgeDelegate>)delegate {
+    _delegate = delegate;
+    BridgeDelegate = _delegate;
 }
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
