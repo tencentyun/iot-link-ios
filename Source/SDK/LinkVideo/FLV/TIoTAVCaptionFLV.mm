@@ -377,8 +377,8 @@ void *ijk_soundtouch_handle = NULL;
     [self.pcmRecord addData:&circularBuf_gvoice_pcm :pcmdata :pcmlen];
 }
 
-static uint8_t pcm_buffer_origin[640];
-static uint8_t pcm_buffer_gvoice[640];
+static uint8_t pcm_buffer_origin[1280];
+static uint8_t pcm_buffer_gvoice[1280];
 static uint8_t pcm_buffer_result[8192];
 
 TPCircularBuffer circularBuf_gvoice_pcm;
@@ -391,23 +391,23 @@ static void record_callback(uint8_t *buffer, int size, void *u)
 //    dispatch_async(vc.audioEncodeQueue, ^{
         
         //1. get origin pcm
-        memset(pcm_buffer_origin, 0, 640);
-        UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :pcm_buffer_origin :640];
-        if (len < 640) {
+        memset(pcm_buffer_origin, 0, 1280);
+        UInt32 len = [vc.pcmRecord getData:&pcm_circularBuffer :pcm_buffer_origin :1280];
+        if (len < 1280) {
             return;
         }
         
         //2. =>aec pcm
-        memset(pcm_buffer_gvoice, 0, 640);
-        [vc.pcmRecord getData:&circularBuf_gvoice_pcm :pcm_buffer_gvoice :640];
+        memset(pcm_buffer_gvoice, 0, 1280);
+        [vc.pcmRecord getData:&circularBuf_gvoice_pcm :pcm_buffer_gvoice :1280];
         
         //trae gvoice inout pcm_buffer_origin
         if (vc.isEchoCancel && vc.trae_is_valid == 0) {
-            [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice];
+            [GVoiceSE voice_handle_process:(char *)pcm_buffer_origin ref:(char *)pcm_buffer_gvoice len:1280];
         }
     
         //3. pcm=>aac
-        [vc.pcmRecord addData:&circularBuf_result_pcm :pcm_buffer_origin :640];
+        [vc.pcmRecord addData:&circularBuf_result_pcm :pcm_buffer_origin :1280];
     
         static int tmpChannelDataLen = 2048;//vc.pcmRecord.pcmStreamDescription.mChannelsPerFrame * 2048;
         UInt32 aaclen = [vc.pcmRecord getData:&circularBuf_result_pcm :pcm_buffer_result :tmpChannelDataLen];
@@ -569,8 +569,8 @@ int encodeFlvData(int type, NSData *packetData) {
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
     
-    [self.pcmRecord Init_buffer:&circularBuf_gvoice_pcm :1920];
-    [self.pcmRecord Init_buffer:&circularBuf_result_pcm :1920];
+    [self.pcmRecord Init_buffer:&circularBuf_gvoice_pcm :2560];
+    [self.pcmRecord Init_buffer:&circularBuf_result_pcm :2560];
     flv_init_load();
     if (self.videoConfig.isExternal) {
         return YES;//走外部采集数据发送
