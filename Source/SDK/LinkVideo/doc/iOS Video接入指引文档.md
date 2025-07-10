@@ -50,7 +50,7 @@ if (code == XP2P_OK) {
 ### 3.2 视频直播
 ```objective-c
 // 获取HTTP-FLV播放地址
-NSString *url = [bridge getUrlForHttpFlv:@"设备名称"];
+NSString *url = [bridge getUrlForHttpFlv:@"产品ID/设备名称"];
 
 // 使用播放器播放URL
 ```
@@ -69,7 +69,7 @@ videoConfig.localView = self.previewView; // 本地预览视图，如果只有�
 videoConfig.videoPosition = AVCaptureDevicePositionFront; // 前置摄像头
 
 // 开始对讲
-[bridge sendVoiceToServer:@"设备名称" channel:@"0" audioConfig:audioConfig videoConfig:videoConfig];
+[bridge sendVoiceToServer:@"产品ID/设备名称" channel:@"0" audioConfig:audioConfig videoConfig:videoConfig];
 
 // 停止对讲
 [bridge stopVoiceToServer];
@@ -77,7 +77,7 @@ videoConfig.videoPosition = AVCaptureDevicePositionFront; // 前置摄像头
 
 ### 3.4 设备信令交互,具体信令参数 [参考此处](https://cloud.tencent.com/document/product/1131/61744)
 ```objective-c
-[bridge getCommandRequestWithAsync:@"设备名称" cmd:@"action=inner_define&channel=0&cmd=get_device_st" timeout:2*1000*1000 completion:^(NSString *jsonList) {
+[bridge getCommandRequestWithAsync:@"产品ID/设备名称" cmd:@"action=inner_define&channel=0&cmd=get_device_st" timeout:2*1000*1000 completion:^(NSString *jsonList) {
     NSLog(@"收到设备回复: %@", jsonList);
 }];
 ```
@@ -91,10 +91,10 @@ videoConfig.videoPosition = AVCaptureDevicePositionFront; // 前置摄像头
 
 // 开始接收裸流
 bridge.delegate = self;
-[bridge startAvRecvService:@"设备名称" cmd:@"action=live"];
+[bridge startAvRecvService:@"产品ID/设备名称" cmd:@"action=live"];
 
 // 停止接收裸流
-[bridge stopAvRecvService:@"设备名称"];
+[bridge stopAvRecvService:@"产品ID/设备名称"];
 ```
 
 ## 4. 高级功能
