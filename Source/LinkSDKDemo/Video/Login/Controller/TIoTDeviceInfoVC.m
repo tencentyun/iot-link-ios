@@ -208,6 +208,10 @@
     [self hideKeyBoard];
     [self saveInputInfo];
     
+//    self.productID.text = @"";
+//    self.devicenname.text = @"";
+//    self.xp2pinfo.text = @"";
+    
     TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
     
     TIoTExploreOrVideoDeviceModel *model = [TIoTExploreOrVideoDeviceModel new]; model.DeviceName = self.devicenname.text;

@@ -1314,9 +1314,10 @@ NSFileHandle *_fileHandle;
 //        [self.player setOptionValue:@"1" forKey:@"ac" ofCategory:kIJKFFOptionCategoryCodec];
 //        [self.player setOptionIntValue:0 forKey:@"seek-at-start" ofCategory:kIJKFFOptionCategoryPlayer];
 //        [self.player setOptionIntValue:25 * 1024 forKey:@"max-buffer-size" ofCategory:kIJKFFOptionCategoryPlayer];
-        
+//        [self.player setOptionIntValue:1280 forKey:@"videotoolbox-max-frame-width" ofCategory:kIJKFFOptionCategoryPlayer];
+//        [self.player setOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change" ofCategory:kIJKFFOptionCategoryPlayer];
 //        [self.player setAudioSpeed:1.2f];
-//        [self.player setMaxPacketNum:5];
+//        [self.player setMaxPacketNum:10001];
         
     }else {
         // 2.通过裸流服务拉流
