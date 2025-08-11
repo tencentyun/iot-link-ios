@@ -57,6 +57,14 @@ NSString *url = [bridge getUrlForHttpFlv:@"产品ID/设备名称"];
 
 ### 3.3 语音对讲
 ```objective-c
+AVAudioSession *avsession = [AVAudioSession sharedInstance];
+[avsession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+[avsession setPreferredSampleRate:16000 error:nil];
+[avsession setPreferredInputNumberOfChannels:audio_config.channels error:nil];
+NSTimeInterval duration = 0.02;
+[avsession setPreferredIOBufferDuration:duration error:nil];
+[avsession setActive:YES error:nil];
+
 // 配置音频参数
 TIoTCoreAudioConfig *audioConfig = [[TIoTCoreAudioConfig alloc] init];
 audioConfig.channels = 1; // 单声道
