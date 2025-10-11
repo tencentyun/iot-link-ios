@@ -863,6 +863,9 @@ static NSString *_appUUIDUnitlKeyChainKey = @"__TYC_XDP_UUID_Unitl_Key_Chain_APP
     if (!ops_report_enabled) {
         return;
     }
+    if (report.data_action == NULL) {
+        return;
+    }
     NSString *reqid = [NSString stringWithCString:(const char *)report.uniqueId encoding:NSASCIIStringEncoding];
     NSString *status = [NSString stringWithCString:(const char *)report.status encoding:NSASCIIStringEncoding];
     NSString *dataaction = [NSString stringWithCString:(const char *)report.data_action encoding:NSASCIIStringEncoding];

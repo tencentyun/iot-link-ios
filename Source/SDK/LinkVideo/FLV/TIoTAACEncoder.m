@@ -28,7 +28,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     ioData->mBuffers[0].mData = param->source;
     ioData->mBuffers[0].mDataByteSize = param->sourceSize;
     ioData->mBuffers[0].mNumberChannels = param->channelCount;
-    *ioNumberDataPacket = 1;
+    *ioNumberDataPacket = param->sourceSize/2;
     param->sourceSize = 0;
     return noErr;
 }

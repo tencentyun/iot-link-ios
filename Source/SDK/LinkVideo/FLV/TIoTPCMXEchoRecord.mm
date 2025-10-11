@@ -32,6 +32,9 @@
     }else {
         des.componentSubType = kAudioUnitSubType_RemoteIO;
     }
+    if (@available(iOS 26.0, *)) {
+        des.componentSubType = kAudioUnitSubType_RemoteIO;
+    }
     
     AudioComponent audioComponent;
     audioComponent = AudioComponentFindNext(NULL, &des);
