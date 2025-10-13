@@ -564,7 +564,7 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
 //
-//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.pcm"];
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.aac"];
 //    [fileManager removeItemAtPath:h264File error:nil];
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];

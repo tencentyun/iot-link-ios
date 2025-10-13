@@ -32,9 +32,6 @@
     }else {
         des.componentSubType = kAudioUnitSubType_RemoteIO;
     }
-    if (@available(iOS 26.0, *)) {
-        des.componentSubType = kAudioUnitSubType_RemoteIO;
-    }
     
     AudioComponent audioComponent;
     audioComponent = AudioComponentFindNext(NULL, &des);
@@ -43,9 +40,9 @@
         return nil;
     
     AudioStreamBasicDescription outStreamDes;
-    outStreamDes.mSampleRate = 16000;
+    outStreamDes.mSampleRate = 48000;
     outStreamDes.mFormatID = kAudioFormatLinearPCM;
-    outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger;
+    outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger|kAudioFormatFlagIsPacked;
     outStreamDes.mFramesPerPacket = 1;
     outStreamDes.mChannelsPerFrame = channel;
     outStreamDes.mBitsPerChannel = 16;
@@ -83,6 +80,34 @@
 
 TPCircularBuffer pcm_circularBuffer;
 
+/**
+ * 线性插值法重采样 48000Hz -> 16000Hz
+ * 转换比例 3:1，适合实时处理
+ */
+uint8_t bufferData16[8192];
+- (void)resample48000To16000_Linear:(int16_t *)input
+                            output:(int16_t *)output
+                       inputFrames:(UInt32)inputFrames
+                      outputFrames:(UInt32 *)outputFrames {
+    
+    float ratio = 48000.0f / 16000.0f; // 3.0
+    *outputFrames = (UInt32)(inputFrames / ratio);
+    
+    for (UInt32 i = 0; i < *outputFrames; i++) {
+        float inputIndex = i * ratio;
+        UInt32 index1 = (UInt32)inputIndex;
+        UInt32 index2 = MIN(index1 + 1, inputFrames - 1);
+        float fraction = inputIndex - index1;
+        
+        // 线性插值
+        float sample1 = input[index1];
+        float sample2 = input[index2];
+        float interpolated = sample1 + (sample2 - sample1) * fraction;
+        
+        output[i] = (int16_t)interpolated;
+    }
+}
+
 static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrame, AudioBufferList *__nullable ioData)
 {
     TIoTPCMXEchoRecord *r = (__bridge TIoTPCMXEchoRecord *)(inRefCon);
@@ -101,9 +126,17 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     UInt32   bufferSize = list.mBuffers[0].mDataByteSize;
     uint8_t *bufferData = (uint8_t *)list.mBuffers[0].mData;
 //    NSLog(@"record_callback__________size : %d", bufferSize);
-    [r addData:&pcm_circularBuffer :bufferData :bufferSize];
+    
+    
+    UInt32 bufferData16Size = 0;
+    [r resample48000To16000_Linear:(int16_t *)bufferData output:(int16_t *)bufferData16 inputFrames:bufferSize outputFrames:&bufferData16Size];
+    [r addData:&pcm_circularBuffer :bufferData16 :bufferData16Size];
     if (r->callback)
-        r->callback(bufferData, bufferSize, r->user);
+        r->callback(bufferData16, bufferData16Size, r->user);
+
+//    [r addData:&pcm_circularBuffer :bufferData :bufferSize];
+//    if (r->callback)
+//        r->callback(bufferData, bufferSize, r->user);
     return error;
 }
 

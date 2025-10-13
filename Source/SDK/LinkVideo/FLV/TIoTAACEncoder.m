@@ -46,6 +46,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     if ( self = [super init]) {
         encodeQueue = dispatch_queue_create("com.audio.encode", DISPATCH_QUEUE_SERIAL);
         inAudioStreamBasicDescription = inAudioDes;
+        inAudioStreamBasicDescription.mSampleRate = 16000;
     }
     return self;
 }
