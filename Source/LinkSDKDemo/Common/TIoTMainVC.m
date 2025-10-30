@@ -21,6 +21,10 @@
     // Do any additional setup after loading the view from its nib.
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     _versionLB.text = [NSString stringWithFormat:@"%@",appVersion];
+    
+    LoginVC *loginVC = [[LoginVC alloc]init];
+    [self.navigationController pushViewController:loginVC animated:NO];
+//    [self.navigationController.navigationBar.backItem setHidesBackButton:YES];
 }
 - (IBAction)jumpLinkSDK:(id)sender {
     LoginVC *loginVC = [[LoginVC alloc]init];

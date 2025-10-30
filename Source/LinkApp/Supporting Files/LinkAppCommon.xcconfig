@@ -1,9 +1,0 @@
-//
-//  LinkAppCommon.xcconfig
-//  LinkApp
-//
-
-LinkAPP_VERSION = local
-LinkAPP_BUILD_VERSION = 1
-
-LinkSDKDemo_VERSION = sdk_local

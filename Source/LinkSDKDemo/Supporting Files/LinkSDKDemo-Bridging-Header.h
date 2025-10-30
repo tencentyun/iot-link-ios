@@ -3,3 +3,10 @@
 //
 
 #import "TRTCCalling.h"
+
+// 设备API桥接类（合并了设备绑定和设备列表功能）
+#import "DeviceAPIBridge.h"
+
+// IoT Core SDK
+#import "TIoTCoreDeviceSet.h"
+#import "TIoTCoreUserManage.h"

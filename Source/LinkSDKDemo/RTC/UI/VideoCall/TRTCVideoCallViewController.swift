@@ -716,13 +716,13 @@ extension TRTCCallingVideoViewController {
         self.isMicMute = !self.isMicMute
 //        TRTCCalling.shareInstance().setMicMute(self.isMicMute)
         self.mute.setImage(UIImage(named: self.isMicMute ? "ic_mute_on" : "ic_mute"), for: .normal)
-        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
-        indicator.mode = MBProgressHUDMode.text
-        indicator.label.text = self.isMicMute ? NSLocalizedString("mute_on", comment: "开启静音") : NSLocalizedString("mute_on", comment: "关闭静音")
-        indicator.margin = 10
-        indicator.offset.y = 50
-        indicator.removeFromSuperViewOnHide = true
-        indicator.hide(animated: true, afterDelay: 0.5)
+//        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+//        indicator.mode = MBProgressHUDMode.text
+//        indicator.label.text = self.isMicMute ? NSLocalizedString("mute_on", comment: "开启静音") : NSLocalizedString("mute_on", comment: "关闭静音")
+//        indicator.margin = 10
+//        indicator.offset.y = 50
+//        indicator.removeFromSuperViewOnHide = true
+//        indicator.hide(animated: true, afterDelay: 0.5)
     }
     
     
@@ -730,13 +730,13 @@ extension TRTCCallingVideoViewController {
         self.isHandsFreeOn = !self.isHandsFreeOn
 //        TRTCCalling.shareInstance().setHandsFree(self.isHandsFreeOn)
         self.handsfree.setImage(UIImage(named: self.isHandsFreeOn ? "ic_handsfree_on" : "ic_handsfree"), for: .normal)
-        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
-        indicator.mode = MBProgressHUDMode.text
-        indicator.label.text = self.isHandsFreeOn ? NSLocalizedString("turn_on_handsfree", comment: "开启免提") : NSLocalizedString("turn_off_handsfree", comment: "关闭免提")
-        indicator.margin = 10
-        indicator.offset.y = 50
-        indicator.removeFromSuperViewOnHide = true
-        indicator.hide(animated: true, afterDelay: 0.5)
+//        let indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+//        indicator.mode = MBProgressHUDMode.text
+//        indicator.label.text = self.isHandsFreeOn ? NSLocalizedString("turn_on_handsfree", comment: "开启免提") : NSLocalizedString("turn_off_handsfree", comment: "关闭免提")
+//        indicator.margin = 10
+//        indicator.offset.y = 50
+//        indicator.removeFromSuperViewOnHide = true
+//        indicator.hide(animated: true, afterDelay: 0.5)
     }
     
     func autoSetUIByState() {

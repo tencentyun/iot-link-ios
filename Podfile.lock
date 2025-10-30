@@ -1,141 +1,67 @@
 PODS:
-  - Bugly (2.5.91)
   - CocoaAsyncSocket (7.6.5)
   - CocoaLumberjack (3.7.2):
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
-  - FDFullscreenPopGesture (1.1)
   - IoTVideoCloud (1.0.0):
     - CocoaAsyncSocket (= 7.6.5)
-    - TIoTLinkKit_FLV (= 2.2.3)
-    - TIoTLinkKit_SoundTouch (= 0.0.4)
-    - TIoTLinkKit_XP2P (= 2.4.34-beta.202211150834)
+    - CocoaLumberjack
     - TXLiteAVSDK_TRTC (= 11.1.14143)
-  - IQKeyboardManager (6.1.1)
-  - KeychainAccess (4.2.0)
-  - lottie-ios (3.1.8)
+    - YYModel
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
-  - MJRefresh (3.2.0)
   - QCloudCore (5.5.2)
   - QCloudCOSXML/Transfer (5.5.2):
     - QCloudCore (= 5.5.2)
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
-  - SocketRocket (0.5.1)
-  - Tencent-MapSDK (4.3.9)
-  - TIoTLinkKit (1.0.0):
-    - TIoTLinkKit/LinkCore (= 1.0.0)
-  - TIoTLinkKit/LinkCore (1.0.0):
-    - CocoaAsyncSocket (= 7.6.5)
-    - CocoaLumberjack (= 3.7.2)
-    - MBProgressHUD (= 1.1.0)
-  - TIoTLinkKit/LinkRTC (1.0.0):
-    - TIoTLinkKit/LinkCore
-    - TXLiteAVSDK_TRTC (= 11.1.14143)
-    - YYModel (= 1.0.4)
-  - TIoTLinkKit_FLV (2.2.3)
-  - TIoTLinkKit_IJKPlayer (2.0.8-beta.202212290234)
-  - TIoTLinkKit_SoundTouch (0.0.4)
-  - TIoTLinkKit_TPNS (1.0.1)
-  - TIoTLinkKit_WechatOpenSDK (1.0.1)
-  - TIoTLinkKit_XP2P (2.4.34-beta.202211150834)
-  - TrueTime (5.0.3)
   - TXLiteAVSDK_TRTC (11.1.14143):
     - TXLiteAVSDK_TRTC/TRTC (= 11.1.14143)
   - TXLiteAVSDK_TRTC/TRTC (11.1.14143)
-  - TZImagePickerController (3.2.1)
+  - WechatOpenSDK-XCFramework (2.0.4)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - Bugly (= 2.5.91)
-  - CocoaAsyncSocket (= 7.6.5)
   - CocoaLumberjack (= 3.7.2)
-  - FDFullscreenPopGesture (= 1.1)
-  - IoTVideoCloud (from `./`)
-  - IQKeyboardManager (= 6.1.1)
-  - KeychainAccess (= 4.2.0)
-  - lottie-ios (= 3.1.8)
+  - IoTVideoCloud (from `https://raw.githubusercontent.com/tencentyun/iot-thirdparty-ios/master/IoTVideoCloud.podspec`)
   - Masonry (= 1.1.0)
   - MBProgressHUD (= 1.1.0)
-  - MJRefresh (= 3.2.0)
   - QCloudCOSXML/Transfer (= 5.5.2)
   - SDWebImage (= 4.4.2)
-  - SocketRocket (= 0.5.1)
-  - Tencent-MapSDK (= 4.3.9)
-  - TIoTLinkKit (from `./`)
-  - TIoTLinkKit/LinkRTC (from `./`)
-  - TIoTLinkKit_IJKPlayer (= 2.0.8-beta.202212290234)
-  - TIoTLinkKit_TPNS (= 1.0.1)
-  - TIoTLinkKit_WechatOpenSDK (= 1.0.1)
-  - TrueTime (= 5.0.3)
-  - TZImagePickerController (= 3.2.1)
+  - WechatOpenSDK-XCFramework (= 2.0.4)
   - YYModel (= 1.0.4)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Bugly
+  trunk:
     - CocoaAsyncSocket
     - CocoaLumberjack
-    - FDFullscreenPopGesture
-    - IQKeyboardManager
-    - KeychainAccess
-    - lottie-ios
     - Masonry
     - MBProgressHUD
-    - MJRefresh
     - QCloudCore
     - QCloudCOSXML
     - SDWebImage
-    - SocketRocket
-    - Tencent-MapSDK
-    - TIoTLinkKit_FLV
-    - TIoTLinkKit_IJKPlayer
-    - TIoTLinkKit_SoundTouch
-    - TIoTLinkKit_TPNS
-    - TIoTLinkKit_WechatOpenSDK
-    - TIoTLinkKit_XP2P
-    - TrueTime
     - TXLiteAVSDK_TRTC
-    - TZImagePickerController
+    - WechatOpenSDK-XCFramework
     - YYModel
 
 EXTERNAL SOURCES:
   IoTVideoCloud:
-    :path: "./"
-  TIoTLinkKit:
-    :path: "./"
+    :podspec: https://raw.githubusercontent.com/tencentyun/iot-thirdparty-ios/master/IoTVideoCloud.podspec
 
 SPEC CHECKSUMS:
-  Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
-  FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
-  IoTVideoCloud: 49a68b8919818d81144642375c6d806a53b71600
-  IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
-  KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
-  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  IoTVideoCloud: 9c04a7cea1aef8391aa01c2a667919e0fb55e1c0
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
-  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   QCloudCore: b91a762d280f0a80cc6f537fd186ac43a4a3025e
   QCloudCOSXML: a30ab17f45b0cbbcbb218a3677298498e8748a22
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
-  Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
-  TIoTLinkKit: be41a7732a4f4de2ed18926bda76f5e33f874866
-  TIoTLinkKit_FLV: aec2b2ec9664990ec6c5b9f760fc1a9043d5a9a5
-  TIoTLinkKit_IJKPlayer: 423fb51f6d04f59a2f2a0ba3c875592f8048735c
-  TIoTLinkKit_SoundTouch: 3b558a8663d8c867305f4336960ca078a9ae9768
-  TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
-  TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
-  TIoTLinkKit_XP2P: a5409ccbbaa2de3faf8aa82bf98b0c3df193541a
-  TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: 15b46120bfb5227c4f07a03d7b73b2530a4034bf
-  TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
+  WechatOpenSDK-XCFramework: 36fb2bea0754266c17184adf4963d7e6ff98b69f
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 8191314e7d387c03a8c6e4dba9f665a2e55cb0e0
+PODFILE CHECKSUM: 8ea5f1db33891711e794e370d93355b600cf1fad
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.16.2

@@ -17,6 +17,7 @@
 #import "TIoTCoreRequestObject.h"
 #import "TIoTTRTCUIManage.h"
 #import "HXYNotice.h"
+#import "LinkSDKDemo-Swift.h"
 
 @interface ControlDeviceVC ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -31,6 +32,10 @@
 @property (nonatomic, strong) NSDictionary *reportData;
 @property (nonatomic, strong) TIOTtrtcPayloadModel *reportModel;
 @property (nonatomic, strong) DeviceInfo *deviceInfomation;
+
+// SwiftUI相关
+@property (nonatomic, strong) UIViewController *deviceDetailSwiftUIVC;
+
 @end
 
 @implementation ControlDeviceVC{
@@ -46,6 +51,14 @@
 
     [HXYNotice addReportDeviceListener:self reaction:@selector(deviceReport:)];
     self.deviceInfomation.deviceId = self.deviceInfo[@"DeviceId"];
+    
+    // 隐藏原有的UI元素
+    self.tableView.hidden = YES;
+    if (self.theme) self.theme.hidden = YES;
+    if (self.navBar) self.navBar.hidden = YES;
+    if (self.content1) self.content1.hidden = YES;
+    if (self.content2) self.content2.hidden = YES;
+    if (self.timing) self.timing.hidden = YES;
     
     [[TIoTCoreDeviceSet shared] activePushWithDeviceIds:@[self.deviceInfo[@"DeviceId"]] complete:^(BOOL success, id data) {
         

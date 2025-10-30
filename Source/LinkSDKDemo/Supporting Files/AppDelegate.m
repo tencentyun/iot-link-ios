@@ -10,6 +10,8 @@
 #import "TIoTDemoWebSocketManager.h"
 #import "TIoTCoreServices.h"
 #import "TIoTPrintLogManager.h"
+#import "WxManager.h"
+#import "LinkSDKDemo-Swift.h"
 
 @interface AppDelegate ()
 
@@ -31,17 +33,12 @@
     
 //    [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
     
+    //注册微信
+    [[WxManager sharedWxManager] registerApp:@"wx3c5a586d7fbcbace"];
+    
     environment.appKey = @"物联网开发平台申请的 App Key";
     environment.appSecret = @"物联网开发平台申请的 App Secret";
 
-    /**
-     * 此处若接入腾讯云物理网智能视频服务,则需要进行相关注册后，获取以下信息
-     * 参考连接
-     * https://cloud.tencent.com/product
-     */
-    environment.cloudSecretId = @"";
-    environment.cloudSecretKey = @"";
-    environment.cloudProductId = @"";
     
     //开启打印日志
     [TIoTCoreServices shared].logEnable = true;
@@ -49,8 +46,13 @@
     [[TIoTPrintLogManager sharedManager] config];
     [[TIoTPrintLogManager sharedManager] setLogLevel:ddLogLevel];
     
-    if (![TIoTCoreUserManage shared].isValidToken) {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[NSClassFromString(@"TIoTMainVC") new]];
+    // 根据登录状态决定显示哪个页面
+    if ([TIoTCoreUserManage shared].isValidToken) {
+        // 已登录，跳转到DeviceListView
+        [self showDeviceListView];
+    } else {
+        // 未登录，跳转到LoginView
+        [self showLoginView];
     }
     
     return YES;
@@ -61,5 +63,58 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EnterForeground" object:nil];
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
+    
+    return [[WxManager sharedWxManager] handleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+    
+    
+    return [[WxManager sharedWxManager] handleOpenUniversalLink:userActivity];
+}
+
+#pragma mark - Navigation Methods
+
+// 显示设备列表页面
+- (void)showDeviceListView {
+    // 创建UserManager、DeviceViewModel和NavigationBridge
+    UserManager *userManager = [[UserManager alloc] init];
+    DeviceViewModel *deviceViewModel = [[DeviceViewModel alloc] init];
+    NavigationBridge *navigationBridge = [[NavigationBridge alloc] init];
+    
+    // 设置退出登录回调
+    __weak typeof(self) weakSelf = self;
+    userManager.logoutCallback = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf showLoginView];
+        });
+    };
+    
+    // 创建DeviceListView控制器
+    UIViewController *deviceListVC = [SwiftUIHelper createDeviceListViewControllerWithUserManager:userManager 
+                                                                                   deviceViewModel:deviceViewModel 
+                                                                                  navigationBridge:navigationBridge];
+    
+    // 创建导航控制器并设置为根视图控制器
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:deviceListVC];
+    navController.navigationBar.prefersLargeTitles = NO;
+    
+    self.window.rootViewController = navController;
+    
+    [SwiftUIHelper setNavigationController:navController];
+}
+
+// 显示登录页面
+- (void)showLoginView {
+    // 创建LoginView控制器
+    UIViewController *loginVC = [NSClassFromString(@"LoginVC") new];
+    
+    // 创建导航控制器并设置为根视图控制器
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    navController.navigationBar.prefersLargeTitles = NO;
+    
+    self.window.rootViewController = navController;
+}
 
 @end

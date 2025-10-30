@@ -12,19 +12,13 @@
 #import "TIoTCoreAppEnvironment.h"
 #import "TIoTCoreDeviceSet.h"
 #import "IoTVideoCloud.h"
-#import "TIoTDemoSameScreenVC.h"
 
 #import "TIoTExploreDeviceListModel.h"
 #import "TIoTVideoDeviceListModel.h"
 #import "TIoTExploreOrVideoDeviceModel.h"
 #import <YYModel.h>
-#import "TIoTCloudStorageVC.h"
 #import "TIoTDemoPreviewDeviceVC.h"
 #import "TIoTDemoProductDetailModel.h"
-#import "TIoTDemoNVRSubDeviceVC.h"
-#import "TIoTDemoPlaybackVC.h"
-#import "TIoTDemoPreviewMJPEGVC.h"
-#import "TIoTDemoPreviewP2PVC.h"
 
 static NSInteger const maxLimitDeviceNumber = 4;
 static NSString *const kVideoDeviceListCellID = @"kVideoDeviceListCellID";
@@ -231,7 +225,7 @@ static NSInteger const kLimit = 100;
     
     TIoTDemoCustomSheetView *customActionSheet = [[TIoTDemoCustomSheetView alloc]init];
     cell.moreActionBlock = ^{
-        NSArray *actionTitleArray = @[@"RTC拨打设备", @"P2P拨打设备", @"回放",@"图片流（mjpeg）",@"取消"];
+        NSArray *actionTitleArray = @[@"RTC拨打设备", @"取消"];
         
         ChooseFunctionBlock previewVideoBlock = ^(TIoTDemoCustomSheetView *view){
             DDLogVerbose(@"RTC拨打");
@@ -244,53 +238,12 @@ static NSInteger const kLimit = 100;
             [customActionSheet removeFromSuperview];
         };
         
-        ChooseFunctionBlock P2PVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            DDLogVerbose(@"p2p通话预览");
-            
-            TIoTDemoPreviewP2PVC *previewDeviceVC = [[TIoTDemoPreviewP2PVC alloc]init];
-            previewDeviceVC.selectedModel = model;
-            previewDeviceVC.isNVR = NO;
-            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
-            [weakSelf resetDeviceListStatus];
-            [customActionSheet removeFromSuperview];
-        };
-        
-        ChooseFunctionBlock playbackVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            DDLogVerbose(@"回放");
-            TIoTExploreOrVideoDeviceModel *model = weakSelf.dataArray[indexPath.row];
-//            TIoTCloudStorageVC *cloudStorageVC = [[TIoTCloudStorageVC alloc]init];
-//            cloudStorageVC.deviceModel = model;
-//            [self.navigationController pushViewController:cloudStorageVC animated:YES];
-//            [customActionSheet removeFromSuperview];
-            
-            TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
-            playBackVC.deviceModel = model;
-            playBackVC.isNVR = weakSelf.isNVR;
-            playBackVC.deviceName = model.DeviceName;
-            playBackVC.isFromHome = YES;
-            
-            [weakSelf.navigationController pushViewController:playBackVC animated:YES];
-            [customActionSheet removeFromSuperview];  
-        };
-        
-        ChooseFunctionBlock mjpegVideoBlock = ^(TIoTDemoCustomSheetView *view){
-            DDLogVerbose(@"图片流mjpeg");
-//            TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
-//            TIoTExploreOrVideoDeviceModel *model = weakSelf.dataArray[indexPath.row];
-            TIoTDemoPreviewMJPEGVC *previewDeviceVC = [[TIoTDemoPreviewMJPEGVC alloc]init];
-            previewDeviceVC.selectedModel = model;
-            previewDeviceVC.isNVR = NO;
-            
-            [weakSelf.navigationController pushViewController:previewDeviceVC animated:YES];
-            [weakSelf resetDeviceListStatus];
-            [customActionSheet removeFromSuperview];
-        };
         
         ChooseFunctionBlock cancelBlock = ^(TIoTDemoCustomSheetView *view) {
             DDLogVerbose(@"取消");
             [view removeFromSuperview];
         };
-        NSArray *actionBlockArray = @[previewVideoBlock,P2PVideoBlock,playbackVideoBlock,mjpegVideoBlock,cancelBlock];
+        NSArray *actionBlockArray = @[previewVideoBlock,cancelBlock];
         
         
         [customActionSheet sheetViewTopTitleArray:actionTitleArray withMatchBlocks:actionBlockArray];
@@ -306,9 +259,6 @@ static NSInteger const kLimit = 100;
     TIoTExploreOrVideoDeviceModel *model = self.dataArray[indexPath.row];
     if (self.isNVR == YES) {
         //NVR 子设备页面
-        TIoTDemoNVRSubDeviceVC *NVRDeviceVC = [[TIoTDemoNVRSubDeviceVC alloc]init];
-        NVRDeviceVC.selectedModel = model;
-        [self.navigationController pushViewController:NVRDeviceVC animated:YES];
     }else {
         //预览页
         TIoTDemoPreviewDeviceVC *previewDeviceVC = [[TIoTDemoPreviewDeviceVC alloc]init];
@@ -362,11 +312,7 @@ static NSInteger const kLimit = 100;
             }];
         }else {
             if (weakSelf.selectedArray.count != 0) {
-                TIoTDemoSameScreenVC *sameScreenVC = [[TIoTDemoSameScreenVC alloc]init];
-                sameScreenVC.isNVRType = NO;
-                [sameScreenVC setupSameScreenArray:weakSelf.selectedArray];
-                [weakSelf.navigationController pushViewController:sameScreenVC animated:YES];
-                [weakSelf resetDeviceListStatus];
+                
             }else {
                 [weakSelf resetDeviceListStatus];
             }

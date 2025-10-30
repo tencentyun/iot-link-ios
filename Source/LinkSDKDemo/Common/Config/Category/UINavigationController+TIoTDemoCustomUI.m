@@ -18,7 +18,7 @@ static char const *const panGesKey = "panGesKey";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
     
-        [self swizzlingMethod:@selector(pushViewController:animated:) replace:@selector(xdp_pushViewController:animated:)];
+//        [self swizzlingMethod:@selector(pushViewController:animated:) replace:@selector(xdp_pushViewController:animated:)];
 //        [self swizzlingMethod:@selector(viewDidLoad) replace:@selector(xdp_viewDidLoad)];
 
     });

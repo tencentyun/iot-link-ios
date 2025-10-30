@@ -42,6 +42,7 @@
     [[TIoTCoreDeviceSet shared] bindDeviceWithDeviceSignature:textField.text inFamilyId:[TIoTCoreUserManage shared].familyId roomId:@"0" success:^(id  _Nonnull responseObject) {
        
         DDLogDebug(@"---");
+        [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
         DDLogError(@"fail bind---");
     }];

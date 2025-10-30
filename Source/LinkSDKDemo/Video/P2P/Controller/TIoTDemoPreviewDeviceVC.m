@@ -5,7 +5,6 @@
 //
 
 #import "TIoTDemoPreviewDeviceVC.h"
-#import "TIoTDemoPlaybackCustomCell.h"
 #import "TIoTDemoCustomSheetView.h"
 #import "AppDelegate.h"
 #import "UIDevice+TIoTDemoRotateScreen.h"
@@ -14,13 +13,8 @@
 #import "NSString+Extension.h"
 #import "TIoTCoreAppEnvironment.h"
 #import <YYModel.h>
-#import "TIoTDemoCloudEventListModel.h"
-#import "TIoTCloudStorageVC.h"
 #import "TIoTCoreUtil.h"
 #import "NSObject+additions.h"
-#import "TIoTDemoDeviceStatusModel.h"
-#import "TIoTCoreUtil+TIoTDemoDeviceStatus.h"
-#import "TIoTDemoPlaybackVC.h"
 #import "TIoTXp2pInfoModel.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ReachabilityManager.h"
@@ -70,7 +64,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 @property (nonatomic, strong) UIButton *supperDef;
 
 @property (nonatomic, strong) NSString *videoUrl;
-@property (nonatomic, strong) TIoTDemoCloudEventListModel *listModel;
 
 @property (nonatomic, strong) NSString *qualityString; //保存选择video清晰度
 
@@ -150,34 +143,24 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
         
         IoTVideoParams *videoparams = [IoTVideoParams new];
-        videoparams.productid = env.cloudProductId;
-        videoparams.devicename = self.deviceName;
-        videoparams.rtcparams = xp2pInfo;
         
-        TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
-        audio_config.refreshSession = NO;
-        audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
-        audio_config.channels = 1;
-        audio_config.isEchoCancel = NO;
-        audio_config.pitch = 0; // -6声音会变粗一点;    6声音会变细一点
-        videoparams.audioConfig = audio_config;
-        
-        TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
-        video_config.localView = self.imageView;
-        video_config.remoteView = self.remoteView;
-        video_config.videoPosition = AVCaptureDevicePositionFront;
-        videoparams.videoConfig = video_config;
-        
-        int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
+//        TIoTCoreAudioConfig *audio_config = [TIoTCoreAudioConfig new];
+//        audio_config.refreshSession = NO;
+//        audio_config.sampleRate = TIoTAVCaptionFLVAudio_8;
+//        audio_config.channels = 1;
+//        audio_config.isEchoCancel = NO;
+//        audio_config.pitch = 0; // -6声音会变粗一点;    6声音会变细一点
+//        videoparams.audioConfig = audio_config;
+//        
+//        TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
+//        video_config.localView = self.imageView;
+//        video_config.remoteView = self.remoteView;
+//        video_config.videoPosition = AVCaptureDevicePositionFront;
+//        videoparams.videoConfig = video_config;
+//        
+        [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
         //        [[TIoTCoreXP2PBridge sharedInstance] setXp2pInfo:self.deviceName?:@"" sec_id:env.cloudSecretId sec_key:env.cloudSecretKey xp2pinfo:xp2pInfo?:@""];
         
-        if (errorcode == XP2P_ERR_VERSION) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"APP SDK 版本与设备端 SDK 版本号不匹配，版本号需前两位保持一致" message:nil preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alertC addAction:alertA];
-            [self presentViewController:alertC animated:YES completion:nil];
-        }
         
         //计算IPC打洞开始时间
         self.startIpcP2P = CACurrentMediaTime();
@@ -281,53 +264,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     __weak typeof(self) weakSelf = self;
     [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString?:@"" timeout:2*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-        if ([responseModel.status isEqualToString:@"0"]) {
-            if ([singleType isEqualToString:action_live]) {
-                //直播
-                [weakSelf setVieoPlayerStartPlayWith:qualityType];
-            }else if ([singleType isEqualToString:action_voice]) {
-                //推流
-                
-                [[IoTVideoCloud sharedInstance] startLocalStream:weakSelf.deviceName];
-                
-            }
-            
-        }else {
-            //设备状态异常提示
-            [TIoTCoreUtil showDeviceStatusError:responseModel commandInfo:[NSString stringWithFormat:@"发送信令: %@\n\n接收: %@",actionString,jsonList]];
-        }
-    }];
-}
-
-//带回调的状态检测
-- (void)getDeviceStatusWithType:(NSString *)singleType qualityType:(NSString *)qualityType completion:(void (^ __nullable)(BOOL finished))completion {
-    
-    NSString *actionString = @"";
-    NSString *qualityTypeString = [qualityType componentsSeparatedByString:@"&"].lastObject;
-    if (self.isNVR == YES) {
-        actionString = [NSString stringWithFormat:@"action=inner_define&channel=%@&cmd=get_device_st&type=%@&%@",self.selectedModel.Channel,singleType?:@"",qualityTypeString?:@""];
-    }else {
-        actionString =[NSString stringWithFormat:@"action=inner_define&channel=0&cmd=get_device_st&type=%@&%@",singleType?:@"",qualityTypeString?:@""];
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    [[IoTVideoCloud sharedInstance] sendCustomCmdMsg:self.deviceName?:@"" cmd:actionString?:@"" timeout:1.5*1000*1000 completion:^(NSString * _Nonnull jsonList) {
-        NSArray *responseArray = [NSArray yy_modelArrayWithClass:[TIoTDemoDeviceStatusModel class] json:jsonList];
-        TIoTDemoDeviceStatusModel *responseModel = responseArray.firstObject;
-        if ([responseModel.status isEqualToString:@"0"]) {
-            if ([singleType isEqualToString:action_live]) {
-                //直播
-                [weakSelf setVieoPlayerStartPlayWith:qualityType];
-            }else if ([singleType isEqualToString:action_voice]) {
-                //对讲
-            }
-            completion(YES);
-        }else {
-            //设备状态异常提示
-            completion(NO);
-        }
+        NSLog(@"status");
     }];
 }
 
@@ -680,7 +617,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         [self getDeviceStatusWithType:action_voice qualityType:self.qualityString];
     }else {
         self.talkbackIcon.image = [UIImage imageNamed:@"talkback_unselect"];
-        [[IoTVideoCloud sharedInstance] stopLocalStream];
+//        [[IoTVideoCloud sharedInstance] stopLocalStream];
         
 //        [[TIoTSessionManager sharedInstance] resetToCachedAudioSession];
     }
@@ -690,15 +627,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 ///MARK: 回放
 - (void)clickPlayback:(UIButton *)button {
     
-    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
-    playBackVC.deviceModel = self.selectedModel;
-    playBackVC.isNVR = self.isNVR;
-    playBackVC.deviceName = self.deviceName;
-    playBackVC.playerReloadBlock = ^{
-        [self addRotateNotification];
-        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
-    };
-    [self.navigationController pushViewController:playBackVC animated:YES];
+    
 }
 ///MARK: 录像
 - (void)clickVideoBtn:(UIButton *)button {
@@ -947,95 +876,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [self.navigationController.navigationBar setShadowImage:nil];
 }
 
-#pragma mark - request network
-///MARK: 云存事件列表
-- (void)requestCloudStoreVideoList {
-    return;
-    NSDate *date = [NSDate date];
-    NSInteger year = [date dateYear];
-    NSInteger month = [date dateMonth];
-    NSInteger day = [date dateDay];
-    NSString *currentDayTime = [NSString stringWithFormat:@"%02ld-%02ld-%02ld",(long)year,(long)month,(long)day];
-    
-    NSString *startString = [NSString stringWithFormat:@"%@ 00:00:00",currentDayTime?:@""];
-    NSString *endString = [NSString stringWithFormat:@"%@ 23:59:59",currentDayTime?:@""];
-    NSString *startTimestampString = [NSString getTimeStampWithString:startString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-    NSString *endTimesstampString = [NSString getTimeStampWithString:endString withFormatter:@"YYYY-MM-dd HH:mm:ss" withTimezone:@""];
-    
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
-    paramDic[@"Size"] = [NSNumber numberWithInteger:kLimit];
-    paramDic[@"DeviceName"] = self.deviceName?:@"";
-    paramDic[@"StartTime"] = [NSNumber numberWithInteger:startTimestampString.integerValue];
-    paramDic[@"EndTime"] = [NSNumber numberWithInteger:endTimesstampString.integerValue];
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageEvents vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        
-        self.listModel = [TIoTDemoCloudEventListModel yy_modelWithJSON:responseObject];
-        
-        if (self.listModel.Events.count != 0) {
-            NSMutableArray *temp = (NSMutableArray *)[[self.listModel.Events?:@[] reverseObjectEnumerator] allObjects];
-            self.dataArray = [NSMutableArray arrayWithArray:temp?:@[]];
-            self.dataArray = (NSMutableArray *)[[self.dataArray reverseObjectEnumerator] allObjects];
-            
-            [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    TIoTDemoCloudEventModel *model = obj;
-                    [self requestCloudStoreUrlWithThumbnail:model index:idx];
-                });
-                
-            }];
-        }
-        
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        
-    }];
-    
-}
-
-///MARK: 云存事件缩略图
-- (void)requestCloudStoreUrlWithThumbnail:(TIoTDemoCloudEventModel *)eventModel index:(NSInteger)index {
-    return;
-    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc]init];
-    paramDic[@"ProductId"] = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId?:@"";
-    paramDic[@"Version"] = @"2021-11-25";//@"2020-12-15";
-    paramDic[@"DeviceName"] = self.deviceName?:@"";
-    paramDic[@"Thumbnail"] = eventModel.Thumbnail?:@"";
-    [[TIoTCoreDeviceSet shared] requestVideoOrExploreDataWithParam:paramDic action:DescribeCloudStorageThumbnail vidowOrExploreHost:TIotApiHostVideo success:^(id  _Nonnull responseObject) {
-        TIoTDemoCloudEventModel *tuumbnailModel = [TIoTDemoCloudEventModel yy_modelWithJSON:responseObject];
-        eventModel.ThumbnailURL = tuumbnailModel.ThumbnailURL;
-        //        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    } failure:^(NSString * _Nullable reason, NSError * _Nullable error, NSDictionary * _Nullable dic) {
-        
-    }];
-    
-}
-
-#pragma mark - UITableViewdelegate and UITableViewDataSrouce
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArray.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TIoTDemoPlaybackCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:kPreviewDeviceCellID forIndexPath:indexPath];
-    cell.model = self.dataArray[indexPath.row];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //跳转回看页面，并播放当前选中事件视频，滚动条滑动相应位置
-    TIoTDemoCloudEventModel *itemModel = self.dataArray[indexPath.row];
-    TIoTDemoPlaybackVC *playBackVC = [[TIoTDemoPlaybackVC alloc]init];
-    playBackVC.eventItemModel = itemModel;
-    playBackVC.deviceModel = self.selectedModel;
-    playBackVC.isNVR = self.isNVR;
-    playBackVC.deviceName = self.deviceName;
-    playBackVC.playerReloadBlock = ^{
-        [self addRotateNotification];
-        [self getDeviceStatusWithType:action_live qualityType:self.qualityString];
-    };
-    [self.navigationController pushViewController:playBackVC animated:YES];
-}
 
 
 #pragma mark Install Movie Notifications
@@ -1190,16 +1030,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 
 - (void)resconnectXp2pWithDevicename:(NSString *)deviceName xp2pInfo:(NSString *)xp2pInfo {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
-    [[IoTVideoCloud sharedInstance] setXp2pInfo:deviceName?:@"" xp2pinfo:xp2pInfo?:@""];
     
-    [self getDeviceStatusWithType:action_live qualityType:self.qualityString completion:^(BOOL finished) {
-        if (finished) {
-            self.is_reconnect_xp2p = NO; //连通成功后，复位标记
-        }else {
-            [self resconnectXp2pRequestInfo:deviceName];
-        }
-        
-    }];
+    
 }
 
 /// MARK:新设备
@@ -1241,7 +1073,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     // 1.通过播放器发起的拉流
     if (_is_ijkPlayer_stream) {
         [IoTVideoCloud sharedInstance].writeFile = YES;
-        [IoTVideoCloud recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
+//        [IoTVideoCloud recordstream:self.deviceName]; //保存到 document 目录 video.data 文件，需打开writeFile开关
         
         [self stopPlayMovie];
 #ifdef DEBUG
@@ -1263,9 +1095,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         fileTip.textAlignment = NSTextAlignmentCenter;
         fileTip.textColor = [UIColor whiteColor];
         [self.imageView addSubview:fileTip];
-        if (self.isNVR == NO) {
-            [[IoTVideoCloud sharedInstance] startAvRecvService:self.deviceName?:@"" cmd:@"action=live"];
-        }
+        
         
     }
 }
@@ -1457,9 +1287,6 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     
     if (self.isNVR == NO) {
         
-        if ([IoTVideoCloud sharedInstance].writeFile) {
-            [[IoTVideoCloud sharedInstance] stopAvRecvService:self.deviceName?:@""];
-        }
     }
     
     NSString *qualityID = @"";
@@ -1585,11 +1412,8 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     
     IoTVideoParams *videoparams = [IoTVideoParams new];
-    videoparams.productid = env.cloudProductId;
-    videoparams.devicename = self.deviceName;
-//    videoparams.rtcparams = xp2pInfo;
     
-    int errorcode = [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
+    [[IoTVideoCloud sharedInstance] startAppWith:videoparams];
 }
 
 

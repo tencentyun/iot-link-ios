@@ -5,7 +5,7 @@
 //
 
 #import "TIoTDemoWebSocketManager.h"
-#import "TIoTAppEnvironment.h"
+#import "TIoTCoreAppEnvironment.h"
 //#import "TIoTAppUtilOC.h"
 #import "TIoTCoreRequestObj.h"
 #import "ReachabilityManager.h"
@@ -64,7 +64,7 @@ static NSString *heartBeatReqID = @"5002";
 - (void)instanceSocketManager {
     self.trtcDeviceIds = [NSMutableSet set];
 //    [TIoTCoreSocketManager shared].socketedRequestURL = [TIoTCoreAppEnvironment shareEnvironment].wsUrl;
-//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,TIoTAPPConfig.GlobalDebugUin];
+    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl, @"1234567890"];
     [TIoTCoreSocketManager shared].delegate = self;
     
     //TRTC UI Delegate

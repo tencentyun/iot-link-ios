@@ -10,5 +10,7 @@
 
 @property (nonatomic,strong) UIWindow *window;
 @property (nonatomic,assign) BOOL isRotation;
+
+- (void)showDeviceListView;
 @end
 

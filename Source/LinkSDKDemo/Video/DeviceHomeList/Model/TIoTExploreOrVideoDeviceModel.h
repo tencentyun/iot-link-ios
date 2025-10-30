@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *LoginTime;
 @property (nonatomic, copy) NSString *NwkSKey;
 @property (nonatomic, copy) NSString *Status;
-@property (nonatomic, copy) NSString *Version;
+//@property (nonatomic, copy) NSString *Version;
 @end
 
 NS_ASSUME_NONNULL_END

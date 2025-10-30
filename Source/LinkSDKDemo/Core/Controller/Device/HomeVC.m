@@ -16,6 +16,7 @@
 #import "TIoTCoreAppEnvironment.h"
 #import "HXYNotice.h"
 #import "TIoTDemoWebSocketManager.h"
+#import "LinkSDKDemo-Swift.h"
  
 static NSString *cellID = @"DODO";
 @interface HomeVC ()<UITableViewDelegate,UITableViewDataSource,CMPageTitleContentViewDelegate>
@@ -30,9 +31,14 @@ static NSString *cellID = @"DODO";
 @property (nonatomic,strong) CMPageTitleContentView *familyTitlesView;
 @property (nonatomic,strong) CMPageTitleContentView *roomTitlesView;
 
-
 @property dispatch_semaphore_t sem;
 @property (nonatomic, copy) NSArray *deviceIds;
+
+// SwiftUI相关
+@property (nonatomic, strong) UserManager *userManager;
+@property (nonatomic, strong) DeviceViewModel *deviceViewModel;
+@property (nonatomic, strong) NavigationBridge *navigationBridge;
+@property (nonatomic, strong) UIViewController *deviceListSwiftUIVC;
 
 @end
 
@@ -40,16 +46,45 @@ static NSString *cellID = @"DODO";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-//    [TIoTCoreSocketManager shared].socketedRequestURL = [NSString stringWithFormat:@"%@?uin=%@",[TIoTCoreAppEnvironment shareEnvironment].wsUrl,SDKGlobalDebugUin];
-
+    
     [[TIoTDemoWebSocketManager shared] SRWebSocketOpen];
     
     self.title = NSLocalizedString(@"main_tab_1", @"首页");
-    [self.tab registerClass:[TIoTCoreEquipmentTableViewCell class] forCellReuseIdentifier:cellID];
     
-//    [self getFamilyList];
+    // 初始化SwiftUI相关对象
+    self.userManager = [[UserManager alloc] init];
+    self.deviceViewModel = [[DeviceViewModel alloc] init];
+    self.navigationBridge = [[NavigationBridge alloc] init];
     
+    // 设置添加设备回调
+    __weak typeof(self) weakSelf = self;
+    self.deviceViewModel.addDeviceSuccessCallback = ^(NSString *deviceId, NSString *deviceName, NSString *location) {
+        // 这里可以调用原有的添加设备逻辑
+        DDLogDebug(@"添加设备: %@ - %@", deviceId, deviceName);
+    };
+    
+    // 设置删除设备回调
+    self.deviceViewModel.deleteDeviceCallback = ^(NSString *deviceId) {
+        [weakSelf handleDeleteDevice:deviceId];
+    };
+    
+    // 隐藏原有的TableView
+    self.tab.hidden = YES;
+}
+
+// 跳转到设备详情页面
+- (void)navigateToDeviceDetail:(NSDictionary *)deviceInfo {
+    ControlDeviceVC *vc = [[ControlDeviceVC alloc] init];
+    vc.title = [NSString stringWithFormat:@"%@", deviceInfo[@"AliasName"]];
+    vc.deviceInfo = [deviceInfo mutableCopy];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+// 处理删除设备
+- (void)handleDeleteDevice:(NSString *)deviceId {
+    // 这里调用原有的删除设备逻辑
+    DDLogDebug(@"删除设备: %@", deviceId);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -59,6 +94,11 @@ static NSString *cellID = @"DODO";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getFamilyList];
+    
+    // 同步设备列表到SwiftUI
+    if (self.deviceList && self.deviceList.count > 0) {
+        [self.deviceViewModel updateDevicesFromOCWithDeviceArray:self.deviceList];
+    }
 }
 
 - (void)addViewWithType:(NSUInteger)type names:(NSArray<NSString *> *)names
@@ -166,6 +206,8 @@ static NSString *cellID = @"DODO";
         
         [self.tab reloadData];
         
+        // 同步设备列表到SwiftUI
+        [self.deviceViewModel updateDevicesFromOCWithDeviceArray:self.deviceList];
         
     } failure:^(NSString * _Nullable reason, NSError * _Nullable error,NSDictionary *dic) {
         

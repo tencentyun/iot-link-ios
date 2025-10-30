@@ -7,7 +7,6 @@
 #import "TIoTDemoPlayConfigVC.h"
 #import "IoTVideoCloud.h"
 #import "UILabel+TIoTExtension.h"
-#import "TIoTAreaNetworkConfigVC.h"
 @interface TIoTDemoVideoVC ()
 
 @end
@@ -22,14 +21,14 @@
     
     [self initVideoUI];
     
-    NSString *appVersion = [IoTVideoCloud getSDKVersion];
-    UILabel *versionLB = [[UILabel alloc]init];
-    versionLB.text = [NSString stringWithFormat:@"%@",appVersion];
-    [self.view addSubview:versionLB];
-    [versionLB mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).offset(-16);
-        make.left.equalTo(self.view).offset(16);
-    }];
+//    NSString *appVersion = [IoTVideoCloud getSDKVersion];
+//    UILabel *versionLB = [[UILabel alloc]init];
+//    versionLB.text = [NSString stringWithFormat:@"%@",appVersion];
+//    [self.view addSubview:versionLB];
+//    [versionLB mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.view.mas_bottom).offset(-16);
+//        make.left.equalTo(self.view).offset(16);
+//    }];
     
 }
 
@@ -113,8 +112,7 @@
 }
 
 - (void)jumpLocalAreaNetwork {
-    TIoTAreaNetworkConfigVC *areaNetVC = [[TIoTAreaNetworkConfigVC alloc]init];
-    [self.navigationController pushViewController:areaNetVC animated:YES];
+    
 }
 
 

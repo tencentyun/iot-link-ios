@@ -7,7 +7,6 @@
 #import "TIoTVideoVC.h"
 #import "TIoTVideoConfigNetVC.h"
 #import "TIoTPlayConfigVC.h"
-#import "TIoTPlayListVC.h"
 #import "IoTVideoCloud.h"
 #import "TIoTPlayConfigVC.h"
 
@@ -21,8 +20,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSString *appVersion = [IoTVideoCloud getSDKVersion];
-    _versionLB.text = [NSString stringWithFormat:@"v%@",appVersion];
+//    NSString *appVersion = [IoTVideoCloud getSDKVersion];
+//    _versionLB.text = [NSString stringWithFormat:@"v%@",appVersion];
     
 }
 - (IBAction)jumpDistributeNet:(id)sender {

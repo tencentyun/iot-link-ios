@@ -9,7 +9,6 @@
 #import "NSObject+additions.h"
 #import "UIColor+Color.h"
 #import "NSString+Extension.h"
-#import "TIoTPlayListVC.h"
 #import "TIoTCoreAppEnvironment.h"
 #import "IoTVideoCloud.h"
 
@@ -203,11 +202,11 @@
         environment.cloudSecretKey = self.secretKeyString;
         environment.cloudProductId = self.productIDString;
         
-        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-        [self.navigationController pushViewController:playListVC animated:YES];
+//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+//        [self.navigationController pushViewController:playListVC animated:YES];
     }else {
-        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
-        [self.navigationController pushViewController:playListVC animated:YES];
+//        TIoTPlayListVC *playListVC = [[TIoTPlayListVC alloc]init];
+//        [self.navigationController pushViewController:playListVC animated:YES];
     }
     
 }
