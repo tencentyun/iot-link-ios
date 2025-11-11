@@ -40,9 +40,15 @@
         return nil;
     
     AudioStreamBasicDescription outStreamDes;
-    outStreamDes.mSampleRate = 48000;
+    if (@available(iOS 18.0, *)) {
+        outStreamDes.mSampleRate = 48000;
+        outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger|kAudioFormatFlagIsPacked;
+        
+    }else {
+        outStreamDes.mSampleRate = 16000;
+        outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger;
+    }
     outStreamDes.mFormatID = kAudioFormatLinearPCM;
-    outStreamDes.mFormatFlags = kAudioFormatFlagIsSignedInteger|kAudioFormatFlagIsPacked;
     outStreamDes.mFramesPerPacket = 1;
     outStreamDes.mChannelsPerFrame = channel;
     outStreamDes.mBitsPerChannel = 16;
@@ -126,17 +132,18 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     UInt32   bufferSize = list.mBuffers[0].mDataByteSize;
     uint8_t *bufferData = (uint8_t *)list.mBuffers[0].mData;
 //    NSLog(@"record_callback__________size : %d", bufferSize);
+    if (@available(iOS 18.0, *)) {
+        UInt32 bufferData16Size = 0;
+        [r resample48000To16000_Linear:(int16_t *)bufferData output:(int16_t *)bufferData16 inputFrames:bufferSize outputFrames:&bufferData16Size];
+        [r addData:&pcm_circularBuffer :bufferData16 :bufferData16Size];
+        if (r->callback)
+            r->callback(bufferData16, bufferData16Size, r->user);
+    }else{
+        [r addData:&pcm_circularBuffer :bufferData :bufferSize];
+        if (r->callback)
+            r->callback(bufferData, bufferSize, r->user);
+    }
     
-    
-    UInt32 bufferData16Size = 0;
-    [r resample48000To16000_Linear:(int16_t *)bufferData output:(int16_t *)bufferData16 inputFrames:bufferSize outputFrames:&bufferData16Size];
-    [r addData:&pcm_circularBuffer :bufferData16 :bufferData16Size];
-    if (r->callback)
-        r->callback(bufferData16, bufferData16Size, r->user);
-
-//    [r addData:&pcm_circularBuffer :bufferData :bufferSize];
-//    if (r->callback)
-//        r->callback(bufferData, bufferSize, r->user);
     return error;
 }
 
