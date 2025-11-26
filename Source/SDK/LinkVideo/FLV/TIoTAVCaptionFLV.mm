@@ -1,10 +1,9 @@
-
-
 #import "TIoTAVCaptionFLV.h"
 #import "TIoTAACEncoder.h"
 #import "TIoTH264Encoder.h"
 
 #include <string>
+#include <memory> // 添加memory头文件以支持std::unique_ptr
 //#include <flv-writer.h>
 //#include <flv-muxer.h>
 #import "flv-writer.h"
@@ -498,18 +497,21 @@ static int flv_onwrite(void *param, const struct flv_vec_t* vec, int n) {
     }
 
 //    NSLog(@"========= flv_onmuxer total size: %d", total_size);
-    char* bytes = new char[total_size];
+    
+    // 使用unique_ptr自动管理内存，确保异常安全
+    std::unique_ptr<char[]> bytes(new char[total_size]);
     for(int i = 0, offset = 0; i < n; i++) {
-        memcpy(bytes + offset, vec[i].ptr, vec[i].len);
+        memcpy(bytes.get() + offset, vec[i].ptr, vec[i].len);
         offset += vec[i].len;
     }
 
 //    NSData *ByteHeader = [NSData dataWithBytes:bytes length:total_size];
 //    [_fileHandle writeData:ByteHeader];
     
-    [tAVCaptionFLV.delegate capture:(uint8_t *)bytes len:total_size];
+    // 传递数据给delegate，确保在函数返回前数据有效
+    [tAVCaptionFLV.delegate capture:(uint8_t *)bytes.get() len:total_size];
     
-    delete[] bytes;
+    // unique_ptr会自动释放内存，无需手动delete[]
     return 0;
 }
 
@@ -521,14 +523,15 @@ int encodeFlvData(int type, NSData *packetData) {
         NSLog(@"Please init flv muxer first.");
         return -1;
     }
-    __block NSData *blockData = packetData;
+    // 使用强引用确保数据在异步执行期间不被释放
+    NSData *strongData = [packetData copy];
     dispatch_async(muxerQueue, ^{
         
         CFTimeInterval timestamp = CACurrentMediaTime();
         uint32_t pts = timestamp*1000;
         
-        const void *c_data = blockData.bytes;
-        NSUInteger len = blockData.length;
+        const void *c_data = strongData.bytes;
+        NSUInteger len = strongData.length;
         //    NSLog(@"===========================------------ %ld, pts: %u", len, pts);
         
         
@@ -564,7 +567,7 @@ int encodeFlvData(int type, NSData *packetData) {
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths firstObject];
 //
-//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.aac"];
+//    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.h264"];
 //    [fileManager removeItemAtPath:h264File error:nil];
 //    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
 //    _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];

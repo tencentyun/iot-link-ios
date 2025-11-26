@@ -293,9 +293,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
                 audio_config.pitch =  0;//tt_pitch; // -6声音会变粗一点;    6声音会变细一点
                 
                 TIoTCoreVideoConfig *video_config = [TIoTCoreVideoConfig new];
-                video_config.localView = nil;
+                video_config.localView = nil;//self.tableView;
                 video_config.videoPosition = AVCaptureDevicePositionFront;
-                
+//                [[TIoTCoreXP2PBridge sharedInstance] resolutionRatio:AVCaptureSessionPreset1920x1080];
                 [[TIoTCoreXP2PBridge sharedInstance] sendVoiceToServer:weakSelf.combinedId channel:channel audioConfig:audio_config videoConfig:video_config];
                 
                 if(tt_pitch == 6){
@@ -1253,7 +1253,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         self.player = nil;
     }
 }
-NSFileHandle *_fileHandle;
+//NSFileHandle *_fileHandle;
 - (void)configVideo {
 
     // 1.通过播放器发起的拉流
@@ -1262,10 +1262,10 @@ NSFileHandle *_fileHandle;
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths firstObject];
         
-        NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"ijkplayerbbb.pcm"];
-        [fileManager removeItemAtPath:h264File error:nil];
-        [fileManager createFileAtPath:h264File contents:nil attributes:nil];
-        _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
+//        NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"ijkplayerbbb.pcm"];
+//        [fileManager removeItemAtPath:h264File error:nil];
+//        [fileManager createFileAtPath:h264File contents:nil attributes:nil];
+//        _fileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
 
         [TIoTCoreXP2PBridge sharedInstance].writeFile = YES;
         [TIoTCoreXP2PBridge recordstream:self.combinedId]; //保存到 document 目录 video.data 文件，需打开writeFile开关
