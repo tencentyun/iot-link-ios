@@ -420,13 +420,23 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     reqlog.HTTPMethod = @"POST";
     reqlog.HTTPBody = [NSJSONSerialization dataWithJSONObject:accessParam options:NSJSONWritingFragmentsAllowed error:nil];;
     NSURLSessionDataTask *tasklog = [[NSURLSession sharedSession] dataTaskWithRequest:reqlog completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
+
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
+        if (httpResponse.statusCode == 200 && data != nil) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
-            [self setAppLogConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
+            
+            // 检查服务器返回的业务错误码
+            NSNumber *code = [dic objectForKey:@"code"];
+            if (code && [code integerValue] == 0) {
+                // 业务成功，处理配置数据
+                [self setAppLogConfig:[[dic objectForKey:@"data"] objectForKey:@"Data"]];
+            } else {
+                // 业务失败，记录错误日志
+                NSString *errorMsg = [dic objectForKey:@"msg"] ?: @"Unknown error";
+                NSLog(@"AppGetUserConfig failed: %@", errorMsg);
+            }
         }
     }];
     [tasklog resume];
