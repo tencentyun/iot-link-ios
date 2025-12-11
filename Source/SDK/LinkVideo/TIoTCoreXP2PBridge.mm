@@ -360,7 +360,7 @@ BOOL checkVersionAfterPercent(NSString *input) {
 
         // 拼接新的参数
         NSString *combinedId = [NSString stringWithFormat:@"%@/%@", pro_id, dev_name];
-        ret = startService(combinedId.UTF8String, pro_id.UTF8String, dev_name.UTF8String, config_);
+        ret = startService(combinedId.UTF8String, pro_id.UTF8String, dev_name.UTF8String, appconfig.xp2pinfo.UTF8String, config_);
         setDeviceXp2pInfo(combinedId.UTF8String, appconfig.xp2pinfo.UTF8String);
     }
     
@@ -509,7 +509,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
         
         NSString *combinedId = [NSString stringWithFormat:@"%@/%@", appconfig.pro_id, appconfig.dev_name];
 
-        startService(combinedId.UTF8String, appconfig.pro_id.UTF8String, appconfig.dev_name.UTF8String, config_);
+        startService(combinedId.UTF8String, appconfig.pro_id.UTF8String, appconfig.dev_name.UTF8String, appconfig.xp2pinfo.UTF8String, config_);
         setDeviceXp2pInfo(combinedId.UTF8String, appconfig.xp2pinfo.UTF8String);
     }];
     [tasklog resume];
