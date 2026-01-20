@@ -490,10 +490,12 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
                 config_.port = stunPort;
             }
             if (stunHost.length > 0) {
-                config_.server = stunHost.UTF8String;
+                strncpy(config_.server, stunHost.UTF8String, sizeof(config_.server) - 1);
+                config_.server[sizeof(config_.server) - 1] = '\0';
             }
             if (stunIP.length > 0) {
-                config_.ip = stunIP.UTF8String;
+                strncpy(config_.ip, stunIP.UTF8String, sizeof(config_.ip) - 1);
+                config_.ip[sizeof(config_.ip) - 1] = '\0';
             }
             if ([protocol isEqualToString:@"TCP"]) {
                 config_.type = XP2P_PROTOCOL_TCP;

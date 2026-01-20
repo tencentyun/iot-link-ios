@@ -42,7 +42,7 @@ target 'LinkSDKDemo' do
   pod 'TIoTLinkKit/LinkRTC', :path => './'
   
   pod 'TIoTLinkVideo', :path => './'
-  pod 'TIoTLinkKit_XP2P', '2.4.64'
+  pod 'TIoTLinkKit_XP2P', '2.4.66-beta.202601200312'
   pod 'TIoTLinkKit_IJKPlayer', '2.0.16-beta.202502200213'
 end
 

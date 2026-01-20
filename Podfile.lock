@@ -35,13 +35,13 @@ PODS:
   - TIoTLinkKit_SoundTouch (1.0.0)
   - TIoTLinkKit_TPNS (1.0.1)
   - TIoTLinkKit_WechatOpenSDK (1.0.1)
-  - TIoTLinkKit_XP2P (2.4.64)
+  - TIoTLinkKit_XP2P (2.4.66-beta.202601200312)
   - TIoTLinkVideo (1.0.0):
     - CocoaAsyncSocket (= 7.6.5)
     - TIoTLinkKit_FLV (= 2.2.3)
     - TIoTLinkKit_GVoiceSE (>= 1.1.1)
     - TIoTLinkKit_SoundTouch (= 1.0.0)
-    - TIoTLinkKit_XP2P (>= 2.4.64)
+    - TIoTLinkKit_XP2P (>= 2.4.65)
     - TPCircularBuffer (= 1.6.1)
   - TPCircularBuffer (1.6.1)
   - TrueTime (5.0.3)
@@ -69,7 +69,7 @@ DEPENDENCIES:
   - TIoTLinkKit_IJKPlayer (= 2.0.16-beta.202502200213)
   - TIoTLinkKit_TPNS (= 1.0.1)
   - TIoTLinkKit_WechatOpenSDK (= 1.0.1)
-  - TIoTLinkKit_XP2P (= 2.4.64)
+  - TIoTLinkKit_XP2P (= 2.4.66-beta.202601200312)
   - TIoTLinkVideo (from `./`)
   - TrueTime (= 5.0.3)
   - TZImagePickerController (= 3.2.1)
@@ -134,14 +134,14 @@ SPEC CHECKSUMS:
   TIoTLinkKit_SoundTouch: cf79ae182b6c2349ff65bac7a338974bc538fa77
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
-  TIoTLinkKit_XP2P: 0293395429537bfb4eaa4e0938460af807156695
-  TIoTLinkVideo: 17e1d3844cad1a741146506d03ec407c72125b11
+  TIoTLinkKit_XP2P: e81b26b6fdad6c4d4ef38ea5d46be911f9ef54ce
+  TIoTLinkVideo: 6b786a24cd2da1b527c3f04d21e6ffb589c8c4d5
   TPCircularBuffer: c13243556527551c4d320709c7b14a6d20cdc30a
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 3d4e856601280dca8e268c7f316d86892147abcb
+PODFILE CHECKSUM: 0dcb288a5e23c5375c223e34ab4877ca4be4e984
 
 COCOAPODS: 1.16.2
