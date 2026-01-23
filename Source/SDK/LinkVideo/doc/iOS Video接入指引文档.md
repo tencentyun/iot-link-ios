@@ -50,7 +50,10 @@ if (code == XP2P_OK) {
 ### 3.2 视频直播
 ```objective-c
 // 获取HTTP-FLV播放地址
-NSString *url = [bridge getUrlForHttpFlv:@"产品ID/设备名称"];
+NSString *httpflv = [bridge getUrlForHttpFlv:@"产品ID/设备名称"];
+
+//1.获取httpflv的url,ipc拼接参数说明 直播拼接ipc.flv?action=live；本地回看拼接ipc.flv?action=playback，标清quality=standard，高清quality=high，超清quality=super
+ NSString *videoUrl = [NSString stringWithFormat:@"%@ipc.flv?action=live&quality=high",httpflv];
 
 // 使用播放器播放URL
 ```
