@@ -572,10 +572,10 @@
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
     if (self.currentConnectedPerpheral) {
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
-//        if (hexstr.length < 2) {
+       if (hexstr.length < 2) {
             DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@--hexstr==%@",self.currentConnectedPerpheral.name, hexstr);
-//            return;
-//        }
+           return;
+       }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
         if ([cmdtype isEqualToString:@"08"]) {
             
