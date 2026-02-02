@@ -23,7 +23,7 @@ target 'LinkApp' do
   pod 'FDFullscreenPopGesture', '1.1'
   pod 'SocketRocket', '0.5.1'
   pod 'TZImagePickerController', '3.2.1'
-  pod 'TrueTime','5.0.3'
+  pod 'TrueTime', :git => 'https://github.com/instacart/TrueTime.swift.git', :tag => '5.1.0'
   pod 'KeychainAccess', '4.2.0'
 #  pod 'Tencent-MapSDK', '4.3.9'
   pod 'lottie-ios', '3.1.8'
