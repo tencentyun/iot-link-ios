@@ -1139,6 +1139,13 @@ static const uint8_t QCPayloadLenMask   = 0x7F;
 {
     [self assertOnWorkQueue];
     
+    // 增加stream状态检查，避免在stream已关闭或无效时继续写入
+    if (!_outputStream || _outputStream.streamStatus == NSStreamStatusClosed || 
+        _outputStream.streamStatus == NSStreamStatusNotOpen || 
+        _outputStream.streamStatus == NSStreamStatusError) {
+        return;
+    }
+    
     NSUInteger dataLength = _outputBuffer.length;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
         NSInteger bytesWritten = [_outputStream write:_outputBuffer.bytes + _outputBufferOffset maxLength:dataLength - _outputBufferOffset];
@@ -1484,6 +1491,7 @@ static const size_t QCFrameHeaderOverhead = 32;
 
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode;
 {
+    // 使用weak引用，在异步block中转为strong引用，防止在异步调度期间对象被释放
     __weak typeof(self) weakSelf = self;
     
     if (_secure && !_pinnedCertFound && (eventCode == NSStreamEventHasBytesAvailable || eventCode == NSStreamEventHasSpaceAvailable)) {
@@ -1511,25 +1519,39 @@ static const size_t QCFrameHeaderOverhead = 32;
             
             if (!_pinnedCertFound) {
                 dispatch_async(_workQueue, ^{
-                    NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Invalid server cert" };
-                    [weakSelf _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:userInfo]];
+                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Invalid server cert" };
+                        [strongSelf _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:userInfo]];
+                    }
                 });
                 return;
             } else if (aStream == _outputStream) {
                 dispatch_async(_workQueue, ^{
-                    [self didConnect];
+                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [strongSelf didConnect];
+                    }
                 });
             }
         }
     }
 
     dispatch_async(_workQueue, ^{
-        [weakSelf safeHandleEvent:eventCode stream:aStream];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf safeHandleEvent:eventCode stream:aStream];
+        }
     });
 }
 
 - (void)safeHandleEvent:(NSStreamEvent)eventCode stream:(NSStream *)aStream
 {
+        // 增加状态检查，防止在已关闭状态下继续处理事件
+        if (self.readyState == QC_CLOSED) {
+            return;
+        }
+        
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
                 QCFastLog(@"NSStreamEventOpenCompleted %@", aStream);
@@ -1564,22 +1586,21 @@ static const size_t QCFrameHeaderOverhead = 32;
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
-                    dispatch_async(_workQueue, ^{
-                        if (self.readyState != QC_CLOSED) {
-                            self.readyState = QC_CLOSED;
-                            [self _scheduleCleanup];
-                        }
-                        
-                        if (!self->_sentClose && !self->_failed) {
-                            self->_sentClose = YES;
-                            // If we get closed in this state it's probably not clean because we should be sending this when we send messages
-                            [self _performDelegateBlock:^{
-                                if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                                    [self.delegate webSocket:self didCloseWithCode:QCStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
-                                }
-                            }];
-                        }
-                    });
+                    // 已经在_workQueue中执行，不需要再次异步调度
+                    if (self.readyState != QC_CLOSED) {
+                        self.readyState = QC_CLOSED;
+                        [self _scheduleCleanup];
+                    }
+                    
+                    if (!self->_sentClose && !self->_failed) {
+                        self->_sentClose = YES;
+                        // If we get closed in this state it's probably not clean because we should be sending this when we send messages
+                        [self _performDelegateBlock:^{
+                            if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
+                                [self.delegate webSocket:self didCloseWithCode:QCStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
+                            }
+                        }];
+                    }
                 }
                 
                 break;

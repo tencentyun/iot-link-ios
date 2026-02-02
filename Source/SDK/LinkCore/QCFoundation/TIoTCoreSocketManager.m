@@ -299,28 +299,39 @@ static NSString *heartBeatReqID = @"5002";
         //data = [data stringByReplacingOccurrencesOfString:@"\\" withString:@""];
     }
     WeakSelf(self);
-    dispatch_queue_t queue =  dispatch_queue_create("zy", NULL);
     
-    dispatch_async(queue, ^{
-        if (weakself.socket != nil) {
-            // 只有 QC_OPEN 开启状态才能调 send 方法啊，不然要崩
-            if (weakself.socket.readyState == QC_OPEN) {
-                [weakself.socket send:data];    // 发送数据
+    // 使用全局并发队列，避免每次创建新队列造成资源浪费
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 先检查weakself是否有效
+        if (!weakself) {
+            return;
+        }
+        
+        // 使用同步块保护socket状态检查和发送操作，避免竞态条件
+        @synchronized(weakself) {
+            if (weakself.socket != nil) {
+                // 只有 QC_OPEN 开启状态才能调 send 方法啊，不然要崩
+                WCReadyState currentState = weakself.socket.readyState;
                 
-            } else if (weakself.socket.readyState == QC_CONNECTING) {
-
-                [weakself reConnect];
-                [weakself reHeartStart];
-            } else if (weakself.socket.readyState == QC_CLOSING || weakself.socket.readyState == QC_CLOSED) {
-                // websocket 断开了，调用 reConnect 方法重连
-                DDLogInfo(@"socket 重连");
-                
-                [weakself reConnect];
-                [weakself reHeartStart];
+                if (currentState == QC_OPEN) {
+                    // 再次检查状态，确保在发送时仍然是OPEN状态
+                    if (weakself.socket && weakself.socket.readyState == QC_OPEN) {
+                        [weakself.socket send:data];    // 发送数据
+                    }
+                } else if (currentState == QC_CONNECTING) {
+                    [weakself reConnect];
+                    [weakself reHeartStart];
+                } else if (currentState == QC_CLOSING || currentState == QC_CLOSED) {
+                    // websocket 断开了，调用 reConnect 方法重连
+                    DDLogInfo(@"socket 重连");
+                    
+                    [weakself reConnect];
+                    [weakself reHeartStart];
+                }
+            } else {
+                // 这里要看你的具体业务需求；不过一般情况下，调用发送数据还是希望能把数据发送出去，所以可以再次打开链接；不用担心这里会有多个socketopen；因为如果当前有socket存在，会停止创建哒
+                [weakself socketOpen];
             }
-        } else {
-            // 这里要看你的具体业务需求；不过一般情况下，调用发送数据还是希望能把数据发送出去，所以可以再次打开链接；不用担心这里会有多个socketopen；因为如果当前有socket存在，会停止创建哒
-            [weakself socketOpen];
         }
     });
 }
