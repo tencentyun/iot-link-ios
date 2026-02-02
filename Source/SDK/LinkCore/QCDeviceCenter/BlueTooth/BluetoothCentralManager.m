@@ -264,6 +264,13 @@
     }
 }
 
+- (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfoData:(NSData *)data {
+    if (self.currentLLSyncCharacteristic) {
+        // 将指令写入蓝牙
+        [peripheral writeValue:data forCharacteristic:self.currentLLSyncCharacteristic type:CBCharacteristicWriteWithResponse];
+    }
+}
+
 - (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfo:(NSString *)type {
     if (self.currentLLSyncCharacteristic) {
         

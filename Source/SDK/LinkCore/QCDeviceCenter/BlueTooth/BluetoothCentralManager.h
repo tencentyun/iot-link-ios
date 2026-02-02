@@ -99,6 +99,7 @@
 /*
  * 添加LLSync写数据接口
  */
+- (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfoData:(NSData *)data;
 - (void)sendLLSyncWithPeripheral:(CBPeripheral *)peripheral LLDeviceInfo:(NSString *)type ;
 
 /*

@@ -1,8 +1,8 @@
-platform :ios, '9.0'
+platform :ios, '11.0'
 #inhibit_all_warnings!
 use_frameworks!
-#source 'https://cdn.cocoapods.org/'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
+#source 'https://github.com/CocoaPods/Specs.git'
 def common_all_pods
   pod 'Masonry', '1.1.0'
   pod 'MBProgressHUD', '1.1.0'
@@ -43,4 +43,14 @@ target 'LinkSDKDemo' do
   
   pod 'TIoTLinkVideo', :path => './'
   pod 'TIoTLinkKit_IJKPlayer', '2.0.8-beta.202212290234'
+end
+
+
+#older OS versions does not contain 'libarclite', at least iOS 11
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "11.0"
+    end
+  end
 end

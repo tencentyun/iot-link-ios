@@ -572,10 +572,10 @@
 - (void)updateData:(NSArray *)dataHexArray withCharacteristic:(CBCharacteristic *)characteristic pheropheralUUID:(NSString *)pheropheralUUID serviceUUID:(NSString *)serviceString {
     if (self.currentConnectedPerpheral) {
         NSString *hexstr = [NSString transformStringWithData:characteristic.value];
-        if (hexstr.length < 2) {
-            DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@",self.currentConnectedPerpheral.name);
-            return;
-        }
+//        if (hexstr.length < 2) {
+            DDLogWarn(@"不支持的蓝牙设备，服务的回调数据不属于llsync --%@--hexstr==%@",self.currentConnectedPerpheral.name, hexstr);
+//            return;
+//        }
         NSString *cmdtype = [hexstr substringWithRange:NSMakeRange(0, 2)];
         if ([cmdtype isEqualToString:@"08"]) {
             
@@ -636,6 +636,15 @@
             
         }else if ([cmdtype isEqualToString:@"E2"] || [cmdtype isEqualToString:@"e2"]) {
             //设备连好wifi了，此时需要下一步给设备下发Token
+            Byte messageHeader[6]; //1个字节消息类型
+            [characteristic.value getBytes:messageHeader length:6];
+            int messageType = (int) (messageHeader[0]&0xff); //1：探测消息；2：探测响应消息；其他保留
+            int station = (int) (messageHeader[4]&0xff); //高4bit：主版本号；低4bit：子版本号
+            if (station == 1) {
+                //Station状态表示WIFI是否连接，0x00表示已连接，0x01表示未连接。
+                [self.blueManager sendLLSyncWithPeripheral:self.currentConnectedPerpheral LLDeviceInfo:@"E3"];
+                return;
+            }
             
             NSString *bingwifitoken = self.wifiInfo[@"token"];
             NSString *bingwifitokenhex = [NSString hexStringFromString:bingwifitoken];
