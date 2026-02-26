@@ -157,9 +157,10 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         
         config.xp2pinfo = xp2pInfo;
         
-        config.autoConfigFromDevice = NO;
-        config.type = XP2P_PROTOCOL_AUTO;
-        config.crossStunTurn = NO;
+        config.autoConfigFromDevice = YES;
+        config.oversea = YES;
+        config.type = XP2P_PROTOCOL_TCP;
+        config.crossStunTurn = YES;
         
         int errorcode = [[TIoTCoreXP2PBridge sharedInstance] startAppWith:env.cloudProductId dev_name:self.deviceName?:@"" appconfig:config];
         if (errorcode == XP2P_ERR_VERSION) {

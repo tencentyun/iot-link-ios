@@ -458,6 +458,9 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     
     
     NSURL *url = [NSURL URLWithString:@"https://iot.cloud.tencent.com/api/exploreropen/appapi"];
+    if (appconfig.oversea) {
+        url = [NSURL URLWithString:@"https://oversea.iotcloud.tencentiotcloud.com/api/exploreropen/appapi"];
+    }
     NSMutableURLRequest *reqlog = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5];
     [reqlog setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     reqlog.HTTPMethod = @"POST";

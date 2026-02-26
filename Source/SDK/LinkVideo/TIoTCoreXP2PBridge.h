@@ -25,6 +25,7 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
 @property (nonatomic, strong)NSString *xp2pinfo; //被连接设备的p2p_info
 
 @property (nonatomic, assign)BOOL autoConfigFromDevice; //是否跟随对应设备配置,YES 后下面的配置（cross、type等）不生效
+@property (nonatomic, assign)BOOL oversea; //是否海外设备，需配置对应的海外appkey/appsecret
 @property (nonatomic, assign)BOOL crossStunTurn; //是否打开双中转开关，默认false
 @property (nonatomic, assign)XP2PProtocolType type; //通信协议，默认auto
 @end

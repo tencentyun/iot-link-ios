@@ -8,3 +8,4 @@ ExportOptions.plist
 *.xcarchive
 Packaging.log
 build.sh
+.codebuddy/
