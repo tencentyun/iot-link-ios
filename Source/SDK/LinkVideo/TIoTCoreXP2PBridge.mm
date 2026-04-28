@@ -422,7 +422,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
     NSURLSessionDataTask *tasklog = [[NSURLSession sharedSession] dataTaskWithRequest:reqlog completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200 && data != nil) {
+        if (httpResponse.statusCode == 200 && data != nil && data.length > 0) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);
@@ -476,7 +476,7 @@ NSString *createSortedQueryString(NSMutableDictionary *params) {
         };
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode == 200) {
+        if (httpResponse.statusCode == 200 && data != nil && data.length > 0) {
             NSError *jsonerror = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonerror];
 //            NSLog(@"log serverapi:content===>%@, param==>%@, data===>%@",content,accessParam,dic);

@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
         config.xp2pinfo = xp2pInfo;
         
         config.autoConfigFromDevice = YES;
-        config.oversea = YES;
+        config.oversea = NO;
         config.type = XP2P_PROTOCOL_TCP;
         config.crossStunTurn = YES;
         
