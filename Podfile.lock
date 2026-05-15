@@ -30,7 +30,7 @@ PODS:
     - TXLiteAVSDK_TRTC (= 8.0.9644)
     - YYModel (= 1.0.4)
   - TIoTLinkKit_FLV (2.2.3)
-  - TIoTLinkKit_GVoiceSE (1.1.1)
+  - TIoTLinkKit_GVoice (1.1.2)
   - TIoTLinkKit_IJKPlayer (2.0.16-beta.202502200213)
   - TIoTLinkKit_SoundTouch (1.0.0)
   - TIoTLinkKit_TPNS (1.0.1)
@@ -39,7 +39,7 @@ PODS:
   - TIoTLinkVideo (1.0.0):
     - CocoaAsyncSocket (= 7.6.5)
     - TIoTLinkKit_FLV (= 2.2.3)
-    - TIoTLinkKit_GVoiceSE (>= 1.1.1)
+    - TIoTLinkKit_GVoice (>= 1.1.2)
     - TIoTLinkKit_SoundTouch (= 1.0.0)
     - TIoTLinkKit_XP2P (>= 2.4.65)
     - TPCircularBuffer (= 1.6.1)
@@ -76,7 +76,7 @@ DEPENDENCIES:
   - YYModel (= 1.0.4)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - Bugly
     - CocoaAsyncSocket
     - CocoaLumberjack
@@ -93,7 +93,7 @@ SPEC REPOS:
     - SocketRocket
     - Tencent-MapSDK
     - TIoTLinkKit_FLV
-    - TIoTLinkKit_GVoiceSE
+    - TIoTLinkKit_GVoice
     - TIoTLinkKit_IJKPlayer
     - TIoTLinkKit_SoundTouch
     - TIoTLinkKit_TPNS
@@ -129,19 +129,19 @@ SPEC CHECKSUMS:
   Tencent-MapSDK: 6dfbee53b46131deb4c4bb02b3edc5ce7fb630dc
   TIoTLinkKit: 0386fb583c61765a02ad5cca810c7661d5a0bc53
   TIoTLinkKit_FLV: aec2b2ec9664990ec6c5b9f760fc1a9043d5a9a5
-  TIoTLinkKit_GVoiceSE: a5babede5cb5963ad639e2ed33895539984fcd45
+  TIoTLinkKit_GVoice: 0e88efe8ca0700e09f0a09e4b5a5e2cdbb8f45a3
   TIoTLinkKit_IJKPlayer: f69a63ee19daaab5838e193dee2d785ad5c0b0e5
   TIoTLinkKit_SoundTouch: cf79ae182b6c2349ff65bac7a338974bc538fa77
   TIoTLinkKit_TPNS: 7cea4fc1d20ef6c4c11c4f0b66bbb10ecf4ed968
   TIoTLinkKit_WechatOpenSDK: 7822d68cc5c46edf3f6020422202e7b65ea87614
   TIoTLinkKit_XP2P: e81b26b6fdad6c4d4ef38ea5d46be911f9ef54ce
-  TIoTLinkVideo: 6b786a24cd2da1b527c3f04d21e6ffb589c8c4d5
+  TIoTLinkVideo: a42da8c0525bf0a259fc42f5b72879a0f4412d63
   TPCircularBuffer: c13243556527551c4d320709c7b14a6d20cdc30a
   TrueTime: b49551ffafb28a9dee04e51b226f42a416010842
   TXLiteAVSDK_TRTC: e3383a81565e8bb2aaaaab4bd099ad5239cd5b2d
   TZImagePickerController: bf4c57b98d8707fce41ea6be872414a71c7a8c9d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 0dcb288a5e23c5375c223e34ab4877ca4be4e984
+PODFILE CHECKSUM: cacc9af17763aa578278c59b1c1601430e690578
 
 COCOAPODS: 1.16.2
