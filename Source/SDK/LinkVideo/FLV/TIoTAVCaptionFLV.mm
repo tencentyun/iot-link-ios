@@ -13,6 +13,7 @@
 #import "TIoTPCMXEchoRecord.h"
 #import <SoundTouchiOS/ijksoundtouch_wrap.h>
 #import <GVoiceSEiOS/GVoiceSE.h>
+#import <Accelerate/Accelerate.h>
 
 __weak static TIoTAVCaptionFLV *tAVCaptionFLV = nil;
 static flv_muxer_t* flvMuxer = nullptr;
@@ -426,6 +427,33 @@ static void record_callback(uint8_t *buffer, int size, void *u)
         
         NSData *data = [NSData dataWithBytes:pcm_buffer_result length:tmpChannelDataLen];
 //        [_fileHandle writeData:data];
+
+        // 麿克风录音增益（软件放大）：仅在开关打开且增益>1.0时生效
+        // 使用 vDSP 向量化加速：int16 -> float -> 乘法 -> 限幅 -> int16
+        if (vc.audioConfig.enableMicGain && vc.audioConfig.micGain > 1.0f) {
+            float gain = vc.audioConfig.micGain;
+            // 限制上限，避免严重削顶
+            if (gain > 8.0f) gain = 8.0f;
+
+            int16_t *samples = (int16_t *)[data bytes]; // PCM 以 16-bit 表示，length 为字节数
+            vDSP_Length sampleCount = (vDSP_Length)(data.length / sizeof(int16_t));
+            if (sampleCount > 0) {
+                static float floatBuf[8192]; // tmpChannelDataLen=2048 字节 -> 1024 采样点，这里预留足够容量
+                vDSP_Length cnt = sampleCount > 8192 ? 8192 : sampleCount;
+
+                // 1) int16 -> float
+                vDSP_vflt16(samples, 1, floatBuf, 1, cnt);
+                // 2) 整体乘以增益系数
+                vDSP_vsmul(floatBuf, 1, &gain, floatBuf, 1, cnt);
+                // 3) 限幅到 int16 范围，避免转换时溢出
+                float minV = -32768.0f;
+                float maxV =  32767.0f;
+                vDSP_vclip(floatBuf, 1, &minV, &maxV, floatBuf, 1, cnt);
+                // 4) float -> int16（就近舍入）
+                vDSP_vfix16(floatBuf, 1, samples, 1, cnt);
+            }
+        }
+
         [vc.aacEncoder encodePCMData:data];
 //    });
 }

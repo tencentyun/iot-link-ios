@@ -46,6 +46,21 @@ typedef NS_ENUM(NSInteger, TIoTAVCaptionFLVAudioType) {
  */
 @property (nonatomic,assign) BOOL isExternal;
 
+/**
+ *  是否开启麦克风录音增益（软件放大），用于解决iOS录制声音过小、对端播放音量偏小的问题
+ *  默认 NO（不开启）
+ */
+@property (nonatomic,assign) BOOL enableMicGain;
+
+/**
+ *  麦克风录音增益倍数（线性放大系数），仅在 enableMicGain == YES 时生效
+ *  建议范围 1.0 ~ 4.0，超过 4.0 容易削顶失真；
+ *  - 1.0 表示原始音量；
+ *  - 2.0 表示放大约 +6dB；
+ *  - 默认值 1.0
+ */
+@property (nonatomic,assign) float micGain;
+
 @end
 
 NS_ASSUME_NONNULL_END

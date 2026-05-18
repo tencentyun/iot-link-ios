@@ -89,8 +89,9 @@ TPCircularBuffer pcm_circularBuffer;
 /**
  * 线性插值法重采样 48000Hz -> 16000Hz
  * 转换比例 3:1，适合实时处理
+ * 注意：inputFrames / outputFrames 单位均为 "采样点数(per channel frame)"，不是字节数
  */
-uint8_t bufferData16[8192];
+uint8_t bufferData16[16384];
 - (void)resample48000To16000_Linear:(int16_t *)input
                             output:(int16_t *)output
                        inputFrames:(UInt32)inputFrames
@@ -133,11 +134,19 @@ static OSStatus record_callback(void *inRefCon, AudioUnitRenderActionFlags *ioAc
     uint8_t *bufferData = (uint8_t *)list.mBuffers[0].mData;
 //    NSLog(@"record_callback__________size : %d", bufferSize);
     if (@available(iOS 18.0, *)) {
-        UInt32 bufferData16Size = 0;
-        [r resample48000To16000_Linear:(int16_t *)bufferData output:(int16_t *)bufferData16 inputFrames:bufferSize outputFrames:&bufferData16Size];
-        [r addData:&pcm_circularBuffer :bufferData16 :bufferData16Size];
+        // 16-bit PCM，每个采样点占 2 * channel 字节，必须将字节数换算为采样点数后再传入重采样函数
+        UInt32 bytesPerSample = 2 * (UInt32)channel;
+        UInt32 inputSamples   = (bytesPerSample > 0) ? (bufferSize / bytesPerSample) : 0;
+        UInt32 outputSamples  = 0;
+        [r resample48000To16000_Linear:(int16_t *)bufferData
+                                output:(int16_t *)bufferData16
+                           inputFrames:inputSamples
+                          outputFrames:&outputSamples];
+        // 重采样输出的是采样点数，写入环形缓冲 / 上抛回调时需要再换回字节数
+        UInt32 outputBytes = outputSamples * bytesPerSample;
+        [r addData:&pcm_circularBuffer :bufferData16 :outputBytes];
         if (r->callback)
-            r->callback(bufferData16, bufferData16Size, r->user);
+            r->callback(bufferData16, outputBytes, r->user);
     }else{
         [r addData:&pcm_circularBuffer :bufferData :bufferSize];
         if (r->callback)
