@@ -87,7 +87,7 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
     AudioClassDescription descriptions[cout];
     //将编码器数组信息写入到descriptions中
     AudioFormatGetProperty(kAudioFormatProperty_Encoders, sizeof(outAudioStreamBasicDescription.mFormatID), &outAudioStreamBasicDescription.mFormatID, &countSize, descriptions);
-    for (int i = 0; i < cout; cout++) {
+    for (int i = 0; i < cout; i++) {
         AudioClassDescription temp = descriptions[i];
         if (temp.mManufacturer==kAppleSoftwareAudioCodecManufacturer
             &&temp.mSubType==outAudioStreamBasicDescription.mFormatID) {
@@ -188,6 +188,8 @@ OSStatus audioConverterComplexInputDataProc(AudioConverterRef inAudioConverter,U
         char *pcmData = NULL;
         CMBlockBufferGetDataPointer(blockBuffer, 0, NULL, &pcmLength, &pcmData);
         if (pcmLength == 0 || !pcmData) {
+            CFRelease(blockBuffer);
+            CFRelease(sampleBuffer);
             return;
         }
         
