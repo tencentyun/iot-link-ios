@@ -374,6 +374,8 @@ void *ijk_soundtouch_handle = NULL;
 }
 
 - (void)setRemoteAudioFrame:(void *)pcmdata len:(int)pcmlen {
+    // 防御：录音未启动 / 空数据 / 无效长度，直接丢弃
+    if (!pcmdata || pcmlen <= 0 || !self.pcmRecord || !self.pcmRecord.isRecording) return;
     [self.pcmRecord addData:&circularBuf_gvoice_pcm :pcmdata :pcmlen];
 }
 

@@ -13,7 +13,7 @@
     RecordCallback callback;
     void *user;
 }
-
+@property (nonatomic, assign) BOOL isRecording;
 @end
 
 @implementation TIoTPCMXEchoRecord
@@ -162,12 +162,14 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 - (void)start_record
 {
+    _isRecording = YES;
     [self Init_buffer:&pcm_circularBuffer :8192];
     AudioOutputUnitStart(audioUnit);
 }
 
 - (void)stop_record
 {
+    _isRecording = NO;
     AudioOutputUnitStop(audioUnit);
     [self Destory_buffer:&pcm_circularBuffer];
 }
@@ -200,27 +202,31 @@ OSStatus outputRender_cb(void *inRefCon, AudioUnitRenderActionFlags *ioActionFla
 
 -(UInt32)addData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
 {
+    // 防御：已停止录音 / 空指针 / 无效长度，直接丢弃，防止crash
+    if (!_isRecording || !buffer_ || !buf_ || size_ <= 0)
+          return 0;
+
     uint32_t availableBytes = 0;
     TPCircularBufferHead(buffer_, &availableBytes);
     if (availableBytes <= 0)
           return 0;
-     
-    UInt32 len =  (availableBytes >= size_ ? size_ : availableBytes);
-    TPCircularBufferProduceBytes(buffer_, (void*)buf_, size_);
+
+    UInt32 len = (availableBytes >= size_ ? size_ : availableBytes);
+    TPCircularBufferProduceBytes(buffer_, (void*)buf_, len);
     return len;
 }
 
 -(UInt32)getData:(TPCircularBuffer*)buffer_ :(void *)buf_ :(UInt32)size_
 {
+    if (!_isRecording || !buffer_ || !buf_ || size_ <= 0) return 0;
+
     uint32_t availableBytes = 0;
     void *bufferTail = TPCircularBufferTail(buffer_, &availableBytes);
     if (availableBytes >= size_)
     {
-        UInt32 len = 0;
-        len = (size_ > availableBytes ? availableBytes : size_);
+        UInt32 len = (size_ > availableBytes ? availableBytes : size_);
         memcpy(buf_, bufferTail, len);
         TPCircularBufferConsume(buffer_, len);
-//        NSLog(@"ggggggggggg=====len = %ld", len);
         return len;
     }
     return 0;
