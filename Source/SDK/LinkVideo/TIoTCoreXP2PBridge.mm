@@ -55,6 +55,13 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
 //            fwrite(msg, 1, strlen(msg)>300?300:strlen(msg), p2pOutLogFile);
             [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
         }
+        // 通过 logEnable 控制将日志输出给客户，客户可在回调中写入本地文件
+        if (logEnable && BridgeDelegate && [BridgeDelegate respondsToSelector:@selector(outputLogMessage:)]) {
+            NSString *logMsg = [[NSString alloc] initWithCString:msg encoding:NSUTF8StringEncoding];
+            if (logMsg) {
+                [BridgeDelegate outputLogMessage:logMsg];
+            }
+        }
         return nullptr;
     }else if (type == XP2PTypeSaveFileOn) {
         

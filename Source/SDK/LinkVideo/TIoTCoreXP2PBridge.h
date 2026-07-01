@@ -58,6 +58,12 @@ extern NSNotificationName const TIoTCoreXP2PBridgeNotificationStreamEnd;
  * msg 事件详情
  */
 - (void)reviceEventMsgWithID:(NSString *)combinedId eventType:(XP2PType)eventType msg:(const char*) msg;
+
+/*
+ * SDK 日志输出回调，需设置 logEnable = YES 才会触发
+ * 客户可在此回调中获取 SDK 内部日志，自行写入本地文件等
+ */
+- (void)outputLogMessage:(NSString *)message;
 @end
 
 
