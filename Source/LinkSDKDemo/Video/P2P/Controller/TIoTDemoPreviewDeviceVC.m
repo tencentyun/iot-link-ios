@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     TIotDemoDeviceDirectionDown,
 };
 
-@interface TIoTDemoPreviewDeviceVC ()<UITableViewDelegate,UITableViewDataSource, IJKMediaNativeInvokeDelegate>
+@interface TIoTDemoPreviewDeviceVC ()<UITableViewDelegate,UITableViewDataSource, IJKMediaNativeInvokeDelegate, TIoTCoreXP2PBridgeDelegate>
 @property (nonatomic, assign) CGRect screenRect;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *actionBottomView; //功能操作底层view
@@ -111,6 +111,7 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     self.productId = [TIoTCoreAppEnvironment shareEnvironment].cloudProductId;
     //关闭日志
     [TIoTCoreXP2PBridge sharedInstance].logEnable = YES;
+    [TIoTCoreXP2PBridge sharedInstance].delegate = self;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     self.qualityString = quality_high;
@@ -234,7 +235,9 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
 }
 
 - (void)dealloc{
-    
+    // 先解绑 delegate，避免 stopService 触发的日志回调打到正在 dealloc 的 self 上
+    [TIoTCoreXP2PBridge sharedInstance].delegate = nil;
+
     [self stopPlayMovie];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
@@ -1654,6 +1657,35 @@ typedef NS_ENUM(NSInteger, TIotDemoDeviceDirection) {
     [[TIoTCoreXP2PBridge sharedInstance] stopService:self.combinedId];
     TIoTCoreAppEnvironment *env = [TIoTCoreAppEnvironment shareEnvironment];
     [self requestXp2pInfo];// 重新获取info，启动p2p
+}
+
+- (void)outputLogMessage:(NSString *)message withId:(NSString *)combinedId {
+    static NSString *logPath = nil;
+    static NSFileHandle *fileHandle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docPath = [paths firstObject];
+        logPath = [docPath stringByAppendingPathComponent:@"xp2p_client.log"];
+        [[NSData data] writeToFile:logPath atomically:YES];
+        fileHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];
+    });
+
+    @autoreleasepool {
+        NSData *logData = [message dataUsingEncoding:NSUTF8StringEncoding];
+        if (!logData) return;
+
+        @try {
+            [fileHandle seekToEndOfFile];
+            [fileHandle writeData:logData];
+        } @catch (NSException *exception) {
+            fileHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];
+            if (fileHandle) {
+                [fileHandle seekToEndOfFile];
+                [fileHandle writeData:logData];
+            }
+        }
+    }
 }
 
 @end

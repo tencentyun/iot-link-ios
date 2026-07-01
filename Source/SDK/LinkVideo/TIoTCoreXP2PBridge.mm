@@ -38,6 +38,7 @@ static BOOL ops_report_enabled = YES;
 @property (nonatomic, strong) NSMutableDictionary *uniReqStartTime;
 @property (nonatomic, strong) TIoTCoreLogger *logger;
 @property (nonatomic, assign) CFTimeInterval start_voice_time;
+@property (nonatomic, assign) BOOL logOutputEnabled;
 - (void)cancelTimer;
 - (void)doTick:(data_report_t)data_buf;
 @end
@@ -56,10 +57,16 @@ const char* XP2PMsgHandle(const char *idd, XP2PType type, const char* msg) {
             [[TIoTCoreXP2PBridge sharedInstance].logger addLog:[NSString stringWithCString:msg encoding:NSASCIIStringEncoding]];
         }
         // 通过 logEnable 控制将日志输出给客户，客户可在回调中写入本地文件
-        if (logEnable && BridgeDelegate && [BridgeDelegate respondsToSelector:@selector(outputLogMessage:)]) {
-            NSString *logMsg = [[NSString alloc] initWithCString:msg encoding:NSUTF8StringEncoding];
-            if (logMsg) {
-                [BridgeDelegate outputLogMessage:logMsg];
+        // 注意：此回调可能在 delegate 对象 dealloc 期间被同步触发（例如 delegate.dealloc -> stopService -> log），
+        // 业务侧应在 stopService 前，先解绑 delegate
+        if (logEnable && BridgeDelegate && [TIoTCoreXP2PBridge sharedInstance].logOutputEnabled) {
+            @autoreleasepool {
+                id<TIoTCoreXP2PBridgeDelegate> localDelegate = BridgeDelegate;
+                NSString *logMsg = [[NSString alloc] initWithCString:msg encoding:NSUTF8StringEncoding];
+                NSString *combinedId = [[NSString alloc] initWithCString:idd encoding:NSUTF8StringEncoding];
+                if (localDelegate && logMsg && combinedId) {
+                    [localDelegate outputLogMessage:logMsg withId:combinedId];
+                }
             }
         }
         return nullptr;
@@ -297,6 +304,7 @@ BOOL checkVersionAfterPercent(NSString *input) {
 - (void)setDelegate:(id<TIoTCoreXP2PBridgeDelegate>)delegate {
     _delegate = delegate;
     BridgeDelegate = _delegate;
+    self.logOutputEnabled = [delegate respondsToSelector:@selector(outputLogMessage:withId:)];
 }
 
 - (XP2PErrCode)startAppWith:(NSString *)pro_id dev_name:(NSString *)dev_name appconfig:(TIoTP2PAPPConfig *)appconfig {
